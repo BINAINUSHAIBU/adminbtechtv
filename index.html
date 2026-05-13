@@ -287,6 +287,12 @@ padding:15px;
 <td>
   <a href="#" class="status paid">Pay To View</a>
 </td>
+ <td>
+  <a href="payment.html?channel=123" class="status paid">
+    Pay To View
+  </a>
+</td>
+ 
 <td>
 <span class="status locked">Locked</span>
 </td>
@@ -303,7 +309,9 @@ padding:15px;
 <span class="status free">Free</span>
 </td>
 <td>
-<span class="status unlocked">Unlocked</span>
+  <button class="status paid" onclick="payToUnlock(123)">
+    Pay To View
+  </button>
 </td>
 <td>
 <button class="lock-btn">Lock</button>
@@ -379,7 +387,19 @@ button.innerText = "Lock";
 
 });
 });
-</script>
+ <td>
+  <button class="status paid" onclick="payToView(123)">
+    Pay To View
+  </button>
+</td>
 
+<script>
+function payToView(id) {
+  alert("Redirecting to payment for channel " + id);
+  window.location.href = "https://paystack.shop/pay/-58t6onvtj?channel=" + id;
+}
+
+</script>
+<script src="https://js.paystack.co/v1/inline.js"></script>
 </body>
 </html>
