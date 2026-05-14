@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>User Dashboard</title>
+<style>
+body { font-family: Arial; background:#0f172a; color:white; }
+.header { padding:20px; background:#1e293b; display:flex; justify-content:space-between; }
+.card { background:#334155; padding:20px; margin:20px; border-radius:10px; }
+button { padding:10px; background:red; color:white; border:none; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<div class="header">
+<h2>User Dashboard</h2>
+<button onclick="logout()">Logout</button>
+</div>
+
+<div class="card">
+<h3>Welcome User 👋</h3>
+<p>Status: Active</p>
+</div>
+
+<div class="card">
+<h3>Available Channels</h3>
+<p>🎬 Movies | 📺 Sports | 🧒 Kids | 🌍 News</p>
+</div>
+
+<script>
+if(localStorage.getItem("role") !== "user") {
+    window.location.href = "login.html";
+}
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>
