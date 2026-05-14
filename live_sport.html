@@ -1,80 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Live Sports Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Sports Channel Dashboard</title>
 
 <style>
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #0f172a;
+  background: #0b1220;
   color: #fff;
 }
 
 header {
-  padding: 20px;
   background: #111827;
+  padding: 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-h1 { font-size: 20px; }
+h1 { font-size: 18px; }
 
-.filters button {
-  margin: 0 5px;
-  padding: 8px 12px;
-  border: none;
-  cursor: pointer;
+.search input {
+  padding: 8px;
   border-radius: 6px;
-  background: #1f2937;
-  color: #fff;
-}
-
-.filters button.active {
-  background: #22c55e;
+  border: none;
+  width: 200px;
 }
 
 .container {
-  padding: 20px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 15px;
+  grid-template-columns: 300px 1fr;
+  height: calc(100vh - 60px);
 }
 
-.card {
+.sidebar {
+  background: #0f172a;
+  overflow-y: auto;
+  padding: 10px;
+  border-right: 1px solid #1f2937;
+}
+
+.channel {
   background: #1e293b;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+}
+
+.channel:hover {
+  background: #273449;
+}
+
+.badge {
+  font-size: 10px;
+  padding: 3px 6px;
+  border-radius: 5px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.free { background: #22c55e; }
+.premium { background: #ef4444; }
+
+.locked {
+  opacity: 0.6;
+}
+
+.main {
   padding: 15px;
-  border-radius: 10px;
-  border-left: 4px solid #22c55e;
 }
 
-.match {
+.player {
+  width: 100%;
+  height: 60vh;
+  background: black;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  font-size: 18px;
 }
 
-.score {
-  font-size: 22px;
-  font-weight: bold;
+.info {
+  background: #111827;
+  padding: 10px;
+  border-radius: 8px;
 }
 
-.live {
-  color: #22c55e;
-  font-size: 12px;
-  animation: blink 1s infinite;
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
 }
 
-@keyframes blink {
-  50% { opacity: 0.4; }
+.pay {
+  background: #f59e0b;
+  color: black;
 }
 
-.team {
-  font-size: 14px;
-  margin: 5px 0;
+.watch {
+  background: #22c55e;
+  color: white;
 }
 </style>
 </head>
@@ -82,73 +117,97 @@ h1 { font-size: 20px; }
 <body>
 
 <header>
-  <h1>🏟️ Live Sports Dashboard</h1>
-
-  <div class="filters">
-    <button class="active" onclick="filterLeague('all')">All</button>
-    <button onclick="filterLeague('football')">Football</button>
-    <button onclick="filterLeague('basketball')">Basketball</button>
-    <button onclick="filterLeague('tennis')">Tennis</button>
+  <h1>📺 Live Sports Channels</h1>
+  <div class="search">
+    <input type="text" id="search" placeholder="Search channels...">
   </div>
 </header>
 
-<div class="container" id="matches"></div>
+<div class="container">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="channelList"></div>
+
+  <!-- MAIN PLAYER -->
+  <div class="main">
+    <div class="player" id="player">
+      Select a channel to watch
+    </div>
+
+    <div class="info" id="info">
+      Channel info will appear here
+    </div>
+  </div>
+
+</div>
 
 <script>
-const matches = [
-  { id: 1, league: "football", home: "Arsenal", away: "Chelsea", score: "2 - 1", status: "LIVE" },
-  { id: 2, league: "football", home: "Man City", away: "Liverpool", score: "1 - 1", status: "LIVE" },
-  { id: 3, league: "basketball", home: "Lakers", away: "Bulls", score: "98 - 102", status: "LIVE" },
-  { id: 4, league: "tennis", home: "Djokovic", away: "Alcaraz", score: "2 - 1", status: "LIVE" }
+const channels = [
+  { id: 1, name: "Sky Sports Premier League", type: "premium", stream: "LIVE STREAM 1" },
+  { id: 2, name: "ESPN Sports HD", type: "free", stream: "LIVE STREAM 2" },
+  { id: 3, name: "BeIN Sports HD", type: "premium", stream: "LIVE STREAM 3" },
+  { id: 4, name: "SuperSport Football", type: "free", stream: "LIVE STREAM 4" },
+  { id: 5, name: "NBA TV Live", type: "premium", stream: "LIVE STREAM 5" }
 ];
 
-let currentFilter = "all";
+let unlocked = {};
 
-function render(data) {
-  const container = document.getElementById("matches");
+function render(list) {
+  const container = document.getElementById("channelList");
   container.innerHTML = "";
 
-  data.forEach(m => {
+  list.forEach(ch => {
+    const isLocked = ch.type === "premium" && !unlocked[ch.id];
+
     container.innerHTML += `
-      <div class="card">
-        <div class="live">● ${m.status}</div>
-        <div class="team">${m.home} vs ${m.away}</div>
-        <div class="match">
-          <div class="score">${m.score}</div>
-        </div>
-        <small>League: ${m.league}</small>
+      <div class="channel ${isLocked ? "locked" : ""}" onclick="openChannel(${ch.id})">
+        ${ch.name}
+        <span class="badge ${ch.type === "free" ? "free" : "premium"}">
+          ${ch.type.toUpperCase()}
+        </span>
       </div>
     `;
   });
 }
 
-function filterLeague(type) {
-  currentFilter = type;
+function openChannel(id) {
+  const ch = channels.find(c => c.id === id);
+  const player = document.getElementById("player");
+  const info = document.getElementById("info");
 
-  document.querySelectorAll(".filters button")
-    .forEach(btn => btn.classList.remove("active"));
+  const isLocked = ch.type === "premium" && !unlocked[id];
 
-  event.target.classList.add("active");
+  if (isLocked) {
+    player.innerHTML = "🔒 Premium Channel Locked";
+    info.innerHTML = `
+      <b>${ch.name}</b><br>
+      This is a premium channel.<br>
+      <button class="btn pay" onclick="unlock(${id})">Pay to Unlock</button>
+    `;
+    return;
+  }
 
-  if (type === "all") render(matches);
-  else render(matches.filter(m => m.league === type));
+  player.innerHTML = "▶ Playing: " + ch.stream;
+  info.innerHTML = `
+    <b>${ch.name}</b><br>
+    Status: LIVE
+  `;
 }
 
-// fake live updates
-setInterval(() => {
-  matches.forEach(m => {
-    if (Math.random() > 0.7) {
-      let parts = m.score.split(" - ").map(Number);
-      parts[Math.floor(Math.random() * 2)]++;
-      m.score = parts.join(" - ");
-    }
-  });
+function unlock(id) {
+  // simulate payment success (replace with Paystack/Flutterwave later)
+  unlocked[id] = true;
+  alert("Payment Successful! Channel Unlocked");
+  render(channels);
+}
 
-  if (currentFilter === "all") render(matches);
-  else render(matches.filter(m => m.league === currentFilter));
-}, 5000);
+document.getElementById("search").addEventListener("input", e => {
+  const value = e.target.value.toLowerCase();
+  const filtered = channels.filter(c => c.name.toLowerCase().includes(value));
+  render(filtered);
+});
 
-render(matches);
+render(channels);
 </script>
 
 </body>
