@@ -2,77 +2,75 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>User Dashboard</title>
+<title>Login System</title>
 <style>
-body {
+body{
   font-family: Arial;
-  margin: 0;
-  background: #f4f4f4;
+  background: linear-gradient(120deg,#141e30,#243b55);
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
-header {
-  background: #2a5298;
-  color: white;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
+.box{
+  background:#fff;
+  padding:25px;
+  border-radius:10px;
+  width:320px;
 }
-.container {
-  padding: 20px;
+input,select{
+  width:100%;
+  padding:10px;
+  margin:8px 0;
 }
-.card {
-  background: white;
-  padding: 20px;
-  margin: 10px;
-  border-radius: 10px;
-  display: inline-block;
-  width: 200px;
-}
-button {
-  padding: 8px 12px;
-  background: red;
-  color: white;
-  border: none;
-  cursor: pointer;
+button{
+  width:100%;
+  padding:10px;
+  background:#243b55;
+  color:#fff;
+  border:none;
+  cursor:pointer;
 }
 </style>
 </head>
 <body>
 
-<header>
-  <h2>Dashboard</h2>
-  <button onclick="logout()">Logout</button>
-</header>
+<div class="box">
+<h2>Login</h2>
 
-<div class="container">
-  <h3 id="welcome"></h3>
+<input type="text" id="username" placeholder="Username">
+<input type="password" id="password" placeholder="Password">
 
-  <div class="card">
-    <h4>Total Channels</h4>
-    <p>20,000+</p>
-  </div>
+<select id="role">
+  <option value="user">User</option>
+  <option value="admin">Admin</option>
+</select>
 
-  <div class="card">
-    <h4>Free Channels</h4>
-    <p>5,000</p>
-  </div>
-
-  <div class="card">
-    <h4>Premium Channels</h4>
-    <p>15,000</p>
-  </div>
+<button onclick="login()">Login</button>
+<p id="msg"></p>
 </div>
 
 <script>
-// Check login
-const user = localStorage.getItem("user");
-if(!user){
-  window.location.href = "index.html";
-}
-document.getElementById("welcome").innerText = "Welcome, " + user;
+function login(){
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+  const role = document.getElementById("role").value;
 
-function logout(){
-  localStorage.removeItem("user");
-  window.location.href = "index.html";
+  // Demo credentials (upgrade later to database)
+  if(user && pass){
+    localStorage.setItem("user", JSON.stringify({
+      username: user,
+      role: role
+    }));
+
+    if(role === "admin"){
+      window.location.href = "admin.html";
+    } else {
+      window.location.href = "user.html";
+    }
+  } else {
+    document.getElementById("msg").innerText = "Fill all fields";
+  }
 }
 </script>
 
