@@ -1,91 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Channel Dashboard</title>
-  <style>
-    body { font-family: Arial; background:#0b1220; color:white; }
-    .topbar { padding:15px; background:#111827; display:flex; justify-content:space-between; }
-    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:15px; padding:20px; }
-
-    .card {
-      background:#1f2937;
-      padding:15px;
-      border-radius:10px;
-    }
-
-    .free { color:#22c55e; }
-    .paid { color:#f59e0b; }
-    .locked { color:#ef4444; }
-
-    button {
-      padding:8px;
-      width:100%;
-      border:none;
-      margin-top:10px;
-      cursor:pointer;
-      background:#3b82f6;
-      color:white;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>User Dashboard</title>
+<style>
+body {
+  font-family: Arial;
+  margin: 0;
+  background: #f4f4f4;
+}
+header {
+  background: #2a5298;
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+.container {
+  padding: 20px;
+}
+.card {
+  background: white;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 10px;
+  display: inline-block;
+  width: 200px;
+}
+button {
+  padding: 8px 12px;
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+</style>
 </head>
 <body>
 
-<div class="topbar">
-  <div>Welcome, <span id="user"></span></div>
+<header>
+  <h2>Dashboard</h2>
   <button onclick="logout()">Logout</button>
+</header>
+
+<div class="container">
+  <h3 id="welcome"></h3>
+
+  <div class="card">
+    <h4>Total Channels</h4>
+    <p>20,000+</p>
+  </div>
+
+  <div class="card">
+    <h4>Free Channels</h4>
+    <p>5,000</p>
+  </div>
+
+  <div class="card">
+    <h4>Premium Channels</h4>
+    <p>15,000</p>
+  </div>
 </div>
 
-<h2 style="padding:20px;">📡 All Channels Dashboard</h2>
-
-<div class="grid" id="channels"></div>
-
 <script>
-document.getElementById("user").innerText = localStorage.getItem("user");
-
-let channels = [
-  {name:"BBC News", type:"Free"},
-  {name:"ESPN Sports", type:"Paid"},
-  {name:"Netflix Movies", type:"Locked"},
-  {name:"Kids TV", type:"Free"},
-  {name:"Premium Sports HD", type:"Paid"},
-  {name:"Music Live", type:"Locked"}
-];
-
-function loadChannels(){
-  let box = document.getElementById("channels");
-  box.innerHTML = "";
-
-  channels.forEach((c, i) => {
-    let statusClass = c.type.toLowerCase();
-
-    let locked = c.type === "Locked" ? true : false;
-
-    box.innerHTML += `
-      <div class="card">
-        <h3>${c.name}</h3>
-        <p class="${statusClass}">${c.type}</p>
-        ${locked ? `<button onclick="unlock(${i})">🔓 Pay to Unlock</button>` : `<button onclick="watch(${i})">▶ Watch</button>`}
-      </div>
-    `;
-  });
+// Check login
+const user = localStorage.getItem("user");
+if(!user){
+  window.location.href = "login.html";
 }
-
-function unlock(i){
-  alert("Payment gateway coming soon (Paystack/Flutterwave integration)");
-  channels[i].type = "Paid";
-  loadChannels();
-}
-
-function watch(i){
-  alert("Now playing: " + channels[i].name);
-}
+document.getElementById("welcome").innerText = "Welcome, " + user;
 
 function logout(){
   localStorage.removeItem("user");
-  window.location.href = "index.html";
+  window.location.href = "login.html";
 }
-
-loadChannels();
 </script>
 
 </body>
