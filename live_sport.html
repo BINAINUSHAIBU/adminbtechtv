@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Live Sports Dashboard</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: #fff;
+}
+
+header {
+  padding: 20px;
+  background: #111827;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+h1 { font-size: 20px; }
+
+.filters button {
+  margin: 0 5px;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  background: #1f2937;
+  color: #fff;
+}
+
+.filters button.active {
+  background: #22c55e;
+}
+
+.container {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 15px;
+}
+
+.card {
+  background: #1e293b;
+  padding: 15px;
+  border-radius: 10px;
+  border-left: 4px solid #22c55e;
+}
+
+.match {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.score {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.live {
+  color: #22c55e;
+  font-size: 12px;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0.4; }
+}
+
+.team {
+  font-size: 14px;
+  margin: 5px 0;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🏟️ Live Sports Dashboard</h1>
+
+  <div class="filters">
+    <button class="active" onclick="filterLeague('all')">All</button>
+    <button onclick="filterLeague('football')">Football</button>
+    <button onclick="filterLeague('basketball')">Basketball</button>
+    <button onclick="filterLeague('tennis')">Tennis</button>
+  </div>
+</header>
+
+<div class="container" id="matches"></div>
+
+<script>
+const matches = [
+  { id: 1, league: "football", home: "Arsenal", away: "Chelsea", score: "2 - 1", status: "LIVE" },
+  { id: 2, league: "football", home: "Man City", away: "Liverpool", score: "1 - 1", status: "LIVE" },
+  { id: 3, league: "basketball", home: "Lakers", away: "Bulls", score: "98 - 102", status: "LIVE" },
+  { id: 4, league: "tennis", home: "Djokovic", away: "Alcaraz", score: "2 - 1", status: "LIVE" }
+];
+
+let currentFilter = "all";
+
+function render(data) {
+  const container = document.getElementById("matches");
+  container.innerHTML = "";
+
+  data.forEach(m => {
+    container.innerHTML += `
+      <div class="card">
+        <div class="live">● ${m.status}</div>
+        <div class="team">${m.home} vs ${m.away}</div>
+        <div class="match">
+          <div class="score">${m.score}</div>
+        </div>
+        <small>League: ${m.league}</small>
+      </div>
+    `;
+  });
+}
+
+function filterLeague(type) {
+  currentFilter = type;
+
+  document.querySelectorAll(".filters button")
+    .forEach(btn => btn.classList.remove("active"));
+
+  event.target.classList.add("active");
+
+  if (type === "all") render(matches);
+  else render(matches.filter(m => m.league === type));
+}
+
+// fake live updates
+setInterval(() => {
+  matches.forEach(m => {
+    if (Math.random() > 0.7) {
+      let parts = m.score.split(" - ").map(Number);
+      parts[Math.floor(Math.random() * 2)]++;
+      m.score = parts.join(" - ");
+    }
+  });
+
+  if (currentFilter === "all") render(matches);
+  else render(matches.filter(m => m.league === currentFilter));
+}, 5000);
+
+render(matches);
+</script>
+
+</body>
+</html>
