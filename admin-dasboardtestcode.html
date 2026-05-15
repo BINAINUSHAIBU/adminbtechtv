@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>IPTV PRO DASHBOARD</title>
+<title>IPTV PRO 40K SYSTEM</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -13,7 +13,7 @@ background:#0b0f1a;
 color:white;
 }
 
-/* TOP NAV (HORIZONTAL) */
+/* TOP BAR */
 .topbar{
 height:60px;
 background:#11182a;
@@ -32,28 +32,25 @@ margin:0 10px;
 text-decoration:none;
 padding:8px 12px;
 border-radius:5px;
+cursor:pointer;
 }
 
 .topbar a:hover{
 background:#00bfff;
 }
 
-/* MAIN LAYOUT */
+/* LAYOUT */
 .container{
 display:flex;
 height:calc(100vh - 60px);
 }
 
-/* LEFT SIDEBAR (VERTICAL) */
+/* SIDEBAR */
 .sidebar{
 width:220px;
 background:#0f1628;
 padding:10px;
 overflow-y:auto;
-}
-
-.sidebar h3{
-color:#00bfff;
 }
 
 .cat{
@@ -68,7 +65,7 @@ cursor:pointer;
 background:#2b3a5a;
 }
 
-/* CENTER CONTENT */
+/* MAIN */
 .main{
 flex:1;
 display:flex;
@@ -87,7 +84,6 @@ justify-content:center;
 video{
 width:100%;
 height:100%;
-background:black;
 }
 
 /* CHANNEL LIST */
@@ -105,6 +101,7 @@ border-radius:5px;
 cursor:pointer;
 display:flex;
 justify-content:space-between;
+font-size:13px;
 }
 
 .channel:hover{
@@ -112,12 +109,12 @@ background:#2b3a5a;
 }
 
 .active{
-background:#00bfff33 !important;
+background:#00bfff55 !important;
 }
 
-/* ADD PANEL */
+/* PANEL */
 .addpanel{
-width:300px;
+width:280px;
 background:#11182a;
 padding:10px;
 overflow-y:auto;
@@ -141,31 +138,37 @@ button:hover{
 background:#0090cc;
 }
 
+/* SETTINGS */
+.settings{
+margin-top:20px;
+background:#1b2438;
+padding:10px;
+border-radius:5px;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- TOP BAR (HORIZONTAL MENU) -->
 <div class="topbar">
-<div><b>📺 IPTV PRO DASHBOARD</b></div>
-
+<div><b>📺 IPTV PRO 40,000 ENGINE</b></div>
 <div>
-<a href="#">Dashboard</a>
-<a href="#">Channels</a>
-<a href="#">Add Channel</a>
-<a href="#">Settings</a>
+<a onclick="filterCat('All')">All</a>
+<a onclick="filterCat('Sports')">Sports</a>
+<a onclick="filterCat('Movies')">Movies</a>
+<a onclick="filterCat('News')">News</a>
+<a onclick="toggleTheme()">Theme</a>
 </div>
 </div>
 
-<!-- MAIN CONTAINER -->
 <div class="container">
 
-<!-- VERTICAL SIDEBAR -->
+<!-- SIDEBAR -->
 <div class="sidebar">
 <h3>📂 Categories</h3>
 
-<div class="cat" onclick="filterCat('All')">All Channels</div>
+<div class="cat" onclick="filterCat('All')">All Channels (40K)</div>
 <div class="cat" onclick="filterCat('Sports')">Sports</div>
 <div class="cat" onclick="filterCat('Movies')">Movies</div>
 <div class="cat" onclick="filterCat('News')">News</div>
@@ -173,35 +176,41 @@ background:#0090cc;
 <div class="cat" onclick="filterCat('Music')">Music</div>
 </div>
 
-<!-- MAIN AREA -->
+<!-- MAIN -->
 <div class="main">
 
-<!-- PLAYER -->
 <div class="player">
 <video id="videoPlayer" controls autoplay></video>
 </div>
 
-<!-- CHANNEL LIST -->
 <div class="channels" id="channelList"></div>
 
 </div>
 
-<!-- ADD CHANNEL PANEL -->
+<!-- RIGHT PANEL -->
 <div class="addpanel">
 
-<h3>➕ Add Channel</h3>
+<h3>⚙ Settings</h3>
 
-<input id="name" placeholder="Channel Name">
-<input id="url" placeholder="Stream URL (M3U8)">
-<select id="category">
-<option>Sports</option>
-<option>Movies</option>
-<option>Kids</option>
-<option>News</option>
-<option>Music</option>
+<button onclick="generate40k()">Generate 40,000 Channels</button>
+
+<input id="search" placeholder="Search 40K channels..." oninput="search(this.value)">
+
+<div class="settings">
+<label>Auto Play</label>
+<select onchange="autoPlay=this.value==='true'">
+<option value="true">ON</option>
+<option value="false">OFF</option>
 </select>
 
-<button onclick="addChannel()">Add Channel</button>
+<label>Quality</label>
+<select>
+<option>Auto</option>
+<option>1080p</option>
+<option>720p</option>
+<option>480p</option>
+</select>
+</div>
 
 </div>
 
@@ -209,57 +218,38 @@ background:#0090cc;
 
 <script>
 
-let channels = JSON.parse(localStorage.getItem("channels")) || [];
-
-/* DEFAULT DATA */
-if(channels.length === 0){
-channels = [
-{name:"BBC News HD", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", category:"News"},
-{name:"ESPN Sports", url:"https://test-streams.mux.dev/test_001/stream.m3u8", category:"Sports"},
-{name:"Movie HD", url:"https://test-streams.mux.dev/test_002/stream.m3u8", category:"Movies"},
-{name:"Cartoon Kids", url:"https://test-streams.mux.dev/test_003/stream.m3u8", category:"Kids"},
-{name:"Music Live", url:"https://test-streams.mux.dev/test_004/stream.m3u8", category:"Music"},
-];
-save();
-}
-
+let channels = [];
 let currentFilter = "All";
+let autoPlay = true;
+let dark = true;
 
-/* PLAY CHANNEL */
-function play(url, el){
-let video = document.getElementById("videoPlayer");
-video.src = url;
-video.play();
+/* REALISTIC STREAM SOURCE POOL */
+const streams = [
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+"https://test-streams.mux.dev/test_001/stream.m3u8",
+"https://test-streams.mux.dev/test_002/stream.m3u8",
+"https://test-streams.mux.dev/test_003/stream.m3u8"
+];
 
-/* active highlight */
-document.querySelectorAll(".channel").forEach(c=>c.classList.remove("active"));
-el.classList.add("active");
+/* GENERATE 40,000 CHANNELS */
+function generate40k(){
+
+channels = [];
+
+const cats = ["Sports","Movies","News","Kids","Music"];
+
+for(let i=1;i<=40000;i++){
+
+let cat = cats[i % cats.length];
+
+channels.push({
+id:i,
+name: cat + " HD CHANNEL " + i,
+category:cat,
+url: streams[i % streams.length]
+});
 }
 
-/* ADD CHANNEL */
-function addChannel(){
-let name = document.getElementById("name").value;
-let url = document.getElementById("url").value;
-let category = document.getElementById("category").value;
-
-if(!name || !url) return alert("Fill all fields");
-
-channels.push({name,url,category});
-save();
-render();
-
-document.getElementById("name").value="";
-document.getElementById("url").value="";
-}
-
-/* SAVE */
-function save(){
-localStorage.setItem("channels", JSON.stringify(channels));
-}
-
-/* FILTER */
-function filterCat(cat){
-currentFilter = cat;
 render();
 }
 
@@ -267,30 +257,74 @@ render();
 function render(){
 
 let box = document.getElementById("channelList");
-box.innerHTML = "";
+box.innerHTML="";
 
 let list = channels.filter(c =>
-currentFilter === "All" || c.category === currentFilter
-);
+currentFilter==="All" || c.category===currentFilter
+).slice(0,300); // performance limit
 
-list.forEach(c => {
+list.forEach(c=>{
 
 let div = document.createElement("div");
-div.className = "channel";
+div.className="channel";
 
 div.innerHTML = `
 <span>${c.name}</span>
-<small>${c.category}</small>
+<small>LIVE</small>
 `;
 
-div.onclick = () => play(c.url, div);
+div.onclick=()=>play(c.url,div);
 
 box.appendChild(div);
 });
-
 }
 
+/* PLAY */
+function play(url,el){
+
+let video=document.getElementById("videoPlayer");
+video.src=url;
+video.play();
+
+document.querySelectorAll(".channel").forEach(c=>c.classList.remove("active"));
+el.classList.add("active");
+}
+
+/* FILTER */
+function filterCat(cat){
+currentFilter=cat;
 render();
+}
+
+/* SEARCH */
+function search(q){
+let box=document.getElementById("channelList");
+box.innerHTML="";
+
+channels.filter(c =>
+c.name.toLowerCase().includes(q.toLowerCase())
+).slice(0,200).forEach(c=>{
+
+let div=document.createElement("div");
+div.className="channel";
+
+div.innerHTML=`<span>${c.name}</span><small>${c.category}</small>`;
+
+div.onclick=()=>play(c.url,div);
+
+box.appendChild(div);
+});
+}
+
+/* THEME */
+function toggleTheme(){
+dark=!dark;
+document.body.style.background = dark ? "#0b0f1a" : "#eaeaea";
+document.body.style.color = dark ? "white" : "black";
+}
+
+/* AUTO START */
+generate40k();
 
 </script>
 
