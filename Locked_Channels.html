@@ -616,6 +616,307 @@ document.getElementById("unlockModal")
 renderChannels(lockedChannels);
 
 </script>
+  <script>
+
+/* ===========================
+   40K LOCKED CHANNEL ENGINE
+=========================== */
+
+const lockedChannels = [];
+
+const categories = [
+"Sports",
+"Movies",
+"VIP",
+"Entertainment",
+"News",
+"Documentary",
+"Kids",
+"Music"
+];
+
+/* GENERATE 40,000 LOCKED CHANNELS */
+
+for(let i=1;i<=40000;i++){
+
+lockedChannels.push({
+
+id:i,
+
+name:`LOCKED CHANNEL ${i}`,
+
+category:
+categories[
+Math.floor(
+Math.random()*categories.length
+)
+],
+
+tier:
+Math.random()>0.5
+? "Premium"
+: "VIP",
+
+status:"Locked",
+
+price:
+Math.floor(Math.random()*8000)+1000,
+
+live:
+Math.random()>0.2
+
+});
+
+}
+
+/* PAGINATION */
+
+let page = 0;
+const limit = 120;
+
+/* ===========================
+   RENDER CHANNELS
+=========================== */
+
+function renderChannels(list, append=false){
+
+const grid =
+document.getElementById("channelGrid");
+
+if(!append)
+grid.innerHTML="";
+
+let start = page * limit;
+let end = start + limit;
+
+let channels =
+list.slice(start,end);
+
+channels.forEach(channel=>{
+
+grid.innerHTML += `
+
+<div class="channel-card">
+
+<div class="channel-banner">
+
+<span class="lock-icon">
+🔒
+</span>
+
+${channel.category}
+
+</div>
+
+<div class="channel-info">
+
+<h3>${channel.name}</h3>
+
+<p>${channel.category}</p>
+
+<p>
+₦${channel.price}
+</p>
+
+<span class="badge locked">
+LOCKED
+</span>
+
+<span class="
+badge
+${channel.tier==="Premium"
+? "premium"
+: "vip"}
+">
+
+${channel.tier}
+
+</span>
+
+<span class="
+badge
+${channel.live
+? "vip"
+: "locked"}
+">
+
+${channel.live
+? "LIVE"
+: "OFF"}
+
+</span>
+
+<button
+class="unlock-btn"
+onclick="
+unlockChannel(
+${channel.id}
+)"
+>
+
+Unlock Channel
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+/* LOAD MORE BUTTON */
+
+if(end < list.length){
+
+grid.innerHTML += `
+
+<button
+class="unlock-btn"
+onclick="loadMore()">
+
+⬇ Load More Channels
+
+</button>
+
+`;
+
+}
+
+/* UPDATE STATS */
+
+document.getElementById(
+"lockedCount"
+).innerText =
+lockedChannels.length
+.toLocaleString();
+
+document.getElementById(
+"premiumCount"
+).innerText =
+lockedChannels.filter(
+c=>c.tier==="Premium"
+).length.toLocaleString();
+
+document.getElementById(
+"vipCount"
+).innerText =
+lockedChannels.filter(
+c=>c.tier==="VIP"
+).length.toLocaleString();
+
+document.getElementById(
+"sportsCount"
+).innerText =
+lockedChannels.filter(
+c=>c.category==="Sports"
+).length.toLocaleString();
+
+}
+
+/* ===========================
+   SEARCH
+=========================== */
+
+function searchChannels(){
+
+page = 0;
+
+const value =
+document.getElementById(
+"searchInput"
+).value.toLowerCase();
+
+const filtered =
+lockedChannels.filter(
+channel=>
+
+channel.name
+.toLowerCase()
+.includes(value)
+
+||
+
+channel.category
+.toLowerCase()
+.includes(value)
+
+);
+
+renderChannels(filtered);
+
+}
+
+/* ===========================
+   LOAD MORE
+=========================== */
+
+function loadMore(){
+
+page++;
+
+renderChannels(
+lockedChannels,
+true
+);
+
+}
+
+/* ===========================
+   UNLOCK
+=========================== */
+
+function unlockChannel(id){
+
+const channel =
+lockedChannels.find(
+c=>c.id===id
+);
+
+document.getElementById(
+"unlockModal"
+).style.display =
+"flex";
+
+document.getElementById(
+"modalText"
+).innerText =
+
+`Subscribe to unlock:
+
+${channel.name}
+
+Tier:
+${channel.tier}
+
+Price:
+₦${channel.price}
+
+Category:
+${channel.category}
+`;
+
+}
+
+/* CLOSE MODAL */
+
+function closeModal(){
+
+document.getElementById(
+"unlockModal"
+).style.display =
+"none";
+
+}
+
+/* INIT */
+
+renderChannels(
+lockedChannels
+);
+
+</script>
 
 </body>
 </html>
