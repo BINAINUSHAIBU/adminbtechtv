@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>User IPTV Dashboard</title>
+<title>ACTIVE IPTV SYSTEM</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -13,6 +13,39 @@ background:#0b0f1a;
 color:white;
 }
 
+/* LOGIN */
+#login{
+display:flex;
+height:100vh;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+}
+
+input{
+padding:10px;
+margin:5px;
+width:260px;
+border:none;
+border-radius:5px;
+}
+
+button{
+padding:10px;
+width:260px;
+margin-top:10px;
+background:#00bfff;
+border:none;
+color:white;
+cursor:pointer;
+border-radius:5px;
+}
+
+/* APP */
+#app{
+display:none;
+}
+
 /* TOP BAR */
 .topbar{
 height:60px;
@@ -21,51 +54,28 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 padding:0 20px;
-position:sticky;
-top:0;
-z-index:10;
 }
 
-.topbar a{
-color:white;
-margin:0 10px;
-text-decoration:none;
-padding:8px 12px;
-border-radius:5px;
-}
-
-.topbar a:hover{
-background:#00bfff;
-}
-
-/* MAIN LAYOUT */
+/* LAYOUT */
 .container{
 display:flex;
 height:calc(100vh - 60px);
 }
 
-/* LEFT SIDEBAR */
+/* SIDEBAR */
 .sidebar{
 width:220px;
 background:#0f1628;
 padding:10px;
-overflow-y:auto;
-}
-
-.sidebar h3{
-color:#00bfff;
+overflow:auto;
 }
 
 .cat{
 padding:10px;
 margin:5px 0;
 background:#1b2438;
-border-radius:5px;
 cursor:pointer;
-}
-
-.cat:hover{
-background:#2b3a5a;
+border-radius:5px;
 }
 
 /* MAIN */
@@ -75,25 +85,20 @@ display:flex;
 flex-direction:column;
 }
 
-/* PLAYER */
 .player{
 height:320px;
 background:black;
-display:flex;
-align-items:center;
-justify-content:center;
 }
 
 video{
 width:100%;
 height:100%;
-background:black;
 }
 
-/* CHANNEL LIST */
+/* CHANNELS */
 .channels{
 flex:1;
-overflow-y:auto;
+overflow:auto;
 padding:10px;
 }
 
@@ -101,35 +106,31 @@ padding:10px;
 padding:10px;
 margin:5px 0;
 background:#1b2438;
-border-radius:5px;
-cursor:pointer;
 display:flex;
 justify-content:space-between;
+border-radius:5px;
+cursor:pointer;
 }
 
 .channel:hover{
 background:#2b3a5a;
 }
 
+.locked{
+opacity:0.4;
+}
+
+.vip{
+color:#ff4d4d;
+font-size:12px;
+}
+
+.heart{
+cursor:pointer;
+}
+
 .active{
-background:#00bfff33 !important;
-}
-
-small{
-opacity:0.7;
-}
-
-/* SEARCH */
-.search{
-padding:10px;
-background:#11182a;
-}
-
-.search input{
-width:100%;
-padding:10px;
-border:none;
-border-radius:5px;
+background:#00bfff33;
 }
 
 </style>
@@ -137,48 +138,51 @@ border-radius:5px;
 
 <body>
 
-<!-- TOP BAR -->
+<!-- LOGIN -->
+<div id="login">
+
+<h2>📺 IPTV LOGIN</h2>
+
+<input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Password">
+
+<button onclick="signup()">Signup</button>
+<button onclick="login()">Login</button>
+
+</div>
+
+<!-- APP -->
+<div id="app">
+
 <div class="topbar">
-<div><b>📺 USER IPTV DASHBOARD</b></div>
-
+<div><b>ACTIVE IPTV DASHBOARD</b></div>
 <div>
-<a href="#">Home</a>
-<a href="#">Live TV</a>
-<a href="#">Favorites</a>
-<a href="#">Profile</a>
+<button onclick="unlockVIP()">💳 Unlock VIP</button>
 </div>
 </div>
 
-<!-- CONTAINER -->
 <div class="container">
 
-<!-- SIDEBAR CATEGORIES -->
+<!-- SIDEBAR -->
 <div class="sidebar">
-<h3>📂 Categories</h3>
-
-<div class="cat" onclick="filterCat('All')">All Channels</div>
-<div class="cat" onclick="filterCat('Sports')">Sports</div>
-<div class="cat" onclick="filterCat('Movies')">Movies</div>
-<div class="cat" onclick="filterCat('News')">News</div>
-<div class="cat" onclick="filterCat('Kids')">Kids</div>
-<div class="cat" onclick="filterCat('Music')">Music</div>
+<h3>Categories</h3>
+<div class="cat" onclick="filter('All')">All</div>
+<div class="cat" onclick="filter('Sports')">Sports</div>
+<div class="cat" onclick="filter('Movies')">Movies</div>
+<div class="cat" onclick="filter('News')">News</div>
+<div class="cat" onclick="filter('Kids')">Kids</div>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-<!-- PLAYER -->
 <div class="player">
-<video id="videoPlayer" controls autoplay></video>
+<video id="player" controls autoplay></video>
 </div>
 
-<!-- SEARCH -->
-<div class="search">
-<input id="search" onkeyup="render()" placeholder="Search channels...">
-</div>
+<div class="channels" id="list"></div>
 
-<!-- CHANNEL LIST -->
-<div class="channels" id="channelList"></div>
+</div>
 
 </div>
 
@@ -186,69 +190,115 @@ border-radius:5px;
 
 <script>
 
-let channels = JSON.parse(localStorage.getItem("channels")) || [];
+/* USERS */
+let users = JSON.parse(localStorage.getItem("users")) || [];
+let session = localStorage.getItem("session");
 
-/* DEFAULT CHANNELS */
-if(channels.length === 0){
-channels = [
-{name:"BBC News HD", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", category:"News"},
-{name:"ESPN Sports", url:"https://test-streams.mux.dev/test_001/stream.m3u8", category:"Sports"},
-{name:"Movie HD", url:"https://test-streams.mux.dev/test_002/stream.m3u8", category:"Movies"},
-{name:"Cartoon Kids", url:"https://test-streams.mux.dev/test_003/stream.m3u8", category:"Kids"},
-{name:"Music Live", url:"https://test-streams.mux.dev/test_004/stream.m3u8", category:"Music"}
+/* CHANNELS */
+let channels = [
+{name:"BBC News HD", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", category:"News", vip:false},
+{name:"ESPN Sports", url:"https://test-streams.mux.dev/test_001/stream.m3u8", category:"Sports", vip:true},
+{name:"Movie HD", url:"https://test-streams.mux.dev/test_002/stream.m3u8", category:"Movies", vip:true},
+{name:"Cartoon Kids", url:"https://test-streams.mux.dev/test_003/stream.m3u8", category:"Kids", vip:false}
 ];
-localStorage.setItem("channels", JSON.stringify(channels));
+
+let currentCat="All";
+
+/* SIGNUP */
+function signup(){
+let email=document.getElementById("email").value;
+let pass=document.getElementById("pass").value;
+
+if(!email||!pass) return alert("Fill fields");
+
+users.push({email,pass,vip:false});
+localStorage.setItem("users",JSON.stringify(users));
+
+alert("Account created!");
 }
 
-let currentFilter = "All";
+/* LOGIN */
+function login(){
+let email=document.getElementById("email").value;
+let pass=document.getElementById("pass").value;
 
-/* PLAY CHANNEL */
-function play(url, el){
-let video = document.getElementById("videoPlayer");
-video.src = url;
-video.play();
+let user=users.find(u=>u.email==email && u.pass==pass);
 
-document.querySelectorAll(".channel").forEach(c=>c.classList.remove("active"));
-el.classList.add("active");
-}
+if(!user) return alert("Invalid login");
 
-/* FILTER CATEGORY */
-function filterCat(cat){
-currentFilter = cat;
+localStorage.setItem("session",email);
+
+document.getElementById("login").style.display="none";
+document.getElementById("app").style.display="block";
+
 render();
 }
 
-/* RENDER CHANNELS */
+/* VIP UPGRADE */
+function unlockVIP(){
+let email=localStorage.getItem("session");
+let user=users.find(u=>u.email==email);
+
+if(user){
+user.vip=true;
+localStorage.setItem("users",JSON.stringify(users));
+alert("VIP Activated!");
+render();
+}
+}
+
+/* PLAY */
+function play(url){
+document.getElementById("player").src=url;
+}
+
+/* FILTER */
+function filter(c){
+currentCat=c;
+render();
+}
+
+/* RENDER */
 function render(){
 
-let box = document.getElementById("channelList");
-let search = document.getElementById("search").value.toLowerCase();
+let box=document.getElementById("list");
+box.innerHTML="";
 
-box.innerHTML = "";
+let email=localStorage.getItem("session");
+let user=users.find(u=>u.email==email);
 
-let list = channels.filter(c =>
-(currentFilter === "All" || c.category === currentFilter) &&
-c.name.toLowerCase().includes(search)
-);
+channels
+.filter(c=>currentCat=="All"||c.category==currentCat)
+.forEach(c=>{
 
-list.forEach(c => {
+let locked=c.vip && !user.vip;
 
-let div = document.createElement("div");
-div.className = "channel";
+let div=document.createElement("div");
+div.className="channel";
 
-div.innerHTML = `
-<span>${c.name}</span>
-<small>${c.category}</small>
+div.innerHTML=`
+<span>
+${c.name} ${c.vip?"<span class='vip'>VIP</span>":""}
+</span>
+<span class="heart">❤️</span>
 `;
 
-div.onclick = () => play(c.url, div);
+if(!locked){
+div.onclick=()=>play(c.url);
+}else{
+div.innerHTML+=" 🔒";
+}
 
 box.appendChild(div);
 });
 
 }
 
-render();
+/* AUTO LOGIN */
+if(session){
+document.getElementById("login").style.display="none";
+document.getElementById("app").style.display="block";
+}
 
 </script>
 
