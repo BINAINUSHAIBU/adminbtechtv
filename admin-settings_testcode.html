@@ -1,6 +1,176 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"><script>
+
+/* LOAD SETTINGS */
+let settings = JSON.parse(localStorage.getItem("settings")) || {
+autoplay:true,
+theme:"dark"
+};
+
+/* APPLY THEME */
+function applyTheme(){
+document.body.className = settings.theme;
+}
+
+/* GENERATE 40,000 ACTIVE CHANNELS */
+let channels = JSON.parse(localStorage.getItem("channels")) || [];
+
+if(channels.length === 0){
+
+const categories = ["Sports","Movies","News","Kids","Music","Education","Drama","Documentary"];
+
+/* REALISTIC STREAM POOL */
+const streams = [
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+"https://test-streams.mux.dev/test_001/stream.m3u8",
+"https://test-streams.mux.dev/test_002/stream.m3u8"
+];
+
+for(let i=1;i<=40000;i++){
+
+let cat = categories[i % categories.length];
+
+channels.push({
+id:i,
+name:`BTECH LIVE CHANNEL ${i}`,
+category:cat,
+
+/* 60% Free, 40% Paid */
+type: (i % 5 === 0) ? "Pay To View" : "Free",
+
+/* 15% locked */
+status: (i % 7 === 0) ? "Locked" : "Unlocked",
+
+/* 70% live */
+active: Math.random() > 0.3,
+
+url: streams[i % streams.length]
+});
+}
+
+localStorage.setItem("channels", JSON.stringify(channels));
+}
+
+/* FILTER STATE */
+let currentCat = "All";
+let page = 0;
+let limit = 120;
+
+/* SHOW PAGE */
+function showPage(p){
+document.getElementById("channelsPage").style.display = p==="channels"?"block":"none";
+document.getElementById("settingsPage").style.display = p==="settings"?"block":"none";
+}
+
+/* PLAY CHANNEL */
+function play(url){
+let v = document.getElementById("videoPlayer");
+v.src = url;
+if(settings.autoplay) v.play();
+}
+
+/* FILTER CATEGORY */
+function filterCat(cat){
+currentCat = cat;
+page = 0;
+render();
+}
+
+/* SEARCH FUNCTION (FAST 40K FILTER) */
+function searchChannels(){
+let value = document.getElementById("searchInput").value.toLowerCase();
+
+let filtered = channels.filter(c =>
+c.name.toLowerCase().includes(value)
+);
+
+render(filtered);
+}
+
+/* RENDER CHANNELS (OPTIMIZED FOR 40K) */
+function render(customList=null){
+
+let box = document.getElementById("channelList");
+box.innerHTML = "";
+
+/* BASE LIST */
+let list = customList || channels.filter(c =>
+currentCat === "All" || c.category === currentCat
+);
+
+/* PAGINATION */
+let start = page * limit;
+let end = start + limit;
+
+let slice = list.slice(start, end);
+
+/* STATS */
+document.getElementById("freeCount")?.innerText &&
+(document.getElementById("freeCount").innerText =
+channels.filter(c=>c.type==="Free").length);
+
+document.getElementById("totalCount")?.innerText &&
+(document.getElementById("totalCount").innerText =
+channels.length);
+
+/* CHANNELS */
+slice.forEach(c=>{
+
+let div = document.createElement("div");
+div.className = "channel";
+
+div.innerHTML = `
+<span>${c.name}</span>
+<small>
+${c.active ? "🟢 LIVE" : "⚫ OFF"}
+</small>
+`;
+
+div.onclick = () => play(c.url);
+
+box.appendChild(div);
+});
+
+/* LOAD MORE */
+if(end < list.length){
+let btn = document.createElement("button");
+btn.innerText = "⬇ Load More 40K Channels";
+btn.onclick = ()=>{ page++; render(customList); };
+box.appendChild(btn);
+}
+
+}
+
+/* SETTINGS */
+function saveSettings(){
+settings.autoplay = document.getElementById("autoplay").checked;
+localStorage.setItem("settings",JSON.stringify(settings));
+}
+
+function changeTheme(){
+settings.theme = document.getElementById("theme").value;
+localStorage.setItem("settings",JSON.stringify(settings));
+applyTheme();
+}
+
+function clearChannels(){
+if(confirm("Clear all channels?")){
+localStorage.removeItem("channels");
+location.reload();
+}
+}
+
+function resetApp(){
+localStorage.clear();
+location.reload();
+}
+
+/* INIT */
+applyTheme();
+render();
+
+</script>
 <head>
 <meta charset="UTF-8">
 <title>IPTV PRO SETTINGS DASHBOARD</title>
