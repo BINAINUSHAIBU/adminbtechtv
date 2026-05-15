@@ -594,6 +594,157 @@ document.getElementById("videoPlayer")
 renderChannels(freeChannels);
 
 </script>
+  <script>
+
+/* ===== FREE IPTV ENGINE (40,000 CHANNELS) ===== */
+
+const freeChannels = [];
+
+const categories = [
+"Sports",
+"Movies",
+"News",
+"Kids",
+"Music",
+"Entertainment",
+"Documentary",
+"Education"
+];
+
+/* REAL HLS STREAM POOL (SAFE TEST SOURCES) */
+const streams = [
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+"https://test-streams.mux.dev/test_001/stream.m3u8",
+"https://test-streams.mux.dev/test_002/stream.m3u8",
+"https://test-streams.mux.dev/test_003/stream.m3u8"
+];
+
+/* GENERATE 40,000 FREE CHANNELS */
+for(let i=1;i<=40000;i++){
+
+let cat = categories[i % categories.length];
+
+freeChannels.push({
+id:i,
+name:`FREE LIVE CHANNEL ${i}`,
+category:cat,
+
+type:"Free",
+status:"Unlocked",
+
+/* realistic LIVE simulation */
+live: Math.random() > 0.25, // 75% live
+
+/* rotate streams */
+streamUrl: streams[i % streams.length]
+});
+}
+
+/* ===== RENDER ENGINE (OPTIMIZED) ===== */
+
+function renderChannels(list){
+
+const grid = document.getElementById("channelGrid");
+grid.innerHTML = "";
+
+/* only render 120 for performance */
+list.slice(0,120).forEach(channel=>{
+
+grid.innerHTML += `
+<div class="channel-card">
+
+<div class="channel-banner">
+${channel.category}
+</div>
+
+<div class="channel-info">
+
+<h3>${channel.name}</h3>
+
+<p>${channel.category}</p>
+
+<span class="badge free">Free</span>
+<span class="badge unlocked">${channel.live ? "LIVE" : "OFFLINE"}</span>
+
+<button class="watch-btn" onclick="watchChannel(${channel.id})">
+Watch Free Channel
+</button>
+
+</div>
+
+</div>
+`;
+
+});
+
+/* ===== STATS ENGINE ===== */
+
+document.getElementById("freeChannels").innerText =
+freeChannels.length.toLocaleString();
+
+document.getElementById("sportsChannels").innerText =
+freeChannels.filter(c=>c.category==="Sports").length.toLocaleString();
+
+document.getElementById("movieChannels").innerText =
+freeChannels.filter(c=>c.category==="Movies").length.toLocaleString();
+
+document.getElementById("newsChannels").innerText =
+freeChannels.filter(c=>c.category==="News").length.toLocaleString();
+
+}
+
+/* ===== SEARCH (40K FAST FILTER) ===== */
+
+function searchChannels(){
+
+const value = document.getElementById("searchInput").value.toLowerCase();
+
+const filtered = freeChannels.filter(c =>
+c.name.toLowerCase().includes(value)
+);
+
+renderChannels(filtered);
+}
+
+/* ===== PLAYER ===== */
+
+function watchChannel(id){
+
+const channel = freeChannels.find(c=>c.id===id);
+
+document.getElementById("playerModal").style.display = "flex";
+document.getElementById("playerTitle").innerText = channel.name;
+
+const video = document.getElementById("videoPlayer");
+
+if(Hls.isSupported()){
+
+const hls = new Hls();
+hls.loadSource(channel.streamUrl);
+hls.attachMedia(video);
+
+hls.on(Hls.Events.MANIFEST_PARSED,function(){
+video.play();
+});
+
+}else{
+video.src = channel.streamUrl;
+video.play();
+}
+
+}
+
+/* ===== CLOSE PLAYER ===== */
+
+function closePlayer(){
+document.getElementById("playerModal").style.display = "none";
+document.getElementById("videoPlayer").pause();
+}
+
+/* INIT */
+renderChannels(freeChannels);
+
+</script>
 
 </body>
 </html>
