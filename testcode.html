@@ -1,0 +1,689 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BTECH TV Ultra</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+  <style>
+    :root{
+      --bg:#08080c;
+      --panel:#111118;
+      --card:#191925;
+      --border:#2c2c3d;
+      --text:#f4f4f8;
+      --muted:#9e9eb2;
+      --accent:#8b5cf6;
+      --green:#22c55e;
+      --red:#ef4444;
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family:Arial, sans-serif;
+      overflow:hidden;
+    }
+
+    #app{
+      display:flex;
+      height:100vh;
+    }
+
+    /* SIDEBAR */
+
+    #sidebar{
+      width:340px;
+      background:var(--panel);
+      border-right:1px solid var(--border);
+      display:flex;
+      flex-direction:column;
+    }
+
+    #search{
+      padding:14px;
+      border:none;
+      outline:none;
+      background:var(--card);
+      color:white;
+      margin:10px;
+      border-radius:8px;
+    }
+
+    #stats{
+      padding:10px 14px;
+      font-size:12px;
+      color:var(--muted);
+      border-bottom:1px solid var(--border);
+    }
+
+    #channels{
+      overflow-y:auto;
+      flex:1;
+      padding:8px;
+    }
+
+    .channel{
+      display:flex;
+      gap:10px;
+      padding:10px;
+      border-radius:8px;
+      cursor:pointer;
+      transition:.2s;
+      margin-bottom:6px;
+      background:transparent;
+    }
+
+    .channel:hover{
+      background:var(--card);
+    }
+
+    .logoBox{
+      width:50px;
+      height:50px;
+      border-radius:8px;
+      background:#000;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-shrink:0;
+    }
+
+    .logoBox img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
+    .channelInfo{
+      flex:1;
+      min-width:0;
+    }
+
+    .channelName{
+      font-size:14px;
+      font-weight:bold;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .channelMeta{
+      font-size:11px;
+      color:var(--muted);
+      margin-top:4px;
+    }
+
+    /* PLAYER */
+
+    #main{
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      background:black;
+    }
+
+    #playerWrap{
+      flex:1;
+      position:relative;
+      background:black;
+    }
+
+    video{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      background:black;
+    }
+
+    #overlay{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      background:rgba(0,0,0,.85);
+      z-index:5;
+    }
+
+    #overlay h1{
+      font-size:40px;
+      margin-bottom:10px;
+    }
+
+    #overlay p{
+      color:var(--muted);
+    }
+
+    #controls{
+      height:70px;
+      background:var(--panel);
+      border-top:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:0 20px;
+    }
+
+    #nowPlaying{
+      overflow:hidden;
+    }
+
+    #nowName{
+      font-weight:bold;
+    }
+
+    #nowMeta{
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .btns{
+      display:flex;
+      gap:10px;
+    }
+
+    button{
+      background:var(--card);
+      color:white;
+      border:1px solid var(--border);
+      padding:10px 14px;
+      border-radius:8px;
+      cursor:pointer;
+    }
+
+    button:hover{
+      border-color:var(--accent);
+    }
+
+    @media(max-width:800px){
+      #sidebar{
+        width:100%;
+        position:absolute;
+        z-index:10;
+        height:100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="app">
+
+  <!-- SIDEBAR -->
+
+  <div id="sidebar">
+
+    <input
+      id="search"
+      type="text"
+      placeholder="Search channels..."
+      oninput="filterChannels()"
+    >
+
+    <div id="stats">
+      Loading IPTV channels...
+    </div>
+
+    <div id="channels"></div>
+
+  </div>
+
+  <!-- MAIN -->
+
+  <div id="main">
+
+    <div id="playerWrap">
+
+      <video
+        id="video"
+        controls
+        autoplay
+        playsinline
+      ></video>
+
+      <div id="overlay">
+        <h1>📺</h1>
+        <p>BTECH TV Ultra Loading...</p>
+      </div>
+
+    </div>
+
+    <div id="controls">
+
+      <div id="nowPlaying">
+        <div id="nowName">No Channel Selected</div>
+        <div id="nowMeta">Live IPTV Streaming</div>
+      </div>
+
+      <div class="btns">
+        <button onclick="prevChannel()">◀ Prev</button>
+        <button onclick="nextChannel()">Next ▶</button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+/* =========================
+   PLAYLIST SOURCES
+========================= */
+
+const playlists = [
+
+  "https://iptv-org.github.io/iptv/index.m3u",
+  "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8",
+  "https://raw.githubusercontent.com/freecasthub/public-iptv/main/playlist.m3u",
+  "https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/main/playlists/roku_all.m3u",
+  "https://tvpass.org/playlist/m3u"
+
+];
+
+/* =========================
+   GLOBAL STATE
+========================= */
+
+let allChannels = [];
+let filteredChannels = [];
+let currentIndex = 0;
+let hls = null;
+
+/* =========================
+   LOAD PLAYLISTS
+========================= */
+
+async function loadAllPlaylists(){
+
+  const stats = document.getElementById("stats");
+
+  stats.innerHTML = "Loading IPTV sources...";
+
+  const seen = new Set();
+
+  for(const url of playlists){
+
+    try{
+
+      const response = await fetch(url);
+      const text = await response.text();
+
+      const parsed = parseM3U(text);
+
+      for(const ch of parsed){
+
+        if(!seen.has(ch.url)){
+
+          seen.add(ch.url);
+
+          allChannels.push(ch);
+
+        }
+
+      }
+
+      stats.innerHTML =
+        `Loaded ${allChannels.length.toLocaleString()} channels`;
+
+    }catch(err){
+
+      console.log("FAILED:", url);
+
+    }
+
+  }
+
+  allChannels.sort((a,b)=>
+    a.name.localeCompare(b.name)
+  );
+
+  filteredChannels = allChannels;
+
+  renderChannels();
+
+  document.getElementById("overlay").innerHTML =
+    `
+      <h1>🚀</h1>
+      <p>${allChannels.length.toLocaleString()} Channels Ready</p>
+    `;
+
+}
+
+/* =========================
+   PARSE M3U
+========================= */
+
+function parseM3U(text){
+
+  const lines = text.split("\n");
+
+  const result = [];
+
+  let temp = {};
+
+  for(let line of lines){
+
+    line = line.trim();
+
+    if(line.startsWith("#EXTINF")){
+
+      temp = {
+
+        name:
+          line.match(/,(.*)/)?.[1] || "Unknown",
+
+        logo:
+          line.match(/tvg-logo="(.*?)"/)?.[1] || "",
+
+        group:
+          line.match(/group-title="(.*?)"/)?.[1] || "Live TV"
+
+      };
+
+    }
+
+    else if(line.startsWith("http")){
+
+      temp.url = line;
+
+      result.push(temp);
+
+      temp = {};
+
+    }
+
+  }
+
+  return result;
+
+}
+
+/* =========================
+   RENDER CHANNELS
+========================= */
+
+function renderChannels(){
+
+  const container =
+    document.getElementById("channels");
+
+  container.innerHTML = "";
+
+  filteredChannels
+    .slice(0,1000)
+    .forEach((channel,index)=>{
+
+      const div = document.createElement("div");
+
+      div.className = "channel";
+
+      div.innerHTML = `
+
+        <div class="logoBox">
+
+          ${
+            channel.logo
+            ? `<img src="${channel.logo}" loading="lazy">`
+            : "📺"
+          }
+
+        </div>
+
+        <div class="channelInfo">
+
+          <div class="channelName">
+            ${channel.name}
+          </div>
+
+          <div class="channelMeta">
+            ${channel.group}
+          </div>
+
+        </div>
+
+      `;
+
+      div.onclick = ()=>playChannel(index);
+
+      container.appendChild(div);
+
+    });
+
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+function filterChannels(){
+
+  const q =
+    document
+      .getElementById("search")
+      .value
+      .toLowerCase();
+
+  filteredChannels = allChannels.filter(ch=>
+
+    ch.name.toLowerCase().includes(q) ||
+
+    ch.group.toLowerCase().includes(q)
+
+  );
+
+  renderChannels();
+
+}
+
+/* =========================
+   PLAY CHANNEL
+========================= */
+
+function playChannel(index){
+
+  currentIndex = index;
+
+  const channel =
+    filteredChannels[index];
+
+  const video =
+    document.getElementById("video");
+
+  document.getElementById("overlay")
+    .style.display = "none";
+
+  document.getElementById("nowName")
+    .innerText = channel.name;
+
+  document.getElementById("nowMeta")
+    .innerText = channel.group;
+
+  if(hls){
+
+    hls.destroy();
+
+    hls = null;
+
+  }
+
+  if(Hls.isSupported()){
+
+    hls = new Hls();
+
+    hls.loadSource(channel.url);
+
+    hls.attachMedia(video);
+
+    hls.on(
+      Hls.Events.MANIFEST_PARSED,
+      ()=>video.play()
+    );
+
+  }else{
+
+    video.src = channel.url;
+
+    video.play();
+
+  }
+
+}
+
+/* =========================
+   NEXT / PREVIOUS
+========================= */
+
+function nextChannel(){
+
+  currentIndex++;
+
+  if(currentIndex >= filteredChannels.length){
+
+    currentIndex = 0;
+
+  }
+
+  playChannel(currentIndex);
+
+}
+
+function prevChannel(){
+
+  currentIndex--;
+
+  if(currentIndex < 0){
+
+    currentIndex =
+      filteredChannels.length - 1;
+
+  }
+
+  playChannel(currentIndex);
+
+}
+
+/* =========================
+   START
+========================= */
+
+loadAllPlaylists();
+
+</script>
+/* =========================
+   ULTRA IPTV PLAYLIST SOURCES (EXPANDED)
+========================= */
+
+const playlists = [
+
+  /* CORE INDEXES */
+  "https://iptv-org.github.io/iptv/index.m3u",
+  "https://iptv-org.github.io/iptv/index.country.m3u",
+  "https://iptv-org.github.io/iptv/index.category.m3u",
+  "https://iptv-org.github.io/iptv/index.language.m3u",
+  "https://iptv-org.github.io/iptv/index.nsfw.m3u",
+
+  /* FREE-TV */
+  "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8",
+  "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlists/playlist_usa.m3u8",
+  "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlists/playlist_uk.m3u8",
+  "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlists/playlist_sports.m3u8",
+  "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlists/playlist_news.m3u8",
+
+  /* FREECAST HUB */
+  "https://raw.githubusercontent.com/freecasthub/public-iptv/main/playlist.m3u",
+  "https://raw.githubusercontent.com/freecasthub/public-iptv/main/countries/us.m3u",
+  "https://raw.githubusercontent.com/freecasthub/public-iptv/main/countries/uk.m3u",
+  "https://raw.githubusercontent.com/freecasthub/public-iptv/main/categories/sports.m3u",
+  "https://raw.githubusercontent.com/freecasthub/public-iptv/main/categories/news.m3u",
+
+  /* ROKU */
+  "https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/main/playlists/roku_all.m3u",
+  "https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/main/playlists/roku_us.m3u",
+  "https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/main/playlists/roku_uk.m3u",
+
+  /* IPTV RESTREAM */
+  "https://raw.githubusercontent.com/iptv-restream/iptv-channels/master/index.m3u",
+  "https://raw.githubusercontent.com/iptv-restream/iptv-channels/master/iptv/usa.m3u",
+  "https://raw.githubusercontent.com/iptv-restream/iptv-channels/master/iptv/uk.m3u",
+
+  /* TVPASS */
+  "https://tvpass.org/playlist/m3u",
+
+  /* APSATTV MASSIVE NETWORK */
+  "https://www.apsattv.com/xumo.m3u",
+  "https://www.apsattv.com/firetv.m3u",
+  "https://www.apsattv.com/lg.m3u",
+  "https://www.apsattv.com/redbox.m3u",
+  "https://www.apsattv.com/tablo.m3u",
+  "https://www.apsattv.com/klowd.m3u",
+  "https://www.apsattv.com/pluto.m3u",
+  "https://www.apsattv.com/vizio.m3u",
+  "https://www.apsattv.com/distro.m3u",
+  "https://www.apsattv.com/cineverse.m3u",
+  "https://www.apsattv.com/localnow.m3u",
+  "https://www.apsattv.com/samsungtvplus.m3u",
+  "https://www.apsattv.com/roku.m3u",
+  "https://www.apsattv.com/xiaomi.m3u",
+  "https://www.apsattv.com/stirr.m3u",
+  "https://www.apsattv.com/plex.m3u",
+  "https://www.apsattv.com/plexlive.m3u",
+  "https://www.apsattv.com/sling.m3u",
+  "https://www.apsattv.com/tubi.m3u",
+  "https://www.apsattv.com/freevee.m3u",
+  "https://www.apsattv.com/filmrise.m3u",
+  "https://www.apsattv.com/paramount.m3u",
+  "https://www.apsattv.com/shoutfactory.m3u",
+  "https://www.apsattv.com/ion.m3u",
+  "https://www.apsattv.com/cbsnews.m3u",
+  "https://www.apsattv.com/bloomberg.m3u",
+  "https://www.apsattv.com/newsnet.m3u",
+  "https://www.apsattv.com/sports.m3u",
+  "https://www.apsattv.com/music.m3u",
+  "https://www.apsattv.com/entertainment.m3u",
+  "https://www.apsattv.com/kids.m3u",
+  "https://www.apsattv.com/documentary.m3u",
+  "https://www.apsattv.com/movies.m3u",
+  "https://www.apsattv.com/reality.m3u",
+
+  /* REGIONS */
+  "https://www.apsattv.com/africa.m3u",
+  "https://www.apsattv.com/nigeria.m3u",
+  "https://www.apsattv.com/ghana.m3u",
+  "https://www.apsattv.com/southafrica.m3u",
+  "https://www.apsattv.com/uk.m3u",
+  "https://www.apsattv.com/usa.m3u",
+  "https://www.apsattv.com/canada.m3u",
+  "https://www.apsattv.com/europe.m3u",
+  "https://www.apsattv.com/asia.m3u",
+  "https://www.apsattv.com/india.m3u",
+  "https://www.apsattv.com/france.m3u",
+  "https://www.apsattv.com/germany.m3u",
+  "https://www.apsattv.com/spain.m3u",
+  "https://www.apsattv.com/italy.m3u",
+  "https://www.apsattv.com/portugal.m3u",
+  "https://www.apsattv.com/brazil.m3u",
+  "https://www.apsattv.com/mexico.m3u",
+  "https://www.apsattv.com/latin.m3u",
+
+  /* WORLD EXTRA */
+  "https://raw.githubusercontent.com/dracohe/FreeTv-IPTV/master/playlist_sport.m3u8",
+  "https://raw.githubusercontent.com/dracohe/FreeTv-IPTV/master/playlist_news.m3u8"
+
+];
+</body>
+</html>
