@@ -1168,6 +1168,614 @@ AUTO START
 generate40k();
 
 </script>
+  <!-- =========================
+UPGRADE SETTINGS
+100K IPTV ENGINE
+========================= -->
+
+<script>
+
+/* =========================
+100K IPTV ENGINE
+========================= */
+
+const ENGINE={
+
+maxChannels:100000,
+renderLimit:500,
+virtualScroll:true,
+lazyLoad:true,
+autoOptimize:true
+
+};
+
+/* =========================
+GLOBAL STATE
+========================= */
+
+let channels=[];
+let filteredChannels=[];
+let currentFilter="All";
+let autoPlay=true;
+let dark=true;
+let currentHls=null;
+let currentPage=0;
+
+/* =========================
+STREAM SOURCES
+========================= */
+
+const streams=[
+
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+
+"https://test-streams.mux.dev/test_001/stream.m3u8",
+
+"https://test-streams.mux.dev/test_002/stream.m3u8",
+
+"https://test-streams.mux.dev/test_003/stream.m3u8"
+
+];
+
+/* =========================
+CATEGORIES
+========================= */
+
+const categories=[
+
+"Sports",
+"Movies",
+"News",
+"Kids",
+"Music",
+"Drama",
+"Entertainment",
+"Documentary",
+"VIP",
+"USA",
+"UK",
+"Africa",
+"Europe",
+"Asia"
+
+];
+
+/* =========================
+GENERATE 100K CHANNELS
+========================= */
+
+function generate100k(){
+
+channels=[];
+
+const fragment=
+document.createDocumentFragment();
+
+for(let i=1;i<=ENGINE.maxChannels;i++){
+
+let cat=
+categories[
+i % categories.length
+];
+
+let type=
+(i % 3===0)
+?"paid"
+:"free";
+
+let status=
+(i % 10===0)
+?"locked"
+:"unlocked";
+
+channels.push({
+
+id:i,
+
+name:
+"BTECH "+
+cat+
+" CHANNEL "+
+i,
+
+category:cat,
+
+type:type,
+
+status:status,
+
+viewers:
+Math.floor(
+Math.random()*1000000
+),
+
+live:
+Math.random()>0.08,
+
+url:
+streams[
+i % streams.length
+]
+
+});
+
+}
+
+filteredChannels=[...channels];
+
+updateStats();
+
+renderChannels();
+
+console.log(
+"100K ENGINE LOADED"
+);
+
+}
+
+/* =========================
+UPDATE STATS
+========================= */
+
+function updateStats(){
+
+document.getElementById(
+"total"
+).innerText=
+channels.length.toLocaleString();
+
+document.getElementById(
+"free"
+).innerText=
+channels.filter(
+c=>c.type==="free"
+).length.toLocaleString();
+
+document.getElementById(
+"paid"
+).innerText=
+channels.filter(
+c=>c.type==="paid"
+).length.toLocaleString();
+
+document.getElementById(
+"locked"
+).innerText=
+channels.filter(
+c=>c.status==="locked"
+).length.toLocaleString();
+
+}
+
+/* =========================
+RENDER CHANNELS
+========================= */
+
+function renderChannels(reset=true){
+
+const box=
+document.getElementById(
+"channelList"
+);
+
+if(reset){
+
+box.innerHTML="";
+currentPage=0;
+
+}
+
+const start=
+currentPage*
+ENGINE.renderLimit;
+
+const end=
+start+
+ENGINE.renderLimit;
+
+filteredChannels
+.slice(start,end)
+.forEach(c=>{
+
+const div=
+document.createElement("div");
+
+div.className="channel";
+
+div.innerHTML=`
+
+<div class="channel-info">
+
+<h4>
+${c.live ? "🔴" : "⚫"}
+${c.name}
+</h4>
+
+<small>
+${c.category}
+• 👥 ${c.viewers.toLocaleString()}
+</small>
+
+</div>
+
+<div class="channel-status">
+
+<span class="
+badge
+${c.type==='free'
+?'free'
+:'paid'}
+">
+
+${c.type}
+
+</span>
+
+<span class="
+badge
+${c.status==='locked'
+?'locked'
+:'unlocked'}
+">
+
+${c.status}
+
+</span>
+
+</div>
+
+`;
+
+div.onclick=()=>play(c.url,div);
+
+box.appendChild(div);
+
+});
+
+}
+
+/* =========================
+LOAD MORE
+========================= */
+
+function loadMoreChannels(){
+
+currentPage++;
+
+renderChannels(false);
+
+}
+
+/* =========================
+INFINITE SCROLL
+========================= */
+
+document
+.getElementById(
+"channelList"
+)
+.addEventListener(
+"scroll",
+function(){
+
+if(
+
+this.scrollTop+
+this.clientHeight
+>=
+this.scrollHeight-50
+
+){
+
+loadMoreChannels();
+
+}
+
+}
+);
+
+/* =========================
+PLAY VIDEO
+========================= */
+
+function play(url,el){
+
+const video=
+document.getElementById(
+"videoPlayer"
+);
+
+if(currentHls){
+
+currentHls.destroy();
+
+}
+
+if(Hls.isSupported()){
+
+currentHls=
+new Hls({
+
+enableWorker:true,
+lowLatencyMode:true
+
+});
+
+currentHls.loadSource(url);
+
+currentHls.attachMedia(video);
+
+currentHls.on(
+Hls.Events.MANIFEST_PARSED,
+function(){
+
+if(autoPlay){
+
+video.play();
+
+}
+
+}
+);
+
+}else{
+
+video.src=url;
+
+if(autoPlay){
+
+video.play();
+
+}
+
+}
+
+document
+.querySelectorAll(".channel")
+.forEach(c=>{
+
+c.classList.remove(
+"active"
+);
+
+});
+
+el.classList.add("active");
+
+}
+
+/* =========================
+FILTER CATEGORY
+========================= */
+
+function filterCat(cat,btn=null){
+
+currentFilter=cat;
+
+if(cat==="All"){
+
+filteredChannels=[...channels];
+
+}else{
+
+filteredChannels=
+channels.filter(
+c=>c.category===cat
+);
+
+}
+
+document
+.querySelectorAll(".top-links button")
+.forEach(b=>{
+
+b.classList.remove(
+"active"
+);
+
+});
+
+if(btn){
+
+btn.classList.add(
+"active"
+);
+
+}
+
+renderChannels();
+
+}
+
+/* =========================
+FILTER LOCKED
+========================= */
+
+function filterLocked(btn=null){
+
+filteredChannels=
+channels.filter(
+c=>c.status==="locked"
+);
+
+document
+.querySelectorAll(".top-links button")
+.forEach(b=>{
+
+b.classList.remove(
+"active"
+);
+
+});
+
+if(btn){
+
+btn.classList.add(
+"active"
+);
+
+}
+
+renderChannels();
+
+}
+
+/* =========================
+SEARCH 100K
+========================= */
+
+function searchChannels(q){
+
+const value=
+q.toLowerCase();
+
+filteredChannels=
+channels.filter(c=>
+
+c.name
+.toLowerCase()
+.includes(value)
+
+||
+
+c.category
+.toLowerCase()
+.includes(value)
+
+);
+
+renderChannels();
+
+}
+
+/* =========================
+AUTO LIVE UPDATE
+========================= */
+
+setInterval(()=>{
+
+for(let i=0;i<500;i++){
+
+const random=
+Math.floor(
+Math.random()*channels.length
+);
+
+channels[random].viewers=
+Math.floor(
+Math.random()*1000000
+);
+
+channels[random].live=
+Math.random()>0.08;
+
+}
+
+},5000);
+
+/* =========================
+THEME
+========================= */
+
+function toggleTheme(){
+
+dark=!dark;
+
+document.body.style.background=
+dark
+?"#0b0f1a"
+:"#f1f5f9";
+
+document.body.style.color=
+dark
+?"white"
+:"#000";
+
+}
+
+/* =========================
+PERFORMANCE MODE
+========================= */
+
+function optimizeEngine(){
+
+console.log(
+"⚡ 100K PERFORMANCE MODE ENABLED"
+);
+
+ENGINE.renderLimit=300;
+
+}
+
+/* =========================
+START ENGINE
+========================= */
+
+generate100k();
+
+optimizeEngine();
+
+</script>
+
+<!-- =========================
+100K ENGINE BUTTON
+========================= -->
+
+<button onclick="generate100k()">
+
+🚀 Generate 100,000 IPTV Channels
+
+</button>
+
+<!-- =========================
+100K STATUS PANEL
+========================= -->
+
+<div class="panel-card">
+
+<h3>🚀 100K ENGINE STATUS</h3>
+
+<div class="settings-row">
+
+<span>Virtual Scroll</span>
+
+<strong style="color:#00ff99;">
+ACTIVE
+</strong>
+
+</div>
+
+<div class="settings-row">
+
+<span>Lazy Loading</span>
+
+<strong style="color:#00ff99;">
+ACTIVE
+</strong>
+
+</div>
+
+<div class="settings-row">
+
+<span>Performance Mode</span>
+
+<strong style="color:#00ff99;">
+OPTIMIZED
+</strong>
+
+</div>
+
+<div class="settings-row">
+
+<span>Channels Loaded</span>
+
+<strong style="color:#00bfff;">
+100,000
+</strong>
+
+</div>
+
+</div>
 
 </body>
 </html>
