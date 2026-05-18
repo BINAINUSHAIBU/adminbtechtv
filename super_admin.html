@@ -1,6 +1,7 @@
 <!-- =========================================
 BTECH-TV PRO 100K SUPER ADMIN DASHBOARD
 MERGED ULTRA ENGINE + SUPER ADMIN PANEL
+FULL MERGED VERSION
 ========================================= -->
 
 <!DOCTYPE html>
@@ -74,6 +75,9 @@ justify-content:space-between;
 align-items:center;
 padding:0 20px;
 border-bottom:1px solid rgba(255,255,255,.06);
+position:sticky;
+top:0;
+z-index:999;
 }
 
 .logo{
@@ -117,7 +121,7 @@ SIDEBAR
 ========================================= */
 
 .sidebar{
-width:260px;
+width:270px;
 background:#0f1628;
 padding:15px;
 overflow-y:auto;
@@ -142,6 +146,11 @@ font-size:14px;
 .cat:hover{
 background:var(--hover);
 transform:translateX(4px);
+}
+
+.sidebar a{
+text-decoration:none;
+color:white;
 }
 
 /* =========================================
@@ -348,7 +357,7 @@ background:#2563eb;
 }
 
 /* =========================================
-RIGHT PANEL
+ADMIN PANEL
 ========================================= */
 
 .admin-panel{
@@ -537,7 +546,7 @@ TOPBAR
 <div class="topbar">
 
 <div class="logo">
-📺 BTECH-TV SUPER ADMIN
+📺 BTECH-TV PRO ULTRA MAX
 </div>
 
 <div class="top-links">
@@ -559,6 +568,10 @@ Movies
 
 <button onclick="filterCat('News',this)">
 News
+</button>
+
+<button onclick="filterCat('Kids',this)">
+Kids
 </button>
 
 <button onclick="filterLocked(this)">
@@ -589,19 +602,77 @@ SIDEBAR
 ⚙ SUPER ADMIN MENU
 </h3>
 
-<div class="cat">📺 Dashboard</div>
-<div class="cat">👥 User Manager</div>
-<div class="cat">💳 Subscription Plans</div>
-<div class="cat">📡 IPTV Sources</div>
-<div class="cat">🔒 Locked Channels</div>
-<div class="cat">📈 Analytics</div>
-<div class="cat">🧠 AI Optimization</div>
-<div class="cat">⚡ Performance Engine</div>
-<div class="cat">🌍 Geo Channels</div>
-<div class="cat">🎬 Movies</div>
-<div class="cat">🏆 Sports</div>
-<div class="cat">📰 News</div>
-<div class="cat">⚙ Settings</div>
+<div class="cat" onclick="filterCat('All')">
+📺 All Channels
+</div>
+
+<div class="cat" onclick="filterCat('Sports')">
+🏆 Sports
+</div>
+
+<div class="cat" onclick="filterCat('Movies')">
+🎬 Movies
+</div>
+
+<div class="cat" onclick="filterCat('News')">
+📰 News
+</div>
+
+<div class="cat" onclick="filterCat('Kids')">
+🧸 Kids
+</div>
+
+<div class="cat" onclick="filterCat('Music')">
+🎵 Music
+</div>
+
+<div class="cat" onclick="filterCat('Africa')">
+🌍 Africa
+</div>
+
+<div class="cat" onclick="filterCat('USA')">
+🇺🇸 USA
+</div>
+
+<div class="cat" onclick="filterCat('UK')">
+🇬🇧 UK
+</div>
+
+<a href="https://superadminbtech-tv.netlify.app/super_admin">
+<div class="cat">
+⚙ Super Admin
+</div>
+</a>
+
+<a href="https://superadminbtech-tv.netlify.app/user_manager">
+<div class="cat">
+👥 User Manager
+</div>
+</a>
+
+<a href="https://superadminbtech-tv.netlify.app/pay-to-view.html">
+<div class="cat">
+💳 Pay To View
+</div>
+</a>
+
+<a href="https://superadminbtech-tv.netlify.app/locked-channels.html">
+<div class="cat">
+🔒 Locked Channels
+</div>
+</a>
+
+<div class="cat">
+📈 Analytics
+</div>
+
+<div class="cat">
+🧠 AI Optimization
+</div>
+
+<div class="cat">
+⚡ Performance Engine
+</div>
 
 </div>
 
@@ -616,7 +687,7 @@ MAIN
 <div class="player">
 
 <div class="live-badge">
-🔴 LIVE
+🔴 LIVE STREAM
 </div>
 
 <video
@@ -633,8 +704,8 @@ id="overlay"
 
 <h1>🚀</h1>
 
-<p>
-Booting 100K IPTV Engine...
+<p id="loaderText">
+Initializing BTECH-TV Engine...
 </p>
 
 </div>
@@ -764,6 +835,7 @@ onclick="generateVirtualChannels()"
 
 <input placeholder="Username">
 <input placeholder="Email">
+
 <select>
 <option>Free Plan</option>
 <option>VIP Plan</option>
@@ -830,7 +902,7 @@ onchange="toggleTheme()"
 
 <div class="settings-row">
 
-<span>Performance</span>
+<span>Performance Mode</span>
 
 <strong style="color:#00ff99;">
 ACTIVE
@@ -907,6 +979,10 @@ const ENGINE={
 
 maxChannels:100000,
 renderLimit:250,
+bufferSize:1500,
+virtualScroll:true,
+lazyLoad:true,
+smartRender:true,
 performanceMode:true
 
 };
@@ -917,11 +993,27 @@ GLOBAL STATE
 
 let channels=[];
 let filteredChannels=[];
-let currentIndex=0;
 let currentPage=0;
+let currentIndex=0;
 let currentHls=null;
 let autoPlay=true;
 let dark=true;
+
+/* =========================================
+PLAYLISTS
+========================================= */
+
+const playlists=[
+
+"https://iptv-org.github.io/iptv/index.m3u",
+
+"https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8",
+
+"https://raw.githubusercontent.com/freecasthub/public-iptv/main/playlist.m3u",
+
+"https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/main/playlists/roku_all.m3u"
+
+];
 
 /* =========================================
 BACKUP STREAMS
@@ -950,32 +1042,212 @@ const categories=[
 "News",
 "Kids",
 "Music",
+"Drama",
 "Africa",
 "USA",
 "UK",
 "VIP",
-"Documentary"
+"Entertainment",
+"Documentary",
+"Religion",
+"Fashion",
+"Travel",
+"Comedy",
+"Science",
+"Anime",
+"Arabic",
+"Europe"
 
 ];
 
 /* =========================================
-GENERATE CHANNELS
+LOAD PLAYLISTS
+========================================= */
+
+async function loadPlaylists(){
+
+showLoader(
+"Loading BTECH-TV Playlists..."
+);
+
+const seen=new Set();
+
+for(const url of playlists){
+
+try{
+
+const res=
+await fetch(url);
+
+const text=
+await res.text();
+
+const parsed=
+parseM3U(text);
+
+parsed.forEach(ch=>{
+
+if(
+ch.url &&
+!seen.has(ch.url)
+){
+
+seen.add(ch.url);
+
+channels.push({
+
+id:
+channels.length+1,
+
+name:
+ch.name ||
+"Unknown IPTV",
+
+category:
+ch.category ||
+"Live",
+
+logo:
+ch.logo ||
+"https://via.placeholder.com/60",
+
+type:
+Math.random()>0.7
+?"paid"
+:"free",
+
+status:
+Math.random()>0.9
+?"locked"
+:"unlocked",
+
+viewers:
+Math.floor(
+Math.random()*1000000
+),
+
+live:
+Math.random()>0.05,
+
+url:
+ch.url
+
+});
+
+}
+
+});
+
+updateLoader(
+channels.length+
+" Channels Loaded"
+);
+
+}catch(err){
+
+console.log(
+"Playlist Failed",
+url
+);
+
+}
+
+}
+
+generateVirtualChannels();
+
+filteredChannels=[...channels];
+
+updateStats();
+
+renderChannels();
+
+hideLoader();
+
+}
+
+/* =========================================
+PARSE M3U
+========================================= */
+
+function parseM3U(text){
+
+const lines=
+text.split("\n");
+
+const result=[];
+
+let temp={};
+
+for(let line of lines){
+
+line=line.trim();
+
+if(
+line.startsWith("#EXTINF")
+){
+
+temp={
+
+name:
+line.match(/,(.*)/)?.[1]
+|| "Unknown",
+
+logo:
+line.match(
+/tvg-logo="(.*?)"/
+)?.[1]
+|| "",
+
+category:
+line.match(
+/group-title="(.*?)"/
+)?.[1]
+|| "LIVE"
+
+};
+
+}
+
+else if(
+line.startsWith("http")
+){
+
+temp.url=line;
+
+result.push(temp);
+
+temp={};
+
+}
+
+}
+
+return result;
+
+}
+
+/* =========================================
+GENERATE VIRTUAL CHANNELS
 ========================================= */
 
 function generateVirtualChannels(){
 
-channels=[];
+const needed=
+ENGINE.maxChannels-
+channels.length;
 
-for(let i=1;i<=ENGINE.maxChannels;i++){
+for(let i=1;i<=needed;i++){
 
-const cat=
+let cat=
 categories[
 i % categories.length
 ];
 
 channels.push({
 
-id:i,
+id:
+channels.length+1,
 
 name:
 "BTECH "+
@@ -1014,16 +1286,6 @@ i % streams.length
 });
 
 }
-
-filteredChannels=[...channels];
-
-updateStats();
-
-renderChannels();
-
-document.getElementById(
-"overlay"
-).style.display="none";
 
 }
 
@@ -1166,7 +1428,9 @@ currentHls=
 new Hls({
 
 enableWorker:true,
-lowLatencyMode:true
+lowLatencyMode:true,
+backBufferLength:90,
+maxBufferLength:120
 
 });
 
@@ -1194,7 +1458,11 @@ video.play();
 video.src=
 channel.url;
 
+if(autoPlay){
+
 video.play();
+
+}
 
 }
 
@@ -1314,7 +1582,7 @@ renderChannels();
 }
 
 /* =========================================
-LOCKED
+LOCKED FILTER
 ========================================= */
 
 function filterLocked(btn=null){
@@ -1465,6 +1733,41 @@ dark
 }
 
 /* =========================================
+LOADER
+========================================= */
+
+function showLoader(text){
+
+const overlay=
+document.getElementById(
+"overlay"
+);
+
+overlay.style.display="flex";
+
+document.getElementById(
+"loaderText"
+).innerText=text;
+
+}
+
+function updateLoader(text){
+
+document.getElementById(
+"loaderText"
+).innerText=text;
+
+}
+
+function hideLoader(){
+
+document.getElementById(
+"overlay"
+).style.display="none";
+
+}
+
+/* =========================================
 LIVE VIEWERS UPDATE
 ========================================= */
 
@@ -1484,6 +1787,9 @@ Math.floor(
 Math.random()*1000000
 );
 
+channels[random].live=
+Math.random()>0.08;
+
 }
 
 }
@@ -1491,10 +1797,36 @@ Math.random()*1000000
 },5000);
 
 /* =========================================
+ENGINE OPTIMIZATION
+========================================= */
+
+function optimizeEngine(){
+
+console.log(
+"⚡ PERFORMANCE MODE ENABLED"
+);
+
+if(
+navigator.hardwareConcurrency <= 4
+){
+
+ENGINE.renderLimit=150;
+
+console.log(
+"LOW POWER DEVICE MODE"
+);
+
+}
+
+}
+
+/* =========================================
 BOOT ENGINE
 ========================================= */
 
-generateVirtualChannels();
+optimizeEngine();
+
+loadPlaylists();
 
 </script>
 
