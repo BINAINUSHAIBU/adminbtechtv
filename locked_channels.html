@@ -1,0 +1,1171 @@
+<!-- =========================================
+LOCKED CHANNELS DASHBOARD
+MERGED BTECH-TV 100K SUPER ADMIN ENGINE
+========================================= -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>BTECH-TV LOCKED CHANNELS DASHBOARD</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+
+/* =========================
+ROOT
+========================= */
+
+:root{
+
+--bg:#0b0f1a;
+--panel:#11182a;
+--card:#1b2438;
+--hover:#2b3a5a;
+--accent:#ff3b3b;
+--text:#ffffff;
+--muted:#94a3b8;
+
+}
+
+/* =========================
+GLOBAL
+========================= */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
+
+/* =========================
+TOPBAR
+========================= */
+
+.topbar{
+height:65px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 20px;
+border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.topbar h2{
+color:var(--accent);
+font-size:22px;
+}
+
+.top-links{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.top-links button{
+padding:10px 15px;
+background:var(--card);
+border:none;
+border-radius:8px;
+color:white;
+font-weight:bold;
+cursor:pointer;
+transition:0.3s;
+}
+
+.top-links button:hover,
+.top-links button.active{
+background:var(--accent);
+color:white;
+}
+
+/* =========================
+LAYOUT
+========================= */
+
+.container{
+display:flex;
+height:calc(100vh - 65px);
+}
+
+/* =========================
+SIDEBAR
+========================= */
+
+.sidebar{
+width:260px;
+background:#0f1628;
+padding:15px;
+overflow-y:auto;
+border-right:1px solid rgba(255,255,255,0.05);
+}
+
+.sidebar h3{
+margin-bottom:15px;
+color:var(--accent);
+}
+
+.cat{
+padding:12px;
+margin:8px 0;
+background:var(--card);
+border-radius:8px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.cat:hover{
+background:var(--hover);
+transform:translateX(4px);
+}
+
+/* =========================
+MAIN
+========================= */
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+/* =========================
+PLAYER
+========================= */
+
+.player{
+height:320px;
+background:black;
+position:relative;
+}
+
+.player video{
+width:100%;
+height:100%;
+object-fit:contain;
+background:black;
+}
+
+.live-badge{
+position:absolute;
+top:15px;
+left:15px;
+background:red;
+padding:8px 14px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+z-index:5;
+}
+
+/* =========================
+OVERLAY
+========================= */
+
+.overlay{
+position:absolute;
+inset:0;
+background:rgba(0,0,0,.85);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+z-index:10;
+}
+
+.overlay h1{
+font-size:60px;
+margin-bottom:10px;
+}
+
+.overlay p{
+color:var(--muted);
+}
+
+/* =========================
+NOW PLAYING
+========================= */
+
+.now-playing-bar{
+background:var(--panel);
+padding:15px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-top:1px solid rgba(255,255,255,0.05);
+border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.now-info h3{
+margin-bottom:5px;
+}
+
+.now-info p{
+font-size:13px;
+color:var(--muted);
+}
+
+.control-buttons{
+display:flex;
+gap:10px;
+}
+
+.control-buttons button{
+padding:10px 16px;
+border:none;
+border-radius:8px;
+background:var(--card);
+color:white;
+cursor:pointer;
+}
+
+.control-buttons button:hover{
+background:var(--hover);
+}
+
+/* =========================
+CHANNEL GRID
+========================= */
+
+.channels{
+flex:1;
+overflow-y:auto;
+padding:12px;
+display:grid;
+grid-template-columns:
+repeat(auto-fill,minmax(320px,1fr));
+gap:12px;
+}
+
+.channel{
+background:var(--card);
+padding:14px;
+border-radius:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+cursor:pointer;
+transition:0.3s;
+border:1px solid transparent;
+}
+
+.channel:hover{
+background:var(--hover);
+border-color:var(--accent);
+transform:translateY(-2px);
+}
+
+.channel.active{
+border-color:var(--accent);
+background:#ff000022;
+}
+
+.channel-left{
+display:flex;
+align-items:center;
+gap:12px;
+overflow:hidden;
+}
+
+.channel-left img{
+width:60px;
+height:60px;
+border-radius:10px;
+background:black;
+object-fit:cover;
+}
+
+.channel-info{
+overflow:hidden;
+}
+
+.channel-info h4{
+font-size:14px;
+margin-bottom:5px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.channel-info small{
+color:#cbd5e1;
+}
+
+.channel-status{
+display:flex;
+flex-direction:column;
+gap:6px;
+align-items:flex-end;
+}
+
+.badge{
+padding:5px 10px;
+border-radius:20px;
+font-size:11px;
+font-weight:bold;
+}
+
+.locked{
+background:#dc2626;
+color:white;
+}
+
+.paid{
+background:#f59e0b;
+color:black;
+}
+
+/* =========================
+RIGHT PANEL
+========================= */
+
+.addpanel{
+width:320px;
+background:var(--panel);
+padding:15px;
+overflow-y:auto;
+border-left:1px solid rgba(255,255,255,0.05);
+}
+
+.panel-card{
+background:var(--card);
+padding:15px;
+border-radius:12px;
+margin-bottom:15px;
+}
+
+.panel-card h3{
+margin-bottom:15px;
+color:var(--accent);
+}
+
+.stats-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.stat-box{
+background:#0f1628;
+padding:15px;
+border-radius:8px;
+text-align:center;
+}
+
+.stat-box h4{
+font-size:12px;
+margin-bottom:8px;
+color:#cbd5e1;
+}
+
+.stat-box p{
+font-size:22px;
+font-weight:bold;
+color:var(--accent);
+}
+
+input{
+width:100%;
+padding:12px;
+border:none;
+border-radius:8px;
+background:#0f1628;
+color:white;
+margin-top:10px;
+}
+
+.action-btn{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+background:var(--accent);
+color:white;
+font-weight:bold;
+cursor:pointer;
+}
+
+.action-btn:hover{
+opacity:0.9;
+}
+
+/* =========================
+MOBILE
+========================= */
+
+@media(max-width:1000px){
+
+.sidebar,
+.addpanel{
+display:none;
+}
+
+.channels{
+grid-template-columns:1fr;
+}
+
+.player{
+height:250px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =========================
+TOPBAR
+========================= -->
+
+<div class="topbar">
+
+<h2>
+🔒 BTECH-TV LOCKED CHANNELS
+</h2>
+
+<div class="top-links">
+
+<button
+class="active"
+onclick="showLocked(this)"
+>
+Locked Channels
+</button>
+
+<button
+onclick="showPaid(this)"
+>
+Paid Channels
+</button>
+
+<button
+onclick="toggleTheme()"
+>
+Theme
+</button>
+
+</div>
+
+</div>
+
+<!-- =========================
+CONTAINER
+========================= -->
+
+<div class="container">
+
+<!-- =========================
+SIDEBAR
+========================= -->
+
+<div class="sidebar">
+
+<h3>
+🔒 Security Menu
+</h3>
+
+<div class="cat" onclick="showLocked()">
+🚫 Locked Streams
+</div>
+
+<div class="cat" onclick="showPaid()">
+💳 Paid Streams
+</div>
+
+<div class="cat" onclick="generateLockedChannels()">
+🚀 Generate 100K Locked
+</div>
+
+<a href='https://superadminbtech-tv.netlify.app/super_admin'
+style='text-decoration:none;color:white;'>
+
+<div class="cat">
+⚙ Super Admin
+</div>
+
+</a>
+
+<a href='https://superadminbtech-tv.netlify.app/user_manager'
+style='text-decoration:none;color:white;'>
+
+<div class="cat">
+👥 User Manager
+</div>
+
+</a>
+
+</div>
+
+<!-- =========================
+MAIN
+========================= -->
+
+<div class="main">
+
+<!-- PLAYER -->
+
+<div class="player">
+
+<div class="live-badge">
+🔒 PREMIUM LOCKED
+</div>
+
+<video
+id="videoPlayer"
+controls
+autoplay
+playsinline
+></video>
+
+<div
+class="overlay"
+id="overlay"
+>
+
+<h1>🔒</h1>
+
+<p>
+Loading Locked Channels Engine...
+</p>
+
+</div>
+
+</div>
+
+<!-- NOW PLAYING -->
+
+<div class="now-playing-bar">
+
+<div class="now-info">
+
+<h3 id="channelName">
+No Locked Channel Selected
+</h3>
+
+<p id="channelGroup">
+BTECH-TV Security Engine
+</p>
+
+</div>
+
+<div class="control-buttons">
+
+<button onclick="prevChannel()">
+◀ Prev
+</button>
+
+<button onclick="nextChannel()">
+Next ▶
+</button>
+
+</div>
+
+</div>
+
+<!-- CHANNEL LIST -->
+
+<div
+class="channels"
+id="channelList"
+></div>
+
+</div>
+
+<!-- =========================
+RIGHT PANEL
+========================= -->
+
+<div class="addpanel">
+
+<div class="panel-card">
+
+<h3>
+📊 LOCKED CHANNEL STATS
+</h3>
+
+<div class="stats-grid">
+
+<div class="stat-box">
+
+<h4>Total Locked</h4>
+
+<p id="lockedCount">
+0
+</p>
+
+</div>
+
+<div class="stat-box">
+
+<h4>Paid</h4>
+
+<p id="paidCount">
+0
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="panel-card">
+
+<h3>
+🔍 Search Locked Channels
+</h3>
+
+<input
+placeholder="Search locked streams..."
+oninput="searchChannels(this.value)"
+>
+
+<button
+class="action-btn"
+onclick="generateLockedChannels()"
+>
+🚀 Generate 100K Locked
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =========================
+ENGINE
+========================= */
+
+const ENGINE={
+
+maxChannels:100000,
+renderLimit:250
+
+};
+
+/* =========================
+GLOBAL
+========================= */
+
+let channels=[];
+let filteredChannels=[];
+let currentIndex=0;
+let currentPage=0;
+let currentHls=null;
+let dark=true;
+
+/* =========================
+STREAMS
+========================= */
+
+const streams=[
+
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+
+"https://test-streams.mux.dev/test_001/stream.m3u8",
+
+"https://test-streams.mux.dev/test_002/stream.m3u8",
+
+"https://test-streams.mux.dev/test_003/stream.m3u8"
+
+];
+
+/* =========================
+CATEGORIES
+========================= */
+
+const categories=[
+
+"Sports",
+"Movies",
+"News",
+"Kids",
+"VIP",
+"Entertainment",
+"Documentary",
+"Anime"
+
+];
+
+/* =========================
+GENERATE LOCKED CHANNELS
+========================= */
+
+function generateLockedChannels(){
+
+channels=[];
+
+for(let i=1;i<=ENGINE.maxChannels;i++){
+
+let cat=
+categories[
+i % categories.length
+];
+
+channels.push({
+
+id:i,
+
+name:
+"LOCKED "+
+cat+
+" CHANNEL "+
+i,
+
+category:cat,
+
+logo:
+"https://via.placeholder.com/60",
+
+type:"paid",
+
+status:"locked",
+
+viewers:
+Math.floor(
+Math.random()*1000000
+),
+
+url:
+streams[
+i % streams.length
+]
+
+});
+
+}
+
+filteredChannels=[...channels];
+
+updateStats();
+
+renderChannels();
+
+document.getElementById(
+"overlay"
+).style.display="none";
+
+}
+
+/* =========================
+RENDER CHANNELS
+========================= */
+
+function renderChannels(reset=true){
+
+const box=
+document.getElementById(
+"channelList"
+);
+
+if(reset){
+
+box.innerHTML="";
+currentPage=0;
+
+}
+
+const start=
+currentPage*
+ENGINE.renderLimit;
+
+const end=
+start+
+ENGINE.renderLimit;
+
+filteredChannels
+.slice(start,end)
+.forEach((c,index)=>{
+
+const div=
+document.createElement("div");
+
+div.className="channel";
+
+div.innerHTML=`
+
+<div class="channel-left">
+
+<img
+src="${c.logo}"
+loading="lazy"
+>
+
+<div class="channel-info">
+
+<h4>
+🔒 ${c.name}
+</h4>
+
+<small>
+${c.category}
+• 👥 ${c.viewers.toLocaleString()}
+</small>
+
+</div>
+
+</div>
+
+<div class="channel-status">
+
+<span class="badge paid">
+PAID
+</span>
+
+<span class="badge locked">
+LOCKED
+</span>
+
+</div>
+
+`;
+
+div.onclick=
+()=>playChannel(
+start+index,
+div
+);
+
+box.appendChild(div);
+
+});
+
+}
+
+/* =========================
+INFINITE SCROLL
+========================= */
+
+document
+.getElementById(
+"channelList"
+)
+.addEventListener(
+"scroll",
+function(){
+
+if(
+
+this.scrollTop+
+this.clientHeight
+>=
+this.scrollHeight-100
+
+){
+
+if(
+
+(currentPage+1)*
+ENGINE.renderLimit
+<
+filteredChannels.length
+
+){
+
+currentPage++;
+
+renderChannels(false);
+
+}
+
+}
+
+}
+);
+
+/* =========================
+PLAY CHANNEL
+========================= */
+
+function playChannel(index,el=null){
+
+currentIndex=index;
+
+const channel=
+filteredChannels[index];
+
+document.getElementById(
+"channelName"
+).innerText=
+channel.name;
+
+document.getElementById(
+"channelGroup"
+).innerText=
+channel.category;
+
+const video=
+document.getElementById(
+"videoPlayer"
+);
+
+if(currentHls){
+
+currentHls.destroy();
+
+}
+
+if(Hls.isSupported()){
+
+currentHls=
+new Hls();
+
+currentHls.loadSource(
+channel.url
+);
+
+currentHls.attachMedia(video);
+
+}else{
+
+video.src=
+channel.url;
+
+}
+
+document
+.querySelectorAll(".channel")
+.forEach(c=>{
+
+c.classList.remove(
+"active"
+);
+
+});
+
+if(el){
+
+el.classList.add(
+"active"
+);
+
+}
+
+}
+
+/* =========================
+NEXT / PREV
+========================= */
+
+function nextChannel(){
+
+currentIndex++;
+
+if(
+currentIndex >=
+filteredChannels.length
+){
+
+currentIndex=0;
+
+}
+
+playChannel(currentIndex);
+
+}
+
+function prevChannel(){
+
+currentIndex--;
+
+if(currentIndex < 0){
+
+currentIndex=
+filteredChannels.length-1;
+
+}
+
+playChannel(currentIndex);
+
+}
+
+/* =========================
+SEARCH
+========================= */
+
+function searchChannels(q){
+
+const value=
+q.toLowerCase();
+
+filteredChannels=
+channels.filter(c=>
+
+c.name
+.toLowerCase()
+.includes(value)
+
+||
+
+c.category
+.toLowerCase()
+.includes(value)
+
+);
+
+renderChannels();
+
+}
+
+/* =========================
+FILTERS
+========================= */
+
+function showLocked(btn=null){
+
+filteredChannels=
+channels.filter(
+c=>c.status==="locked"
+);
+
+setActive(btn);
+
+renderChannels();
+
+}
+
+function showPaid(btn=null){
+
+filteredChannels=
+channels.filter(
+c=>c.type==="paid"
+);
+
+setActive(btn);
+
+renderChannels();
+
+}
+
+function setActive(btn){
+
+document
+.querySelectorAll(
+".top-links button"
+)
+.forEach(b=>{
+
+b.classList.remove(
+"active"
+);
+
+});
+
+if(btn){
+
+btn.classList.add(
+"active"
+);
+
+}
+
+}
+
+/* =========================
+STATS
+========================= */
+
+function updateStats(){
+
+document.getElementById(
+"lockedCount"
+).innerText=
+channels.length.toLocaleString();
+
+document.getElementById(
+"paidCount"
+).innerText=
+channels.filter(
+c=>c.type==="paid"
+).length.toLocaleString();
+
+}
+
+/* =========================
+THEME
+========================= */
+
+function toggleTheme(){
+
+dark=!dark;
+
+document.documentElement
+.style.setProperty(
+"--bg",
+dark
+?"#0b0f1a"
+:"#f1f5f9"
+);
+
+document.documentElement
+.style.setProperty(
+"--text",
+dark
+?"#ffffff"
+:"#000000"
+);
+
+}
+
+/* =========================
+AUTO UPDATE
+========================= */
+
+setInterval(()=>{
+
+for(let i=0;i<1000;i++){
+
+const random=
+Math.floor(
+Math.random()*channels.length
+);
+
+if(channels[random]){
+
+channels[random].viewers=
+Math.floor(
+Math.random()*1000000
+);
+
+}
+
+}
+
+},5000);
+
+/* =========================
+BOOT ENGINE
+========================= */
+
+generateLockedChannels();
+
+</script>
+
+</body>
+</html>
