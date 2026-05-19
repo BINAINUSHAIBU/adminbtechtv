@@ -1,25 +1,19 @@
-<!-- =========================================
-BTECH-TV PRO 100K SUPER ADMIN DASHBOARD
-MERGED ULTRA ENGINE + SUPER ADMIN PANEL
-FULL MERGED VERSION (CLEAN FORMAT)
-========================================= -->
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>BTECH-TV PRO 100K SUPER ADMIN</title>
+<title>BTECH-TV LOCKED CHANNEL SUPER ADMIN</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
-/* =========================================
+/* =========================
 ROOT
-========================================= */
+========================= */
 
 :root{
 --bg:#0b0f1a;
@@ -29,20 +23,20 @@ ROOT
 --accent:#00bfff;
 --text:#ffffff;
 --muted:#94a3b8;
---success:#16a34a;
---danger:#dc2626;
---warning:#f59e0b;
+--danger:#ef4444;
+--success:#22c55e;
+--warn:#f59e0b;
 }
 
-/* =========================================
+/* =========================
 GLOBAL
-========================================= */
+========================= */
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Arial;
 }
 
 body{
@@ -51,103 +45,61 @@ color:var(--text);
 overflow:hidden;
 }
 
-button{
-cursor:pointer;
-border:none;
-}
+button{cursor:pointer}
 
-/* =========================================
+/* =========================
 TOPBAR
-========================================= */
+========================= */
 
 .topbar{
-height:70px;
+height:60px;
 background:var(--panel);
 display:flex;
 justify-content:space-between;
 align-items:center;
 padding:0 20px;
-border-bottom:1px solid rgba(255,255,255,.06);
-position:sticky;
-top:0;
-z-index:999;
+border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
-.logo{
-font-size:22px;
-font-weight:bold;
+.topbar h2{
 color:var(--accent);
 }
 
-.top-links{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-}
-
-.top-links button{
-padding:10px 15px;
-border-radius:10px;
-background:var(--card);
-color:white;
-font-weight:bold;
-transition:.3s;
-}
-
-.top-links button:hover,
-.top-links button.active{
-background:var(--accent);
-color:black;
-}
-
-/* =========================================
+/* =========================
 LAYOUT
-========================================= */
+========================= */
 
 .container{
 display:flex;
-height:calc(100vh - 70px);
+height:calc(100vh - 60px);
 }
 
-/* =========================================
+/* =========================
 SIDEBAR
-========================================= */
+========================= */
 
 .sidebar{
-width:270px;
+width:260px;
 background:#0f1628;
 padding:15px;
 overflow-y:auto;
-border-right:1px solid rgba(255,255,255,.05);
-}
-
-.sidebar h3{
-margin-bottom:15px;
-color:var(--accent);
 }
 
 .cat{
-padding:12px;
+padding:10px;
+margin:6px 0;
 background:var(--card);
-border-radius:10px;
-margin-bottom:10px;
+border-radius:8px;
 cursor:pointer;
-transition:.3s;
 }
 
 .cat:hover{
 background:var(--hover);
-transform:translateX(4px);
 }
 
-.sidebar a{
-text-decoration:none;
-color:white;
-}
-
-/* =========================================
+/* =========================
 MAIN
-========================================= */
+========================= */
 
 .main{
 flex:1;
@@ -156,156 +108,141 @@ flex-direction:column;
 overflow:hidden;
 }
 
-/* =========================================
-PLAYER
-========================================= */
+/* PLAYER */
 
 .player{
-height:360px;
+height:300px;
 background:black;
 position:relative;
 display:flex;
-justify-content:center;
 align-items:center;
+justify-content:center;
 }
 
-.player video{
+video{
 width:100%;
 height:100%;
 object-fit:contain;
 }
 
-.live-badge{
+.overlay{
 position:absolute;
-top:15px;
-left:15px;
-background:red;
-padding:8px 14px;
-border-radius:30px;
-font-size:12px;
-font-weight:bold;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,.85);
+flex-direction:column;
 }
 
-/* =========================================
-CHANNELS
-========================================= */
+/* NOW BAR */
+
+.now{
+padding:10px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+/* CHANNEL LIST */
 
 .channels{
 flex:1;
 overflow-y:auto;
-padding:12px;
+padding:10px;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
-gap:12px;
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+gap:10px;
 }
 
 .channel{
 background:var(--card);
-padding:14px;
-border-radius:12px;
+padding:12px;
+border-radius:10px;
+cursor:pointer;
 display:flex;
 justify-content:space-between;
-align-items:center;
-cursor:pointer;
-transition:.3s;
 }
 
 .channel:hover{
 background:var(--hover);
-border:1px solid var(--accent);
+}
+
+.channel.active{
+border:2px solid var(--accent);
 }
 
 .badge{
-padding:5px 10px;
+padding:4px 8px;
 border-radius:20px;
 font-size:11px;
 }
 
-.free{background:var(--success);}
+.locked{background:var(--warn); color:black;}
+.unlocked{background:var(--success);}
+.free{background:#16a34a;}
 .paid{background:var(--danger);}
-.locked{background:var(--warning);color:black;}
-.unlocked{background:#2563eb;}
 
-/* =========================================
-ADMIN PANEL
-========================================= */
+/* RIGHT PANEL */
 
-.admin-panel{
-width:340px;
+.right{
+width:300px;
 background:var(--panel);
 padding:15px;
 overflow-y:auto;
-border-left:1px solid rgba(255,255,255,.05);
 }
 
-.panel-card{
-background:var(--card);
-padding:15px;
-border-radius:14px;
-margin-bottom:15px;
+/* BUTTONS */
+
+.btn{
+width:100%;
+padding:10px;
+margin-top:8px;
+border:none;
+border-radius:8px;
+background:var(--accent);
+color:black;
+font-weight:bold;
 }
 
-.stats-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-}
+.btn.danger{background:var(--danger); color:white;}
+.btn.warn{background:var(--warn);}
 
-.stat{
+/* SEARCH */
+
+input{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:none;
 background:#0f1628;
-padding:12px;
-border-radius:10px;
-text-align:center;
-}
-
-.stat p{
-font-size:20px;
-color:var(--accent);
-}
-
-/* =========================================
-RESPONSIVE
-========================================= */
-
-@media(max-width:1100px){
-.sidebar,.admin-panel{display:none;}
-.channels{grid-template-columns:1fr;}
-.player{height:250px;}
-.top-links{display:none;}
+color:white;
+margin-top:10px;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
-<div class="logo">📺 BTECH-TV PRO ULTRA MAX</div>
-
-<div class="top-links">
-<button class="active" onclick="filterCat('All',this)">All</button>
-<button onclick="filterCat('Sports',this)">Sports</button>
-<button onclick="filterCat('Movies',this)">Movies</button>
-<button onclick="filterCat('News',this)">News</button>
-<button onclick="filterLocked(this)">Locked</button>
-</div>
+<h2>🔒 BTECH-TV LOCKED ADMIN</h2>
+<button class="btn warn" onclick="showLockedOnly()">Show Locked</button>
 </div>
 
-<!-- CONTAINER -->
 <div class="container">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<h3>⚙ MENU</h3>
+<div class="cat" onclick="filterAll()">📺 All Channels</div>
+<div class="cat" onclick="showLockedOnly()">🔒 Locked</div>
+<div class="cat" onclick="unlockAll()">🔓 Unlock All</div>
+<div class="cat" onclick="deleteLocked()">❌ Delete Locked</div>
 
-<div class="cat" onclick="filterCat('All')">📺 All Channels</div>
-<div class="cat" onclick="filterCat('Sports')">🏆 Sports</div>
-<div class="cat" onclick="filterCat('Movies')">🎬 Movies</div>
-<div class="cat" onclick="filterCat('News')">📰 News</div>
-
-<a href="#">🔒 Locked Channels</a>
+<input placeholder="Search..." oninput="search(this.value)">
 
 </div>
 
@@ -313,33 +250,43 @@ RESPONSIVE
 <div class="main">
 
 <div class="player">
-<div class="live-badge">🔴 LIVE</div>
-<video id="videoPlayer" controls autoplay></video>
-</div>
-
-<div class="channels" id="channelList"></div>
-
-</div>
-
-<!-- ADMIN PANEL -->
-<div class="admin-panel">
-
-<div class="panel-card">
-<h3>📊 STATS</h3>
-<div class="stats-grid">
-<div class="stat"><p id="total">0</p></div>
-<div class="stat"><p id="locked">0</p></div>
+<video id="video" controls></video>
+<div class="overlay" id="overlay">
+<h1>🔒</h1>
+<p>Locked Channel Admin Engine</p>
 </div>
 </div>
 
-<div class="panel-card">
-<h3>🔒 LOCKED CONTROL</h3>
+<div class="now">
+<div>
+<h3 id="name">No Channel</h3>
+<small id="cat">---</small>
+</div>
 
-<button onclick="filterLocked()" class="action-btn">View Locked</button>
-<button onclick="unlockAll()" class="action-btn">Unlock All</button>
-<button onclick="deleteLocked()" class="action-btn">Delete Locked</button>
+<div>
+<button class="btn" onclick="prev()">Prev</button>
+<button class="btn" onclick="next()">Next</button>
+</div>
+</div>
+
+<div class="channels" id="list"></div>
 
 </div>
+
+<!-- RIGHT PANEL -->
+<div class="right">
+
+<h3>⚙ ADMIN PANEL</h3>
+
+<button class="btn" onclick="lockSelected()">🔒 Lock Selected</button>
+<button class="btn warn" onclick="unlockSelected()">🔓 Unlock Selected</button>
+<button class="btn danger" onclick="deleteSelected()">❌ Delete Selected</button>
+
+<h3 style="margin-top:15px;">📊 Stats</h3>
+
+<p>Total: <span id="total">0</span></p>
+<p>Locked: <span id="locked">0</span></p>
+<p>Unlocked: <span id="unlocked">0</span></p>
 
 </div>
 
@@ -347,45 +294,59 @@ RESPONSIVE
 
 <script>
 
-/* ENGINE */
+/* =========================
+DATA
+========================= */
+
 let channels=[];
-let filteredChannels=[];
-let currentIndex=0;
+let filtered=[];
+let index=0;
+let selected=new Set();
 
-/* FILTER LOCKED */
-function filterLocked(){
-filteredChannels = channels.filter(c=>c.status==="locked");
+const streams=[
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+"https://test-streams.mux.dev/test_001/stream.m3u8"
+];
+
+/* =========================
+GENERATE
+========================= */
+
+function generate(){
+
+for(let i=1;i<=200;i++){
+
+channels.push({
+id:i,
+name:"BTECH CHANNEL "+i,
+category:i%2===0?"Sports":"Movies",
+url:streams[i%streams.length],
+status:i%7===0?"locked":"unlocked",
+type:i%3===0?"paid":"free"
+});
+
+}
+
+filtered=[...channels];
 render();
+stats();
+document.getElementById("overlay").style.display="none";
 }
 
-/* UNLOCK ALL */
-function unlockAll(){
-channels.forEach(c=>c.status="unlocked");
-render();
-updateStats();
-}
+generate();
 
-/* DELETE LOCKED */
-function deleteLocked(){
-channels = channels.filter(c=>c.status!=="locked");
-filteredChannels=[...channels];
-render();
-updateStats();
-}
+/* =========================
+RENDER
+========================= */
 
-/* STATS */
-function updateStats(){
-document.getElementById("total").innerText=channels.length;
-document.getElementById("locked").innerText=channels.filter(c=>c.status==="locked").length;
-}
-
-/* RENDER */
 function render(){
-const box=document.getElementById("channelList");
+
+let box=document.getElementById("list");
 box.innerHTML="";
 
-filteredChannels.forEach((c,i)=>{
-const div=document.createElement("div");
+filtered.forEach((c,i)=>{
+
+let div=document.createElement("div");
 div.className="channel";
 
 div.innerHTML=`
@@ -395,24 +356,126 @@ div.innerHTML=`
 </div>
 
 <div>
-<span class="badge ${c.status}">${c.status}</span>
+<span class="badge ${c.status}">${c.status}</span><br>
+<span class="badge ${c.type}">${c.type}</span>
 </div>
 `;
 
+div.onclick=()=>play(i);
+
 box.appendChild(div);
+
 });
+
 }
 
-/* INIT SAMPLE DATA */
-channels=[
-{name:"Sports Live 1",category:"Sports",status:"locked"},
-{name:"Movie HD",category:"Movies",status:"unlocked"},
-{name:"News 24",category:"News",status:"locked"}
-];
+/* =========================
+PLAY
+========================= */
 
-filteredChannels=[...channels];
+function play(i){
+
+index=i;
+
+let c=filtered[i];
+
+document.getElementById("name").innerText=c.name;
+document.getElementById("cat").innerText=c.category;
+
+let video=document.getElementById("video");
+
+if(Hls.isSupported()){
+
+let hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(video);
+
+}else{
+video.src=c.url;
+}
+
+}
+
+/* =========================
+FILTER
+========================= */
+
+function filterAll(){
+filtered=[...channels];
 render();
-updateStats();
+}
+
+function showLockedOnly(){
+filtered=channels.filter(c=>c.status==="locked");
+render();
+}
+
+/* =========================
+SEARCH
+========================= */
+
+function search(v){
+
+filtered=channels.filter(c=>
+c.name.toLowerCase().includes(v.toLowerCase())
+);
+
+render();
+
+}
+
+/* =========================
+ADMIN ACTIONS
+========================= */
+
+function lockSelected(){
+channels.forEach(c=>c.status="locked");
+filterAll(); stats();
+}
+
+function unlockSelected(){
+channels.forEach(c=>c.status="unlocked");
+filterAll(); stats();
+}
+
+function deleteSelected(){
+channels=channels.filter(c=>c.status!=="locked");
+filterAll(); stats();
+}
+
+function unlockAll(){
+channels.forEach(c=>c.status="unlocked");
+filterAll(); stats();
+}
+
+function deleteLocked(){
+channels=channels.filter(c=>c.status!=="unlocked");
+filterAll(); stats();
+}
+
+/* =========================
+NEXT/PREV
+========================= */
+
+function next(){
+if(index<filtered.length-1) play(index+1);
+}
+
+function prev(){
+if(index>0) play(index-1);
+}
+
+/* =========================
+STATS
+========================= */
+
+function stats(){
+
+document.getElementById("total").innerText=channels.length;
+document.getElementById("locked").innerText=channels.filter(c=>c.status==="locked").length;
+document.getElementById("unlocked").innerText=channels.filter(c=>c.status==="unlocked").length;
+
+}
 
 </script>
 
