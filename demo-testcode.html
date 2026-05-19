@@ -3,42 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV ALL USERS SUPER ADMIN</title>
+<title>BTECH-TV SUPER ADMIN PRO MAX</title>
 
 <style>
-
-/* =========================
-ROOT
-========================= */
 :root{
 --bg:#0b0f1a;
 --panel:#11182a;
 --card:#1b2438;
 --hover:#2b3a5a;
 --accent:#00bfff;
---text:#ffffff;
+--text:#fff;
 --muted:#94a3b8;
 }
 
-/* =========================
-GLOBAL
-========================= */
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 
-body{
-background:var(--bg);
-color:var(--text);
-overflow:hidden;
-}
+body{background:var(--bg);color:var(--text);overflow:hidden}
 
-/* =========================
-TOPBAR
-========================= */
+/* TOPBAR */
 .topbar{
 height:65px;
 background:var(--panel);
@@ -49,9 +31,7 @@ padding:0 20px;
 border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
-.topbar h2{
-color:var(--accent);
-}
+.topbar h2{color:var(--accent)}
 
 .topbar input{
 padding:10px;
@@ -59,25 +39,16 @@ border:none;
 border-radius:8px;
 background:#0f1628;
 color:white;
-width:300px;
+width:280px;
 }
 
-/* =========================
-LAYOUT
-========================= */
-.container{
-display:flex;
-height:calc(100vh - 65px);
-}
+/* LAYOUT */
+.container{display:flex;height:calc(100vh - 65px)}
 
-/* =========================
-SIDEBAR
-========================= */
 .sidebar{
-width:260px;
+width:240px;
 background:#0f1628;
 padding:15px;
-overflow-y:auto;
 border-right:1px solid rgba(255,255,255,0.05);
 }
 
@@ -90,23 +61,12 @@ cursor:pointer;
 transition:0.3s;
 }
 
-.cat:hover{
-background:var(--hover);
-transform:translateX(4px);
-}
+.cat:hover{background:var(--hover)}
 
-/* =========================
-MAIN
-========================= */
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-}
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column}
 
-/* =========================
-STATS
-========================= */
+/* STATS */
 .stats{
 display:grid;
 grid-template-columns:repeat(4,1fr);
@@ -121,31 +81,20 @@ border-radius:10px;
 text-align:center;
 }
 
-.box h3{
-color:var(--muted);
-font-size:12px;
-margin-bottom:8px;
-}
+.box p{color:var(--accent);font-size:20px;font-weight:bold}
 
-.box p{
-font-size:20px;
-color:var(--accent);
-font-weight:bold;
-}
-
-/* =========================
-USER GRID
-========================= */
-.users{
+/* GRID */
+.grid{
 flex:1;
 overflow-y:auto;
 padding:15px;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
 gap:12px;
 }
 
-.user{
+/* CARD */
+.card{
 background:var(--card);
 padding:15px;
 border-radius:12px;
@@ -153,60 +102,51 @@ transition:0.3s;
 border:1px solid transparent;
 }
 
-.user:hover{
+.card:hover{
 transform:translateY(-3px);
 border-color:var(--accent);
 background:var(--hover);
-}
-
-.user h4{
-margin-bottom:5px;
-}
-
-.user small{
-color:var(--muted);
-display:block;
-margin-bottom:10px;
 }
 
 .badge{
 padding:5px 10px;
 border-radius:20px;
 font-size:11px;
-font-weight:bold;
+margin-right:5px;
 }
 
-.active{background:#16a34a;}
-.banned{background:#dc2626;}
-.premium{background:#f59e0b;}
+.active{background:#16a34a}
+.banned{background:#dc2626}
+.premium{background:#f59e0b;color:black}
+.free{background:#16a34a}
+.paid{background:#dc2626}
+.locked{background:#f59e0b;color:black}
 
-/* =========================
-BUTTONS
-========================= */
+/* BUTTON */
 button{
-padding:10px 12px;
+padding:10px;
 border:none;
 border-radius:8px;
 cursor:pointer;
 background:var(--accent);
 font-weight:bold;
+margin-top:8px;
 }
 
-button:hover{opacity:0.8;}
+button:hover{opacity:0.8}
 
-.danger{background:#dc2626;}
-.warning{background:#f59e0b;color:black;}
+.danger{background:#dc2626}
+.warning{background:#f59e0b;color:black}
 
+.tab-active{background:var(--accent);color:black}
 </style>
 </head>
 
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
-<h2>👥 BTECH-TV ALL USERS ADMIN</h2>
-
-<input placeholder="Search users..." oninput="searchUsers(this.value)">
+<h2>🚀 BTECH SUPER ADMIN PRO MAX</h2>
+<input placeholder="Search users or channels..." oninput="searchAll(this.value)">
 </div>
 
 <div class="container">
@@ -214,16 +154,13 @@ button:hover{opacity:0.8;}
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="cat" onclick="filterUsers('all')">📁 All Users</div>
-<div class="cat" onclick="filterUsers('active')">🟢 Active</div>
-<div class="cat" onclick="filterUsers('banned')">🔴 Banned</div>
-<div class="cat" onclick="filterUsers('premium')">⭐ Premium</div>
+<div class="cat tab-active" onclick="switchTab('users',this)">👥 Users</div>
+<div class="cat" onclick="switchTab('channels',this)">📺 Channels</div>
 
-<hr style="margin:15px 0;opacity:0.2;">
+<hr style="opacity:0.2;margin:10px 0">
 
-<button onclick="generateUsers()">🚀 Generate Users</button>
-<br><br>
-<button class="warning" onclick="clearBanned()">🧹 Clear Banned</button>
+<button onclick="generateUsers()">Generate Users</button>
+<button onclick="generateChannels()">Generate Channels</button>
 
 </div>
 
@@ -232,188 +169,224 @@ button:hover{opacity:0.8;}
 
 <!-- STATS -->
 <div class="stats">
-<div class="box">
-<h3>Total Users</h3>
-<p id="total">0</p>
+<div class="box"><p id="t1">0</p><small>Total Users</small></div>
+<div class="box"><p id="t2">0</p><small>Total Channels</small></div>
+<div class="box"><p id="t3">0</p><small>Active / Free</small></div>
+<div class="box"><p id="t4">0</p><small>Banned / Locked</small></div>
 </div>
 
-<div class="box">
-<h3>Active</h3>
-<p id="active">0</p>
-</div>
-
-<div class="box">
-<h3>Banned</h3>
-<p id="banned">0</p>
-</div>
-
-<div class="box">
-<h3>Premium</h3>
-<p id="premium">0</p>
-</div>
-</div>
-
-<!-- USERS -->
-<div class="users" id="userList"></div>
+<!-- GRID -->
+<div class="grid" id="grid"></div>
 
 </div>
+
 </div>
 
 <script>
 
-/* =========================
-DATA
-========================= */
+/* =====================
+STATE
+===================== */
 let users=[];
-let filtered=[];
+let channels=[];
+let view="users";
 
-/* =========================
+/* =====================
+SWITCH TAB
+===================== */
+function switchTab(tab,el){
+
+view=tab;
+
+document.querySelectorAll(".cat")
+.forEach(c=>c.classList.remove("tab-active"));
+
+el.classList.add("tab-active");
+
+render();
+}
+
+/* =====================
 GENERATE USERS
-========================= */
+===================== */
 function generateUsers(){
 
 users=[];
 
-for(let i=1;i<=500;i++){
-
-let status=
-i%10===0?"banned":"active";
+for(let i=1;i<=200;i++){
 
 users.push({
-
 id:i,
 name:"User_"+i,
 email:"user"+i+"@mail.com",
-status:status,
-premium:i%7===0,
-country:"NG"
-
+status:i%10===0?"banned":"active",
+premium:i%7===0
 });
 
 }
 
-filtered=[...users];
 render();
-updateStats();
+}
+
+/* =====================
+GENERATE CHANNELS
+===================== */
+function generateChannels(){
+
+const cats=["Sports","Movies","News","Kids","Music","Africa"];
+
+channels=[];
+
+for(let i=1;i<=200;i++){
+
+channels.push({
+id:i,
+name:"BTECH Channel "+i,
+category:cats[i%cats.length],
+type:i%3===0?"paid":"free",
+status:i%10===0?"locked":"unlocked",
+viewers:Math.floor(Math.random()*100000)
+});
 
 }
 
-/* =========================
-RENDER USERS
-========================= */
+render();
+}
+
+/* =====================
+RENDER
+===================== */
 function render(){
 
-const box=document.getElementById("userList");
-box.innerHTML="";
+const grid=document.getElementById("grid");
+grid.innerHTML="";
 
-filtered.forEach(u=>{
+if(view==="users"){
+
+users.forEach(u=>{
 
 const div=document.createElement("div");
-div.className="user";
+div.className="card";
 
 div.innerHTML=`
-<h4>👤 ${u.name}</h4>
-<small>${u.email}</small>
+<h3>👤 ${u.name}</h3>
+<p>${u.email}</p>
 
-<span class="badge ${u.status}">
-${u.status.toUpperCase()}
-</span>
+<span class="badge ${u.status}">${u.status}</span>
+${u.premium?'<span class="badge premium">premium</span>':''}
 
-${u.premium?'<span class="badge premium">PREMIUM</span>':''}
-
-<br><br>
-
-<button onclick="toggleStatus(${u.id})">Toggle</button>
-<button class="danger" onclick="deleteUser(${u.id})">Delete</button>
+<br>
+<button onclick="toggleUser(${u.id})">Toggle</button>
 `;
 
-box.appendChild(div);
+grid.appendChild(div);
+
+});
+
+}else{
+
+channels.forEach(c=>{
+
+const div=document.createElement("div");
+div.className="card";
+
+div.innerHTML=`
+<h3>📺 ${c.name}</h3>
+<p>${c.category}</p>
+
+<span class="badge ${c.type}">${c.type}</span>
+<span class="badge ${c.status}">${c.status}</span>
+
+<p>👥 ${c.viewers}</p>
+
+`;
+
+grid.appendChild(div);
 
 });
 
 }
 
-/* =========================
+updateStats();
+}
+
+/* =====================
 STATS
-========================= */
+===================== */
 function updateStats(){
 
-document.getElementById("total").innerText=users.length;
-document.getElementById("active").innerText=users.filter(u=>u.status==="active").length;
-document.getElementById("banned").innerText=users.filter(u=>u.status==="banned").length;
-document.getElementById("premium").innerText=users.filter(u=>u.premium).length;
+document.getElementById("t1").innerText=users.length;
+document.getElementById("t2").innerText=channels.length;
+
+document.getElementById("t3").innerText=
+view==="users"
+? users.filter(u=>u.status==="active").length
+: channels.filter(c=>c.type==="free").length;
+
+document.getElementById("t4").innerText=
+view==="users"
+? users.filter(u=>u.status==="banned").length
+: channels.filter(c=>c.status==="locked").length;
 
 }
 
-/* =========================
-SEARCH
-========================= */
-function searchUsers(q){
-
-q=q.toLowerCase();
-
-filtered=users.filter(u=>
-u.name.toLowerCase().includes(q)||
-u.email.toLowerCase().includes(q)
-);
-
-render();
-
-}
-
-/* =========================
-FILTER
-========================= */
-function filterUsers(type){
-
-if(type==="all") filtered=[...users];
-else if(type==="active") filtered=users.filter(u=>u.status==="active");
-else if(type==="banned") filtered=users.filter(u=>u.status==="banned");
-else if(type==="premium") filtered=users.filter(u=>u.premium);
-
-render();
-
-}
-
-/* =========================
+/* =====================
 ACTIONS
-========================= */
-function toggleStatus(id){
+===================== */
+function toggleUser(id){
 
 users=users.map(u=>{
 if(u.id===id){
-u.status=(u.status==="active")?"banned":"active";
+u.status=u.status==="active"?"banned":"active";
 }
 return u;
 });
 
 render();
-updateStats();
-
 }
 
-function deleteUser(id){
+/* =====================
+SEARCH
+===================== */
+function searchAll(q){
 
-users=users.filter(u=>u.id!==id);
-filtered=filtered.filter(u=>u.id!==id);
+q=q.toLowerCase();
 
-render();
-updateStats();
+if(view==="users"){
+
+const filtered=users.filter(u=>
+u.name.toLowerCase().includes(q)||
+u.email.toLowerCase().includes(q)
+);
+
+usersToRender(filtered);
+
+}else{
+
+const filtered=channels.filter(c=>
+c.name.toLowerCase().includes(q)||
+c.category.toLowerCase().includes(q)
+);
+
+channelsToRender(filtered);
 
 }
+}
 
-function clearBanned(){
+/* helpers */
+function usersToRender(list){
+document.getElementById("grid").innerHTML="";
+list.forEach(u=>console.log(u));
+}
 
-users=users.filter(u=>u.status!=="banned");
-filtered=[...users];
-
-render();
-updateStats();
-
+function channelsToRender(list){
+document.getElementById("grid").innerHTML="";
+list.forEach(c=>console.log(c));
 }
 
 /* INIT */
 generateUsers();
+generateChannels();
 
 </script>
 
