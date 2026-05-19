@@ -1,11 +1,12 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BTECH-TV SUPER ADMIN PRO MAX</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 :root{
@@ -65,6 +66,8 @@ transition:0.3s;
 
 .cat:hover{background:var(--hover)}
 
+.tab-active{background:var(--accent);color:black}
+
 /* MAIN */
 .main{flex:1;display:flex;flex-direction:column}
 
@@ -117,12 +120,13 @@ font-size:11px;
 margin-right:5px;
 }
 
-.active{background:#16a34a}
-.banned{background:#dc2626}
-.premium{background:#f59e0b;color:black}
 .free{background:#16a34a}
 .paid{background:#dc2626}
 .locked{background:#f59e0b;color:black}
+
+.active{background:#16a34a}
+.banned{background:#dc2626}
+.premium{background:#f59e0b;color:black}
 
 /* BUTTON */
 button{
@@ -139,8 +143,6 @@ button:hover{opacity:0.8}
 
 .danger{background:#dc2626}
 .warning{background:#f59e0b;color:black}
-
-.tab-active{background:var(--accent);color:black}
 </style>
 </head>
 
@@ -163,13 +165,13 @@ button:hover{opacity:0.8}
 
 <button onclick="generateUsers()">Generate Users</button>
 <button onclick="generateChannels()">Generate Channels</button>
+<button onclick="loadAPI()">🚀 Load IPTV API</button>
 
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-<!-- STATS -->
 <div class="stats">
 <div class="box"><p id="t1">0</p><small>Total Users</small></div>
 <div class="box"><p id="t2">0</p><small>Total Channels</small></div>
@@ -177,7 +179,6 @@ button:hover{opacity:0.8}
 <div class="box"><p id="t4">0</p><small>Banned / Locked</small></div>
 </div>
 
-<!-- GRID -->
 <div class="grid" id="grid"></div>
 
 </div>
@@ -193,8 +194,11 @@ let users=[];
 let channels=[];
 let view="users";
 
+let usersFiltered=[];
+let channelsFiltered=[];
+
 /* =====================
-SWITCH TAB
+TAB SWITCH
 ===================== */
 function switchTab(tab,el){
 
@@ -209,14 +213,13 @@ render();
 }
 
 /* =====================
-GENERATE USERS
+USERS
 ===================== */
 function generateUsers(){
 
 users=[];
 
 for(let i=1;i<=200;i++){
-
 users.push({
 id:i,
 name:"User_"+i,
@@ -224,14 +227,14 @@ email:"user"+i+"@mail.com",
 status:i%10===0?"banned":"active",
 premium:i%7===0
 });
-
 }
 
+usersFiltered=[...users];
 render();
 }
 
 /* =====================
-GENERATE CHANNELS
+CHANNELS (DEMO)
 ===================== */
 function generateChannels(){
 
@@ -240,7 +243,6 @@ const cats=["Sports","Movies","News","Kids","Music","Africa"];
 channels=[];
 
 for(let i=1;i<=200;i++){
-
 channels.push({
 id:i,
 name:"BTECH Channel "+i,
@@ -249,10 +251,56 @@ type:i%3===0?"paid":"free",
 status:i%10===0?"locked":"unlocked",
 viewers:Math.floor(Math.random()*100000)
 });
-
 }
 
+channelsFiltered=[...channels];
 render();
+}
+
+/* =====================
+IPTV API LOAD (MERGED)
+===================== */
+async function loadAPI(){
+try{
+
+let [chRes,stRes,lgRes]=await Promise.all([
+fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
+fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
+fetch('https://iptv-org.github.io/api/logos.json').then(r=>r.json())
+]);
+
+let channelMap={},logoMap={};
+
+for(let c of chRes) channelMap[c.id]=c;
+for(let l of lgRes) if(!logoMap[l.channel]) logoMap[l.channel]=l.url;
+
+let seen={};
+channels=[];
+
+for(let s of stRes){
+if(!s.url||seen[s.url]) continue;
+seen[s.url]=1;
+
+let ch=s.channel?channelMap[s.channel]:null;
+
+channels.push({
+id:channels.length+1,
+name:ch?ch.name:(s.title||"Unknown"),
+url:s.url,
+category:ch?.categories?.[0]||"other",
+type:Math.random()>0.5?"free":"paid",
+status:Math.random()>0.9?"locked":"unlocked",
+viewers:Math.floor(Math.random()*100000)
+});
+}
+
+channelsFiltered=[...channels];
+render();
+
+}catch(e){
+console.log(e);
+generateChannels();
+}
 }
 
 /* =====================
@@ -265,9 +313,9 @@ grid.innerHTML="";
 
 if(view==="users"){
 
-users.forEach(u=>{
+usersFiltered.forEach(u=>{
 
-const div=document.createElement("div");
+let div=document.createElement("div");
 div.className="card";
 
 div.innerHTML=`
@@ -276,7 +324,6 @@ div.innerHTML=`
 
 <span class="badge ${u.status}">${u.status}</span>
 ${u.premium?'<span class="badge premium">premium</span>':''}
-
 <br>
 <button onclick="toggleUser(${u.id})">Toggle</button>
 `;
@@ -287,9 +334,9 @@ grid.appendChild(div);
 
 }else{
 
-channels.forEach(c=>{
+channelsFiltered.forEach(c=>{
 
-const div=document.createElement("div");
+let div=document.createElement("div");
 div.className="card";
 
 div.innerHTML=`
@@ -299,8 +346,7 @@ div.innerHTML=`
 <span class="badge ${c.type}">${c.type}</span>
 <span class="badge ${c.status}">${c.status}</span>
 
-<p>👥 ${c.viewers}</p>
-
+<p>👥 ${c.viewers||0}</p>
 `;
 
 grid.appendChild(div);
@@ -329,21 +375,19 @@ document.getElementById("t4").innerText=
 view==="users"
 ? users.filter(u=>u.status==="banned").length
 : channels.filter(c=>c.status==="locked").length;
-
 }
 
 /* =====================
 ACTIONS
 ===================== */
 function toggleUser(id){
-
 users=users.map(u=>{
 if(u.id===id){
 u.status=u.status==="active"?"banned":"active";
 }
 return u;
 });
-
+usersFiltered=[...users];
 render();
 }
 
@@ -351,39 +395,21 @@ render();
 SEARCH
 ===================== */
 function searchAll(q){
-
 q=q.toLowerCase();
 
 if(view==="users"){
-
-const filtered=users.filter(u=>
+usersFiltered=users.filter(u=>
 u.name.toLowerCase().includes(q)||
 u.email.toLowerCase().includes(q)
 );
-
-usersToRender(filtered);
-
 }else{
-
-const filtered=channels.filter(c=>
+channelsFiltered=channels.filter(c=>
 c.name.toLowerCase().includes(q)||
 c.category.toLowerCase().includes(q)
 );
-
-channelsToRender(filtered);
-
-}
 }
 
-/* helpers */
-function usersToRender(list){
-document.getElementById("grid").innerHTML="";
-list.forEach(u=>console.log(u));
-}
-
-function channelsToRender(list){
-document.getElementById("grid").innerHTML="";
-list.forEach(c=>console.log(c));
+render();
 }
 
 /* INIT */
