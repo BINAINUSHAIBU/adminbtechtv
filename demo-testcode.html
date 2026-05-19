@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV ULTRA MAX 2026 GOD MODE ++</title>
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>BTECH-TV ULTRA USER MANAGER</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -12,311 +14,261 @@
 --bg:#0b0f1a;
 --panel:#11182a;
 --card:#1b2438;
+--hover:#2b3a5a;
 --accent:#00bfff;
---text:#fff;
---free:#16a34a;
---paid:#dc2626;
---locked:#f59e0b;
+--text:#ffffff;
+--muted:#94a3b8;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-body{background:var(--bg);color:var(--text);overflow:hidden}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+body{background:var(--bg);color:var(--text);overflow:hidden;}
 
-/* LOGIN */
-#login{
-position:fixed;inset:0;
-background:#000;
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;
+/* TOPBAR */
+.topbar{
+height:65px;background:var(--panel);
+display:flex;justify-content:space-between;align-items:center;
+padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.05);
 }
-
-.box{
-width:300px;
-background:var(--panel);
-padding:20px;
-border-radius:10px;
+.topbar h2{color:var(--accent);font-size:22px;}
+.top-links{display:flex;gap:10px;}
+.top-links button{
+padding:10px 15px;border:none;border-radius:8px;
+background:var(--card);color:white;font-weight:bold;cursor:pointer;
 }
-
-input,button{
-width:100%;
-padding:10px;
-margin-top:10px;
-border:none;
-border-radius:6px;
-}
-
-button{
-background:var(--accent);
-font-weight:bold;
-cursor:pointer;
-}
+.top-links button:hover{background:var(--accent);color:black;}
 
 /* LAYOUT */
-.topbar{
-height:60px;
-background:var(--panel);
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:0 15px;
-}
+.container{display:flex;height:calc(100vh - 65px);}
 
-.container{display:flex;height:calc(100vh - 60px)}
-
+/* SIDEBAR */
 .sidebar{
-width:240px;
-background:#0f1628;
-padding:10px;
-overflow:auto;
+width:260px;background:#0f1628;padding:15px;overflow-y:auto;
+border-right:1px solid rgba(255,255,255,0.05);
 }
-
-.main{flex:1;display:flex;flex-direction:column}
-
-.player{height:260px;background:black}
-video{width:100%;height:100%;object-fit:contain}
-
-.list{
-flex:1;
-overflow:auto;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-gap:10px;
-padding:10px;
+.cat{
+padding:12px;margin:8px 0;background:var(--card);
+border-radius:8px;cursor:pointer;
 }
+.cat:hover{background:var(--hover);}
 
-.card{
-background:var(--card);
-padding:10px;
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.dashboard-grid{
+flex:1;display:grid;
+grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+gap:15px;padding:15px;overflow-y:auto;
+}
+.card{background:var(--card);padding:20px;border-radius:15px;}
+.card h3{color:var(--accent);margin-bottom:10px;}
+
+/* CHANNEL LIST */
+.channel-list{max-height:420px;overflow-y:auto;}
+.channel-item{
+display:flex;justify-content:space-between;
+padding:12px;background:#0f1628;margin-bottom:8px;
+border-radius:10px;cursor:pointer;
+}
+.channel-item:hover{background:var(--hover);}
+
+/* USER LIST */
+.user-item{
+display:flex;justify-content:space-between;
+padding:10px;background:#0f1628;margin:8px 0;
 border-radius:10px;
-cursor:pointer;
-border:1px solid transparent;
 }
 
-.card:hover{border-color:var(--accent)}
-
-.badge{
-padding:4px 8px;
-border-radius:20px;
-font-size:11px;
-margin-right:4px;
-}
-
-.free{background:var(--free)}
-.paid{background:var(--paid)}
-.locked{background:var(--locked);color:#000}
-
-/* RIGHT */
-.right{
-width:260px;
-background:var(--panel);
-padding:10px;
-overflow:auto;
-}
-
-.stat{
-background:#0f1628;
-padding:10px;
-margin-bottom:8px;
-border-radius:8px;
+/* PLAYER */
+.player{height:260px;background:black;position:relative;border-radius:15px;overflow:hidden;}
+.player video{width:100%;height:100%;object-fit:cover;}
+.overlay{
+position:absolute;inset:0;background:rgba(0,0,0,0.7);
+display:flex;align-items:center;justify-content:center;
+font-size:18px;
 }
 </style>
+
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div id="login">
-<div class="box">
-<h3>🔐 ULTRA MAX LOGIN</h3>
-<p style="font-size:12px;opacity:.7">Demo password: <b>1234</b></p>
-<input id="pass" type="password" placeholder="Enter Password">
-<button onclick="login()">ENTER GOD MODE</button>
-</div>
-</div>
-
-<!-- TOPBAR -->
 <div class="topbar">
-<h3>🚀 ULTRA MAX 2026 GOD MODE ++</h3>
-<div id="status">LOCKED</div>
+<h2>🚀 BTECH-TV ULTRA USER MANAGER</h2>
 </div>
 
 <div class="container">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-<h4>⚙ CONTROL PANEL</h4>
-
-<button onclick="filterAll()">All</button>
-<button onclick="filterLocked()">Locked</button>
-<button onclick="filterFree()">Free</button>
-<button onclick="filterPaid()">Paid</button>
-
-<input placeholder="Search..." oninput="search(this.value)">
+<h3 style="color:#00bfff;">Navigation</h3>
+<div class="cat" onclick="setTab('channels')">📡 Channels</div>
+<div class="cat" onclick="setTab('users')">👥 Users</div>
+<div class="cat" onclick="setTab('custom')">➕ Custom</div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
+
+<div class="dashboard-grid">
+
+<!-- PLAYER -->
+<div class="card">
+<h3>📺 LIVE PLAYER</h3>
 <div class="player">
-<video id="video" controls></video>
+<video id="vid" controls autoplay></video>
+<div class="overlay" id="overlay">Loading IPTV Engine...</div>
 </div>
-<div class="list" id="list"></div>
-</div>
-
-<!-- RIGHT -->
-<div class="right">
-<h4>📊 SYSTEM STATS</h4>
-
-<div class="stat">Total: <span id="t">0</span></div>
-<div class="stat">Free: <span id="f">0</span></div>
-<div class="stat">Paid: <span id="p">0</span></div>
-<div class="stat">Locked: <span id="l">0</span></div>
-
-<button onclick="lockAll()">🔒 Lock ALL</button>
-<button onclick="unlockAll()">🔓 Unlock ALL</button>
-<button onclick="deleteLocked()">❌ Delete Locked</button>
 </div>
 
+<!-- CHANNEL LIST -->
+<div class="card">
+<h3>📡 CHANNELS</h3>
+<input placeholder="Search..." oninput="search(this.value)" />
+<div class="channel-list" id="chlist"></div>
+</div>
+
+<!-- USERS -->
+<div class="card">
+<h3>👥 USERS</h3>
+<div id="userList"></div>
+</div>
+
+</div>
+</div>
 </div>
 
 <script>
-/* =====================
-LOGIN
-===================== */
-function login(){
-const p=document.getElementById("pass").value;
-if(p==="1234"){
-document.getElementById("login").style.display="none";
-document.getElementById("status").innerText="GOD MODE ACTIVE";
-}else alert("Wrong password");
+
+/* =========================
+FULL IPTV ENGINE (MERGED)
+========================= */
+
+var all=[],filtered=[],cur=null;
+var favs={},recent=[];
+var channelMap={},logoMap={},deadCh={},aliveCh={};
+
+function flag(c){return c?c.toUpperCase():"🌐";}
+
+/* INIT */
+init();
+
+function init(){
+loadAPI();
 }
 
-/* =====================
-IPTV ENGINE MERGED
-===================== */
+/* =========================
+LOAD IPTV API
+========================= */
 
-let channels=[],filtered=[],cur=null;
-
-function flag(cc){
-if(!cc||cc.length!==2)return'🌐';
-var a=0x1F1E6;
-return String.fromCodePoint(a+cc.charCodeAt(0)-65,a+cc.charCodeAt(1)-65);
-}
-
-/* LOAD IPTV */
 async function loadAPI(){
-try{
-const [ch,st,lg]=await Promise.all([
-fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
-fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
-fetch('https://iptv-org.github.io/api/logos.json').then(r=>r.json())
+let [ch,st,lg]=await Promise.all([
+fetch("https://iptv-org.github.io/api/channels.json").then(r=>r.json()),
+fetch("https://iptv-org.github.io/api/streams.json").then(r=>r.json()),
+fetch("https://iptv-org.github.io/api/logos.json").then(r=>r.json())
 ]);
 
-let map={},logos={};
-
-ch.forEach(c=>map[c.id]=c);
-lg.forEach(l=>logos[l.channel]=l.url);
+ch.forEach(c=>channelMap[c.id]=c);
+lg.forEach(l=>logoMap[l.channel]=l.url);
 
 let seen={};
 st.forEach(s=>{
-if(!s.url||seen[s.url])return;
+if(seen[s.url])return;
 seen[s.url]=1;
-channels.push({
-id:channels.length,
-name:s.title||"Channel",
-url:s.url,
-type:"free",
-status:"free",
-cc:map[s.channel]?.country||"",
-logo:logos[s.channel]||""
+if(!s.url)return;
+
+all.push({
+id:all.length+1,
+n:s.channel||s.title||"Unknown",
+u:s.url,
+cat:"LIVE",
+logo:logoMap[s.channel]||"",
+cc:""
 });
 });
 
-filtered=[...channels];
+filtered=[...all];
 render();
-document.getElementById("status").innerText="LIVE: "+channels.length;
-}catch(e){
-console.log(e);
-}
 }
 
-/* =====================
-RENDER
-===================== */
+/* =========================
+RENDER CHANNELS
+========================= */
 
 function render(){
-const box=document.getElementById("list");
-box.innerHTML="";
-
-filtered.forEach((c,i)=>{
-const div=document.createElement("div");
-div.className="card";
-
-div.innerHTML=`
-<b>${c.name}</b><br>
-<span class="badge ${c.type}">${c.type}</span>
-<span class="badge ${c.status}">${c.status}</span>
-`;
-
-div.onclick=()=>play(i);
-box.appendChild(div);
+let h="";
+filtered.slice(0,200).forEach(c=>{
+h+=`
+<div class="channel-item" onclick="play(${c.id})">
+<div>${c.n}</div>
+</div>`;
 });
-
-stats();
+document.getElementById("chlist").innerHTML=h;
 }
 
-/* =====================
-PLAY
-===================== */
+/* =========================
+PLAY CHANNEL
+========================= */
 
-function play(i){
-const c=filtered[i];
-const v=document.getElementById("video");
+var hls=null;
+
+function play(id){
+let ch=all.find(x=>x.id===id);
+if(!ch)return;
+
+let v=document.getElementById("vid");
+
+if(hls)hls.destroy();
 
 if(Hls.isSupported()){
-const h=new Hls();
-h.loadSource(c.url);
-h.attachMedia(v);
-}else v.src=c.url;
-cur=c;
+hls=new Hls();
+hls.loadSource(ch.u);
+hls.attachMedia(v);
+hls.on(Hls.Events.MANIFEST_PARSED,()=>v.play());
+}else{
+v.src=ch.u;
+v.play();
 }
 
-/* =====================
-FILTER
-===================== */
+document.getElementById("overlay").style.display="none";
+cur=ch;
+}
 
-function filterAll(){filtered=[...channels];render();}
-function filterLocked(){filtered=channels.filter(c=>c.status==="locked");render();}
-function filterFree(){filtered=channels.filter(c=>c.type==="free");render();}
-function filterPaid(){filtered=channels.filter(c=>c.type==="paid");render();}
+/* =========================
+SEARCH
+========================= */
 
-/* SEARCH */
-function search(v){
-filtered=channels.filter(c=>
-c.name.toLowerCase().includes(v.toLowerCase())
-);
+function search(q){
+q=q.toLowerCase();
+filtered=all.filter(c=>c.n.toLowerCase().includes(q));
 render();
 }
 
-/* ADMIN */
-function lockAll(){channels.forEach(c=>c.status="locked");render();}
-function unlockAll(){channels.forEach(c=>c.status="free");render();}
-function deleteLocked(){
-channels=channels.filter(c=>c.status!=="locked");
-render();
+/* =========================
+USERS DEMO
+========================= */
+
+let users=[];
+for(let i=1;i<=200;i++){
+users.push({n:"USER_"+i,e:"u"+i+"@mail.com"});
 }
 
-/* STATS */
-function stats(){
-document.getElementById("t").innerText=channels.length;
-document.getElementById("f").innerText=channels.filter(c=>c.type==="free").length;
-document.getElementById("p").innerText=channels.filter(c=>c.type==="paid").length;
-document.getElementById("l").innerText=channels.filter(c=>c.status==="locked").length;
+function renderUsers(){
+let h="";
+users.forEach(u=>{
+h+=`<div class="user-item">
+<div>${u.n}</div>
+<div>${u.e}</div>
+</div>`;
+});
+document.getElementById("userList").innerHTML=h;
+}
+renderUsers();
+
+/* =========================
+TABS (simple)
+========================= */
+
+function setTab(t){
+console.log("Tab:",t);
 }
 
-/* BOOT */
-loadAPI();
 </script>
 
 </body>
