@@ -1,6 +1,790 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="w
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTECH-TV ENTERPRISE PRO MAX v4</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+
+:root{
+--bg:#0b0f1a;
+--panel:#11182a;
+--card:#1b2438;
+--accent:#00bfff;
+--danger:#ef4444;
+--warn:#f59e0b;
+--ok:#22c55e;
+--text:#fff;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+
+body{background:var(--bg);color:var(--text)}
+
+/* LOGIN */
+#login{
+position:fixed;inset:0;
+background:#000;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.box{
+width:320px;
+background:var(--panel);
+padding:20px;
+border-radius:10px;
+}
+
+/* LAYOUT */
+.topbar{
+height:60px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 15px;
+}
+
+.container{display:flex;height:calc(100vh - 60px)}
+
+.sidebar{
+width:240px;
+background:#0f1628;
+padding:10px;
+overflow:auto;
+}
+
+.main{flex:1;display:flex;flex-direction:column}
+
+.player{height:240px;background:black}
+video{width:100%;height:100%;object-fit:contain}
+
+.list{
+flex:1;
+overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+gap:10px;
+padding:10px;
+}
+
+.card{
+background:var(--card);
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+border:1px solid transparent;
+}
+
+.card:hover{border-color:var(--accent)}
+
+.badge{
+font-size:11px;
+padding:4px 6px;
+border-radius:20px;
+margin-right:4px;
+}
+
+.locked{background:var(--warn)}
+.unlocked{background:var(--ok)}
+.paid{background:var(--danger)}
+
+/* RIGHT */
+.right{
+width:260px;
+background:var(--panel);
+padding:10px;
+overflow:auto;
+}
+
+/* LOG */
+.log{
+font-size:12px;
+background:#0f1628;
+padding:8px;
+margin-top:10px;
+height:200px;
+overflow:auto;
+}
+
+button{
+width:100%;
+padding:10px;
+margin-top:8px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.primary{background:var(--accent)}
+.danger{background:var(--danger)}
+.warn{background:var(--warn)}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:10px;
+background:#0f1628;
+border:none;
+color:white;
+border-radius:6px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+<div class="box">
+<h3>🔐 ENTERPRISE LOGIN</h3>
+
+<input id="user" placeholder="Username">
+<select id="role">
+<option value="superadmin">Super Admin</option>
+<option value="admin">Admin</option>
+<option value="viewer">Viewer</option>
+</select>
+
+<button class="primary" onclick="login()">LOGIN</button>
+</div>
+</div>
+
+<!-- TOP -->
+<div class="topbar">
+<h3>🚀 BTECH-TV ENTERPRISE v4</h3>
+<div id="roleBox"></div>
+</div>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+<h4>➕ Add Channel</h4>
+
+<input id="name" placeholder="Name">
+<input id="url" placeholder="Stream URL">
+
+<button class="primary" onclick="add()">Add</button>
+
+<button onclick="filterAll()">All</button>
+<button onclick="filterLocked()">Locked</button>
+<button onclick="filterPaid()">Paid</button>
+
+<input placeholder="Search..." oninput="search(this.value)">
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="player">
+<video id="video" controls></video>
+</div>
+
+<div class="list" id="list"></div>
+
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+
+<h4>⚙ Actions</h4>
+
+<button class="primary" onclick="lockAllSelected()">Lock Selected</button>
+<button class="primary" onclick="unlockAllSelected()">Unlock Selected</button>
+<button class="danger" onclick="deleteSelected()">Delete Selected</button>
+
+<h4 style="margin-top:10px">📊 Stats</h4>
+<p>Total: <span id="t"></span></p>
+<p>Locked: <span id="l"></span></p>
+<p>Paid: <span id="p"></span></p>
+
+<h4>📡 Live Logs</h4>
+<div class="log" id="log"></div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =====================
+AUTH SYSTEM
+===================== */
+
+let role="";
+
+function login(){
+
+role=document.getElementById("role").value;
+
+document.getElementById("login").style.display="none";
+
+log("LOGIN: "+role);
+
+document.getElementById("roleBox").innerText=
+"Role: "+role.toUpperCase();
+
+}
+
+/* =====================
+DATABASE ENGINE
+===================== */
+
+let db={
+channels:[],
+logs:[]
+};
+
+let filtered=[];
+let selected=new Set();
+
+/* INIT */
+function init(){
+
+let saved=localStorage.getItem("btech_enterprise");
+
+if(saved){
+db=JSON.parse(saved);
+}else{
+generate();
+}
+
+filtered=[...db.channels];
+render();
+stats();
+
+}
+
+/* GENERATE */
+function generate(){
+
+for(let i=1;i<=100;i++){
+
+db.channels.push({
+id:i,
+name:"BTECH TV "+i,
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+status:i%6===0?"locked":"unlocked",
+type:i%4===0?"paid":"free"
+});
+
+}
+
+}
+
+/* SAVE */
+function save(){
+localStorage.setItem("btech_enterprise",JSON.stringify(db));
+}
+
+/* LOG ENGINE */
+function log(text){
+
+db.logs.unshift({
+time:new Date().toLocaleTimeString(),
+text
+});
+
+renderLogs();
+save();
+
+}
+
+function renderLogs(){
+
+let box=document.getElementById("log");
+
+box.innerHTML=db.logs
+.slice(0,30)
+.map(l=>`[${l.time}] ${l.text}`)
+.join("<br>");
+
+}
+
+/* RENDER */
+function render(){
+
+let box=document.getElementById("list");
+box.innerHTML="";
+
+filtered.forEach((c,i)=>{
+
+let div=document.createElement("div");
+div.className="card";
+
+div.innerHTML=`
+<input type="checkbox" onchange="toggle(${c.id})">
+<b>${c.name}</b><br>
+<span class="badge ${c.status}">${c.status}</span>
+<span class="badge ${c.type}">${c.type}</span>
+`;
+
+div.onclick=()=>play(i);
+
+box.appendChild(div);
+
+});
+
+}
+
+/* TOGGLE */
+function toggle(id){
+
+selected.has(id)?
+selected.delete(id):
+selected.add(id);
+
+}
+
+/* PLAY */
+function play(i){
+
+let c=filtered[i];
+
+let v=document.getElementById("video");
+
+if(Hls.isSupported()){
+let hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(v);
+}else{
+v.src=c.url;
+}
+
+log("PLAY: "+c.name);
+
+}
+
+/* ADD */
+function add(){
+
+if(role!=="superadmin"){
+alert("Permission denied");
+return;
+}
+
+db.channels.push({
+id:Date.now(),
+name:name.value,
+url:url.value,
+status:"unlocked",
+type:"free"
+});
+
+log("CHANNEL ADDED");
+
+refresh();
+
+}
+
+/* FILTER */
+function filterAll(){filtered=[...db.channels];render();}
+function filterLocked(){filtered=db.channels.filter(c=>c.status==="locked");render();}
+function filterPaid(){filtered=db.channels.filter(c=>c.type==="paid");render();}
+
+/* SEARCH */
+function search(v){
+filtered=db.channels.filter(c=>
+c.name.toLowerCase().includes(v.toLowerCase())
+);
+render();
+}
+
+/* ACTIONS */
+function lockAllSelected(){
+
+db.channels.forEach(c=>{
+if(selected.has(c.id)){
+c.status="locked";
+log("LOCK: "+c.name);
+}
+});
+
+refresh();
+
+}
+
+function unlockAllSelected(){
+
+db.channels.forEach(c=>{
+if(selected.has(c.id)){
+c.status="unlocked";
+log("UNLOCK: "+c.name);
+}
+});
+
+refresh();
+
+}
+
+function deleteSelected(){
+
+db.channels=db.channels.filter(c=>!selected.has(c.id));
+
+log("DELETE SELECTED");
+
+refresh();
+
+}
+
+/* REFRESH */
+function refresh(){
+filtered=[...db.channels];
+save();
+render();
+stats();
+}
+
+/* STATS */
+function stats(){
+
+t.innerText=db.channels.length;
+l.innerText=db.channels.filter(c=>c.status==="locked").length;
+p.innerText=db.channels.filter(c=>c.type==="paid").length;
+
+}
+
+/* BOOT */
+init();
+
+</script>
+
+</body>
+</html>
+idth=device-width, initial-scale=1.0">
+<title>BTECH-TV ENTERPRISE PRO MAX v4</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+
+:root{
+--bg:#0b0f1a;
+--panel:#11182a;
+--card:#1b2438;
+--accent:#00bfff;
+--danger:#ef4444;
+--warn:#f59e0b;
+--ok:#22c55e;
+--text:#fff;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+
+body{background:var(--bg);color:var(--text)}
+
+.topbar{
+height:60px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 15px;
+}
+
+.container{display:flex;height:calc(100vh - 60px)}
+
+.sidebar{
+width:240px;
+background:#0f1628;
+padding:10px;
+overflow:auto;
+}
+
+.main{flex:1;display:flex;flex-direction:column}
+
+.player{height:240px;background:black}
+video{width:100%;height:100%;object-fit:contain}
+
+.list{
+flex:1;
+overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+gap:10px;
+padding:10px;
+}
+
+.card{
+background:var(--card);
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+border:1px solid transparent;
+}
+
+.card:hover{border-color:var(--accent)}
+
+.right{
+width:260px;
+background:var(--panel);
+padding:10px;
+overflow:auto;
+}
+
+.log{
+font-size:12px;
+background:#0f1628;
+padding:8px;
+margin-top:10px;
+height:200px;
+overflow:auto;
+}
+
+button{
+width:100%;
+padding:10px;
+margin-top:8px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.primary{background:var(--accent)}
+.danger{background:var(--danger)}
+.warn{background:var(--warn)}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:10px;
+background:#0f1628;
+border:none;
+color:white;
+border-radius:6px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- TOP -->
+<div class="topbar">
+<h3>🚀 BTECH-TV ENTERPRISE v4</h3>
+<div id="roleBox">ADMIN MODE</div>
+</div>
+
+<div class="container">
+
+<div class="sidebar">
+<h4>📡 Controls</h4>
+<p style="font-size:12px;color:#aaa">IPTV Ultra Engine Loaded</p>
+
+<input id="name" placeholder="Channel Name">
+<input id="url" placeholder="Stream URL">
+<button class="primary" onclick="addChannel()">Add Channel</button>
+
+<button onclick="filterAll()">All</button>
+<button onclick="filterLocked()">Locked</button>
+<button onclick="filterPaid()">Paid</button>
+
+<input placeholder="Search..." oninput="search(this.value)">
+</div>
+
+<div class="main">
+
+<div class="player">
+<video id="video" controls></video>
+</div>
+
+<div class="list" id="chlist"></div>
+
+</div>
+
+<div class="right">
+<h4>⚙ Status</h4>
+
+<p id="status">Loading...</p>
+<p id="chcount"></p>
+
+<h4>📡 Logs</h4>
+<div class="log" id="log"></div>
+</div>
+
+</div>
+
+<script>
+
+/* =====================
+STATE
+===================== */
+
+var all=[],filtered=[],cur=null;
+var deadCh={},aliveCh={};
+var favs={};
+var recent=[];
+var channelMap={},logoMap={};
+
+/* =====================
+UTILS
+===================== */
+
+function esc(s){
+return s?s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):'';
+}
+
+function log(t){
+console.log(t);
+}
+
+/* =====================
+LOAD API
+===================== */
+
+async function loadAPI(){
+try{
+var [chRes,stRes,lgRes]=await Promise.all([
+fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
+fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
+fetch('https://iptv-org.github.io/api/logos.json').then(r=>r.json())
+]);
+
+for(var i=0;i<chRes.length;i++){
+var ch=chRes[i];
+if(!ch.is_nsfw&&!ch.closed)channelMap[ch.id]=ch;
+}
+
+for(var i=0;i<lgRes.length;i++){
+var lg=lgRes[i];
+if(!logoMap[lg.channel])logoMap[lg.channel]=lg.url;
+}
+
+var id=0,seen={};
+
+for(var i=0;i<stRes.length;i++){
+var st=stRes[i];
+if(!st.url||seen[st.url])continue;
+if(st.url.includes('youtube')||st.url.includes('twitch'))continue;
+
+seen[st.url]=1;
+
+var ch=st.channel?channelMap[st.channel]:null;
+
+all.push({
+id:++id,
+n:ch?ch.name:(st.title||'Unknown'),
+u:st.url,
+cat:ch&&ch.categories?ch.categories[0]:'other'
+});
+}
+
+render();
+document.getElementById('status').innerText="Loaded "+all.length+" channels";
+
+}catch(e){
+document.getElementById('status').innerText="Error loading API";
+}
+}
+
+/* =====================
+RENDER
+===================== */
+
+function render(){
+filtered=all;
+
+var box=document.getElementById("chlist");
+box.innerHTML="";
+
+filtered.slice(0,300).forEach(c=>{
+var div=document.createElement("div");
+div.className="card";
+
+div.onclick=()=>play(c);
+
+div.innerHTML="<b>"+esc(c.n)+"</b><br><small>"+c.cat+"</small>";
+
+box.appendChild(div);
+});
+}
+
+/* =====================
+PLAY
+===================== */
+
+function play(c){
+var v=document.getElementById("video");
+
+if(window.Hls&&Hls.isSupported()){
+var hls=new Hls();
+hls.loadSource(c.u);
+hls.attachMedia(v);
+}else{
+v.src=c.u;
+}
+
+document.getElementById("status").innerText="Playing: "+c.n;
+}
+
+/* =====================
+ADD CHANNEL
+===================== */
+
+function addChannel(){
+
+all.push({
+id:Date.now(),
+n:name.value,
+u:url.value,
+cat:"custom"
+});
+
+name.value="";
+url.value="";
+
+render();
+}
+
+/* =====================
+FILTERS
+===================== */
+
+function filterAll(){render();}
+function filterLocked(){filtered=all.filter(c=>c.cat==="locked");}
+function filterPaid(){filtered=all.filter(c=>c.cat==="paid");}
+
+/* =====================
+SEARCH
+===================== */
+
+function search(v){
+filtered=all.filter(c=>c.n.toLowerCase().includes(v.toLowerCase()));
+render();
+}
+
+/* =====================
+BOOT
+===================== */
+
+loadAPI();
+
+</script>
+
+</body>
+</html>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BTECH-TV ENTERPRISE PRO MAX v4</title>
