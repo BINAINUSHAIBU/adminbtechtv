@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV SUPER ADMIN PRO MAX</title>
+<title>📺 IPTV ULTRA MAX CONTROL CENTER</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+
 :root{
 --bg:#0b0f1a;
 --panel:#11182a;
@@ -15,57 +16,80 @@
 --hover:#2b3a5a;
 --accent:#00bfff;
 --text:#fff;
---muted:#94a3b8;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 
 body{background:var(--bg);color:var(--text);overflow:hidden}
 
-/* TOPBAR */
+/* LOGIN */
+.login{
+position:fixed;inset:0;
+background:black;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.login-box{
+background:var(--panel);
+padding:20px;
+border-radius:12px;
+width:300px;
+}
+
+.login-box input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:8px;
+border:none;
+background:#0f1628;
+color:white;
+}
+
+.login-box button{
+width:100%;
+padding:10px;
+margin-top:10px;
+background:var(--accent);
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* TOP */
 .topbar{
-height:65px;
+height:60px;
 background:var(--panel);
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:0 20px;
-border-bottom:1px solid rgba(255,255,255,0.05);
+padding:0 15px;
 }
 
 .topbar h2{color:var(--accent)}
 
-.topbar input{
-padding:10px;
-border:none;
-border-radius:8px;
-background:#0f1628;
-color:white;
-width:280px;
-}
-
 /* LAYOUT */
-.container{display:flex;height:calc(100vh - 65px)}
+.container{display:flex;height:calc(100vh - 60px)}
 
 .sidebar{
-width:240px;
+width:250px;
 background:#0f1628;
-padding:15px;
-border-right:1px solid rgba(255,255,255,0.05);
+padding:10px;
+overflow:auto;
 }
 
 .cat{
-padding:12px;
-margin:8px 0;
+padding:10px;
+margin:6px 0;
 background:var(--card);
 border-radius:8px;
 cursor:pointer;
-transition:0.3s;
 }
 
 .cat:hover{background:var(--hover)}
-
-.tab-active{background:var(--accent);color:black}
 
 /* MAIN */
 .main{flex:1;display:flex;flex-direction:column}
@@ -73,47 +97,40 @@ transition:0.3s;
 /* STATS */
 .stats{
 display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:10px;
-padding:15px;
+grid-template-columns:repeat(5,1fr);
+gap:8px;
+padding:10px;
 }
 
 .box{
 background:var(--card);
-padding:15px;
-border-radius:10px;
+padding:10px;
+border-radius:8px;
 text-align:center;
 }
-
-.box p{color:var(--accent);font-size:20px;font-weight:bold}
 
 /* GRID */
 .grid{
 flex:1;
-overflow-y:auto;
-padding:15px;
+overflow:auto;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-gap:12px;
+grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+gap:10px;
+padding:10px;
 }
 
-/* CARD */
 .card{
 background:var(--card);
-padding:15px;
-border-radius:12px;
-transition:0.3s;
-border:1px solid transparent;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+transition:.2s;
 }
 
-.card:hover{
-transform:translateY(-3px);
-border-color:var(--accent);
-background:var(--hover);
-}
+.card:hover{background:var(--hover);transform:scale(1.02)}
 
 .badge{
-padding:5px 10px;
+padding:4px 8px;
 border-radius:20px;
 font-size:11px;
 margin-right:5px;
@@ -123,33 +140,79 @@ margin-right:5px;
 .paid{background:#dc2626}
 .locked{background:#f59e0b;color:black}
 
-.active{background:#16a34a}
-.banned{background:#dc2626}
-.premium{background:#f59e0b;color:black}
+.online{background:#16a34a}
+.offline{background:#dc2626}
 
-/* BUTTON */
-button{
-padding:10px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-background:var(--accent);
-font-weight:bold;
-margin-top:8px;
+/* PLAYER */
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.95);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:999;
 }
 
-button:hover{opacity:0.8}
+.player{
+width:85%;
+height:75%;
+background:black;
+position:relative;
+border-radius:10px;
+overflow:hidden;
+}
 
-.danger{background:#dc2626}
-.warning{background:#f59e0b;color:black}
+.player video{width:100%;height:100%}
+
+.close{
+position:absolute;
+top:10px;right:10px;
+background:red;
+border:none;
+padding:8px 12px;
+color:white;
+cursor:pointer;
+border-radius:6px;
+}
+
+.monitor{
+position:absolute;
+bottom:10px;
+left:10px;
+background:rgba(0,0,0,.6);
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+}
+
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
+<div class="login" id="login">
+<div class="login-box">
+<h3>🔐 ULTRA ADMIN LOGIN</h3>
+<input id="pass" type="password" placeholder="Password">
+<button onclick="login()">Enter</button>
+</div>
+</div>
+
+<!-- PLAYER -->
+<div class="modal" id="modal">
+<div class="player">
+<button class="close" onclick="closePlayer()">X</button>
+<video id="video" controls autoplay></video>
+<div class="monitor" id="monitor">LIVE MONITOR: --</div>
+</div>
+</div>
+
+<!-- TOP -->
 <div class="topbar">
-<h2>🚀 BTECH SUPER ADMIN PRO MAX</h2>
-<input placeholder="Search users or channels..." oninput="searchAll(this.value)">
+<h2>📺 IPTV ULTRA MAX CONTROL CENTER</h2>
+<input placeholder="Search..." oninput="search(this.value)" style="padding:8px;border:none;border-radius:8px;background:#0f1628;color:white">
 </div>
 
 <div class="container">
@@ -157,14 +220,11 @@ button:hover{opacity:0.8}
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="cat tab-active" onclick="switchTab('users',this)">👥 Users</div>
-<div class="cat" onclick="switchTab('channels',this)">📺 Channels</div>
+<div class="cat" onclick="setView('channels')">📺 Channels</div>
+<div class="cat" onclick="setView('users')">👥 Users</div>
+<div class="cat" onclick="toggleFav()">⭐ Favorites</div>
 
-<hr style="opacity:0.2;margin:10px 0">
-
-<button onclick="generateUsers()">Generate Users</button>
-<button onclick="generateChannels()">Generate Channels</button>
-<button onclick="loadAPI()">🚀 Load IPTV API</button>
+<button onclick="loadAPI()" style="width:100%;margin-top:10px">🚀 Load IPTV</button>
 
 </div>
 
@@ -172,10 +232,11 @@ button:hover{opacity:0.8}
 <div class="main">
 
 <div class="stats">
-<div class="box"><p id="t1">0</p><small>Total Users</small></div>
-<div class="box"><p id="t2">0</p><small>Total Channels</small></div>
-<div class="box"><p id="t3">0</p><small>Active / Free</small></div>
-<div class="box"><p id="t4">0</p><small>Banned / Locked</small></div>
+<div class="box"><b id="t1">0</b><br>Total</div>
+<div class="box"><b id="t2">0</b><br>Free</div>
+<div class="box"><b id="t3">0</b><br>Paid</div>
+<div class="box"><b id="t4">0</b><br>Online</div>
+<div class="box"><b id="t5">0</b><br>Favorites</div>
 </div>
 
 <div class="grid" id="grid"></div>
@@ -186,234 +247,170 @@ button:hover{opacity:0.8}
 
 <script>
 
-/* =====================
-STATE
-===================== */
-let users=[];
-let channels=[];
-let view="users";
+/* ENGINE */
+let view="channels";
+let channels=[],users=[];
+let filtered=[];
+let favs=new Set();
+let showFav=false;
+let hls=null;
 
-let usersFiltered=[];
-let channelsFiltered=[];
-
-/* =====================
-TAB SWITCH
-===================== */
-function switchTab(tab,el){
-
-view=tab;
-
-document.querySelectorAll(".cat")
-.forEach(c=>c.classList.remove("tab-active"));
-
-el.classList.add("tab-active");
-
-render();
+/* LOGIN */
+function login(){
+if(document.getElementById("pass").value==="admin123"){
+localStorage.setItem("auth","1");
+document.getElementById("login").style.display="none";
+}
+}
+if(localStorage.getItem("auth")==="1"){
+document.getElementById("login").style.display="none";
 }
 
-/* =====================
-USERS
-===================== */
-function generateUsers(){
-
-users=[];
-
-for(let i=1;i<=200;i++){
-users.push({
-id:i,
-name:"User_"+i,
-email:"user"+i+"@mail.com",
-status:i%10===0?"banned":"active",
-premium:i%7===0
-});
-}
-
-usersFiltered=[...users];
-render();
-}
-
-/* =====================
-CHANNELS (DEMO)
-===================== */
-function generateChannels(){
-
-const cats=["Sports","Movies","News","Kids","Music","Africa"];
-
-channels=[];
-
-for(let i=1;i<=200;i++){
-channels.push({
-id:i,
-name:"BTECH Channel "+i,
-category:cats[i%cats.length],
-type:i%3===0?"paid":"free",
-status:i%10===0?"locked":"unlocked",
-viewers:Math.floor(Math.random()*100000)
-});
-}
-
-channelsFiltered=[...channels];
-render();
-}
-
-/* =====================
-IPTV API LOAD (MERGED)
-===================== */
+/* LOAD */
 async function loadAPI(){
-try{
+let res=await fetch("https://iptv-org.github.io/api/streams.json");
+let data=await res.json();
 
-let [chRes,stRes,lgRes]=await Promise.all([
-fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
-fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
-fetch('https://iptv-org.github.io/api/logos.json').then(r=>r.json())
-]);
-
-let channelMap={},logoMap={};
-
-for(let c of chRes) channelMap[c.id]=c;
-for(let l of lgRes) if(!logoMap[l.channel]) logoMap[l.channel]=l.url;
-
-let seen={};
-channels=[];
-
-for(let s of stRes){
-if(!s.url||seen[s.url]) continue;
-seen[s.url]=1;
-
-let ch=s.channel?channelMap[s.channel]:null;
-
-channels.push({
-id:channels.length+1,
-name:ch?ch.name:(s.title||"Unknown"),
+channels=data.slice(0,300).map((s,i)=>({
+id:i,
+name:"Channel "+i,
 url:s.url,
-category:ch?.categories?.[0]||"other",
-type:Math.random()>0.5?"free":"paid",
-status:Math.random()>0.9?"locked":"unlocked",
-viewers:Math.floor(Math.random()*100000)
-});
-}
+type:i%2?"free":"paid",
+status:Math.random()>0.2?"online":"offline",
+viewers:Math.floor(Math.random()*99999)
+}));
 
-channelsFiltered=[...channels];
+filtered=[...channels];
 render();
-
-}catch(e){
-console.log(e);
-generateChannels();
-}
 }
 
-/* =====================
-RENDER
-===================== */
+/* USERS */
+for(let i=0;i<100;i++){
+users.push({id:i,name:"User "+i,status:i%2?"active":"banned"});
+}
+
+/* VIEW */
+function setView(v){
+view=v;
+render();
+}
+
+/* FAVORITES */
+function toggleFavView(){
+showFav=!showFav;
+render();
+}
+
+/* SEARCH */
+function search(q){
+q=q.toLowerCase();
+
+if(view==="channels"){
+filtered=channels.filter(c=>c.name.toLowerCase().includes(q));
+}else{
+filtered=users.filter(u=>u.name.toLowerCase().includes(q));
+}
+render();
+}
+
+/* FAVORITE */
+function fav(id){
+if(favs.has(id)) favs.delete(id);
+else favs.add(id);
+render();
+}
+
+/* PLAY */
+function play(c){
+
+document.getElementById("modal").style.display="flex";
+
+let v=document.getElementById("video");
+
+if(hls)hls.destroy();
+
+if(Hls.isSupported()){
+hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(v);
+}else{
+v.src=c.url;
+}
+
+v.play();
+
+/* LIVE MONITOR */
+setInterval(()=>{
+document.getElementById("monitor").innerText=
+`LIVE: ${c.name} | VIEWERS: ${Math.floor(Math.random()*100000)} | STATUS: ${c.status}`;
+},1000);
+
+}
+
+/* CLOSE */
+function closePlayer(){
+document.getElementById("modal").style.display="none";
+}
+
+/* RENDER */
 function render(){
 
-const grid=document.getElementById("grid");
-grid.innerHTML="";
+let g=document.getElementById("grid");
+g.innerHTML="";
 
-if(view==="users"){
+if(view==="channels"){
 
-usersFiltered.forEach(u=>{
+let list=showFav?channels.filter(c=>favs.has(c.id)):channels;
 
-let div=document.createElement("div");
-div.className="card";
+list.forEach(c=>{
 
-div.innerHTML=`
-<h3>👤 ${u.name}</h3>
-<p>${u.email}</p>
+let d=document.createElement("div");
+d.className="card";
 
-<span class="badge ${u.status}">${u.status}</span>
-${u.premium?'<span class="badge premium">premium</span>':''}
+d.innerHTML=`
+<h4>${c.name}</h4>
+<span class="badge ${c.type}">${c.type}</span>
+<span class="badge ${c.status}">${c.status}</span>
 <br>
-<button onclick="toggleUser(${u.id})">Toggle</button>
+<button onclick="play(channels[${c.id}])">▶ Play</button>
+<button onclick="fav(${c.id})">⭐</button>
 `;
 
-grid.appendChild(div);
+g.appendChild(d);
 
 });
 
 }else{
 
-channelsFiltered.forEach(c=>{
+users.forEach(u=>{
 
-let div=document.createElement("div");
-div.className="card";
+let d=document.createElement("div");
+d.className="card";
 
-div.innerHTML=`
-<h3>📺 ${c.name}</h3>
-<p>${c.category}</p>
-
-<span class="badge ${c.type}">${c.type}</span>
-<span class="badge ${c.status}">${c.status}</span>
-
-<p>👥 ${c.viewers||0}</p>
-`;
-
-grid.appendChild(div);
+d.innerHTML=`<h4>👤 ${u.name}</h4><p>${u.status}</p>`;
+g.appendChild(d);
 
 });
 
 }
 
 updateStats();
+
 }
 
-/* =====================
-STATS
-===================== */
+/* STATS */
 function updateStats(){
 
-document.getElementById("t1").innerText=users.length;
-document.getElementById("t2").innerText=channels.length;
+document.getElementById("t1").innerText=channels.length;
+document.getElementById("t2").innerText=channels.filter(c=>c.type==="free").length;
+document.getElementById("t3").innerText=channels.filter(c=>c.type==="paid").length;
+document.getElementById("t4").innerText=channels.filter(c=>c.status==="online").length;
+document.getElementById("t5").innerText=favs.size;
 
-document.getElementById("t3").innerText=
-view==="users"
-? users.filter(u=>u.status==="active").length
-: channels.filter(c=>c.type==="free").length;
-
-document.getElementById("t4").innerText=
-view==="users"
-? users.filter(u=>u.status==="banned").length
-: channels.filter(c=>c.status==="locked").length;
-}
-
-/* =====================
-ACTIONS
-===================== */
-function toggleUser(id){
-users=users.map(u=>{
-if(u.id===id){
-u.status=u.status==="active"?"banned":"active";
-}
-return u;
-});
-usersFiltered=[...users];
-render();
-}
-
-/* =====================
-SEARCH
-===================== */
-function searchAll(q){
-q=q.toLowerCase();
-
-if(view==="users"){
-usersFiltered=users.filter(u=>
-u.name.toLowerCase().includes(q)||
-u.email.toLowerCase().includes(q)
-);
-}else{
-channelsFiltered=channels.filter(c=>
-c.name.toLowerCase().includes(q)||
-c.category.toLowerCase().includes(q)
-);
-}
-
-render();
 }
 
 /* INIT */
-generateUsers();
-generateChannels();
+loadAPI();
 
 </script>
 
