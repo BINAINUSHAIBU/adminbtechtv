@@ -1,5 +1,263 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BTECH-TV ULTRA USER MANAGER (MERGED IPTV ENGINE)</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+:root{
+--bg:#0b0f1a;
+--panel:#11182a;
+--card:#1b2438;
+--hover:#2b3a5a;
+--accent:#00bfff;
+--text:#ffffff;
+--muted:#94a3b8;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:var(--bg);color:var(--text);overflow:hidden;}
+
+.topbar{
+height:65px;background:var(--panel);
+display:flex;justify-content:space-between;align-items:center;
+padding:0 20px;border-bottom:1px solid rgba(255,255,255,0.05);
+}
+.topbar h2{color:var(--accent);font-size:20px;}
+.top-links button{
+padding:8px 12px;border:none;border-radius:8px;
+background:var(--card);color:white;cursor:pointer;
+}
+.top-links button.active,.top-links button:hover{background:var(--accent);color:black;}
+
+.container{display:flex;height:calc(100vh - 65px);}
+
+/* SIDEBAR */
+.sidebar{
+width:260px;background:#0f1628;padding:15px;overflow-y:auto;
+}
+.cat{padding:10px;margin:6px 0;background:var(--card);border-radius:8px;cursor:pointer;}
+.cat:hover{background:var(--hover);}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.dashboard-grid{
+flex:1;display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:15px;padding:15px;overflow-y:auto;
+}
+
+.card{
+background:var(--card);padding:15px;border-radius:12px;
+}
+
+.card h3{color:var(--accent);margin-bottom:10px;}
+
+/* USER LIST */
+.user-list,.channel-list{max-height:300px;overflow-y:auto;}
+
+.user-item,.channel-item{
+background:#0f1628;padding:10px;margin:6px 0;
+border-radius:8px;cursor:pointer;
+}
+
+.user-item:hover,.channel-item:hover{background:var(--hover);}
+
+/* PLAYER */
+.player{height:260px;background:black;border-radius:10px;overflow:hidden;}
+.player video{width:100%;height:100%;object-fit:cover;}
+
+.badge{padding:3px 8px;border-radius:20px;font-size:10px;}
+.active{background:#16a34a;}
+.blocked{background:#dc2626;}
+.premium{background:#2563eb;}
+.free{background:#f59e0b;}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+<h2>🚀 BTECH-TV ULTRA IPTV MERGED</h2>
+<div class="top-links">
+<button class="active">Dashboard</button>
+<button onclick="toggleAutoSkip()">Auto Skip</button>
+<button onclick="toggleTheme()">Theme</button>
+</div>
+</div>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h3 style="color:var(--accent)">📡 Channels</h3>
+<div class="cat" onclick="filterAll()">All</div>
+<div class="cat" onclick="filterFav()">⭐ Favorites</div>
+<div class="cat" onclick="filterRecent()">🕒 Recent</div>
+
+<hr style="margin:10px 0;opacity:0.2">
+
+<div class="cat">➕ Add Playlist</div>
+<input id="plist" placeholder="M3U URL" style="width:100%;padding:8px;margin-top:5px;">
+<button onclick="loadCustomPlaylist()" style="width:100%;margin-top:5px;">Load</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="dashboard-grid">
+
+<!-- USER STATS -->
+<div class="card">
+<h3>📊 Stats</h3>
+<p>Total Channels: <span id="total">0</span></p>
+<p>Favorites: <span id="favc">0</span></p>
+<p>Recent: <span id="recentc">0</span></p>
+</div>
+
+<!-- PLAYER -->
+<div class="card">
+<h3>📺 Player</h3>
+<div class="player">
+<video id="video" controls autoplay></video>
+</div>
+<p id="now">No channel playing</p>
+</div>
+
+<!-- CHANNEL LIST -->
+<div class="card">
+<h3>📡 Channels</h3>
+<div class="channel-list" id="list"></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+<script>
+
+/* ================= STATE ================= */
+let all=[],filtered=[],cur=null;
+let favs=JSON.parse(localStorage.getItem("fav")||"{}");
+let recent=JSON.parse(localStorage.getItem("rec")||"[]");
+let hls=null;
+let autoSkip=true;
+
+/* ================= LOAD ================= */
+async function load(){
+const res=await fetch("https://iptv-org.github.io/iptv/index.m3u");
+const text=await res.text();
+all=parseM3U(text).map((c,i)=>({...c,id:i+1}));
+filtered=[...all];
+updateStats();
+render();
+}
+
+/* ================= PARSER ================= */
+function parseM3U(t){
+let lines=t.split("\n"),out=[],tmp={};
+for(let l of lines){
+l=l.trim();
+if(l.startsWith("#EXTINF")){
+tmp={name:l.split(",")[1]||"Unknown"};
+}
+else if(l.startsWith("http")){
+tmp.url=l;
+out.push(tmp);
+tmp={};
+}
+}
+return out;
+}
+
+/* ================= RENDER ================= */
+function render(){
+let box=document.getElementById("list");
+box.innerHTML="";
+filtered.slice(0,200).forEach(c=>{
+let div=document.createElement("div");
+div.className="channel-item";
+div.innerHTML=`
+<strong>${c.name}</strong>
+${favs[c.id]?" ⭐":""}
+`;
+div.onclick=()=>play(c);
+box.appendChild(div);
+});
+}
+
+/* ================= PLAY ================= */
+function play(c){
+cur=c;
+document.getElementById("now").innerText=c.name;
+
+if(hls)hls.destroy();
+
+if(Hls.isSupported()){
+hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(document.getElementById("video"));
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+}else{
+video.src=c.url;
+video.play();
+}
+
+recent.unshift(c.id);
+recent=recent.slice(0,20);
+localStorage.setItem("rec",JSON.stringify(recent));
+updateStats();
+}
+
+/* ================= FILTERS ================= */
+function filterAll(){filtered=[...all];render();}
+function filterFav(){filtered=all.filter(c=>favs[c.id]);render();}
+function filterRecent(){filtered=recent.map(id=>all.find(c=>c.id==id)).filter(Boolean);render();}
+
+/* ================= FAVORITE ================= */
+document.addEventListener("keydown",e=>{
+if(e.key==="f"&&cur){
+favs[cur.id]=!favs[cur.id];
+localStorage.setItem("fav",JSON.stringify(favs));
+render();
+updateStats();
+}
+});
+
+/* ================= STATS ================= */
+function updateStats(){
+document.getElementById("total").innerText=all.length;
+document.getElementById("favc").innerText=Object.keys(favs).length;
+document.getElementById("recentc").innerText=recent.length;
+}
+
+/* ================= CUSTOM ================= */
+async function loadCustomPlaylist(){
+let url=document.getElementById("plist").value;
+if(!url)return;
+let r=await fetch(url);
+let t=await r.text();
+let parsed=parseM3U(t);
+let start=all.length;
+parsed.forEach((c,i)=>c.id=start+i+1);
+all.push(...parsed);
+filtered=[...all];
+render();
+updateStats();
+}
+
+/* ================= INIT ================= */
+load();
+
+</script>
+
+</body>
+</html>
 <html lang="en">
 <head>
 
