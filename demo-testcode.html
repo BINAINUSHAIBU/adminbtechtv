@@ -1,189 +1,93 @@
+<!-- =========================================
+BTECH-TV PRO 100K SUPER ADMIN + QUIZ ENGINE
+QUIZ CHANNEL + 1000 QUESTION SYSTEM
+========================================= -->
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>BTECH QUIZ PRO MAX SUPER ADMIN</title>
+<title>BTECH SUPER QUIZ ADMIN</title>
 
 <style>
-
-/* =========================================
-ROOT
-========================================= */
-
 :root{
 --bg:#0b0f1a;
 --panel:#11182a;
 --card:#1b2438;
---hover:#2b3a5a;
 --accent:#00bfff;
---text:#ffffff;
---muted:#94a3b8;
---success:#16a34a;
---danger:#dc2626;
---warning:#f59e0b;
+--text:#fff;
+--good:#16a34a;
+--bad:#dc2626;
 }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:var(--bg);
-color:var(--text);
-overflow:hidden;
-}
-
-button{cursor:pointer;border:none}
-
-/* =========================================
-TOPBAR
-========================================= */
+body{margin:0;font-family:Arial;background:var(--bg);color:var(--text);}
 
 .topbar{
-height:70px;
 background:var(--panel);
+padding:15px;
 display:flex;
 justify-content:space-between;
-align-items:center;
-padding:0 20px;
-border-bottom:1px solid rgba(255,255,255,.06);
 }
 
-.logo{
-font-size:22px;
-font-weight:bold;
-color:var(--accent);
-}
-
-.container{
-display:flex;
-height:calc(100vh - 70px);
-}
-
-/* SIDEBAR */
+.container{display:flex;height:calc(100vh - 60px);}
 
 .sidebar{
-width:270px;
+width:260px;
 background:#0f1628;
-padding:15px;
-overflow:auto;
-border-right:1px solid rgba(255,255,255,.05);
-}
-
-.cat{
-padding:12px;
-background:var(--card);
-margin-bottom:10px;
-border-radius:10px;
-cursor:pointer;
-}
-
-.cat:hover{
-background:var(--hover);
-}
-
-/* MAIN */
-
-.main{
-flex:1;
-padding:15px;
-overflow:auto;
-}
-
-/* QUIZ CHANNELS */
-
-.channels{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-gap:10px;
-}
-
-.channel{
-background:var(--card);
-padding:15px;
-border-radius:12px;
-cursor:pointer;
-}
-
-.channel:hover{
-background:var(--hover);
-}
-
-/* ADMIN PANEL */
-
-.admin{
-width:340px;
-background:var(--panel);
-padding:15px;
-overflow:auto;
-border-left:1px solid rgba(255,255,255,.05);
-}
-
-.box{
-background:var(--card);
-padding:15px;
-border-radius:12px;
-margin-bottom:15px;
-}
-
-input,select{
-width:100%;
 padding:10px;
-margin-top:8px;
-border:none;
-border-radius:8px;
-background:#0f1628;
-color:white;
+overflow:auto;
 }
 
-.btn{
-width:100%;
+.menu{
 padding:12px;
-margin-top:10px;
+margin:8px 0;
+background:var(--card);
+cursor:pointer;
 border-radius:8px;
-font-weight:bold;
-background:var(--accent);
-color:black;
 }
 
-.success{background:var(--success);color:white}
-.danger{background:var(--danger);color:white}
-.warning{background:var(--warning);color:black}
+.main{flex:1;padding:15px;overflow:auto;}
 
-.quizBox{
+.quizCard{
 background:var(--card);
 padding:15px;
-border-radius:12px;
+border-radius:10px;
 margin-bottom:10px;
 }
 
 .option{
 padding:10px;
+margin:6px 0;
 background:#0f1628;
-margin-top:8px;
 border-radius:8px;
 cursor:pointer;
 }
 
-.option:hover{background:var(--hover)}
+.adminBox{
+background:#0f1628;
+padding:10px;
+border-radius:10px;
+}
 
+button{
+padding:10px;
+margin-top:8px;
+background:var(--accent);
+border:none;
+color:#000;
+font-weight:bold;
+border-radius:8px;
+cursor:pointer;
+}
 </style>
-
 </head>
 
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
-<div class="logo">🎯 BTECH QUIZ SUPER ADMIN</div>
-<div id="userBox">ADMIN PANEL</div>
+<h2>🎯 SUPER QUIZ ADMIN + CHANNEL ENGINE</h2>
+<div id="user"></div>
 </div>
 
 <div class="container">
@@ -191,198 +95,264 @@ cursor:pointer;
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="cat" onclick="loadChannel('multiple')">📝 Multiple Quiz</div>
-<div class="cat" onclick="loadChannel('audio')">🎧 Audio Quiz</div>
-<div class="cat" onclick="loadChannel('picture')">🖼 Picture Quiz</div>
-<div class="cat" onclick="loadChannel('millionaire')">🏆 Who Wants Millionaire</div>
-
-<div class="cat" onclick="showWinners()">🏆 Winners</div>
-<div class="cat" onclick="showPayments()">💳 Payments</div>
-<div class="cat" onclick="showLeaderboard()">📊 Leaderboard</div>
+<div class="menu" onclick="openQuiz()">🧠 Quiz Channel</div>
+<div class="menu" onclick="openMillionaire()">💰 Millionaire Mode</div>
+<div class="menu" onclick="openAdd()">➕ Add Question</div>
+<div class="menu" onclick="openBank()">📚 Question Bank</div>
+<div class="menu" onclick="openWinners()">🏆 Winners</div>
+<div class="menu" onclick="openPayments()">💳 Payment Approval</div>
+<div class="menu" onclick="generate1000()">⚡ Generate 1000 Quiz</div>
 
 </div>
 
 <!-- MAIN -->
 <div class="main" id="main"></div>
 
-<!-- ADMIN PANEL -->
-<div class="admin">
-
-<div class="box">
-<h3>➕ Add Question</h3>
-
-<input id="q" placeholder="Question">
-<input id="o1" placeholder="Option 1">
-<input id="o2" placeholder="Option 2">
-<input id="o3" placeholder="Option 3">
-<input id="o4" placeholder="Option 4">
-<input id="ans" placeholder="Correct Answer">
-
-<button class="btn" onclick="addQuestion()">Add Question</button>
-</div>
-
-<div class="box">
-<h3>⚙ Quiz Settings</h3>
-
-<select>
-<option>Multiple Choice</option>
-<option>Audio Quiz</option>
-<option>Picture Quiz</option>
-<option>Millionaire Mode</option>
-</select>
-
-<button class="btn warning">Save Settings</button>
-</div>
-
-<div class="box">
-<h3>💰 Jackpot Control</h3>
-<p>Total Jackpot: ₦1,000,000</p>
-<button class="btn success">Approve Winner</button>
-<button class="btn danger">Reset Jackpot</button>
-</div>
-
-</div>
-
 </div>
 
 <script>
 
-/* =========================================
-DATA
-========================================= */
+/* =========================
+STATE
+========================= */
 
-let questions=[
-{
-type:"multiple",
-q:"Capital of Nigeria?",
-options:["Lagos","Abuja","Kano","Ibadan"],
-answer:"Abuja"
-}
-];
+let user={name:"Admin",role:"admin"};
 
-let submissions=[];
+let questions=[];
+
+let score=0;
+let index=0;
+
 let winners=[];
-let jackpot=1000000;
+let payments=[];
 
-/* =========================================
-LOAD CHANNEL
-========================================= */
+/* =========================
+AUTO 1000 QUIZ ENGINE
+========================= */
 
-function loadChannel(type){
+function generate1000(){
 
-let box=document.getElementById("main");
+questions = [];
 
-box.innerHTML="";
+let topics=["Math","Science","Sports","History","Tech","Movies"];
 
-let filtered=questions.filter(q=>q.type===type || type==="multiple");
+for(let i=1;i<=1000;i++){
 
-filtered.forEach((q,i)=>{
+let t = topics[i % topics.length];
 
-box.innerHTML+=`
-<div class="quizBox">
+questions.push({
+q:`${t} Question ${i}: What is ${i} + 10?`,
+options:[`${i+10}`,`${i+5}`,`${i+1}`,`${i+20}`],
+answer:`${i+10}`,
+type:"mcq"
+});
 
-<h3>${q.q}</h3>
+}
 
-${q.options.map(o=>`
-<div class="option" onclick="submitAnswer('${o}','${q.answer}')">${o}</div>
-`).join("")}
+alert("✅ 1000 Quiz Questions Generated!");
+}
+
+/* =========================
+QUIZ CHANNEL
+========================= */
+
+function openQuiz(){
+
+index=0;
+score=0;
+
+renderQuiz();
+
+}
+
+function renderQuiz(){
+
+if(questions.length===0){
+document.getElementById("main").innerHTML="⚠ Generate quiz first";
+return;
+}
+
+let q=questions[index];
+
+document.getElementById("main").innerHTML=`
+<div class="quizCard">
+
+<h3>🧠 Quiz ${index+1}/1000</h3>
+<h2>${q.q}</h2>
+
+${q.options.map(o=>
+`<div class="option" onclick="answer('${o}')">${o}</div>`
+).join("")}
+
+<p>Score: ${score}</p>
 
 </div>
 `;
-
-});
-
 }
 
-/* =========================================
-SUBMIT ANSWER
-========================================= */
+function answer(val){
 
-function submitAnswer(val,correct){
+if(val===questions[index].answer){
+score++;
+}
 
-let time=new Date().toLocaleTimeString();
+index++;
 
-let score=(val===correct)?10:0;
+if(index>=questions.length){
 
-submissions.push({
-answer:val,
-correct:correct,
+winners.push({
+name:user.name,
 score:score,
-time:time
+time:new Date().toLocaleString()
 });
 
-alert("Submitted: "+score+" points");
+document.getElementById("main").innerHTML=
+`<h2>🏁 Finished</h2><h3>Score: ${score}</h3>`;
+
+return;
 }
 
-/* =========================================
-ADD QUESTION
-========================================= */
+renderQuiz();
+}
 
-function addQuestion(){
+/* =========================
+MILLIONAIRE MODE
+========================= */
+
+function openMillionaire(){
+
+document.getElementById("main").innerHTML=`
+<div class="quizCard">
+<h2>💰 WHO WANTS TO BE A MILLIONAIRE</h2>
+<button onclick="startMillionaire()">Start Game</button>
+</div>
+`;
+}
+
+function startMillionaire(){
+
+index=0;
+score=0;
+renderQuiz();
+}
+
+/* =========================
+ADD QUESTION
+========================= */
+
+function openAdd(){
+
+document.getElementById("main").innerHTML=`
+<div class="adminBox">
+
+<h3>➕ Add Question</h3>
+
+<input id="q" placeholder="Question"><br>
+<input id="o1" placeholder="Option 1">
+<input id="o2" placeholder="Option 2">
+<input id="o3" placeholder="Option 3">
+<input id="o4" placeholder="Option 4">
+<input id="ans" placeholder="Answer">
+
+<button onclick="addQ()">Add</button>
+
+</div>
+`;
+}
+
+function addQ(){
 
 questions.push({
-type:"multiple",
-q:document.getElementById("q").value,
-options:[
-o1.value,o2.value,o3.value,o4.value
-],
+q:q.value,
+options:[o1.value,o2.value,o3.value,o4.value],
 answer:ans.value
 });
 
 alert("Question Added");
 }
 
-/* =========================================
-WINNERS
-========================================= */
+/* =========================
+QUESTION BANK
+========================= */
 
-function showWinners(){
+function openBank(){
 
-let box=document.getElementById("main");
-
-box.innerHTML="<h2>🏆 Winners</h2>";
-
-winners.forEach(w=>{
-
-box.innerHTML+=`
-<p>👤 ${w.name} - ₦${w.amount}</p>
-`;
-
-});
-
+document.getElementById("main").innerHTML=
+questions.slice(0,50).map((q,i)=>
+`<div class="quizCard">
+<b>${i+1}. ${q.q}</b>
+</div>`
+).join("");
 }
 
-/* =========================================
-PAYMENTS
-========================================= */
+/* =========================
+WINNERS
+========================= */
 
-function showPayments(){
+function openWinners(){
+
+document.getElementById("main").innerHTML=
+winners.map(w=>
+`<div class="quizCard">
+🏆 ${w.name} - Score: ${w.score} - ${w.time}
+</div>`
+).join("");
+}
+
+/* =========================
+PAYMENT APPROVAL
+========================= */
+
+function openPayments(){
 
 document.getElementById("main").innerHTML=`
-<h2>💳 Payment Requests</h2>
-<p>No pending payments</p>
+<div class="quizCard">
+
+<h3>💳 Payment Requests</h3>
+
+<div id="payList"></div>
+
+</div>
 `;
-}
 
-/* =========================================
-LEADERBOARD
-========================================= */
+payments.forEach((p,i)=>{
 
-function showLeaderboard(){
-
-let box=document.getElementById("main");
-
-box.innerHTML="<h2>📊 Leaderboard</h2>";
-
-submissions.forEach((s,i)=>{
-
-box.innerHTML+=`
-<p>#${i+1} - Score: ${s.score} - Time: ${s.time}</p>
+let div=document.createElement("div");
+div.className="quizCard";
+div.innerHTML=`
+👤 ${p.name} - ₦${p.amount}
+<button onclick="approve(${i})">Approve</button>
 `;
+
+document.getElementById("payList").appendChild(div);
 
 });
 
 }
+
+function approve(i){
+
+alert("💰 Payment Approved!");
+payments.splice(i,1);
+openPayments();
+}
+
+/* =========================
+FAKE PAYMENT REQUEST
+========================= */
+
+setInterval(()=>{
+
+if(Math.random()>0.7){
+
+payments.push({
+name:"User"+Math.floor(Math.random()*100),
+amount:Math.floor(Math.random()*50000)
+});
+
+}
+
+},5000);
 
 </script>
 
