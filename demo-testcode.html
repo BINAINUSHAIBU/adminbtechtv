@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV GOD MODE ADMIN</title>
+<title>BTECH-TV ULTRA MAX 2026 GOD MODE ++</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -12,7 +12,6 @@
 --bg:#0b0f1a;
 --panel:#11182a;
 --card:#1b2438;
---hover:#2b3a5a;
 --accent:#00bfff;
 --text:#fff;
 --free:#16a34a;
@@ -25,8 +24,7 @@ body{background:var(--bg);color:var(--text);overflow:hidden}
 
 /* LOGIN */
 #login{
-position:fixed;
-inset:0;
+position:fixed;inset:0;
 background:#000;
 display:flex;
 align-items:center;
@@ -34,11 +32,11 @@ justify-content:center;
 z-index:9999;
 }
 
-.login-box{
+.box{
+width:300px;
 background:var(--panel);
 padding:20px;
 border-radius:10px;
-width:300px;
 }
 
 input,button{
@@ -109,7 +107,7 @@ margin-right:4px;
 .paid{background:var(--paid)}
 .locked{background:var(--locked);color:#000}
 
-/* RIGHT */
+/* RIGHT PANEL */
 .right{
 width:260px;
 background:var(--panel);
@@ -123,7 +121,6 @@ padding:10px;
 margin-bottom:8px;
 border-radius:8px;
 }
-
 </style>
 </head>
 
@@ -131,18 +128,17 @@ border-radius:8px;
 
 <!-- LOGIN -->
 <div id="login">
-<div class="login-box">
-<h3>🔐 GOD MODE LOGIN</h3>
-<p style="font-size:12px;opacity:0.7">Demo password: <b>1234</b></p>
-
+<div class="box">
+<h3>🔐 ULTRA MAX LOGIN</h3>
+<p style="font-size:12px;opacity:.7">Demo password: <b>1234</b></p>
 <input id="pass" type="password" placeholder="Enter Password">
-<button onclick="login()">LOGIN</button>
+<button onclick="login()">ENTER GOD MODE</button>
 </div>
 </div>
 
 <!-- TOP -->
 <div class="topbar">
-<h3>🚀 BTECH-TV GOD MODE</h3>
+<h3>🚀 ULTRA MAX 2026 GOD MODE ++</h3>
 <div id="status">LOCKED</div>
 </div>
 
@@ -150,7 +146,7 @@ border-radius:8px;
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<h4>⚙ Controls</h4>
+<h4>⚙ CONTROL PANEL</h4>
 
 <button onclick="filterAll()">All</button>
 <button onclick="filterLocked()">Locked</button>
@@ -173,7 +169,8 @@ border-radius:8px;
 
 <!-- RIGHT -->
 <div class="right">
-<h4>📊 STATS</h4>
+<h4>📊 SYSTEM STATS</h4>
+
 <div class="stat">Total: <span id="t">0</span></div>
 <div class="stat">Free: <span id="f">0</span></div>
 <div class="stat">Paid: <span id="p">0</span></div>
@@ -190,7 +187,7 @@ border-radius:8px;
 <script>
 
 /* =====================
-LOGIN
+LOGIN ENGINE
 ===================== */
 
 function login(){
@@ -205,12 +202,11 @@ alert("Wrong password");
 }
 
 /* =====================
-STATE
+CORE STATE (CLEAN)
 ===================== */
 
 let channels=[];
 let filtered=[];
-let selected=new Set();
 
 const streams=[
 "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
@@ -218,21 +214,19 @@ const streams=[
 ];
 
 /* =====================
-GENERATE CHANNELS
+GENERATE ENGINE
 ===================== */
 
 function generate(){
-
-for(let i=0;i<500;i++){
+for(let i=0;i<600;i++){
 channels.push({
 id:i,
-name:"GOD CHANNEL "+i,
+name:"ULTRA CHANNEL "+i,
 url:streams[i%streams.length],
 type:i%3===0?"paid":"free",
-status:i%9===0?"locked":"free"
+status:i%8===0?"locked":"free"
 });
 }
-
 }
 
 /* =====================
@@ -242,18 +236,18 @@ RENDER
 function render(){
 filtered=[...channels];
 
-let box=document.getElementById("list");
+const box=document.getElementById("list");
 box.innerHTML="";
 
 filtered.forEach((c,i)=>{
-let div=document.createElement("div");
+
+const div=document.createElement("div");
 div.className="card";
 
 div.innerHTML=`
 <b>${c.name}</b><br>
 <span class="badge ${c.type}">${c.type}</span>
 <span class="badge ${c.status}">${c.status}</span>
-<input type="checkbox" onchange="toggle(${c.id})">
 `;
 
 div.onclick=()=>play(i);
@@ -265,23 +259,15 @@ stats();
 }
 
 /* =====================
-TOGGLE
-===================== */
-
-function toggle(id){
-selected.has(id)?selected.delete(id):selected.add(id);
-}
-
-/* =====================
 PLAY
 ===================== */
 
 function play(i){
-let c=filtered[i];
-let v=document.getElementById("video");
+const c=filtered[i];
+const v=document.getElementById("video");
 
 if(Hls.isSupported()){
-let h=new Hls();
+const h=new Hls();
 h.loadSource(c.url);
 h.attachMedia(v);
 }else{
@@ -303,17 +289,30 @@ SEARCH
 ===================== */
 
 function search(v){
-filtered=channels.filter(c=>c.name.toLowerCase().includes(v.toLowerCase()));
+filtered=channels.filter(c=>
+c.name.toLowerCase().includes(v.toLowerCase())
+);
 render();
 }
 
 /* =====================
-ACTIONS
+ADMIN ACTIONS
 ===================== */
 
-function lockAll(){channels.forEach(c=>c.status="locked");render();}
-function unlockAll(){channels.forEach(c=>c.status="free");render();}
-function deleteLocked(){channels=channels.filter(c=>c.status!=="locked");render();}
+function lockAll(){
+channels.forEach(c=>c.status="locked");
+render();
+}
+
+function unlockAll(){
+channels.forEach(c=>c.status="free");
+render();
+}
+
+function deleteLocked(){
+channels=channels.filter(c=>c.status!=="locked");
+render();
+}
 
 /* =====================
 STATS
