@@ -2,66 +2,75 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BTECH PRO QUIZ SYSTEM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTECH QUIZ SUPER ADMIN DASHBOARD</title>
 
 <style>
 
+/* =========================
+ROOT
+========================= */
 :root{
 --bg:#0b0f1a;
 --panel:#11182a;
 --card:#1b2438;
+--hover:#2b3a5a;
 --accent:#00bfff;
---text:#fff;
+--text:#ffffff;
+--muted:#94a3b8;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+/* =========================
+GLOBAL
+========================= */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
 
 body{
 background:var(--bg);
 color:var(--text);
+overflow:hidden;
 }
 
-.center{
-display:flex;
-height:100vh;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-}
+button{cursor:pointer}
 
-input,button{
-padding:12px;
-margin:6px;
-border-radius:8px;
-border:none;
-}
-
-button{
-background:var(--accent);
-cursor:pointer;
-font-weight:bold;
-}
-
-/* DASHBOARD */
-
+/* =========================
+TOPBAR
+========================= */
 .topbar{
+height:60px;
 background:var(--panel);
-padding:15px;
 display:flex;
 justify-content:space-between;
 align-items:center;
+padding:0 20px;
+border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
+.topbar h2{
+color:var(--accent);
+}
+
+/* =========================
+LAYOUT
+========================= */
 .container{
 display:flex;
 height:calc(100vh - 60px);
 }
 
+/* =========================
+SIDEBAR
+========================= */
 .sidebar{
-width:220px;
+width:260px;
 background:#0f1628;
-padding:10px;
+padding:15px;
+overflow-y:auto;
 }
 
 .menu{
@@ -72,14 +81,40 @@ border-radius:8px;
 cursor:pointer;
 }
 
+.menu:hover{
+background:var(--hover);
+}
+
+/* =========================
+MAIN
+========================= */
 .main{
 flex:1;
 padding:15px;
 overflow:auto;
 }
 
-/* QUIZ */
+/* =========================
+RIGHT PANEL (ADMIN)
+========================= */
+.admin{
+width:320px;
+background:var(--panel);
+padding:15px;
+overflow-y:auto;
+border-left:1px solid rgba(255,255,255,0.05);
+}
 
+.box{
+background:var(--card);
+padding:15px;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+/* =========================
+QUIZ BOX
+========================= */
 .quiz{
 background:var(--card);
 padding:20px;
@@ -89,28 +124,46 @@ margin-bottom:10px;
 
 .option{
 display:block;
-margin:8px 0;
 padding:10px;
+margin:8px 0;
 background:#0f1628;
 border-radius:8px;
 cursor:pointer;
 }
 
-/* PROFILE */
+.option:hover{
+background:var(--hover);
+}
 
+/* =========================
+PROFILE
+========================= */
 .profile{
 background:var(--card);
 padding:15px;
 border-radius:10px;
 }
 
-/* ADMIN */
-
-.admin-box{
-background:#0f1628;
+/* =========================
+BUTTON
+========================= */
+.btn{
 padding:10px;
-border-radius:10px;
-margin-top:10px;
+background:var(--accent);
+border:none;
+border-radius:8px;
+font-weight:bold;
+width:100%;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:5px 0;
+border-radius:8px;
+border:none;
+background:#0f1628;
+color:white;
 }
 
 </style>
@@ -118,27 +171,10 @@ margin-top:10px;
 
 <body>
 
-<!-- LOGIN -->
-<div id="loginPage" class="center">
-
-<h1>🔐 BTECH QUIZ LOGIN</h1>
-
-<input id="name" placeholder="Username">
-<input id="role" placeholder="admin / user">
-
-<button onclick="login()">Login</button>
-
-</div>
-
-<!-- DASHBOARD -->
-<div id="app" style="display:none">
-
+<!-- TOPBAR -->
 <div class="topbar">
-
-<h3>🎯 PRO QUIZ SYSTEM</h3>
-
-<div id="userBox"></div>
-
+<h2>🎯 BTECH QUIZ SUPER ADMIN</h2>
+<div id="userBox">👤 Guest</div>
 </div>
 
 <div class="container">
@@ -146,78 +182,85 @@ margin-top:10px;
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="menu" onclick="showQuiz()">🧠 Play Quiz</div>
-<div class="menu" onclick="showProfile()">👤 Profile</div>
+<div class="menu" onclick="showQuiz()">🧠 Quiz Engine</div>
 <div class="menu" onclick="showLeaderboard()">🏆 Leaderboard</div>
-<div class="menu" onclick="showAdmin()">⚙ Admin</div>
+<div class="menu" onclick="showProfile()">👤 Profile</div>
+<div class="menu" onclick="showAdmin()">⚙ Admin Panel</div>
 
 </div>
 
 <!-- MAIN -->
-<div class="main" id="main"></div>
+<div class="main" id="main">
+
+<h2>🚀 Welcome to Quiz Dashboard</h2>
 
 </div>
+
+<!-- ADMIN PANEL -->
+<div class="admin">
+
+<div class="box">
+<h3>📊 Stats</h3>
+<p>Total Questions: <span id="totalQ">3</span></p>
+<p>Players: 1</p>
+</div>
+
+<div class="box">
+<h3>➕ Add Question</h3>
+
+<input id="q" placeholder="Question">
+<input id="o1" placeholder="Option 1">
+<input id="o2" placeholder="Option 2">
+<input id="o3" placeholder="Option 3">
+<input id="o4" placeholder="Option 4">
+<input id="ans" placeholder="Correct Answer">
+
+<button class="btn" onclick="addQ()">Add Question</button>
+</div>
+
+</div>
+
 </div>
 
 <script>
 
-/* =====================
-DATA STORAGE
-===================== */
+/* =========================
+DATA
+========================= */
 
-let user=null;
+let user={name:"Admin",role:"admin"};
 
 let questions=[
 {
-type:"multiple",
 q:"Capital of Nigeria?",
 options:["Lagos","Abuja","Kano","Ibadan"],
 answer:"Abuja"
 },
 {
-type:"picture",
-q:"Guess image",
-img:"https://picsum.photos/500/300",
-options:["Cat","Dog","Car","House"],
-answer:"Cat"
+q:"2 + 2 = ?",
+options:["1","2","4","5"],
+answer:"4"
 },
 {
-type:"audio",
-q:"Listen and answer",
-audio:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-options:["Song A","Song B","Song C","Song D"],
-answer:"Song A"
+q:"Capital of USA?",
+options:["New York","Washington DC","Texas","LA"],
+answer:"Washington DC"
 }
 ];
 
 let index=0;
 let score=0;
-let timer;
 
-/* =====================
-LOGIN
-===================== */
+/* =========================
+INIT USER
+========================= */
 
-function login(){
+document.getElementById("userBox").innerText=
+"👤 "+user.name+" ("+user.role+")";
 
-let name=document.getElementById("name").value;
-let role=document.getElementById("role").value;
-
-user={name,role};
-
-document.getElementById("loginPage").style.display="none";
-document.getElementById("app").style.display="block";
-
-document.getElementById("userBox").innerHTML=
-`👤 ${name} (${role})`;
-
-showQuiz();
-
-}
-
-/* =====================
+/* =========================
 QUIZ ENGINE
-===================== */
+========================= */
 
 function showQuiz(){
 
@@ -231,28 +274,13 @@ function renderQuiz(){
 
 let q=questions[index];
 
-let box=document.getElementById("main");
+document.getElementById("main").innerHTML=`
 
-clearInterval(timer);
-let time=15;
-
-timer=setInterval(()=>{
-time--;
-if(time<=0){
-next();
-}
-},1000);
-
-box.innerHTML=`
 <div class="quiz">
 
-<h3>⏱ Time: <span id="t">${time}</span>s</h3>
+<h3>🧠 Question ${index+1}</h3>
 
 <h2>${q.q}</h2>
-
-${q.img?`<img src="${q.img}" style="width:100%">`:''}
-
-${q.audio?`<audio controls autoplay src="${q.audio}"></audio>`:''}
 
 <div>
 ${q.options.map(o=>
@@ -261,139 +289,92 @@ ${q.options.map(o=>
 </div>
 
 </div>
+
 `;
 
 }
 
-/* =====================
-ANSWER CHECK
-===================== */
+/* =========================
+ANSWER
+========================= */
 
 function answer(val){
 
-let q=questions[index];
-
-if(val===q.answer) score++;
-
-next();
-
-}
-
-/* =====================
-NEXT QUESTION
-===================== */
-
-function next(){
+if(val===questions[index].answer) score++;
 
 index++;
 
 if(index>=questions.length){
 
-saveScore();
-
 document.getElementById("main").innerHTML=
 `<h2>🏁 Finished</h2><h3>Score: ${score}</h3>`;
 
 return;
+
 }
 
 renderQuiz();
 
 }
 
-/* =====================
+/* =========================
 LEADERBOARD
-===================== */
-
-function saveScore(){
-
-let board=JSON.parse(localStorage.getItem("board")||"[]");
-
-board.push({
-name:user.name,
-score:score
-});
-
-localStorage.setItem("board",JSON.stringify(board));
-
-}
+========================= */
 
 function showLeaderboard(){
 
-let board=JSON.parse(localStorage.getItem("board")||"[]");
-
-board.sort((a,b)=>b.score-a.score);
-
 document.getElementById("main").innerHTML=`
 <h2>🏆 Leaderboard</h2>
-${board.map(b=>
-`<p>👤 ${b.name} - ${b.score}</p>`
-).join("")}
+<p>👤 Admin - ${score}</p>
 `;
 
 }
 
-/* =====================
+/* =========================
 PROFILE
-===================== */
+========================= */
 
 function showProfile(){
 
 document.getElementById("main").innerHTML=`
 <div class="profile">
-
 <h2>👤 Profile</h2>
 <p>Name: ${user.name}</p>
 <p>Role: ${user.role}</p>
-
 </div>
 `;
 
 }
 
-/* =====================
-ADMIN PANEL
-===================== */
+/* =========================
+ADMIN
+========================= */
 
 function showAdmin(){
 
-if(user.role!=="admin"){
-document.getElementById("main").innerHTML=
-"<h3>❌ Admin Only</h3>";
-return;
-}
-
 document.getElementById("main").innerHTML=`
-<div class="admin-box">
-
-<h3>➕ Add Question</h3>
-
-<input id="q" placeholder="Question"><br>
-<input id="o1" placeholder="Option 1">
-<input id="o2" placeholder="Option 2">
-<input id="o3" placeholder="Option 3">
-<input id="o4" placeholder="Option 4">
-<input id="ans" placeholder="Correct Answer">
-
-<button onclick="addQ()">Add</button>
-
-</div>
+<h2>⚙ Admin Control Active</h2>
+<p>Use right panel to add questions</p>
 `;
 
 }
+
+/* =========================
+ADD QUESTION
+========================= */
 
 function addQ(){
 
 questions.push({
-type:"multiple",
-q:document.getElementById("q").value,
-options:[
-o1.value,o2.value,o3.value,o4.value
-],
-answer:document.getElementById("ans").value
+q:q.value,
+options:[o1.value,o2.value,o3.value,o4.value],
+answer:ans.value
 });
 
+document.getElementById("totalQ").innerText=questions.length;
+
 alert("Question Added!");
+
 }
 
 </script>
