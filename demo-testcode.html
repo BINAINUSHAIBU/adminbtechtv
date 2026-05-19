@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📺 IPTV ULTRA MAX CONTROL CENTER</title>
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>🚀 BTECH-TV ULTRA CONTROL + IPTV MAX MERGED</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -15,12 +17,22 @@
 --card:#1b2438;
 --hover:#2b3a5a;
 --accent:#00bfff;
---text:#fff;
+--text:#ffffff;
+--muted:#94a3b8;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
 
-body{background:var(--bg);color:var(--text);overflow:hidden}
+body{
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
 
 /* LOGIN */
 .login{
@@ -59,40 +71,51 @@ border-radius:8px;
 cursor:pointer;
 }
 
-/* TOP */
+/* TOPBAR */
 .topbar{
-height:60px;
+height:65px;
 background:var(--panel);
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:0 15px;
+padding:0 20px;
 }
 
-.topbar h2{color:var(--accent)}
+.topbar h2{
+color:var(--accent);
+}
 
 /* LAYOUT */
-.container{display:flex;height:calc(100vh - 60px)}
+.container{
+display:flex;
+height:calc(100vh - 65px);
+}
 
+/* SIDEBAR */
 .sidebar{
-width:250px;
+width:260px;
 background:#0f1628;
-padding:10px;
+padding:15px;
 overflow:auto;
 }
 
 .cat{
-padding:10px;
-margin:6px 0;
+padding:12px;
+margin:8px 0;
 background:var(--card);
 border-radius:8px;
 cursor:pointer;
 }
 
-.cat:hover{background:var(--hover)}
+.cat:hover{background:var(--hover);}
 
 /* MAIN */
-.main{flex:1;display:flex;flex-direction:column}
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
 
 /* STATS */
 .stats{
@@ -109,7 +132,7 @@ border-radius:8px;
 text-align:center;
 }
 
-/* GRID */
+/* GRID (IPTV CARDS) */
 .grid{
 flex:1;
 overflow:auto;
@@ -138,12 +161,10 @@ margin-right:5px;
 
 .free{background:#16a34a}
 .paid{background:#dc2626}
-.locked{background:#f59e0b;color:black}
-
 .online{background:#16a34a}
 .offline{background:#dc2626}
 
-/* PLAYER */
+/* PLAYER MODAL */
 .modal{
 position:fixed;
 inset:0;
@@ -170,10 +191,9 @@ position:absolute;
 top:10px;right:10px;
 background:red;
 border:none;
-padding:8px 12px;
+padding:8px;
 color:white;
 cursor:pointer;
-border-radius:6px;
 }
 
 .monitor{
@@ -186,7 +206,30 @@ border-radius:8px;
 font-size:12px;
 }
 
+/* USER LIST */
+.user-list{
+max-height:420px;
+overflow:auto;
+}
+
+.user-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:#0f1628;
+padding:12px;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+/* BADGES */
+.active{background:#16a34a;}
+.blocked{background:#dc2626;}
+.premium{background:#2563eb;}
+.freeplan{background:#f59e0b;}
+
 </style>
+
 </head>
 
 <body>
@@ -194,9 +237,9 @@ font-size:12px;
 <!-- LOGIN -->
 <div class="login" id="login">
 <div class="login-box">
-<h3>🔐 ULTRA ADMIN LOGIN</h3>
-<input id="pass" type="password" placeholder="Password">
-<button onclick="login()">Enter</button>
+<h3>🔐 ADMIN LOGIN</h3>
+<input type="password" id="pass" placeholder="Password">
+<button onclick="login()">Login</button>
 </div>
 </div>
 
@@ -205,32 +248,30 @@ font-size:12px;
 <div class="player">
 <button class="close" onclick="closePlayer()">X</button>
 <video id="video" controls autoplay></video>
-<div class="monitor" id="monitor">LIVE MONITOR: --</div>
+<div class="monitor" id="monitor">LIVE MONITOR</div>
 </div>
 </div>
 
-<!-- TOP -->
+<!-- TOPBAR -->
 <div class="topbar">
-<h2>📺 IPTV ULTRA MAX CONTROL CENTER</h2>
-<input placeholder="Search..." oninput="search(this.value)" style="padding:8px;border:none;border-radius:8px;background:#0f1628;color:white">
+<h2>🚀 BTECH-TV ULTRA IPTV CONTROL CENTER</h2>
+<input placeholder="Search..." oninput="globalSearch(this.value)" style="padding:8px;border:none;border-radius:8px;background:#0f1628;color:white">
 </div>
 
 <div class="container">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-
-<div class="cat" onclick="setView('channels')">📺 Channels</div>
-<div class="cat" onclick="setView('users')">👥 Users</div>
-<div class="cat" onclick="toggleFav()">⭐ Favorites</div>
-
-<button onclick="loadAPI()" style="width:100%;margin-top:10px">🚀 Load IPTV</button>
-
+<div class="cat">📺 IPTV Channels</div>
+<div class="cat">👥 Users</div>
+<div class="cat">⭐ Favorites</div>
+<button onclick="loadPlaylists()">🚀 Load IPTV</button>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
+<!-- STATS -->
 <div class="stats">
 <div class="box"><b id="t1">0</b><br>Total</div>
 <div class="box"><b id="t2">0</b><br>Free</div>
@@ -239,6 +280,7 @@ font-size:12px;
 <div class="box"><b id="t5">0</b><br>Favorites</div>
 </div>
 
+<!-- GRID -->
 <div class="grid" id="grid"></div>
 
 </div>
@@ -247,81 +289,110 @@ font-size:12px;
 
 <script>
 
-/* ENGINE */
-let view="channels";
-let channels=[],users=[];
+/* =====================
+STATE
+===================== */
+
+let channels=[];
 let filtered=[];
 let favs=new Set();
-let showFav=false;
 let hls=null;
 
 /* LOGIN */
 function login(){
 if(document.getElementById("pass").value==="admin123"){
-localStorage.setItem("auth","1");
 document.getElementById("login").style.display="none";
 }
 }
-if(localStorage.getItem("auth")==="1"){
-document.getElementById("login").style.display="none";
+
+/* IPTV SOURCES */
+const playlists=[
+"https://iptv-org.github.io/iptv/index.m3u"
+];
+
+const fallback=[
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+];
+
+/* =====================
+LOAD IPTV
+===================== */
+async function loadPlaylists(){
+
+channels=[];
+
+try{
+const res=await fetch(playlists[0]);
+const text=await res.text();
+
+const lines=text.split("\n");
+let temp={};
+
+lines.forEach(line=>{
+if(line.startsWith("#EXTINF")){
+temp.name=line.split(",")[1]||"Channel";
 }
+if(line.startsWith("http")){
+temp.url=line;
+temp.id=channels.length;
+temp.type=Math.random()>0.5?"free":"paid";
+temp.status=Math.random()>0.2?"online":"offline";
+channels.push({...temp});
+}
+});
 
-/* LOAD */
-async function loadAPI(){
-let res=await fetch("https://iptv-org.github.io/api/streams.json");
-let data=await res.json();
+}catch(e){}
 
-channels=data.slice(0,300).map((s,i)=>({
-id:i,
-name:"Channel "+i,
-url:s.url,
+/* fallback virtual channels */
+for(let i=0;i<200;i++){
+channels.push({
+id:channels.length,
+name:"BTECH LIVE "+i,
+url:fallback[0],
 type:i%2?"free":"paid",
-status:Math.random()>0.2?"online":"offline",
-viewers:Math.floor(Math.random()*99999)
-}));
+status:"online"
+});
+}
 
 filtered=[...channels];
 render();
+updateStats();
 }
 
-/* USERS */
-for(let i=0;i<100;i++){
-users.push({id:i,name:"User "+i,status:i%2?"active":"banned"});
+/* =====================
+RENDER GRID
+===================== */
+function render(){
+
+let g=document.getElementById("grid");
+g.innerHTML="";
+
+filtered.forEach(c=>{
+
+let div=document.createElement("div");
+div.className="card";
+
+div.innerHTML=`
+<h4>${c.name}</h4>
+<span class="badge ${c.type}">${c.type}</span>
+<span class="badge ${c.status}">${c.status}</span>
+<br><br>
+<button onclick="play(${c.id})">▶ Play</button>
+<button onclick="fav(${c.id})">⭐</button>
+`;
+
+g.appendChild(div);
+
+});
+
 }
 
-/* VIEW */
-function setView(v){
-view=v;
-render();
-}
+/* =====================
+PLAY CHANNEL
+===================== */
+function play(id){
 
-/* FAVORITES */
-function toggleFavView(){
-showFav=!showFav;
-render();
-}
-
-/* SEARCH */
-function search(q){
-q=q.toLowerCase();
-
-if(view==="channels"){
-filtered=channels.filter(c=>c.name.toLowerCase().includes(q));
-}else{
-filtered=users.filter(u=>u.name.toLowerCase().includes(q));
-}
-render();
-}
-
-/* FAVORITE */
-function fav(id){
-if(favs.has(id)) favs.delete(id);
-else favs.add(id);
-render();
-}
-
-/* PLAY */
-function play(c){
+let c=channels[id];
 
 document.getElementById("modal").style.display="flex";
 
@@ -339,10 +410,10 @@ v.src=c.url;
 
 v.play();
 
-/* LIVE MONITOR */
+/* monitor */
 setInterval(()=>{
 document.getElementById("monitor").innerText=
-`LIVE: ${c.name} | VIEWERS: ${Math.floor(Math.random()*100000)} | STATUS: ${c.status}`;
+`LIVE: ${c.name} | STATUS: ${c.status}`;
 },1000);
 
 }
@@ -352,50 +423,18 @@ function closePlayer(){
 document.getElementById("modal").style.display="none";
 }
 
-/* RENDER */
-function render(){
-
-let g=document.getElementById("grid");
-g.innerHTML="";
-
-if(view==="channels"){
-
-let list=showFav?channels.filter(c=>favs.has(c.id)):channels;
-
-list.forEach(c=>{
-
-let d=document.createElement("div");
-d.className="card";
-
-d.innerHTML=`
-<h4>${c.name}</h4>
-<span class="badge ${c.type}">${c.type}</span>
-<span class="badge ${c.status}">${c.status}</span>
-<br>
-<button onclick="play(channels[${c.id}])">▶ Play</button>
-<button onclick="fav(${c.id})">⭐</button>
-`;
-
-g.appendChild(d);
-
-});
-
-}else{
-
-users.forEach(u=>{
-
-let d=document.createElement("div");
-d.className="card";
-
-d.innerHTML=`<h4>👤 ${u.name}</h4><p>${u.status}</p>`;
-g.appendChild(d);
-
-});
-
+/* FAVORITE */
+function fav(id){
+if(favs.has(id))favs.delete(id);
+else favs.add(id);
+updateStats();
 }
 
-updateStats();
-
+/* SEARCH */
+function globalSearch(q){
+q=q.toLowerCase();
+filtered=channels.filter(c=>c.name.toLowerCase().includes(q));
+render();
 }
 
 /* STATS */
@@ -410,7 +449,7 @@ document.getElementById("t5").innerText=favs.size;
 }
 
 /* INIT */
-loadAPI();
+loadPlaylists();
 
 </script>
 
