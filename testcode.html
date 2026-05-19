@@ -1,689 +1,471 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BTECH TV Ultra</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTECH-TV SUPER ADMIN PRO MAX</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-  <style>
-    :root{
-      --bg:#08080c;
-      --panel:#111118;
-      --card:#191925;
-      --border:#2c2c3d;
-      --text:#f4f4f8;
-      --muted:#9e9eb2;
-      --accent:#8b5cf6;
-      --green:#22c55e;
-      --red:#ef4444;
-    }
+<style>
+:root{
+--bg:#0b0f1a;
+--panel:#11182a;
+--card:#1b2438;
+--hover:#2b3a5a;
+--accent:#00bfff;
+--text:#fff;
+--muted:#94a3b8;
+}
 
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-    }
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 
-    body{
-      background:var(--bg);
-      color:var(--text);
-      font-family:Arial, sans-serif;
-      overflow:hidden;
-    }
+body{background:var(--bg);color:var(--text);overflow:hidden}
 
-    #app{
-      display:flex;
-      height:100vh;
-    }
+/* TOPBAR */
+.topbar{
+height:65px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 20px;
+border-bottom:1px solid rgba(255,255,255,0.05);
+}
 
-    /* SIDEBAR */
+.topbar h2{color:var(--accent)}
 
-    #sidebar{
-      width:340px;
-      background:var(--panel);
-      border-right:1px solid var(--border);
-      display:flex;
-      flex-direction:column;
-    }
+.topbar input{
+padding:10px;
+border:none;
+border-radius:8px;
+background:#0f1628;
+color:white;
+width:280px;
+}
 
-    #search{
-      padding:14px;
-      border:none;
-      outline:none;
-      background:var(--card);
-      color:white;
-      margin:10px;
-      border-radius:8px;
-    }
+/* LAYOUT */
+.container{display:flex;height:calc(100vh - 65px)}
 
-    #stats{
-      padding:10px 14px;
-      font-size:12px;
-      color:var(--muted);
-      border-bottom:1px solid var(--border);
-    }
+.sidebar{
+width:240px;
+background:#0f1628;
+padding:15px;
+border-right:1px solid rgba(255,255,255,0.05);
+overflow-y:auto;
+}
 
-    #channels{
-      overflow-y:auto;
-      flex:1;
-      padding:8px;
-    }
+.cat{
+padding:12px;
+margin:8px 0;
+background:var(--card);
+border-radius:8px;
+cursor:pointer;
+transition:0.3s;
+}
 
-    .channel{
-      display:flex;
-      gap:10px;
-      padding:10px;
-      border-radius:8px;
-      cursor:pointer;
-      transition:.2s;
-      margin-bottom:6px;
-      background:transparent;
-    }
+.cat:hover{background:var(--hover)}
 
-    .channel:hover{
-      background:var(--card);
-    }
+.tab-active{background:var(--accent);color:black}
 
-    .logoBox{
-      width:50px;
-      height:50px;
-      border-radius:8px;
-      background:#000;
-      overflow:hidden;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-shrink:0;
-    }
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column}
 
-    .logoBox img{
-      width:100%;
-      height:100%;
-      object-fit:contain;
-    }
+/* STATS */
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+padding:15px;
+}
 
-    .channelInfo{
-      flex:1;
-      min-width:0;
-    }
+.box{
+background:var(--card);
+padding:15px;
+border-radius:10px;
+text-align:center;
+}
 
-    .channelName{
-      font-size:14px;
-      font-weight:bold;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
+.box p{color:var(--accent);font-size:20px;font-weight:bold}
 
-    .channelMeta{
-      font-size:11px;
-      color:var(--muted);
-      margin-top:4px;
-    }
+/* GRID */
+.grid{
+flex:1;
+overflow-y:auto;
+padding:15px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+gap:12px;
+}
 
-    /* PLAYER */
+/* CARD */
+.card{
+background:var(--card);
+padding:15px;
+border-radius:12px;
+transition:0.3s;
+border:1px solid transparent;
+}
 
-    #main{
-      flex:1;
-      display:flex;
-      flex-direction:column;
-      background:black;
-    }
+.card:hover{
+transform:translateY(-3px);
+border-color:var(--accent);
+background:var(--hover);
+}
 
-    #playerWrap{
-      flex:1;
-      position:relative;
-      background:black;
-    }
+.badge{
+padding:5px 10px;
+border-radius:20px;
+font-size:11px;
+margin-right:5px;
+}
 
-    video{
-      width:100%;
-      height:100%;
-      object-fit:contain;
-      background:black;
-    }
+.free{background:#16a34a}
+.paid{background:#dc2626}
+.locked{background:#f59e0b;color:black}
 
-    #overlay{
-      position:absolute;
-      inset:0;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-direction:column;
-      background:rgba(0,0,0,.85);
-      z-index:5;
-    }
+.active{background:#16a34a}
+.banned{background:#dc2626}
+.premium{background:#f59e0b;color:black}
 
-    #overlay h1{
-      font-size:40px;
-      margin-bottom:10px;
-    }
+/* BUTTON */
+button{
+padding:10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+background:var(--accent);
+font-weight:bold;
+margin-top:8px;
+}
 
-    #overlay p{
-      color:var(--muted);
-    }
+button:hover{opacity:0.8}
 
-    #controls{
-      height:70px;
-      background:var(--panel);
-      border-top:1px solid var(--border);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding:0 20px;
-    }
+/* ======================
+LIVE IPTV MONITOR
+====================== */
+.monitor{
+position:fixed;
+right:0;
+top:65px;
+width:320px;
+height:calc(100vh - 65px);
+background:#0f1628;
+border-left:1px solid rgba(255,255,255,0.1);
+display:flex;
+flex-direction:column;
+padding:10px;
+}
 
-    #nowPlaying{
-      overflow:hidden;
-    }
+.monitor h3{
+color:var(--accent);
+margin-bottom:10px;
+}
 
-    #nowName{
-      font-weight:bold;
-    }
+video{
+width:100%;
+height:180px;
+background:black;
+border-radius:10px;
+}
 
-    #nowMeta{
-      font-size:12px;
-      color:var(--muted);
-    }
+.liveList{
+flex:1;
+overflow:auto;
+margin-top:10px;
+}
 
-    .btns{
-      display:flex;
-      gap:10px;
-    }
+.liveItem{
+padding:8px;
+background:var(--card);
+margin-bottom:6px;
+border-radius:8px;
+cursor:pointer;
+font-size:12px;
+}
 
-    button{
-      background:var(--card);
-      color:white;
-      border:1px solid var(--border);
-      padding:10px 14px;
-      border-radius:8px;
-      cursor:pointer;
-    }
-
-    button:hover{
-      border-color:var(--accent);
-    }
-
-    @media(max-width:800px){
-      #sidebar{
-        width:100%;
-        position:absolute;
-        z-index:10;
-        height:100%;
-      }
-    }
-  </style>
+.liveItem:hover{background:var(--hover)}
+</style>
 </head>
 
 <body>
 
-<div id="app">
+<div class="topbar">
+<h2>🚀 BTECH SUPER ADMIN PRO MAX</h2>
+<input placeholder="Search users or channels..." oninput="searchAll(this.value)">
+</div>
 
-  <!-- SIDEBAR -->
+<div class="container">
 
-  <div id="sidebar">
+<!-- SIDEBAR -->
+<div class="sidebar">
 
-    <input
-      id="search"
-      type="text"
-      placeholder="Search channels..."
-      oninput="filterChannels()"
-    >
+<div class="cat tab-active" onclick="switchTab('users',this)">👥 Users</div>
+<div class="cat" onclick="switchTab('channels',this)">📺 Channels</div>
 
-    <div id="stats">
-      Loading IPTV channels...
-    </div>
+<hr style="opacity:0.2;margin:10px 0">
 
-    <div id="channels"></div>
+<button onclick="generateUsers()">Generate Users</button>
+<button onclick="generateChannels()">Generate Channels</button>
+<button onclick="loadAPI()">🚀 Load IPTV API</button>
 
-  </div>
+</div>
 
-  <!-- MAIN -->
+<!-- MAIN -->
+<div class="main">
 
-  <div id="main">
+<div class="stats">
+<div class="box"><p id="t1">0</p><small>Total Users</small></div>
+<div class="box"><p id="t2">0</p><small>Total Channels</small></div>
+<div class="box"><p id="t3">0</p><small>Active / Free</small></div>
+<div class="box"><p id="t4">0</p><small>Banned / Locked</small></div>
+</div>
 
-    <div id="playerWrap">
+<div class="grid" id="grid"></div>
 
-      <video
-        id="video"
-        controls
-        autoplay
-        playsinline
-      ></video>
+</div>
 
-      <div id="overlay">
-        <h1>📺</h1>
-        <p>BTECH TV Ultra Loading...</p>
-      </div>
+</div>
 
-    </div>
-
-    <div id="controls">
-
-      <div id="nowPlaying">
-        <div id="nowName">No Channel Selected</div>
-        <div id="nowMeta">Live IPTV Streaming</div>
-      </div>
-
-      <div class="btns">
-        <button onclick="prevChannel()">◀ Prev</button>
-        <button onclick="nextChannel()">Next ▶</button>
-      </div>
-
-    </div>
-
-  </div>
-
+<!-- ================= LIVE IPTV MONITOR ================= -->
+<div class="monitor">
+<h3>📺 LIVE IPTV MONITOR</h3>
+<video id="player" controls></video>
+<div class="liveList" id="liveList"></div>
 </div>
 
 <script>
 
-/* =========================
-   PLAYLIST SOURCES
-========================= */
+/* =====================
+STATE
+===================== */
+let users=[];
+let channels=[];
+let view="users";
 
-const playlists = [
+let usersFiltered=[];
+let channelsFiltered=[];
 
-  "https://iptv-org.github.io/iptv/index.m3u",
-  "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8",
-  "https://raw.githubusercontent.com/freecasthub/public-iptv/main/playlist.m3u",
-  "https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/main/playlists/roku_all.m3u",
-  "https://tvpass.org/playlist/m3u"
+let currentStream=null;
 
-];
+/* =====================
+PLAYER
+===================== */
+function playStream(url,name){
 
-/* =========================
-   GLOBAL STATE
-========================= */
+const video=document.getElementById("player");
 
-let allChannels = [];
-let filteredChannels = [];
-let currentIndex = 0;
-let hls = null;
+if(Hls.isSupported()){
+let hls=new Hls();
+hls.loadSource(url);
+hls.attachMedia(video);
+}else{
+video.src=url;
+}
 
-/* =========================
-   LOAD PLAYLISTS
-========================= */
+video.play();
+}
 
-async function loadAllPlaylists(){
+/* =====================
+TAB SWITCH
+===================== */
+function switchTab(tab,el){
 
-  const stats = document.getElementById("stats");
+view=tab;
 
-  stats.innerHTML = "Loading IPTV sources...";
+document.querySelectorAll(".cat")
+.forEach(c=>c.classList.remove("tab-active"));
 
-  const seen = new Set();
+el.classList.add("tab-active");
 
-  for(const url of playlists){
+render();
+}
 
-    try{
+/* =====================
+USERS
+===================== */
+function generateUsers(){
 
-      const response = await fetch(url);
-      const text = await response.text();
+users=[];
 
-      const parsed = parseM3U(text);
+for(let i=1;i<=200;i++){
+users.push({
+id:i,
+name:"User_"+i,
+email:"user"+i+"@mail.com",
+status:i%10===0?"banned":"active",
+premium:i%7===0
+});
+}
 
-      for(const ch of parsed){
+usersFiltered=[...users];
+render();
+}
 
-        if(!seen.has(ch.url)){
+/* =====================
+CHANNELS
+===================== */
+function generateChannels(){
 
-          seen.add(ch.url);
+const cats=["Sports","Movies","News","Kids","Music","Africa"];
 
-          allChannels.push(ch);
+channels=[];
 
-        }
+for(let i=1;i<=50;i++){
+channels.push({
+id:i,
+name:"BTECH Channel "+i,
+category:cats[i%cats.length],
+url:"https://test-streams.mux.dev/test_001/stream.m3u8",
+type:i%3===0?"paid":"free",
+status:i%10===0?"locked":"unlocked",
+viewers:Math.floor(Math.random()*100000)
+});
+}
 
-      }
+channelsFiltered=[...channels];
+render();
+renderLiveList();
+}
 
-      stats.innerHTML =
-        `Loaded ${allChannels.length.toLocaleString()} channels`;
+/* =====================
+LIVE LIST
+===================== */
+function renderLiveList(){
 
-    }catch(err){
+let list=document.getElementById("liveList");
+list.innerHTML="";
 
-      console.log("FAILED:", url);
+channels.forEach(c=>{
 
-    }
+let div=document.createElement("div");
+div.className="liveItem";
+div.innerHTML=`
+📺 ${c.name}<br>
+<button onclick="playStream('${c.url}','${c.name}')">Play</button>
+`;
 
-  }
+list.appendChild(div);
 
-  allChannels.sort((a,b)=>
-    a.name.localeCompare(b.name)
-  );
+});
+}
 
-  filteredChannels = allChannels;
+/* =====================
+RENDER
+===================== */
+function render(){
 
-  renderChannels();
+const grid=document.getElementById("grid");
+grid.innerHTML="";
 
-  document.getElementById("overlay").innerHTML =
-    `
-      <h1>🚀</h1>
-      <p>${allChannels.length.toLocaleString()} Channels Ready</p>
-    `;
+if(view==="users"){
+
+usersFiltered.forEach(u=>{
+
+let div=document.createElement("div");
+div.className="card";
+
+div.innerHTML=`
+<h3>👤 ${u.name}</h3>
+<p>${u.email}</p>
+
+<span class="badge ${u.status}">${u.status}</span>
+${u.premium?'<span class="badge premium">premium</span>':''}
+<br>
+<button onclick="toggleUser(${u.id})">Toggle</button>
+`;
+
+grid.appendChild(div);
+
+});
+
+}else{
+
+channelsFiltered.forEach(c=>{
+
+let div=document.createElement("div");
+div.className="card";
+
+div.innerHTML=`
+<h3>📺 ${c.name}</h3>
+<p>${c.category}</p>
+
+<span class="badge ${c.type}">${c.type}</span>
+<span class="badge ${c.status}">${c.status}</span>
+
+<p>👥 ${c.viewers}</p>
+
+<button onclick="playStream('${c.url}','${c.name}')">▶ Play</button>
+`;
+
+grid.appendChild(div);
+
+});
 
 }
 
-/* =========================
-   PARSE M3U
-========================= */
-
-function parseM3U(text){
-
-  const lines = text.split("\n");
-
-  const result = [];
-
-  let temp = {};
-
-  for(let line of lines){
-
-    line = line.trim();
-
-    if(line.startsWith("#EXTINF")){
-
-      temp = {
-
-        name:
-          line.match(/,(.*)/)?.[1] || "Unknown",
-
-        logo:
-          line.match(/tvg-logo="(.*?)"/)?.[1] || "",
-
-        group:
-          line.match(/group-title="(.*?)"/)?.[1] || "Live TV"
-
-      };
-
-    }
-
-    else if(line.startsWith("http")){
-
-      temp.url = line;
-
-      result.push(temp);
-
-      temp = {};
-
-    }
-
-  }
-
-  return result;
-
+updateStats();
 }
 
-/* =========================
-   RENDER CHANNELS
-========================= */
+/* =====================
+STATS
+===================== */
+function updateStats(){
 
-function renderChannels(){
+document.getElementById("t1").innerText=users.length;
+document.getElementById("t2").innerText=channels.length;
 
-  const container =
-    document.getElementById("channels");
+document.getElementById("t3").innerText=
+view==="users"
+? users.filter(u=>u.status==="active").length
+: channels.filter(c=>c.type==="free").length;
 
-  container.innerHTML = "";
-
-  filteredChannels
-    .slice(0,1000)
-    .forEach((channel,index)=>{
-
-      const div = document.createElement("div");
-
-      div.className = "channel";
-
-      div.innerHTML = `
-
-        <div class="logoBox">
-
-          ${
-            channel.logo
-            ? `<img src="${channel.logo}" loading="lazy">`
-            : "📺"
-          }
-
-        </div>
-
-        <div class="channelInfo">
-
-          <div class="channelName">
-            ${channel.name}
-          </div>
-
-          <div class="channelMeta">
-            ${channel.group}
-          </div>
-
-        </div>
-
-      `;
-
-      div.onclick = ()=>playChannel(index);
-
-      container.appendChild(div);
-
-    });
-
+document.getElementById("t4").innerText=
+view==="users"
+? users.filter(u=>u.status==="banned").length
+: channels.filter(c=>c.status==="locked").length;
 }
 
-/* =========================
-   SEARCH
-========================= */
-
-function filterChannels(){
-
-  const q =
-    document
-      .getElementById("search")
-      .value
-      .toLowerCase();
-
-  filteredChannels = allChannels.filter(ch=>
-
-    ch.name.toLowerCase().includes(q) ||
-
-    ch.group.toLowerCase().includes(q)
-
-  );
-
-  renderChannels();
-
+/* =====================
+ACTIONS
+===================== */
+function toggleUser(id){
+users=users.map(u=>{
+if(u.id===id){
+u.status=u.status==="active"?"banned":"active";
+}
+return u;
+});
+usersFiltered=[...users];
+render();
 }
 
-/* =========================
-   PLAY CHANNEL
-========================= */
+/* =====================
+SEARCH
+===================== */
+function searchAll(q){
+q=q.toLowerCase();
 
-function playChannel(index){
-
-  currentIndex = index;
-
-  const channel =
-    filteredChannels[index];
-
-  const video =
-    document.getElementById("video");
-
-  document.getElementById("overlay")
-    .style.display = "none";
-
-  document.getElementById("nowName")
-    .innerText = channel.name;
-
-  document.getElementById("nowMeta")
-    .innerText = channel.group;
-
-  if(hls){
-
-    hls.destroy();
-
-    hls = null;
-
-  }
-
-  if(Hls.isSupported()){
-
-    hls = new Hls();
-
-    hls.loadSource(channel.url);
-
-    hls.attachMedia(video);
-
-    hls.on(
-      Hls.Events.MANIFEST_PARSED,
-      ()=>video.play()
-    );
-
-  }else{
-
-    video.src = channel.url;
-
-    video.play();
-
-  }
-
+if(view==="users"){
+usersFiltered=users.filter(u=>
+u.name.toLowerCase().includes(q)||
+u.email.toLowerCase().includes(q)
+);
+}else{
+channelsFiltered=channels.filter(c=>
+c.name.toLowerCase().includes(q)||
+c.category.toLowerCase().includes(q)
+);
 }
 
-/* =========================
-   NEXT / PREVIOUS
-========================= */
-
-function nextChannel(){
-
-  currentIndex++;
-
-  if(currentIndex >= filteredChannels.length){
-
-    currentIndex = 0;
-
-  }
-
-  playChannel(currentIndex);
-
+render();
 }
 
-function prevChannel(){
-
-  currentIndex--;
-
-  if(currentIndex < 0){
-
-    currentIndex =
-      filteredChannels.length - 1;
-
-  }
-
-  playChannel(currentIndex);
-
-}
-
-/* =========================
-   START
-========================= */
-
-loadAllPlaylists();
+/* INIT */
+generateUsers();
+generateChannels();
 
 </script>
-/* =========================
-   ULTRA IPTV PLAYLIST SOURCES (EXPANDED)
-========================= */
 
-const playlists = [
-
-  /* CORE INDEXES */
-  "https://iptv-org.github.io/iptv/index.m3u",
-  "https://iptv-org.github.io/iptv/index.country.m3u",
-  "https://iptv-org.github.io/iptv/index.category.m3u",
-  "https://iptv-org.github.io/iptv/index.language.m3u",
-  "https://iptv-org.github.io/iptv/index.nsfw.m3u",
-
-  /* FREE-TV */
-  "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8",
-  "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlists/playlist_usa.m3u8",
-  "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlists/playlist_uk.m3u8",
-  "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlists/playlist_sports.m3u8",
-  "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlists/playlist_news.m3u8",
-
-  /* FREECAST HUB */
-  "https://raw.githubusercontent.com/freecasthub/public-iptv/main/playlist.m3u",
-  "https://raw.githubusercontent.com/freecasthub/public-iptv/main/countries/us.m3u",
-  "https://raw.githubusercontent.com/freecasthub/public-iptv/main/countries/uk.m3u",
-  "https://raw.githubusercontent.com/freecasthub/public-iptv/main/categories/sports.m3u",
-  "https://raw.githubusercontent.com/freecasthub/public-iptv/main/categories/news.m3u",
-
-  /* ROKU */
-  "https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/main/playlists/roku_all.m3u",
-  "https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/main/playlists/roku_us.m3u",
-  "https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/main/playlists/roku_uk.m3u",
-
-  /* IPTV RESTREAM */
-  "https://raw.githubusercontent.com/iptv-restream/iptv-channels/master/index.m3u",
-  "https://raw.githubusercontent.com/iptv-restream/iptv-channels/master/iptv/usa.m3u",
-  "https://raw.githubusercontent.com/iptv-restream/iptv-channels/master/iptv/uk.m3u",
-
-  /* TVPASS */
-  "https://tvpass.org/playlist/m3u",
-
-  /* APSATTV MASSIVE NETWORK */
-  "https://www.apsattv.com/xumo.m3u",
-  "https://www.apsattv.com/firetv.m3u",
-  "https://www.apsattv.com/lg.m3u",
-  "https://www.apsattv.com/redbox.m3u",
-  "https://www.apsattv.com/tablo.m3u",
-  "https://www.apsattv.com/klowd.m3u",
-  "https://www.apsattv.com/pluto.m3u",
-  "https://www.apsattv.com/vizio.m3u",
-  "https://www.apsattv.com/distro.m3u",
-  "https://www.apsattv.com/cineverse.m3u",
-  "https://www.apsattv.com/localnow.m3u",
-  "https://www.apsattv.com/samsungtvplus.m3u",
-  "https://www.apsattv.com/roku.m3u",
-  "https://www.apsattv.com/xiaomi.m3u",
-  "https://www.apsattv.com/stirr.m3u",
-  "https://www.apsattv.com/plex.m3u",
-  "https://www.apsattv.com/plexlive.m3u",
-  "https://www.apsattv.com/sling.m3u",
-  "https://www.apsattv.com/tubi.m3u",
-  "https://www.apsattv.com/freevee.m3u",
-  "https://www.apsattv.com/filmrise.m3u",
-  "https://www.apsattv.com/paramount.m3u",
-  "https://www.apsattv.com/shoutfactory.m3u",
-  "https://www.apsattv.com/ion.m3u",
-  "https://www.apsattv.com/cbsnews.m3u",
-  "https://www.apsattv.com/bloomberg.m3u",
-  "https://www.apsattv.com/newsnet.m3u",
-  "https://www.apsattv.com/sports.m3u",
-  "https://www.apsattv.com/music.m3u",
-  "https://www.apsattv.com/entertainment.m3u",
-  "https://www.apsattv.com/kids.m3u",
-  "https://www.apsattv.com/documentary.m3u",
-  "https://www.apsattv.com/movies.m3u",
-  "https://www.apsattv.com/reality.m3u",
-
-  /* REGIONS */
-  "https://www.apsattv.com/africa.m3u",
-  "https://www.apsattv.com/nigeria.m3u",
-  "https://www.apsattv.com/ghana.m3u",
-  "https://www.apsattv.com/southafrica.m3u",
-  "https://www.apsattv.com/uk.m3u",
-  "https://www.apsattv.com/usa.m3u",
-  "https://www.apsattv.com/canada.m3u",
-  "https://www.apsattv.com/europe.m3u",
-  "https://www.apsattv.com/asia.m3u",
-  "https://www.apsattv.com/india.m3u",
-  "https://www.apsattv.com/france.m3u",
-  "https://www.apsattv.com/germany.m3u",
-  "https://www.apsattv.com/spain.m3u",
-  "https://www.apsattv.com/italy.m3u",
-  "https://www.apsattv.com/portugal.m3u",
-  "https://www.apsattv.com/brazil.m3u",
-  "https://www.apsattv.com/mexico.m3u",
-  "https://www.apsattv.com/latin.m3u",
-
-  /* WORLD EXTRA */
-  "https://raw.githubusercontent.com/dracohe/FreeTv-IPTV/master/playlist_sport.m3u8",
-  "https://raw.githubusercontent.com/dracohe/FreeTv-IPTV/master/playlist_news.m3u8"
-
-];
 </body>
 </html>
