@@ -3,13 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV LOCKED PRO MAX v2</title>
+
+<title>BTECH-TV PRO ULTRA LOCKED ENGINE</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+
+/* ================= ROOT ================= */
 :root{
 --bg:#0b0f1a;
 --panel:#11182a;
 --card:#1b2438;
+--hover:#2b3a5a;
 --accent:#00bfff;
 --text:#fff;
 --muted:#94a3b8;
@@ -20,344 +26,303 @@
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
-body{background:var(--bg);color:var(--text);}
-
-/* LOGIN */
-.login{
-position:fixed;inset:0;
-background:#000c;
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;
+body{
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
 }
 
-.box{
+/* ================= TOPBAR ================= */
+.topbar{
+height:65px;
 background:var(--panel);
-padding:20px;
-border-radius:12px;
-width:320px;
-}
-
-input{
-width:100%;
-padding:10px;
-margin-top:10px;
-border:none;
-border-radius:8px;
-background:#0f1628;
-color:#fff;
-}
-
-button{
-margin-top:10px;
-width:100%;
-padding:10px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-}
-
-.primary{background:var(--accent);}
-.danger{background:var(--danger);color:#fff;}
-.success{background:var(--success);}
-
-/* HEADER */
-.header{
 display:flex;
 justify-content:space-between;
-padding:15px;
-background:var(--panel);
+align-items:center;
+padding:0 20px;
 border-bottom:1px solid #222;
 }
 
-.stats{
-display:flex;gap:10px;
+.topbar h2{color:var(--accent);}
+
+.top-links{
+display:flex;
+gap:10px;
 }
 
-.stat{
+.top-links button{
+padding:10px 14px;
+border:none;
+border-radius:8px;
 background:var(--card);
-padding:10px;
-border-radius:10px;
-text-align:center;
-min-width:110px;
+color:#fff;
+cursor:pointer;
 }
 
-.stat p{color:var(--accent);font-weight:bold;}
+.top-links button.active,
+.top-links button:hover{
+background:var(--accent);
+color:#000;
+}
 
-/* LAYOUT */
+/* ================= LAYOUT ================= */
 .container{
 display:flex;
-height:calc(100vh - 70px);
+height:calc(100vh - 65px);
 }
 
+/* ================= SIDEBAR ================= */
+.sidebar{
+width:260px;
+background:#0f1628;
+padding:15px;
+overflow-y:auto;
+border-right:1px solid #222;
+}
+
+.cat{
+padding:12px;
+margin:8px 0;
+background:var(--card);
+border-radius:8px;
+cursor:pointer;
+}
+
+.cat:hover{
+background:var(--hover);
+}
+
+/* ================= MAIN ================= */
 .main{
 flex:1;
-padding:15px;
-overflow:auto;
+display:flex;
+flex-direction:column;
+overflow:hidden;
 }
 
-.grid{
+/* ================= PLAYER ================= */
+.player{
+height:320px;
+background:#000;
+position:relative;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+.player video{
+width:100%;
+height:100%;
+object-fit:contain;
+}
+
+.overlay{
+position:absolute;
+inset:0;
+background:rgba(0,0,0,.85);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+z-index:10;
+}
+
+/* ================= CHANNELS ================= */
+.channels{
+flex:1;
+overflow-y:auto;
+padding:12px;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-gap:12px;
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+gap:10px;
 }
 
-.card{
+.channel{
 background:var(--card);
 padding:12px;
 border-radius:10px;
-border:1px solid #222;
+cursor:pointer;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.channel:hover{
+background:var(--hover);
 }
 
 .badge{
-padding:4px 8px;
+padding:4px 10px;
 border-radius:20px;
 font-size:11px;
-margin-right:5px;
 }
 
-.locked{background:#f59e0b;color:#000;}
-.paid{background:#dc2626;}
+.locked{background:var(--warning);color:#000;}
+.unlocked{background:var(--success);color:#000;}
+.paid{background:var(--danger);}
 .free{background:#16a34a;}
 
-.actions{display:flex;gap:8px;margin-top:10px;}
-
-.small-btn{
-flex:1;
-padding:7px;
-font-size:12px;
-border-radius:6px;
-}
-
-.unlock{background:var(--success);}
-.pay{background:var(--warning);}
-.del{background:var(--danger);color:#fff;}
-
-.sidebar{
-width:280px;
-background:var(--panel);
-padding:10px;
-border-right:1px solid #222;
-overflow:auto;
-}
-
-.log{
-font-size:12px;
-color:var(--muted);
-margin-top:8px;
-border-bottom:1px dashed #333;
-padding-bottom:5px;
-}
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
-<div class="login" id="login">
-<div class="box">
-<h3>🔐 PRO MAX LOGIN</h3>
-<input id="user" placeholder="username">
-<input id="pass" type="password" placeholder="password">
-<button class="primary" onclick="login()">Login</button>
-<p style="color:#888;font-size:12px;margin-top:10px;">
-admin / admin123
-</p>
-</div>
-</div>
+<!-- TOPBAR -->
+<div class="topbar">
+<h2>📺 BTECH PRO ULTRA LOCKED</h2>
 
-<!-- HEADER -->
-<div class="header">
-<h3>🔒 LOCKED PRO MAX v2</h3>
-
-<div class="stats">
-<div class="stat"><p id="tLock">0</p><small>Locked</small></div>
-<div class="stat"><p id="rev">₦0</p><small>Revenue</small></div>
-<div class="stat"><p id="act">0</p><small>Actions</small></div>
+<div class="top-links">
+<button class="active" onclick="filterCat('All',this)">All</button>
+<button onclick="filterCat('Sports',this)">Sports</button>
+<button onclick="filterCat('Movies',this)">Movies</button>
+<button onclick="filterLocked(this)">Locked</button>
 </div>
 </div>
 
 <div class="container">
 
+<!-- SIDEBAR -->
+<div class="sidebar">
+<div class="cat" onclick="filterCat('All')">📺 All</div>
+<div class="cat" onclick="filterCat('Sports')">🏆 Sports</div>
+<div class="cat" onclick="filterCat('Movies')">🎬 Movies</div>
+<div class="cat" onclick="filterLocked()">🔒 Locked</div>
+</div>
+
 <!-- MAIN -->
 <div class="main">
 
-<input placeholder="Search locked channels..." oninput="render(this.value)">
-
-<button class="primary" onclick="exportCSV()">⬇ Export CSV</button>
-
-<div class="grid" id="grid"></div>
-
+<!-- PLAYER -->
+<div class="player">
+<div class="overlay" id="overlay">
+<h1>🚀</h1>
+<p>Loading Engine...</p>
+</div>
+<video id="videoPlayer" controls></video>
 </div>
 
-<!-- SIDEBAR LOG -->
-<div class="sidebar">
-<h4>📜 Activity Log</h4>
-<div id="log"></div>
+<!-- CHANNEL LIST -->
+<div class="channels" id="channelList"></div>
+
 </div>
 
 </div>
 
 <script>
 
-/* ================= AUTH ================= */
-let USER=null;
-let ROLE=null;
+/* ================= ENGINE ================= */
+const ENGINE={
+maxChannels:5000,
+renderLimit:200
+};
 
-/* ================= STATE ================= */
 let channels=[];
-let revenue=0;
-let actions=0;
+let filtered=[];
 
-/* ================= LOGIN ================= */
-function login(){
-const u=document.getElementById("user").value;
-const p=document.getElementById("pass").value;
+/* ================= STREAMS ================= */
+const streams=[
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+"https://test-streams.mux.dev/test_001/stream.m3u8"
+];
 
-if(u==="admin" && p==="admin123"){
-USER="admin";
-ROLE="admin";
-document.getElementById("login").style.display="none";
-init();
-}else{
-alert("Invalid login");
-}
-}
-
-/* ================= INIT ================= */
-function init(){
-channels=generate();
-render();
-}
-
-/* ================= DEMO ================= */
+/* ================= GENERATE ================= */
 function generate(){
-let arr=[];
-for(let i=1;i<=60;i++){
-arr.push({
+const cats=["Sports","Movies","News","VIP"];
+
+for(let i=1;i<=ENGINE.maxChannels;i++){
+
+channels.push({
 id:i,
-name:"LOCKED "+i,
-cat:i%2?"Sports":"Movies",
-status:"locked",
-type:i%3?"free":"paid",
-price:100+i
-});
-}
-return arr;
-}
-
-/* ================= LOG ================= */
-function log(msg){
-actions++;
-let div=document.createElement("div");
-div.className="log";
-div.innerText=new Date().toLocaleTimeString()+" - "+msg;
-document.getElementById("log").prepend(div);
-}
-
-/* ================= ACTIONS ================= */
-function unlock(id){
-if(ROLE!=="admin") return;
-
-channels=channels.map(c=>{
-if(c.id===id) c.status="unlocked";
-return c;
+name:"BTECH "+cats[i%cats.length]+" "+i,
+category:cats[i%cats.length],
+url:streams[i%streams.length],
+status:i%10===0?"locked":"unlocked",
+type:i%3===0?"paid":"free"
 });
 
-log("Unlocked channel "+id);
-render();
 }
 
-function pay(id){
-let c=channels.find(x=>x.id===id);
-revenue+=c.price;
-c.status="unlocked";
-log("Paid unlock ₦"+c.price);
+filtered=[...channels];
 render();
-}
-
-function del(id){
-if(ROLE!=="admin") return;
-channels=channels.filter(c=>c.id!==id);
-log("Deleted channel "+id);
-render();
-}
-
-/* ================= STATS ================= */
-function stats(){
-document.getElementById("tLock").innerText=
-channels.filter(c=>c.status==="locked").length;
-
-document.getElementById("rev").innerText=
-"₦"+revenue;
-
-document.getElementById("act").innerText=actions;
+document.getElementById("overlay").style.display="none";
 }
 
 /* ================= RENDER ================= */
-function render(q=""){
+function render(){
 
-let grid=document.getElementById("grid");
-grid.innerHTML="";
+const box=document.getElementById("channelList");
+box.innerHTML="";
 
-let data=channels.filter(c=>c.status==="locked");
+filtered.slice(0,ENGINE.renderLimit).forEach((c,i)=>{
 
-if(q){
-data=data.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
-}
+box.innerHTML+=`
+<div class="channel" onclick="play(${c.id})">
 
-stats();
+<div>
+<b>${c.name}</b><br>
+<small>${c.category}</small>
+</div>
 
-data.forEach(c=>{
-
-let div=document.createElement("div");
-div.className="card";
-
-div.innerHTML=`
-<h4>${c.name}</h4>
-<small>${c.cat}</small><br>
-
-<span class="badge locked">LOCKED</span>
-<span class="badge ${c.type}">${c.type}</span>
-
-<div class="actions">
-
-<button class="small-btn unlock" onclick="unlock(${c.id})">
-Unlock
-</button>
-
-<button class="small-btn pay" onclick="pay(${c.id})">
-Pay
-</button>
-
-<button class="small-btn del" onclick="del(${c.id})">
-Delete
-</button>
+<div>
+<span class="badge ${c.status}">
+${c.status}
+</span>
+</div>
 
 </div>
 `;
 
-grid.appendChild(div);
-
 });
 
 }
 
-/* ================= EXPORT ================= */
-function exportCSV(){
-let csv="id,name,category,status,type,price\n";
-channels.forEach(c=>{
-csv+=`${c.id},${c.name},${c.cat},${c.status},${c.type},${c.price}\n`;
-});
+/* ================= PLAY ================= */
+let hls;
 
-let blob=new Blob([csv],{type:"text/csv"});
-let a=document.createElement("a");
-a.href=URL.createObjectURL(blob);
-a.download="locked_channels.csv";
-a.click();
+function play(id){
+
+const ch=channels.find(c=>c.id===id);
+
+const video=document.getElementById("videoPlayer");
+
+if(hls) hls.destroy();
+
+if(Hls.isSupported()){
+
+hls=new Hls();
+hls.loadSource(ch.url);
+hls.attachMedia(video);
+
+}else{
+video.src=ch.url;
 }
+
+video.play();
+
+}
+
+/* ================= FILTER ================= */
+function filterCat(cat,btn){
+
+filtered=cat==="All"
+?channels
+:channels.filter(c=>c.category.includes(cat));
+
+render();
+
+document.querySelectorAll(".top-links button")
+.forEach(b=>b.classList.remove("active"));
+
+if(btn) btn.classList.add("active");
+}
+
+function filterLocked(){
+filtered=channels.filter(c=>c.status==="locked");
+render();
+}
+
+/* ================= START ================= */
+generate();
 
 </script>
 
