@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV LOCKED CHANNEL SUPER ADMIN (NO LOGIN)</title>
+<title>BTECH-TV LOCKED SUPER ADMIN (LOGIN)</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -20,8 +20,54 @@
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-body{background:var(--bg);color:var(--text);overflow:hidden;}
 
+body{
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
+
+/* LOGIN */
+#loginBox{
+position:fixed;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,0.95);
+z-index:9999;
+}
+
+.login-card{
+width:300px;
+background:var(--panel);
+padding:20px;
+border-radius:10px;
+text-align:center;
+}
+
+.login-card input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:6px;
+background:#0f1628;
+color:white;
+}
+
+.login-card button{
+width:100%;
+margin-top:10px;
+padding:10px;
+border:none;
+border-radius:6px;
+background:var(--accent);
+font-weight:bold;
+cursor:pointer;
+}
+
+/* TOPBAR */
 .topbar{
 height:60px;
 background:var(--panel);
@@ -29,7 +75,6 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 padding:0 15px;
-border-bottom:1px solid #222;
 }
 
 .container{display:flex;height:calc(100vh - 60px);}
@@ -50,21 +95,12 @@ border-radius:8px;
 cursor:pointer;
 }
 
-.cat:hover{background:#2b3a5a;}
-
 /* MAIN */
 .main{flex:1;display:flex;flex-direction:column;}
 
-.player{
-height:260px;
-background:black;
-}
+.player{height:260px;background:black;}
 
-video{
-width:100%;
-height:100%;
-object-fit:contain;
-}
+video{width:100%;height:100%;object-fit:contain;}
 
 /* LIST */
 .channels{
@@ -81,10 +117,7 @@ background:var(--card);
 padding:10px;
 border-radius:10px;
 cursor:pointer;
-border:1px solid transparent;
 }
-
-.channel:hover{border-color:var(--accent);}
 
 .badge{
 font-size:11px;
@@ -123,11 +156,10 @@ font-weight:bold;
 cursor:pointer;
 }
 
-button:hover{opacity:0.85;}
-.danger{background:#dc2626;}
 .warn{background:#f59e0b;}
+.danger{background:#dc2626;}
 
-input{
+input.search{
 width:100%;
 padding:10px;
 margin-top:8px;
@@ -141,23 +173,39 @@ border-radius:6px;
 
 <body>
 
+<!-- 🔐 LOGIN -->
+<div id="loginBox">
+  <div class="login-card">
+    <h3>🔐 ADMIN LOGIN</h3>
+    <p style="font-size:12px;opacity:0.7;margin-top:5px;">
+      Demo Password: <b>admin123</b>
+    </p>
+
+    <input type="password" id="pass" placeholder="Enter Password">
+    <button onclick="login()">LOGIN</button>
+  </div>
+</div>
+
+<!-- TOPBAR -->
 <div class="topbar">
 <h3>🚀 BTECH-TV LOCKED SUPER ADMIN</h3>
-<div id="status">NO LOGIN MODE</div>
+<div id="status">LOCKED</div>
 </div>
 
 <div class="container">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<h3>CONTROL PANEL</h3>
+
+<h3>CONTROL</h3>
 
 <div class="cat" onclick="filterAll()">📺 All</div>
 <div class="cat" onclick="filterLocked()">🔒 Locked</div>
 <div class="cat" onclick="filterFree()">🟢 Free</div>
 <div class="cat" onclick="filterPaid()">💰 Paid</div>
 
-<input placeholder="Search channels..." oninput="search(this.value)">
+<input class="search" placeholder="Search..." oninput="search(this.value)">
+
 </div>
 
 <!-- MAIN -->
@@ -174,17 +222,17 @@ border-radius:6px;
 <!-- RIGHT -->
 <div class="right">
 
-<h3>⚙ ADMIN ACTIONS</h3>
+<h3>ADMIN</h3>
 
 <button onclick="lockAll()">🔒 Lock ALL</button>
 <button onclick="unlockAll()">🔓 Unlock ALL</button>
 
-<button class="warn" onclick="lockSelected()">🔒 Lock Selected</button>
-<button class="warn" onclick="unlockSelected()">🔓 Unlock Selected</button>
+<button class="warn" onclick="lockSelected()">Lock Selected</button>
+<button class="warn" onclick="unlockSelected()">Unlock Selected</button>
 
-<button class="danger" onclick="deleteLocked()">❌ Delete Locked</button>
+<button class="danger" onclick="deleteLocked()">Delete Locked</button>
 
-<h3 style="margin-top:10px">📊 STATS</h3>
+<h3 style="margin-top:10px">STATS</h3>
 <div class="stat">Total: <span id="t">0</span></div>
 <div class="stat">Free: <span id="f">0</span></div>
 <div class="stat">Paid: <span id="p">0</span></div>
@@ -196,21 +244,29 @@ border-radius:6px;
 
 <script>
 
-/* =====================
-STATE
-===================== */
-let channels = [];
-let filtered = [];
-let selected = new Set();
+/* 🔐 LOGIN SYSTEM */
+function login(){
+const p = document.getElementById("pass").value;
 
-const streams = [
+if(p === "admin123"){
+document.getElementById("loginBox").style.display="none";
+document.getElementById("status").innerText="ONLINE";
+}else{
+alert("Wrong Password");
+}
+}
+
+/* STATE */
+let channels=[];
+let filtered=[];
+let selected=new Set();
+
+const streams=[
 "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
 "https://test-streams.mux.dev/test_001/stream.m3u8"
 ];
 
-/* =====================
-GENERATE DATA
-===================== */
+/* GENERATE */
 function generate(){
 for(let i=0;i<600;i++){
 channels.push({
@@ -223,9 +279,7 @@ status:i%10===0?"locked":"free"
 }
 }
 
-/* =====================
-RENDER
-===================== */
+/* RENDER */
 function render(){
 filtered=[...channels];
 let box=document.getElementById("list");
@@ -250,40 +304,32 @@ box.appendChild(div);
 stats();
 }
 
-/* =====================
-TOGGLE SELECT
-===================== */
+/* SELECT */
 function toggle(id){
-selected.has(id) ? selected.delete(id) : selected.add(id);
+selected.has(id)?selected.delete(id):selected.add(id);
 }
 
-/* =====================
-PLAY
-===================== */
+/* PLAY */
 function play(i){
 let c=filtered[i];
 let v=document.getElementById("video");
 
-if(window.Hls && Hls.isSupported()){
-let hls=new Hls();
-hls.loadSource(c.url);
-hls.attachMedia(v);
+if(Hls.isSupported()){
+let h=new Hls();
+h.loadSource(c.url);
+h.attachMedia(v);
 }else{
 v.src=c.url;
 }
 }
 
-/* =====================
-FILTERS
-===================== */
+/* FILTER */
 function filterAll(){render();}
 function filterLocked(){filtered=channels.filter(c=>c.status==="locked");render();}
 function filterFree(){filtered=channels.filter(c=>c.type==="free");render();}
 function filterPaid(){filtered=channels.filter(c=>c.type==="paid");render();}
 
-/* =====================
-SEARCH
-===================== */
+/* SEARCH */
 function search(v){
 filtered=channels.filter(c=>
 c.name.toLowerCase().includes(v.toLowerCase())
@@ -291,18 +337,9 @@ c.name.toLowerCase().includes(v.toLowerCase())
 render();
 }
 
-/* =====================
-ADMIN ACTIONS
-===================== */
-function lockAll(){
-channels.forEach(c=>c.status="locked");
-render();
-}
-
-function unlockAll(){
-channels.forEach(c=>c.status="free");
-render();
-}
+/* ACTIONS */
+function lockAll(){channels.forEach(c=>c.status="locked");render();}
+function unlockAll(){channels.forEach(c=>c.status="free");render();}
 
 function lockSelected(){
 channels.forEach(c=>{
@@ -323,9 +360,7 @@ channels = channels.filter(c=>c.status!=="locked");
 render();
 }
 
-/* =====================
-STATS
-===================== */
+/* STATS */
 function stats(){
 document.getElementById("t").innerText=channels.length;
 document.getElementById("f").innerText=channels.filter(c=>c.type==="free").length;
@@ -333,7 +368,7 @@ document.getElementById("p").innerText=channels.filter(c=>c.type==="paid").lengt
 document.getElementById("l").innerText=channels.filter(c=>c.status==="locked").length;
 }
 
-/* BOOT */
+/* INIT */
 generate();
 render();
 
