@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV ULTRA MAX IPTV ENGINE</title>
+<title>BTECH-TV GOD MODE ADMIN</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -12,6 +12,7 @@
 --bg:#0b0f1a;
 --panel:#11182a;
 --card:#1b2438;
+--hover:#2b3a5a;
 --accent:#00bfff;
 --text:#fff;
 --free:#16a34a;
@@ -20,34 +21,39 @@
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-body{background:var(--bg);color:var(--text);overflow:hidden;}
+body{background:var(--bg);color:var(--text);overflow:hidden}
 
 /* LOGIN */
 #login{
-position:fixed;inset:0;
-display:flex;align-items:center;justify-content:center;
+position:fixed;
+inset:0;
 background:#000;
+display:flex;
+align-items:center;
+justify-content:center;
 z-index:9999;
 }
 
-.box{
-width:320px;
+.login-box{
 background:var(--panel);
 padding:20px;
 border-radius:10px;
+width:300px;
 }
 
-input,select,button{
+input,button{
 width:100%;
 padding:10px;
 margin-top:10px;
 border:none;
 border-radius:6px;
-background:#0f1628;
-color:white;
 }
 
-button{background:var(--accent);font-weight:bold;cursor:pointer}
+button{
+background:var(--accent);
+font-weight:bold;
+cursor:pointer;
+}
 
 /* LAYOUT */
 .topbar{
@@ -59,7 +65,7 @@ align-items:center;
 padding:0 15px;
 }
 
-.container{display:flex;height:calc(100vh - 60px);}
+.container{display:flex;height:calc(100vh - 60px)}
 
 .sidebar{
 width:240px;
@@ -68,12 +74,12 @@ padding:10px;
 overflow:auto;
 }
 
-.main{flex:1;display:flex;flex-direction:column;}
+.main{flex:1;display:flex;flex-direction:column}
 
-.player{height:240px;background:black;}
-video{width:100%;height:100%;object-fit:contain;}
+.player{height:260px;background:black}
+video{width:100%;height:100%;object-fit:contain}
 
-.channels{
+.list{
 flex:1;
 overflow:auto;
 display:grid;
@@ -82,24 +88,28 @@ gap:10px;
 padding:10px;
 }
 
-.channel{
+.card{
 background:var(--card);
 padding:10px;
 border-radius:10px;
 cursor:pointer;
+border:1px solid transparent;
 }
 
+.card:hover{border-color:var(--accent)}
+
 .badge{
-font-size:11px;
-padding:4px 6px;
+padding:4px 8px;
 border-radius:20px;
+font-size:11px;
 margin-right:4px;
 }
 
-.free{background:var(--free);}
-.paid{background:var(--paid);}
-.locked{background:var(--locked);color:#000;}
+.free{background:var(--free)}
+.paid{background:var(--paid)}
+.locked{background:var(--locked);color:#000}
 
+/* RIGHT */
 .right{
 width:260px;
 background:var(--panel);
@@ -113,6 +123,7 @@ padding:10px;
 margin-bottom:8px;
 border-radius:8px;
 }
+
 </style>
 </head>
 
@@ -120,59 +131,57 @@ border-radius:8px;
 
 <!-- LOGIN -->
 <div id="login">
-<div class="box">
-<h3>🔐 ULTRA MAX LOGIN</h3>
+<div class="login-box">
+<h3>🔐 GOD MODE LOGIN</h3>
+<p style="font-size:12px;opacity:0.7">Demo password: <b>1234</b></p>
 
-<input id="pass" type="password" placeholder="Password">
-<select id="role">
-<option value="admin">Admin</option>
-<option value="viewer">Viewer</option>
-</select>
-
-<button onclick="login()">ENTER</button>
+<input id="pass" type="password" placeholder="Enter Password">
+<button onclick="login()">LOGIN</button>
 </div>
 </div>
 
 <!-- TOP -->
 <div class="topbar">
-<h3>🚀 ULTRA MAX IPTV ENGINE</h3>
-<div id="mode">LOCKED</div>
+<h3>🚀 BTECH-TV GOD MODE</h3>
+<div id="status">LOCKED</div>
 </div>
 
 <div class="container">
 
+<!-- SIDEBAR -->
 <div class="sidebar">
-<button onclick="filterAll()">ALL</button>
-<button onclick="filterLocked()">LOCKED</button>
-<button onclick="filterFree()">FREE</button>
-<button onclick="filterPaid()">PAID</button>
+<h4>⚙ Controls</h4>
+
+<button onclick="filterAll()">All</button>
+<button onclick="filterLocked()">Locked</button>
+<button onclick="filterFree()">Free</button>
+<button onclick="filterPaid()">Paid</button>
+
+<input placeholder="Search..." oninput="search(this.value)">
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
 <div class="player">
 <video id="video" controls></video>
 </div>
 
-<div class="channels" id="list"></div>
+<div class="list" id="list"></div>
 
 </div>
 
+<!-- RIGHT -->
 <div class="right">
+<h4>📊 STATS</h4>
+<div class="stat">Total: <span id="t">0</span></div>
+<div class="stat">Free: <span id="f">0</span></div>
+<div class="stat">Paid: <span id="p">0</span></div>
+<div class="stat">Locked: <span id="l">0</span></div>
 
-<h3>CONTROL PANEL</h3>
-
-<button onclick="lockAll()">LOCK ALL</button>
-<button onclick="unlockAll()">UNLOCK ALL</button>
-<button onclick="lockSelected()">LOCK SELECTED</button>
-<button onclick="unlockSelected()">UNLOCK SELECTED</button>
-<button onclick="deleteLocked()">DELETE LOCKED</button>
-
-<h3>STATS</h3>
-<div class="stat">Total: <span id="t"></span></div>
-<div class="stat">Free: <span id="f"></span></div>
-<div class="stat">Paid: <span id="p"></span></div>
-<div class="stat">Locked: <span id="l"></span></div>
+<button onclick="lockAll()">🔒 Lock ALL</button>
+<button onclick="unlockAll()">🔓 Unlock ALL</button>
+<button onclick="deleteLocked()">❌ Delete Locked</button>
 
 </div>
 
@@ -181,48 +190,27 @@ border-radius:8px;
 <script>
 
 /* =====================
-SECURE LOGIN HASH
+LOGIN
 ===================== */
-
-function hash(str){
-return btoa(unescape(encodeURIComponent(str)));
-}
-
-let role="viewer";
 
 function login(){
-const pass=document.getElementById("pass").value;
-const r=document.getElementById("role").value;
+const p=document.getElementById("pass").value;
 
-if(hash(pass)==hash("admin123")){
-
-role=r;
-localStorage.setItem("ultra_role",role);
-
+if(p==="1234"){
 document.getElementById("login").style.display="none";
-document.getElementById("mode").innerText=role.toUpperCase();
-
-boot();
-
-}else alert("Wrong Password");
+document.getElementById("status").innerText="GOD MODE ACTIVE";
+}else{
+alert("Wrong password");
 }
-
-/* AUTO SESSION */
-window.onload=()=>{
-const saved=localStorage.getItem("ultra_role");
-if(saved){
-role=saved;
-document.getElementById("login").style.display="none";
-document.getElementById("mode").innerText=role.toUpperCase();
-boot();
 }
-};
 
 /* =====================
-ENGINE
+STATE
 ===================== */
 
-let channels=[],filtered=[],selected=new Set();
+let channels=[];
+let filtered=[];
+let selected=new Set();
 
 const streams=[
 "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
@@ -230,66 +218,54 @@ const streams=[
 ];
 
 /* =====================
-VIRTUAL 100K ENGINE
+GENERATE CHANNELS
 ===================== */
 
 function generate(){
-for(let i=0;i<800;i++){
+
+for(let i=0;i<500;i++){
 channels.push({
 id:i,
-name:"ULTRA CH "+i,
+name:"GOD CHANNEL "+i,
 url:streams[i%streams.length],
 type:i%3===0?"paid":"free",
-status:i%10===0?"locked":"free"
+status:i%9===0?"locked":"free"
 });
 }
+
 }
 
 /* =====================
-RENDER OPTIMIZED
+RENDER
 ===================== */
 
 function render(){
 filtered=[...channels];
-const box=document.getElementById("list");
+
+let box=document.getElementById("list");
 box.innerHTML="";
 
-const frag=document.createDocumentFragment();
-
 filtered.forEach((c,i)=>{
-const div=document.createElement("div");
-div.className="channel";
+let div=document.createElement("div");
+div.className="card";
 
 div.innerHTML=`
 <b>${c.name}</b><br>
 <span class="badge ${c.type}">${c.type}</span>
 <span class="badge ${c.status}">${c.status}</span>
-<br>
 <input type="checkbox" onchange="toggle(${c.id})">
 `;
 
 div.onclick=()=>play(i);
-frag.appendChild(div);
+
+box.appendChild(div);
 });
 
-box.appendChild(frag);
 stats();
 }
 
 /* =====================
-SECURITY CHECK
-===================== */
-
-function adminOnly(){
-if(role!=="admin"){
-alert("Viewer mode blocked");
-return false;
-}
-return true;
-}
-
-/* =====================
-SELECT
+TOGGLE
 ===================== */
 
 function toggle(id){
@@ -304,11 +280,13 @@ function play(i){
 let c=filtered[i];
 let v=document.getElementById("video");
 
-if(window.Hls && Hls.isSupported()){
+if(Hls.isSupported()){
 let h=new Hls();
 h.loadSource(c.url);
 h.attachMedia(v);
-}else v.src=c.url;
+}else{
+v.src=c.url;
+}
 }
 
 /* =====================
@@ -321,29 +299,21 @@ function filterFree(){filtered=channels.filter(c=>c.type==="free");render();}
 function filterPaid(){filtered=channels.filter(c=>c.type==="paid");render();}
 
 /* =====================
-ADMIN ACTIONS
+SEARCH
 ===================== */
 
-function lockAll(){if(!adminOnly())return;channels.forEach(c=>c.status="locked");render();}
-function unlockAll(){if(!adminOnly())return;channels.forEach(c=>c.status="free");render();}
-
-function lockSelected(){
-if(!adminOnly())return;
-channels.forEach(c=>{if(selected.has(c.id))c.status="locked";});
+function search(v){
+filtered=channels.filter(c=>c.name.toLowerCase().includes(v.toLowerCase()));
 render();
 }
 
-function unlockSelected(){
-if(!adminOnly())return;
-channels.forEach(c=>{if(selected.has(c.id))c.status="free";});
-render();
-}
+/* =====================
+ACTIONS
+===================== */
 
-function deleteLocked(){
-if(!adminOnly())return;
-channels=channels.filter(c=>c.status!=="locked");
-render();
-}
+function lockAll(){channels.forEach(c=>c.status="locked");render();}
+function unlockAll(){channels.forEach(c=>c.status="free");render();}
+function deleteLocked(){channels=channels.filter(c=>c.status!=="locked");render();}
 
 /* =====================
 STATS
@@ -356,14 +326,9 @@ document.getElementById("p").innerText=channels.filter(c=>c.type==="paid").lengt
 document.getElementById("l").innerText=channels.filter(c=>c.status==="locked").length;
 }
 
-/* =====================
-BOOT
-===================== */
-
-function boot(){
+/* BOOT */
 generate();
 render();
-}
 
 </script>
 
