@@ -1,77 +1,418 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📺 IPTV ULTRA MAX CONTROL CENTER</title>
 
-<title>
-BTECH-TV ULTRA MAX
-</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
 :root{
-
 --bg:#0b0f1a;
 --panel:#11182a;
 --card:#1b2438;
+--hover:#2b3a5a;
 --accent:#00bfff;
 --text:#fff;
-
 }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 
-body{
+body{background:var(--bg);color:var(--text);overflow:hidden}
 
-background:var(--bg);
-color:var(--text);
-overflow:hidden;
-
-}
-
-/* =====================
-LOGIN
-===================== */
-
-#loginScreen{
-
-position:fixed;
-inset:0;
-
+/* LOGIN */
+.login{
+position:fixed;inset:0;
+background:black;
 display:flex;
-justify-content:center;
 align-items:center;
-
-background:
-linear-gradient(
-135deg,
-#020617,
-#0b1120,
-#11182a
-);
-
-z-index:99999;
-
+justify-content:center;
+z-index:9999;
 }
 
 .login-box{
-
-width:380px;
-padding:35px;
-
 background:var(--panel);
+padding:20px;
+border-radius:12px;
+width:300px;
+}
 
-border-radius:20px;
+.login-box input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:8px;
+border:none;
+background:#0f1628;
+color:white;
+}
 
+.login-box button{
+width:100%;
+padding:10px;
+margin-top:10px;
+background:var(--accent);
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* TOP */
+.topbar{
+height:60px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 15px;
+}
+
+.topbar h2{color:var(--accent)}
+
+/* LAYOUT */
+.container{display:flex;height:calc(100vh - 60px)}
+
+.sidebar{
+width:250px;
+background:#0f1628;
+padding:10px;
+overflow:auto;
+}
+
+.cat{
+padding:10px;
+margin:6px 0;
+background:var(--card);
+border-radius:8px;
+cursor:pointer;
+}
+
+.cat:hover{background:var(--hover)}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column}
+
+/* STATS */
+.stats{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:8px;
+padding:10px;
+}
+
+.box{
+background:var(--card);
+padding:10px;
+border-radius:8px;
 text-align:center;
+}
 
-box-shadow:
-0 0 50px rgba(0,
+/* GRID */
+.grid{
+flex:1;
+overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+gap:10px;
+padding:10px;
+}
+
+.card{
+background:var(--card);
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+transition:.2s;
+}
+
+.card:hover{background:var(--hover);transform:scale(1.02)}
+
+.badge{
+padding:4px 8px;
+border-radius:20px;
+font-size:11px;
+margin-right:5px;
+}
+
+.free{background:#16a34a}
+.paid{background:#dc2626}
+.locked{background:#f59e0b;color:black}
+
+.online{background:#16a34a}
+.offline{background:#dc2626}
+
+/* PLAYER */
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.95);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:999;
+}
+
+.player{
+width:85%;
+height:75%;
+background:black;
+position:relative;
+border-radius:10px;
+overflow:hidden;
+}
+
+.player video{width:100%;height:100%}
+
+.close{
+position:absolute;
+top:10px;right:10px;
+background:red;
+border:none;
+padding:8px 12px;
+color:white;
+cursor:pointer;
+border-radius:6px;
+}
+
+.monitor{
+position:absolute;
+bottom:10px;
+left:10px;
+background:rgba(0,0,0,.6);
+padding:6px 10px;
+border-radius:8px;
+font-size:12px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="login" id="login">
+<div class="login-box">
+<h3>🔐 ULTRA ADMIN LOGIN</h3>
+<input id="pass" type="password" placeholder="Password">
+<button onclick="login()">Enter</button>
+</div>
+</div>
+
+<!-- PLAYER -->
+<div class="modal" id="modal">
+<div class="player">
+<button class="close" onclick="closePlayer()">X</button>
+<video id="video" controls autoplay></video>
+<div class="monitor" id="monitor">LIVE MONITOR: --</div>
+</div>
+</div>
+
+<!-- TOP -->
+<div class="topbar">
+<h2>📺 IPTV ULTRA MAX CONTROL CENTER</h2>
+<input placeholder="Search..." oninput="search(this.value)" style="padding:8px;border:none;border-radius:8px;background:#0f1628;color:white">
+</div>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+<div class="cat" onclick="setView('channels')">📺 Channels</div>
+<div class="cat" onclick="setView('users')">👥 Users</div>
+<div class="cat" onclick="toggleFav()">⭐ Favorites</div>
+
+<button onclick="loadAPI()" style="width:100%;margin-top:10px">🚀 Load IPTV</button>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="stats">
+<div class="box"><b id="t1">0</b><br>Total</div>
+<div class="box"><b id="t2">0</b><br>Free</div>
+<div class="box"><b id="t3">0</b><br>Paid</div>
+<div class="box"><b id="t4">0</b><br>Online</div>
+<div class="box"><b id="t5">0</b><br>Favorites</div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+</div>
+
+</div>
+
+<script>
+
+/* ENGINE */
+let view="channels";
+let channels=[],users=[];
+let filtered=[];
+let favs=new Set();
+let showFav=false;
+let hls=null;
+
+/* LOGIN */
+function login(){
+if(document.getElementById("pass").value==="admin123"){
+localStorage.setItem("auth","1");
+document.getElementById("login").style.display="none";
+}
+}
+if(localStorage.getItem("auth")==="1"){
+document.getElementById("login").style.display="none";
+}
+
+/* LOAD */
+async function loadAPI(){
+let res=await fetch("https://iptv-org.github.io/api/streams.json");
+let data=await res.json();
+
+channels=data.slice(0,300).map((s,i)=>({
+id:i,
+name:"Channel "+i,
+url:s.url,
+type:i%2?"free":"paid",
+status:Math.random()>0.2?"online":"offline",
+viewers:Math.floor(Math.random()*99999)
+}));
+
+filtered=[...channels];
+render();
+}
+
+/* USERS */
+for(let i=0;i<100;i++){
+users.push({id:i,name:"User "+i,status:i%2?"active":"banned"});
+}
+
+/* VIEW */
+function setView(v){
+view=v;
+render();
+}
+
+/* FAVORITES */
+function toggleFavView(){
+showFav=!showFav;
+render();
+}
+
+/* SEARCH */
+function search(q){
+q=q.toLowerCase();
+
+if(view==="channels"){
+filtered=channels.filter(c=>c.name.toLowerCase().includes(q));
+}else{
+filtered=users.filter(u=>u.name.toLowerCase().includes(q));
+}
+render();
+}
+
+/* FAVORITE */
+function fav(id){
+if(favs.has(id)) favs.delete(id);
+else favs.add(id);
+render();
+}
+
+/* PLAY */
+function play(c){
+
+document.getElementById("modal").style.display="flex";
+
+let v=document.getElementById("video");
+
+if(hls)hls.destroy();
+
+if(Hls.isSupported()){
+hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(v);
+}else{
+v.src=c.url;
+}
+
+v.play();
+
+/* LIVE MONITOR */
+setInterval(()=>{
+document.getElementById("monitor").innerText=
+`LIVE: ${c.name} | VIEWERS: ${Math.floor(Math.random()*100000)} | STATUS: ${c.status}`;
+},1000);
+
+}
+
+/* CLOSE */
+function closePlayer(){
+document.getElementById("modal").style.display="none";
+}
+
+/* RENDER */
+function render(){
+
+let g=document.getElementById("grid");
+g.innerHTML="";
+
+if(view==="channels"){
+
+let list=showFav?channels.filter(c=>favs.has(c.id)):channels;
+
+list.forEach(c=>{
+
+let d=document.createElement("div");
+d.className="card";
+
+d.innerHTML=`
+<h4>${c.name}</h4>
+<span class="badge ${c.type}">${c.type}</span>
+<span class="badge ${c.status}">${c.status}</span>
+<br>
+<button onclick="play(channels[${c.id}])">▶ Play</button>
+<button onclick="fav(${c.id})">⭐</button>
+`;
+
+g.appendChild(d);
+
+});
+
+}else{
+
+users.forEach(u=>{
+
+let d=document.createElement("div");
+d.className="card";
+
+d.innerHTML=`<h4>👤 ${u.name}</h4><p>${u.status}</p>`;
+g.appendChild(d);
+
+});
+
+}
+
+updateStats();
+
+}
+
+/* STATS */
+function updateStats(){
+
+document.getElementById("t1").innerText=channels.length;
+document.getElementById("t2").innerText=channels.filter(c=>c.type==="free").length;
+document.getElementById("t3").innerText=channels.filter(c=>c.type==="paid").length;
+document.getElementById("t4").innerText=channels.filter(c=>c.status==="online").length;
+document.getElementById("t5").innerText=favs.size;
+
+}
+
+/* INIT */
+loadAPI();
+
+</script>
+
+</body>
+</html>
