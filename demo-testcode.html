@@ -113,6 +113,7 @@ background:var(--hover);
 border:1px solid var(--accent);
 }
 
+/* BADGES */
 .badge{
 padding:5px 10px;
 border-radius:20px;
@@ -228,34 +229,23 @@ font-size:12px;
 <script>
 
 /* =====================
-STATE (MERGED ENGINE)
+STATE
 ===================== */
 let channels=[];
 let filtered=[];
-let cur=null;
 let hls=null;
 
-/* IPTV SOURCES */
-const apiSources=[
-"https://iptv-org.github.io/api/channels.json",
-"https://iptv-org.github.io/api/streams.json",
-"https://iptv-org.github.io/api/logos.json"
-];
-
-const extraFeeds=[
-"https://iptv-org.github.io/iptv/index.m3u"
-];
-
 /* =====================
-LOAD IPTV ENGINE
+LOAD IPTV ENGINE (MERGED)
 ===================== */
 async function loadAPI(){
+
 channels=[];
 
 try{
 const [chRes,stRes]=await Promise.all([
-fetch(apiSources[0]).then(r=>r.json()),
-fetch(apiSources[1]).then(r=>r.json())
+fetch("https://iptv-org.github.io/api/channels.json").then(r=>r.json()),
+fetch("https://iptv-org.github.io/api/streams.json").then(r=>r.json())
 ]);
 
 let map={};
@@ -281,7 +271,7 @@ status:"online"
 });
 
 }catch(e){
-console.log("API failed, fallback M3U...");
+console.log("API failed → fallback M3U");
 await loadM3UFallback();
 }
 
@@ -292,11 +282,11 @@ renderLiveList();
 }
 
 /* =====================
-FALLBACK M3U LOADER
+FALLBACK M3U ENGINE
 ===================== */
 async function loadM3UFallback(){
 try{
-let r=await fetch(extraFeeds[0]);
+let r=await fetch("https://iptv-org.github.io/iptv/index.m3u");
 let t=await r.text();
 
 let lines=t.split("\n");
@@ -323,7 +313,7 @@ console.log("Fallback failed",e);
 }
 
 /* =====================
-PLAY STREAM
+PLAYER
 ===================== */
 function playStream(url){
 let v=document.getElementById("player");
@@ -387,12 +377,10 @@ box.appendChild(div);
 STATS
 ===================== */
 function updateStats(){
-
 document.getElementById("t1").innerText=channels.length;
 document.getElementById("t2").innerText=channels.filter(c=>c.type==="free").length;
 document.getElementById("t3").innerText=channels.filter(c=>c.type==="paid").length;
 document.getElementById("t4").innerText=channels.filter(c=>c.status==="online").length;
-
 }
 
 /* =====================
