@@ -1,27 +1,39 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1">
 
-<title>BTECH QUIZ PRO MAX</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BTECH QUIZ SUPER ADMIN DASHBOARD</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+
+/* =========================
+ROOT
+========================= */
 
 :root{
 --bg:#0b0f1a;
 --panel:#11182a;
 --card:#1b2438;
+--hover:#2b3a5a;
 --accent:#00bfff;
---text:white;
+--text:#ffffff;
+--muted:#94a3b8;
 }
+
+/* =========================
+GLOBAL
+========================= */
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial;
+font-family:Arial,sans-serif;
 }
 
 body{
@@ -30,14 +42,28 @@ color:var(--text);
 overflow:hidden;
 }
 
+button{cursor:pointer}
+
+/* =========================
+TOPBAR
+========================= */
+
 .topbar{
 height:65px;
-background:#111;
+background:var(--panel);
 display:flex;
 justify-content:space-between;
 align-items:center;
 padding:0 20px;
 }
+
+.topbar h2{
+color:var(--accent);
+}
+
+/* =========================
+LAYOUT
+========================= */
 
 .container{
 display:flex;
@@ -47,124 +73,107 @@ height:calc(100vh - 65px);
 /* SIDEBAR */
 
 .sidebar{
-width:250px;
+width:280px;
 background:#0f1628;
-padding:20px;
+padding:15px;
+overflow-y:auto;
 }
 
-.menu{
-padding:15px;
-margin:10px 0;
+.cat{
+padding:12px;
+margin:8px 0;
 background:var(--card);
-border-radius:10px;
+border-radius:8px;
 cursor:pointer;
 }
 
-.menu:hover{
-background:#2b3a5a;
+.cat:hover{
+background:var(--hover);
 }
 
 /* MAIN */
 
 .main{
 flex:1;
-padding:20px;
-overflow:auto;
+display:flex;
+flex-direction:column;
+overflow:hidden;
 }
 
-.cards{
+/* QUIZ PLAYER */
 
-display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(250px,1fr));
-
-gap:20px;
+.player{
+height:320px;
+background:#000;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+position:relative;
 }
 
-.card{
-
-background:var(--card);
-padding:20px;
-border-radius:15px;
-cursor:pointer;
-transition:.3s;
-
+.overlay{
+position:absolute;
+inset:0;
+background:rgba(0,0,0,.85);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
 }
 
-.card:hover{
-transform:translateY(-5px);
+.overlay h1{
+font-size:40px;
 }
 
 .quiz-box{
-
-background:#000;
-height:300px;
-border-radius:20px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-margin-bottom:20px;
-
-overflow:hidden;
-
+padding:20px;
+text-align:center;
 }
 
-.quiz-box img{
-width:100%;
-height:100%;
-object-fit:cover;
+/* CHANNEL GRID */
+
+.channels{
+flex:1;
+overflow-y:auto;
+padding:12px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+gap:12px;
 }
+
+.channel{
+background:var(--card);
+padding:15px;
+border-radius:10px;
+cursor:pointer;
+}
+
+.channel:hover{
+background:var(--hover);
+}
+
+/* PROFILE */
 
 .profile{
-
 background:var(--card);
-padding:20px;
-border-radius:20px;
-
-}
-
-.avatar{
-
-width:90px;
-height:90px;
-border-radius:50%;
-background:#00bfff;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-font-size:35px;
-
-margin:auto;
-
+padding:15px;
+border-radius:10px;
+margin:10px;
 }
 
 .stats{
 display:grid;
 grid-template-columns:repeat(3,1fr);
 gap:10px;
-margin-top:20px;
+margin-top:10px;
 }
 
 .stat{
 background:#0f1628;
-padding:15px;
-border-radius:10px;
+padding:10px;
+border-radius:8px;
 text-align:center;
-}
-
-button{
-
-padding:12px;
-border:none;
-border-radius:10px;
-background:var(--accent);
-font-weight:bold;
-cursor:pointer;
-
 }
 
 </style>
@@ -172,288 +181,248 @@ cursor:pointer;
 
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
 
-<h2>
-🎯 BTECH QUIZ PRO MAX
-</h2>
+<h2>🎯 BTECH QUIZ SUPER ADMIN</h2>
 
-<button>
-Logout
-</button>
+<button onclick="nextQuiz()">NEXT QUIZ ▶</button>
 
 </div>
 
-
+<!-- CONTAINER -->
 <div class="container">
 
-<!-- Sidebar -->
-
+<!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="menu">
-🏠 Dashboard
-</div>
+<div class="cat" onclick="filterType('multiple')">📝 Multiple Quiz</div>
+<div class="cat" onclick="filterType('audio')">🎧 Audio Quiz</div>
+<div class="cat" onclick="filterType('picture')">🖼 Picture Quiz</div>
+<div class="cat" onclick="filterType('video')">🎥 Video Quiz</div>
 
-<div class="menu">
-📝 Multiple Quiz
-</div>
-
-<div class="menu">
-🎧 Audio Quiz
-</div>
-
-<div class="menu">
-🖼 Picture Quiz
-</div>
-
-<div class="menu">
-🎥 Video Quiz
-</div>
-
-<div class="menu">
-🏆 Leaderboard
-</div>
-
-<div class="menu">
-👤 Profile
-</div>
-
-<div class="menu">
-⚙ Settings
-</div>
+<div class="cat" onclick="showProfile()">👤 Profile</div>
 
 </div>
 
-
-<!-- Main -->
-
+<!-- MAIN -->
 <div class="main">
 
-<div class="quiz-box"
-id="quizArea">
+<!-- PLAYER -->
+<div class="player" id="quizPlayer">
 
-<h1>
-
-Select Quiz Channel
-
-</h1>
+<div class="overlay" id="overlay">
+<h1>🚀 QUIZ ENGINE</h1>
+<p>Select a quiz channel</p>
+</div>
 
 </div>
 
-
-<div class="cards">
-
-<div class="card"
-onclick="openQuiz('multiple')">
-
-<h2>
-📝 Multiple Choice
-</h2>
-
-<p>
-
-1000 Questions
-
-</p>
-
-</div>
-
-
-<div class="card"
-onclick="openQuiz('audio')">
-
-<h2>
-🎧 Audio Quiz
-</h2>
-
-<p>
-
-Listen & answer
-
-</p>
-
-</div>
-
-
-<div class="card"
-onclick="openQuiz('picture')">
-
-<h2>
-🖼 Picture Quiz
-</h2>
-
-<p>
-
-Guess images
-
-</p>
-
-</div>
-
-
-<div class="card"
-onclick="openQuiz('video')">
-
-<h2>
-🎥 Video Quiz
-</h2>
-
-<p>
-
-Watch & answer
-
-</p>
+<!-- CHANNELS -->
+<div class="channels" id="quizList"></div>
 
 </div>
 
 </div>
 
+<script>
 
+/* =========================
+QUIZ DATA
+========================= */
+
+let quizzes=[
+{
+id:1,
+type:"multiple",
+title:"General Knowledge Quiz",
+question:"What is capital of Nigeria?",
+options:["Lagos","Abuja","Kano","Ibadan"],
+answer:"Abuja"
+},
+{
+id:2,
+type:"audio",
+title:"Music Quiz",
+audio:"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+},
+{
+id:3,
+type:"picture",
+title:"Image Quiz",
+image:"https://picsum.photos/800/300"
+},
+{
+id:4,
+type:"multiple",
+title:"Math Quiz",
+question:"2 + 2 = ?",
+options:["1","2","4","5"],
+answer:"4"
+}
+];
+
+let currentIndex=0;
+let filtered=[...quizzes];
+
+/* =========================
+RENDER QUIZ LIST
+========================= */
+
+function render(){
+
+let box=document.getElementById("quizList");
+
+box.innerHTML="";
+
+filtered.forEach((q,i)=>{
+
+let div=document.createElement("div");
+
+div.className="channel";
+
+div.innerHTML=`
+<h3>${q.title}</h3>
+<p>${q.type.toUpperCase()} QUIZ</p>
+`;
+
+div.onclick=()=>openQuiz(i);
+
+box.appendChild(div);
+
+});
+
+}
+
+/* =========================
+OPEN QUIZ
+========================= */
+
+function openQuiz(i){
+
+let q=filtered[i];
+
+let box=document.getElementById("quizPlayer");
+
+document.getElementById("overlay").style.display="none";
+
+if(q.type==="multiple"){
+
+box.innerHTML=`
+<div class="quiz-box">
+<h2>${q.question}</h2>
 <br>
+${q.options.map(o=>
+`<button onclick="check('${o}','${q.answer}')">${o}</button>`
+).join("<br><br>")}
+</div>
+`;
 
+}
 
-<!-- USER PROFILE -->
+else if(q.type==="audio"){
 
+box.innerHTML=`
+<h2>${q.title}</h2>
+<audio controls autoplay>
+<source src="${q.audio}">
+</audio>
+`;
+
+}
+
+else if(q.type==="picture"){
+
+box.innerHTML=`
+<h2>${q.title}</h2>
+<img src="${q.image}" style="width:100%;height:100%;object-fit:cover">
+`;
+
+}
+
+currentIndex=i;
+
+}
+
+/* =========================
+ANSWER CHECK
+========================= */
+
+function check(a,b){
+
+alert(a===b ? "✅ Correct!" : "❌ Wrong!");
+
+}
+
+/* =========================
+FILTER TYPE
+========================= */
+
+function filterType(type){
+
+filtered=quizzes.filter(q=>q.type===type);
+
+render();
+
+}
+
+/* =========================
+NEXT QUIZ
+========================= */
+
+function nextQuiz(){
+
+currentIndex++;
+
+if(currentIndex>=filtered.length) currentIndex=0;
+
+openQuiz(currentIndex);
+
+}
+
+/* =========================
+PROFILE
+========================= */
+
+function showProfile(){
+
+let box=document.getElementById("quizPlayer");
+
+box.innerHTML=`
 <div class="profile">
 
-<div class="avatar">
+<h2>👤 User Profile</h2>
 
-👤
-
-</div>
-
-<h2 align="center">
-
-User Profile
-
-</h2>
-
-<p align="center">
-
-Name:
-John Doe
-
-</p>
-
-<p align="center">
-
-Email:
-john@gmail.com
-
-</p>
-
+<p>Name: John Doe</p>
+<p>Email: john@gmail.com</p>
 
 <div class="stats">
 
 <div class="stat">
-
-<h3>
-120
-</h3>
-
-<p>
-Score
-</p>
-
+<h3>120</h3>
+<p>Score</p>
 </div>
-
 
 <div class="stat">
-
-<h3>
-15
-</h3>
-
-<p>
-Wins
-</p>
-
+<h3>15</h3>
+<p>Wins</p>
 </div>
-
 
 <div class="stat">
-
-<h3>
-#4
-</h3>
-
-<p>
-Rank
-</p>
-
-</div>
-
-</div>
-
-<br>
-
-<button>
-
-Claim Prize
-
-</button>
-
+<h3>#4</h3>
+<p>Rank</p>
 </div>
 
 </div>
 
 </div>
-
-
-<script>
-
-function openQuiz(type){
-
-const box=
-document.getElementById(
-"quizArea"
-);
-
-if(type==="picture"){
-
-box.innerHTML=`
-
-<img src=
-"https://picsum.photos/800/300">
-
 `;
 
 }
 
+/* INIT */
 
-else if(type==="audio"){
-
-box.innerHTML=`
-
-<audio controls>
-
-<source src=
-"https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
-
-</audio>
-
-`;
-
-}
-
-
-else{
-
-box.innerHTML=`
-
-<h1>
-
-${type.toUpperCase()}
-QUIZ
-
-</h1>
-
-`;
-
-}
-
-}
+render();
 
 </script>
 
