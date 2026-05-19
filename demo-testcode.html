@@ -107,7 +107,7 @@ margin-right:4px;
 .paid{background:var(--paid)}
 .locked{background:var(--locked);color:#000}
 
-/* RIGHT PANEL */
+/* RIGHT */
 .right{
 width:260px;
 background:var(--panel);
@@ -136,7 +136,7 @@ border-radius:8px;
 </div>
 </div>
 
-<!-- TOP -->
+<!-- TOPBAR -->
 <div class="topbar">
 <h3>🚀 ULTRA MAX 2026 GOD MODE ++</h3>
 <div id="status">LOCKED</div>
@@ -158,13 +158,10 @@ border-radius:8px;
 
 <!-- MAIN -->
 <div class="main">
-
 <div class="player">
 <video id="video" controls></video>
 </div>
-
 <div class="list" id="list"></div>
-
 </div>
 
 <!-- RIGHT -->
@@ -179,53 +176,68 @@ border-radius:8px;
 <button onclick="lockAll()">🔒 Lock ALL</button>
 <button onclick="unlockAll()">🔓 Unlock ALL</button>
 <button onclick="deleteLocked()">❌ Delete Locked</button>
-
 </div>
 
 </div>
 
 <script>
-
 /* =====================
-LOGIN ENGINE
+LOGIN
 ===================== */
-
 function login(){
 const p=document.getElementById("pass").value;
-
 if(p==="1234"){
 document.getElementById("login").style.display="none";
 document.getElementById("status").innerText="GOD MODE ACTIVE";
-}else{
-alert("Wrong password");
-}
+}else alert("Wrong password");
 }
 
 /* =====================
-CORE STATE (CLEAN)
+IPTV ENGINE MERGED
 ===================== */
 
-let channels=[];
-let filtered=[];
+let channels=[],filtered=[],cur=null;
 
-const streams=[
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-"https://test-streams.mux.dev/test_001/stream.m3u8"
-];
+function flag(cc){
+if(!cc||cc.length!==2)return'🌐';
+var a=0x1F1E6;
+return String.fromCodePoint(a+cc.charCodeAt(0)-65,a+cc.charCodeAt(1)-65);
+}
 
-/* =====================
-GENERATE ENGINE
-===================== */
+/* LOAD IPTV */
+async function loadAPI(){
+try{
+const [ch,st,lg]=await Promise.all([
+fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
+fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
+fetch('https://iptv-org.github.io/api/logos.json').then(r=>r.json())
+]);
 
-function generate(){
-for(let i=0;i<600;i++){
+let map={},logos={};
+
+ch.forEach(c=>map[c.id]=c);
+lg.forEach(l=>logos[l.channel]=l.url);
+
+let seen={};
+st.forEach(s=>{
+if(!s.url||seen[s.url])return;
+seen[s.url]=1;
 channels.push({
-id:i,
-name:"ULTRA CHANNEL "+i,
-url:streams[i%streams.length],
-type:i%3===0?"paid":"free",
-status:i%8===0?"locked":"free"
+id:channels.length,
+name:s.title||"Channel",
+url:s.url,
+type:"free",
+status:"free",
+cc:map[s.channel]?.country||"",
+logo:logos[s.channel]||""
 });
+});
+
+filtered=[...channels];
+render();
+document.getElementById("status").innerText="LIVE: "+channels.length;
+}catch(e){
+console.log(e);
 }
 }
 
@@ -234,13 +246,10 @@ RENDER
 ===================== */
 
 function render(){
-filtered=[...channels];
-
 const box=document.getElementById("list");
 box.innerHTML="";
 
 filtered.forEach((c,i)=>{
-
 const div=document.createElement("div");
 div.className="card";
 
@@ -251,7 +260,6 @@ div.innerHTML=`
 `;
 
 div.onclick=()=>play(i);
-
 box.appendChild(div);
 });
 
@@ -270,24 +278,20 @@ if(Hls.isSupported()){
 const h=new Hls();
 h.loadSource(c.url);
 h.attachMedia(v);
-}else{
-v.src=c.url;
-}
+}else v.src=c.url;
+cur=c;
 }
 
 /* =====================
-FILTERS
+FILTER
 ===================== */
 
-function filterAll(){render();}
+function filterAll(){filtered=[...channels];render();}
 function filterLocked(){filtered=channels.filter(c=>c.status==="locked");render();}
 function filterFree(){filtered=channels.filter(c=>c.type==="free");render();}
 function filterPaid(){filtered=channels.filter(c=>c.type==="paid");render();}
 
-/* =====================
-SEARCH
-===================== */
-
+/* SEARCH */
 function search(v){
 filtered=channels.filter(c=>
 c.name.toLowerCase().includes(v.toLowerCase())
@@ -295,29 +299,15 @@ c.name.toLowerCase().includes(v.toLowerCase())
 render();
 }
 
-/* =====================
-ADMIN ACTIONS
-===================== */
-
-function lockAll(){
-channels.forEach(c=>c.status="locked");
-render();
-}
-
-function unlockAll(){
-channels.forEach(c=>c.status="free");
-render();
-}
-
+/* ADMIN */
+function lockAll(){channels.forEach(c=>c.status="locked");render();}
+function unlockAll(){channels.forEach(c=>c.status="free");render();}
 function deleteLocked(){
 channels=channels.filter(c=>c.status!=="locked");
 render();
 }
 
-/* =====================
-STATS
-===================== */
-
+/* STATS */
 function stats(){
 document.getElementById("t").innerText=channels.length;
 document.getElementById("f").innerText=channels.filter(c=>c.type==="free").length;
@@ -326,9 +316,7 @@ document.getElementById("l").innerText=channels.filter(c=>c.status==="locked").l
 }
 
 /* BOOT */
-generate();
-render();
-
+loadAPI();
 </script>
 
 </body>
