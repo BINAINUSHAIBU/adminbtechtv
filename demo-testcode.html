@@ -2,298 +2,418 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>PRO MULTIPLAYER QUIZ SYSTEM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTECH-TV ALL USERS SUPER ADMIN</title>
 
 <style>
+
+/* =========================
+ROOT
+========================= */
 :root{
 --bg:#0b0f1a;
 --panel:#11182a;
 --card:#1b2438;
+--hover:#2b3a5a;
 --accent:#00bfff;
---text:#fff;
---good:#16a34a;
---bad:#dc2626;
+--text:#ffffff;
+--muted:#94a3b8;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:var(--bg);color:var(--text)}
+/* =========================
+GLOBAL
+========================= */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
 
-button{cursor:pointer;border:none;padding:10px;border-radius:8px;background:var(--accent);font-weight:bold}
-input{padding:10px;width:100%;margin:5px 0;border-radius:8px;border:none;background:#0f1628;color:white}
+body{
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
 
-.container{display:flex;height:100vh}
+/* =========================
+TOPBAR
+========================= */
+.topbar{
+height:65px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 20px;
+border-bottom:1px solid rgba(255,255,255,0.05);
+}
 
-/* SIDEBAR */
+.topbar h2{
+color:var(--accent);
+}
+
+.topbar input{
+padding:10px;
+border:none;
+border-radius:8px;
+background:#0f1628;
+color:white;
+width:300px;
+}
+
+/* =========================
+LAYOUT
+========================= */
+.container{
+display:flex;
+height:calc(100vh - 65px);
+}
+
+/* =========================
+SIDEBAR
+========================= */
 .sidebar{
-width:220px;background:#0f1628;padding:10px
+width:260px;
+background:#0f1628;
+padding:15px;
+overflow-y:auto;
+border-right:1px solid rgba(255,255,255,0.05);
 }
-.menu{padding:10px;margin:5px 0;background:var(--card);border-radius:8px;cursor:pointer}
 
-/* MAIN */
-.main{flex:1;padding:10px;overflow:auto}
+.cat{
+padding:12px;
+margin:8px 0;
+background:var(--card);
+border-radius:8px;
+cursor:pointer;
+transition:0.3s;
+}
 
-/* TOP */
-.top{display:flex;justify-content:space-between;align-items:center;background:var(--panel);padding:10px}
+.cat:hover{
+background:var(--hover);
+transform:translateX(4px);
+}
 
-/* CARD */
-.card{background:var(--card);padding:10px;margin:10px;border-radius:10px}
+/* =========================
+MAIN
+========================= */
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+}
 
-/* QUIZ */
-.option{padding:10px;background:#0f1628;margin:5px;border-radius:8px;cursor:pointer}
-.option:hover{background:#1f2a44}
+/* =========================
+STATS
+========================= */
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+padding:15px;
+}
 
-/* PROFILE */
-.profile{background:var(--card);padding:15px;border-radius:10px}
+.box{
+background:var(--card);
+padding:15px;
+border-radius:10px;
+text-align:center;
+}
 
-/* TABLE */
-table{width:100%;margin-top:10px;border-collapse:collapse}
-td,th{padding:8px;border-bottom:1px solid #2a3550}
+.box h3{
+color:var(--muted);
+font-size:12px;
+margin-bottom:8px;
+}
+
+.box p{
+font-size:20px;
+color:var(--accent);
+font-weight:bold;
+}
+
+/* =========================
+USER GRID
+========================= */
+.users{
+flex:1;
+overflow-y:auto;
+padding:15px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+gap:12px;
+}
+
+.user{
+background:var(--card);
+padding:15px;
+border-radius:12px;
+transition:0.3s;
+border:1px solid transparent;
+}
+
+.user:hover{
+transform:translateY(-3px);
+border-color:var(--accent);
+background:var(--hover);
+}
+
+.user h4{
+margin-bottom:5px;
+}
+
+.user small{
+color:var(--muted);
+display:block;
+margin-bottom:10px;
+}
+
+.badge{
+padding:5px 10px;
+border-radius:20px;
+font-size:11px;
+font-weight:bold;
+}
+
+.active{background:#16a34a;}
+.banned{background:#dc2626;}
+.premium{background:#f59e0b;}
+
+/* =========================
+BUTTONS
+========================= */
+button{
+padding:10px 12px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+background:var(--accent);
+font-weight:bold;
+}
+
+button:hover{opacity:0.8;}
+
+.danger{background:#dc2626;}
+.warning{background:#f59e0b;color:black;}
 
 </style>
 </head>
 
 <body>
 
-<div class="top">
-<h2>🎯 PRO MULTIPLAYER QUIZ</h2>
-<div id="userBox"></div>
+<!-- TOPBAR -->
+<div class="topbar">
+<h2>👥 BTECH-TV ALL USERS ADMIN</h2>
+
+<input placeholder="Search users..." oninput="searchUsers(this.value)">
 </div>
 
 <div class="container">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<div class="menu" onclick="showQuiz()">🧠 Quiz</div>
-<div class="menu" onclick="showProfile()">👤 Profile</div>
-<div class="menu" onclick="showLeaderboard()">🏆 Leaderboard</div>
-<div class="menu" onclick="showAdmin()">⚙ Admin</div>
-<div class="menu" onclick="resetAll()">🔄 Reset System</div>
+
+<div class="cat" onclick="filterUsers('all')">📁 All Users</div>
+<div class="cat" onclick="filterUsers('active')">🟢 Active</div>
+<div class="cat" onclick="filterUsers('banned')">🔴 Banned</div>
+<div class="cat" onclick="filterUsers('premium')">⭐ Premium</div>
+
+<hr style="margin:15px 0;opacity:0.2;">
+
+<button onclick="generateUsers()">🚀 Generate Users</button>
+<br><br>
+<button class="warning" onclick="clearBanned()">🧹 Clear Banned</button>
+
 </div>
 
 <!-- MAIN -->
-<div class="main" id="main"></div>
+<div class="main">
 
+<!-- STATS -->
+<div class="stats">
+<div class="box">
+<h3>Total Users</h3>
+<p id="total">0</p>
+</div>
+
+<div class="box">
+<h3>Active</h3>
+<p id="active">0</p>
+</div>
+
+<div class="box">
+<h3>Banned</h3>
+<p id="banned">0</p>
+</div>
+
+<div class="box">
+<h3>Premium</h3>
+<p id="premium">0</p>
+</div>
+</div>
+
+<!-- USERS -->
+<div class="users" id="userList"></div>
+
+</div>
 </div>
 
 <script>
 
-/* ======================
+/* =========================
 DATA
-====================== */
+========================= */
+let users=[];
+let filtered=[];
 
-let user=null;
-let index=0;
-let score=0;
-let startTime=0;
-let timer;
+/* =========================
+GENERATE USERS
+========================= */
+function generateUsers(){
 
-let users=JSON.parse(localStorage.getItem("users")||"{}");
-let board=JSON.parse(localStorage.getItem("board")||"[]");
+users=[];
 
-/* ======================
-1000 QUESTION BANK
-====================== */
+for(let i=1;i<=500;i++){
 
-let questions=[];
+let status=
+i%10===0?"banned":"active";
 
-for(let i=1;i<=1000;i++){
-questions.push({
-q:`Question ${i}: What is ${i} + 1 ?`,
-options:[`${i}`,`${i+1}`,`${i+2}`,`${i+3}`],
-answer:`${i+1}`
-});
-}
+users.push({
 
-/* ======================
-LOGIN (AUTO SIMPLE)
-====================== */
+id:i,
+name:"User_"+i,
+email:"user"+i+"@mail.com",
+status:status,
+premium:i%7===0,
+country:"NG"
 
-function login(name){
-user=name;
-
-if(!users[name]){
-users[name]={
-name,
-score:0,
-time:0
-};
-}
-
-document.getElementById("userBox").innerHTML=
-`👤 ${name}`;
-
-showQuiz();
-}
-
-/* ======================
-QUIZ
-====================== */
-
-function showQuiz(){
-index=0;
-score=0;
-startTime=Date.now();
-renderQ();
-}
-
-function renderQ(){
-
-let q=questions[index];
-let timeLeft=15;
-
-clearInterval(timer);
-
-timer=setInterval(()=>{
-timeLeft--;
-if(timeLeft<=0) next();
-document.getElementById("t").innerText=timeLeft;
-},1000);
-
-document.getElementById("main").innerHTML=`
-<div class="card">
-
-<h3>⏱ Time: <span id="t">15</span>s</h3>
-<h2>${q.q}</h2>
-
-${q.options.map(o=>
-`<div class="option" onclick="answer('${o}')">${o}</div>`
-).join("")}
-
-</div>
-`;
-}
-
-function answer(val){
-if(val===questions[index].answer){
-score++;
-}
-next();
-}
-
-function next(){
-index++;
-
-if(index>=questions.length){
-finish();
-return;
-}
-
-renderQ();
-}
-
-function finish(){
-
-let totalTime=Math.floor((Date.now()-startTime)/1000);
-
-users[user].score=score;
-users[user].time=totalTime;
-
-board.push({
-name:user,
-score,
-time:totalTime
 });
 
-localStorage.setItem("users",JSON.stringify(users));
-localStorage.setItem("board",JSON.stringify(board));
+}
 
-document.getElementById("main").innerHTML=`
-<div class="card">
-<h2>🏁 Finished</h2>
-<h3>Score: ${score}</h3>
-<h3>Time: ${totalTime}s</h3>
-</div>
+filtered=[...users];
+render();
+updateStats();
+
+}
+
+/* =========================
+RENDER USERS
+========================= */
+function render(){
+
+const box=document.getElementById("userList");
+box.innerHTML="";
+
+filtered.forEach(u=>{
+
+const div=document.createElement("div");
+div.className="user";
+
+div.innerHTML=`
+<h4>👤 ${u.name}</h4>
+<small>${u.email}</small>
+
+<span class="badge ${u.status}">
+${u.status.toUpperCase()}
+</span>
+
+${u.premium?'<span class="badge premium">PREMIUM</span>':''}
+
+<br><br>
+
+<button onclick="toggleStatus(${u.id})">Toggle</button>
+<button class="danger" onclick="deleteUser(${u.id})">Delete</button>
 `;
+
+box.appendChild(div);
+
+});
+
 }
 
-/* ======================
-LEADERBOARD
-====================== */
+/* =========================
+STATS
+========================= */
+function updateStats(){
 
-function showLeaderboard(){
+document.getElementById("total").innerText=users.length;
+document.getElementById("active").innerText=users.filter(u=>u.status==="active").length;
+document.getElementById("banned").innerText=users.filter(u=>u.status==="banned").length;
+document.getElementById("premium").innerText=users.filter(u=>u.premium).length;
 
-board.sort((a,b)=>b.score-a.score || a.time-b.time);
-
-document.getElementById("main").innerHTML=`
-<div class="card">
-<h2>🏆 Leaderboard</h2>
-
-<table>
-<tr><th>User</th><th>Score</th><th>Time</th></tr>
-${board.map(b=>`
-<tr>
-<td>${b.name}</td>
-<td>${b.score}</td>
-<td>${b.time}s</td>
-</tr>
-`).join("")}
-</table>
-
-</div>
-`;
 }
 
-/* ======================
-PROFILE
-====================== */
+/* =========================
+SEARCH
+========================= */
+function searchUsers(q){
 
-function showProfile(){
+q=q.toLowerCase();
 
-let u=users[user];
+filtered=users.filter(u=>
+u.name.toLowerCase().includes(q)||
+u.email.toLowerCase().includes(q)
+);
 
-document.getElementById("main").innerHTML=`
-<div class="profile">
+render();
 
-<h2>👤 Profile</h2>
-<p>Name: ${u.name}</p>
-<p>Score: ${u.score}</p>
-<p>Best Time: ${u.time}s</p>
-
-</div>
-`;
 }
 
-/* ======================
-ADMIN
-====================== */
+/* =========================
+FILTER
+========================= */
+function filterUsers(type){
 
-function showAdmin(){
+if(type==="all") filtered=[...users];
+else if(type==="active") filtered=users.filter(u=>u.status==="active");
+else if(type==="banned") filtered=users.filter(u=>u.status==="banned");
+else if(type==="premium") filtered=users.filter(u=>u.premium);
 
-document.getElementById("main").innerHTML=`
-<div class="card">
+render();
 
-<h2>⚙ SUPER ADMIN</h2>
-
-<input id="uname" placeholder="Login User Name">
-<button onclick="login(uname.value)">Login User</button>
-
-<hr>
-
-<h3>Users</h3>
-
-${Object.keys(users).map(u=>`
-<p>👤 ${u} - Score: ${users[u].score}</p>
-`).join("")}
-
-</div>
-`;
 }
 
-/* ======================
-RESET
-====================== */
+/* =========================
+ACTIONS
+========================= */
+function toggleStatus(id){
 
-function resetAll(){
-localStorage.clear();
-location.reload();
+users=users.map(u=>{
+if(u.id===id){
+u.status=(u.status==="active")?"banned":"active";
+}
+return u;
+});
+
+render();
+updateStats();
+
 }
 
-/* ======================
-AUTO LOGIN DEMO
-====================== */
+function deleteUser(id){
 
-login("Player1");
+users=users.filter(u=>u.id!==id);
+filtered=filtered.filter(u=>u.id!==id);
+
+render();
+updateStats();
+
+}
+
+function clearBanned(){
+
+users=users.filter(u=>u.status!=="banned");
+filtered=[...users];
+
+render();
+updateStats();
+
+}
+
+/* INIT */
+generateUsers();
 
 </script>
 
