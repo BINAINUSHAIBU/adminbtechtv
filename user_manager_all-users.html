@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV SUPER ADMIN PRO MAX</title>
+
+<title>🚀 BTECH-TV SUPER ADMIN PRO MAX</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -104,15 +106,15 @@ background:var(--card);
 padding:15px;
 border-radius:12px;
 transition:0.3s;
-border:1px solid transparent;
 }
 
 .card:hover{
 transform:translateY(-3px);
-border-color:var(--accent);
 background:var(--hover);
+border:1px solid var(--accent);
 }
 
+/* BADGES */
 .badge{
 padding:5px 10px;
 border-radius:20px;
@@ -122,7 +124,8 @@ margin-right:5px;
 
 .free{background:#16a34a}
 .paid{background:#dc2626}
-.locked{background:#f59e0b;color:black}
+.online{background:#16a34a}
+.offline{background:#dc2626}
 
 .active{background:#16a34a}
 .banned{background:#dc2626}
@@ -139,11 +142,9 @@ font-weight:bold;
 margin-top:8px;
 }
 
-button:hover{opacity:0.8}
+button:hover{opacity:0.85}
 
-/* ======================
-LIVE IPTV MONITOR
-====================== */
+/* LIVE MONITOR */
 .monitor{
 position:fixed;
 right:0;
@@ -185,6 +186,7 @@ font-size:12px;
 }
 
 .liveItem:hover{background:var(--hover)}
+
 </style>
 </head>
 
@@ -207,7 +209,6 @@ font-size:12px;
 
 <button onclick="generateUsers()">Generate Users</button>
 <button onclick="generateChannels()">Generate Channels</button>
-<button onclick="loadAPI()">🚀 Load IPTV API</button>
 
 </div>
 
@@ -227,7 +228,7 @@ font-size:12px;
 
 </div>
 
-<!-- ================= LIVE IPTV MONITOR ================= -->
+<!-- LIVE MONITOR -->
 <div class="monitor">
 <h3>📺 LIVE IPTV MONITOR</h3>
 <video id="player" controls></video>
@@ -236,9 +237,7 @@ font-size:12px;
 
 <script>
 
-/* =====================
-STATE
-===================== */
+/* STATE */
 let users=[];
 let channels=[];
 let view="users";
@@ -246,13 +245,8 @@ let view="users";
 let usersFiltered=[];
 let channelsFiltered=[];
 
-let currentStream=null;
-
-/* =====================
-PLAYER
-===================== */
-function playStream(url,name){
-
+/* PLAYER */
+function playStream(url){
 const video=document.getElementById("player");
 
 if(Hls.isSupported()){
@@ -266,9 +260,7 @@ video.src=url;
 video.play();
 }
 
-/* =====================
-TAB SWITCH
-===================== */
+/* TAB */
 function switchTab(tab,el){
 
 view=tab;
@@ -281,9 +273,7 @@ el.classList.add("tab-active");
 render();
 }
 
-/* =====================
-USERS
-===================== */
+/* USERS */
 function generateUsers(){
 
 users=[];
@@ -302,9 +292,7 @@ usersFiltered=[...users];
 render();
 }
 
-/* =====================
-CHANNELS
-===================== */
+/* CHANNELS */
 function generateChannels(){
 
 const cats=["Sports","Movies","News","Kids","Music","Africa"];
@@ -318,7 +306,7 @@ name:"BTECH Channel "+i,
 category:cats[i%cats.length],
 url:"https://test-streams.mux.dev/test_001/stream.m3u8",
 type:i%3===0?"paid":"free",
-status:i%10===0?"locked":"unlocked",
+status:i%10===0?"locked":"active",
 viewers:Math.floor(Math.random()*100000)
 });
 }
@@ -328,34 +316,27 @@ render();
 renderLiveList();
 }
 
-/* =====================
-LIVE LIST
-===================== */
+/* LIVE LIST */
 function renderLiveList(){
 
-let list=document.getElementById("liveList");
-list.innerHTML="";
+let box=document.getElementById("liveList");
+box.innerHTML="";
 
 channels.forEach(c=>{
-
 let div=document.createElement("div");
 div.className="liveItem";
 div.innerHTML=`
 📺 ${c.name}<br>
-<button onclick="playStream('${c.url}','${c.name}')">Play</button>
+<button onclick="playStream('${c.url}')">Play</button>
 `;
-
-list.appendChild(div);
-
+box.appendChild(div);
 });
 }
 
-/* =====================
-RENDER
-===================== */
+/* RENDER */
 function render(){
 
-const grid=document.getElementById("grid");
+let grid=document.getElementById("grid");
 grid.innerHTML="";
 
 if(view==="users"){
@@ -368,11 +349,8 @@ div.className="card";
 div.innerHTML=`
 <h3>👤 ${u.name}</h3>
 <p>${u.email}</p>
-
 <span class="badge ${u.status}">${u.status}</span>
 ${u.premium?'<span class="badge premium">premium</span>':''}
-<br>
-<button onclick="toggleUser(${u.id})">Toggle</button>
 `;
 
 grid.appendChild(div);
@@ -391,11 +369,11 @@ div.innerHTML=`
 <p>${c.category}</p>
 
 <span class="badge ${c.type}">${c.type}</span>
-<span class="badge ${c.status}">${c.status}</span>
+<span class="badge ${c.status==="locked"?"banned":"active"}">${c.status}</span>
 
 <p>👥 ${c.viewers}</p>
 
-<button onclick="playStream('${c.url}','${c.name}')">▶ Play</button>
+<button onclick="playStream('${c.url}')">▶ Play</button>
 `;
 
 grid.appendChild(div);
@@ -407,9 +385,7 @@ grid.appendChild(div);
 updateStats();
 }
 
-/* =====================
-STATS
-===================== */
+/* STATS */
 function updateStats(){
 
 document.getElementById("t1").innerText=users.length;
@@ -424,25 +400,10 @@ document.getElementById("t4").innerText=
 view==="users"
 ? users.filter(u=>u.status==="banned").length
 : channels.filter(c=>c.status==="locked").length;
+
 }
 
-/* =====================
-ACTIONS
-===================== */
-function toggleUser(id){
-users=users.map(u=>{
-if(u.id===id){
-u.status=u.status==="active"?"banned":"active";
-}
-return u;
-});
-usersFiltered=[...users];
-render();
-}
-
-/* =====================
-SEARCH
-===================== */
+/* SEARCH */
 function searchAll(q){
 q=q.toLowerCase();
 
