@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH QUIZ SUPER ADMIN DASHBOARD</title>
+
+<title>BTECH QUIZ PRO MAX SUPER ADMIN</title>
 
 <style>
 
-/* =========================
+/* =========================================
 ROOT
-========================= */
+========================================= */
+
 :root{
 --bg:#0b0f1a;
 --panel:#11182a;
@@ -18,16 +22,16 @@ ROOT
 --accent:#00bfff;
 --text:#ffffff;
 --muted:#94a3b8;
+--success:#16a34a;
+--danger:#dc2626;
+--warning:#f59e0b;
 }
 
-/* =========================
-GLOBAL
-========================= */
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial;
+font-family:Arial,sans-serif;
 }
 
 body{
@@ -36,145 +40,150 @@ color:var(--text);
 overflow:hidden;
 }
 
-button{cursor:pointer}
+button{cursor:pointer;border:none}
 
-/* =========================
+/* =========================================
 TOPBAR
-========================= */
+========================================= */
+
 .topbar{
-height:60px;
+height:70px;
 background:var(--panel);
 display:flex;
 justify-content:space-between;
 align-items:center;
 padding:0 20px;
-border-bottom:1px solid rgba(255,255,255,0.05);
+border-bottom:1px solid rgba(255,255,255,.06);
 }
 
-.topbar h2{
+.logo{
+font-size:22px;
+font-weight:bold;
 color:var(--accent);
 }
 
-/* =========================
-LAYOUT
-========================= */
 .container{
 display:flex;
-height:calc(100vh - 60px);
+height:calc(100vh - 70px);
 }
 
-/* =========================
-SIDEBAR
-========================= */
+/* SIDEBAR */
+
 .sidebar{
-width:260px;
+width:270px;
 background:#0f1628;
 padding:15px;
-overflow-y:auto;
+overflow:auto;
+border-right:1px solid rgba(255,255,255,.05);
 }
 
-.menu{
+.cat{
 padding:12px;
-margin:8px 0;
 background:var(--card);
-border-radius:8px;
+margin-bottom:10px;
+border-radius:10px;
 cursor:pointer;
 }
 
-.menu:hover{
+.cat:hover{
 background:var(--hover);
 }
 
-/* =========================
-MAIN
-========================= */
+/* MAIN */
+
 .main{
 flex:1;
 padding:15px;
 overflow:auto;
 }
 
-/* =========================
-RIGHT PANEL (ADMIN)
-========================= */
+/* QUIZ CHANNELS */
+
+.channels{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+gap:10px;
+}
+
+.channel{
+background:var(--card);
+padding:15px;
+border-radius:12px;
+cursor:pointer;
+}
+
+.channel:hover{
+background:var(--hover);
+}
+
+/* ADMIN PANEL */
+
 .admin{
-width:320px;
+width:340px;
 background:var(--panel);
 padding:15px;
-overflow-y:auto;
-border-left:1px solid rgba(255,255,255,0.05);
+overflow:auto;
+border-left:1px solid rgba(255,255,255,.05);
 }
 
 .box{
 background:var(--card);
 padding:15px;
-border-radius:10px;
-margin-bottom:10px;
+border-radius:12px;
+margin-bottom:15px;
 }
 
-/* =========================
-QUIZ BOX
-========================= */
-.quiz{
-background:var(--card);
-padding:20px;
-border-radius:10px;
-margin-bottom:10px;
-}
-
-.option{
-display:block;
-padding:10px;
-margin:8px 0;
-background:#0f1628;
-border-radius:8px;
-cursor:pointer;
-}
-
-.option:hover{
-background:var(--hover);
-}
-
-/* =========================
-PROFILE
-========================= */
-.profile{
-background:var(--card);
-padding:15px;
-border-radius:10px;
-}
-
-/* =========================
-BUTTON
-========================= */
-.btn{
-padding:10px;
-background:var(--accent);
-border:none;
-border-radius:8px;
-font-weight:bold;
-width:100%;
-}
-
-input{
+input,select{
 width:100%;
 padding:10px;
-margin:5px 0;
-border-radius:8px;
+margin-top:8px;
 border:none;
+border-radius:8px;
 background:#0f1628;
 color:white;
 }
 
+.btn{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:8px;
+font-weight:bold;
+background:var(--accent);
+color:black;
+}
+
+.success{background:var(--success);color:white}
+.danger{background:var(--danger);color:white}
+.warning{background:var(--warning);color:black}
+
+.quizBox{
+background:var(--card);
+padding:15px;
+border-radius:12px;
+margin-bottom:10px;
+}
+
+.option{
+padding:10px;
+background:#0f1628;
+margin-top:8px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.option:hover{background:var(--hover)}
+
 </style>
+
 </head>
 
 <body>
 
 <!-- TOPBAR -->
 <div class="topbar">
-<h2>🎯 BTECH QUIZ SUPER ADMIN</h2>
-<div id="userBox">👤 Guest</div>
+<div class="logo">🎯 BTECH QUIZ SUPER ADMIN</div>
+<div id="userBox">ADMIN PANEL</div>
 </div>
 
 <div class="container">
@@ -182,28 +191,22 @@ color:white;
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="menu" onclick="showQuiz()">🧠 Quiz Engine</div>
-<div class="menu" onclick="showLeaderboard()">🏆 Leaderboard</div>
-<div class="menu" onclick="showProfile()">👤 Profile</div>
-<div class="menu" onclick="showAdmin()">⚙ Admin Panel</div>
+<div class="cat" onclick="loadChannel('multiple')">📝 Multiple Quiz</div>
+<div class="cat" onclick="loadChannel('audio')">🎧 Audio Quiz</div>
+<div class="cat" onclick="loadChannel('picture')">🖼 Picture Quiz</div>
+<div class="cat" onclick="loadChannel('millionaire')">🏆 Who Wants Millionaire</div>
+
+<div class="cat" onclick="showWinners()">🏆 Winners</div>
+<div class="cat" onclick="showPayments()">💳 Payments</div>
+<div class="cat" onclick="showLeaderboard()">📊 Leaderboard</div>
 
 </div>
 
 <!-- MAIN -->
-<div class="main" id="main">
-
-<h2>🚀 Welcome to Quiz Dashboard</h2>
-
-</div>
+<div class="main" id="main"></div>
 
 <!-- ADMIN PANEL -->
 <div class="admin">
-
-<div class="box">
-<h3>📊 Stats</h3>
-<p>Total Questions: <span id="totalQ">3</span></p>
-<p>Players: 1</p>
-</div>
 
 <div class="box">
 <h3>➕ Add Question</h3>
@@ -215,7 +218,27 @@ color:white;
 <input id="o4" placeholder="Option 4">
 <input id="ans" placeholder="Correct Answer">
 
-<button class="btn" onclick="addQ()">Add Question</button>
+<button class="btn" onclick="addQuestion()">Add Question</button>
+</div>
+
+<div class="box">
+<h3>⚙ Quiz Settings</h3>
+
+<select>
+<option>Multiple Choice</option>
+<option>Audio Quiz</option>
+<option>Picture Quiz</option>
+<option>Millionaire Mode</option>
+</select>
+
+<button class="btn warning">Save Settings</button>
+</div>
+
+<div class="box">
+<h3>💰 Jackpot Control</h3>
+<p>Total Jackpot: ₦1,000,000</p>
+<button class="btn success">Approve Winner</button>
+<button class="btn danger">Reset Jackpot</button>
 </div>
 
 </div>
@@ -224,156 +247,140 @@ color:white;
 
 <script>
 
-/* =========================
+/* =========================================
 DATA
-========================= */
-
-let user={name:"Admin",role:"admin"};
+========================================= */
 
 let questions=[
 {
+type:"multiple",
 q:"Capital of Nigeria?",
 options:["Lagos","Abuja","Kano","Ibadan"],
 answer:"Abuja"
-},
-{
-q:"2 + 2 = ?",
-options:["1","2","4","5"],
-answer:"4"
-},
-{
-q:"Capital of USA?",
-options:["New York","Washington DC","Texas","LA"],
-answer:"Washington DC"
 }
 ];
 
-let index=0;
-let score=0;
+let submissions=[];
+let winners=[];
+let jackpot=1000000;
 
-/* =========================
-INIT USER
-========================= */
+/* =========================================
+LOAD CHANNEL
+========================================= */
 
-document.getElementById("userBox").innerText=
-"👤 "+user.name+" ("+user.role+")";
+function loadChannel(type){
 
-/* =========================
-QUIZ ENGINE
-========================= */
+let box=document.getElementById("main");
 
-function showQuiz(){
+box.innerHTML="";
 
-index=0;
-score=0;
-renderQuiz();
+let filtered=questions.filter(q=>q.type===type || type==="multiple");
 
-}
+filtered.forEach((q,i)=>{
 
-function renderQuiz(){
+box.innerHTML+=`
+<div class="quizBox">
 
-let q=questions[index];
+<h3>${q.q}</h3>
 
-document.getElementById("main").innerHTML=`
-
-<div class="quiz">
-
-<h3>🧠 Question ${index+1}</h3>
-
-<h2>${q.q}</h2>
-
-<div>
-${q.options.map(o=>
-`<div class="option" onclick="answer('${o}')">${o}</div>`
-).join("")}
-</div>
+${q.options.map(o=>`
+<div class="option" onclick="submitAnswer('${o}','${q.answer}')">${o}</div>
+`).join("")}
 
 </div>
-
 `;
 
-}
-
-/* =========================
-ANSWER
-========================= */
-
-function answer(val){
-
-if(val===questions[index].answer) score++;
-
-index++;
-
-if(index>=questions.length){
-
-document.getElementById("main").innerHTML=
-`<h2>🏁 Finished</h2><h3>Score: ${score}</h3>`;
-
-return;
+});
 
 }
 
-renderQuiz();
+/* =========================================
+SUBMIT ANSWER
+========================================= */
 
+function submitAnswer(val,correct){
+
+let time=new Date().toLocaleTimeString();
+
+let score=(val===correct)?10:0;
+
+submissions.push({
+answer:val,
+correct:correct,
+score:score,
+time:time
+});
+
+alert("Submitted: "+score+" points");
 }
 
-/* =========================
-LEADERBOARD
-========================= */
-
-function showLeaderboard(){
-
-document.getElementById("main").innerHTML=`
-<h2>🏆 Leaderboard</h2>
-<p>👤 Admin - ${score}</p>
-`;
-
-}
-
-/* =========================
-PROFILE
-========================= */
-
-function showProfile(){
-
-document.getElementById("main").innerHTML=`
-<div class="profile">
-<h2>👤 Profile</h2>
-<p>Name: ${user.name}</p>
-<p>Role: ${user.role}</p>
-</div>
-`;
-
-}
-
-/* =========================
-ADMIN
-========================= */
-
-function showAdmin(){
-
-document.getElementById("main").innerHTML=`
-<h2>⚙ Admin Control Active</h2>
-<p>Use right panel to add questions</p>
-`;
-
-}
-
-/* =========================
+/* =========================================
 ADD QUESTION
-========================= */
+========================================= */
 
-function addQ(){
+function addQuestion(){
 
 questions.push({
-q:q.value,
-options:[o1.value,o2.value,o3.value,o4.value],
+type:"multiple",
+q:document.getElementById("q").value,
+options:[
+o1.value,o2.value,o3.value,o4.value
+],
 answer:ans.value
 });
 
-document.getElementById("totalQ").innerText=questions.length;
+alert("Question Added");
+}
 
-alert("Question Added!");
+/* =========================================
+WINNERS
+========================================= */
+
+function showWinners(){
+
+let box=document.getElementById("main");
+
+box.innerHTML="<h2>🏆 Winners</h2>";
+
+winners.forEach(w=>{
+
+box.innerHTML+=`
+<p>👤 ${w.name} - ₦${w.amount}</p>
+`;
+
+});
+
+}
+
+/* =========================================
+PAYMENTS
+========================================= */
+
+function showPayments(){
+
+document.getElementById("main").innerHTML=`
+<h2>💳 Payment Requests</h2>
+<p>No pending payments</p>
+`;
+}
+
+/* =========================================
+LEADERBOARD
+========================================= */
+
+function showLeaderboard(){
+
+let box=document.getElementById("main");
+
+box.innerHTML="<h2>📊 Leaderboard</h2>";
+
+submissions.forEach((s,i)=>{
+
+box.innerHTML+=`
+<p>#${i+1} - Score: ${s.score} - Time: ${s.time}</p>
+`;
+
+});
 
 }
 
