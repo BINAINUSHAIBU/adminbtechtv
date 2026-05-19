@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV SUPER LOCKED ADMIN v2</title>
+<title>BTECH-TV PRO MAX SUPER ADMIN</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -14,64 +14,92 @@
 --panel:#11182a;
 --card:#1b2438;
 --accent:#00bfff;
---text:#fff;
---warn:#f59e0b;
 --danger:#ef4444;
+--warn:#f59e0b;
 --ok:#22c55e;
+--text:#fff;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:var(--bg);color:var(--text);overflow:hidden}
+
+body{
+background:var(--bg);
+color:var(--text);
+}
+
+/* LOGIN */
+#login{
+position:fixed;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#000;
+z-index:9999;
+}
+
+.login-box{
+background:var(--panel);
+padding:20px;
+border-radius:10px;
+width:300px;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:6px;
+background:#0f1628;
+color:#fff;
+}
+
+button{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.primary{background:var(--accent)}
+.danger{background:var(--danger);color:#fff}
 
 /* TOP */
 .topbar{
 height:60px;
-background:var(--panel);
 display:flex;
 justify-content:space-between;
 align-items:center;
 padding:0 15px;
-border-bottom:1px solid #222;
+background:var(--panel);
 }
-.topbar h2{color:var(--accent)}
 
 /* LAYOUT */
 .container{display:flex;height:calc(100vh - 60px)}
 
-/* SIDEBAR */
 .sidebar{
-width:240px;
+width:230px;
 background:#0f1628;
 padding:10px;
 overflow:auto;
 }
-.cat{
-padding:10px;
-margin:6px 0;
-background:var(--card);
-border-radius:8px;
-cursor:pointer;
-}
 
-/* MAIN */
 .main{flex:1;display:flex;flex-direction:column}
 
-/* PLAYER */
-.player{
-height:260px;
-background:black;
-position:relative;
-}
+.player{height:250px;background:black}
 video{width:100%;height:100%;object-fit:contain}
 
-/* LIST */
 .list{
 flex:1;
 overflow:auto;
-padding:10px;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
 gap:10px;
+padding:10px;
 }
 
 .card{
@@ -79,61 +107,25 @@ background:var(--card);
 padding:10px;
 border-radius:10px;
 cursor:pointer;
-border:2px solid transparent;
 position:relative;
 }
 
-.card:hover{border-color:var(--accent)}
-.card.active{border-color:var(--accent)}
-
-.locked{color:var(--warn)}
-.unlocked{color:var(--ok)}
-
 .badge{
 font-size:11px;
-padding:4px 6px;
+padding:3px 6px;
 border-radius:20px;
-background:#000;
-margin-right:5px;
 }
 
-/* RIGHT PANEL */
+.locked{background:var(--warn)}
+.unlocked{background:var(--ok)}
+.paid{background:var(--danger)}
+
+/* RIGHT */
 .right{
-width:280px;
+width:260px;
 background:var(--panel);
 padding:10px;
 overflow:auto;
-}
-
-button{
-width:100%;
-padding:10px;
-margin-top:8px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-}
-
-.primary{background:var(--accent)}
-.danger{background:var(--danger);color:#fff}
-.warn{background:var(--warn)}
-
-/* CHECKBOX */
-.sel{
-position:absolute;
-top:8px;
-right:8px;
-}
-
-input[type="text"]{
-width:100%;
-padding:10px;
-margin-top:10px;
-background:#0f1628;
-border:none;
-color:#fff;
-border-radius:8px;
 }
 
 </style>
@@ -141,19 +133,45 @@ border-radius:8px;
 
 <body>
 
+<!-- LOGIN -->
+<div id="login">
+<div class="login-box">
+<h3>🔐 BTECH ADMIN LOGIN</h3>
+
+<input id="user" placeholder="Username">
+<select id="role">
+<option value="superadmin">Super Admin</option>
+<option value="admin">Admin</option>
+</select>
+
+<button class="primary" onclick="login()">LOGIN</button>
+</div>
+</div>
+
+<!-- TOP -->
 <div class="topbar">
-<h2>🔒 BTECH-TV SUPER ADMIN v2</h2>
-<button class="primary" onclick="saveState()">💾 Save</button>
+<h3>🚀 PRO MAX DASHBOARD</h3>
+<div id="roleText"></div>
 </div>
 
 <div class="container">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<div class="cat" onclick="filterAll()">📺 All</div>
-<div class="cat" onclick="filterLocked()">🔒 Locked</div>
-<div class="cat" onclick="filterUnlocked()">🔓 Unlocked</div>
-<input type="text" placeholder="Search..." oninput="search(this.value)">
+
+<h4>➕ Add Channel</h4>
+
+<input id="cname" placeholder="Channel Name">
+<input id="curl" placeholder="Stream URL">
+
+<button class="primary" onclick="addChannel()">Add</button>
+
+<button onclick="filterAll()">All</button>
+<button onclick="filterLocked()">Locked</button>
+<button onclick="filterPaid()">Paid</button>
+
+<input placeholder="Search..." oninput="search(this.value)">
+
 </div>
 
 <!-- MAIN -->
@@ -170,16 +188,16 @@ border-radius:8px;
 <!-- RIGHT -->
 <div class="right">
 
-<h3>⚙ ADMIN TOOLS</h3>
+<h4>⚙ Actions</h4>
 
-<button class="primary" onclick="lockSelected()">🔒 Lock Selected</button>
-<button class="primary" onclick="unlockSelected()">🔓 Unlock Selected</button>
-<button class="danger" onclick="deleteLocked()">❌ Delete Locked</button>
+<button class="primary" onclick="lockSelected()">Lock Selected</button>
+<button class="primary" onclick="unlockSelected()">Unlock Selected</button>
+<button class="danger" onclick="deleteSelected()">Delete Selected</button>
 
-<h3 style="margin-top:10px">📊 STATS</h3>
-<p>Total: <span id="t">0</span></p>
-<p>Locked: <span id="l">0</span></p>
-<p>Unlocked: <span id="u">0</span></p>
+<h4>📊 Stats</h4>
+<p>Total: <span id="t"></span></p>
+<p>Locked: <span id="l"></span></p>
+<p>Paid: <span id="p"></span></p>
 
 </div>
 
@@ -187,36 +205,41 @@ border-radius:8px;
 
 <script>
 
-/* =========================
-STATE
-========================= */
+/* =====================
+AUTH
+===================== */
+
+let role="";
+
+function login(){
+
+role=document.getElementById("role").value;
+
+document.getElementById("login").style.display="none";
+
+document.getElementById("roleText").innerText=
+"Role: "+role.toUpperCase();
+
+}
+
+/* =====================
+DB
+===================== */
 
 let channels=[];
 let filtered=[];
 let selected=new Set();
-let currentIndex=0;
+let index=0;
 
-const streams=[
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-"https://test-streams.mux.dev/test_001/stream.m3u8"
-];
-
-/* =========================
-INIT OR LOAD
-========================= */
-
+/* LOAD */
 function init(){
 
-let saved=localStorage.getItem("btech_channels");
+let data=localStorage.getItem("btech_promax");
 
-if(saved){
-
-channels=JSON.parse(saved);
-
+if(data){
+channels=JSON.parse(data);
 }else{
-
 generate();
-
 }
 
 filtered=[...channels];
@@ -225,31 +248,29 @@ stats();
 
 }
 
-/* =========================
-GENERATE
-========================= */
-
+/* GENERATE */
 function generate(){
 
-for(let i=1;i<=150;i++){
+for(let i=1;i<=120;i++){
 
 channels.push({
 id:i,
-name:"BTECH CHANNEL "+i,
-category:i%2?"Movies":"Sports",
-url:streams[i%streams.length],
-status:i%6===0?"locked":"unlocked",
-type:i%3===0?"paid":"free"
+name:"BTECH TV "+i,
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+status:i%7===0?"locked":"unlocked",
+type:i%5===0?"paid":"free"
 });
 
 }
 
 }
 
-/* =========================
-RENDER
-========================= */
+/* SAVE */
+function save(){
+localStorage.setItem("btech_promax",JSON.stringify(channels));
+}
 
+/* RENDER */
 function render(){
 
 let box=document.getElementById("list");
@@ -261,10 +282,10 @@ let div=document.createElement("div");
 div.className="card";
 
 div.innerHTML=`
-<input class="sel" type="checkbox" onchange="toggleSel(${c.id})">
+<input type="checkbox" onchange="toggle(${c.id})">
 <b>${c.name}</b><br>
-<small>${c.category}</small><br>
 <span class="badge ${c.status}">${c.status}</span>
+<span class="badge ${c.type}">${c.type}</span>
 `;
 
 div.onclick=()=>play(i);
@@ -275,52 +296,52 @@ box.appendChild(div);
 
 }
 
-/* =========================
-SELECT
-========================= */
+/* TOGGLE */
+function toggle(id){
 
-function toggleSel(id){
-
-if(selected.has(id)){
-selected.delete(id);
-}else{
-selected.add(id);
-}
+if(selected.has(id)) selected.delete(id);
+else selected.add(id);
 
 }
 
-/* =========================
-PLAY
-========================= */
-
+/* PLAY */
 function play(i){
-
-currentIndex=i;
 
 let c=filtered[i];
 
 let v=document.getElementById("video");
 
 if(Hls.isSupported()){
-
 let hls=new Hls();
 hls.loadSource(c.url);
 hls.attachMedia(v);
-
 }else{
 v.src=c.url;
 }
 
 }
 
-/* =========================
-FILTERS
-========================= */
+/* ADD */
+function addChannel(){
 
+channels.push({
+id:Date.now(),
+name:document.getElementById("cname").value,
+url:document.getElementById("curl").value,
+status:"unlocked",
+type:"free"
+});
+
+refresh();
+
+}
+
+/* FILTERS */
 function filterAll(){filtered=[...channels];render();}
 function filterLocked(){filtered=channels.filter(c=>c.status==="locked");render();}
-function filterUnlocked(){filtered=channels.filter(c=>c.status==="unlocked");render();}
+function filterPaid(){filtered=channels.filter(c=>c.type==="paid");render();}
 
+/* SEARCH */
 function search(v){
 filtered=channels.filter(c=>
 c.name.toLowerCase().includes(v.toLowerCase())
@@ -328,72 +349,42 @@ c.name.toLowerCase().includes(v.toLowerCase())
 render();
 }
 
-/* =========================
-ACTIONS
-========================= */
-
+/* ACTIONS */
 function lockSelected(){
-
 channels.forEach(c=>{
 if(selected.has(c.id)) c.status="locked";
 });
-
 refresh();
-
 }
 
 function unlockSelected(){
-
 channels.forEach(c=>{
 if(selected.has(c.id)) c.status="unlocked";
 });
-
 refresh();
-
 }
 
-function deleteLocked(){
-
-channels=channels.filter(c=>c.status!=="locked");
+function deleteSelected(){
+channels=channels.filter(c=>!selected.has(c.id));
 refresh();
-
 }
 
-/* =========================
-REFRESH
-========================= */
-
+/* REFRESH */
 function refresh(){
 filtered=[...channels];
+save();
 render();
 stats();
-saveState();
 }
 
-/* =========================
-STATS
-========================= */
-
+/* STATS */
 function stats(){
-
 document.getElementById("t").innerText=channels.length;
 document.getElementById("l").innerText=channels.filter(c=>c.status==="locked").length;
-document.getElementById("u").innerText=channels.filter(c=>c.status==="unlocked").length;
-
+document.getElementById("p").innerText=channels.filter(c=>c.type==="paid").length;
 }
 
-/* =========================
-SAVE
-========================= */
-
-function saveState(){
-localStorage.setItem("btech_channels",JSON.stringify(channels));
-}
-
-/* =========================
-BOOT
-========================= */
-
+/* BOOT */
 init();
 
 </script>
