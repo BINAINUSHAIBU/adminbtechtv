@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,7 +95,6 @@ margin-right:4px;
 .unlocked{background:var(--ok)}
 .paid{background:var(--danger)}
 
-/* RIGHT */
 .right{
 width:260px;
 background:var(--panel);
@@ -104,7 +102,6 @@ padding:10px;
 overflow:auto;
 }
 
-/* LOG */
 .log{
 font-size:12px;
 background:#0f1628;
@@ -167,52 +164,29 @@ border-radius:6px;
 
 <div class="container">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-
-<h4>➕ Add Channel</h4>
-
-<input id="name" placeholder="Name">
-<input id="url" placeholder="Stream URL">
-
-<button class="primary" onclick="add()">Add</button>
-
-<button onclick="filterAll()">All</button>
-<button onclick="filterLocked()">Locked</button>
-<button onclick="filterPaid()">Paid</button>
-
-<input placeholder="Search..." oninput="search(this.value)">
-
+<h4>📡 Controls</h4>
+<p style="font-size:12px;color:#aaa">IPTV Ultra Engine Loaded</p>
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
 <div class="player">
 <video id="video" controls></video>
 </div>
 
-<div class="list" id="list"></div>
+<div class="list" id="chlist"></div>
 
 </div>
 
-<!-- RIGHT -->
 <div class="right">
+<h4>⚙ Status</h4>
 
-<h4>⚙ Actions</h4>
+<p id="status">Loading...</p>
+<p id="chcount"></p>
 
-<button class="primary" onclick="lockAllSelected()">Lock Selected</button>
-<button class="primary" onclick="unlockAllSelected()">Unlock Selected</button>
-<button class="danger" onclick="deleteSelected()">Delete Selected</button>
-
-<h4 style="margin-top:10px">📊 Stats</h4>
-<p>Total: <span id="t"></span></p>
-<p>Locked: <span id="l"></span></p>
-<p>Paid: <span id="p"></span></p>
-
-<h4>📡 Live Logs</h4>
+<h4>📡 Logs</h4>
 <div class="log" id="log"></div>
-
 </div>
 
 </div>
@@ -220,244 +194,154 @@ border-radius:6px;
 <script>
 
 /* =====================
-AUTH SYSTEM
+STATE
 ===================== */
 
-let role="";
+var all=[],filtered=[],cur=null,cat='All',activeTab='all',hlsP=null;
+var deadCh={},aliveCh={},autoSkipOn=true;
+var favs=JSON.parse(localStorage.getItem('atv_favs')||'{}');
+var recent=JSON.parse(localStorage.getItem('atv_recent')||'[]');
+var channelMap={},logoMap={};
+
+/* =====================
+LOGIN
+===================== */
 
 function login(){
-
-role=document.getElementById("role").value;
-
 document.getElementById("login").style.display="none";
-
-log("LOGIN: "+role);
-
-document.getElementById("roleBox").innerText=
-"Role: "+role.toUpperCase();
-
 }
 
 /* =====================
-DATABASE ENGINE
+UTILS
 ===================== */
 
-let db={
-channels:[],
-logs:[]
-};
-
-let filtered=[];
-let selected=new Set();
-
-/* INIT */
-function init(){
-
-let saved=localStorage.getItem("btech_enterprise");
-
-if(saved){
-db=JSON.parse(saved);
-}else{
-generate();
+function flag(cc){
+if(!cc||cc.length!==2)return'🌐';
+var a=0x1F1E6;
+return String.fromCodePoint(
+a+cc.charCodeAt(0)-65,
+a+cc.charCodeAt(1)-65
+);
 }
 
-filtered=[...db.channels];
-render();
-stats();
-
+function esc(s){
+return s?s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):'';
 }
 
-/* GENERATE */
-function generate(){
+function tick(){
+document.getElementById('clock')?.innerText=new Date().toLocaleTimeString();
+}
+setInterval(tick,30000);
 
-for(let i=1;i<=100;i++){
+/* =====================
+LOAD API
+===================== */
 
-db.channels.push({
-id:i,
-name:"BTECH TV "+i,
-url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-status:i%6===0?"locked":"unlocked",
-type:i%4===0?"paid":"free"
+async function loadAPI(){
+try{
+var [chRes,stRes,lgRes]=await Promise.all([
+fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
+fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
+fetch('https://iptv-org.github.io/api/logos.json').then(r=>r.json())
+]);
+
+for(var i=0;i<chRes.length;i++){
+var ch=chRes[i];
+if(!ch.is_nsfw&&!ch.closed)channelMap[ch.id]=ch;
+}
+
+for(var i=0;i<lgRes.length;i++){
+var lg=lgRes[i];
+if(!logoMap[lg.channel])logoMap[lg.channel]=lg.url;
+}
+
+var id=0,seen={};
+
+for(var i=0;i<stRes.length;i++){
+var st=stRes[i];
+if(!st.url||seen[st.url])continue;
+
+if(st.url.includes('youtube')||st.url.includes('twitch'))continue;
+
+seen[st.url]=1;
+
+var ch=st.channel?channelMap[st.channel]:null;
+
+all.push({
+id:++id,
+chId:st.channel||null,
+n:ch?ch.name:(st.title||'Unknown'),
+u:st.url,
+cc:ch?ch.country:null,
+cat:ch&&ch.categories?ch.categories[0]:'other',
+logo:logoMap[st.channel]||null,
+q:st.quality||''
 });
-
 }
 
+renderCats();
+doFilter();
+
+document.getElementById('status').innerText="Loaded "+all.length+" channels";
+
+}catch(e){
+document.getElementById('status').innerText="Error loading API";
+}
 }
 
-/* SAVE */
-function save(){
-localStorage.setItem("btech_enterprise",JSON.stringify(db));
+/* =====================
+FILTER + RENDER
+===================== */
+
+function doFilter(){
+filtered=all;
+renderList();
 }
 
-/* LOG ENGINE */
-function log(text){
-
-db.logs.unshift({
-time:new Date().toLocaleTimeString(),
-text
-});
-
-renderLogs();
-save();
-
-}
-
-function renderLogs(){
-
-let box=document.getElementById("log");
-
-box.innerHTML=db.logs
-.slice(0,30)
-.map(l=>`[${l.time}] ${l.text}`)
-.join("<br>");
-
-}
-
-/* RENDER */
-function render(){
-
-let box=document.getElementById("list");
+function renderList(){
+var box=document.getElementById("chlist");
 box.innerHTML="";
 
-filtered.forEach((c,i)=>{
-
-let div=document.createElement("div");
+filtered.slice(0,300).forEach(c=>{
+var div=document.createElement("div");
 div.className="card";
+div.onclick=()=>tune(c.id);
 
 div.innerHTML=`
-<input type="checkbox" onchange="toggle(${c.id})">
-<b>${c.name}</b><br>
-<span class="badge ${c.status}">${c.status}</span>
-<span class="badge ${c.type}">${c.type}</span>
+<b>${esc(c.n)}</b><br>
+<small>${c.cat}</small>
 `;
 
-div.onclick=()=>play(i);
-
 box.appendChild(div);
-
 });
-
 }
 
-/* TOGGLE */
-function toggle(id){
+/* =====================
+PLAYER
+===================== */
 
-selected.has(id)?
-selected.delete(id):
-selected.add(id);
+function tune(id){
+var ch=all.find(x=>x.id===id);
+if(!ch)return;
 
-}
+var v=document.getElementById("video");
 
-/* PLAY */
-function play(i){
-
-let c=filtered[i];
-
-let v=document.getElementById("video");
-
-if(Hls.isSupported()){
-let hls=new Hls();
-hls.loadSource(c.url);
+if(window.Hls&&Hls.isSupported()){
+var hls=new Hls();
+hls.loadSource(ch.u);
 hls.attachMedia(v);
 }else{
-v.src=c.url;
+v.src=ch.u;
 }
 
-log("PLAY: "+c.name);
-
+document.getElementById("status").innerText="Playing: "+ch.n;
 }
 
-/* ADD */
-function add(){
+/* =====================
+BOOT
+===================== */
 
-if(role!=="superadmin"){
-alert("Permission denied");
-return;
-}
-
-db.channels.push({
-id:Date.now(),
-name:name.value,
-url:url.value,
-status:"unlocked",
-type:"free"
-});
-
-log("CHANNEL ADDED");
-
-refresh();
-
-}
-
-/* FILTER */
-function filterAll(){filtered=[...db.channels];render();}
-function filterLocked(){filtered=db.channels.filter(c=>c.status==="locked");render();}
-function filterPaid(){filtered=db.channels.filter(c=>c.type==="paid");render();}
-
-/* SEARCH */
-function search(v){
-filtered=db.channels.filter(c=>
-c.name.toLowerCase().includes(v.toLowerCase())
-);
-render();
-}
-
-/* ACTIONS */
-function lockAllSelected(){
-
-db.channels.forEach(c=>{
-if(selected.has(c.id)){
-c.status="locked";
-log("LOCK: "+c.name);
-}
-});
-
-refresh();
-
-}
-
-function unlockAllSelected(){
-
-db.channels.forEach(c=>{
-if(selected.has(c.id)){
-c.status="unlocked";
-log("UNLOCK: "+c.name);
-}
-});
-
-refresh();
-
-}
-
-function deleteSelected(){
-
-db.channels=db.channels.filter(c=>!selected.has(c.id));
-
-log("DELETE SELECTED");
-
-refresh();
-
-}
-
-/* REFRESH */
-function refresh(){
-filtered=[...db.channels];
-save();
-render();
-stats();
-}
-
-/* STATS */
-function stats(){
-
-t.innerText=db.channels.length;
-l.innerText=db.channels.filter(c=>c.status==="locked").length;
-p.innerText=db.channels.filter(c=>c.type==="paid").length;
-
-}
-
-/* BOOT */
-init();
+loadAPI();
 
 </script>
 
