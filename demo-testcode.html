@@ -65,7 +65,9 @@ transition:0.3s;
 }
 
 .cat:hover{background:var(--hover)}
+.tab-active{background:var(--accent);color:black}
 
+/* MAIN */
 .main{flex:1;display:flex;flex-direction:column}
 
 /* STATS */
@@ -95,6 +97,7 @@ grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
 gap:12px;
 }
 
+/* CARD */
 .card{
 background:var(--card);
 padding:15px;
@@ -116,8 +119,6 @@ font-size:11px;
 margin-right:5px;
 }
 
-.active{background:#16a34a}
-.banned{background:#dc2626}
 .free{background:#16a34a}
 .paid{background:#dc2626}
 .locked{background:#f59e0b;color:black}
@@ -144,19 +145,23 @@ button:hover{opacity:0.8}
 
 <div class="container">
 
+<!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="cat" onclick="setCat('All')">📺 All Channels</div>
-<div class="cat" onclick="setCat('Sports')">🏆 Sports</div>
-<div class="cat" onclick="setCat('Movies')">🎬 Movies</div>
-<div class="cat" onclick="setCat('News')">📰 News</div>
-<div class="cat" onclick="setCat('Kids')">🧸 Kids</div>
+<div class="cat tab-active" onclick="setCat('All',this)">📺 All Channels</div>
+<div class="cat" onclick="setCat('Sports',this)">🏆 Sports</div>
+<div class="cat" onclick="setCat('Movies',this)">🎬 Movies</div>
+<div class="cat" onclick="setCat('News',this)">📰 News</div>
+<div class="cat" onclick="setCat('Kids',this)">🧸 Kids</div>
+
+<hr style="opacity:0.2;margin:10px 0">
 
 <button onclick="loadAPI()">🚀 Load IPTV API</button>
-<button onclick="generateChannels()">⚡ Generate 100K</button>
+<button onclick="generateChannels()">⚡ Generate Demo</button>
 
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
 <div class="stats">
@@ -175,17 +180,18 @@ button:hover{opacity:0.8}
 <script>
 
 /* =====================
-STATE (MERGED CLEAN)
+STATE
 ===================== */
 let all=[];
 let filtered=[];
 let cat='All';
 
 /* =====================
-LOAD IPTV API (YOUR ENGINE)
+LOAD IPTV API (MERGED ENGINE)
 ===================== */
 async function loadAPI(){
 try{
+
 let [chRes,stRes,lgRes]=await Promise.all([
 fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
 fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
@@ -208,10 +214,9 @@ let ch=s.channel?channelMap[s.channel]:null;
 
 all.push({
 id:all.length+1,
-name:ch?ch.name:s.title||"Unknown",
+name:ch?ch.name:(s.title||"Unknown"),
 url:s.url,
 category:ch?.categories?.[0]||"other",
-logo:logoMap[s.channel]||"",
 type:Math.random()>0.5?"free":"paid",
 status:Math.random()>0.9?"locked":"unlocked",
 viewers:Math.floor(Math.random()*100000)
@@ -223,7 +228,7 @@ render();
 updateStats();
 
 }catch(e){
-alert("API failed, using generator");
+console.log(e);
 generateChannels();
 }
 }
@@ -232,7 +237,7 @@ generateChannels();
 GENERATOR
 ===================== */
 function generateChannels(){
-const cats=["Sports","Movies","News","Kids","Music"];
+const cats=["Sports","Movies","News","Kids","Music","Africa"];
 all=[];
 
 for(let i=1;i<=200;i++){
@@ -252,10 +257,16 @@ updateStats();
 }
 
 /* =====================
-FILTER
+CATEGORY FILTER
 ===================== */
-function setCat(c){
+function setCat(c,el){
 cat=c;
+
+document.querySelectorAll(".cat")
+.forEach(x=>x.classList.remove("tab-active"));
+
+el.classList.add("tab-active");
+
 filtered=c==="All"?all:all.filter(x=>x.category===c);
 render();
 }
@@ -280,6 +291,7 @@ let g=document.getElementById("grid");
 g.innerHTML="";
 
 for(let c of filtered){
+
 let div=document.createElement("div");
 div.className="card";
 
