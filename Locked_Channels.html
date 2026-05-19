@@ -114,7 +114,7 @@ border-radius:6px;
 <!-- TOP -->
 <div class="topbar">
 <h3>🚀 BTECH-TV ENTERPRISE PRO MAX</h3>
-<div id="status">Loading...</div>
+<div id="status">Ready</div>
 </div>
 
 <div class="container">
@@ -164,21 +164,10 @@ border-radius:6px;
 <script>
 
 /* =====================
-FULL IPTV ENGINE (MERGED)
+STATE
 ===================== */
 
 var all=[],filtered=[],cur=null;
-var deadCh={},aliveCh={};
-var favs={},recent=[];
-var channelMap={},logoMap={};
-
-function esc(s){
-return s?s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):'';
-}
-
-function log(t){
-console.log(t);
-}
 
 /* =====================
 INIT
@@ -188,26 +177,15 @@ loadAPI();
 }
 
 /* =====================
-LOAD IPTV ORG API
+LOAD API
 ===================== */
 async function loadAPI(){
 try{
 
-let [chRes,stRes,lgRes]=await Promise.all([
+let [chRes,stRes]=await Promise.all([
 fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
-fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
-fetch('https://iptv-org.github.io/api/logos.json').then(r=>r.json())
+fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json())
 ]);
-
-for(let i=0;i<chRes.length;i++){
-let ch=chRes[i];
-if(!ch.is_nsfw&&!ch.closed)channelMap[ch.id]=ch;
-}
-
-for(let i=0;i<lgRes.length;i++){
-let lg=lgRes[i];
-if(!logoMap[lg.channel])logoMap[lg.channel]=lg.url;
-}
 
 let id=0,seen={};
 
@@ -218,13 +196,13 @@ if(st.url.includes('youtube')||st.url.includes('twitch'))continue;
 
 seen[st.url]=1;
 
-let ch=st.channel?channelMap[st.channel]:null;
+let ch=chRes.find(c=>c.id===st.channel);
 
 all.push({
 id:++id,
 n:ch?ch.name:(st.title||'Unknown'),
 u:st.url,
-cat:ch&&ch.categories?ch.categories[0]:'other'
+cat:"general"
 });
 }
 
@@ -240,19 +218,19 @@ document.getElementById("status").innerText="Load error";
 }
 
 /* =====================
-RENDER LIST
+RENDER
 ===================== */
 function render(){
 let box=document.getElementById("chlist");
 box.innerHTML="";
 
-filtered.slice(0,300).forEach((c,i)=>{
+filtered.slice(0,300).forEach(c=>{
 
 let div=document.createElement("div");
 div.className="card";
 
 div.innerHTML=
-"<b>"+esc(c.n)+"</b><br><small>"+c.cat+"</small>";
+"<b>"+c.n+"</b><br><small>"+c.cat+"</small>";
 
 div.onclick=()=>play(c);
 
@@ -263,9 +241,10 @@ stats();
 }
 
 /* =====================
-PLAY STREAM
+PLAY
 ===================== */
 function play(c){
+
 let v=document.getElementById("video");
 
 if(window.Hls&&Hls.isSupported()){
@@ -278,7 +257,6 @@ v.src=c.u;
 
 cur=c;
 document.getElementById("status").innerText="Playing: "+c.n;
-log("PLAY "+c.n);
 }
 
 /* =====================
@@ -298,8 +276,6 @@ url.value="";
 
 filtered=all;
 render();
-
-log("ADDED CHANNEL");
 }
 
 /* =====================
