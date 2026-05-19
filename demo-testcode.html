@@ -1,36 +1,21 @@
-<!-- =========================================
-BTECH-TV PRO 100K SUPER ADMIN + QUIZ ENGINE
-QUIZ CHANNEL + 1000 QUESTION SYSTEM
-========================================= -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH SUPER QUIZ ADMIN</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PRO MULTIPLAYER QUIZ SYSTEM</title>
 
 <style>
-:root{
---bg:#0b0f1a;
---panel:#11182a;
---card:#1b2438;
---accent:#00bfff;
---text:#fff;
---good:#16a34a;
---bad:#dc2626;
-}
-
-body{margin:0;font-family:Arial;background:var(--bg);color:var(--text);}
+body{margin:0;font-family:Arial;background:#0b0f1a;color:#fff}
 
 .topbar{
-background:var(--panel);
-padding:15px;
+background:#11182a;
+padding:12px;
 display:flex;
 justify-content:space-between;
 }
 
-.container{display:flex;height:calc(100vh - 60px);}
+.container{display:flex;height:calc(100vh - 50px)}
 
 .sidebar{
 width:260px;
@@ -39,320 +24,317 @@ padding:10px;
 overflow:auto;
 }
 
-.menu{
+.main{flex:1;padding:15px;overflow:auto}
+
+.card{
+background:#1b2438;
 padding:12px;
-margin:8px 0;
-background:var(--card);
-cursor:pointer;
-border-radius:8px;
-}
-
-.main{flex:1;padding:15px;overflow:auto;}
-
-.quizCard{
-background:var(--card);
-padding:15px;
-border-radius:10px;
 margin-bottom:10px;
-}
-
-.option{
-padding:10px;
-margin:6px 0;
-background:#0f1628;
-border-radius:8px;
-cursor:pointer;
-}
-
-.adminBox{
-background:#0f1628;
-padding:10px;
 border-radius:10px;
 }
 
 button{
 padding:10px;
 margin-top:8px;
-background:var(--accent);
+background:#00bfff;
 border:none;
-color:#000;
+border-radius:8px;
+cursor:pointer;
 font-weight:bold;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:5px 0;
+border-radius:8px;
+border:none;
+background:#0f1628;
+color:#fff;
+}
+
+.option{
+padding:10px;
+margin:5px 0;
+background:#0f1628;
 border-radius:8px;
 cursor:pointer;
 }
+
 </style>
 </head>
 
 <body>
 
 <div class="topbar">
-<h2>🎯 SUPER QUIZ ADMIN + CHANNEL ENGINE</h2>
-<div id="user"></div>
+<h3>🎮 MULTIPLAYER QUIZ SYSTEM</h3>
+<div id="me"></div>
 </div>
 
 <div class="container">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="menu" onclick="openQuiz()">🧠 Quiz Channel</div>
-<div class="menu" onclick="openMillionaire()">💰 Millionaire Mode</div>
-<div class="menu" onclick="openAdd()">➕ Add Question</div>
-<div class="menu" onclick="openBank()">📚 Question Bank</div>
-<div class="menu" onclick="openWinners()">🏆 Winners</div>
-<div class="menu" onclick="openPayments()">💳 Payment Approval</div>
-<div class="menu" onclick="generate1000()">⚡ Generate 1000 Quiz</div>
+<h3>🎯 MENU</h3>
+
+<input id="roomId" placeholder="Room ID">
+<input id="name" placeholder="Your Name">
+
+<button onclick="createRoom()">Create Room</button>
+<button onclick="joinRoom()">Join Room</button>
+
+<button onclick="startGame()">Start Game (Host)</button>
 
 </div>
 
-<!-- MAIN -->
 <div class="main" id="main"></div>
 
 </div>
 
 <script>
 
-/* =========================
-STATE
-========================= */
+/* ======================
+GLOBAL STATE
+====================== */
 
-let user={name:"Admin",role:"admin"};
+let rooms = {};
+let currentRoom = null;
+let me = null;
+let isHost = false;
+let index = 0;
+let timer = null;
 
-let questions=[];
+/* ======================
+1000 QUESTIONS ENGINE
+====================== */
 
-let score=0;
-let index=0;
-
-let winners=[];
-let payments=[];
-
-/* =========================
-AUTO 1000 QUIZ ENGINE
-========================= */
-
-function generate1000(){
-
-questions = [];
-
-let topics=["Math","Science","Sports","History","Tech","Movies"];
+let questions = [];
 
 for(let i=1;i<=1000;i++){
-
-let t = topics[i % topics.length];
-
 questions.push({
-q:`${t} Question ${i}: What is ${i} + 10?`,
-options:[`${i+10}`,`${i+5}`,`${i+1}`,`${i+20}`],
-answer:`${i+10}`,
-type:"mcq"
+q:`Math Question ${i}: ${i} + 5 = ?`,
+options:[i+5,i+3,i+10,i],
+answer:i+5
 });
-
 }
 
-alert("✅ 1000 Quiz Questions Generated!");
+/* ======================
+CREATE ROOM
+====================== */
+
+function createRoom(){
+
+let id = document.getElementById("roomId").value;
+let name = document.getElementById("name").value;
+
+if(!id || !name) return alert("Fill fields");
+
+rooms[id] = {
+host:name,
+players:{},
+index:0,
+time:15,
+started:false
+};
+
+joinRoom();
+isHost = true;
 }
 
-/* =========================
-QUIZ CHANNEL
-========================= */
+/* ======================
+JOIN ROOM
+====================== */
 
-function openQuiz(){
+function joinRoom(){
 
-index=0;
-score=0;
+let id = document.getElementById("roomId").value;
+let name = document.getElementById("name").value;
 
-renderQuiz();
+if(!rooms[id]) return alert("Room not found");
 
+currentRoom = id;
+me = name;
+
+rooms[id].players[name] = {
+score:0,
+answered:false
+};
+
+document.getElementById("me").innerHTML =
+`👤 ${name} ${isHost ? "(Host)" : ""}`;
+
+renderLobby();
 }
 
-function renderQuiz(){
+/* ======================
+LOBBY
+====================== */
 
-if(questions.length===0){
-document.getElementById("main").innerHTML="⚠ Generate quiz first";
-return;
-}
+function renderLobby(){
 
-let q=questions[index];
+let room = rooms[currentRoom];
 
-document.getElementById("main").innerHTML=`
-<div class="quizCard">
+document.getElementById("main").innerHTML = `
+<div class="card">
+<h2>🎮 ROOM: ${currentRoom}</h2>
 
-<h3>🧠 Quiz ${index+1}/1000</h3>
-<h2>${q.q}</h2>
+<h3>👥 Players</h3>
 
-${q.options.map(o=>
-`<div class="option" onclick="answer('${o}')">${o}</div>`
+${Object.keys(room.players).map(p=>
+`<div class="card">👤 ${p} — ⭐ ${room.players[p].score}</div>`
 ).join("")}
-
-<p>Score: ${score}</p>
 
 </div>
 `;
 }
+
+/* ======================
+START GAME
+====================== */
+
+function startGame(){
+
+if(!isHost) return alert("Only host can start");
+
+rooms[currentRoom].started = true;
+
+loadQuestion();
+startTimer();
+}
+
+/* ======================
+LOAD QUESTION
+====================== */
+
+function loadQuestion(){
+
+let room = rooms[currentRoom];
+let q = questions[room.index];
+
+document.getElementById("main").innerHTML = `
+<div class="card">
+
+<h2>⏱ Question ${room.index+1}</h2>
+<h3>${q.q}</h3>
+
+${q.options.map(o=>
+`<div class="option" onclick="answer(${o})">${o}</div>`
+).join("")}
+
+</div>
+`;
+
+updateBoard();
+}
+
+/* ======================
+ANSWER
+====================== */
 
 function answer(val){
 
-if(val===questions[index].answer){
-score++;
+let room = rooms[currentRoom];
+let q = questions[room.index];
+
+if(val == q.answer){
+room.players[me].score++;
 }
 
-index++;
+nextQ();
+}
 
-if(index>=questions.length){
+/* ======================
+NEXT QUESTION
+====================== */
 
-winners.push({
-name:user.name,
-score:score,
-time:new Date().toLocaleString()
-});
+function nextQ(){
 
-document.getElementById("main").innerHTML=
-`<h2>🏁 Finished</h2><h3>Score: ${score}</h3>`;
+let room = rooms[currentRoom];
 
+room.index++;
+
+if(room.index >= questions.length){
+
+endGame();
 return;
 }
 
-renderQuiz();
+loadQuestion();
+startTimer();
 }
 
-/* =========================
-MILLIONAIRE MODE
-========================= */
+/* ======================
+TIMER
+====================== */
 
-function openMillionaire(){
+function startTimer(){
 
-document.getElementById("main").innerHTML=`
-<div class="quizCard">
-<h2>💰 WHO WANTS TO BE A MILLIONAIRE</h2>
-<button onclick="startMillionaire()">Start Game</button>
-</div>
-`;
+let room = rooms[currentRoom];
+
+clearInterval(timer);
+
+room.time = 15;
+
+timer = setInterval(()=>{
+
+room.time--;
+
+if(room.time <= 0){
+clearInterval(timer);
+nextQ();
 }
 
-function startMillionaire(){
-
-index=0;
-score=0;
-renderQuiz();
+},1000);
 }
 
-/* =========================
-ADD QUESTION
-========================= */
+/* ======================
+LEADERBOARD
+====================== */
 
-function openAdd(){
+function updateBoard(){
 
-document.getElementById("main").innerHTML=`
-<div class="adminBox">
+let room = rooms[currentRoom];
 
-<h3>➕ Add Question</h3>
+let board = Object.entries(room.players)
+.map(([n,v])=>({name:n,score:v.score}))
+.sort((a,b)=>b.score-a.score);
 
-<input id="q" placeholder="Question"><br>
-<input id="o1" placeholder="Option 1">
-<input id="o2" placeholder="Option 2">
-<input id="o3" placeholder="Option 3">
-<input id="o4" placeholder="Option 4">
-<input id="ans" placeholder="Answer">
-
-<button onclick="addQ()">Add</button>
-
-</div>
-`;
-}
-
-function addQ(){
-
-questions.push({
-q:q.value,
-options:[o1.value,o2.value,o3.value,o4.value],
-answer:ans.value
-});
-
-alert("Question Added");
-}
-
-/* =========================
-QUESTION BANK
-========================= */
-
-function openBank(){
-
-document.getElementById("main").innerHTML=
-questions.slice(0,50).map((q,i)=>
-`<div class="quizCard">
-<b>${i+1}. ${q.q}</b>
-</div>`
-).join("");
-}
-
-/* =========================
-WINNERS
-========================= */
-
-function openWinners(){
-
-document.getElementById("main").innerHTML=
-winners.map(w=>
-`<div class="quizCard">
-🏆 ${w.name} - Score: ${w.score} - ${w.time}
-</div>`
-).join("");
-}
-
-/* =========================
-PAYMENT APPROVAL
-========================= */
-
-function openPayments(){
-
-document.getElementById("main").innerHTML=`
-<div class="quizCard">
-
-<h3>💳 Payment Requests</h3>
-
-<div id="payList"></div>
-
+let html = `
+<div class="card">
+<h3>🏆 LIVE LEADERBOARD</h3>
+${board.map(b=>
+`<div class="card">👤 ${b.name} — ⭐ ${b.score}</div>`
+).join("")}
 </div>
 `;
 
-payments.forEach((p,i)=>{
+document.getElementById("main").innerHTML += html;
+}
 
-let div=document.createElement("div");
-div.className="quizCard";
-div.innerHTML=`
-👤 ${p.name} - ₦${p.amount}
-<button onclick="approve(${i})">Approve</button>
+/* ======================
+END GAME
+====================== */
+
+function endGame(){
+
+let room = rooms[currentRoom];
+
+let result = Object.entries(room.players)
+.map(([n,v])=>({name:n,score:v.score}))
+.sort((a,b)=>b.score-a.score);
+
+document.getElementById("main").innerHTML = `
+<div class="card">
+<h1>🏁 GAME OVER</h1>
+<h2>🏆 Winner: ${result[0].name}</h2>
+
+${result.map(r=>
+`<div class="card">👤 ${r.name} — ⭐ ${r.score}</div>`
+).join("")}
+
+</div>
 `;
-
-document.getElementById("payList").appendChild(div);
-
-});
-
 }
-
-function approve(i){
-
-alert("💰 Payment Approved!");
-payments.splice(i,1);
-openPayments();
-}
-
-/* =========================
-FAKE PAYMENT REQUEST
-========================= */
-
-setInterval(()=>{
-
-if(Math.random()>0.7){
-
-payments.push({
-name:"User"+Math.floor(Math.random()*100),
-amount:Math.floor(Math.random()*50000)
-});
-
-}
-
-},5000);
 
 </script>
 
