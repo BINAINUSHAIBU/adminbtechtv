@@ -1,5 +1,340 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTECH-TV ENTERPRISE PRO MAX v4</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+
+:root{
+--bg:#0b0f1a;
+--panel:#11182a;
+--card:#1b2438;
+--accent:#00bfff;
+--danger:#ef4444;
+--warn:#f59e0b;
+--ok:#22c55e;
+--text:#fff;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+
+body{background:var(--bg);color:var(--text)}
+
+/* TOPBAR */
+.topbar{
+height:60px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 15px;
+}
+
+/* LAYOUT */
+.container{display:flex;height:calc(100vh - 60px)}
+
+.sidebar{
+width:240px;
+background:#0f1628;
+padding:10px;
+overflow:auto;
+}
+
+.main{flex:1;display:flex;flex-direction:column}
+
+.player{height:240px;background:black}
+video{width:100%;height:100%;object-fit:contain}
+
+.list{
+flex:1;
+overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+gap:10px;
+padding:10px;
+}
+
+.card{
+background:var(--card);
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+border:1px solid transparent;
+}
+
+.card:hover{border-color:var(--accent)}
+
+.right{
+width:260px;
+background:var(--panel);
+padding:10px;
+overflow:auto;
+}
+
+.log{
+font-size:12px;
+background:#0f1628;
+padding:8px;
+margin-top:10px;
+height:200px;
+overflow:auto;
+}
+
+button{
+width:100%;
+padding:10px;
+margin-top:8px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.primary{background:var(--accent)}
+.danger{background:var(--danger)}
+.warn{background:var(--warn)}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+background:#0f1628;
+border:none;
+color:white;
+border-radius:6px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- TOP -->
+<div class="topbar">
+<h3>🚀 BTECH-TV ENTERPRISE PRO MAX v4</h3>
+<div id="status">Loading...</div>
+</div>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+<h4>📡 Controls</h4>
+
+<input id="name" placeholder="Channel Name">
+<input id="url" placeholder="Stream URL">
+
+<button class="primary" onclick="addChannel()">Add Channel</button>
+
+<button onclick="filterAll()">All</button>
+<button onclick="filterLocked()">Locked</button>
+<button onclick="filterPaid()">Paid</button>
+
+<input placeholder="Search..." oninput="search(this.value)">
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="player">
+<video id="video" controls></video>
+</div>
+
+<div class="list" id="chlist"></div>
+
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+
+<h4>⚙ System</h4>
+<p id="chcount"></p>
+
+<h4>📡 Logs</h4>
+<div class="log" id="log"></div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =====================
+STATE ENGINE
+===================== */
+
+var all=[],filtered=[],cur=null;
+var channelMap={},logoMap={};
+
+/* =====================
+UTILS
+===================== */
+
+function log(t){
+document.getElementById("log").innerHTML =
+"▶ " + t + "<br>" + document.getElementById("log").innerHTML;
+}
+
+/* =====================
+LOAD IPTV API
+===================== */
+
+async function loadAPI(){
+try{
+
+let [chRes,stRes,lgRes]=await Promise.all([
+fetch("https://iptv-org.github.io/api/channels.json").then(r=>r.json()),
+fetch("https://iptv-org.github.io/api/streams.json").then(r=>r.json()),
+fetch("https://iptv-org.github.io/api/logos.json").then(r=>r.json())
+]);
+
+for(let c of chRes){
+if(!c.is_nsfw && !c.closed)channelMap[c.id]=c;
+}
+
+for(let l of lgRes){
+if(!logoMap[l.channel])logoMap[l.channel]=l.url;
+}
+
+let id=0,seen={};
+
+for(let s of stRes){
+if(!s.url || seen[s.url])continue;
+if(s.url.includes("youtube")||s.url.includes("twitch"))continue;
+
+seen[s.url]=1;
+
+let ch=s.channel?channelMap[s.channel]:null;
+
+all.push({
+id:++id,
+n:ch?ch.name:(s.title||"Unknown"),
+u:s.url,
+cat:ch&&ch.categories?ch.categories[0]:"other"
+});
+}
+
+filtered=[...all];
+render();
+
+document.getElementById("status").innerText =
+"Loaded " + all.length + " channels";
+
+}catch(e){
+document.getElementById("status").innerText="API Error";
+}
+}
+
+/* =====================
+RENDER
+===================== */
+
+function render(){
+
+let box=document.getElementById("chlist");
+box.innerHTML="";
+
+let list=filtered.slice(0,300);
+
+for(let c of list){
+
+let div=document.createElement("div");
+div.className="card";
+
+div.innerHTML =
+"<b>"+c.n+"</b><br><small>"+c.cat+"</small>";
+
+div.onclick=()=>play(c);
+
+box.appendChild(div);
+}
+
+document.getElementById("chcount").innerText =
+"Total: " + filtered.length;
+
+}
+
+/* =====================
+PLAY ENGINE
+===================== */
+
+function play(c){
+
+let v=document.getElementById("video");
+
+if(window.Hls && Hls.isSupported()){
+let hls=new Hls();
+hls.loadSource(c.u);
+hls.attachMedia(v);
+}else{
+v.src=c.u;
+}
+
+cur=c;
+log("PLAY: "+c.n);
+
+document.getElementById("status").innerText =
+"Playing: " + c.n;
+}
+
+/* =====================
+ADD CHANNEL
+===================== */
+
+function addChannel(){
+
+all.push({
+id:Date.now(),
+n:name.value,
+u:url.value,
+cat:"custom"
+});
+
+name.value="";
+url.value="";
+
+filtered=[...all];
+render();
+
+log("CHANNEL ADDED");
+}
+
+/* =====================
+FILTERS
+===================== */
+
+function filterAll(){filtered=[...all];render();}
+function filterLocked(){filtered=all.filter(c=>c.cat==="locked");render();}
+function filterPaid(){filtered=all.filter(c=>c.cat==="paid");render();}
+
+/* =====================
+SEARCH
+===================== */
+
+function search(v){
+filtered=all.filter(c=>
+c.n.toLowerCase().includes(v.toLowerCase())
+);
+render();
+}
+
+/* =====================
+BOOT
+===================== */
+
+loadAPI();
+
+</script>
+
+</body>
+</html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
