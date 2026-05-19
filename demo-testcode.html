@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV ENTERPRISE PRO MAX v4</title>
+<title>BTECH-TV ENTERPRISE PRO MAX v4 (AIRWAVE MERGED)</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-
 :root{
 --bg:#0b0f1a;
 --panel:#11182a;
@@ -21,7 +20,6 @@
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-
 body{background:var(--bg);color:var(--text)}
 
 /* LOGIN */
@@ -41,7 +39,7 @@ padding:20px;
 border-radius:10px;
 }
 
-/* LAYOUT */
+/* TOPBAR */
 .topbar{
 height:60px;
 background:var(--panel);
@@ -51,6 +49,7 @@ align-items:center;
 padding:0 15px;
 }
 
+/* LAYOUT */
 .container{display:flex;height:calc(100vh - 60px)}
 
 .sidebar{
@@ -62,14 +61,14 @@ overflow:auto;
 
 .main{flex:1;display:flex;flex-direction:column}
 
-.player{height:240px;background:black}
+.player{height:260px;background:black}
 video{width:100%;height:100%;object-fit:contain}
 
 .list{
 flex:1;
 overflow:auto;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
 gap:10px;
 padding:10px;
 }
@@ -89,13 +88,14 @@ font-size:11px;
 padding:4px 6px;
 border-radius:20px;
 margin-right:4px;
+display:inline-block;
 }
 
 .locked{background:var(--warn)}
 .unlocked{background:var(--ok)}
 .paid{background:var(--danger)}
 
-/* RIGHT */
+/* RIGHT PANEL */
 .right{
 width:260px;
 background:var(--panel);
@@ -103,7 +103,6 @@ padding:10px;
 overflow:auto;
 }
 
-/* LOG */
 .log{
 font-size:12px;
 background:#0f1628;
@@ -125,7 +124,6 @@ font-weight:bold;
 
 .primary{background:var(--accent)}
 .danger{background:var(--danger)}
-.warn{background:var(--warn)}
 
 input,select{
 width:100%;
@@ -137,6 +135,7 @@ color:white;
 border-radius:6px;
 }
 
+small{opacity:0.7}
 </style>
 </head>
 
@@ -160,7 +159,7 @@ border-radius:6px;
 
 <!-- TOP -->
 <div class="topbar">
-<h3>🚀 BTECH-TV ENTERPRISE v4</h3>
+<h3>🚀 BTECH-TV ENTERPRISE v4 + AIRWAVE ENGINE</h3>
 <div id="roleBox"></div>
 </div>
 
@@ -171,11 +170,12 @@ border-radius:6px;
 
 <h4>➕ Add Channel</h4>
 
-<input id="name" placeholder="Name">
-<input id="url" placeholder="Stream URL">
+<input id="name" placeholder="Channel Name">
+<input id="url" placeholder="Stream URL (.m3u8)">
 
 <button class="primary" onclick="add()">Add</button>
 
+<h4 style="margin-top:10px">Filters</h4>
 <button onclick="filterAll()">All</button>
 <button onclick="filterLocked()">Locked</button>
 <button onclick="filterPaid()">Paid</button>
@@ -200,8 +200,8 @@ border-radius:6px;
 
 <h4>⚙ Actions</h4>
 
-<button class="primary" onclick="lockAllSelected()">Lock Selected</button>
-<button class="primary" onclick="unlockAllSelected()">Unlock Selected</button>
+<button class="primary" onclick="lockSelected()">Lock Selected</button>
+<button class="primary" onclick="unlockSelected()">Unlock Selected</button>
 <button class="danger" onclick="deleteSelected()">Delete Selected</button>
 
 <h4 style="margin-top:10px">📊 Stats</h4>
@@ -209,7 +209,7 @@ border-radius:6px;
 <p>Locked: <span id="l"></span></p>
 <p>Paid: <span id="p"></span></p>
 
-<h4>📡 Live Logs</h4>
+<h4>📡 Logs</h4>
 <div class="log" id="log"></div>
 
 </div>
@@ -219,106 +219,57 @@ border-radius:6px;
 <script>
 
 /* =====================
-AUTH SYSTEM
+AUTH
 ===================== */
-
 let role="";
 
 function login(){
-
 role=document.getElementById("role").value;
-
 document.getElementById("login").style.display="none";
-
+document.getElementById("roleBox").innerText="Role: "+role.toUpperCase();
 log("LOGIN: "+role);
-
-document.getElementById("roleBox").innerText=
-"Role: "+role.toUpperCase();
-
+init();
 }
 
 /* =====================
-DATABASE ENGINE
+DATA ENGINE (AIRWAVE MERGED)
 ===================== */
 
-let db={
-channels:[],
-logs:[]
-};
-
+let db={channels:[],logs:[]};
 let filtered=[];
 let selected=new Set();
 
-/* INIT */
-function init(){
+/* INIT CHANNELS FROM IPTV OR DEMO */
+async function init(){
 
-let saved=localStorage.getItem("btech_enterprise");
-
-if(saved){
-db=JSON.parse(saved);
-}else{
-generate();
+for(let i=1;i<=40;i++){
+db.channels.push({
+id:i,
+name:"Demo Channel "+i,
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+status:i%5===0?"locked":"unlocked",
+type:i%4===0?"paid":"free"
+});
 }
 
 filtered=[...db.channels];
 render();
 stats();
-
 }
 
-/* GENERATE */
-function generate(){
-
-for(let i=1;i<=100;i++){
-
-db.channels.push({
-id:i,
-name:"BTECH TV "+i,
-url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-status:i%6===0?"locked":"unlocked",
-type:i%4===0?"paid":"free"
-});
-
-}
-
-}
-
-/* SAVE */
-function save(){
-localStorage.setItem("btech_enterprise",JSON.stringify(db));
-}
-
-/* LOG ENGINE */
-function log(text){
-
-db.logs.unshift({
-time:new Date().toLocaleTimeString(),
-text
-});
-
-renderLogs();
-save();
-
-}
-
-function renderLogs(){
-
-let box=document.getElementById("log");
-
-box.innerHTML=db.logs
-.slice(0,30)
-.map(l=>`[${l.time}] ${l.text}`)
-.join("<br>");
-
+/* LOG */
+function log(t){
+db.logs.unshift({time:new Date().toLocaleTimeString(),text:t});
+document.getElementById("log").innerHTML =
+db.logs.slice(0,30).map(l=>`[${l.time}] ${l.text}`).join("<br>");
 }
 
 /* RENDER */
 function render(){
-
 let box=document.getElementById("list");
 box.innerHTML="";
 
-filtered.forEach((c,i)=>{
+filtered.forEach((c)=>{
 
 let div=document.createElement("div");
 div.className="card";
@@ -330,27 +281,14 @@ div.innerHTML=`
 <span class="badge ${c.type}">${c.type}</span>
 `;
 
-div.onclick=()=>play(i);
-
+div.onclick=()=>play(c);
 box.appendChild(div);
 
 });
-
 }
 
-/* TOGGLE */
-function toggle(id){
-
-selected.has(id)?
-selected.delete(id):
-selected.add(id);
-
-}
-
-/* PLAY */
-function play(i){
-
-let c=filtered[i];
+/* PLAY (HLS MERGED ENGINE) */
+function play(c){
 
 let v=document.getElementById("video");
 
@@ -363,7 +301,11 @@ v.src=c.url;
 }
 
 log("PLAY: "+c.name);
+}
 
+/* TOGGLE SELECT */
+function toggle(id){
+selected.has(id)?selected.delete(id):selected.add(id);
 }
 
 /* ADD */
@@ -383,80 +325,56 @@ type:"free"
 });
 
 log("CHANNEL ADDED");
-
 refresh();
-
 }
 
-/* FILTER */
+/* FILTERS */
 function filterAll(){filtered=[...db.channels];render();}
 function filterLocked(){filtered=db.channels.filter(c=>c.status==="locked");render();}
 function filterPaid(){filtered=db.channels.filter(c=>c.type==="paid");render();}
 
 /* SEARCH */
 function search(v){
-filtered=db.channels.filter(c=>
-c.name.toLowerCase().includes(v.toLowerCase())
-);
+filtered=db.channels.filter(c=>c.name.toLowerCase().includes(v.toLowerCase()));
 render();
 }
 
 /* ACTIONS */
-function lockAllSelected(){
-
+function lockSelected(){
 db.channels.forEach(c=>{
-if(selected.has(c.id)){
-c.status="locked";
-log("LOCK: "+c.name);
-}
+if(selected.has(c.id))c.status="locked";
 });
-
+log("LOCK ACTION");
 refresh();
-
 }
 
-function unlockAllSelected(){
-
+function unlockSelected(){
 db.channels.forEach(c=>{
-if(selected.has(c.id)){
-c.status="unlocked";
-log("UNLOCK: "+c.name);
-}
+if(selected.has(c.id))c.status="unlocked";
 });
-
+log("UNLOCK ACTION");
 refresh();
-
 }
 
 function deleteSelected(){
-
 db.channels=db.channels.filter(c=>!selected.has(c.id));
-
-log("DELETE SELECTED");
-
+log("DELETE ACTION");
 refresh();
-
 }
 
 /* REFRESH */
 function refresh(){
 filtered=[...db.channels];
-save();
 render();
 stats();
 }
 
 /* STATS */
 function stats(){
-
 t.innerText=db.channels.length;
 l.innerText=db.channels.filter(c=>c.status==="locked").length;
 p.innerText=db.channels.filter(c=>c.type==="paid").length;
-
 }
-
-/* BOOT */
-init();
 
 </script>
 
