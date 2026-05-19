@@ -6,87 +6,72 @@
 <title>PRO MULTIPLAYER QUIZ SYSTEM</title>
 
 <style>
-body{margin:0;font-family:Arial;background:#0b0f1a;color:#fff}
-
-.topbar{
-background:#11182a;
-padding:12px;
-display:flex;
-justify-content:space-between;
+:root{
+--bg:#0b0f1a;
+--panel:#11182a;
+--card:#1b2438;
+--accent:#00bfff;
+--text:#fff;
+--good:#16a34a;
+--bad:#dc2626;
 }
 
-.container{display:flex;height:calc(100vh - 50px)}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:var(--bg);color:var(--text)}
 
+button{cursor:pointer;border:none;padding:10px;border-radius:8px;background:var(--accent);font-weight:bold}
+input{padding:10px;width:100%;margin:5px 0;border-radius:8px;border:none;background:#0f1628;color:white}
+
+.container{display:flex;height:100vh}
+
+/* SIDEBAR */
 .sidebar{
-width:260px;
-background:#0f1628;
-padding:10px;
-overflow:auto;
+width:220px;background:#0f1628;padding:10px
 }
+.menu{padding:10px;margin:5px 0;background:var(--card);border-radius:8px;cursor:pointer}
 
-.main{flex:1;padding:15px;overflow:auto}
+/* MAIN */
+.main{flex:1;padding:10px;overflow:auto}
 
-.card{
-background:#1b2438;
-padding:12px;
-margin-bottom:10px;
-border-radius:10px;
-}
+/* TOP */
+.top{display:flex;justify-content:space-between;align-items:center;background:var(--panel);padding:10px}
 
-button{
-padding:10px;
-margin-top:8px;
-background:#00bfff;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-}
+/* CARD */
+.card{background:var(--card);padding:10px;margin:10px;border-radius:10px}
 
-input{
-width:100%;
-padding:10px;
-margin:5px 0;
-border-radius:8px;
-border:none;
-background:#0f1628;
-color:#fff;
-}
+/* QUIZ */
+.option{padding:10px;background:#0f1628;margin:5px;border-radius:8px;cursor:pointer}
+.option:hover{background:#1f2a44}
 
-.option{
-padding:10px;
-margin:5px 0;
-background:#0f1628;
-border-radius:8px;
-cursor:pointer;
-}
+/* PROFILE */
+.profile{background:var(--card);padding:15px;border-radius:10px}
+
+/* TABLE */
+table{width:100%;margin-top:10px;border-collapse:collapse}
+td,th{padding:8px;border-bottom:1px solid #2a3550}
 
 </style>
 </head>
 
 <body>
 
-<div class="topbar">
-<h3>🎮 MULTIPLAYER QUIZ SYSTEM</h3>
-<div id="me"></div>
+<div class="top">
+<h2>🎯 PRO MULTIPLAYER QUIZ</h2>
+<div id="userBox"></div>
 </div>
 
 <div class="container">
 
+<!-- SIDEBAR -->
 <div class="sidebar">
-
-<h3>🎯 MENU</h3>
-
-<input id="roomId" placeholder="Room ID">
-<input id="name" placeholder="Your Name">
-
-<button onclick="createRoom()">Create Room</button>
-<button onclick="joinRoom()">Join Room</button>
-
-<button onclick="startGame()">Start Game (Host)</button>
-
+<div class="menu" onclick="showQuiz()">🧠 Quiz</div>
+<div class="menu" onclick="showProfile()">👤 Profile</div>
+<div class="menu" onclick="showLeaderboard()">🏆 Leaderboard</div>
+<div class="menu" onclick="showAdmin()">⚙ Admin</div>
+<div class="menu" onclick="resetAll()">🔄 Reset System</div>
 </div>
 
+<!-- MAIN -->
 <div class="main" id="main"></div>
 
 </div>
@@ -94,247 +79,221 @@ cursor:pointer;
 <script>
 
 /* ======================
-GLOBAL STATE
+DATA
 ====================== */
 
-let rooms = {};
-let currentRoom = null;
-let me = null;
-let isHost = false;
-let index = 0;
-let timer = null;
+let user=null;
+let index=0;
+let score=0;
+let startTime=0;
+let timer;
+
+let users=JSON.parse(localStorage.getItem("users")||"{}");
+let board=JSON.parse(localStorage.getItem("board")||"[]");
 
 /* ======================
-1000 QUESTIONS ENGINE
+1000 QUESTION BANK
 ====================== */
 
-let questions = [];
+let questions=[];
 
 for(let i=1;i<=1000;i++){
 questions.push({
-q:`Math Question ${i}: ${i} + 5 = ?`,
-options:[i+5,i+3,i+10,i],
-answer:i+5
+q:`Question ${i}: What is ${i} + 1 ?`,
+options:[`${i}`,`${i+1}`,`${i+2}`,`${i+3}`],
+answer:`${i+1}`
 });
 }
 
 /* ======================
-CREATE ROOM
+LOGIN (AUTO SIMPLE)
 ====================== */
 
-function createRoom(){
+function login(name){
+user=name;
 
-let id = document.getElementById("roomId").value;
-let name = document.getElementById("name").value;
-
-if(!id || !name) return alert("Fill fields");
-
-rooms[id] = {
-host:name,
-players:{},
-index:0,
-time:15,
-started:false
-};
-
-joinRoom();
-isHost = true;
-}
-
-/* ======================
-JOIN ROOM
-====================== */
-
-function joinRoom(){
-
-let id = document.getElementById("roomId").value;
-let name = document.getElementById("name").value;
-
-if(!rooms[id]) return alert("Room not found");
-
-currentRoom = id;
-me = name;
-
-rooms[id].players[name] = {
+if(!users[name]){
+users[name]={
+name,
 score:0,
-answered:false
+time:0
 };
+}
 
-document.getElementById("me").innerHTML =
-`👤 ${name} ${isHost ? "(Host)" : ""}`;
+document.getElementById("userBox").innerHTML=
+`👤 ${name}`;
 
-renderLobby();
+showQuiz();
 }
 
 /* ======================
-LOBBY
+QUIZ
 ====================== */
 
-function renderLobby(){
-
-let room = rooms[currentRoom];
-
-document.getElementById("main").innerHTML = `
-<div class="card">
-<h2>🎮 ROOM: ${currentRoom}</h2>
-
-<h3>👥 Players</h3>
-
-${Object.keys(room.players).map(p=>
-`<div class="card">👤 ${p} — ⭐ ${room.players[p].score}</div>`
-).join("")}
-
-</div>
-`;
+function showQuiz(){
+index=0;
+score=0;
+startTime=Date.now();
+renderQ();
 }
 
-/* ======================
-START GAME
-====================== */
+function renderQ(){
 
-function startGame(){
+let q=questions[index];
+let timeLeft=15;
 
-if(!isHost) return alert("Only host can start");
+clearInterval(timer);
 
-rooms[currentRoom].started = true;
+timer=setInterval(()=>{
+timeLeft--;
+if(timeLeft<=0) next();
+document.getElementById("t").innerText=timeLeft;
+},1000);
 
-loadQuestion();
-startTimer();
-}
-
-/* ======================
-LOAD QUESTION
-====================== */
-
-function loadQuestion(){
-
-let room = rooms[currentRoom];
-let q = questions[room.index];
-
-document.getElementById("main").innerHTML = `
+document.getElementById("main").innerHTML=`
 <div class="card">
 
-<h2>⏱ Question ${room.index+1}</h2>
-<h3>${q.q}</h3>
+<h3>⏱ Time: <span id="t">15</span>s</h3>
+<h2>${q.q}</h2>
 
 ${q.options.map(o=>
-`<div class="option" onclick="answer(${o})">${o}</div>`
+`<div class="option" onclick="answer('${o}')">${o}</div>`
 ).join("")}
 
 </div>
 `;
-
-updateBoard();
 }
-
-/* ======================
-ANSWER
-====================== */
 
 function answer(val){
-
-let room = rooms[currentRoom];
-let q = questions[room.index];
-
-if(val == q.answer){
-room.players[me].score++;
+if(val===questions[index].answer){
+score++;
+}
+next();
 }
 
-nextQ();
-}
+function next(){
+index++;
 
-/* ======================
-NEXT QUESTION
-====================== */
-
-function nextQ(){
-
-let room = rooms[currentRoom];
-
-room.index++;
-
-if(room.index >= questions.length){
-
-endGame();
+if(index>=questions.length){
+finish();
 return;
 }
 
-loadQuestion();
-startTimer();
+renderQ();
 }
 
-/* ======================
-TIMER
-====================== */
+function finish(){
 
-function startTimer(){
+let totalTime=Math.floor((Date.now()-startTime)/1000);
 
-let room = rooms[currentRoom];
+users[user].score=score;
+users[user].time=totalTime;
 
-clearInterval(timer);
+board.push({
+name:user,
+score,
+time:totalTime
+});
 
-room.time = 15;
+localStorage.setItem("users",JSON.stringify(users));
+localStorage.setItem("board",JSON.stringify(board));
 
-timer = setInterval(()=>{
-
-room.time--;
-
-if(room.time <= 0){
-clearInterval(timer);
-nextQ();
-}
-
-},1000);
+document.getElementById("main").innerHTML=`
+<div class="card">
+<h2>🏁 Finished</h2>
+<h3>Score: ${score}</h3>
+<h3>Time: ${totalTime}s</h3>
+</div>
+`;
 }
 
 /* ======================
 LEADERBOARD
 ====================== */
 
-function updateBoard(){
+function showLeaderboard(){
 
-let room = rooms[currentRoom];
+board.sort((a,b)=>b.score-a.score || a.time-b.time);
 
-let board = Object.entries(room.players)
-.map(([n,v])=>({name:n,score:v.score}))
-.sort((a,b)=>b.score-a.score);
-
-let html = `
+document.getElementById("main").innerHTML=`
 <div class="card">
-<h3>🏆 LIVE LEADERBOARD</h3>
-${board.map(b=>
-`<div class="card">👤 ${b.name} — ⭐ ${b.score}</div>`
-).join("")}
+<h2>🏆 Leaderboard</h2>
+
+<table>
+<tr><th>User</th><th>Score</th><th>Time</th></tr>
+${board.map(b=>`
+<tr>
+<td>${b.name}</td>
+<td>${b.score}</td>
+<td>${b.time}s</td>
+</tr>
+`).join("")}
+</table>
+
 </div>
 `;
-
-document.getElementById("main").innerHTML += html;
 }
 
 /* ======================
-END GAME
+PROFILE
 ====================== */
 
-function endGame(){
+function showProfile(){
 
-let room = rooms[currentRoom];
+let u=users[user];
 
-let result = Object.entries(room.players)
-.map(([n,v])=>({name:n,score:v.score}))
-.sort((a,b)=>b.score-a.score);
+document.getElementById("main").innerHTML=`
+<div class="profile">
 
-document.getElementById("main").innerHTML = `
-<div class="card">
-<h1>🏁 GAME OVER</h1>
-<h2>🏆 Winner: ${result[0].name}</h2>
-
-${result.map(r=>
-`<div class="card">👤 ${r.name} — ⭐ ${r.score}</div>`
-).join("")}
+<h2>👤 Profile</h2>
+<p>Name: ${u.name}</p>
+<p>Score: ${u.score}</p>
+<p>Best Time: ${u.time}s</p>
 
 </div>
 `;
 }
+
+/* ======================
+ADMIN
+====================== */
+
+function showAdmin(){
+
+document.getElementById("main").innerHTML=`
+<div class="card">
+
+<h2>⚙ SUPER ADMIN</h2>
+
+<input id="uname" placeholder="Login User Name">
+<button onclick="login(uname.value)">Login User</button>
+
+<hr>
+
+<h3>Users</h3>
+
+${Object.keys(users).map(u=>`
+<p>👤 ${u} - Score: ${users[u].score}</p>
+`).join("")}
+
+</div>
+`;
+}
+
+/* ======================
+RESET
+====================== */
+
+function resetAll(){
+localStorage.clear();
+location.reload();
+}
+
+/* ======================
+AUTO LOGIN DEMO
+====================== */
+
+login("Player1");
 
 </script>
 
