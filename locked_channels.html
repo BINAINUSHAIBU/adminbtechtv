@@ -3,326 +3,388 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>BTECH-TV PRO ULTRA LOCKED ENGINE</title>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<title>BTECH-TV CHANNEL CONTROL DASHBOARD</title>
 
 <style>
-
-/* ================= ROOT ================= */
 :root{
---bg:#0b0f1a;
---panel:#11182a;
---card:#1b2438;
---hover:#2b3a5a;
---accent:#00bfff;
---text:#fff;
---muted:#94a3b8;
---danger:#dc2626;
---success:#00ff99;
---warning:#f59e0b;
+  --bg:#0b0f1a;
+  --panel:#11182a;
+  --card:#1b2438;
+  --accent:#00bfff;
+  --text:#fff;
+  --muted:#94a3b8;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial;
+}
 
 body{
-background:var(--bg);
-color:var(--text);
-overflow:hidden;
+  background:var(--bg);
+  color:var(--text);
 }
 
-/* ================= TOPBAR ================= */
+/* TOP BAR */
 .topbar{
-height:65px;
-background:var(--panel);
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:0 20px;
-border-bottom:1px solid #222;
+  height:60px;
+  background:var(--panel);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
 }
 
-.topbar h2{color:var(--accent);}
-
-.top-links{
-display:flex;
-gap:10px;
+.topbar h2{
+  color:var(--accent);
 }
 
-.top-links button{
-padding:10px 14px;
-border:none;
-border-radius:8px;
-background:var(--card);
-color:#fff;
-cursor:pointer;
-}
-
-.top-links button.active,
-.top-links button:hover{
-background:var(--accent);
-color:#000;
-}
-
-/* ================= LAYOUT ================= */
+/* LAYOUT */
 .container{
-display:flex;
-height:calc(100vh - 65px);
+  display:flex;
+  height:calc(100vh - 60px);
 }
 
-/* ================= SIDEBAR ================= */
+/* LEFT PANEL */
 .sidebar{
-width:260px;
-background:#0f1628;
-padding:15px;
-overflow-y:auto;
-border-right:1px solid #222;
+  width:280px;
+  background:#0f1628;
+  padding:15px;
+  overflow:auto;
 }
 
-.cat{
-padding:12px;
-margin:8px 0;
-background:var(--card);
-border-radius:8px;
-cursor:pointer;
+.btn{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border:none;
+  border-radius:8px;
+  background:var(--card);
+  color:white;
+  cursor:pointer;
 }
 
-.cat:hover{
-background:var(--hover);
+.btn:hover{
+  background:var(--accent);
+  color:black;
 }
 
-/* ================= MAIN ================= */
+/* MAIN */
 .main{
-flex:1;
-display:flex;
-flex-direction:column;
-overflow:hidden;
+  flex:1;
+  padding:15px;
+  overflow:auto;
 }
 
-/* ================= PLAYER ================= */
-.player{
-height:320px;
-background:#000;
-position:relative;
-display:flex;
-align-items:center;
-justify-content:center;
+/* STATS */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:15px;
 }
 
-.player video{
-width:100%;
-height:100%;
-object-fit:contain;
+.stat{
+  background:var(--card);
+  padding:15px;
+  border-radius:10px;
+  text-align:center;
 }
 
-.overlay{
-position:absolute;
-inset:0;
-background:rgba(0,0,0,.85);
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-z-index:10;
+.stat h3{
+  color:var(--muted);
+  font-size:12px;
 }
 
-/* ================= CHANNELS ================= */
-.channels{
-flex:1;
-overflow-y:auto;
-padding:12px;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-gap:10px;
+.stat p{
+  font-size:20px;
+  margin-top:5px;
+  color:var(--accent);
 }
 
-.channel{
-background:var(--card);
-padding:12px;
-border-radius:10px;
-cursor:pointer;
-display:flex;
-justify-content:space-between;
-align-items:center;
+/* FORM */
+.form{
+  background:var(--card);
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:15px;
 }
 
-.channel:hover{
-background:var(--hover);
+input{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  border:none;
+  border-radius:8px;
+  background:#0f1628;
+  color:white;
+}
+
+/* CHANNEL LIST */
+.list{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:10px;
+}
+
+.card{
+  background:var(--card);
+  padding:12px;
+  border-radius:10px;
+  cursor:pointer;
+  border:2px solid transparent;
+}
+
+.card:hover{
+  border-color:var(--accent);
+}
+
+.card h4{
+  margin-bottom:5px;
 }
 
 .badge{
-padding:4px 10px;
-border-radius:20px;
-font-size:11px;
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:20px;
+  font-size:11px;
+  margin-right:5px;
 }
 
-.locked{background:var(--warning);color:#000;}
-.unlocked{background:var(--success);color:#000;}
-.paid{background:var(--danger);}
-.free{background:#16a34a;}
+.locked{background:#f59e0b;}
+.unlocked{background:#22c55e;}
 
+.actions{
+  margin-top:10px;
+  display:flex;
+  gap:5px;
+}
+
+.smallbtn{
+  flex:1;
+  padding:6px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:12px;
+}
+
+.lockBtn{background:#f59e0b;}
+.unlockBtn{background:#22c55e;}
+.deleteBtn{background:#ef4444;color:white;}
+
+.filterbar{
+  display:flex;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.filterbar button{
+  flex:1;
+  padding:8px;
+  border:none;
+  border-radius:6px;
+  background:var(--card);
+  color:white;
+  cursor:pointer;
+}
+
+.filterbar button.active{
+  background:var(--accent);
+  color:black;
+}
 </style>
 </head>
 
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
-<h2>📺 BTECH PRO ULTRA LOCKED</h2>
-
-<div class="top-links">
-<button class="active" onclick="filterCat('All',this)">All</button>
-<button onclick="filterCat('Sports',this)">Sports</button>
-<button onclick="filterCat('Movies',this)">Movies</button>
-<button onclick="filterLocked(this)">Locked</button>
-</div>
+  <h2>📺 BTECH-TV CONTROL PANEL</h2>
+  <div>Channel Admin Dashboard</div>
 </div>
 
 <div class="container">
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-<div class="cat" onclick="filterCat('All')">📺 All</div>
-<div class="cat" onclick="filterCat('Sports')">🏆 Sports</div>
-<div class="cat" onclick="filterCat('Movies')">🎬 Movies</div>
-<div class="cat" onclick="filterLocked()">🔒 Locked</div>
-</div>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
 
-<!-- MAIN -->
-<div class="main">
+    <h3>⚙ Actions</h3>
 
-<!-- PLAYER -->
-<div class="player">
-<div class="overlay" id="overlay">
-<h1>🚀</h1>
-<p>Loading Engine...</p>
-</div>
-<video id="videoPlayer" controls></video>
-</div>
+    <button class="btn" onclick="generateChannels()">Generate Channels</button>
+    <button class="btn" onclick="clearLocked()">Delete Locked</button>
+    <button class="btn" onclick="resetAll()">Reset All</button>
 
-<!-- CHANNEL LIST -->
-<div class="channels" id="channelList"></div>
+  </div>
 
-</div>
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat">
+        <h3>Total</h3>
+        <p id="total">0</p>
+      </div>
+      <div class="stat">
+        <h3>Locked</h3>
+        <p id="locked">0</p>
+      </div>
+      <div class="stat">
+        <h3>Unlocked</h3>
+        <p id="unlocked">0</p>
+      </div>
+    </div>
+
+    <!-- ADD CHANNEL -->
+    <div class="form">
+      <h3>Add Channel</h3>
+      <input id="name" placeholder="Channel Name">
+      <input id="category" placeholder="Category">
+      <button class="btn" onclick="addChannel()">Add Channel</button>
+    </div>
+
+    <!-- FILTER -->
+    <div class="filterbar">
+      <button class="active" onclick="setFilter('all',this)">All</button>
+      <button onclick="setFilter('locked',this)">Locked</button>
+      <button onclick="setFilter('unlocked',this)">Unlocked</button>
+    </div>
+
+    <!-- LIST -->
+    <div class="list" id="list"></div>
+
+  </div>
 
 </div>
 
 <script>
 
-/* ================= ENGINE ================= */
-const ENGINE={
-maxChannels:5000,
-renderLimit:200
-};
+let channels = [];
+let filter = "all";
 
-let channels=[];
-let filtered=[];
+function generateChannels(){
+  channels = [];
 
-/* ================= STREAMS ================= */
-const streams=[
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-"https://test-streams.mux.dev/test_001/stream.m3u8"
-];
+  for(let i=1;i<=50;i++){
+    channels.push({
+      id:i,
+      name:"BTECH Channel "+i,
+      category:i%2===0?"Sports":"Movies",
+      locked:i%5===0
+    });
+  }
 
-/* ================= GENERATE ================= */
-function generate(){
-const cats=["Sports","Movies","News","VIP"];
-
-for(let i=1;i<=ENGINE.maxChannels;i++){
-
-channels.push({
-id:i,
-name:"BTECH "+cats[i%cats.length]+" "+i,
-category:cats[i%cats.length],
-url:streams[i%streams.length],
-status:i%10===0?"locked":"unlocked",
-type:i%3===0?"paid":"free"
-});
-
+  render();
 }
 
-filtered=[...channels];
-render();
-document.getElementById("overlay").style.display="none";
+function addChannel(){
+  const name = document.getElementById("name").value;
+  const category = document.getElementById("category").value;
+
+  if(!name) return;
+
+  channels.push({
+    id:Date.now(),
+    name,
+    category,
+    locked:false
+  });
+
+  document.getElementById("name").value="";
+  document.getElementById("category").value="";
+
+  render();
 }
 
-/* ================= RENDER ================= */
+function toggleLock(id){
+  channels = channels.map(c=>{
+    if(c.id===id){
+      c.locked = !c.locked;
+    }
+    return c;
+  });
+
+  render();
+}
+
+function deleteChannel(id){
+  channels = channels.filter(c=>c.id!==id);
+  render();
+}
+
+function clearLocked(){
+  channels = channels.filter(c=>!c.locked);
+  render();
+}
+
+function resetAll(){
+  channels = [];
+  render();
+}
+
+function setFilter(type,btn){
+  filter = type;
+
+  document.querySelectorAll(".filterbar button")
+  .forEach(b=>b.classList.remove("active"));
+
+  btn.classList.add("active");
+
+  render();
+}
+
 function render(){
 
-const box=document.getElementById("channelList");
-box.innerHTML="";
+let list = document.getElementById("list");
+list.innerHTML = "";
 
-filtered.slice(0,ENGINE.renderLimit).forEach((c,i)=>{
+let data = channels;
 
-box.innerHTML+=`
-<div class="channel" onclick="play(${c.id})">
+if(filter==="locked"){
+  data = channels.filter(c=>c.locked);
+}
+if(filter==="unlocked"){
+  data = channels.filter(c=>!c.locked);
+}
 
-<div>
-<b>${c.name}</b><br>
-<small>${c.category}</small>
-</div>
+data.forEach(c=>{
 
-<div>
-<span class="badge ${c.status}">
-${c.status}
-</span>
-</div>
+let div = document.createElement("div");
+div.className="card";
 
-</div>
+div.innerHTML=`
+  <h4>${c.name}</h4>
+  <small>${c.category}</small>
+  <div style="margin-top:8px;">
+    <span class="badge ${c.locked?'locked':'unlocked'}">
+      ${c.locked?'Locked':'Unlocked'}
+    </span>
+  </div>
+
+  <div class="actions">
+    <button class="smallbtn lockBtn" onclick="toggleLock(${c.id})">Lock</button>
+    <button class="smallbtn unlockBtn" onclick="toggleLock(${c.id})">Unlock</button>
+    <button class="smallbtn deleteBtn" onclick="deleteChannel(${c.id})">Delete</button>
+  </div>
 `;
+
+list.appendChild(div);
 
 });
 
-}
-
-/* ================= PLAY ================= */
-let hls;
-
-function play(id){
-
-const ch=channels.find(c=>c.id===id);
-
-const video=document.getElementById("videoPlayer");
-
-if(hls) hls.destroy();
-
-if(Hls.isSupported()){
-
-hls=new Hls();
-hls.loadSource(ch.url);
-hls.attachMedia(video);
-
-}else{
-video.src=ch.url;
-}
-
-video.play();
+updateStats();
 
 }
 
-/* ================= FILTER ================= */
-function filterCat(cat,btn){
-
-filtered=cat==="All"
-?channels
-:channels.filter(c=>c.category.includes(cat));
-
-render();
-
-document.querySelectorAll(".top-links button")
-.forEach(b=>b.classList.remove("active"));
-
-if(btn) btn.classList.add("active");
+function updateStats(){
+  document.getElementById("total").innerText = channels.length;
+  document.getElementById("locked").innerText = channels.filter(c=>c.locked).length;
+  document.getElementById("unlocked").innerText = channels.filter(c=>!c.locked).length;
 }
 
-function filterLocked(){
-filtered=channels.filter(c=>c.status==="locked");
-render();
-}
-
-/* ================= START ================= */
-generate();
+generateChannels();
 
 </script>
 
