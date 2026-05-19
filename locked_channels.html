@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV LOCKED CHANNELS PRO</title>
+<title>BTECH-TV LOCKED PRO MAX v2</title>
 
 <style>
 :root{
@@ -20,25 +20,60 @@
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
-body{
-background:var(--bg);
-color:var(--text);
+body{background:var(--bg);color:var(--text);}
+
+/* LOGIN */
+.login{
+position:fixed;inset:0;
+background:#000c;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
 }
 
-.header{
-padding:20px;
+.box{
 background:var(--panel);
+padding:20px;
+border-radius:12px;
+width:320px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+background:#0f1628;
+color:#fff;
+}
+
+button{
+margin-top:10px;
+width:100%;
+padding:10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.primary{background:var(--accent);}
+.danger{background:var(--danger);color:#fff;}
+.success{background:var(--success);}
+
+/* HEADER */
+.header{
 display:flex;
 justify-content:space-between;
-align-items:center;
+padding:15px;
+background:var(--panel);
 border-bottom:1px solid #222;
 }
 
-.header h2{color:var(--accent);}
-
 .stats{
-display:flex;
-gap:10px;
+display:flex;gap:10px;
 }
 
 .stat{
@@ -46,39 +81,38 @@ background:var(--card);
 padding:10px;
 border-radius:10px;
 text-align:center;
-min-width:120px;
+min-width:110px;
 }
 
-.stat h4{font-size:12px;color:var(--muted);}
-.stat p{color:var(--accent);font-weight:bold;font-size:18px;}
+.stat p{color:var(--accent);font-weight:bold;}
 
-.container{padding:20px;}
+/* LAYOUT */
+.container{
+display:flex;
+height:calc(100vh - 70px);
+}
 
-.search{
-width:100%;
-padding:12px;
-border-radius:10px;
-border:none;
-background:var(--panel);
-color:#fff;
-margin-bottom:15px;
+.main{
+flex:1;
+padding:15px;
+overflow:auto;
 }
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-gap:15px;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:12px;
 }
 
 .card{
 background:var(--card);
-padding:15px;
-border-radius:12px;
+padding:12px;
+border-radius:10px;
 border:1px solid #222;
 }
 
 .badge{
-padding:4px 10px;
+padding:4px 8px;
 border-radius:20px;
 font-size:11px;
 margin-right:5px;
@@ -88,230 +122,190 @@ margin-right:5px;
 .paid{background:#dc2626;}
 .free{background:#16a34a;}
 
-.btns{display:flex;gap:10px;margin-top:10px;}
+.actions{display:flex;gap:8px;margin-top:10px;}
 
-button{
+.small-btn{
 flex:1;
-padding:8px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
+padding:7px;
+font-size:12px;
+border-radius:6px;
 }
 
 .unlock{background:var(--success);}
-.pay{background:var(--warning);color:#000;}
-.delete{background:var(--danger);color:#fff;}
+.pay{background:var(--warning);}
+.del{background:var(--danger);color:#fff;}
 
-/* LOGIN OVERLAY */
-.login{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.9);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;
-}
-
-.login-box{
+.sidebar{
+width:280px;
 background:var(--panel);
-padding:25px;
-border-radius:12px;
-width:300px;
-text-align:center;
+padding:10px;
+border-right:1px solid #222;
+overflow:auto;
 }
 
-.login-box input{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:none;
-border-radius:8px;
-background:#0f1628;
-color:#fff;
-}
-
-.login-box button{
-margin-top:10px;
-width:100%;
-background:var(--accent);
-}
-
-.small{
+.log{
 font-size:12px;
 color:var(--muted);
-margin-top:10px;
+margin-top:8px;
+border-bottom:1px dashed #333;
+padding-bottom:5px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ================= LOGIN ================= -->
-<div class="login" id="loginBox">
-<div class="login-box">
-<h3>🔐 Admin Login</h3>
-<input type="password" id="pass" placeholder="Enter Admin Key">
-<button onclick="login()">Login</button>
-<p class="small">Default: admin123</p>
+<!-- LOGIN -->
+<div class="login" id="login">
+<div class="box">
+<h3>🔐 PRO MAX LOGIN</h3>
+<input id="user" placeholder="username">
+<input id="pass" type="password" placeholder="password">
+<button class="primary" onclick="login()">Login</button>
+<p style="color:#888;font-size:12px;margin-top:10px;">
+admin / admin123
+</p>
 </div>
 </div>
 
-<!-- ================= HEADER ================= -->
+<!-- HEADER -->
 <div class="header">
-<h2>🔒 Locked Channels PRO</h2>
+<h3>🔒 LOCKED PRO MAX v2</h3>
 
 <div class="stats">
-<div class="stat"><h4>Locked</h4><p id="lockedCount">0</p></div>
-<div class="stat"><h4>Revenue</h4><p id="revenue">₦0</p></div>
-<div class="stat"><h4>Paid</h4><p id="paidCount">0</p></div>
+<div class="stat"><p id="tLock">0</p><small>Locked</small></div>
+<div class="stat"><p id="rev">₦0</p><small>Revenue</small></div>
+<div class="stat"><p id="act">0</p><small>Actions</small></div>
 </div>
 </div>
 
 <div class="container">
 
-<input class="search" placeholder="Search locked channels..." oninput="render(this.value)">
+<!-- MAIN -->
+<div class="main">
+
+<input placeholder="Search locked channels..." oninput="render(this.value)">
+
+<button class="primary" onclick="exportCSV()">⬇ Export CSV</button>
 
 <div class="grid" id="grid"></div>
 
 </div>
 
+<!-- SIDEBAR LOG -->
+<div class="sidebar">
+<h4>📜 Activity Log</h4>
+<div id="log"></div>
+</div>
+
+</div>
+
 <script>
 
-/* ================= SECURITY ================= */
-let ADMIN = false;
-const ADMIN_KEY = "admin123";
+/* ================= AUTH ================= */
+let USER=null;
+let ROLE=null;
 
-/* ================= DATA ================= */
-let channels = [];
-let revenue = 0;
+/* ================= STATE ================= */
+let channels=[];
+let revenue=0;
+let actions=0;
 
 /* ================= LOGIN ================= */
 function login(){
-const val = document.getElementById("pass").value;
+const u=document.getElementById("user").value;
+const p=document.getElementById("pass").value;
 
-if(val === ADMIN_KEY){
-ADMIN = true;
-document.getElementById("loginBox").style.display="none";
-load();
+if(u==="admin" && p==="admin123"){
+USER="admin";
+ROLE="admin";
+document.getElementById("login").style.display="none";
+init();
 }else{
-alert("Wrong admin key");
+alert("Invalid login");
 }
 }
 
-/* ================= LOAD ================= */
-function load(){
-
-const saved = localStorage.getItem("channels");
-
-if(saved){
-channels = JSON.parse(saved);
-}else{
-channels = demo();
-save();
-}
-
+/* ================= INIT ================= */
+function init(){
+channels=generate();
 render();
 }
 
 /* ================= DEMO ================= */
-function demo(){
+function generate(){
 let arr=[];
-
-for(let i=1;i<=40;i++){
+for(let i=1;i<=60;i++){
 arr.push({
 id:i,
-name:"Locked Channel "+i,
-category:i%2?"Sports":"Movies",
+name:"LOCKED "+i,
+cat:i%2?"Sports":"Movies",
 status:"locked",
 type:i%3?"free":"paid",
-price: i%3?0:100
+price:100+i
 });
 }
-
 return arr;
 }
 
-/* ================= SAVE ================= */
-function save(){
-localStorage.setItem("channels",JSON.stringify(channels));
+/* ================= LOG ================= */
+function log(msg){
+actions++;
+let div=document.createElement("div");
+div.className="log";
+div.innerText=new Date().toLocaleTimeString()+" - "+msg;
+document.getElementById("log").prepend(div);
 }
 
-/* ================= UNLOCK ================= */
+/* ================= ACTIONS ================= */
 function unlock(id){
+if(ROLE!=="admin") return;
 
-if(!ADMIN) return alert("Admin only");
-
-channels = channels.map(c=>{
-if(c.id===id){
-c.status="unlocked";
-}
+channels=channels.map(c=>{
+if(c.id===id) c.status="unlocked";
 return c;
 });
 
-save();
+log("Unlocked channel "+id);
 render();
 }
 
-/* ================= PAY TO UNLOCK ================= */
-function payUnlock(id){
-
-const ch = channels.find(c=>c.id===id);
-
-if(!ch) return;
-
-let cost = ch.price || 100;
-
-let confirmPay = confirm("Pay ₦"+cost+" to unlock "+ch.name+" ?");
-
-if(!confirmPay) return;
-
-revenue += cost;
-
-ch.status = "unlocked";
-
-save();
+function pay(id){
+let c=channels.find(x=>x.id===id);
+revenue+=c.price;
+c.status="unlocked";
+log("Paid unlock ₦"+c.price);
 render();
 }
 
-/* ================= DELETE ================= */
 function del(id){
-
-if(!ADMIN) return alert("Admin only");
-
-channels = channels.filter(c=>c.id!==id);
-
-save();
+if(ROLE!=="admin") return;
+channels=channels.filter(c=>c.id!==id);
+log("Deleted channel "+id);
 render();
 }
 
 /* ================= STATS ================= */
 function stats(){
-
-document.getElementById("lockedCount").innerText =
+document.getElementById("tLock").innerText=
 channels.filter(c=>c.status==="locked").length;
 
-document.getElementById("paidCount").innerText =
-channels.filter(c=>c.type==="paid").length;
+document.getElementById("rev").innerText=
+"₦"+revenue;
 
-document.getElementById("revenue").innerText =
-"₦"+revenue.toLocaleString();
-
+document.getElementById("act").innerText=actions;
 }
 
 /* ================= RENDER ================= */
 function render(q=""){
 
-const grid = document.getElementById("grid");
+let grid=document.getElementById("grid");
 grid.innerHTML="";
 
-let data = channels.filter(c=>c.status==="locked");
+let data=channels.filter(c=>c.status==="locked");
 
 if(q){
-data = data.filter(c=>
-c.name.toLowerCase().includes(q.toLowerCase())
-);
+data=data.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
 }
 
 stats();
@@ -322,24 +316,24 @@ let div=document.createElement("div");
 div.className="card";
 
 div.innerHTML=`
-<h3>${c.name}</h3>
-<p>${c.category}</p>
+<h4>${c.name}</h4>
+<small>${c.cat}</small><br>
 
 <span class="badge locked">LOCKED</span>
 <span class="badge ${c.type}">${c.type}</span>
 
-<div class="btns">
+<div class="actions">
 
-<button class="unlock" onclick="unlock(${c.id})">
-🔓 Unlock
+<button class="small-btn unlock" onclick="unlock(${c.id})">
+Unlock
 </button>
 
-<button class="pay" onclick="payUnlock(${c.id})">
-💳 Pay Unlock
+<button class="small-btn pay" onclick="pay(${c.id})">
+Pay
 </button>
 
-<button class="delete" onclick="del(${c.id})">
-🗑 Delete
+<button class="small-btn del" onclick="del(${c.id})">
+Delete
 </button>
 
 </div>
@@ -349,6 +343,20 @@ grid.appendChild(div);
 
 });
 
+}
+
+/* ================= EXPORT ================= */
+function exportCSV(){
+let csv="id,name,category,status,type,price\n";
+channels.forEach(c=>{
+csv+=`${c.id},${c.name},${c.cat},${c.status},${c.type},${c.price}\n`;
+});
+
+let blob=new Blob([csv],{type:"text/csv"});
+let a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download="locked_channels.csv";
+a.click();
 }
 
 </script>
