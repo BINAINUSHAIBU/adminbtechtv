@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV LOCKED SUPER ADMIN (LOGIN)</title>
+<title>BTECH-TV GOD MODE ADMIN</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -13,6 +13,7 @@
 --bg:#0b0f1a;
 --panel:#11182a;
 --card:#1b2438;
+--hover:#2b3a5a;
 --accent:#00bfff;
 --text:#fff;
 --free:#16a34a;
@@ -21,54 +22,41 @@
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-
-body{
-background:var(--bg);
-color:var(--text);
-overflow:hidden;
-}
+body{background:var(--bg);color:var(--text);overflow:hidden}
 
 /* LOGIN */
-#loginBox{
+#login{
 position:fixed;
 inset:0;
+background:#000;
 display:flex;
 align-items:center;
 justify-content:center;
-background:rgba(0,0,0,0.95);
 z-index:9999;
 }
 
-.login-card{
-width:300px;
+.login-box{
 background:var(--panel);
 padding:20px;
 border-radius:10px;
-text-align:center;
+width:300px;
 }
 
-.login-card input{
+input,button{
 width:100%;
 padding:10px;
 margin-top:10px;
 border:none;
 border-radius:6px;
-background:#0f1628;
-color:white;
 }
 
-.login-card button{
-width:100%;
-margin-top:10px;
-padding:10px;
-border:none;
-border-radius:6px;
+button{
 background:var(--accent);
 font-weight:bold;
 cursor:pointer;
 }
 
-/* TOPBAR */
+/* LAYOUT */
 .topbar{
 height:60px;
 background:var(--panel);
@@ -78,9 +66,8 @@ align-items:center;
 padding:0 15px;
 }
 
-.container{display:flex;height:calc(100vh - 60px);}
+.container{display:flex;height:calc(100vh - 60px)}
 
-/* SIDEBAR */
 .sidebar{
 width:240px;
 background:#0f1628;
@@ -88,23 +75,12 @@ padding:10px;
 overflow:auto;
 }
 
-.cat{
-padding:10px;
-background:var(--card);
-margin-bottom:8px;
-border-radius:8px;
-cursor:pointer;
-}
+.main{flex:1;display:flex;flex-direction:column}
 
-/* MAIN */
-.main{flex:1;display:flex;flex-direction:column;}
+.player{height:260px;background:black}
+video{width:100%;height:100%;object-fit:contain}
 
-.player{height:260px;background:black;}
-
-video{width:100%;height:100%;object-fit:contain;}
-
-/* LIST */
-.channels{
+.list{
 flex:1;
 overflow:auto;
 display:grid;
@@ -113,23 +89,26 @@ gap:10px;
 padding:10px;
 }
 
-.channel{
+.card{
 background:var(--card);
 padding:10px;
 border-radius:10px;
 cursor:pointer;
+border:1px solid transparent;
 }
 
+.card:hover{border-color:var(--accent)}
+
 .badge{
-font-size:11px;
-padding:4px 6px;
+padding:4px 8px;
 border-radius:20px;
+font-size:11px;
 margin-right:4px;
 }
 
-.free{background:var(--free);}
-.paid{background:var(--paid);}
-.locked{background:var(--locked);color:#000;}
+.free{background:var(--free)}
+.paid{background:var(--paid)}
+.locked{background:var(--locked);color:#000}
 
 /* RIGHT */
 .right{
@@ -146,50 +125,25 @@ margin-bottom:8px;
 border-radius:8px;
 }
 
-button{
-width:100%;
-padding:10px;
-margin-top:8px;
-border:none;
-border-radius:6px;
-background:var(--accent);
-font-weight:bold;
-cursor:pointer;
-}
-
-.warn{background:#f59e0b;}
-.danger{background:#dc2626;}
-
-input.search{
-width:100%;
-padding:10px;
-margin-top:8px;
-background:#0f1628;
-border:none;
-color:white;
-border-radius:6px;
-}
 </style>
 </head>
 
 <body>
 
-<!-- 🔐 LOGIN -->
-<div id="loginBox">
-  <div class="login-card">
-    <h3>🔐 ADMIN LOGIN</h3>
-    <p style="font-size:12px;opacity:0.7;margin-top:5px;">
-      Demo Password: <b>admin123</b>
-    </p>
+<!-- LOGIN -->
+<div id="login">
+<div class="login-box">
+<h3>🔐 GOD MODE LOGIN</h3>
+<p style="font-size:12px;opacity:0.7">Demo password: <b>1234</b></p>
 
-    <input type="password" id="pass" placeholder="Enter Password">
-    <button onclick="login()">LOGIN</button>
-  </div>
+<input id="pass" type="password" placeholder="Enter Password">
+<button onclick="login()">LOGIN</button>
+</div>
 </div>
 
-<!-- TOPBAR -->
+<!-- TOP -->
 <div class="topbar">
-<h3>🚀 BTECH-TV LOCKED SUPER ADMIN</h3>
+<h3>🚀 BTECH-TV GOD MODE</h3>
 <div id="status">LOCKED</div>
 </div>
 
@@ -197,16 +151,14 @@ border-radius:6px;
 
 <!-- SIDEBAR -->
 <div class="sidebar">
+<h4>⚙ Controls</h4>
 
-<h3>CONTROL</h3>
+<button onclick="filterAll()">All</button>
+<button onclick="filterLocked()">Locked</button>
+<button onclick="filterFree()">Free</button>
+<button onclick="filterPaid()">Paid</button>
 
-<div class="cat" onclick="filterAll()">📺 All</div>
-<div class="cat" onclick="filterLocked()">🔒 Locked</div>
-<div class="cat" onclick="filterFree()">🟢 Free</div>
-<div class="cat" onclick="filterPaid()">💰 Paid</div>
-
-<input class="search" placeholder="Search..." oninput="search(this.value)">
-
+<input placeholder="Search..." oninput="search(this.value)">
 </div>
 
 <!-- MAIN -->
@@ -216,28 +168,21 @@ border-radius:6px;
 <video id="video" controls></video>
 </div>
 
-<div class="channels" id="list"></div>
+<div class="list" id="list"></div>
 
 </div>
 
 <!-- RIGHT -->
 <div class="right">
-
-<h3>ADMIN</h3>
-
-<button onclick="lockAll()">🔒 Lock ALL</button>
-<button onclick="unlockAll()">🔓 Unlock ALL</button>
-
-<button class="warn" onclick="lockSelected()">Lock Selected</button>
-<button class="warn" onclick="unlockSelected()">Unlock Selected</button>
-
-<button class="danger" onclick="deleteLocked()">Delete Locked</button>
-
-<h3 style="margin-top:10px">STATS</h3>
+<h4>📊 STATS</h4>
 <div class="stat">Total: <span id="t">0</span></div>
 <div class="stat">Free: <span id="f">0</span></div>
 <div class="stat">Paid: <span id="p">0</span></div>
 <div class="stat">Locked: <span id="l">0</span></div>
+
+<button onclick="lockAll()">🔒 Lock ALL</button>
+<button onclick="unlockAll()">🔓 Unlock ALL</button>
+<button onclick="deleteLocked()">❌ Delete Locked</button>
 
 </div>
 
@@ -245,19 +190,25 @@ border-radius:6px;
 
 <script>
 
-/* 🔐 LOGIN SYSTEM */
+/* =====================
+LOGIN
+===================== */
+
 function login(){
-const p = document.getElementById("pass").value;
+const p=document.getElementById("pass").value;
 
-if(p === "admin123"){
-document.getElementById("loginBox").style.display="none";
-document.getElementById("status").innerText="ONLINE";
+if(p==="1234"){
+document.getElementById("login").style.display="none";
+document.getElementById("status").innerText="GOD MODE ACTIVE";
 }else{
-alert("Wrong Password");
+alert("Wrong password");
 }
 }
 
-/* STATE */
+/* =====================
+STATE
+===================== */
+
 let channels=[];
 let filtered=[];
 let selected=new Set();
@@ -267,50 +218,65 @@ const streams=[
 "https://test-streams.mux.dev/test_001/stream.m3u8"
 ];
 
-/* GENERATE */
+/* =====================
+GENERATE CHANNELS
+===================== */
+
 function generate(){
-for(let i=0;i<600;i++){
+
+for(let i=0;i<500;i++){
 channels.push({
 id:i,
-name:"BTECH CHANNEL "+i,
+name:"GOD CHANNEL "+i,
 url:streams[i%streams.length],
 type:i%3===0?"paid":"free",
-status:i%10===0?"locked":"free"
+status:i%9===0?"locked":"free"
 });
 }
+
 }
 
-/* RENDER */
+/* =====================
+RENDER
+===================== */
+
 function render(){
 filtered=[...channels];
+
 let box=document.getElementById("list");
 box.innerHTML="";
 
 filtered.forEach((c,i)=>{
 let div=document.createElement("div");
-div.className="channel";
+div.className="card";
 
 div.innerHTML=`
 <b>${c.name}</b><br>
 <span class="badge ${c.type}">${c.type}</span>
 <span class="badge ${c.status}">${c.status}</span>
-<br>
 <input type="checkbox" onchange="toggle(${c.id})">
 `;
 
 div.onclick=()=>play(i);
+
 box.appendChild(div);
 });
 
 stats();
 }
 
-/* SELECT */
+/* =====================
+TOGGLE
+===================== */
+
 function toggle(id){
 selected.has(id)?selected.delete(id):selected.add(id);
 }
 
-/* PLAY */
+/* =====================
+PLAY
+===================== */
+
 function play(i){
 let c=filtered[i];
 let v=document.getElementById("video");
@@ -324,44 +290,36 @@ v.src=c.url;
 }
 }
 
-/* FILTER */
+/* =====================
+FILTERS
+===================== */
+
 function filterAll(){render();}
 function filterLocked(){filtered=channels.filter(c=>c.status==="locked");render();}
 function filterFree(){filtered=channels.filter(c=>c.type==="free");render();}
 function filterPaid(){filtered=channels.filter(c=>c.type==="paid");render();}
 
-/* SEARCH */
+/* =====================
+SEARCH
+===================== */
+
 function search(v){
-filtered=channels.filter(c=>
-c.name.toLowerCase().includes(v.toLowerCase())
-);
+filtered=channels.filter(c=>c.name.toLowerCase().includes(v.toLowerCase()));
 render();
 }
 
-/* ACTIONS */
+/* =====================
+ACTIONS
+===================== */
+
 function lockAll(){channels.forEach(c=>c.status="locked");render();}
 function unlockAll(){channels.forEach(c=>c.status="free");render();}
+function deleteLocked(){channels=channels.filter(c=>c.status!=="locked");render();}
 
-function lockSelected(){
-channels.forEach(c=>{
-if(selected.has(c.id)) c.status="locked";
-});
-render();
-}
+/* =====================
+STATS
+===================== */
 
-function unlockSelected(){
-channels.forEach(c=>{
-if(selected.has(c.id)) c.status="free";
-});
-render();
-}
-
-function deleteLocked(){
-channels = channels.filter(c=>c.status!=="locked");
-render();
-}
-
-/* STATS */
 function stats(){
 document.getElementById("t").innerText=channels.length;
 document.getElementById("f").innerText=channels.filter(c=>c.type==="free").length;
@@ -369,7 +327,7 @@ document.getElementById("p").innerText=channels.filter(c=>c.type==="paid").lengt
 document.getElementById("l").innerText=channels.filter(c=>c.status==="locked").length;
 }
 
-/* INIT */
+/* BOOT */
 generate();
 render();
 
