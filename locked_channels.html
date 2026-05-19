@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>BTECH-TV LOCKED CHANNELS DASHBOARD</title>
+<title>BTECH-TV LOCKED CHANNELS PRO</title>
 
 <style>
 :root{
@@ -16,14 +15,10 @@
 --muted:#94a3b8;
 --danger:#dc2626;
 --success:#00ff99;
+--warning:#f59e0b;
 }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
 body{
 background:var(--bg);
@@ -39,36 +34,25 @@ align-items:center;
 border-bottom:1px solid #222;
 }
 
-.header h2{
-color:var(--accent);
-}
+.header h2{color:var(--accent);}
 
 .stats{
 display:flex;
-gap:15px;
+gap:10px;
 }
 
 .stat{
 background:var(--card);
-padding:10px 15px;
+padding:10px;
 border-radius:10px;
 text-align:center;
+min-width:120px;
 }
 
-.stat h4{
-font-size:12px;
-color:var(--muted);
-}
+.stat h4{font-size:12px;color:var(--muted);}
+.stat p{color:var(--accent);font-weight:bold;font-size:18px;}
 
-.stat p{
-font-size:18px;
-color:var(--accent);
-font-weight:bold;
-}
-
-.container{
-padding:20px;
-}
+.container{padding:20px;}
 
 .search{
 width:100%;
@@ -76,9 +60,8 @@ padding:12px;
 border-radius:10px;
 border:none;
 background:var(--panel);
-color:white;
+color:#fff;
 margin-bottom:15px;
-outline:none;
 }
 
 .grid{
@@ -94,16 +77,6 @@ border-radius:12px;
 border:1px solid #222;
 }
 
-.card h3{
-margin-bottom:5px;
-}
-
-.meta{
-font-size:13px;
-color:var(--muted);
-margin-bottom:10px;
-}
-
 .badge{
 padding:4px 10px;
 border-radius:20px;
@@ -111,24 +84,11 @@ font-size:11px;
 margin-right:5px;
 }
 
-.locked{
-background:#f59e0b;
-color:#000;
-}
+.locked{background:#f59e0b;color:#000;}
+.paid{background:#dc2626;}
+.free{background:#16a34a;}
 
-.paid{
-background:#dc2626;
-}
-
-.free{
-background:#16a34a;
-}
-
-.btns{
-display:flex;
-gap:10px;
-margin-top:10px;
-}
+.btns{display:flex;gap:10px;margin-top:10px;}
 
 button{
 flex:1;
@@ -139,54 +99,79 @@ cursor:pointer;
 font-weight:bold;
 }
 
-.unlock{
-background:var(--success);
-color:#000;
+.unlock{background:var(--success);}
+.pay{background:var(--warning);color:#000;}
+.delete{background:var(--danger);color:#fff;}
+
+/* LOGIN OVERLAY */
+.login{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.9);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
 }
 
-.delete{
-background:var(--danger);
+.login-box{
+background:var(--panel);
+padding:25px;
+border-radius:12px;
+width:300px;
+text-align:center;
+}
+
+.login-box input{
+width:100%;
+padding:12px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+background:#0f1628;
 color:#fff;
 }
 
-.topbar{
-display:flex;
-justify-content:space-between;
-margin-bottom:15px;
+.login-box button{
+margin-top:10px;
+width:100%;
+background:var(--accent);
+}
+
+.small{
+font-size:12px;
+color:var(--muted);
+margin-top:10px;
 }
 </style>
 </head>
 
 <body>
 
+<!-- ================= LOGIN ================= -->
+<div class="login" id="loginBox">
+<div class="login-box">
+<h3>🔐 Admin Login</h3>
+<input type="password" id="pass" placeholder="Enter Admin Key">
+<button onclick="login()">Login</button>
+<p class="small">Default: admin123</p>
+</div>
+</div>
+
+<!-- ================= HEADER ================= -->
 <div class="header">
-<h2>🔒 Locked Channels Dashboard</h2>
+<h2>🔒 Locked Channels PRO</h2>
 
 <div class="stats">
-<div class="stat">
-<h4>Total Locked</h4>
-<p id="totalLocked">0</p>
-</div>
-
-<div class="stat">
-<h4>Paid Locked</h4>
-<p id="paidLocked">0</p>
-</div>
-
-<div class="stat">
-<h4>Free Locked</h4>
-<p id="freeLocked">0</p>
-</div>
+<div class="stat"><h4>Locked</h4><p id="lockedCount">0</p></div>
+<div class="stat"><h4>Revenue</h4><p id="revenue">₦0</p></div>
+<div class="stat"><h4>Paid</h4><p id="paidCount">0</p></div>
 </div>
 </div>
 
 <div class="container">
 
-<input
-class="search"
-placeholder="Search locked channels..."
-oninput="render(this.value)"
-/>
+<input class="search" placeholder="Search locked channels..." oninput="render(this.value)">
 
 <div class="grid" id="grid"></div>
 
@@ -194,122 +179,69 @@ oninput="render(this.value)"
 
 <script>
 
-let channels = [];
+/* ================= SECURITY ================= */
+let ADMIN = false;
+const ADMIN_KEY = "admin123";
 
-/* =========================
-LOAD FROM MAIN APP
-========================= */
-function loadData(){
+/* ================= DATA ================= */
+let channels = [];
+let revenue = 0;
+
+/* ================= LOGIN ================= */
+function login(){
+const val = document.getElementById("pass").value;
+
+if(val === ADMIN_KEY){
+ADMIN = true;
+document.getElementById("loginBox").style.display="none";
+load();
+}else{
+alert("Wrong admin key");
+}
+}
+
+/* ================= LOAD ================= */
+function load(){
 
 const saved = localStorage.getItem("channels");
 
 if(saved){
 channels = JSON.parse(saved);
-} else {
-channels = generateDemoLocked();
+}else{
+channels = demo();
 save();
 }
 
 render();
 }
 
-/* =========================
-DEMO DATA
-========================= */
-function generateDemoLocked(){
-
+/* ================= DEMO ================= */
+function demo(){
 let arr=[];
 
-for(let i=1;i<=50;i++){
-
+for(let i=1;i<=40;i++){
 arr.push({
 id:i,
 name:"Locked Channel "+i,
-category:i%2===0?"Sports":"Movies",
+category:i%2?"Sports":"Movies",
 status:"locked",
-type:i%3===0?"paid":"free",
-viewers:Math.floor(Math.random()*50000)
+type:i%3?"free":"paid",
+price: i%3?0:100
 });
-
 }
 
 return arr;
 }
 
-/* =========================
-SAVE
-========================= */
+/* ================= SAVE ================= */
 function save(){
 localStorage.setItem("channels",JSON.stringify(channels));
 }
 
-/* =========================
-RENDER
-========================= */
-function render(search=""){
+/* ================= UNLOCK ================= */
+function unlock(id){
 
-const grid=document.getElementById("grid");
-
-grid.innerHTML="";
-
-let locked = channels.filter(c=>c.status==="locked");
-
-if(search){
-
-locked = locked.filter(c=>
-c.name.toLowerCase().includes(search.toLowerCase()) ||
-c.category.toLowerCase().includes(search.toLowerCase())
-);
-
-}
-
-document.getElementById("totalLocked").innerText =
-channels.filter(c=>c.status==="locked").length;
-
-document.getElementById("paidLocked").innerText =
-channels.filter(c=>c.status==="locked" && c.type==="paid").length;
-
-document.getElementById("freeLocked").innerText =
-channels.filter(c=>c.status==="locked" && c.type==="free").length;
-
-locked.forEach(ch=>{
-
-const div=document.createElement("div");
-div.className="card";
-
-div.innerHTML=`
-<h3>${ch.name}</h3>
-
-<div class="meta">
-${ch.category} • 👥 ${ch.viewers}
-</div>
-
-<span class="badge locked">LOCKED</span>
-<span class="badge ${ch.type}">${ch.type.toUpperCase()}</span>
-
-<div class="btns">
-
-<button class="unlock" onclick="unlockChannel(${ch.id})">
-🔓 Unlock
-</button>
-
-<button class="delete" onclick="deleteChannel(${ch.id})">
-🗑 Delete
-</button>
-
-</div>
-`;
-
-grid.appendChild(div);
-
-});
-
-}
-
-/* =========================
-UNLOCK CHANNEL
-========================= */
-function unlockChannel(id){
+if(!ADMIN) return alert("Admin only");
 
 channels = channels.map(c=>{
 if(c.id===id){
@@ -322,10 +254,31 @@ save();
 render();
 }
 
-/* =========================
-DELETE CHANNEL
-========================= */
-function deleteChannel(id){
+/* ================= PAY TO UNLOCK ================= */
+function payUnlock(id){
+
+const ch = channels.find(c=>c.id===id);
+
+if(!ch) return;
+
+let cost = ch.price || 100;
+
+let confirmPay = confirm("Pay ₦"+cost+" to unlock "+ch.name+" ?");
+
+if(!confirmPay) return;
+
+revenue += cost;
+
+ch.status = "unlocked";
+
+save();
+render();
+}
+
+/* ================= DELETE ================= */
+function del(id){
+
+if(!ADMIN) return alert("Admin only");
 
 channels = channels.filter(c=>c.id!==id);
 
@@ -333,7 +286,70 @@ save();
 render();
 }
 
-loadData();
+/* ================= STATS ================= */
+function stats(){
+
+document.getElementById("lockedCount").innerText =
+channels.filter(c=>c.status==="locked").length;
+
+document.getElementById("paidCount").innerText =
+channels.filter(c=>c.type==="paid").length;
+
+document.getElementById("revenue").innerText =
+"₦"+revenue.toLocaleString();
+
+}
+
+/* ================= RENDER ================= */
+function render(q=""){
+
+const grid = document.getElementById("grid");
+grid.innerHTML="";
+
+let data = channels.filter(c=>c.status==="locked");
+
+if(q){
+data = data.filter(c=>
+c.name.toLowerCase().includes(q.toLowerCase())
+);
+}
+
+stats();
+
+data.forEach(c=>{
+
+let div=document.createElement("div");
+div.className="card";
+
+div.innerHTML=`
+<h3>${c.name}</h3>
+<p>${c.category}</p>
+
+<span class="badge locked">LOCKED</span>
+<span class="badge ${c.type}">${c.type}</span>
+
+<div class="btns">
+
+<button class="unlock" onclick="unlock(${c.id})">
+🔓 Unlock
+</button>
+
+<button class="pay" onclick="payUnlock(${c.id})">
+💳 Pay Unlock
+</button>
+
+<button class="delete" onclick="del(${c.id})">
+🗑 Delete
+</button>
+
+</div>
+`;
+
+grid.appendChild(div);
+
+});
+
+}
 
 </script>
 
