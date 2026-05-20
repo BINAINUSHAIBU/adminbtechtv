@@ -428,6 +428,538 @@ generateUsers();
 generateChannels();
 
 </script>
+  <script>
+
+/* =========================
+SUPER ADMIN IPTV STATE
+========================= */
+
+let users=[];
+let view="channels";
+
+var all=[],
+filtered=[],
+cur=null,
+cat='All',
+hlsP=null;
+
+var favs=
+JSON.parse(
+localStorage.getItem('atv_favs')||'{}'
+);
+
+let channelsFiltered=[];
+
+
+/* =========================
+LOAD IPTV API
+========================= */
+
+async function loadChannels(){
+
+try{
+
+const [chRes,stRes]=await Promise.all([
+
+fetch(
+'https://iptv-org.github.io/api/channels.json'
+).then(r=>r.json()),
+
+fetch(
+'https://iptv-org.github.io/api/streams.json'
+).then(r=>r.json())
+
+]);
+
+let map={};
+
+chRes.forEach(c=>{
+map[c.id]=c;
+});
+
+all=[];
+
+stRes.forEach((s,i)=>{
+
+if(!s.url) return;
+
+let ch=
+map[s.channel]||{};
+
+all.push({
+
+id:i+1,
+
+name:
+ch.name ||
+s.title ||
+"Unknown",
+
+category:
+(
+ch.categories &&
+ch.categories[0]
+)
+|| "Other",
+
+country:
+ch.country ||
+
+"",
+
+url:s.url,
+
+status:
+Math.random()>.2
+?
+"active"
+:
+"locked",
+
+type:
+Math.random()>.5
+?
+"free"
+:
+"paid",
+
+viewers:
+Math.floor(
+Math.random()*100000
+)
+
+});
+
+});
+
+channelsFiltered=[...all];
+
+render();
+renderLive();
+
+}
+catch(e){
+
+console.log(e);
+
+}
+
+}
+
+
+/* =========================
+PLAY STREAM
+========================= */
+
+function playStream(url){
+
+let video=
+document.getElementById(
+"player"
+);
+
+if(
+Hls.isSupported()
+){
+
+if(window.hls)
+window.hls.destroy();
+
+window.hls=
+new Hls();
+
+window.hls
+.loadSource(url);
+
+window.hls
+.attachMedia(video);
+
+}else{
+
+video.src=url;
+
+}
+
+video.play();
+
+}
+
+
+/* =========================
+RENDER IPTV MONITOR
+========================= */
+
+function renderLive(){
+
+let box=
+document.getElementById(
+"liveList"
+);
+
+box.innerHTML="";
+
+all.slice(0,200)
+.forEach(c=>{
+
+box.innerHTML+=`
+
+<div class="liveItem">
+
+📺 ${c.name}
+
+<br>
+
+<small>
+${c.category}
+</small>
+
+<br>
+
+<button
+onclick="
+playStream(
+'${c.url}'
+)
+">
+
+▶ Play
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+/* =========================
+USERS GENERATOR
+========================= */
+
+function generateUsers(){
+
+users=[];
+
+for(
+let i=1;
+i<=300;
+i++
+){
+
+users.push({
+
+id:i,
+
+name:
+"User_"+i,
+
+email:
+"user"+i+
+"@mail.com",
+
+status:
+i%8===0
+?
+"banned"
+:
+"active",
+
+premium:
+i%6===0
+
+});
+
+}
+
+render();
+
+}
+
+
+/* =========================
+TAB SWITCH
+========================= */
+
+function switchTab(
+tab,
+el
+){
+
+view=tab;
+
+document
+.querySelectorAll(".cat")
+.forEach(x=>
+x.classList
+.remove(
+"tab-active"
+)
+);
+
+el.classList
+.add(
+"tab-active"
+);
+
+render();
+
+}
+
+
+/* =========================
+SEARCH
+========================= */
+
+function searchAll(q){
+
+q=q.toLowerCase();
+
+if(
+view==="users"
+){
+
+users=
+users.filter(
+
+u=>
+
+u.name
+.toLowerCase()
+
+.includes(q)
+
+);
+
+}else{
+
+channelsFiltered=
+
+all.filter(
+
+c=>
+
+c.name
+.toLowerCase()
+.includes(q)
+
+||
+
+c.category
+.toLowerCase()
+.includes(q)
+
+);
+
+}
+
+render();
+
+}
+
+
+/* =========================
+MAIN RENDER
+========================= */
+
+function render(){
+
+let grid=
+document.getElementById(
+"grid"
+);
+
+grid.innerHTML="";
+
+
+/* USERS */
+
+if(
+view==="users"
+){
+
+users.forEach(u=>{
+
+grid.innerHTML+=`
+
+<div class="card">
+
+<h3>
+👤 ${u.name}
+</h3>
+
+<p>
+${u.email}
+</p>
+
+<span class="
+badge
+${u.status}
+">
+
+${u.status}
+
+</span>
+
+${
+u.premium
+?
+'<span class="badge premium">premium</span>'
+:
+''
+}
+
+</div>
+
+`;
+
+});
+
+}
+
+
+/* IPTV CHANNELS */
+
+else{
+
+channelsFiltered
+.forEach(c=>{
+
+grid.innerHTML+=`
+
+<div class="card">
+
+<h3>
+
+📺 ${c.name}
+
+</h3>
+
+<p>
+
+${c.category}
+
+</p>
+
+<p>
+
+🌍 ${c.country}
+
+</p>
+
+<span class="
+badge
+${c.type}
+">
+
+${c.type}
+
+</span>
+
+<span class="
+badge
+${
+c.status==="locked"
+?
+"banned"
+:
+"active"
+}
+">
+
+${c.status}
+
+</span>
+
+<p>
+
+👥
+
+${c.viewers}
+
+</p>
+
+<button
+onclick="
+playStream(
+'${c.url}'
+)
+">
+
+▶ Watch
+
+</button>
+
+</div>
+
+`;
+
+});
+
+}
+
+updateStats();
+
+}
+
+
+/* =========================
+STATS
+========================= */
+
+function updateStats(){
+
+document
+.getElementById("t1")
+.innerHTML=
+
+users.length;
+
+
+document
+.getElementById("t2")
+.innerHTML=
+
+all.length;
+
+
+document
+.getElementById("t3")
+.innerHTML=
+
+all.filter(
+
+x=>
+x.type==="free"
+
+).length;
+
+
+document
+.getElementById("t4")
+.innerHTML=
+
+all.filter(
+
+x=>
+x.status==="locked"
+
+).length;
+
+}
+
+
+/* =========================
+INIT
+========================= */
+
+generateUsers();
+
+loadChannels();
+
+</script>
 
 </body>
 </html>
