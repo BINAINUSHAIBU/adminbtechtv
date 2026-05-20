@@ -1,0 +1,669 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>BTECH-TV ULTRA MAX AFRICA IPTV</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+
+:root{
+--bg:#08111f;
+--panel:#111827;
+--card:#1f2937;
+--accent:#00c8ff;
+--text:#fff;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+background:var(--bg);
+color:white;
+overflow:hidden;
+}
+
+.topbar{
+height:65px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+}
+
+.topbar h2{
+color:var(--accent);
+}
+
+.container{
+display:flex;
+height:calc(100vh - 65px);
+}
+
+.sidebar{
+width:250px;
+background:#0f172a;
+overflow:auto;
+padding:15px;
+}
+
+.cat{
+padding:12px;
+margin:8px 0;
+background:var(--card);
+cursor:pointer;
+border-radius:8px;
+}
+
+.cat:hover{
+background:var(--accent);
+color:black;
+}
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+.player{
+height:320px;
+background:black;
+}
+
+video{
+width:100%;
+height:100%;
+}
+
+.now{
+padding:15px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+}
+
+.channels{
+flex:1;
+overflow:auto;
+padding:10px;
+display:grid;
+grid-template-columns:
+repeat(auto-fill,minmax(280px,1fr));
+gap:10px;
+}
+
+.channel{
+background:var(--card);
+padding:12px;
+border-radius:10px;
+display:flex;
+justify-content:space-between;
+cursor:pointer;
+}
+
+.channel:hover{
+border:1px solid var(--accent);
+}
+
+.right{
+width:280px;
+background:#111827;
+padding:15px;
+overflow:auto;
+}
+
+input{
+width:100%;
+padding:12px;
+border:none;
+background:#0f172a;
+color:white;
+margin-bottom:10px;
+}
+
+button{
+padding:12px;
+border:none;
+cursor:pointer;
+background:var(--accent);
+width:100%;
+margin-top:10px;
+}
+
+.stat{
+background:var(--card);
+padding:15px;
+margin-top:10px;
+border-radius:8px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+
+<h2>
+📺 BTECH-TV AFRICA ULTRA MAX
+</h2>
+
+<div>
+
+<button onclick="filterCat('All')">
+All
+</button>
+
+</div>
+
+</div>
+
+
+<div class="container">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="cat"
+onclick="filterCat('All')">
+All Channels
+</div>
+
+<div class="cat"
+onclick="filterCat('Sports')">
+Sports
+</div>
+
+<div class="cat"
+onclick="filterCat('Movies')">
+Movies
+</div>
+
+<div class="cat"
+onclick="filterCat('News')">
+News
+</div>
+
+<div class="cat"
+onclick="filterCat('Africa')">
+Africa
+</div>
+
+
+<h3 style="margin-top:20px">
+🌍 Africa Countries
+</h3>
+
+<div id="countryList"></div>
+
+</div>
+
+
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="player">
+
+<video
+id="video"
+controls
+autoplay
+></video>
+
+</div>
+
+
+<div class="now">
+
+<div>
+
+<h3 id="name">
+No channel
+</h3>
+
+<p id="group">
+Waiting...
+</p>
+
+</div>
+
+<div>
+
+<button onclick="prev()">
+Prev
+</button>
+
+<button onclick="next()">
+Next
+</button>
+
+</div>
+
+</div>
+
+
+<div
+class="channels"
+id="channels">
+
+</div>
+
+</div>
+
+
+
+<!-- RIGHT -->
+
+<div class="right">
+
+<input
+placeholder="Search"
+oninput="
+searchChannels(
+this.value
+)
+">
+
+<button
+onclick="
+generateChannels()
+">
+Generate 100K
+</button>
+
+<div class="stat">
+
+Total:
+
+<span id="total">
+0
+</span>
+
+</div>
+
+
+<div class="stat">
+
+Free:
+
+<span id="free">
+0
+</span>
+
+</div>
+
+
+<div class="stat">
+
+Locked:
+
+<span id="locked">
+0
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<script>
+
+let channels=[];
+let filtered=[];
+let current=0;
+let hls=null;
+
+
+
+const africa=[
+
+"Algeria",
+"Angola",
+"Benin",
+"Botswana",
+"Cameroon",
+"Egypt",
+"Ghana",
+"Kenya",
+"Libya",
+"Morocco",
+"Nigeria",
+"Rwanda",
+"Senegal",
+"South Africa",
+"Sudan",
+"Tanzania",
+"Togo",
+"Tunisia",
+"Uganda",
+"Zambia",
+"Zimbabwe"
+
+];
+
+
+
+const streams=[
+
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+
+"https://test-streams.mux.dev/test_001/stream.m3u8"
+
+];
+
+
+
+function generateChannels(){
+
+channels=[];
+
+
+for(let i=1;i<=100000;i++){
+
+let country=
+africa[
+i%
+africa.length
+];
+
+channels.push({
+
+name:
+country+
+" TV "+i,
+
+country:
+country,
+
+category:
+"Africa",
+
+url:
+streams[
+i%
+streams.length
+],
+
+status:
+i%10===0
+?"locked"
+:"free"
+
+});
+
+}
+
+
+filtered=
+[...channels];
+
+render();
+
+stats();
+
+}
+
+
+
+function render(){
+
+let box=
+document.getElementById(
+"channels"
+);
+
+box.innerHTML="";
+
+
+filtered
+.slice(0,400)
+.forEach((c,i)=>{
+
+box.innerHTML+=`
+
+<div
+class="channel"
+onclick="
+play(
+${i}
+)
+">
+
+<div>
+
+<h4>
+
+📺 ${c.name}
+
+</h4>
+
+<small>
+
+${c.country}
+
+</small>
+
+</div>
+
+
+<div>
+
+${c.status}
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+
+
+function play(i){
+
+current=i;
+
+let c=
+filtered[i];
+
+name.innerHTML=
+c.name;
+
+group.innerHTML=
+c.country;
+
+
+const video=
+document.getElementById(
+"video"
+);
+
+
+if(Hls.isSupported()){
+
+if(hls)
+hls.destroy();
+
+hls=
+new Hls();
+
+hls.loadSource(
+c.url
+);
+
+hls.attachMedia(
+video
+);
+
+}else{
+
+video.src=
+c.url;
+
+}
+
+}
+
+
+
+function next(){
+
+current++;
+
+if(
+current>=
+filtered.length
+)
+
+current=0;
+
+play(current);
+
+}
+
+
+
+function prev(){
+
+current--;
+
+if(
+current<0
+)
+
+current=
+filtered.length-1;
+
+play(current);
+
+}
+
+
+
+function filterCat(cat){
+
+if(
+cat==="All"
+)
+
+filtered=
+channels;
+
+else
+
+filtered=
+channels.filter(
+x=>
+
+x.category===cat
+
+);
+
+render();
+
+}
+
+
+
+function searchChannels(q){
+
+q=
+q.toLowerCase();
+
+filtered=
+channels.filter(
+
+x=>
+
+x.name
+.toLowerCase()
+.includes(q)
+
+||
+
+x.country
+.toLowerCase()
+.includes(q)
+
+);
+
+render();
+
+}
+
+
+
+function stats(){
+
+total.innerHTML=
+channels.length;
+
+free.innerHTML=
+channels.filter(
+x=>
+
+x.status==="free"
+
+).length;
+
+locked.innerHTML=
+channels.filter(
+x=>
+
+x.status==="locked"
+
+).length;
+
+}
+
+
+
+africa.forEach(c=>{
+
+countryList.innerHTML+=`
+
+<div
+class="cat"
+onclick="
+searchChannels(
+'${c}'
+)
+">
+
+${c}
+
+</div>
+
+`;
+
+});
+
+
+generateChannels();
+
+</script>
+
+</body>
+</html>
