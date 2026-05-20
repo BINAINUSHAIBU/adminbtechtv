@@ -153,7 +153,10 @@ flex-direction:column;
 padding:10px;
 }
 
-.monitor h3{color:var(--accent);margin-bottom:10px}
+.monitor h3{
+color:var(--accent);
+margin-bottom:10px;
+}
 
 video{
 width:100%;
@@ -222,19 +225,18 @@ font-size:12px;
 
 <script>
 
-/* ================= IPTV ENGINE STATE ================= */
+/* STATE */
 var all=[],filtered=[],cur=null;
 var deadCh={},aliveCh={};
 var channelMap={},logoMap={};
 
 /* INIT */
-function init(){
-loadAPI();
-}
+function init(){ loadAPI(); }
 
-/* LOAD IPTV API (your engine merged) */
+/* LOAD IPTV ENGINE */
 async function loadAPI(){
 try{
+
 var [chRes,stRes,lgRes]=await Promise.all([
 fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
 fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
@@ -260,15 +262,13 @@ if(!st.url||seen[st.url])continue;
 seen[st.url]=1;
 
 var ch=st.channel?channelMap[st.channel]:null;
-var logo=st.channel?logoMap[st.channel]:null;
 
 id++;
 all.push({
 id:id,
-name:ch?ch.name:(st.title||'Unknown'),
+name:ch?ch.name:(st.title||"Unknown"),
 url:st.url,
-cat:ch&&ch.categories&&ch.categories.length?ch.categories[0]:'other',
-logo:logo||null
+cat:ch&&ch.categories&&ch.categories.length?ch.categories[0]:"other"
 });
 }
 
@@ -280,7 +280,7 @@ console.log(e);
 }
 }
 
-/* PLAY STREAM */
+/* PLAYER */
 function playStream(url){
 const video=document.getElementById("player");
 
@@ -311,7 +311,7 @@ box.appendChild(div);
 });
 }
 
-/* RENDER GRID */
+/* RENDER */
 function render(){
 filtered=all;
 
@@ -360,7 +360,7 @@ document.querySelectorAll(".cat").forEach(c=>c.classList.remove("tab-active"));
 el.classList.add("tab-active");
 }
 
-/* INIT */
+/* START */
 init();
 
 </script>
