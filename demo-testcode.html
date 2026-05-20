@@ -1,791 +1,298 @@
 
 
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV Locked Channels Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>BTECH-TV ULTRA MAX 100K IPTV PRO</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 :root{
---bg:#0b0f1a;
---panel:#11182a;
---card:#1b2438;
---hover:#2b3a5a;
---accent:#00bfff;
---danger:#dc2626;
---success:#16a34a;
---warning:#f59e0b;
---text:#ffffff;
---muted:#94a3b8;
+--bg:#08111f;
+--panel:#111827;
+--card:#1f2937;
+--accent:#00c8ff;
+--text:#fff;
 }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:var(--bg);color:#fff;overflow:hidden}
+
+.topbar{
+height:60px;background:var(--panel);
+display:flex;align-items:center;justify-content:space-between;
+padding:10px 15px
+}
+.topbar h2{color:var(--accent);font-size:18px}
+
+.container{display:flex;height:calc(100vh - 60px)}
+
+.sidebar{
+width:230px;background:#0f172a;overflow:auto;padding:10px
 }
 
-body{
-background:var(--bg);
-color:var(--text);
-overflow:hidden;
+.cat{
+padding:10px;margin:6px 0;background:var(--card);
+border-radius:6px;cursor:pointer;font-size:13px
+}
+.cat:hover{background:var(--accent);color:#000}
+
+.main{flex:1;display:flex;flex-direction:column}
+
+.player{height:320px;background:#000}
+video{width:100%;height:100%}
+
+.now{
+display:flex;justify-content:space-between;
+padding:10px;background:var(--panel)
+}
+
+.channels{
+flex:1;overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+gap:8px;
+padding:10px
+}
+
+.channel{
+background:var(--card);
+padding:10px;
+border-radius:8px;
+cursor:pointer;
+display:flex;justify-content:space-between
+}
+.channel:hover{border:1px solid var(--accent)}
+
+.right{
+width:260px;background:#111827;
+padding:10px;overflow:auto
+}
+
+input{
+width:100%;padding:10px;
+background:#0f172a;border:none;
+color:#fff;margin-bottom:10px
 }
 
 button{
-cursor:pointer;
-border:none;
-}
-
-/* =========================
-TOPBAR
-========================= */
-
-.topbar{
-height:70px;
-background:var(--panel);
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:0 20px;
-border-bottom:1px solid rgba(255,255,255,0.05);
-}
-
-.topbar h2{
-color:var(--accent);
-font-size:24px;
-}
-
-.top-actions{
-display:flex;
-gap:10px;
-}
-
-.top-actions button{
-padding:12px 18px;
-background:var(--card);
-color:white;
-border-radius:10px;
-font-weight:bold;
-transition:0.3s;
-}
-
-.top-actions button:hover{
-background:var(--hover);
-}
-
-.delete-all-btn{
-background:var(--danger)!important;
-}
-
-/* =========================
-LAYOUT
-========================= */
-
-.container{
-display:flex;
-height:calc(100vh - 70px);
-}
-
-.sidebar{
-width:300px;
-background:#0f1628;
-padding:20px;
-overflow-y:auto;
-border-right:1px solid rgba(255,255,255,0.05);
-}
-
-.main{
-flex:1;
-padding:20px;
-overflow-y:auto;
-}
-
-/* =========================
-CARDS
-========================= */
-
-.card{
-background:var(--panel);
-border-radius:16px;
-padding:20px;
-margin-bottom:20px;
-}
-
-.card h3{
-margin-bottom:15px;
-color:var(--accent);
-}
-
-.stats-grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
-}
-
-.stat-box{
-background:var(--card);
-padding:18px;
-border-radius:12px;
-text-align:center;
-}
-
-.stat-box h4{
-font-size:13px;
-margin-bottom:8px;
-color:var(--muted);
-}
-
-.stat-box p{
-font-size:24px;
-font-weight:bold;
-}
-
-.danger-text{
-color:var(--danger);
-}
-
-.success-text{
-color:var(--success);
-}
-
-/* =========================
-SEARCH
-========================= */
-
-.search-box{
-width:100%;
-padding:14px;
-border:none;
-border-radius:10px;
-background:var(--card);
-color:white;
-margin-bottom:15px;
-}
-
-.action-btn{
-width:100%;
-padding:14px;
-margin-top:10px;
-border-radius:10px;
-font-weight:bold;
-transition:0.3s;
-}
-
-.primary-btn{
+width:100%;padding:10px;
 background:var(--accent);
-color:black;
+border:none;cursor:pointer;
+margin-top:8px
 }
 
-.warning-btn{
-background:var(--warning);
-color:black;
-}
-
-.danger-btn{
-background:var(--danger);
-color:white;
-}
-
-.action-btn:hover{
-opacity:0.85;
-}
-
-/* =========================
-CHANNEL TABLE
-========================= */
-
-.table-wrapper{
-overflow:auto;
-border-radius:14px;
-}
-
-.channel-table{
-width:100%;
-border-collapse:collapse;
-min-width:1000px;
-}
-
-.channel-table thead{
+.stat{
 background:var(--card);
-}
-
-.channel-table th,
-.channel-table td{
-padding:15px;
-text-align:left;
-border-bottom:1px solid rgba(255,255,255,0.05);
-}
-
-.channel-table tbody tr{
-transition:0.3s;
-}
-
-.channel-table tbody tr:hover{
-background:rgba(255,255,255,0.03);
-}
-
-.channel-info{
-display:flex;
-align-items:center;
-gap:12px;
-}
-
-.channel-info img{
-width:60px;
-height:60px;
-border-radius:10px;
-object-fit:cover;
-background:black;
-}
-
-.badge{
-padding:6px 12px;
-border-radius:20px;
-font-size:12px;
-font-weight:bold;
-}
-
-.locked{
-background:var(--warning);
-color:black;
-}
-
-.paid{
-background:var(--danger);
-}
-
-.free{
-background:var(--success);
-}
-
-.delete-btn{
-padding:10px 14px;
-background:var(--danger);
-color:white;
-border-radius:8px;
-font-size:13px;
-}
-
-.unlock-btn{
-padding:10px 14px;
-background:var(--accent);
-color:black;
-border-radius:8px;
-font-size:13px;
-}
-
-/* =========================
-LOG PANEL
-========================= */
-
-.log-box{
-background:#0f1628;
-padding:15px;
-border-radius:12px;
-max-height:250px;
-overflow-y:auto;
-font-size:13px;
-line-height:1.7;
-}
-
-.log-item{
-padding:8px 0;
-border-bottom:1px solid rgba(255,255,255,0.05);
-}
-
-/* =========================
-MOBILE
-========================= */
-
-@media(max-width:1000px){
-.container{
-flex-direction:column;
-overflow:auto;
-}
-
-.sidebar{
-width:100%;
-height:auto;
-border-right:none;
-border-bottom:1px solid rgba(255,255,255,0.05);
-}
-
-.main{
-padding:15px;
-}
-
-.topbar{
-flex-direction:column;
-height:auto;
-padding:15px;
-gap:10px;
-}
-
-.top-actions{
-flex-wrap:wrap;
-justify-content:center;
-}
+padding:10px;margin-top:10px;
+border-radius:6px;font-size:13px
 }
 </style>
 </head>
+
 <body>
 
-<!-- =========================
-TOPBAR
-========================= -->
-
 <div class="topbar">
-<h2>🔒 BTECH-TV LOCKED CHANNELS MANAGER</h2>
-
-<div class="top-actions">
-<button onclick="loadLockedChannels()">🔄 Refresh</button>
-<button onclick="exportLockedChannels()">📥 Export</button>
-<button class="delete-all-btn" onclick="deleteAllLockedChannels()">🗑 Delete All Locked</button>
+<h2>📺 ULTRA MAX 100K IPTV ENGINE</h2>
+<button onclick="filterCat('All')">ALL</button>
 </div>
-</div>
-
-<!-- =========================
-CONTAINER
-========================= -->
 
 <div class="container">
 
-<!-- =========================
-SIDEBAR
-========================= -->
-
+<!-- LEFT -->
 <div class="sidebar">
+<div class="cat" onclick="filterCat('All')">All</div>
+<div class="cat" onclick="filterCat('Africa')">Africa</div>
+<div class="cat" onclick="filterCat('Sports')">Sports</div>
+<div class="cat" onclick="filterCat('News')">News</div>
 
-<div class="card">
-<h3>📊 LOCKED CHANNEL STATS</h3>
-
-<div class="stats-grid">
-<div class="stat-box">
-<h4>Total Channels</h4>
-<p id="totalChannels">0</p>
+<h3 style="margin-top:15px;font-size:13px">🌍 Countries</h3>
+<div id="countryList"></div>
 </div>
 
-<div class="stat-box">
-<h4>Locked</h4>
-<p class="danger-text" id="lockedChannels">0</p>
-</div>
-
-<div class="stat-box">
-<h4>Unlocked</h4>
-<p class="success-text" id="unlockedChannels">0</p>
-</div>
-
-<div class="stat-box">
-<h4>Deleted</h4>
-<p id="deletedChannels">0</p>
-</div>
-</div>
-</div>
-
-<div class="card">
-<h3>🔍 Search Locked Channels</h3>
-
-<input
-class="search-box"
-type="text"
-placeholder="Search locked channels..."
-oninput="searchChannels(this.value)"
->
-
-<button class="action-btn primary-btn" onclick="unlockAllChannels()">
-🔓 Unlock All Channels
-</button>
-
-<button class="action-btn warning-btn" onclick="backupChannels()">
-💾 Backup Channel Database
-</button>
-
-<button class="action-btn danger-btn" onclick="deleteSelectedChannels()">
-🗑 Delete Selected Channels
-</button>
-</div>
-
-<div class="card">
-<h3>⚙ SYSTEM STATUS</h3>
-
-<div class="log-box">
-<div class="log-item">🟢 Database Engine: ONLINE</div>
-<div class="log-item">🟢 Security Firewall: ACTIVE</div>
-<div class="log-item">🟢 IPTV Monitoring: RUNNING</div>
-<div class="log-item">🟢 Locked Channel Scanner: ACTIVE</div>
-<div class="log-item">⚡ Performance Mode: ENABLED</div>
-</div>
-</div>
-
-</div>
-
-<!-- =========================
-MAIN PANEL
-========================= -->
-
+<!-- MAIN -->
 <div class="main">
 
-<div class="card">
-<h3>📺 LOCKED CHANNEL DATABASE</h3>
+<div class="player">
+<video id="video" controls autoplay></video>
+</div>
 
-<div class="table-wrapper">
-<table class="channel-table">
-<thead>
-<tr>
-<th>Select</th>
-<th>Channel</th>
-<th>Category</th>
-<th>Type</th>
-<th>Status</th>
-<th>Viewers</th>
-<th>Actions</th>
-</tr>
-</thead>
-<tbody id="channelTableBody">
-</tbody>
-</table>
+<div class="now">
+<div>
+<h3 id="name">No channel</h3>
+<p id="group">Ready</p>
+</div>
+
+<div>
+<button onclick="prev()">Prev</button>
+<button onclick="next()">Next</button>
 </div>
 </div>
 
-<div class="card">
-<h3>📝 ACTIVITY LOG</h3>
-
-<div class="log-box" id="activityLog">
-<div class="log-item">🚀 BTECH-TV Locked Channel Dashboard Initialized</div>
-</div>
-</div>
+<div id="channels" class="channels"></div>
 
 </div>
+
+<!-- RIGHT -->
+<div class="right">
+
+<input placeholder="Search channels..." oninput="searchChannels(this.value)">
+
+<button onclick="generateChannels()">Generate 100K+</button>
+
+<div class="stat">Total: <span id="total">0</span></div>
+<div class="stat">Free: <span id="free">0</span></div>
+<div class="stat">Locked: <span id="locked">0</span></div>
+
+</div>
+
 </div>
 
 <script>
 
-/* =========================
-GLOBAL DATA
-========================= */
+let channels=[],filtered=[],current=0,hls=null;
 
-let channels=[];
-let filteredChannels=[];
-let deletedCount=0;
-
-/* =========================
-GENERATE SAMPLE DATA
-========================= */
-
-function generateChannels(){
-
-const categories=[
-'Sports',
-'News',
-'Movies',
-'Kids',
-'Entertainment',
-'Africa',
-'USA',
-'UK'
+const africa=[
+"Algeria","Angola","Benin","Botswana","Cameroon","Egypt",
+"Ghana","Kenya","Libya","Morocco","Nigeria","Rwanda",
+"Senegal","South Africa","Sudan","Tanzania","Togo",
+"Tunisia","Uganda","Zambia","Zimbabwe"
 ];
 
-for(let i=1;i<=500;i++){
+const streams=[
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+"https://test-streams.mux.dev/test_001/stream.m3u8"
+];
+
+// 🚀 Generate optimized 100K dataset
+function generateChannels(){
+
+channels=[];
+let batchSize=100000;
+
+for(let i=0;i<batchSize;i++){
+
+let country=africa[i%africa.length];
+let type=["Sports","News","Movies","Music"][i%4];
 
 channels.push({
 id:i,
-name:`BTECH PREMIUM ${i}`,
-category:categories[i % categories.length],
-type:i % 3 === 0 ? 'paid' : 'free',
-status:i % 4 === 0 ? 'locked' : 'unlocked',
-viewers:Math.floor(Math.random()*1000000),
-logo:'https://via.placeholder.com/60'
+name:`${country} ${type} TV ${i}`,
+country,
+category:type,
+url:streams[i%streams.length],
+status:i%7===0?"locked":"free"
 });
 }
 
-filteredChannels=[...channels];
-updateStats();
-renderChannels();
-
+filtered=[...channels];
+render();
+stats();
 }
 
-/* =========================
-RENDER CHANNELS
-========================= */
+// ⚡ Virtual render (only first 400)
+function render(){
+let box=document.getElementById("channels");
+box.innerHTML="";
 
-function renderChannels(){
+filtered.slice(0,400).forEach((c,i)=>{
 
-const tbody=document.getElementById('channelTableBody');
-
-tbody.innerHTML='';
-
-filteredChannels.forEach(channel=>{
-
-if(channel.status !== 'locked') return;
-
-const row=document.createElement('tr');
-
-row.innerHTML=`
-<td>
-<input type="checkbox" class="channelCheck" value="${channel.id}">
-</td>
-
-<td>
-<div class="channel-info">
-<img src="${channel.logo}">
+box.innerHTML+=`
+<div class="channel" onclick="play(${i})">
 <div>
-<strong>${channel.name}</strong><br>
-<small>ID: ${channel.id}</small>
+<b>📺 ${c.name}</b><br>
+<small>${c.country}</small>
 </div>
+<div>${c.status}</div>
 </div>
-</td>
-
-<td>${channel.category}</td>
-
-<td>
-<span class="badge ${channel.type}">
-${channel.type}
-</span>
-</td>
-
-<td>
-<span class="badge locked">
-${channel.status}
-</span>
-</td>
-
-<td>👥 ${channel.viewers.toLocaleString()}</td>
-
-<td>
-<button class="unlock-btn" onclick="unlockChannel(${channel.id})">
-🔓 Unlock
-</button>
-
-<button class="delete-btn" onclick="deleteChannel(${channel.id})">
-🗑 Delete
-</button>
-</td>
 `;
 
-tbody.appendChild(row);
-
 });
 }
 
-/* =========================
-UPDATE STATS
-========================= */
+function play(i){
 
-function updateStats(){
+current=i;
+let c=filtered[i];
 
-const locked=channels.filter(c=>c.status==='locked').length;
-const unlocked=channels.filter(c=>c.status==='unlocked').length;
+name.innerHTML=c.name;
+group.innerHTML=c.country;
 
+let v=document.getElementById("video");
 
-document.getElementById('totalChannels').innerText=channels.length.toLocaleString();
-document.getElementById('lockedChannels').innerText=locked.toLocaleString();
-document.getElementById('unlockedChannels').innerText=unlocked.toLocaleString();
-document.getElementById('deletedChannels').innerText=deletedCount.toLocaleString();
+if(Hls.isSupported()){
+
+if(hls)hls.destroy();
+
+hls=new Hls({
+maxBufferLength:10,
+liveSyncDuration:3
+});
+
+hls.loadSource(c.url);
+hls.attachMedia(v);
+
+}else{
+v.src=c.url;
+}
 
 }
 
-/* =========================
-SEARCH
-========================= */
+function next(){
+current=(current+1)%filtered.length;
+play(current);
+}
 
-function searchChannels(query){
+function prev(){
+current=(current-1+filtered.length)%filtered.length;
+play(current);
+}
 
-const value=query.toLowerCase();
+// 🔎 Smart search
+function searchChannels(q){
 
-filteredChannels=channels.filter(c=>
-(c.name || '').toLowerCase().includes(value) ||
-(c.category || '').toLowerCase().includes(value)
+q=q.toLowerCase();
+
+filtered=channels.filter(x=>
+x.name.toLowerCase().includes(q) ||
+x.country.toLowerCase().includes(q) ||
+x.category.toLowerCase().includes(q)
 );
 
-renderChannels();
-
+render();
 }
 
-/* =========================
-DELETE CHANNEL
-========================= */
+// 🌍 filter
+function filterCat(cat){
 
-function deleteChannel(id){
+filtered = (cat==="All")
+? channels
+: channels.filter(x=>x.category===cat);
 
-if(!confirm('Delete this locked channel?')) return;
-
-channels=channels.filter(c=>c.id !== id);
-filteredChannels=filteredChannels.filter(c=>c.id !== id);
-
-deletedCount++;
-
-updateStats();
-renderChannels();
-
-addLog(`🗑 Deleted locked channel ID ${id}`);
-
+render();
 }
 
-/* =========================
-UNLOCK CHANNEL
-========================= */
-
-function unlockChannel(id){
-
-const channel=channels.find(c=>c.id===id);
-
-if(channel){
-channel.status='unlocked';
+// 📊 stats
+function stats(){
+total.innerHTML=channels.length;
+free.innerHTML=channels.filter(x=>x.status==="free").length;
+locked.innerHTML=channels.filter(x=>x.status==="locked").length;
 }
 
-updateStats();
-renderChannels();
-
-addLog(`🔓 Unlocked channel ID ${id}`);
-
-}
-
-/* =========================
-DELETE ALL LOCKED
-========================= */
-
-function deleteAllLockedChannels(){
-
-if(!confirm('Delete ALL locked channels?')) return;
-
-const before=channels.length;
-
-channels=channels.filter(c=>c.status !== 'locked');
-filteredChannels=[...channels];
-
-deletedCount += before - channels.length;
-
-updateStats();
-renderChannels();
-
-addLog('🗑 All locked channels deleted');
-
-}
-
-/* =========================
-DELETE SELECTED
-========================= */
-
-function deleteSelectedChannels(){
-
-const selected=[...document.querySelectorAll('.channelCheck:checked')]
-.map(c=>parseInt(c.value));
-
-if(selected.length===0){
-alert('No channels selected');
-return;
-}
-
-channels=channels.filter(c=>!selected.includes(c.id));
-filteredChannels=filteredChannels.filter(c=>!selected.includes(c.id));
-
-deletedCount += selected.length;
-
-updateStats();
-renderChannels();
-
-addLog(`🗑 Deleted ${selected.length} selected channels`);
-
-}
-
-/* =========================
-UNLOCK ALL
-========================= */
-
-function unlockAllChannels(){
-
-channels.forEach(channel=>{
-if(channel.status==='locked'){
-channel.status='unlocked';
-}
+// 🌍 country list
+africa.forEach(c=>{
+countryList.innerHTML+=`
+<div class="cat" onclick="searchChannels('${c}')">
+${c}
+</div>`;
 });
 
-filteredChannels=[...channels];
-
-updateStats();
-renderChannels();
-
-addLog('🔓 All locked channels unlocked');
-
-}
-
-/* =========================
-EXPORT
-========================= */
-
-function exportLockedChannels(){
-
-const lockedChannels=channels.filter(c=>c.status==='locked');
-
-const data=JSON.stringify(lockedChannels,null,2);
-
-const blob=new Blob([data],{type:'application/json'});
-const url=URL.createObjectURL(blob);
-
-const a=document.createElement('a');
-a.href=url;
-a.download='btech_locked_channels.json';
-a.click();
-
-addLog('📥 Locked channels exported');
-
-}
-
-/* =========================
-BACKUP
-========================= */
-
-function backupChannels(){
-
-addLog('💾 Channel database backup completed');
-alert('Backup completed successfully');
-
-}
-
-/* =========================
-LOAD LOCKED CHANNELS
-========================= */
-
-function loadLockedChannels(){
-
-filteredChannels=channels.filter(c=>c.status==='locked');
-renderChannels();
-
-addLog('🔄 Locked channel database refreshed');
-
-}
-
-/* =========================
-ACTIVITY LOG
-========================= */
-
-function addLog(message){
-
-const log=document.getElementById('activityLog');
-
-const item=document.createElement('div');
-item.className='log-item';
-
-const time=new Date().toLocaleTimeString();
-
-item.innerHTML=`${time} — ${message}`;
-
-log.prepend(item);
-
-}
-
-/* =========================
-BOOT ENGINE
-========================= */
-
 generateChannels();
-loadLockedChannels();
 
 </script>
 
