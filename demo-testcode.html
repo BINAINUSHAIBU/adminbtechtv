@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>🚀 BTECH-TV SUPER ADMIN PRO MAX</title>
+<title>🚀 BTECH-TV PRO MAX 2026</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -22,6 +22,47 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 
 body{background:var(--bg);color:var(--text);overflow:hidden}
+
+/* LOGIN */
+#loginBox{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.95);
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+z-index:9999;
+}
+
+.loginCard{
+background:var(--panel);
+padding:25px;
+border-radius:12px;
+width:320px;
+text-align:center;
+border:1px solid rgba(255,255,255,0.1);
+}
+
+.loginCard input{
+width:100%;
+padding:10px;
+margin:8px 0;
+border:none;
+border-radius:8px;
+background:#0f1628;
+color:#fff;
+}
+
+.loginCard button{
+width:100%;
+padding:10px;
+border:none;
+border-radius:8px;
+background:var(--accent);
+cursor:pointer;
+font-weight:bold;
+}
 
 /* TOPBAR */
 .topbar{
@@ -66,13 +107,11 @@ transition:0.3s;
 }
 
 .cat:hover{background:var(--hover)}
-
 .tab-active{background:var(--accent);color:black}
 
 /* MAIN */
 .main{flex:1;display:flex;flex-direction:column}
 
-/* STATS */
 .stats{
 display:grid;
 grid-template-columns:repeat(4,1fr);
@@ -89,7 +128,6 @@ text-align:center;
 
 .box p{color:var(--accent);font-size:20px;font-weight:bold}
 
-/* GRID */
 .grid{
 flex:1;
 overflow-y:auto;
@@ -99,7 +137,6 @@ grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
 gap:12px;
 }
 
-/* CARD */
 .card{
 background:var(--card);
 padding:15px;
@@ -113,23 +150,6 @@ background:var(--hover);
 border:1px solid var(--accent);
 }
 
-/* BADGES */
-.badge{
-padding:5px 10px;
-border-radius:20px;
-font-size:11px;
-margin-right:5px;
-}
-
-.free{background:#16a34a}
-.paid{background:#dc2626}
-.online{background:#16a34a}
-.offline{background:#dc2626}
-.active{background:#16a34a}
-.banned{background:#dc2626}
-.premium{background:#f59e0b;color:black}
-
-/* BUTTON */
 button{
 padding:10px;
 border:none;
@@ -142,7 +162,7 @@ margin-top:8px;
 
 button:hover{opacity:0.85}
 
-/* LIVE MONITOR */
+/* LIVE */
 .monitor{
 position:fixed;
 right:0;
@@ -156,22 +176,11 @@ flex-direction:column;
 padding:10px;
 }
 
-.monitor h3{
-color:var(--accent);
-margin-bottom:10px;
-}
-
 video{
 width:100%;
 height:180px;
 background:black;
 border-radius:10px;
-}
-
-.liveList{
-flex:1;
-overflow:auto;
-margin-top:10px;
 }
 
 .liveItem{
@@ -182,254 +191,211 @@ border-radius:8px;
 cursor:pointer;
 font-size:12px;
 }
-
 .liveItem:hover{background:var(--hover)}
 </style>
 </head>
 
 <body>
 
+<!-- 🔐 LOGIN SCREEN -->
+<div id="loginBox">
+  <div class="loginCard">
+    <h2 style="color:var(--accent)">PRO MAX 2026 LOGIN</h2>
+    <p style="font-size:12px;color:#aaa">Demo: admin / admin123</p>
+    <input id="user" placeholder="Username">
+    <input id="pass" type="password" placeholder="Password">
+    <button onclick="login()">LOGIN</button>
+    <p id="err" style="color:red;font-size:12px;margin-top:8px"></p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+
 <div class="topbar">
-<h2>🚀 BTECH SUPER ADMIN PRO MAX</h2>
-<input placeholder="Search users or channels..." oninput="searchAll(this.value)">
+<h2>🚀 BTECH SUPER ADMIN PRO MAX 2026</h2>
+<input placeholder="Search..." oninput="searchAll(this.value)">
 </div>
 
 <div class="container">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-
 <div class="cat tab-active" onclick="switchTab('users',this)">👥 Users</div>
 <div class="cat" onclick="switchTab('channels',this)">📺 Channels</div>
-
-<hr style="opacity:0.2;margin:10px 0">
-
 <button onclick="generateUsers()">Generate Users</button>
-<button onclick="loadAPI()">Load IPTV Channels</button>
-
+<button onclick="loadAPI()">Load IPTV</button>
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
 <div class="stats">
 <div class="box"><p id="t1">0</p><small>Total Users</small></div>
-<div class="box"><p id="t2">0</p><small>Total Channels</small></div>
-<div class="box"><p id="t3">0</p><small>Active / Free</small></div>
-<div class="box"><p id="t4">0</p><small>Banned / Locked</small></div>
+<div class="box"><p id="t2">0</p><small>Channels</small></div>
+<div class="box"><p id="t3">0</p><small>Active</small></div>
+<div class="box"><p id="t4">0</p><small>Banned</small></div>
 </div>
 
 <div class="grid" id="grid"></div>
 
 </div>
-
 </div>
 
-<!-- LIVE MONITOR -->
 <div class="monitor">
-<h3>📺 LIVE IPTV MONITOR</h3>
+<h3 style="color:var(--accent)">📺 LIVE</h3>
 <video id="player" controls></video>
-<div class="liveList" id="liveList"></div>
+<div id="liveList"></div>
+</div>
+
 </div>
 
 <script>
 
-/* ================= STATE ================= */
-let users=[];
-let channels=[];
-let view="users";
+/* ===== LOGIN ===== */
+function login(){
+let u=document.getElementById("user").value;
+let p=document.getElementById("pass").value;
 
-let channelMap={},logoMap={};
-let filteredChannels=[];
-
-/* ================= IPTV ENGINE ================= */
-
-function flag(cc){
-if(!cc||cc.length!==2)return'🌐';
-var a=0x1F1E6;
-return String.fromCodePoint(a+cc.charCodeAt(0)-65,a+cc.charCodeAt(1)-65);
+if(u==="admin" && p==="admin123"){
+localStorage.setItem("pm_login","1");
+document.getElementById("loginBox").style.display="none";
+document.getElementById("app").style.display="block";
+init();
+}else{
+document.getElementById("err").innerText="Wrong credentials!";
+}
 }
 
-/* LOAD IPTV */
+if(localStorage.getItem("pm_login")==="1"){
+document.getElementById("loginBox").style.display="none";
+document.getElementById("app").style.display="block";
+}
+
+/* ===== STATE ===== */
+let users=[],channels=[],view="users";
+let channelMap={},logoMap={};
+
+/* ===== IPTV ===== */
 async function loadAPI(){
-try{
-const [chRes,stRes,lgRes]=await Promise.all([
-fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
-fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
-fetch('https://iptv-org.github.io/api/logos.json').then(r=>r.json())
+const [ch,st,lg]=await Promise.all([
+fetch("https://iptv-org.github.io/api/channels.json").then(r=>r.json()),
+fetch("https://iptv-org.github.io/api/streams.json").then(r=>r.json()),
+fetch("https://iptv-org.github.io/api/logos.json").then(r=>r.json())
 ]);
 
-chRes.forEach(ch=>{
-if(!ch.is_nsfw&&!ch.closed)channelMap[ch.id]=ch;
-});
-
-lgRes.forEach(lg=>{
-if(!logoMap[lg.channel])logoMap[lg.channel]=lg.url;
-});
+ch.forEach(c=>channelMap[c.id]=c);
+lg.forEach(l=>logoMap[l.channel]=l.url);
 
 channels=[];
-let seen={};
-let id=1;
+let id=1,seen={};
 
-stRes.forEach(st=>{
-if(!st.url||seen[st.url])return;
-seen[st.url]=1;
+st.forEach(s=>{
+if(!s.url||seen[s.url])return;
+seen[s.url]=1;
 
-let ch=channelMap[st.channel]||{};
+let c=channelMap[s.channel]||{};
 channels.push({
 id:id++,
-name:ch.name||st.title||"Unknown",
-url:st.url,
-cat:(ch.categories&&ch.categories[0])||"Other",
-country:ch.country||"",
-logo:logoMap[st.channel]||null
+name:c.name||"Unknown",
+url:s.url,
+cat:(c.categories&&c.categories[0])||"Other"
 });
 });
 
-filteredChannels=[...channels];
-
-renderLiveList();
 render();
-updateStats();
-
-}catch(e){
-console.log(e);
-}
+renderLive();
 }
 
-/* ================= USERS ================= */
-
+/* ===== USERS ===== */
 function generateUsers(){
 users=[];
-for(let i=1;i<=200;i++){
+for(let i=1;i<=150;i++){
 users.push({
 id:i,
 name:"User_"+i,
-email:"user"+i+"@mail.com",
-status:i%10===0?"banned":"active",
-premium:i%7===0
+email:"u"+i+"@mail.com",
+status:i%10===0?"banned":"active"
 });
 }
 render();
 }
 
-/* ================= PLAYER ================= */
-
+/* ===== PLAYER ===== */
 function playStream(url){
-const video=document.getElementById("player");
-
+const v=document.getElementById("player");
 if(Hls.isSupported()){
-let hls=new Hls();
-hls.loadSource(url);
-hls.attachMedia(video);
-}else{
-video.src=url;
+let h=new Hls();
+h.loadSource(url);
+h.attachMedia(v);
+}else v.src=url;
+v.play();
 }
 
-video.play();
-}
-
-/* ================= LIVE LIST ================= */
-
-function renderLiveList(){
+/* ===== LIVE ===== */
+function renderLive(){
 let box=document.getElementById("liveList");
 box.innerHTML="";
-
 channels.forEach(c=>{
-let div=document.createElement("div");
-div.className="liveItem";
-div.innerHTML=`
-📺 ${c.name}<br>
+box.innerHTML+=`
+<div class="liveItem">
+${c.name}<br>
 <button onclick="playStream('${c.url}')">Play</button>
-`;
-box.appendChild(div);
+</div>`;
 });
 }
 
-/* ================= RENDER ================= */
-
+/* ===== RENDER ===== */
 function render(){
-const grid=document.getElementById("grid");
-grid.innerHTML="";
+let g=document.getElementById("grid");
+g.innerHTML="";
 
 if(view==="users"){
-
 users.forEach(u=>{
-grid.innerHTML+=`
-<div class="card">
-<h3>👤 ${u.name}</h3>
+g.innerHTML+=`<div class="card">
+<h3>${u.name}</h3>
 <p>${u.email}</p>
-<span class="badge ${u.status}">${u.status}</span>
-${u.premium?'<span class="badge premium">premium</span>':''}
+<span>${u.status}</span>
 </div>`;
 });
-
 }else{
-
 channels.forEach(c=>{
-grid.innerHTML+=`
-<div class="card">
-<h3>📺 ${c.name}</h3>
+g.innerHTML+=`<div class="card">
+<h3>${c.name}</h3>
 <p>${c.cat}</p>
 <button onclick="playStream('${c.url}')">▶ Play</button>
 </div>`;
 });
-
 }
 
-updateStats();
-}
-
-/* ================= STATS ================= */
-
-function updateStats(){
 document.getElementById("t1").innerText=users.length;
 document.getElementById("t2").innerText=channels.length;
-
-document.getElementById("t3").innerText=
-view==="users"
-? users.filter(u=>u.status==="active").length
-: channels.length;
-
-document.getElementById("t4").innerText=
-view==="users"
-? users.filter(u=>u.status==="banned").length
-: 0;
+document.getElementById("t3").innerText=users.filter(u=>u.status==="active").length;
+document.getElementById("t4").innerText=users.filter(u=>u.status==="banned").length;
 }
 
-/* ================= SEARCH ================= */
-
+/* ===== SEARCH ===== */
 function searchAll(q){
 q=q.toLowerCase();
-
 if(view==="users"){
-users=users.filter(u=>
-u.name.toLowerCase().includes(q)||
-u.email.toLowerCase().includes(q)
-);
+users=users.filter(u=>u.name.toLowerCase().includes(q));
 }else{
-channels=filteredChannels.filter(c=>
-c.name.toLowerCase().includes(q)||
-c.cat.toLowerCase().includes(q)
-);
+channels=channels.filter(c=>c.name.toLowerCase().includes(q));
 }
-
 render();
 }
 
-/* ================= TAB ================= */
-
-function switchTab(tab,el){
-view=tab;
+/* ===== TAB ===== */
+function switchTab(t,el){
+view=t;
 document.querySelectorAll(".cat").forEach(c=>c.classList.remove("tab-active"));
 el.classList.add("tab-active");
 render();
 }
 
-/* ================= INIT ================= */
-
+/* ===== INIT ===== */
+function init(){
 generateUsers();
 loadAPI();
+}
 
 </script>
 
