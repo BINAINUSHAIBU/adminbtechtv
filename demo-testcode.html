@@ -3,31 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>🚀 BTECH-TV PRO MAX 2026</title>
+<title>🚀 ULTIMATE PRO MAX 2026</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 :root{
---bg:#0b0f1a;
---panel:#11182a;
---card:#1b2438;
---hover:#2b3a5a;
+--bg:#0a0a0f;
+--panel:#111827;
+--card:#1b1f2e;
 --accent:#00bfff;
+--good:#22c55e;
+--bad:#ef4444;
 --text:#fff;
---muted:#94a3b8;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 
 body{background:var(--bg);color:var(--text);overflow:hidden}
 
-/* LOGIN */
-#loginBox{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.95);
+/* LOGIN OVERLAY */
+#lock{
+position:fixed;inset:0;
+background:#000;
 display:flex;
 align-items:center;
 justify-content:center;
@@ -35,366 +33,255 @@ flex-direction:column;
 z-index:9999;
 }
 
-.loginCard{
-background:var(--panel);
-padding:25px;
-border-radius:12px;
-width:320px;
+#lock input{
+padding:12px;
+margin:8px;
+border:none;
+border-radius:8px;
+width:220px;
 text-align:center;
-border:1px solid rgba(255,255,255,0.1);
 }
 
-.loginCard input{
-width:100%;
-padding:10px;
-margin:8px 0;
-border:none;
-border-radius:8px;
-background:#0f1628;
-color:#fff;
-}
-
-.loginCard button{
-width:100%;
-padding:10px;
-border:none;
-border-radius:8px;
+#lock button{
+padding:10px 16px;
 background:var(--accent);
+border:none;
+border-radius:8px;
 cursor:pointer;
-font-weight:bold;
 }
 
-/* TOPBAR */
+/* TOP */
 .topbar{
-height:65px;
+height:60px;
 background:var(--panel);
 display:flex;
 justify-content:space-between;
 align-items:center;
 padding:0 20px;
-border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
 .topbar h2{color:var(--accent)}
 
-.topbar input{
-padding:10px;
-border:none;
-border-radius:8px;
-background:#0f1628;
-color:white;
-width:280px;
-}
-
 /* LAYOUT */
-.container{display:flex;height:calc(100vh - 65px)}
+.container{display:flex;height:calc(100vh - 60px)}
 
 .sidebar{
-width:240px;
-background:#0f1628;
-padding:15px;
-border-right:1px solid rgba(255,255,255,0.05);
-overflow-y:auto;
+width:220px;
+background:#0f172a;
+padding:10px;
+overflow:auto;
 }
 
-.cat{
-padding:12px;
-margin:8px 0;
-background:var(--card);
-border-radius:8px;
-cursor:pointer;
-transition:0.3s;
-}
-
-.cat:hover{background:var(--hover)}
-.tab-active{background:var(--accent);color:black}
-
-/* MAIN */
 .main{flex:1;display:flex;flex-direction:column}
 
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:10px;
-padding:15px;
-}
-
-.box{
-background:var(--card);
-padding:15px;
-border-radius:10px;
-text-align:center;
-}
-
-.box p{color:var(--accent);font-size:20px;font-weight:bold}
-
+/* NETFLIX GRID */
 .grid{
 flex:1;
-overflow-y:auto;
-padding:15px;
+overflow:auto;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-gap:12px;
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+gap:10px;
+padding:12px;
 }
 
 .card{
 background:var(--card);
-padding:15px;
-border-radius:12px;
-transition:0.3s;
-}
-
-.card:hover{
-transform:translateY(-3px);
-background:var(--hover);
-border:1px solid var(--accent);
-}
-
-button{
 padding:10px;
-border:none;
-border-radius:8px;
+border-radius:12px;
+transition:.3s;
 cursor:pointer;
-background:var(--accent);
-font-weight:bold;
-margin-top:8px;
 }
 
-button:hover{opacity:0.85}
+.card:hover{transform:scale(1.03);border:1px solid var(--accent)}
 
-/* LIVE */
-.monitor{
+.badge{font-size:11px;padding:4px 8px;border-radius:20px}
+.good{background:var(--good)}
+.bad{background:var(--bad)}
+.premium{background:orange;color:#000}
+
+/* PLAYER */
+.player{
 position:fixed;
 right:0;
-top:65px;
+top:60px;
 width:320px;
-height:calc(100vh - 65px);
-background:#0f1628;
-border-left:1px solid rgba(255,255,255,0.1);
+height:calc(100vh - 60px);
+background:#000;
 display:flex;
 flex-direction:column;
-padding:10px;
 }
 
-video{
-width:100%;
-height:180px;
-background:black;
-border-radius:10px;
-}
+video{width:100%;height:180px;background:#000}
 
-.liveItem{
-padding:8px;
-background:var(--card);
+.list{overflow:auto;flex:1;padding:8px}
+
+.item{
+padding:6px;
+background:#1f2937;
 margin-bottom:6px;
 border-radius:8px;
 cursor:pointer;
-font-size:12px;
 }
-.liveItem:hover{background:var(--hover)}
+
+.item:hover{background:#374151}
 </style>
 </head>
 
 <body>
 
-<!-- 🔐 LOGIN SCREEN -->
-<div id="loginBox">
-  <div class="loginCard">
-    <h2 style="color:var(--accent)">PRO MAX 2026 LOGIN</h2>
-    <p style="font-size:12px;color:#aaa">Demo: admin / admin123</p>
-    <input id="user" placeholder="Username">
-    <input id="pass" type="password" placeholder="Password">
-    <button onclick="login()">LOGIN</button>
-    <p id="err" style="color:red;font-size:12px;margin-top:8px"></p>
-  </div>
+<!-- 🔐 LOGIN -->
+<div id="lock">
+<h2>🔐 ULTIMATE PRO MAX 2026</h2>
+<input id="user" placeholder="Username">
+<input id="pass" type="password" placeholder="Password">
+<button onclick="login()">ENTER ADMIN</button>
+<p id="msg"></p>
 </div>
 
-<!-- APP -->
-<div id="app" style="display:none">
-
 <div class="topbar">
-<h2>🚀 BTECH SUPER ADMIN PRO MAX 2026</h2>
-<input placeholder="Search..." oninput="searchAll(this.value)">
+<h2>🚀 PRO MAX 2026</h2>
+<input placeholder="Search..." oninput="search(this.value)">
 </div>
 
 <div class="container">
 
 <div class="sidebar">
-<div class="cat tab-active" onclick="switchTab('users',this)">👥 Users</div>
-<div class="cat" onclick="switchTab('channels',this)">📺 Channels</div>
-<button onclick="generateUsers()">Generate Users</button>
-<button onclick="loadAPI()">Load IPTV</button>
+<button onclick="setMode('all')">All Channels</button>
+<button onclick="setMode('ai')">🤖 AI MODE</button>
+<button onclick="setMode('fav')">⭐ Favorites</button>
 </div>
 
 <div class="main">
-
-<div class="stats">
-<div class="box"><p id="t1">0</p><small>Total Users</small></div>
-<div class="box"><p id="t2">0</p><small>Channels</small></div>
-<div class="box"><p id="t3">0</p><small>Active</small></div>
-<div class="box"><p id="t4">0</p><small>Banned</small></div>
-</div>
-
 <div class="grid" id="grid"></div>
-
-</div>
 </div>
 
-<div class="monitor">
-<h3 style="color:var(--accent)">📺 LIVE</h3>
-<video id="player" controls></video>
-<div id="liveList"></div>
 </div>
 
+<div class="player">
+<video id="vid" controls></video>
+<div class="list" id="list"></div>
 </div>
 
 <script>
 
-/* ===== LOGIN ===== */
-function login(){
-let u=document.getElementById("user").value;
-let p=document.getElementById("pass").value;
+/* 🔐 ADMIN ROLES + SIMPLE ENCRYPT (demo) */
+const ADMIN_USER="admin";
+const ADMIN_PASS=btoa("1234"); // encrypted demo
 
-if(u==="admin" && p==="admin123"){
-localStorage.setItem("pm_login","1");
-document.getElementById("loginBox").style.display="none";
-document.getElementById("app").style.display="block";
+function login(){
+let u=user.value;
+let p=btoa(pass.value);
+
+if(u===ADMIN_USER && p===ADMIN_PASS){
+lock.style.display="none";
 init();
 }else{
-document.getElementById("err").innerText="Wrong credentials!";
+msg.innerText="❌ Access Denied";
 }
 }
 
-if(localStorage.getItem("pm_login")==="1"){
-document.getElementById("loginBox").style.display="none";
-document.getElementById("app").style.display="block";
+/* STATE */
+let all=[],filtered=[],mode="all",fav={};
+
+/* 🤖 AI BOOST SCORE */
+function score(c){
+let s=0;
+if(c.alive) s+=10;
+if(c.views>50000) s+=5;
+if(c.premium) s+=3;
+return s;
 }
 
-/* ===== STATE ===== */
-let users=[],channels=[],view="users";
-let channelMap={},logoMap={};
-
-/* ===== IPTV ===== */
-async function loadAPI(){
-const [ch,st,lg]=await Promise.all([
-fetch("https://iptv-org.github.io/api/channels.json").then(r=>r.json()),
-fetch("https://iptv-org.github.io/api/streams.json").then(r=>r.json()),
-fetch("https://iptv-org.github.io/api/logos.json").then(r=>r.json())
-]);
-
-ch.forEach(c=>channelMap[c.id]=c);
-lg.forEach(l=>logoMap[l.channel]=l.url);
-
-channels=[];
-let id=1,seen={};
-
-st.forEach(s=>{
-if(!s.url||seen[s.url])return;
-seen[s.url]=1;
-
-let c=channelMap[s.channel]||{};
-channels.push({
-id:id++,
-name:c.name||"Unknown",
-url:s.url,
-cat:(c.categories&&c.categories[0])||"Other"
-});
-});
-
-render();
-renderLive();
-}
-
-/* ===== USERS ===== */
-function generateUsers(){
-users=[];
-for(let i=1;i<=150;i++){
-users.push({
+/* LOAD STREAMS */
+function init(){
+for(let i=1;i<=60;i++){
+all.push({
 id:i,
-name:"User_"+i,
-email:"u"+i+"@mail.com",
-status:i%10===0?"banned":"active"
+name:"Channel "+i,
+url:"https://test-streams.mux.dev/test_001/stream.m3u8",
+views:Math.floor(Math.random()*100000),
+premium:i%9===0,
+alive:true
 });
 }
 render();
+renderList();
 }
 
-/* ===== PLAYER ===== */
-function playStream(url){
-const v=document.getElementById("player");
+/* AI MODE */
+function aiSort(list){
+return list.sort((a,b)=>score(b)-score(a));
+}
+
+/* FILTER */
+function setMode(m){
+mode=m;
+render();
+}
+
+/* SEARCH */
+function search(q){
+filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
+render(true);
+}
+
+/* RENDER GRID */
+function render(skip=false){
+
+let list=all;
+
+if(mode==="fav") list=list.filter(c=>fav[c.id]);
+if(mode==="ai") list=aiSort([...list]);
+
+if(skip && filtered.length) list=filtered;
+
+grid.innerHTML="";
+
+list.forEach(c=>{
+let div=document.createElement("div");
+div.className="card";
+
+div.innerHTML=`
+<h4>📺 ${c.name}</h4>
+<p>${c.views} views</p>
+<span class="badge ${c.premium?'premium':'good'}">
+${c.premium?'VIP':'FREE'}
+</span>
+<button onclick="play(${c.id})">▶ Play</button>
+`;
+
+grid.appendChild(div);
+});
+
+}
+
+/* PLAY */
+function play(id){
+let c=all.find(x=>x.id===id);
+let v=document.getElementById("vid");
+
 if(Hls.isSupported()){
 let h=new Hls();
-h.loadSource(url);
+h.loadSource(c.url);
 h.attachMedia(v);
-}else v.src=url;
+}else{
+v.src=c.url;
+}
+
 v.play();
+renderList();
 }
 
-/* ===== LIVE ===== */
-function renderLive(){
-let box=document.getElementById("liveList");
-box.innerHTML="";
-channels.forEach(c=>{
-box.innerHTML+=`
-<div class="liveItem">
-${c.name}<br>
-<button onclick="playStream('${c.url}')">Play</button>
-</div>`;
+/* RIGHT LIST */
+function renderList(){
+list.innerHTML="";
+all.forEach(c=>{
+let d=document.createElement("div");
+d.className="item";
+d.innerHTML="📺 "+c.name;
+d.onclick=()=>play(c.id);
+list.appendChild(d);
 });
-}
-
-/* ===== RENDER ===== */
-function render(){
-let g=document.getElementById("grid");
-g.innerHTML="";
-
-if(view==="users"){
-users.forEach(u=>{
-g.innerHTML+=`<div class="card">
-<h3>${u.name}</h3>
-<p>${u.email}</p>
-<span>${u.status}</span>
-</div>`;
-});
-}else{
-channels.forEach(c=>{
-g.innerHTML+=`<div class="card">
-<h3>${c.name}</h3>
-<p>${c.cat}</p>
-<button onclick="playStream('${c.url}')">▶ Play</button>
-</div>`;
-});
-}
-
-document.getElementById("t1").innerText=users.length;
-document.getElementById("t2").innerText=channels.length;
-document.getElementById("t3").innerText=users.filter(u=>u.status==="active").length;
-document.getElementById("t4").innerText=users.filter(u=>u.status==="banned").length;
-}
-
-/* ===== SEARCH ===== */
-function searchAll(q){
-q=q.toLowerCase();
-if(view==="users"){
-users=users.filter(u=>u.name.toLowerCase().includes(q));
-}else{
-channels=channels.filter(c=>c.name.toLowerCase().includes(q));
-}
-render();
-}
-
-/* ===== TAB ===== */
-function switchTab(t,el){
-view=t;
-document.querySelectorAll(".cat").forEach(c=>c.classList.remove("tab-active"));
-el.classList.add("tab-active");
-render();
-}
-
-/* ===== INIT ===== */
-function init(){
-generateUsers();
-loadAPI();
 }
 
 </script>
