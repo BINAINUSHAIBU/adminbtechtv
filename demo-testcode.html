@@ -66,6 +66,7 @@ transition:0.3s;
 }
 
 .cat:hover{background:var(--hover)}
+
 .tab-active{background:var(--accent);color:black}
 
 /* MAIN */
@@ -122,6 +123,8 @@ margin-right:5px;
 
 .free{background:#16a34a}
 .paid{background:#dc2626}
+.online{background:#16a34a}
+.offline{background:#dc2626}
 .active{background:#16a34a}
 .banned{background:#dc2626}
 .premium{background:#f59e0b;color:black}
@@ -179,6 +182,7 @@ border-radius:8px;
 cursor:pointer;
 font-size:12px;
 }
+
 .liveItem:hover{background:var(--hover)}
 </style>
 </head>
@@ -187,7 +191,7 @@ font-size:12px;
 
 <div class="topbar">
 <h2>🚀 BTECH SUPER ADMIN PRO MAX</h2>
-<input placeholder="Search channels..." oninput="searchAll(this.value)">
+<input placeholder="Search users or channels..." oninput="searchAll(this.value)">
 </div>
 
 <div class="container">
@@ -195,9 +199,13 @@ font-size:12px;
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="cat tab-active" onclick="switchTab('channels',this)">📺 Channels</div>
+<div class="cat tab-active" onclick="switchTab('users',this)">👥 Users</div>
+<div class="cat" onclick="switchTab('channels',this)">📺 Channels</div>
 
-<button onclick="loadAPI()">Reload IPTV Engine</button>
+<hr style="opacity:0.2;margin:10px 0">
+
+<button onclick="generateUsers()">Generate Users</button>
+<button onclick="loadAPI()">Load IPTV Channels</button>
 
 </div>
 
@@ -205,15 +213,16 @@ font-size:12px;
 <div class="main">
 
 <div class="stats">
-<div class="box"><p id="t1">0</p><small>Total Channels</small></div>
-<div class="box"><p id="t2">0</p><small>Filtered</small></div>
-<div class="box"><p id="t3">0</p><small>Alive</small></div>
-<div class="box"><p id="t4">0</p><small>Dead</small></div>
+<div class="box"><p id="t1">0</p><small>Total Users</small></div>
+<div class="box"><p id="t2">0</p><small>Total Channels</small></div>
+<div class="box"><p id="t3">0</p><small>Active / Free</small></div>
+<div class="box"><p id="t4">0</p><small>Banned / Locked</small></div>
 </div>
 
 <div class="grid" id="grid"></div>
 
 </div>
+
 </div>
 
 <!-- LIVE MONITOR -->
@@ -225,67 +234,92 @@ font-size:12px;
 
 <script>
 
-/* STATE */
-var all=[],filtered=[],cur=null;
-var deadCh={},aliveCh={};
-var channelMap={},logoMap={};
+/* ================= STATE ================= */
+let users=[];
+let channels=[];
+let view="users";
 
-/* INIT */
-function init(){ loadAPI(); }
+let channelMap={},logoMap={};
+let filteredChannels=[];
 
-/* LOAD IPTV ENGINE */
+/* ================= IPTV ENGINE ================= */
+
+function flag(cc){
+if(!cc||cc.length!==2)return'🌐';
+var a=0x1F1E6;
+return String.fromCodePoint(a+cc.charCodeAt(0)-65,a+cc.charCodeAt(1)-65);
+}
+
+/* LOAD IPTV */
 async function loadAPI(){
 try{
-
-var [chRes,stRes,lgRes]=await Promise.all([
+const [chRes,stRes,lgRes]=await Promise.all([
 fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
 fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
 fetch('https://iptv-org.github.io/api/logos.json').then(r=>r.json())
 ]);
 
-for(var i=0;i<chRes.length;i++){
-var ch=chRes[i];
-if(ch.is_nsfw||ch.closed)continue;
-channelMap[ch.id]=ch;
-}
+chRes.forEach(ch=>{
+if(!ch.is_nsfw&&!ch.closed)channelMap[ch.id]=ch;
+});
 
-for(var i=0;i<lgRes.length;i++){
-var lg=lgRes[i];
+lgRes.forEach(lg=>{
 if(!logoMap[lg.channel])logoMap[lg.channel]=lg.url;
-}
+});
 
-var id=0,seen={};
+channels=[];
+let seen={};
+let id=1;
 
-for(var i=0;i<stRes.length;i++){
-var st=stRes[i];
-if(!st.url||seen[st.url])continue;
+stRes.forEach(st=>{
+if(!st.url||seen[st.url])return;
 seen[st.url]=1;
 
-var ch=st.channel?channelMap[st.channel]:null;
-
-id++;
-all.push({
-id:id,
-name:ch?ch.name:(st.title||"Unknown"),
+let ch=channelMap[st.channel]||{};
+channels.push({
+id:id++,
+name:ch.name||st.title||"Unknown",
 url:st.url,
-cat:ch&&ch.categories&&ch.categories.length?ch.categories[0]:"other"
+cat:(ch.categories&&ch.categories[0])||"Other",
+country:ch.country||"",
+logo:logoMap[st.channel]||null
 });
-}
+});
 
-render();
+filteredChannels=[...channels];
+
 renderLiveList();
+render();
+updateStats();
 
 }catch(e){
 console.log(e);
 }
 }
 
-/* PLAYER */
+/* ================= USERS ================= */
+
+function generateUsers(){
+users=[];
+for(let i=1;i<=200;i++){
+users.push({
+id:i,
+name:"User_"+i,
+email:"user"+i+"@mail.com",
+status:i%10===0?"banned":"active",
+premium:i%7===0
+});
+}
+render();
+}
+
+/* ================= PLAYER ================= */
+
 function playStream(url){
 const video=document.getElementById("player");
 
 if(Hls.isSupported()){
-var hls=new Hls();
+let hls=new Hls();
 hls.loadSource(url);
 hls.attachMedia(video);
 }else{
@@ -295,12 +329,13 @@ video.src=url;
 video.play();
 }
 
-/* LIVE LIST */
+/* ================= LIVE LIST ================= */
+
 function renderLiveList(){
 let box=document.getElementById("liveList");
 box.innerHTML="";
 
-all.forEach(c=>{
+channels.forEach(c=>{
 let div=document.createElement("div");
 div.className="liveItem";
 div.innerHTML=`
@@ -311,57 +346,90 @@ box.appendChild(div);
 });
 }
 
-/* RENDER */
-function render(){
-filtered=all;
+/* ================= RENDER ================= */
 
-let grid=document.getElementById("grid");
+function render(){
+const grid=document.getElementById("grid");
 grid.innerHTML="";
 
-filtered.forEach(c=>{
-let div=document.createElement("div");
-div.className="card";
+if(view==="users"){
 
-div.innerHTML=`
+users.forEach(u=>{
+grid.innerHTML+=`
+<div class="card">
+<h3>👤 ${u.name}</h3>
+<p>${u.email}</p>
+<span class="badge ${u.status}">${u.status}</span>
+${u.premium?'<span class="badge premium">premium</span>':''}
+</div>`;
+});
+
+}else{
+
+channels.forEach(c=>{
+grid.innerHTML+=`
+<div class="card">
 <h3>📺 ${c.name}</h3>
 <p>${c.cat}</p>
 <button onclick="playStream('${c.url}')">▶ Play</button>
-`;
-
-grid.appendChild(div);
+</div>`;
 });
+
+}
 
 updateStats();
 }
 
-/* STATS */
+/* ================= STATS ================= */
+
 function updateStats(){
-document.getElementById("t1").innerText=all.length;
-document.getElementById("t2").innerText=filtered.length;
-document.getElementById("t3").innerText=Object.keys(aliveCh).length;
-document.getElementById("t4").innerText=Object.keys(deadCh).length;
+document.getElementById("t1").innerText=users.length;
+document.getElementById("t2").innerText=channels.length;
+
+document.getElementById("t3").innerText=
+view==="users"
+? users.filter(u=>u.status==="active").length
+: channels.length;
+
+document.getElementById("t4").innerText=
+view==="users"
+? users.filter(u=>u.status==="banned").length
+: 0;
 }
 
-/* SEARCH */
+/* ================= SEARCH ================= */
+
 function searchAll(q){
 q=q.toLowerCase();
 
-filtered=all.filter(c=>
-c.name.toLowerCase().includes(q)||
-(c.cat||"").toLowerCase().includes(q)
+if(view==="users"){
+users=users.filter(u=>
+u.name.toLowerCase().includes(q)||
+u.email.toLowerCase().includes(q)
 );
+}else{
+channels=filteredChannels.filter(c=>
+c.name.toLowerCase().includes(q)||
+c.cat.toLowerCase().includes(q)
+);
+}
 
 render();
 }
 
-/* TAB */
-function switchTab(t,el){
+/* ================= TAB ================= */
+
+function switchTab(tab,el){
+view=tab;
 document.querySelectorAll(".cat").forEach(c=>c.classList.remove("tab-active"));
 el.classList.add("tab-active");
+render();
 }
 
-/* START */
-init();
+/* ================= INIT ================= */
+
+generateUsers();
+loadAPI();
 
 </script>
 
