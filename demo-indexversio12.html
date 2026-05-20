@@ -1,0 +1,298 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>BTECH-TV ULTRA MAX 100K IPTV PRO</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+:root{
+--bg:#08111f;
+--panel:#111827;
+--card:#1f2937;
+--accent:#00c8ff;
+--text:#fff;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:var(--bg);color:#fff;overflow:hidden}
+
+.topbar{
+height:60px;background:var(--panel);
+display:flex;align-items:center;justify-content:space-between;
+padding:10px 15px
+}
+.topbar h2{color:var(--accent);font-size:18px}
+
+.container{display:flex;height:calc(100vh - 60px)}
+
+.sidebar{
+width:230px;background:#0f172a;overflow:auto;padding:10px
+}
+
+.cat{
+padding:10px;margin:6px 0;background:var(--card);
+border-radius:6px;cursor:pointer;font-size:13px
+}
+.cat:hover{background:var(--accent);color:#000}
+
+.main{flex:1;display:flex;flex-direction:column}
+
+.player{height:320px;background:#000}
+video{width:100%;height:100%}
+
+.now{
+display:flex;justify-content:space-between;
+padding:10px;background:var(--panel)
+}
+
+.channels{
+flex:1;overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+gap:8px;
+padding:10px
+}
+
+.channel{
+background:var(--card);
+padding:10px;
+border-radius:8px;
+cursor:pointer;
+display:flex;justify-content:space-between
+}
+.channel:hover{border:1px solid var(--accent)}
+
+.right{
+width:260px;background:#111827;
+padding:10px;overflow:auto
+}
+
+input{
+width:100%;padding:10px;
+background:#0f172a;border:none;
+color:#fff;margin-bottom:10px
+}
+
+button{
+width:100%;padding:10px;
+background:var(--accent);
+border:none;cursor:pointer;
+margin-top:8px
+}
+
+.stat{
+background:var(--card);
+padding:10px;margin-top:10px;
+border-radius:6px;font-size:13px
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+<h2>📺 ULTRA MAX 100K IPTV ENGINE</h2>
+<button onclick="filterCat('All')">ALL</button>
+</div>
+
+<div class="container">
+
+<!-- LEFT -->
+<div class="sidebar">
+<div class="cat" onclick="filterCat('All')">All</div>
+<div class="cat" onclick="filterCat('Africa')">Africa</div>
+<div class="cat" onclick="filterCat('Sports')">Sports</div>
+<div class="cat" onclick="filterCat('News')">News</div>
+
+<h3 style="margin-top:15px;font-size:13px">🌍 Countries</h3>
+<div id="countryList"></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="player">
+<video id="video" controls autoplay></video>
+</div>
+
+<div class="now">
+<div>
+<h3 id="name">No channel</h3>
+<p id="group">Ready</p>
+</div>
+
+<div>
+<button onclick="prev()">Prev</button>
+<button onclick="next()">Next</button>
+</div>
+</div>
+
+<div id="channels" class="channels"></div>
+
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+
+<input placeholder="Search channels..." oninput="searchChannels(this.value)">
+
+<button onclick="generateChannels()">Generate 100K+</button>
+
+<div class="stat">Total: <span id="total">0</span></div>
+<div class="stat">Free: <span id="free">0</span></div>
+<div class="stat">Locked: <span id="locked">0</span></div>
+
+</div>
+
+</div>
+
+<script>
+
+let channels=[],filtered=[],current=0,hls=null;
+
+const africa=[
+"Algeria","Angola","Benin","Botswana","Cameroon","Egypt",
+"Ghana","Kenya","Libya","Morocco","Nigeria","Rwanda",
+"Senegal","South Africa","Sudan","Tanzania","Togo",
+"Tunisia","Uganda","Zambia","Zimbabwe"
+];
+
+const streams=[
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+"https://test-streams.mux.dev/test_001/stream.m3u8"
+];
+
+// 🚀 Generate optimized 100K dataset
+function generateChannels(){
+
+channels=[];
+let batchSize=100000;
+
+for(let i=0;i<batchSize;i++){
+
+let country=africa[i%africa.length];
+let type=["Sports","News","Movies","Music"][i%4];
+
+channels.push({
+id:i,
+name:`${country} ${type} TV ${i}`,
+country,
+category:type,
+url:streams[i%streams.length],
+status:i%7===0?"locked":"free"
+});
+}
+
+filtered=[...channels];
+render();
+stats();
+}
+
+// ⚡ Virtual render (only first 400)
+function render(){
+let box=document.getElementById("channels");
+box.innerHTML="";
+
+filtered.slice(0,400).forEach((c,i)=>{
+
+box.innerHTML+=`
+<div class="channel" onclick="play(${i})">
+<div>
+<b>📺 ${c.name}</b><br>
+<small>${c.country}</small>
+</div>
+<div>${c.status}</div>
+</div>
+`;
+
+});
+}
+
+function play(i){
+
+current=i;
+let c=filtered[i];
+
+name.innerHTML=c.name;
+group.innerHTML=c.country;
+
+let v=document.getElementById("video");
+
+if(Hls.isSupported()){
+
+if(hls)hls.destroy();
+
+hls=new Hls({
+maxBufferLength:10,
+liveSyncDuration:3
+});
+
+hls.loadSource(c.url);
+hls.attachMedia(v);
+
+}else{
+v.src=c.url;
+}
+
+}
+
+function next(){
+current=(current+1)%filtered.length;
+play(current);
+}
+
+function prev(){
+current=(current-1+filtered.length)%filtered.length;
+play(current);
+}
+
+// 🔎 Smart search
+function searchChannels(q){
+
+q=q.toLowerCase();
+
+filtered=channels.filter(x=>
+x.name.toLowerCase().includes(q) ||
+x.country.toLowerCase().includes(q) ||
+x.category.toLowerCase().includes(q)
+);
+
+render();
+}
+
+// 🌍 filter
+function filterCat(cat){
+
+filtered = (cat==="All")
+? channels
+: channels.filter(x=>x.category===cat);
+
+render();
+}
+
+// 📊 stats
+function stats(){
+total.innerHTML=channels.length;
+free.innerHTML=channels.filter(x=>x.status==="free").length;
+locked.innerHTML=channels.filter(x=>x.status==="locked").length;
+}
+
+// 🌍 country list
+africa.forEach(c=>{
+countryList.innerHTML+=`
+<div class="cat" onclick="searchChannels('${c}')">
+${c}
+</div>`;
+});
+
+generateChannels();
+
+</script>
+
+</body>
+</html>
