@@ -211,12 +211,12 @@ cursor:pointer;
 <!-- SIDEBAR -->
 <div class="sidebar">
 <div class="cat tab-active" onclick="switchTab('users',this)">👥 Users</div>
-<div class="cat" onclick="switchTab('channels',this)">📺 Channels (LIVE IPTV)</div>
+<div class="cat" onclick="switchTab('channels',this)">📺 Channels (LIVE BTECH-TV)</div>
 
 <hr style="opacity:0.2;margin:10px 0">
 
-<button onclick="generateUsers()">Generate Users</button>
-<button onclick="init()">Reload IPTV</button>
+<button onclick="reloadIPTV()">🔄 Reload BTECH-TV Dashboard</button>  
+<button onclick="init()">Reload BTECH-TV</button>
 </div>
 
 <!-- MAIN -->
@@ -443,6 +443,40 @@ document.getElementById("t4").innerText=users.filter(u=>u.status==="banned").len
 }
 
 </script>
+  function reloadIPTV(){
+
+document.getElementById("t2").innerText="Reloading...";
+document.getElementById("t3").innerText="...";
+
+all = [];
+filtered = [];
+deadCh = {};
+aliveCh = {};
+
+document.getElementById("grid").innerHTML = `
+<div style="padding:20px;text-align:center;color:#00bfff;">
+🔄 Reloading BTCH-TV Streams... Please wait
+</div>`;
+
+// small delay for UX
+setTimeout(async () => {
+await loadAPI();   // re-fetch IPTV data
+
+view = "channels";
+filtered = [...all];
+
+render();
+renderList();
+
+document.getElementById("t2").innerText = all.length;
+
+document.getElementById("grid").innerHTML += `
+<div style="padding:10px;text-align:center;color:#22c55e;">
+✅ BTECH-TV Dashboard Reloaded Successfully
+</div>`;
+
+}, 800);
+}
 
 </body>
 </html>
