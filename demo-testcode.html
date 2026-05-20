@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +21,11 @@
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 
-body{background:var(--bg);color:var(--text);overflow:hidden}
+body{
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
 
 /* TOPBAR */
 .topbar{
@@ -89,7 +91,11 @@ border-radius:10px;
 text-align:center;
 }
 
-.box p{color:var(--accent);font-size:20px;font-weight:bold}
+.box p{
+color:var(--accent);
+font-size:20px;
+font-weight:bold;
+}
 
 /* GRID */
 .grid{
@@ -125,9 +131,6 @@ margin-right:5px;
 
 .free{background:#16a34a}
 .paid{background:#dc2626}
-.online{background:#16a34a}
-.offline{background:#dc2626}
-
 .active{background:#16a34a}
 .banned{background:#dc2626}
 .premium{background:#f59e0b;color:black}
@@ -193,6 +196,7 @@ font-size:12px;
 
 <body>
 
+<!-- TOP BAR -->
 <div class="topbar">
 <h2>🚀 BTECH SUPER ADMIN PRO MAX</h2>
 <input placeholder="Search users or channels..." oninput="searchAll(this.value)">
@@ -209,7 +213,7 @@ font-size:12px;
 <hr style="opacity:0.2;margin:10px 0">
 
 <button onclick="generateUsers()">Generate Users</button>
-<button onclick="generateChannels()">Generate Channels</button>
+<button onclick="loadChannels()">Load IPTV</button>
 
 </div>
 
@@ -219,8 +223,8 @@ font-size:12px;
 <div class="stats">
 <div class="box"><p id="t1">0</p><small>Total Users</small></div>
 <div class="box"><p id="t2">0</p><small>Total Channels</small></div>
-<div class="box"><p id="t3">0</p><small>Active / Free</small></div>
-<div class="box"><p id="t4">0</p><small>Banned / Locked</small></div>
+<div class="box"><p id="t3">0</p><small>Free Channels</small></div>
+<div class="box"><p id="t4">0</p><small>Locked Channels</small></div>
 </div>
 
 <div class="grid" id="grid"></div>
@@ -238,33 +242,136 @@ font-size:12px;
 
 <script>
 
-/* STATE */
-let users=[];
-let channels=[];
-let view="users";
+/* =========================
+STATE
+========================= */
 
-let usersFiltered=[];
-let channelsFiltered=[];
+let users = [];
+let all = [];
+let filtered = [];
+let view = "channels";
+let hls = null;
 
-/* PLAYER */
+/* =========================
+IPTV LOADER
+========================= */
+
+async function loadChannels(){
+
+const [ch, st] = await Promise.all([
+
+fetch('https://iptv-org.github.io/api/channels.json')
+.then(r=>r.json()),
+
+fetch('https://iptv-org.github.io/api/streams.json')
+.then(r=>r.json())
+
+]);
+
+let map = {};
+ch.forEach(c => map[c.id] = c);
+
+all = st
+.filter(s => s.url)
+.map((s,i)=>{
+
+let c = map[s.channel] || {};
+
+return {
+id:i+1,
+name:c.name || s.title || "Unknown",
+category:(c.categories && c.categories[0]) || "Other",
+country:c.country || "",
+url:s.url,
+type:Math.random()>0.5?"free":"paid",
+status:Math.random()>0.2?"active":"locked",
+viewers:Math.floor(Math.random()*100000)
+};
+
+});
+
+filtered = [...all];
+
+render();
+renderLiveList();
+}
+
+/* =========================
+PLAY STREAM
+========================= */
+
 function playStream(url){
-const video=document.getElementById("player");
 
-if(Hls.isSupported()){
-let hls=new Hls();
+let video = document.getElementById("player");
+
+if(window.Hls && Hls.isSupported()){
+
+if(hls) hls.destroy();
+
+hls = new Hls();
 hls.loadSource(url);
 hls.attachMedia(video);
+
 }else{
-video.src=url;
+video.src = url;
 }
 
 video.play();
 }
 
-/* TAB */
+/* =========================
+USERS
+========================= */
+
+function generateUsers(){
+
+users = [];
+
+for(let i=1;i<=200;i++){
+
+users.push({
+id:i,
+name:"User_"+i,
+email:"user"+i+"@mail.com",
+status:i%10===0?"banned":"active",
+premium:i%7===0
+});
+
+}
+
+render();
+}
+
+/* =========================
+LIVE LIST
+========================= */
+
+function renderLiveList(){
+
+let box = document.getElementById("liveList");
+box.innerHTML = "";
+
+all.slice(0,100).forEach(c=>{
+
+box.innerHTML += `
+<div class="liveItem">
+📺 ${c.name}<br>
+<small>${c.category}</small><br>
+<button onclick="playStream('${c.url}')">▶ Play</button>
+</div>
+`;
+
+});
+
+}
+
+/* =========================
+SWITCH TAB
+========================= */
+
 function switchTab(tab,el){
 
-view=tab;
+view = tab;
 
 document.querySelectorAll(".cat")
 .forEach(c=>c.classList.remove("tab-active"));
@@ -274,98 +381,67 @@ el.classList.add("tab-active");
 render();
 }
 
-/* USERS */
-function generateUsers(){
+/* =========================
+SEARCH
+========================= */
 
-users=[];
+function searchAll(q){
 
-for(let i=1;i<=200;i++){
-users.push({
-id:i,
-name:"User_"+i,
-email:"user"+i+"@mail.com",
-status:i%10===0?"banned":"active",
-premium:i%7===0
-});
-}
-
-usersFiltered=[...users];
-render();
-}
-
-/* CHANNELS */
-function generateChannels(){
-
-const cats=["Sports","Movies","News","Kids","Music","Africa"];
-
-channels=[];
-
-for(let i=1;i<=50;i++){
-channels.push({
-id:i,
-name:"BTECH Channel "+i,
-category:cats[i%cats.length],
-url:"https://test-streams.mux.dev/test_001/stream.m3u8",
-type:i%3===0?"paid":"free",
-status:i%10===0?"locked":"active",
-viewers:Math.floor(Math.random()*100000)
-});
-}
-
-channelsFiltered=[...channels];
-render();
-renderLiveList();
-}
-
-/* LIVE LIST */
-function renderLiveList(){
-
-let box=document.getElementById("liveList");
-box.innerHTML="";
-
-channels.forEach(c=>{
-let div=document.createElement("div");
-div.className="liveItem";
-div.innerHTML=`
-📺 ${c.name}<br>
-<button onclick="playStream('${c.url}')">Play</button>
-`;
-box.appendChild(div);
-});
-}
-
-/* RENDER */
-function render(){
-
-let grid=document.getElementById("grid");
-grid.innerHTML="";
+q = q.toLowerCase();
 
 if(view==="users"){
 
-usersFiltered.forEach(u=>{
+users = users.filter(u=>
+u.name.toLowerCase().includes(q) ||
+u.email.toLowerCase().includes(q)
+);
 
-let div=document.createElement("div");
-div.className="card";
+}else{
 
-div.innerHTML=`
+filtered = all.filter(c=>
+c.name.toLowerCase().includes(q) ||
+c.category.toLowerCase().includes(q)
+);
+
+}
+
+render();
+}
+
+/* =========================
+RENDER
+========================= */
+
+function render(){
+
+let grid = document.getElementById("grid");
+grid.innerHTML = "";
+
+/* USERS */
+if(view==="users"){
+
+users.forEach(u=>{
+
+grid.innerHTML += `
+<div class="card">
 <h3>👤 ${u.name}</h3>
 <p>${u.email}</p>
 <span class="badge ${u.status}">${u.status}</span>
 ${u.premium?'<span class="badge premium">premium</span>':''}
+</div>
 `;
-
-grid.appendChild(div);
 
 });
 
-}else{
+}
 
-channelsFiltered.forEach(c=>{
+/* CHANNELS */
+else{
 
-let div=document.createElement("div");
-div.className="card";
+filtered.forEach(c=>{
 
-div.innerHTML=`
+grid.innerHTML += `
+<div class="card">
 <h3>📺 ${c.name}</h3>
 <p>${c.category}</p>
 
@@ -375,9 +451,8 @@ div.innerHTML=`
 <p>👥 ${c.viewers}</p>
 
 <button onclick="playStream('${c.url}')">▶ Play</button>
+</div>
 `;
-
-grid.appendChild(div);
 
 });
 
@@ -386,46 +461,29 @@ grid.appendChild(div);
 updateStats();
 }
 
-/* STATS */
+/* =========================
+STATS
+========================= */
+
 function updateStats(){
 
-document.getElementById("t1").innerText=users.length;
-document.getElementById("t2").innerText=channels.length;
+document.getElementById("t1").innerText = users.length;
+document.getElementById("t2").innerText = all.length;
 
-document.getElementById("t3").innerText=
-view==="users"
-? users.filter(u=>u.status==="active").length
-: channels.filter(c=>c.type==="free").length;
+document.getElementById("t3").innerText =
+all.filter(c=>c.type==="free").length;
 
-document.getElementById("t4").innerText=
-view==="users"
-? users.filter(u=>u.status==="banned").length
-: channels.filter(c=>c.status==="locked").length;
+document.getElementById("t4").innerText =
+all.filter(c=>c.status==="locked").length;
 
 }
 
-/* SEARCH */
-function searchAll(q){
-q=q.toLowerCase();
+/* =========================
+INIT
+========================= */
 
-if(view==="users"){
-usersFiltered=users.filter(u=>
-u.name.toLowerCase().includes(q)||
-u.email.toLowerCase().includes(q)
-);
-}else{
-channelsFiltered=channels.filter(c=>
-c.name.toLowerCase().includes(q)||
-c.category.toLowerCase().includes(q)
-);
-}
-
-render();
-}
-
-/* INIT */
 generateUsers();
-generateChannels();
+loadChannels();
 
 </script>
 
