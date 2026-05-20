@@ -2,92 +2,134 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>BTECH-TV ULTRA MAX 100K IPTV PRO</title>
+<title>BTECH-TV PRO 100K ULTRA MAX ENGINE</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 :root{
---bg:#08111f;
---panel:#111827;
---card:#1f2937;
---accent:#00c8ff;
---text:#fff;
+--bg:#0b0f1a;
+--panel:#11182a;
+--card:#1b2438;
+--hover:#2b3a5a;
+--accent:#00bfff;
+--text:#ffffff;
+--muted:#94a3b8;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:var(--bg);color:#fff;overflow:hidden}
+
+body{
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
 
 .topbar{
-height:60px;background:var(--panel);
-display:flex;align-items:center;justify-content:space-between;
-padding:10px 15px
+height:65px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 20px;
+border-bottom:1px solid rgba(255,255,255,0.05);
 }
-.topbar h2{color:var(--accent);font-size:18px}
 
-.container{display:flex;height:calc(100vh - 60px)}
+.topbar h2{color:var(--accent);font-size:20px}
+
+.container{display:flex;height:calc(100vh - 65px)}
 
 .sidebar{
-width:230px;background:#0f172a;overflow:auto;padding:10px
+width:250px;
+background:#0f1628;
+padding:10px;
+overflow:auto;
 }
 
 .cat{
-padding:10px;margin:6px 0;background:var(--card);
-border-radius:6px;cursor:pointer;font-size:13px
+padding:10px;
+margin:6px 0;
+background:var(--card);
+border-radius:8px;
+cursor:pointer;
 }
-.cat:hover{background:var(--accent);color:#000}
+
+.cat:hover{background:var(--hover)}
 
 .main{flex:1;display:flex;flex-direction:column}
 
-.player{height:320px;background:#000}
+.player{height:320px;background:#000;position:relative}
+
 video{width:100%;height:100%}
 
+.overlay{
+position:absolute;inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+background:rgba(0,0,0,0.8);
+}
+
 .now{
-display:flex;justify-content:space-between;
-padding:10px;background:var(--panel)
+display:flex;
+justify-content:space-between;
+padding:10px;
+background:var(--panel);
 }
 
 .channels{
-flex:1;overflow:auto;
+flex:1;
+overflow:auto;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-gap:8px;
-padding:10px
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+gap:10px;
+padding:10px;
 }
 
 .channel{
 background:var(--card);
 padding:10px;
-border-radius:8px;
+border-radius:10px;
 cursor:pointer;
-display:flex;justify-content:space-between
+display:flex;
+justify-content:space-between;
 }
-.channel:hover{border:1px solid var(--accent)}
+
+.channel:hover{background:var(--hover)}
 
 .right{
-width:260px;background:#111827;
-padding:10px;overflow:auto
+width:280px;
+background:var(--panel);
+padding:10px;
+overflow:auto;
 }
 
 input{
-width:100%;padding:10px;
-background:#0f172a;border:none;
-color:#fff;margin-bottom:10px
+width:100%;
+padding:10px;
+background:#0f1628;
+border:none;
+color:white;
+margin-bottom:10px;
 }
 
 button{
-width:100%;padding:10px;
+width:100%;
+padding:10px;
+margin-top:8px;
 background:var(--accent);
-border:none;cursor:pointer;
-margin-top:8px
+border:none;
+cursor:pointer;
 }
 
 .stat{
 background:var(--card);
-padding:10px;margin-top:10px;
-border-radius:6px;font-size:13px
+padding:10px;
+margin-top:10px;
+border-radius:6px;
 }
 </style>
 </head>
@@ -95,7 +137,7 @@ border-radius:6px;font-size:13px
 <body>
 
 <div class="topbar">
-<h2>📺 ULTRA MAX 100K IPTV ENGINE</h2>
+<h2>📺 BTECH-TV ULTRA 100K ENGINE</h2>
 <button onclick="filterCat('All')">ALL</button>
 </div>
 
@@ -104,25 +146,26 @@ border-radius:6px;font-size:13px
 <!-- LEFT -->
 <div class="sidebar">
 <div class="cat" onclick="filterCat('All')">All</div>
-<div class="cat" onclick="filterCat('Africa')">Africa</div>
 <div class="cat" onclick="filterCat('Sports')">Sports</div>
 <div class="cat" onclick="filterCat('News')">News</div>
-
-<h3 style="margin-top:15px;font-size:13px">🌍 Countries</h3>
-<div id="countryList"></div>
+<div class="cat" onclick="filterCat('Movies')">Movies</div>
+<div class="cat" onclick="filterCat('Africa')">Africa</div>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
 <div class="player">
-<video id="video" controls autoplay></video>
+<video id="video" controls></video>
+<div class="overlay" id="overlay">
+<h2>🚀 Loading Engine...</h2>
+</div>
 </div>
 
 <div class="now">
 <div>
-<h3 id="name">No channel</h3>
-<p id="group">Ready</p>
+<h3 id="name">No Channel</h3>
+<small id="group">Ready</small>
 </div>
 
 <div>
@@ -138,9 +181,9 @@ border-radius:6px;font-size:13px
 <!-- RIGHT -->
 <div class="right">
 
-<input placeholder="Search channels..." oninput="searchChannels(this.value)">
+<input placeholder="Search..." oninput="search(this.value)">
 
-<button onclick="generateChannels()">Generate 100K+</button>
+<button onclick="generate()">Generate 100K</button>
 
 <div class="stat">Total: <span id="total">0</span></div>
 <div class="stat">Free: <span id="free">0</span></div>
@@ -152,144 +195,108 @@ border-radius:6px;font-size:13px
 
 <script>
 
-let channels=[],filtered=[],current=0,hls=null;
-
-const africa=[
-"Algeria","Angola","Benin","Botswana","Cameroon","Egypt",
-"Ghana","Kenya","Libya","Morocco","Nigeria","Rwanda",
-"Senegal","South Africa","Sudan","Tanzania","Togo",
-"Tunisia","Uganda","Zambia","Zimbabwe"
-];
+let channels=[],filtered=[],index=0,hls=null;
 
 const streams=[
 "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
 "https://test-streams.mux.dev/test_001/stream.m3u8"
 ];
 
-// 🚀 Generate optimized 100K dataset
-function generateChannels(){
+function generate(){
 
 channels=[];
-let batchSize=100000;
 
-for(let i=0;i<batchSize;i++){
+for(let i=0;i<100000;i++){
 
-let country=africa[i%africa.length];
-let type=["Sports","News","Movies","Music"][i%4];
+let cat=["Sports","News","Movies","Africa"][i%4];
 
 channels.push({
 id:i,
-name:`${country} ${type} TV ${i}`,
-country,
-category:type,
+name:`BTECH ${cat} ${i}`,
+category:cat,
 url:streams[i%streams.length],
-status:i%7===0?"locked":"free"
+status:i%10===0?"locked":"free"
 });
 }
 
 filtered=[...channels];
+
 render();
 stats();
+
+document.getElementById("overlay").style.display="none";
 }
 
-// ⚡ Virtual render (only first 400)
 function render(){
+
 let box=document.getElementById("channels");
 box.innerHTML="";
 
-filtered.slice(0,400).forEach((c,i)=>{
+filtered.slice(0,300).forEach((c,i)=>{
 
 box.innerHTML+=`
 <div class="channel" onclick="play(${i})">
 <div>
-<b>📺 ${c.name}</b><br>
-<small>${c.country}</small>
+<b>${c.name}</b><br>
+<small>${c.category}</small>
 </div>
 <div>${c.status}</div>
-</div>
-`;
-
+</div>`;
 });
+
 }
 
 function play(i){
 
-current=i;
+index=i;
 let c=filtered[i];
 
-name.innerHTML=c.name;
-group.innerHTML=c.country;
+name.innerText=c.name;
+group.innerText=c.category;
 
 let v=document.getElementById("video");
 
-if(Hls.isSupported()){
-
 if(hls)hls.destroy();
 
-hls=new Hls({
-maxBufferLength:10,
-liveSyncDuration:3
-});
-
+if(Hls.isSupported()){
+hls=new Hls();
 hls.loadSource(c.url);
 hls.attachMedia(v);
-
 }else{
 v.src=c.url;
 }
-
 }
 
 function next(){
-current=(current+1)%filtered.length;
-play(current);
+index=(index+1)%filtered.length;
+play(index);
 }
 
 function prev(){
-current=(current-1+filtered.length)%filtered.length;
-play(current);
+index=(index-1+filtered.length)%filtered.length;
+play(index);
 }
 
-// 🔎 Smart search
-function searchChannels(q){
-
-q=q.toLowerCase();
-
-filtered=channels.filter(x=>
-x.name.toLowerCase().includes(q) ||
-x.country.toLowerCase().includes(q) ||
-x.category.toLowerCase().includes(q)
+function search(q){
+filtered=channels.filter(c=>
+c.name.toLowerCase().includes(q.toLowerCase())||
+c.category.toLowerCase().includes(q.toLowerCase())
 );
-
 render();
 }
 
-// 🌍 filter
 function filterCat(cat){
-
-filtered = (cat==="All")
-? channels
-: channels.filter(x=>x.category===cat);
-
+filtered=(cat==="All")?channels:channels.filter(c=>c.category===cat);
 render();
 }
 
-// 📊 stats
 function stats(){
-total.innerHTML=channels.length;
-free.innerHTML=channels.filter(x=>x.status==="free").length;
-locked.innerHTML=channels.filter(x=>x.status==="locked").length;
+total.innerText=channels.length;
+free.innerText=channels.filter(c=>c.status==="free").length;
+locked.innerText=channels.filter(c=>c.status==="locked").length;
 }
 
-// 🌍 country list
-africa.forEach(c=>{
-countryList.innerHTML+=`
-<div class="cat" onclick="searchChannels('${c}')">
-${c}
-</div>`;
-});
-
-generateChannels();
+generate();
 
 </script>
 
