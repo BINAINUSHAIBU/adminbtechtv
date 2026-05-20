@@ -3,26 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🚀 ULTIMATE PRO MAX 2026</title>
+
+<title>🚀 BTECH-TV SUPER ADMIN PRO MAX</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 :root{
---bg:#0a0a0f;
---panel:#111827;
---card:#1b1f2e;
+--bg:#0b0f1a;
+--panel:#11182a;
+--card:#1b2438;
+--hover:#2b3a5a;
 --accent:#00bfff;
---good:#22c55e;
---bad:#ef4444;
 --text:#fff;
+--muted:#94a3b8;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 
 body{background:var(--bg);color:var(--text);overflow:hidden}
 
-/* LOGIN OVERLAY */
+/* LOGIN */
 #lock{
 position:fixed;inset:0;
 background:#000;
@@ -34,12 +35,11 @@ z-index:9999;
 }
 
 #lock input{
-padding:12px;
-margin:8px;
-border:none;
+padding:10px;
+margin:5px;
 border-radius:8px;
+border:none;
 width:220px;
-text-align:center;
 }
 
 #lock button{
@@ -50,62 +50,114 @@ border-radius:8px;
 cursor:pointer;
 }
 
-/* TOP */
+/* TOPBAR */
 .topbar{
-height:60px;
+height:65px;
 background:var(--panel);
 display:flex;
 justify-content:space-between;
 align-items:center;
 padding:0 20px;
+border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
 .topbar h2{color:var(--accent)}
 
+.topbar input{
+padding:10px;
+border:none;
+border-radius:8px;
+background:#0f1628;
+color:white;
+width:280px;
+}
+
 /* LAYOUT */
-.container{display:flex;height:calc(100vh - 60px)}
+.container{display:flex;height:calc(100vh - 65px)}
 
 .sidebar{
-width:220px;
-background:#0f172a;
-padding:10px;
-overflow:auto;
+width:240px;
+background:#0f1628;
+padding:15px;
+border-right:1px solid rgba(255,255,255,0.05);
+overflow-y:auto;
 }
 
+.cat{
+padding:12px;
+margin:8px 0;
+background:var(--card);
+border-radius:8px;
+cursor:pointer;
+transition:0.3s;
+}
+
+.cat:hover{background:var(--hover)}
+
+.tab-active{background:var(--accent);color:black}
+
+/* MAIN */
 .main{flex:1;display:flex;flex-direction:column}
 
-/* NETFLIX GRID */
+/* STATS */
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+padding:15px;
+}
+
+.box{
+background:var(--card);
+padding:15px;
+border-radius:10px;
+text-align:center;
+}
+
+.box p{color:var(--accent);font-size:20px;font-weight:bold}
+
+/* GRID */
 .grid{
 flex:1;
-overflow:auto;
+overflow-y:auto;
+padding:15px;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-gap:10px;
-padding:12px;
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+gap:12px;
 }
 
+/* CARD */
 .card{
 background:var(--card);
-padding:10px;
+padding:15px;
 border-radius:12px;
-transition:.3s;
-cursor:pointer;
+transition:0.3s;
 }
 
-.card:hover{transform:scale(1.03);border:1px solid var(--accent)}
+.card:hover{
+transform:translateY(-3px);
+background:var(--hover);
+border:1px solid var(--accent);
+}
 
-.badge{font-size:11px;padding:4px 8px;border-radius:20px}
-.good{background:var(--good)}
-.bad{background:var(--bad)}
-.premium{background:orange;color:#000}
+/* BADGES */
+.badge{
+padding:5px 10px;
+border-radius:20px;
+font-size:11px;
+margin-right:5px;
+}
+
+.good{background:#22c55e}
+.premium{background:orange;color:black}
 
 /* PLAYER */
 .player{
 position:fixed;
 right:0;
-top:60px;
+top:65px;
 width:320px;
-height:calc(100vh - 60px);
+height:calc(100vh - 65px);
 background:#000;
 display:flex;
 flex-direction:column;
@@ -124,6 +176,15 @@ cursor:pointer;
 }
 
 .item:hover{background:#374151}
+
+button{
+padding:8px;
+margin-top:6px;
+border:none;
+border-radius:8px;
+background:var(--accent);
+cursor:pointer;
+}
 </style>
 </head>
 
@@ -131,59 +192,118 @@ cursor:pointer;
 
 <!-- 🔐 LOGIN -->
 <div id="lock">
-<h2>🔐 ULTIMATE PRO MAX 2026</h2>
+<h2>🔐 PRO MAX 2026 LOGIN</h2>
 <input id="user" placeholder="Username">
 <input id="pass" type="password" placeholder="Password">
-<button onclick="login()">ENTER ADMIN</button>
+<button onclick="login()">LOGIN</button>
 <p id="msg"></p>
 </div>
 
 <div class="topbar">
-<h2>🚀 PRO MAX 2026</h2>
-<input placeholder="Search..." oninput="search(this.value)">
+<h2>🚀 BTECH SUPER ADMIN PRO MAX</h2>
+<input placeholder="Search..." oninput="searchAll(this.value)">
 </div>
 
 <div class="container">
 
+<!-- SIDEBAR -->
 <div class="sidebar">
-<button onclick="setMode('all')">All Channels</button>
-<button onclick="setMode('ai')">🤖 AI MODE</button>
-<button onclick="setMode('fav')">⭐ Favorites</button>
+<div class="cat tab-active" onclick="switchTab('users',this)">👥 Users</div>
+<div class="cat" onclick="switchTab('channels',this)">📺 Channels</div>
+
+<hr style="opacity:0.2;margin:10px 0">
+
+<button onclick="generateUsers()">Generate Users</button>
+<button onclick="generateChannels()">Generate Channels</button>
 </div>
 
+<!-- MAIN -->
 <div class="main">
+
+<div class="stats">
+<div class="box"><p id="t1">0</p><small>Total Users</small></div>
+<div class="box"><p id="t2">0</p><small>Total Channels</small></div>
+<div class="box"><p id="t3">0</p><small>Active / Free</small></div>
+<div class="box"><p id="t4">0</p><small>Banned / Locked</small></div>
+</div>
+
 <div class="grid" id="grid"></div>
-</div>
 
 </div>
+</div>
 
+<!-- PLAYER -->
 <div class="player">
-<video id="vid" controls></video>
+<video id="player" controls></video>
 <div class="list" id="list"></div>
 </div>
 
 <script>
 
-/* 🔐 ADMIN ROLES + SIMPLE ENCRYPT (demo) */
+/* 🔐 LOGIN (MERGED FROM PRO MAX) */
 const ADMIN_USER="admin";
-const ADMIN_PASS=btoa("1234"); // encrypted demo
+const ADMIN_PASS=btoa("1234");
 
 function login(){
-let u=user.value;
-let p=btoa(pass.value);
-
-if(u===ADMIN_USER && p===ADMIN_PASS){
+if(user.value===ADMIN_USER && btoa(pass.value)===ADMIN_PASS){
 lock.style.display="none";
 init();
 }else{
-msg.innerText="❌ Access Denied";
+msg.innerText="❌ Wrong Login";
 }
 }
 
 /* STATE */
-let all=[],filtered=[],mode="all",fav={};
+let users=[];
+let channels=[];
+let view="users";
+let filteredUsers=[];
+let filteredChannels=[];
 
-/* 🤖 AI BOOST SCORE */
+/* SWITCH */
+function switchTab(t,el){
+view=t;
+document.querySelectorAll(".cat").forEach(c=>c.classList.remove("tab-active"));
+el.classList.add("tab-active");
+render();
+}
+
+/* USERS */
+function generateUsers(){
+users=[];
+for(let i=1;i<=200;i++){
+users.push({
+id:i,
+name:"User_"+i,
+email:"user"+i+"@mail.com",
+status:i%10===0?"banned":"active",
+premium:i%7===0
+});
+}
+filteredUsers=[...users];
+render();
+}
+
+/* CHANNELS (AI BOOSTED) */
+function generateChannels(){
+channels=[];
+for(let i=1;i<=60;i++){
+channels.push({
+id:i,
+name:"Channel "+i,
+url:"https://test-streams.mux.dev/test_001/stream.m3u8",
+views:Math.floor(Math.random()*100000),
+premium:i%9===0,
+alive:true,
+category:"Live"
+});
+}
+filteredChannels=[...channels];
+render();
+renderList();
+}
+
+/* AI SCORE */
 function score(c){
 let s=0;
 if(c.alive) s+=10;
@@ -192,73 +312,63 @@ if(c.premium) s+=3;
 return s;
 }
 
-/* LOAD STREAMS */
-function init(){
-for(let i=1;i<=60;i++){
-all.push({
-id:i,
-name:"Channel "+i,
-url:"https://test-streams.mux.dev/test_001/stream.m3u8",
-views:Math.floor(Math.random()*100000),
-premium:i%9===0,
-alive:true
-});
-}
-render();
-renderList();
-}
-
-/* AI MODE */
-function aiSort(list){
-return list.sort((a,b)=>score(b)-score(a));
-}
-
-/* FILTER */
-function setMode(m){
-mode=m;
-render();
-}
-
 /* SEARCH */
-function search(q){
-filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
-render(true);
+function searchAll(q){
+q=q.toLowerCase();
+
+if(view==="users"){
+filteredUsers=users.filter(u=>
+u.name.toLowerCase().includes(q)||
+u.email.toLowerCase().includes(q)
+);
+}else{
+filteredChannels=channels.filter(c=>
+c.name.toLowerCase().includes(q)
+);
+}
+render();
 }
 
-/* RENDER GRID */
-function render(skip=false){
+/* RENDER */
+function render(){
 
-let list=all;
-
-if(mode==="fav") list=list.filter(c=>fav[c.id]);
-if(mode==="ai") list=aiSort([...list]);
-
-if(skip && filtered.length) list=filtered;
-
+let grid=document.getElementById("grid");
 grid.innerHTML="";
 
-list.forEach(c=>{
-let div=document.createElement("div");
-div.className="card";
+if(view==="users"){
 
-div.innerHTML=`
-<h4>📺 ${c.name}</h4>
-<p>${c.views} views</p>
-<span class="badge ${c.premium?'premium':'good'}">
-${c.premium?'VIP':'FREE'}
-</span>
-<button onclick="play(${c.id})">▶ Play</button>
-`;
-
-grid.appendChild(div);
+filteredUsers.forEach(u=>{
+grid.innerHTML+=`
+<div class="card">
+<h3>👤 ${u.name}</h3>
+<p>${u.email}</p>
+<span class="badge ${u.status==='active'?'good':'premium'}">${u.status}</span>
+${u.premium?'<span class="badge premium">VIP</span>':''}
+</div>`;
 });
 
+}else{
+
+filteredChannels
+.sort((a,b)=>score(b)-score(a))
+.forEach(c=>{
+grid.innerHTML+=`
+<div class="card">
+<h3>📺 ${c.name}</h3>
+<p>${c.views} views</p>
+<button onclick="play(${c.id})">▶ Play</button>
+</div>`;
+});
+
+}
+
+updateStats();
 }
 
 /* PLAY */
 function play(id){
-let c=all.find(x=>x.id===id);
-let v=document.getElementById("vid");
+let c=channels.find(x=>x.id===id);
+let v=document.getElementById("player");
 
 if(Hls.isSupported()){
 let h=new Hls();
@@ -267,21 +377,33 @@ h.attachMedia(v);
 }else{
 v.src=c.url;
 }
-
 v.play();
 renderList();
 }
 
-/* RIGHT LIST */
+/* LIST */
 function renderList(){
 list.innerHTML="";
-all.forEach(c=>{
-let d=document.createElement("div");
-d.className="item";
-d.innerHTML="📺 "+c.name;
-d.onclick=()=>play(c.id);
-list.appendChild(d);
+channels.forEach(c=>{
+list.innerHTML+=`
+<div class="item" onclick="play(${c.id})">
+📺 ${c.name}
+</div>`;
 });
+}
+
+/* STATS */
+function updateStats(){
+document.getElementById("t1").innerText=users.length;
+document.getElementById("t2").innerText=channels.length;
+document.getElementById("t3").innerText=channels.filter(c=>c.alive).length;
+document.getElementById("t4").innerText=users.filter(u=>u.status==="banned").length;
+}
+
+/* INIT */
+function init(){
+generateUsers();
+generateChannels();
 }
 
 </script>
