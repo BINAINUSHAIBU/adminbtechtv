@@ -1,19 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
+
 <meta
 name="viewport"
 content="width=device-width, initial-scale=1.0"
 >
 
-<title>BTECH-TV IPTV LOCKED CHANNELS DASHBOARD</title>
+<title>
+BTECH-TV ULTRA SINGLE PAGE DASHBOARD
+</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
+/* =========================
+ROOT
+========================= */
+
 :root{
+
 --bg:#0b0f1a;
 --panel:#11182a;
 --card:#1b2438;
@@ -24,7 +33,12 @@ content="width=device-width, initial-scale=1.0"
 --warning:#f59e0b;
 --text:#ffffff;
 --muted:#94a3b8;
+
 }
+
+/* =========================
+GLOBAL
+========================= */
 
 *{
 margin:0;
@@ -44,14 +58,24 @@ cursor:pointer;
 border:none;
 }
 
+/* =========================
+TOPBAR
+========================= */
+
 .topbar{
+
 height:70px;
 background:var(--panel);
+
 display:flex;
 justify-content:space-between;
 align-items:center;
+
 padding:0 20px;
-border-bottom:1px solid rgba(255,255,255,0.05);
+
+border-bottom:
+1px solid rgba(255,255,255,0.05);
+
 }
 
 .topbar h2{
@@ -62,15 +86,21 @@ font-size:22px;
 .top-actions{
 display:flex;
 gap:10px;
+flex-wrap:wrap;
 }
 
 .top-actions button{
+
 padding:12px 18px;
 background:var(--card);
 color:white;
+
 border-radius:10px;
+
 font-weight:bold;
+
 transition:0.3s;
+
 }
 
 .top-actions button:hover{
@@ -81,30 +111,46 @@ background:var(--hover);
 background:var(--danger)!important;
 }
 
+/* =========================
+LAYOUT
+========================= */
+
 .container{
+
 display:flex;
+
 height:calc(100vh - 70px);
+
 }
+
+/* =========================
+SIDEBAR
+========================= */
 
 .sidebar{
-width:340px;
-background:#0f1628;
-padding:20px;
-overflow-y:auto;
-border-right:1px solid rgba(255,255,255,0.05);
-}
 
-.main{
-flex:1;
+width:320px;
+background:#0f1628;
+
 padding:20px;
+
 overflow-y:auto;
+
+border-right:
+1px solid rgba(255,255,255,0.05);
+
 }
 
 .card{
+
 background:var(--panel);
-border-radius:16px;
+
 padding:20px;
+
+border-radius:16px;
+
 margin-bottom:20px;
+
 }
 
 .card h3{
@@ -113,16 +159,26 @@ color:var(--accent);
 }
 
 .stats-grid{
+
 display:grid;
-grid-template-columns:repeat(2,1fr);
+
+grid-template-columns:
+repeat(2,1fr);
+
 gap:12px;
+
 }
 
 .stat-box{
+
 background:var(--card);
-padding:18px;
+
+padding:16px;
+
 border-radius:12px;
+
 text-align:center;
+
 }
 
 .stat-box h4{
@@ -132,27 +188,42 @@ color:var(--muted);
 }
 
 .stat-box p{
-font-size:24px;
+font-size:22px;
 font-weight:bold;
 }
 
 .search-box{
+
 width:100%;
+
 padding:14px;
-border:none;
-border-radius:10px;
+
 background:var(--card);
+
+border:none;
+
+border-radius:10px;
+
 color:white;
+
 margin-bottom:15px;
+
 }
 
 .action-btn{
+
 width:100%;
+
 padding:14px;
+
 margin-top:10px;
+
 border-radius:10px;
+
 font-weight:bold;
+
 transition:0.3s;
+
 }
 
 .primary-btn{
@@ -170,72 +241,173 @@ background:var(--danger);
 color:white;
 }
 
-.player-wrap{
-background:black;
-border-radius:16px;
+.action-btn:hover{
+opacity:0.85;
+transform:translateY(-2px);
+}
+
+/* =========================
+MAIN
+========================= */
+
+.main{
+
+flex:1;
+
+display:flex;
+flex-direction:column;
+
 overflow:hidden;
-margin-bottom:20px;
+
+}
+
+/* =========================
+PLAYER
+========================= */
+
+.player-wrap{
+
+background:black;
+
+margin:20px;
+
+border-radius:18px;
+
+overflow:hidden;
+
 }
 
 video{
+
 width:100%;
-height:460px;
+height:420px;
 background:black;
+
 }
 
 .now-playing{
-padding:15px;
+
+padding:15px 20px;
+
 background:var(--panel);
+
 display:flex;
 justify-content:space-between;
 align-items:center;
+
 }
 
-.table-wrapper{
-overflow:auto;
-border-radius:14px;
+/* =========================
+CHANNELS
+========================= */
+
+.channels{
+
+flex:1;
+
+overflow-y:auto;
+
+padding:20px;
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fill,minmax(320px,1fr));
+
+gap:16px;
+
 }
 
-.channel-table{
-width:100%;
-border-collapse:collapse;
-min-width:1200px;
-}
+.channel{
 
-.channel-table thead{
 background:var(--card);
-}
 
-.channel-table th,
-.channel-table td{
+border-radius:16px;
+
 padding:15px;
-text-align:left;
-border-bottom:1px solid rgba(255,255,255,0.05);
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+gap:12px;
+
+transition:0.3s;
+
+cursor:pointer;
+
+border:1px solid transparent;
+
 }
 
-.channel-table tbody tr:hover{
-background:rgba(255,255,255,0.03);
+.channel:hover{
+
+background:var(--hover);
+
+transform:translateY(-2px);
+
+border-color:var(--accent);
+
 }
 
-.channel-info{
+.channel-left{
+
 display:flex;
 align-items:center;
 gap:12px;
+
+overflow:hidden;
+
 }
 
-.channel-info img{
+.channel-left img{
+
 width:60px;
 height:60px;
-border-radius:10px;
+
+border-radius:12px;
+
 object-fit:cover;
+
 background:black;
+
+}
+
+.channel-info h4{
+font-size:14px;
+margin-bottom:6px;
+}
+
+.channel-info small{
+color:var(--muted);
+}
+
+.channel-status{
+
+display:flex;
+flex-direction:column;
+gap:6px;
+
 }
 
 .badge{
+
 padding:6px 12px;
+
 border-radius:20px;
-font-size:12px;
+
+font-size:11px;
+
 font-weight:bold;
+
+}
+
+.free{
+background:var(--success);
+}
+
+.paid{
+background:var(--danger);
 }
 
 .locked{
@@ -244,54 +416,43 @@ color:black;
 }
 
 .unlocked{
-background:var(--success);
-color:white;
+background:#2563eb;
 }
 
-.online{
-background:var(--success);
-}
-
-.offline{
-background:var(--danger);
-}
-
-.delete-btn{
-padding:10px 14px;
-background:var(--danger);
-color:white;
-border-radius:8px;
-font-size:13px;
-}
-
-.unlock-btn{
-padding:10px 14px;
-background:var(--accent);
-color:black;
-border-radius:8px;
-font-size:13px;
-}
+/* =========================
+LOGS
+========================= */
 
 .log-box{
+
 background:#0f1628;
+
 padding:15px;
+
 border-radius:12px;
+
 max-height:250px;
+
 overflow-y:auto;
+
 font-size:13px;
+
 line-height:1.7;
+
 }
 
 .log-item{
+
 padding:8px 0;
-border-bottom:1px solid rgba(255,255,255,0.05);
+
+border-bottom:
+1px solid rgba(255,255,255,0.05);
+
 }
 
-.status-bar{
-margin-top:10px;
-font-size:13px;
-color:var(--muted);
-}
+/* =========================
+MOBILE
+========================= */
 
 @media(max-width:1000px){
 
@@ -302,13 +463,13 @@ overflow:auto;
 
 .sidebar{
 width:100%;
-height:auto;
 border-right:none;
-border-bottom:1px solid rgba(255,255,255,0.05);
+border-bottom:
+1px solid rgba(255,255,255,0.05);
 }
 
-.main{
-padding:15px;
+.channels{
+grid-template-columns:1fr;
 }
 
 .topbar{
@@ -318,35 +479,46 @@ padding:15px;
 gap:10px;
 }
 
-.top-actions{
-flex-wrap:wrap;
-justify-content:center;
-}
-
 video{
-height:260px;
+height:250px;
 }
 
 }
 
 </style>
+
 </head>
 
 <body>
 
+<!-- =========================
+TOPBAR
+========================= -->
+
 <div class="topbar">
 
-<h2>📡 BTECH-TV IPTV LOCKED CHANNELS MANAGER</h2>
+<h2>
+📺 BTECH-TV ULTRA IPTV SYSTEM
+</h2>
 
 <div class="top-actions">
 
-<button onclick="loadAPI()">🔄 Refresh API</button>
+<button onclick="loadChannels()">
+🔄 Refresh
+</button>
 
-<button onclick="exportLockedChannels()">📥 Export</button>
+<button onclick="nextChannel()">
+⏭ Next
+</button>
 
-<button onclick="nextChannel()">⏭ Next</button>
+<button onclick="exportChannels()">
+📥 Export
+</button>
 
-<button class="delete-all-btn" onclick="deleteAllLockedChannels()">
+<button
+class="delete-all-btn"
+onclick="deleteLockedChannels()"
+>
 🗑 Delete Locked
 </button>
 
@@ -354,163 +526,163 @@ height:260px;
 
 </div>
 
+<!-- =========================
+CONTAINER
+========================= -->
+
 <div class="container">
+
+<!-- =========================
+SIDEBAR
+========================= -->
 
 <div class="sidebar">
 
 <div class="card">
 
-<h3>📊 IPTV STATS</h3>
+<h3>
+📊 IPTV STATS
+</h3>
 
 <div class="stats-grid">
 
 <div class="stat-box">
-<h4>Total Channels</h4>
-<p id="totalChannels">0</p>
+<h4>Total</h4>
+<p id="totalCount">0</p>
 </div>
 
 <div class="stat-box">
 <h4>Locked</h4>
-<p id="lockedChannels">0</p>
+<p id="lockedCount">0</p>
 </div>
 
 <div class="stat-box">
-<h4>Online</h4>
-<p id="onlineChannels">0</p>
+<h4>Free</h4>
+<p id="freeCount">0</p>
 </div>
 
 <div class="stat-box">
-<h4>Deleted</h4>
-<p id="deletedChannels">0</p>
+<h4>Paid</h4>
+<p id="paidCount">0</p>
 </div>
 
-</div>
-
-<div class="status-bar" id="status">
-Loading IPTV API...
 </div>
 
 </div>
 
 <div class="card">
 
-<h3>🔍 Search IPTV Channels</h3>
+<h3>
+🔍 Search Channels
+</h3>
 
 <input
-class="search-box"
 type="text"
+class="search-box"
 placeholder="Search IPTV channels..."
 oninput="searchChannels(this.value)"
 >
 
-<button class="action-btn primary-btn" onclick="unlockAllChannels()">
+<button
+class="action-btn primary-btn"
+onclick="unlockAll()"
+>
 🔓 Unlock All
 </button>
 
-<button class="action-btn warning-btn" onclick="backupChannels()">
-💾 Backup Database
+<button
+class="action-btn warning-btn"
+onclick="backupChannels()"
+>
+💾 Backup
 </button>
 
-<button class="action-btn danger-btn" onclick="deleteSelectedChannels()">
-🗑 Delete Selected
+<a
+href="https://superadminbtech-tv.netlify.app/delete_locked-channels"
+style="text-decoration:none;"
+>
+
+<button
+class="action-btn danger-btn"
+>
+
+🗑 Delete Locked Channels
+
 </button>
+
+</a>
 
 </div>
 
 <div class="card">
 
-<h3>⚡ IPTV MONITOR</h3>
+<h3>
+📝 Activity Log
+</h3>
 
-<div class="log-box">
+<div
+class="log-box"
+id="logBox"
+>
 
-<div class="log-item">🟢 IPTV API ENGINE ACTIVE</div>
-<div class="log-item">🟢 HLS ENGINE RUNNING</div>
-<div class="log-item">🟢 STREAM CHECKER ENABLED</div>
-<div class="log-item">🟢 AUTO SKIP ENABLED</div>
-<div class="log-item">🚀 IPTV-ORG API CONNECTED</div>
-
+<div class="log-item">
+🚀 BTECH-TV Engine Started
 </div>
 
 </div>
 
 </div>
+
+</div>
+
+<!-- =========================
+MAIN
+========================= -->
 
 <div class="main">
 
 <div class="player-wrap">
 
-<video id="video" controls autoplay muted></video>
+<video
+id="videoPlayer"
+controls
+autoplay
+muted
+playsinline
+></video>
 
 <div class="now-playing">
 
 <div>
 
 <h3 id="nowPlaying">
-No Channel Playing
+No Channel Selected
 </h3>
 
 <small id="channelMeta">
-Waiting for IPTV stream...
+Waiting for stream...
 </small>
 
 </div>
 
-<div>
+<button
+class="action-btn primary-btn"
+style="width:auto;padding:10px 15px;"
+onclick="togglePiP()"
+>
 
-<button class="unlock-btn" onclick="togglePiP()">
 📺 PiP
+
 </button>
 
 </div>
 
 </div>
 
-</div>
-
-<div class="card">
-
-<h3>📺 IPTV CHANNEL DATABASE</h3>
-
-<div class="table-wrapper">
-
-<table class="channel-table">
-
-<thead>
-
-<tr>
-<th>Select</th>
-<th>Channel</th>
-<th>Category</th>
-<th>Status</th>
-<th>Quality</th>
-<th>Country</th>
-<th>Actions</th>
-</tr>
-
-</thead>
-
-<tbody id="channelTableBody">
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h3>📝 IPTV ACTIVITY LOG</h3>
-
-<div class="log-box" id="activityLog">
-
-<div class="log-item">
-🚀 BTECH-TV IPTV Dashboard Initialized
-</div>
-
-</div>
-
-</div>
+<div
+class="channels"
+id="channelGrid"
+></div>
 
 </div>
 
@@ -518,108 +690,96 @@ Waiting for IPTV stream...
 
 <script>
 
-/* =========================================
-GLOBAL IPTV STATE
-========================================= */
+/* =========================
+GLOBAL STATE
+========================= */
 
 let channels=[];
+
 let filteredChannels=[];
-let deletedCount=0;
-let currentChannel=null;
+
+let currentIndex=0;
+
 let hlsPlayer=null;
 
-let deadCh={};
-let aliveCh={};
+/* =========================
+DEMO STREAMS
+========================= */
 
-let all=[];
-let filtered=[];
+const streams=[
 
-let channelMap={};
-let logoMap={};
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
 
-let autoSkipOn=true;
+"https://test-streams.mux.dev/test_001/stream.m3u8",
 
-/* =========================================
-LOAD IPTV API
-========================================= */
+"https://test-streams.mux.dev/test_002/stream.m3u8",
 
-async function loadAPI(){
+"https://test-streams.mux.dev/test_003/stream.m3u8"
 
-document.getElementById('status').innerText=
-'Loading IPTV API...';
+];
 
-try{
+const categories=[
 
-const [chRes,stRes,lgRes]=await Promise.all([
+"Sports",
+"Movies",
+"News",
+"Kids",
+"Music",
+"Africa",
+"USA",
+"UK"
 
-fetch('https://iptv-org.github.io/api/channels.json')
-.then(r=>r.json()),
+];
 
-fetch('https://iptv-org.github.io/api/streams.json')
-.then(r=>r.json()),
+/* =========================
+LOAD CHANNELS
+========================= */
 
-fetch('https://iptv-org.github.io/api/logos.json')
-.then(r=>r.json())
+function loadChannels(){
 
-]);
+channels=[];
 
-for(let ch of chRes){
+for(let i=1;i<=500;i++){
 
-if(ch.is_nsfw || ch.closed) continue;
-
-channelMap[ch.id]=ch;
-
-}
-
-for(let lg of lgRes){
-
-if(!logoMap[lg.channel]){
-
-logoMap[lg.channel]=lg.url;
-
-}
-
-}
-
-let id=1;
-
-for(let st of stRes){
-
-if(!st.url) continue;
-
-if(
-st.url.includes('youtube.com') ||
-st.url.includes('youtu.be')
-) continue;
-
-let ch=channelMap[st.channel];
+let cat=
+categories[
+i % categories.length
+];
 
 channels.push({
 
-id:id++,
+id:i,
 
-name:ch ? ch.name : (st.title || 'Unknown'),
+name:
+"BTECH " +
+cat +
+" LIVE " +
+i,
 
-category:
-(ch && ch.categories && ch.categories[0])
-? ch.categories[0]
-: 'General',
-
-status:'locked',
-
-quality:st.quality || 'HD',
-
-country:ch ? ch.country : '',
+category:cat,
 
 logo:
-logoMap[st.channel] ||
-'https://via.placeholder.com/60',
+"https://via.placeholder.com/60",
 
-url:st.url,
+type:
+i % 3===0
+?"paid"
+:"free",
 
-type:'free',
+status:
+i % 10===0
+?"locked"
+:"unlocked",
 
-viewers:Math.floor(Math.random()*100000)
+viewers:
+Math.floor(
+Math.random()*1000000
+),
+
+url:
+streams[
+i % streams.length
+]
 
 });
 
@@ -631,141 +791,123 @@ updateStats();
 
 renderChannels();
 
-document.getElementById('status').innerText=
-'✅ '+channels.length+' IPTV channels loaded';
-
-addLog('📡 IPTV API loaded successfully');
-
-}catch(e){
-
-document.getElementById('status').innerText=
-'❌ IPTV API failed';
-
-console.error(e);
-
-addLog('❌ API load failed');
+addLog(
+"📡 IPTV channels loaded"
+);
 
 }
 
-}
-
-/* =========================================
+/* =========================
 RENDER CHANNELS
-========================================= */
+========================= */
 
 function renderChannels(){
 
-const tbody=document.getElementById('channelTableBody');
+const grid=
+document.getElementById(
+"channelGrid"
+);
 
-tbody.innerHTML='';
+grid.innerHTML="";
 
-filteredChannels.forEach(channel=>{
+filteredChannels.forEach((channel,index)=>{
 
-if(channel.status!=='locked') return;
+const div=
+document.createElement("div");
 
-const row=document.createElement('tr');
+div.className="channel";
 
-row.innerHTML=`
+div.innerHTML=`
 
-<td>
-<input
-type="checkbox"
-class="channelCheck"
-value="${channel.id}"
->
-</td>
-
-<td>
-
-<div class="channel-info">
+<div class="channel-left">
 
 <img
 src="${channel.logo}"
-onerror="this.src='https://via.placeholder.com/60'"
 >
 
-<div>
+<div class="channel-info">
 
-<strong>${channel.name}</strong><br>
+<h4>
+🔴 ${channel.name}
+</h4>
 
 <small>
+
+${channel.category}
+•
 👥 ${channel.viewers.toLocaleString()}
+
 </small>
 
 </div>
 
 </div>
 
-</td>
+<div class="channel-status">
 
-<td>${channel.category}</td>
+<span class="
+badge
+${channel.type==='free'
+?'free'
+:'paid'}
+">
 
-<td>
-
-<span class="badge ${aliveCh[channel.id]?'online':'locked'}">
-
-${aliveCh[channel.id]?'ONLINE':'LOCKED'}
+${channel.type}
 
 </span>
 
-</td>
+<span class="
+badge
+${channel.status==='locked'
+?'locked'
+:'unlocked'}
+">
 
-<td>${channel.quality}</td>
+${channel.status}
 
-<td>${channel.country || '🌍'}</td>
+</span>
 
-<td>
-
-<button
-class="unlock-btn"
-onclick="playChannel(${channel.id})"
->
-▶ Play
-</button>
-
-<button
-class="unlock-btn"
-onclick="unlockChannel(${channel.id})"
->
-🔓 Unlock
-</button>
-
-<button
-class="delete-btn"
-onclick="deleteChannel(${channel.id})"
->
-🗑 Delete
-</button>
-
-</td>
+</div>
 
 `;
 
-tbody.appendChild(row);
+div.onclick=
+()=>playChannel(index);
+
+grid.appendChild(div);
 
 });
 
 }
 
-/* =========================================
+/* =========================
 PLAY CHANNEL
-========================================= */
+========================= */
 
-function playChannel(id){
+function playChannel(index){
 
-const channel=channels.find(c=>c.id===id);
+currentIndex=index;
 
-if(!channel) return;
+const channel=
+filteredChannels[index];
 
-currentChannel=channel;
-
-document.getElementById('nowPlaying').innerText=
+document.getElementById(
+"nowPlaying"
+).innerText=
 channel.name;
 
-document.getElementById('channelMeta').innerText=
-`${channel.category} • ${channel.quality} • ${channel.country}`;
+document.getElementById(
+"channelMeta"
+).innerText=
 
-const video=document.getElementById('video');
+channel.category +
+" • 👥 " +
+channel.viewers.toLocaleString();
+
+const video=
+document.getElementById(
+"videoPlayer"
+);
 
 if(hlsPlayer){
 
@@ -775,117 +917,87 @@ hlsPlayer.destroy();
 
 if(Hls.isSupported()){
 
-hlsPlayer=new Hls({
+hlsPlayer=
+new Hls({
 
 enableWorker:true,
-
 lowLatencyMode:true
 
 });
 
-hlsPlayer.loadSource(channel.url);
+hlsPlayer.loadSource(
+channel.url
+);
 
 hlsPlayer.attachMedia(video);
 
-hlsPlayer.on(Hls.Events.MANIFEST_PARSED,function(){
+hlsPlayer.on(
+Hls.Events.MANIFEST_PARSED,
+()=>{
 
 video.play();
 
-aliveCh[channel.id]=true;
-
-delete deadCh[channel.id];
-
-updateStats();
-
-renderChannels();
-
-addLog('📡 Streaming '+channel.name);
-
-});
-
-hlsPlayer.on(Hls.Events.ERROR,function(event,data){
-
-deadCh[channel.id]=true;
-
-delete aliveCh[channel.id];
-
-updateStats();
-
-renderChannels();
-
-addLog('❌ Stream failed '+channel.name);
-
-if(autoSkipOn){
-
-nextChannel();
-
 }
-
-});
+);
 
 }else{
 
-video.src=channel.url;
+video.src=
+channel.url;
 
 video.play();
 
 }
 
+addLog(
+"▶ Playing " +
+channel.name
+);
+
 }
 
-/* =========================================
+/* =========================
 NEXT CHANNEL
-========================================= */
+========================= */
 
 function nextChannel(){
 
-const locked=
-channels.filter(c=>c.status==='locked');
+currentIndex++;
 
-if(locked.length===0) return;
+if(
+currentIndex >=
+filteredChannels.length
+){
 
-const random=
-locked[Math.floor(Math.random()*locked.length)];
-
-playChannel(random.id);
-
-}
-
-/* =========================================
-UPDATE STATS
-========================================= */
-
-function updateStats(){
-
-document.getElementById('totalChannels').innerText=
-channels.length.toLocaleString();
-
-document.getElementById('lockedChannels').innerText=
-channels.filter(c=>c.status==='locked').length;
-
-document.getElementById('onlineChannels').innerText=
-Object.keys(aliveCh).length;
-
-document.getElementById('deletedChannels').innerText=
-deletedCount.toLocaleString();
+currentIndex=0;
 
 }
 
-/* =========================================
+playChannel(currentIndex);
+
+}
+
+/* =========================
 SEARCH
-========================================= */
+========================= */
 
 function searchChannels(query){
 
-const value=query.toLowerCase();
+const value=
+query.toLowerCase();
 
-filteredChannels=channels.filter(c=>
+filteredChannels=
+channels.filter(c=>
 
-(c.name||'').toLowerCase().includes(value) ||
+c.name
+.toLowerCase()
+.includes(value)
 
-(c.category||'').toLowerCase().includes(value) ||
+||
 
-(c.country||'').toLowerCase().includes(value)
+c.category
+.toLowerCase()
+.includes(value)
 
 );
 
@@ -893,120 +1005,38 @@ renderChannels();
 
 }
 
-/* =========================================
-DELETE CHANNEL
-========================================= */
+/* =========================
+DELETE LOCKED
+========================= */
 
-function deleteChannel(id){
-
-if(!confirm('Delete this channel?')) return;
+function deleteLockedChannels(){
 
 channels=
-channels.filter(c=>c.id!==id);
-
-filteredChannels=
-filteredChannels.filter(c=>c.id!==id);
-
-deletedCount++;
-
-updateStats();
-
-renderChannels();
-
-addLog('🗑 Deleted channel ID '+id);
-
-}
-
-/* =========================================
-UNLOCK CHANNEL
-========================================= */
-
-function unlockChannel(id){
-
-const channel=
-channels.find(c=>c.id===id);
-
-if(channel){
-
-channel.status='unlocked';
-
-}
-
-updateStats();
-
-renderChannels();
-
-addLog('🔓 Unlocked '+channel.name);
-
-}
-
-/* =========================================
-DELETE ALL LOCKED
-========================================= */
-
-function deleteAllLockedChannels(){
-
-if(!confirm('Delete all locked channels?'))
-return;
-
-const before=channels.length;
-
-channels=
-channels.filter(c=>c.status!=='locked');
+channels.filter(
+c=>c.status!=="locked"
+);
 
 filteredChannels=[...channels];
 
-deletedCount+=before-channels.length;
-
 updateStats();
 
 renderChannels();
 
-addLog('🗑 All locked channels deleted');
+addLog(
+"🗑 Locked channels deleted"
+);
 
 }
 
-/* =========================================
-DELETE SELECTED
-========================================= */
-
-function deleteSelectedChannels(){
-
-const selected=[
-
-...document.querySelectorAll('.channelCheck:checked')
-
-].map(c=>parseInt(c.value));
-
-channels=
-channels.filter(c=>!selected.includes(c.id));
-
-filteredChannels=
-filteredChannels.filter(c=>!selected.includes(c.id));
-
-deletedCount+=selected.length;
-
-updateStats();
-
-renderChannels();
-
-addLog('🗑 Deleted '+selected.length+' channels');
-
-}
-
-/* =========================================
+/* =========================
 UNLOCK ALL
-========================================= */
+========================= */
 
-function unlockAllChannels(){
+function unlockAll(){
 
 channels.forEach(channel=>{
 
-if(channel.status==='locked'){
-
-channel.status='unlocked';
-
-}
+channel.status="unlocked";
 
 });
 
@@ -1016,49 +1046,52 @@ updateStats();
 
 renderChannels();
 
-addLog('🔓 All channels unlocked');
+addLog(
+"🔓 All channels unlocked"
+);
 
 }
 
-/* =========================================
+/* =========================
 EXPORT
-========================================= */
+========================= */
 
-function exportLockedChannels(){
+function exportChannels(){
 
-const data=JSON.stringify(
-
-channels.filter(c=>c.status==='locked'),
-
+const data=
+JSON.stringify(
+channels,
 null,
-
 2
-
 );
 
-const blob=new Blob([data],{
-
+const blob=
+new Blob([data],{
 type:'application/json'
-
 });
 
-const url=URL.createObjectURL(blob);
+const url=
+URL.createObjectURL(blob);
 
-const a=document.createElement('a');
+const a=
+document.createElement('a');
 
 a.href=url;
 
-a.download='btech_locked_channels.json';
+a.download=
+'btech_channels.json';
 
 a.click();
 
-addLog('📥 Locked channels exported');
+addLog(
+"📥 IPTV export completed"
+);
 
 }
 
-/* =========================================
+/* =========================
 BACKUP
-========================================= */
+========================= */
 
 function backupChannels(){
 
@@ -1070,21 +1103,67 @@ JSON.stringify(channels)
 
 );
 
-addLog('💾 Backup completed');
+addLog(
+"💾 Backup completed"
+);
 
-alert('Backup completed');
+alert(
+'Backup saved'
+);
 
 }
 
-/* =========================================
+/* =========================
+UPDATE STATS
+========================= */
+
+function updateStats(){
+
+document.getElementById(
+"totalCount"
+).innerText=
+channels.length;
+
+document.getElementById(
+"lockedCount"
+).innerText=
+
+channels.filter(
+c=>c.status==="locked"
+).length;
+
+document.getElementById(
+"freeCount"
+).innerText=
+
+channels.filter(
+c=>c.type==="free"
+).length;
+
+document.getElementById(
+"paidCount"
+).innerText=
+
+channels.filter(
+c=>c.type==="paid"
+).length;
+
+}
+
+/* =========================
 PiP
-========================================= */
+========================= */
 
 function togglePiP(){
 
-const video=document.getElementById('video');
+const video=
+document.getElementById(
+"videoPlayer"
+);
 
-if(document.pictureInPictureElement){
+if(
+document.pictureInPictureElement
+){
 
 document.exitPictureInPicture();
 
@@ -1096,37 +1175,42 @@ video.requestPictureInPicture();
 
 }
 
-/* =========================================
+/* =========================
 LOGS
-========================================= */
+========================= */
 
 function addLog(message){
 
-const log=document.getElementById('activityLog');
+const log=
+document.getElementById(
+"logBox"
+);
 
-const item=document.createElement('div');
+const item=
+document.createElement("div");
 
-item.className='log-item';
+item.className="log-item";
 
 item.innerHTML=
-new Date().toLocaleTimeString()
-+' — '+message;
+
+new Date()
+.toLocaleTimeString()
+
++
+
+" — " +
+
+message;
 
 log.prepend(item);
 
 }
 
-/* =========================================
-BOOT ENGINE
-========================================= */
+/* =========================
+BOOT
+========================= */
 
-loadAPI();
-
-setInterval(()=>{
-
-updateStats();
-
-},3000);
+loadChannels();
 
 </script>
 
