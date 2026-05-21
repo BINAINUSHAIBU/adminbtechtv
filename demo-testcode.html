@@ -359,6 +359,47 @@ tracks student performance, generates projects and provides instant AI analysis.
 
 <div class="channels">
 
+<div class="channel" id="assignmentChannel">
+<div class="icon">📝</div>
+<h2>AI Assignment Channel</h2>
+<p>
+Create assignments, scan plagiarism and monitor submissions in real-time.
+</p>
+
+<div style="margin:15px 0;padding:15px;background:#0f172a;border-radius:15px;">
+<div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+<span>🟢 Status</span>
+<strong style="color:#22c55e;">ACTIVE</strong>
+</div>
+
+<div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+<span>📚 Assignments</span>
+<strong>8,920</strong>
+</div>
+
+<div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+<span>🔍 Plagiarism Scan</span>
+<strong style="color:#00bfff;">LIVE</strong>
+</div>
+
+<div style="display:flex;justify-content:space-between;">
+<span>🎯 AI Grading</span>
+<strong style="color:#22c55e;">ONLINE</strong>
+</div>
+</div>
+
+<textarea id="assignmentText" placeholder="Enter assignment topic..." style="width:100%;height:120px;background:#0f172a;border:none;border-radius:15px;padding:15px;color:white;margin-bottom:15px;resize:none;"></textarea>
+
+<div style="display:flex;gap:10px;flex-wrap:wrap;">
+<button onclick="generateAssignment()">⚡ Generate AI Assignment</button>
+<button onclick="scanPlagiarism()">🔍 Scan Plagiarism</button>
+<button onclick="monitorSubmissions()">📊 Monitor</button>
+</div>
+
+<div id="assignmentOutput" style="margin-top:20px;background:#0f172a;padding:15px;border-radius:15px;display:none;"></div>
+
+</div>
+
 <div class="channel">
 <div class="icon">📘</div>
 <h2>AI Homework Channel</h2>
@@ -599,6 +640,92 @@ document.body.appendChild(note);
 setTimeout(()=>{
 note.remove();
 },3000);
+}
+
+function generateAssignment(){
+
+const text=document.getElementById('assignmentText').value;
+const output=document.getElementById('assignmentOutput');
+
+output.style.display='block';
+
+output.innerHTML=`
+<h3 style="margin-bottom:15px;color:#00bfff;">📝 AI Assignment Generated</h3>
+<p><strong>Topic:</strong> ${text || 'Artificial Intelligence Research'}</p>
+<br>
+<p><strong>Instructions:</strong></p>
+<ul style="padding-left:20px;line-height:1.8;">
+<li>Research the assignment topic thoroughly.</li>
+<li>Create a minimum of 5 pages report.</li>
+<li>Add references and citations.</li>
+<li>Submit before the deadline.</li>
+<li>AI plagiarism scan required.</li>
+</ul>
+<br>
+<p style="color:#22c55e;font-weight:bold;">✅ Assignment Ready For Students</p>
+`;
+
+showNotification('📝 AI Assignment Generated');
+}
+
+function scanPlagiarism(){
+
+const output=document.getElementById('assignmentOutput');
+
+output.style.display='block';
+
+output.innerHTML=`
+<h3 style="margin-bottom:15px;color:#00bfff;">🔍 AI Plagiarism Scanner</h3>
+<p>Scanning student submissions...</p>
+<br>
+<div class="progress">
+<div style="width:92%"></div>
+</div>
+<br>
+<p>Similarity Score: <strong style="color:#22c55e;">8% Duplicate Content</strong></p>
+<p>Status: <strong style="color:#22c55e;">SAFE</strong></p>
+`;
+
+showNotification('🔍 Plagiarism Scan Complete');
+}
+
+function monitorSubmissions(){
+
+const output=document.getElementById('assignmentOutput');
+
+output.style.display='block';
+
+output.innerHTML=`
+<h3 style="margin-bottom:15px;color:#00bfff;">📊 Live Submission Monitor</h3>
+
+<table style="width:100%;border-collapse:collapse;">
+<tr>
+<th style="padding:10px;text-align:left;">Student</th>
+<th style="padding:10px;text-align:left;">Status</th>
+<th style="padding:10px;text-align:left;">AI Score</th>
+</tr>
+
+<tr>
+<td style="padding:10px;">John Doe</td>
+<td style="padding:10px;color:#22c55e;">Submitted</td>
+<td style="padding:10px;">95%</td>
+</tr>
+
+<tr>
+<td style="padding:10px;">Mary Johnson</td>
+<td style="padding:10px;color:#facc15;">Pending</td>
+<td style="padding:10px;">--</td>
+</tr>
+
+<tr>
+<td style="padding:10px;">Daniel Smith</td>
+<td style="padding:10px;color:#00bfff;">Reviewing</td>
+<td style="padding:10px;">88%</td>
+</tr>
+</table>
+`;
+
+showNotification('📊 Monitoring Student Submissions');
 }
 
 function activateAI(){
