@@ -1,14 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>BTECH-TV USER MANAGER DASHBOARD</title>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
-<style>
 
 :root{
 --bg:#08111f;
@@ -784,6 +774,188 @@ location.reload();
 
 generateUsers();
 loadIPTV();
+
+
+
+/* =========================
+ULTRA IPTV ENGINE ADDON
+========================= */
+
+const ENGINE = {
+maxVirtualChannels:100000,
+renderLimit:250
+};
+
+const playlists = [
+"https://iptv-org.github.io/iptv/index.m3u",
+"https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8",
+"https://raw.githubusercontent.com/freecasthub/public-iptv/main/playlist.m3u",
+"https://raw.githubusercontent.com/BuddyChewChew/app-m3u-generator/main/playlists/roku_all.m3u"
+];
+
+const fallbackStreams = [
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+"https://test-streams.mux.dev/test_001/stream.m3u8",
+"https://test-streams.mux.dev/test_002/stream.m3u8"
+];
+
+const categories = [
+"SPORTS",
+"MOVIES",
+"NEWS",
+"KIDS",
+"MUSIC",
+"AFRICA",
+"USA",
+"UK"
+];
+
+let virtualChannels=[];
+let filteredVirtualChannels=[];
+let currentPage=0;
+let currentIndex=0;
+let currentHls=null;
+let autoPlay=true;
+
+function parseM3U(text){
+const lines=text.split("
+");
+const result=[];
+let temp={};
+
+for(let line of lines){
+line=line.trim();
+
+if(line.startsWith("#EXTINF")){
+temp={
+name:line.match(/,(.*)/)?.[1]||"Unknown",
+logo:line.match(/tvg-logo=\"(.*?)\"/)?.[1]||"",
+group:line.match(/group-title=\"(.*?)\"/)?.[1]||"LIVE"
+};
+}else if(line.startsWith("http")){
+temp.url=line;
+result.push(temp);
+temp={};
+}
+}
+
+return result;
+}
+
+async function loadUltraPlaylists(){
+
+virtualChannels=[];
+const seen=new Set();
+
+for(const url of playlists){
+try{
+const res=await fetch(url);
+const text=await res.text();
+const parsed=parseM3U(text);
+
+parsed.forEach(ch=>{
+if(ch.url && !seen.has(ch.url)){
+seen.add(ch.url);
+virtualChannels.push({
+id:virtualChannels.length+1,
+name:ch.name||"Unknown",
+category:(ch.group||"LIVE").toUpperCase(),
+type:Math.random()>0.7?"paid":"free",
+live:true,
+viewers:Math.floor(Math.random()*1000000),
+logo:ch.logo||"https://via.placeholder.com/60",
+url:ch.url
+});
+}
+});
+}catch(e){
+console.log(e);
+}
+}
+
+for(let i=1;i<=ENGINE.maxVirtualChannels;i++){
+const cat=categories[i%categories.length];
+virtualChannels.push({
+id:virtualChannels.length+1,
+name:"BTECH "+cat+" LIVE "+i,
+category:cat,
+type:i%3===0?"paid":"free",
+live:Math.random()>0.08,
+viewers:Math.floor(Math.random()*1000000),
+logo:"https://via.placeholder.com/60",
+url:fallbackStreams[i%fallbackStreams.length]
+});
+}
+
+filteredVirtualChannels=[...virtualChannels];
+renderUltraChannels(true);
+}
+
+function renderUltraChannels(reset=true){
+
+const box=document.getElementById("channelList");
+if(!box) return;
+
+if(reset){
+box.innerHTML="";
+currentPage=0;
+}
+
+const start=currentPage*ENGINE.renderLimit;
+const end=start+ENGINE.renderLimit;
+
+filteredVirtualChannels.slice(start,end).forEach((c,i)=>{
+
+const div=document.createElement("div");
+div.className="channel-item";
+
+div.innerHTML=`
+<div class="channel-logo">
+<img src="${c.logo}" onerror="this.style.display='none'">
+</div>
+<div class="channel-info">
+<div class="channel-name">${c.live?"🔴":"⚫"} ${c.name}</div>
+<div class="channel-meta">${c.category} • 👥 ${c.viewers.toLocaleString()}</div>
+</div>`;
+
+ div.onclick=()=>playUltraChannel(start+i);
+ box.appendChild(div);
+});
+}
+
+function playUltraChannel(index){
+
+currentIndex=index;
+const channel=filteredVirtualChannels[index];
+const video=document.getElementById("video");
+
+if(currentHls) currentHls.destroy();
+
+if(Hls.isSupported()){
+currentHls=new Hls({enableWorker:true,lowLatencyMode:true});
+currentHls.loadSource(channel.url);
+currentHls.attachMedia(video);
+currentHls.on(Hls.Events.MANIFEST_PARSED,()=>{
+if(autoPlay) video.play();
+});
+}else{
+video.src=channel.url;
+video.play();
+}
+}
+
+setInterval(()=>{
+for(let i=0;i<300;i++){
+const r=Math.floor(Math.random()*virtualChannels.length);
+if(virtualChannels[r]){
+virtualChannels[r].viewers=Math.floor(Math.random()*1000000);
+}
+}
+},5000);
+
+setTimeout(()=>{
+loadUltraPlaylists();
+},2000);
 
 </script>
 
