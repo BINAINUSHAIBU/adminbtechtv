@@ -2,1282 +2,292 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=dev
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH AI Assignment Dashboard</title>
+<title>🤖 AUTO-AI EDUCATION SYSTEM</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-
-:root{
---bg:#0b0f1a;
---panel:#111827;
---card:#1b2438;
---hover:#2b3a5a;
---accent:#00bfff;
---text:#ffffff;
---muted:#94a3b8;
---success:#16a34a;
---warning:#f59e0b;
---danger:#ef4444;
-}
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
 body{
-background:var(--bg);
-color:var(--text);
+margin:0;
+font-family:Arial, sans-serif;
+background:#020617;
 overflow-x:hidden;
 }
 
-.container{
-width:100%;
-min-height:100vh;
-padding:20px;
+.glow{
+box-shadow:0 0 30px rgba(0,255,255,0.2);
 }
 
-.topbar{
-background:var(--panel);
-padding:20px;
-border-radius:20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-flex-wrap:wrap;
-gap:20px;
-margin-bottom:25px;
+.card:hover{
+transform:translateY(-5px) scale(1.02);
+transition:0.3s;
 }
 
-.logo{
-font-size:32px;
-font-weight:bold;
-color:var(--accent);
-}
-
-.nav{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-}
-
-.nav button{
-padding:12px 18px;
-border:none;
-border-radius:12px;
-background:var(--card);
-color:white;
-font-weight:bold;
-cursor:pointer;
-transition:.3s;
-}
-
-.nav button:hover{
-background:var(--accent);
-color:black;
-}
-
-.hero{
-background:linear-gradient(135deg,#00bfff,#1e3a8a);
-padding:40px;
-border-radius:25px;
-margin-bottom:25px;
-}
-
-.hero h1{
-font-size:48px;
-margin-bottom:15px;
-}
-
-.hero p{
-font-size:18px;
-max-width:900px;
-line-height:1.7;
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-margin:25px 0;
-}
-
-.stat{
-background:var(--panel);
-padding:25px;
-border-radius:20px;
-text-align:center;
-}
-
-.stat h2{
-font-size:40px;
-color:var(--accent);
-margin-bottom:10px;
-}
-
-.stat p{
-color:var(--muted);
-font-size:15px;
-}
-
-.channels{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:20px;
-margin-bottom:30px;
-}
-
-.channel{
-background:var(--panel);
-padding:25px;
-border-radius:20px;
-transition:.3s;
-}
-
-.channel:hover{
-transform:translateY(-5px);
-background:var(--hover);
-}
-
-.channel h2{
-font-size:26px;
-margin:15px 0;
-}
-
-.channel p{
-color:var(--muted);
-line-height:1.7;
-margin-bottom:20px;
-}
-
-.icon{
-font-size:50px;
-}
-
-.channel button{
-padding:12px 18px;
-border:none;
-border-radius:12px;
-background:var(--accent);
-color:black;
-font-weight:bold;
-cursor:pointer;
-}
-
-.dashboard{
-display:grid;
-grid-template-columns:2fr 1fr;
-gap:25px;
-margin-bottom:30px;
-}
-
-.panel{
-background:var(--panel);
-padding:25px;
-border-radius:20px;
-}
-
-.panel h2{
-margin-bottom:20px;
-font-size:28px;
-}
-
-.table{
-overflow:auto;
-}
-
-.table table{
-width:100%;
-border-collapse:collapse;
-}
-
-.table th,
-.table td{
-padding:15px;
-text-align:left;
-border-bottom:1px solid rgba(255,255,255,.08);
-}
-
-.badge{
-padding:8px 14px;
-border-radius:20px;
-font-size:12px;
-font-weight:bold;
-}
-
-.completed{
-background:rgba(22,163,74,.2);
-color:#22c55e;
-}
-
-.pending{
-background:rgba(245,158,11,.2);
-color:#facc15;
-}
-
-.review{
-background:rgba(59,130,246,.2);
-color:#60a5fa;
-}
-
-.ai-box{
-background:var(--card);
-padding:18px;
-border-radius:15px;
-margin-bottom:15px;
-}
-
-.ai-box h3{
-margin-bottom:10px;
-}
-
-.progress{
-width:100%;
-height:10px;
-background:#00000055;
-border-radius:20px;
-overflow:hidden;
-}
-
-.progress div{
-height:100%;
-background:var(--accent);
-}
-
-.footer{
-background:var(--panel);
-padding:35px;
-border-radius:25px;
-text-align:center;
-}
-
-.footer h2{
-font-size:36px;
-margin-bottom:15px;
-}
-
-.footer p{
-max-width:900px;
-margin:auto;
-line-height:1.8;
-color:var(--muted);
-margin-bottom:20px;
-}
-
-.footer button{
-padding:15px 25px;
-margin:10px;
-border:none;
-border-radius:14px;
-font-size:16px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.primary{
-background:var(--accent);
-color:black;
-}
-
-.secondary{
-background:var(--card);
-color:white;
-}
-
-@media(max-width:900px){
-.dashboard{
-grid-template-columns:1fr;
-}
-
-.hero h1{
-font-size:34px;
-}
-
-.topbar{
-flex-direction:column;
-align-items:flex-start;
-}
-}
-
-</style>
-</head>
-<body>
-
-<div class="container">
-
-<div class="topbar">
-
-<div class="logo">
-📺 BTECH AI ASSIGNMENT DASHBOARD
-</div>
-
-<div class="nav">
-<button>🏠 Dashboard</button>
-<button>📘 Homework</button>
-<button>📝 Assignments</button>
-<button>🚀 Projects</button>
-<button>🎯 Quiz</button>
-<button>⚙ Admin</button>
-</div>
-
-</div>
-
-<div class="hero">
-<h1>🤖 AUTO-AI EDUCATION SYSTEM</h1>
-<p>
-Complete AI-powered dashboard for student homework, assignments, projects, research,
-quizzes and smart grading. This system automatically creates educational channels,
-tracks student performance, generates projects and provides instant AI analysis.
-</p>
-</div>
-
-<div class="stats">
-
-<div class="stat">
-<h2>12,450</h2>
-<p>Total Students</p>
-</div>
-
-<div class="stat">
-<h2>8,920</h2>
-<p>Assignments</p>
-</div>
-
-<div class="stat">
-<h2>3,120</h2>
-<p>Projects</p>
-</div>
-
-<div class="stat">
-<h2>150+</h2>
-<p>AI Channels</p>
-</div>
-
-</div>
-
-<div class="channels">
-
-<div class="channel" id="assignmentChannel">
-<div class="icon">📝</div>
-<h2>AI Assignment Channel</h2>
-<p>
-Create assignments, scan plagiarism and monitor submissions in real-time.
-</p>
-
-<div style="margin:15px 0;padding:15px;background:#0f172a;border-radius:15px;">
-<div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-<span>🟢 Status</span>
-<strong style="color:#22c55e;">ACTIVE</strong>
-</div>
-
-<div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-<span>📚 Assignments</span>
-<strong>8,920</strong>
-</div>
-
-<div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-<span>🔍 Plagiarism Scan</span>
-<strong style="color:#00bfff;">LIVE</strong>
-</div>
-
-<div style="display:flex;justify-content:space-between;">
-<span>🎯 AI Grading</span>
-<strong style="color:#22c55e;">ONLINE</strong>
-</div>
-</div>
-
-<textarea id="assignmentText" placeholder="Enter assignment topic..." style="width:100%;height:120px;background:#0f172a;border:none;border-radius:15px;padding:15px;color:white;margin-bottom:15px;resize:none;"></textarea>
-
-<div style="display:flex;gap:10px;flex-wrap:wrap;">
-<button onclick="generateAssignment()">⚡ Generate AI Assignment</button>
-<button onclick="scanPlagiarism()">🔍 Scan Plagiarism</button>
-<button onclick="monitorSubmissions()">📊 Monitor</button>
-</div>
-
-<div id="assignmentOutput" style="margin-top:20px;background:#0f172a;padding:15px;border-radius:15px;display:none;"></div>
-
-</div>
-
-<div class="channel">
-<div class="icon">📘</div>
-<h2>AI Homework Channel</h2>
-<p>
-Automatically generate and solve homework with instant grading system.
-</p>
-<button>Open Channel</button>
-</div>
-
-<div class="channel">
-<div class="icon">📝</div>
-<h2>AI Assignment Channel</h2>
-<p>
-Create assignments, scan plagiarism and monitor submissions in real-time.
-</p>
-<button>Open Channel</button>
-</div>
-
-<div class="channel">
-<div class="icon">🚀</div>
-<h2>AI Project Channel</h2>
-<p>
-Generate project topics, coding systems, reports and presentation slides.
-</p>
-<button>Open Channel</button>
-</div>
-
-<div class="channel">
-<div class="icon">🎯</div>
-<h2>AI Quiz Channel</h2>
-<p>
-Generate quizzes, exams and automatic AI-based marking systems.
-</p>
-<button>Open Channel</button>
-</div>
-
-<div class="channel">
-<div class="icon">📚</div>
-<h2>AI Research Channel</h2>
-<p>
-Research paper assistance with references and academic formatting.
-</p>
-<button>Open Channel</button>
-</div>
-
-<div class="channel">
-<div class="icon">💻</div>
-<h2>AI Coding Channel</h2>
-<p>
-Programming assignments with AI compiler and debugging support.
-</p>
-<button>Open Channel</button>
-</div>
-
-</div>
-
-<div class="dashboard">
-
-<div class="panel">
-<h2>🎓 Student Assignment Tracker</h2>
-
-<div class="table">
-<table>
-<thead>
-<tr>
-<th>Student</th>
-<th>Course</th>
-<th>Status</th>
-<th>AI Score</th>
-</tr>
-</thead>
-
-<tbody>
-<tr>
-<td>John Doe</td>
-<td>Computer Science</td>
-<td><span class="badge completed">Completed</span></td>
-<td>95%</td>
-</tr>
-
-<tr>
-<td>Mary Johnson</td>
-<td>Business Admin</td>
-<td><span class="badge pending">Pending</span></td>
-<td>78%</td>
-</tr>
-
-<tr>
-<td>Daniel Smith</td>
-<td>Engineering</td>
-<td><span class="badge review">In Review</span></td>
-<td>88%</td>
-</tr>
-
-<tr>
-<td>Sophia Lee</td>
-<td>Data Science</td>
-<td><span class="badge completed">Completed</span></td>
-<td>99%</td>
-</tr>
-</tbody>
-</table>
-</div>
-
-</div>
-
-<div class="panel">
-<h2>⚡ AI ENGINE</h2>
-
-<div class="ai-box">
-<h3>Homework AI</h3>
-<div class="progress"><div style="width:92%"></div></div>
-</div>
-
-<div class="ai-box">
-<h3>Project Generator</h3>
-<div class="progress"><div style="width:87%"></div></div>
-</div>
-
-<div class="ai-box">
-<h3>AI Grading Engine</h3>
-<div class="progress"><div style="width:96%"></div></div>
-</div>
-
-<div class="ai-box">
-<h3>Plagiarism Detector</h3>
-<div class="progress"><div style="width:75%"></div></div>
-</div>
-
-</div>
-
-</div>
-
-<div class="footer">
-<h2>🚀 BTECH AI EDUCATION ENGINE</h2>
-<p>
-Complete one-page AI dashboard system for universities, schools, colleges and training institutes.
-Supports automatic assignment generation, smart grading, AI tutors, project automation,
-live educational channels and cloud-based education management.
-</p>
-
-<button class="primary">Launch AI System</button>
-<button class="secondary">Open Admin Panel</button>
-</div>
-
-</div>
-
-
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-<script>
-
-/* =========================
-LIVE FIREBASE CONFIG
-REPLACE WITH YOUR REAL KEYS
-========================= */
-
-const firebaseConfig={
-apiKey:"YOUR_API_KEY",
-authDomain:"YOUR_PROJECT.firebaseapp.com",
-projectId:"YOUR_PROJECT_ID",
-storageBucket:"YOUR_PROJECT.appspot.com",
-messagingSenderId:"YOUR_SENDER_ID",
-appId:"YOUR_APP_ID"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
-
-
-const stats = {
-students:12450,
-assignments:8920,
-projects:3120,
-channels:150
-};
-
-function animateStats(){
-const statNumbers=document.querySelectorAll('.stat h2');
-
-statNumbers.forEach((el,index)=>{
-let target=parseInt(el.innerText.replace(/[^0-9]/g,''));
-let count=0;
-let speed=Math.ceil(target/80);
-
-const timer=setInterval(()=>{
-count+=speed;
-
-if(count>=target){
-count=target;
-clearInterval(timer);
-}
-
-if(index===3){
-el.innerText=count+'+';
-}else{
-el.innerText=count.toLocaleString();
-}
-
-},20);
-});
-}
-
-function activateChannels(){
-const buttons=document.querySelectorAll('.channel button');
-
-buttons.forEach(btn=>{
-btn.addEventListener('click',()=>{
-
-const card=btn.closest('.channel');
-const title=card.querySelector('h2').innerText;
-
-btn.innerText='ACTIVE';
-btn.style.background='#16a34a';
-btn.style.color='white';
-
-showNotification(title+' Activated Successfully');
-
-});
-});
-}
-
-function liveClock(){
-const footer=document.querySelector('.footer');
-
-const clock=document.createElement('div');
-clock.id='liveClock';
-clock.style.marginTop='20px';
-clock.style.color='#00bfff';
-clock.style.fontWeight='bold';
-clock.style.fontSize='18px';
-
-footer.appendChild(clock);
-
-setInterval(()=>{
-clock.innerText='🟢 LIVE SYSTEM ONLINE • '+new Date().toLocaleString();
-},1000);
-}
-
-function showNotification(message){
-
-const note=document.createElement('div');
-
-note.innerText=message;
-note.style.position='fixed';
-note.style.top='20px';
-note.style.right='20px';
-note.style.background='#00bfff';
-note.style.color='black';
-note.style.padding='15px 20px';
-note.style.borderRadius='12px';
-note.style.fontWeight='bold';
-note.style.zIndex='9999';
-note.style.boxShadow='0 10px 30px rgba(0,0,0,.4)';
-
-document.body.appendChild(note);
-
-setTimeout(()=>{
-note.remove();
-},3000);
-}
-
-async function generateAssignment(){
-
-const text=document.getElementById('assignmentText').value;
-
-if(!text){
-showNotification('⚠ Enter Assignment Topic');
-return;
-}
-
-const assignment={
-topic:text,
-created:new Date().toISOString(),
-status:'ACTIVE',
-aiScore:Math.floor(Math.random()*20)+80
-};
-
-try{
-
-await db.collection('assignments').add(assignment);
-
-}catch(err){
-console.log(err);
-}
-
-const output=document.getElementById('assignmentOutput');
-
-
-const text=document.getElementById('assignmentText').value;
-const output=document.getElementById('assignmentOutput');
-
-output.style.display='block';
-
-output.innerHTML=`
-<h3 style="margin-bottom:15px;color:#00bfff;">📝 AI Assignment Generated</h3>
-<p><strong>Topic:</strong> ${text || 'Artificial Intelligence Research'}</p>
-<br>
-<p><strong>Instructions:</strong></p>
-<ul style="padding-left:20px;line-height:1.8;">
-<li>Research the assignment topic thoroughly.</li>
-<li>Create a minimum of 5 pages report.</li>
-<li>Add references and citations.</li>
-<li>Submit before the deadline.</li>
-<li>AI plagiarism scan required.</li>
-</ul>
-<br>
-<p style="color:#22c55e;font-weight:bold;">✅ Assignment Ready For Students</p>
-`;
-
-showNotification('📝 AI Assignment Generated');
-}
-
-function scanPlagiarism(){
-
-const output=document.getElementById('assignmentOutput');
-
-output.style.display='block';
-
-output.innerHTML=`
-<h3 style="margin-bottom:15px;color:#00bfff;">🔍 AI Plagiarism Scanner</h3>
-<p>Scanning student submissions...</p>
-<br>
-<div class="progress">
-<div style="width:92%"></div>
-</div>
-<br>
-<p>Similarity Score: <strong style="color:#22c55e;">8% Duplicate Content</strong></p>
-<p>Status: <strong style="color:#22c55e;">SAFE</strong></p>
-`;
-
-showNotification('🔍 Plagiarism Scan Complete');
-}
-
-function monitorSubmissions(){
-
-const output=document.getElementById('assignmentOutput');
-
-output.style.display='block';
-
-output.innerHTML='<h3 style="margin-bottom:15px;color:#00bfff;">📊 Live Submission Monitor</h3><p>Loading live submissions...</p>';
-
-let html=`
-<h3 style="margin-bottom:15px;color:#00bfff;">📊 Live Submission Monitor</h3>
-<table style="width:100%;border-collapse:collapse;">
-<tr>
-<th style="padding:10px;text-align:left;">Student</th>
-<th style="padding:10px;text-align:left;">Status</th>
-<th style="padding:10px;text-align:left;">AI Score</th>
-</tr>
-`;
-
-try{
-
-db.collection('submissions').onSnapshot(snapshot=>{
-
-html=`
-<h3 style="margin-bottom:15px;color:#00bfff;">📊 Live Submission Monitor</h3>
-<table style="width:100%;border-collapse:collapse;">
-<tr>
-<th style="padding:10px;text-align:left;">Student</th>
-<th style="padding:10px;text-align:left;">Status</th>
-<th style="padding:10px;text-align:left;">AI Score</th>
-</tr>
-`;
-
-snapshot.forEach(doc=>{
-
-const data=doc.data();
-
-html+=`
-<tr>
-<td style="padding:10px;">${data.student||'Student'}</td>
-<td style="padding:10px;color:#22c55e;">${data.status||'Submitted'}</td>
-<td style="padding:10px;">${data.score||'90'}%</td>
-</tr>
-`;
-
-});
-
-html+='</table>';
-
-output.innerHTML=html;
-
-});
-
-}catch(err){
-console.log(err);
-}
-
-
-const output=document.getElementById('assignmentOutput');
-
-output.style.display='block';
-
-output.innerHTML=`
-<h3 style="margin-bottom:15px;color:#00bfff;">📊 Live Submission Monitor</h3>
-
-<table style="width:100%;border-collapse:collapse;">
-<tr>
-<th style="padding:10px;text-align:left;">Student</th>
-<th style="padding:10px;text-align:left;">Status</th>
-<th style="padding:10px;text-align:left;">AI Score</th>
-</tr>
-
-<tr>
-<td style="padding:10px;">John Doe</td>
-<td style="padding:10px;color:#22c55e;">Submitted</td>
-<td style="padding:10px;">95%</td>
-</tr>
-
-<tr>
-<td style="padding:10px;">Mary Johnson</td>
-<td style="padding:10px;color:#facc15;">Pending</td>
-<td style="padding:10px;">--</td>
-</tr>
-
-<tr>
-<td style="padding:10px;">Daniel Smith</td>
-<td style="padding:10px;color:#00bfff;">Reviewing</td>
-<td style="padding:10px;">88%</td>
-</tr>
-</table>
-`;
-
-showNotification('📊 Monitoring Student Submissions');
-}
-
-function activateAI(){
-
-const launchBtn=document.querySelector('.primary');
-const adminBtn=document.querySelector('.secondary');
-
-launchBtn.addEventListener('click',()=>{
-showNotification('🚀 AI Education System Activated');
-});
-
-adminBtn.addEventListener('click',()=>{
-showNotification('⚙ Admin Panel Opened');
-});
-
-}
-
-function liveAIEngine(){
-
-const bars=document.querySelectorAll('.progress div');
-
-setInterval(()=>{
-
-bars.forEach(bar=>{
-const random=Math.floor(Math.random()*25)+70;
-bar.style.width=random+'%';
-});
-
-},3000);
-}
-
-animateStats();
-activateChannels();
-liveClock();
-activateAI();
-liveAIEngine();
-
-</script>
-
-</body>
-</html>
-ice-width, initial-scale=1.0">
-
-<title>Live AI Homework Channel</title>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:#050816;
-color:white;
-display:flex;
-align-items:center;
-justify-content:center;
-min-height:100vh;
-padding:20px;
-overflow:hidden;
-}
-
-.bg{
-position:absolute;
-width:800px;
-height:800px;
-background:linear-gradient(45deg,#00e5ff,#7c3aed);
-filter:blur(150px);
-opacity:0.12;
-border-radius:50%;
-z-index:-1;
-}
-
-.ai-channel-card{
-width:100%;
-max-width:1100px;
-background:#111827;
-border:1px solid #1e293b;
-border-radius:35px;
-padding:35px;
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:35px;
-box-shadow:0 0 50px rgba(0,255,255,0.08);
-}
-
-.left{
-display:flex;
-flex-direction:column;
-justify-content:center;
-}
-
-.badge{
-display:inline-block;
-padding:10px 18px;
-border-radius:50px;
-background:rgba(0,255,120,0.15);
-color:#00ff90;
-font-weight:bold;
-margin-bottom:25px;
-width:max-content;
-animation:pulse 1.5s infinite;
+.live-dot{
+animation:pulse 1s infinite;
 }
 
 @keyframes pulse{
 0%{opacity:1;}
-50%{opacity:0.5;}
+50%{opacity:0.3;}
 100%{opacity:1;}
 }
 
-.icon{
-width:90px;
-height:90px;
-border-radius:25px;
-background:linear-gradient(45deg,#00e5ff,#7c3aed);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:45px;
-margin-bottom:25px;
+.progress-bar{
+height:12px;
+border-radius:999px;
+overflow:hidden;
+background:#1e293b;
 }
 
-.left h1{
-font-size:55px;
-margin-bottom:20px;
-font-weight:900;
+.progress-fill{
+height:100%;
+border-radius:999px;
 }
-
-.left p{
-font-size:17px;
-line-height:1.8;
-color:#94a3b8;
-margin-bottom:30px;
-}
-
-.actions{
-display:flex;
-gap:15px;
-flex-wrap:wrap;
-margin-bottom:35px;
-}
-
-button{
-padding:16px 28px;
-border:none;
-border-radius:16px;
-font-size:15px;
-font-weight:bold;
-cursor:pointer;
-transition:0.3s;
-}
-
-.primary{
-background:#00e5ff;
-color:black;
-}
-
-.primary:hover{
-background:white;
-transform:translateY(-3px);
-}
-
-.secondary{
-background:#0f172a;
-color:white;
-border:1px solid #1e293b;
-}
-
-.secondary:hover{
-border-color:#00e5ff;
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px;
-}
-
-.stat{
-background:#0f172a;
-padding:22px;
-border-radius:22px;
-text-align:center;
-border:1px solid #1e293b;
-}
-
-.stat h2{
-font-size:38px;
-margin-bottom:8px;
-}
-
-.right{
-background:#0f172a;
-border-radius:30px;
-padding:30px;
-border:1px solid #1e293b;
-}
-
-.top{
-display:flex;
-align-items:center;
-justify-content:space-between;
-margin-bottom:25px;
-}
-
-.live{
-background:rgba(0,255,120,0.15);
-color:#00ff90;
-padding:10px 16px;
-border-radius:50px;
-font-weight:bold;
-}
-
-.panel{
-background:#111827;
-padding:22px;
-border-radius:22px;
-margin-bottom:18px;
-border:1px solid transparent;
-transition:0.3s;
-}
-
-.panel:hover{
-border-color:#00e5ff;
-}
-
-.panel h3{
-margin-bottom:10px;
-font-size:20px;
-}
-
-.panel p{
-color:#94a3b8;
-line-height:1.7;
-font-size:14px;
-margin-bottom:15px;
-}
-
-.output{
-background:black;
-padding:15px;
-border-radius:15px;
-font-size:14px;
-color:#00ff90;
-min-height:80px;
-overflow:auto;
-border:1px solid #1e293b;
-}
-
-textarea{
-width:100%;
-height:120px;
-background:black;
-border:1px solid #1e293b;
-border-radius:15px;
-padding:15px;
-color:white;
-resize:none;
-margin-bottom:15px;
-}
-
-@media(max-width:950px){
-
-.ai-channel-card{
-grid-template-columns:1fr;
-}
-
-.stats{
-grid-template-columns:1fr;
-}
-
-.left h1{
-font-size:42px;
-}
-
-}
-
 </style>
 </head>
-<body>
+<body class="text-white">
 
-<div class="bg"></div>
+<div class="min-h-screen p-6">
 
-<div class="ai-channel-card">
+<div class="max-w-7xl mx-auto">
 
-<div class="left">
+<div class="bg-gradient-to-r from-cyan-600 to-blue-700 rounded-[30px] p-10 glow mb-8">
+<div class="flex flex-col lg:flex-row justify-between gap-10 items-center">
 
-<div class="badge">
-● LIVE AI SYSTEM ACTIVE
+<div>
+<div class="inline-flex items-center gap-3 bg-black/20 px-5 py-2 rounded-full mb-6">
+<span class="live-dot text-green-300">●</span>
+<span class="font-bold">ACTIVE & FUNCTIONAL SYSTEM</span>
 </div>
 
-<div class="icon">
-📘
-</div>
-
-<h1>
-AI Homework Channel
+<h1 class="text-5xl lg:text-7xl font-black leading-tight mb-6">
+🤖 AUTO-AI
+<span class="block text-cyan-200">EDUCATION SYSTEM</span>
 </h1>
 
-<p>
-Automatically generate, solve and grade student homework
-with instant AI analysis, real-time educational monitoring
-and smart academic assistance.
+<p class="text-lg text-slate-100 leading-relaxed max-w-3xl mb-8">
+Complete AI-powered dashboard for student homework, assignments, projects, research, quizzes and smart grading. Automatically creates educational channels, tracks student performance and provides instant AI analysis.
 </p>
 
-<div class="actions">
-
-<button class="primary" onclick="openChannel()">
-🚀 Open Channel
+<div class="flex flex-wrap gap-4">
+<button onclick="showMessage('AI System Activated Successfully')" class="bg-white text-slate-900 px-8 py-4 rounded-2xl font-black hover:scale-105 transition-all">
+🚀 START AI SYSTEM
 </button>
 
-<button class="secondary" onclick="generateHomework()">
-📝 Generate Homework
+<button onclick="showMessage('Opening Live Dashboard')" class="bg-black/20 border border-white/20 px-8 py-4 rounded-2xl font-black hover:scale-105 transition-all">
+📡 LIVE DASHBOARD
+</button>
+</div>
+</div>
+
+<div class="w-full lg:w-[420px] bg-slate-900/70 border border-white/10 rounded-[30px] p-8 backdrop-blur-xl">
+<h2 class="text-3xl font-black mb-6">SYSTEM STATUS</h2>
+
+<div class="space-y-6">
+
+<div>
+<div class="flex justify-between mb-2">
+<span>AI Engine</span>
+<span class="text-cyan-300 font-bold">100%</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill bg-cyan-400 w-full"></div>
+</div>
+</div>
+
+<div>
+<div class="flex justify-between mb-2">
+<span>Smart Grading</span>
+<span class="text-green-300 font-bold">98%</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill bg-green-400" style="width:98%"></div>
+</div>
+</div>
+
+<div>
+<div class="flex justify-between mb-2">
+<span>Student Analytics</span>
+<span class="text-yellow-300 font-bold">94%</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill bg-yellow-400" style="width:94%"></div>
+</div>
+</div>
+
+<div>
+<div class="flex justify-between mb-2">
+<span>Project Generator</span>
+<span class="text-pink-300 font-bold">96%</span>
+</div>
+<div class="progress-bar">
+<div class="progress-fill bg-pink-400" style="width:96%"></div>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+<div class="card bg-slate-900 border border-slate-800 rounded-[25px] p-6 glow">
+<div class="text-5xl mb-5">📘</div>
+<h3 class="text-2xl font-black mb-3">AI Homework</h3>
+<p class="text-slate-400 mb-5">Generate homework automatically with instant AI solutions.</p>
+<button onclick="showMessage('Homework Channel Opened')" class="bg-cyan-500 w-full py-3 rounded-2xl font-black hover:bg-cyan-600 transition-all">
+OPEN CHANNEL
+</button>
+</div>
+
+<div class="card bg-slate-900 border border-slate-800 rounded-[25px] p-6 glow">
+<div class="text-5xl mb-5">📝</div>
+<h3 class="text-2xl font-black mb-3">AI Assignments</h3>
+<p class="text-slate-400 mb-5">Create assignments, grading and plagiarism detection.</p>
+<button onclick="showMessage('Assignment System Started')" class="bg-green-500 w-full py-3 rounded-2xl font-black hover:bg-green-600 transition-all">
+OPEN CHANNEL
+</button>
+</div>
+
+<div class="card bg-slate-900 border border-slate-800 rounded-[25px] p-6 glow">
+<div class="text-5xl mb-5">🔬</div>
+<h3 class="text-2xl font-black mb-3">AI Research</h3>
+<p class="text-slate-400 mb-5">Research topics, references and AI-powered analysis.</p>
+<button onclick="showMessage('Research AI Activated')" class="bg-purple-500 w-full py-3 rounded-2xl font-black hover:bg-purple-600 transition-all">
+OPEN CHANNEL
+</button>
+</div>
+
+<div class="card bg-slate-900 border border-slate-800 rounded-[25px] p-6 glow">
+<div class="text-5xl mb-5">🧠</div>
+<h3 class="text-2xl font-black mb-3">AI Quiz System</h3>
+<p class="text-slate-400 mb-5">Smart quiz creation with live scoring and analytics.</p>
+<button onclick="showMessage('Quiz Generator Running')" class="bg-pink-500 w-full py-3 rounded-2xl font-black hover:bg-pink-600 transition-all">
+OPEN CHANNEL
+</button>
+</div>
+
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+
+<div class="bg-slate-900 border border-slate-800 rounded-[30px] p-8 glow">
+<div class="flex justify-between items-center mb-8">
+<h2 class="text-3xl font-black">🎓 STUDENT PERFORMANCE</h2>
+<button onclick="showMessage('Reports Exported')" class="bg-green-500 px-5 py-3 rounded-2xl font-black hover:bg-green-600 transition-all">
+EXPORT
+</button>
+</div>
+
+<div class="space-y-6">
+
+<div class="bg-slate-800 rounded-2xl p-5">
+<div class="flex justify-between mb-3">
+<div>
+<h3 class="font-black text-xl">Michael Johnson</h3>
+<p class="text-slate-400 text-sm">Computer Science</p>
+</div>
+<div class="text-cyan-400 text-2xl font-black">95%</div>
+</div>
+<div class="progress-bar">
+<div class="progress-fill bg-cyan-400" style="width:95%"></div>
+</div>
+</div>
+
+<div class="bg-slate-800 rounded-2xl p-5">
+<div class="flex justify-between mb-3">
+<div>
+<h3 class="font-black text-xl">Sarah Williams</h3>
+<p class="text-slate-400 text-sm">Business Administration</p>
+</div>
+<div class="text-green-400 text-2xl font-black">89%</div>
+</div>
+<div class="progress-bar">
+<div class="progress-fill bg-green-400" style="width:89%"></div>
+</div>
+</div>
+
+<div class="bg-slate-800 rounded-2xl p-5">
+<div class="flex justify-between mb-3">
+<div>
+<h3 class="font-black text-xl">David Smith</h3>
+<p class="text-slate-400 text-sm">Engineering</p>
+</div>
+<div class="text-yellow-400 text-2xl font-black">92%</div>
+</div>
+<div class="progress-bar">
+<div class="progress-fill bg-yellow-400" style="width:92%"></div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="bg-gradient-to-br from-cyan-600 to-blue-700 rounded-[30px] p-10 glow text-center flex flex-col justify-center">
+<div class="text-7xl mb-6">🤖</div>
+<h2 class="text-4xl font-black mb-4">LIVE AI ANALYSIS</h2>
+<p class="text-lg text-slate-100 mb-8 leading-relaxed">
+Real-time AI analysis for schools, universities and online educational platforms.
+</p>
+
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div class="bg-black/20 rounded-2xl p-5">
+<div class="text-4xl font-black">12K+</div>
+<div class="text-sm mt-2">Students</div>
+</div>
+
+<div class="bg-black/20 rounded-2xl p-5">
+<div class="text-4xl font-black">85K+</div>
+<div class="text-sm mt-2">Assignments</div>
+</div>
+</div>
+
+<button onclick="activateLiveAI()" class="bg-white text-slate-900 px-10 py-4 rounded-2xl font-black text-xl hover:scale-105 transition-all">
+ACTIVATE LIVE AI SYSTEM
+</button>
+</div>
+
+</div>
+
+<div class="bg-slate-900 border border-slate-800 rounded-[30px] p-10 text-center glow">
+<h2 class="text-4xl font-black mb-4">
+🌍 COMPLETE SINGLE PAGE AI EDUCATION PLATFORM
+</h2>
+
+<p class="text-slate-300 text-lg max-w-4xl mx-auto mb-8 leading-relaxed">
+Fully responsive and functional AI-powered educational management system for schools, universities, colleges and online academies.
+</p>
+
+<div class="flex flex-wrap justify-center gap-4">
+<button onclick="showMessage('Homework Generator Started')" class="bg-cyan-500 px-8 py-4 rounded-2xl font-black hover:bg-cyan-600 transition-all">
+📚 CREATE HOMEWORK
 </button>
 
-</div>
-
-<div class="stats">
-
-<div class="stat">
-<h2 style="color:#00e5ff;">100K+</h2>
-<p>Students</p>
-</div>
-
-<div class="stat">
-<h2 style="color:#00ff90;">24/7</h2>
-<p>AI Active</p>
-</div>
-
-<div class="stat">
-<h2 style="color:#bb86fc;">98%</h2>
-<p>Accuracy</p>
-</div>
-
-</div>
-
-</div>
-
-<div class="right">
-
-<div class="top">
-<h2>🤖 Functional Dashboard</h2>
-
-<div class="live">
-LIVE
-</div>
-</div>
-
-<div class="panel">
-
-<h3>
-📥 Enter Homework Question
-</h3>
-
-<textarea id="question" placeholder="Type homework question here..."></textarea>
-
-<button class="primary" onclick="solveHomework()">
-⚡ Solve with AI
+<button onclick="showMessage('Quiz Generator Activated')" class="bg-green-500 px-8 py-4 rounded-2xl font-black hover:bg-green-600 transition-all">
+🧠 GENERATE QUIZ
 </button>
 
+<button onclick="showMessage('Research AI Running')" class="bg-purple-500 px-8 py-4 rounded-2xl font-black hover:bg-purple-600 transition-all">
+🔬 START RESEARCH
+</button>
 </div>
-
-<div class="panel">
-
-<h3>
-📊 AI Output
-</h3>
-
-<div class="output" id="output">
-AI system ready...
 </div>
 
 </div>
-
-<div class="panel">
-
-<h3>
-📈 Live System Activity
-</h3>
-
-<p>Students Online: <span id="students">8540</span></p>
-<p>Assignments Solved: <span id="assignments">2450</span></p>
-<p>Projects Generated: <span id="projects">1200</span></p>
-
-</div>
-
-</div>
-
 </div>
 
 <script>
-
-function openChannel(){
-
-document.getElementById("output").innerHTML =
-"✅ AI Homework Channel Activated Successfully.";
-
+function showMessage(message){
+alert(message);
 }
 
-function generateHomework(){
-
-document.getElementById("output").innerHTML =
-"📝 New AI homework assignment generated successfully.";
-
+function activateLiveAI(){
+alert('🤖 LIVE AI SYSTEM ACTIVATED SUCCESSFULLY');
 }
-
-function solveHomework(){
-
-let question = document.getElementById("question").value;
-
-if(question.trim() === ""){
-alert("Please enter homework question.");
-return;
-}
-
-document.getElementById("output").innerHTML =
-"🤖 AI is solving: <br><br>" +
-question +
-"<br><br>✅ Homework solved successfully with instant grading.";
-
-}
-
-setInterval(()=>{
-
-let students =
-document.getElementById("students");
-
-let assignments =
-document.getElementById("assignments");
-
-let projects =
-document.getElementById("projects");
-
-students.innerHTML =
-parseInt(students.innerHTML) + Math.floor(Math.random()*3);
-
-assignments.innerHTML =
-parseInt(assignments.innerHTML) + Math.floor(Math.random()*2);
-
-projects.innerHTML =
-parseInt(projects.innerHTML) + 1;
-
-},5000);
-
 </script>
 
 </body>
