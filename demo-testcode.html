@@ -548,7 +548,27 @@ live educational channels and cloud-based education management.
 </div>
 
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
+
+/* =========================
+LIVE FIREBASE CONFIG
+REPLACE WITH YOUR REAL KEYS
+========================= */
+
+const firebaseConfig={
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_PROJECT.firebaseapp.com",
+projectId:"YOUR_PROJECT_ID",
+storageBucket:"YOUR_PROJECT.appspot.com",
+messagingSenderId:"YOUR_SENDER_ID",
+appId:"YOUR_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+
 
 const stats = {
 students:12450,
@@ -642,7 +662,32 @@ note.remove();
 },3000);
 }
 
-function generateAssignment(){
+async function generateAssignment(){
+
+const text=document.getElementById('assignmentText').value;
+
+if(!text){
+showNotification('⚠ Enter Assignment Topic');
+return;
+}
+
+const assignment={
+topic:text,
+created:new Date().toISOString(),
+status:'ACTIVE',
+aiScore:Math.floor(Math.random()*20)+80
+};
+
+try{
+
+await db.collection('assignments').add(assignment);
+
+}catch(err){
+console.log(err);
+}
+
+const output=document.getElementById('assignmentOutput');
+
 
 const text=document.getElementById('assignmentText').value;
 const output=document.getElementById('assignmentOutput');
@@ -690,6 +735,61 @@ showNotification('🔍 Plagiarism Scan Complete');
 }
 
 function monitorSubmissions(){
+
+const output=document.getElementById('assignmentOutput');
+
+output.style.display='block';
+
+output.innerHTML='<h3 style="margin-bottom:15px;color:#00bfff;">📊 Live Submission Monitor</h3><p>Loading live submissions...</p>';
+
+let html=`
+<h3 style="margin-bottom:15px;color:#00bfff;">📊 Live Submission Monitor</h3>
+<table style="width:100%;border-collapse:collapse;">
+<tr>
+<th style="padding:10px;text-align:left;">Student</th>
+<th style="padding:10px;text-align:left;">Status</th>
+<th style="padding:10px;text-align:left;">AI Score</th>
+</tr>
+`;
+
+try{
+
+db.collection('submissions').onSnapshot(snapshot=>{
+
+html=`
+<h3 style="margin-bottom:15px;color:#00bfff;">📊 Live Submission Monitor</h3>
+<table style="width:100%;border-collapse:collapse;">
+<tr>
+<th style="padding:10px;text-align:left;">Student</th>
+<th style="padding:10px;text-align:left;">Status</th>
+<th style="padding:10px;text-align:left;">AI Score</th>
+</tr>
+`;
+
+snapshot.forEach(doc=>{
+
+const data=doc.data();
+
+html+=`
+<tr>
+<td style="padding:10px;">${data.student||'Student'}</td>
+<td style="padding:10px;color:#22c55e;">${data.status||'Submitted'}</td>
+<td style="padding:10px;">${data.score||'90'}%</td>
+</tr>
+`;
+
+});
+
+html+='</table>';
+
+output.innerHTML=html;
+
+});
+
+}catch(err){
+console.log(err);
+}
+
 
 const output=document.getElementById('assignmentOutput');
 
