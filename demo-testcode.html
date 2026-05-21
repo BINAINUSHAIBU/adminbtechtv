@@ -1,8 +1,15 @@
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
 
 <title>BTECH-TV USER MANAGER DASHBOARD</title>
 
@@ -103,7 +110,7 @@ SIDEBAR
 ========================= */
 
 .sidebar{
-width:320px;
+width:280px;
 background:#0f172a;
 padding:15px;
 overflow-y:auto;
@@ -131,94 +138,6 @@ transition:.3s;
 background:var(--accent);
 color:black;
 transform:translateX(4px);
-}
-
-/* =========================
-PLAYER
-========================= */
-
-.player-box{
-height:220px;
-background:black;
-position:relative;
-border-radius:14px;
-overflow:hidden;
-margin-bottom:20px;
-}
-
-.player-box video{
-width:100%;
-height:100%;
-object-fit:cover;
-background:black;
-}
-
-.live{
-position:absolute;
-top:15px;
-left:15px;
-background:red;
-padding:8px 14px;
-border-radius:30px;
-font-size:12px;
-font-weight:bold;
-z-index:5;
-}
-
-.channel-list{
-margin-top:15px;
-}
-
-.channel-item{
-display:flex;
-align-items:center;
-gap:10px;
-padding:10px;
-background:var(--card);
-border-radius:10px;
-margin-bottom:8px;
-cursor:pointer;
-transition:.3s;
-}
-
-.channel-item:hover{
-background:var(--hover);
-}
-
-.channel-logo{
-width:42px;
-height:42px;
-border-radius:50%;
-background:#0b1220;
-display:flex;
-align-items:center;
-justify-content:center;
-overflow:hidden;
-font-size:12px;
-}
-
-.channel-logo img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.channel-info{
-flex:1;
-min-width:0;
-}
-
-.channel-name{
-font-size:13px;
-font-weight:bold;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
-}
-
-.channel-meta{
-font-size:11px;
-color:var(--muted);
 }
 
 /* =========================
@@ -431,6 +350,33 @@ color:white;
 }
 
 /* =========================
+PLAYER
+========================= */
+
+.player-box{
+height:300px;
+background:black;
+position:relative;
+}
+
+.player-box video{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.live{
+position:absolute;
+top:15px;
+left:15px;
+background:red;
+padding:8px 14px;
+border-radius:30px;
+font-size:12px;
+font-weight:bold;
+}
+
+/* =========================
 MOBILE
 ========================= */
 
@@ -455,6 +401,10 @@ grid-template-columns:1fr 1fr;
 
 <body>
 
+<!-- =========================
+TOPBAR
+========================= -->
+
 <div class="topbar">
 
 <div class="logo">
@@ -464,7 +414,7 @@ grid-template-columns:1fr 1fr;
 <div class="top-actions">
 
 <button onclick="generateUsers()">
-⚡ Generate Users
+⚡ Generate 1,000,000 Users
 </button>
 
 <button onclick="toggleTheme()">
@@ -476,20 +426,70 @@ grid-template-columns:1fr 1fr;
 </button>
 
 <button onclick="reloadSystem()">
-🚀 Reload
+🚀 Reload Engine
 </button>
 
 </div>
 
 </div>
 
+<!-- =========================
+CONTAINER
+========================= -->
+
 <div class="container">
 
-<!-- SIDEBAR -->
+<!-- =========================
+SIDEBAR
+========================= -->
 
 <div class="sidebar">
 
-<h3>📡 LIVE IPTV</h3>
+<h3>📂 Management</h3>
+
+<button class="side-btn active">
+👥 All Users
+</button>
+
+<button class="side-btn">
+⭐ Premium Users
+</button>
+
+<button class="side-btn">
+🔒 Blocked Users
+</button>
+
+<button class="side-btn">
+🟢 Online Users
+</button>
+
+<button class="side-btn">
+📺 Active Streams
+</button>
+
+<button class="side-btn">
+💳 Subscription Plans
+</button>
+
+<button class="side-btn">
+📡 IPTV Sessions
+</button>
+
+<button class="side-btn">
+🧠 AI Monitoring
+</button>
+
+<button class="side-btn">
+⚙ System Settings
+</button>
+
+<button class="side-btn">
+🛡 Security Logs
+</button>
+
+<hr style="margin:20px 0;border:0;border-top:1px solid #1e293b;">
+
+<h3>📡 LIVE STREAM</h3>
 
 <div class="player-box">
 
@@ -507,15 +507,17 @@ playsinline
 
 </div>
 
-<h3>📺 CHANNELS</h3>
-
-<div id="channelList" class="channel-list"></div>
-
 </div>
 
-<!-- MAIN -->
+<!-- =========================
+MAIN
+========================= -->
 
 <div class="main">
+
+<!-- =========================
+STATS
+========================= -->
 
 <div class="stats-grid">
 
@@ -545,11 +547,15 @@ playsinline
 </div>
 
 <div class="stat-card">
-<h4>Channels</h4>
-<h2 id="channelCount">0</h2>
+<h4>Server Load</h4>
+<h2 id="serverLoad">0%</h2>
 </div>
 
 </div>
+
+<!-- =========================
+TOOLS
+========================= -->
 
 <div class="toolbar">
 
@@ -566,6 +572,10 @@ oninput="searchUsers(this.value)"
 <option value="online">Online First</option>
 </select>
 
+<button onclick="generateUsers()">
+➕ Add Users
+</button>
+
 <button onclick="blockAll()">
 🔒 Block Random
 </button>
@@ -575,6 +585,10 @@ oninput="searchUsers(this.value)"
 </button>
 
 </div>
+
+<!-- =========================
+TABLE
+========================= -->
 
 <div class="table-wrap">
 
@@ -613,237 +627,32 @@ oninput="searchUsers(this.value)"
 <script>
 
 /* =========================
-GLOBAL USERS
+GLOBAL STATE
 ========================= */
 
 let users = [];
 let filteredUsers = [];
 let dark = true;
 
-const maxUsers = 5000;
+const maxUsers = 1000000;
 
 /* =========================
-IPTV API STATE
+STREAM PLAYER
 ========================= */
 
-let channels = [];
-let hlsPlayer = null;
-
-/* =========================
-LOAD IPTV API
-========================= */
-
-async function loadIPTV(){
-
-try{
-
-const [
-channelRes,
-streamRes,
-logoRes
-] = await Promise.all([
-
-fetch(
-"https://iptv-org.github.io/api/channels.json"
-).then(r=>r.json()),
-
-fetch(
-"https://iptv-org.github.io/api/streams.json"
-).then(r=>r.json()),
-
-fetch(
-"https://iptv-org.github.io/api/logos.json"
-).then(r=>r.json())
-
-]);
-
-const channelMap = {};
-const logoMap = {};
-
-channelRes.forEach(ch=>{
-
-if(!ch.closed && !ch.is_nsfw){
-
-channelMap[ch.id] = ch;
-
-}
-
-});
-
-logoRes.forEach(lg=>{
-
-if(!logoMap[lg.channel]){
-
-logoMap[lg.channel] = lg.url;
-
-}
-
-});
-
-const used = {};
-
-streamRes.forEach(st=>{
-
-if(
-!st.url ||
-used[st.url]
-) return;
-
-if(
-st.url.includes("youtube") ||
-st.url.includes("twitch")
-) return;
-
-used[st.url] = true;
-
-const meta =
-channelMap[st.channel] || {};
-
-channels.push({
-
-id:channels.length+1,
-
-name:
-meta.name ||
-st.title ||
-"Unknown",
-
-url:st.url,
-
-country:
-meta.country || "N/A",
-
-category:
-meta.categories
-? meta.categories[0]
-: "General",
-
-logo:
-logoMap[st.channel] || ""
-
-});
-
-});
-
-document.getElementById(
-"channelCount"
-).innerText =
-channels.length.toLocaleString();
-
-renderChannels();
-
-if(channels.length){
-
-playChannel(
-channels[0].url
-);
-
-}
-
-}catch(err){
-
-console.error(err);
-
-alert(
-"Failed to load IPTV API"
-);
-
-}
-
-}
-
-/* =========================
-RENDER CHANNELS
-========================= */
-
-function renderChannels(limit=150){
-
-const wrap =
-document.getElementById(
-"channelList"
-);
-
-wrap.innerHTML = "";
-
-channels
-.slice(0,limit)
-.forEach(ch=>{
-
-const div =
-document.createElement("div");
-
-div.className =
-"channel-item";
-
-div.onclick = ()=>{
-
-playChannel(ch.url);
-
-};
-
-div.innerHTML = `
-
-<div class="channel-logo">
-
-${
-ch.logo
-? `<img src="${ch.logo}">`
-: "📺"
-}
-
-</div>
-
-<div class="channel-info">
-
-<div class="channel-name">
-${ch.name}
-</div>
-
-<div class="channel-meta">
-${ch.country} • ${ch.category}
-</div>
-
-</div>
-
-`;
-
-wrap.appendChild(div);
-
-});
-
-}
-
-/* =========================
-PLAY CHANNEL
-========================= */
-
-function playChannel(url){
+const stream =
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 
 const video =
-document.getElementById(
-"video"
-);
-
-if(hlsPlayer){
-
-hlsPlayer.destroy();
-
-}
+document.getElementById("video");
 
 if(Hls.isSupported()){
 
-hlsPlayer =
-new Hls();
+const hls = new Hls();
 
-hlsPlayer.loadSource(url);
+hls.loadSource(stream);
 
-hlsPlayer.attachMedia(video);
-
-}else{
-
-video.src = url;
-
-}
+hls.attachMedia(video);
 
 }
 
@@ -1090,6 +899,13 @@ users.filter(
 u=>u.streaming
 ).length.toLocaleString();
 
+document.getElementById(
+"serverLoad"
+).innerText =
+Math.floor(
+Math.random()*100
+)+"%";
+
 }
 
 /* =========================
@@ -1333,7 +1149,7 @@ setInterval(()=>{
 
 if(users.length){
 
-for(let i=0;i<200;i++){
+for(let i=0;i<500;i++){
 
 const random =
 Math.floor(
@@ -1373,8 +1189,6 @@ START
 ========================= */
 
 generateUsers();
-
-loadIPTV();
 
 </script>
 
