@@ -1,25 +1,14 @@
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <title>BTECH-TV USER MANAGER DASHBOARD</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-
-/* =========================
-ROOT
-========================= */
 
 :root{
 --bg:#08111f;
@@ -33,10 +22,6 @@ ROOT
 --text:#ffffff;
 --muted:#94a3b8;
 }
-
-/* =========================
-GLOBAL
-========================= */
 
 *{
 margin:0;
@@ -55,10 +40,6 @@ button{
 border:none;
 cursor:pointer;
 }
-
-/* =========================
-TOPBAR
-========================= */
 
 .topbar{
 height:70px;
@@ -96,21 +77,13 @@ background:var(--accent);
 color:black;
 }
 
-/* =========================
-LAYOUT
-========================= */
-
 .container{
 display:flex;
 height:calc(100vh - 70px);
 }
 
-/* =========================
-SIDEBAR
-========================= */
-
 .sidebar{
-width:280px;
+width:320px;
 background:#0f172a;
 padding:15px;
 overflow-y:auto;
@@ -140,9 +113,89 @@ color:black;
 transform:translateX(4px);
 }
 
-/* =========================
-MAIN
-========================= */
+.player-box{
+height:220px;
+background:black;
+position:relative;
+border-radius:14px;
+overflow:hidden;
+margin-bottom:20px;
+}
+
+.player-box video{
+width:100%;
+height:100%;
+object-fit:cover;
+background:black;
+}
+
+.live{
+position:absolute;
+top:15px;
+left:15px;
+background:red;
+padding:8px 14px;
+border-radius:30px;
+font-size:12px;
+font-weight:bold;
+z-index:5;
+}
+
+.channel-list{
+margin-top:15px;
+}
+
+.channel-item{
+display:flex;
+align-items:center;
+gap:10px;
+padding:10px;
+background:var(--card);
+border-radius:10px;
+margin-bottom:8px;
+cursor:pointer;
+transition:.3s;
+}
+
+.channel-item:hover{
+background:var(--hover);
+}
+
+.channel-logo{
+width:42px;
+height:42px;
+border-radius:50%;
+background:#0b1220;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+font-size:12px;
+}
+
+.channel-logo img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.channel-info{
+flex:1;
+min-width:0;
+}
+
+.channel-name{
+font-size:13px;
+font-weight:bold;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.channel-meta{
+font-size:11px;
+color:var(--muted);
+}
 
 .main{
 flex:1;
@@ -150,10 +203,6 @@ display:flex;
 flex-direction:column;
 overflow:hidden;
 }
-
-/* =========================
-DASHBOARD STATS
-========================= */
 
 .stats-grid{
 display:grid;
@@ -180,10 +229,6 @@ margin-bottom:10px;
 font-size:30px;
 color:var(--accent);
 }
-
-/* =========================
-TOOLS
-========================= */
 
 .toolbar{
 display:flex;
@@ -215,10 +260,6 @@ background:var(--accent);
 font-weight:bold;
 color:black;
 }
-
-/* =========================
-TABLE
-========================= */
 
 .table-wrap{
 flex:1;
@@ -287,34 +328,12 @@ font-weight:bold;
 display:inline-block;
 }
 
-.active{
-background:#16a34a;
-}
-
-.blocked{
-background:#dc2626;
-}
-
-.premium{
-background:#2563eb;
-}
-
-.free{
-background:#64748b;
-}
-
-.online{
-background:#00ff99;
-color:black;
-}
-
-.offline{
-background:#475569;
-}
-
-/* =========================
-ACTION BUTTONS
-========================= */
+.active{background:#16a34a;}
+.blocked{background:#dc2626;}
+.premium{background:#2563eb;}
+.free{background:#64748b;}
+.online{background:#00ff99;color:black;}
+.offline{background:#475569;}
 
 .action-buttons{
 display:flex;
@@ -329,71 +348,15 @@ font-size:12px;
 font-weight:bold;
 }
 
-.edit{
-background:#2563eb;
-color:white;
-}
-
-.lock{
-background:#dc2626;
-color:white;
-}
-
-.unlock{
-background:#16a34a;
-color:white;
-}
-
-.delete{
-background:#ef4444;
-color:white;
-}
-
-/* =========================
-PLAYER
-========================= */
-
-.player-box{
-height:300px;
-background:black;
-position:relative;
-}
-
-.player-box video{
-width:100%;
-height:100%;
-object-fit:cover;
-}
-
-.live{
-position:absolute;
-top:15px;
-left:15px;
-background:red;
-padding:8px 14px;
-border-radius:30px;
-font-size:12px;
-font-weight:bold;
-}
-
-/* =========================
-MOBILE
-========================= */
+.edit{background:#2563eb;color:white;}
+.lock{background:#dc2626;color:white;}
+.unlock{background:#16a34a;color:white;}
+.delete{background:#ef4444;color:white;}
 
 @media(max-width:1000px){
-
-.sidebar{
-display:none;
-}
-
-.container{
-flex-direction:column;
-}
-
-.stats-grid{
-grid-template-columns:1fr 1fr;
-}
-
+.sidebar{display:none;}
+.container{flex-direction:column;}
+.stats-grid{grid-template-columns:1fr 1fr;}
 }
 
 </style>
@@ -401,169 +364,61 @@ grid-template-columns:1fr 1fr;
 
 <body>
 
-<!-- =========================
-TOPBAR
-========================= -->
-
 <div class="topbar">
-
-<div class="logo">
-📺 BTECH-TV USER MANAGER
-</div>
+<div class="logo">📺 BTECH-TV USER MANAGER</div>
 
 <div class="top-actions">
-
-<button onclick="generateUsers()">
-⚡ Generate 1,000,000 Users
-</button>
-
-<button onclick="toggleTheme()">
-🌙 Theme
-</button>
-
-<button onclick="exportUsers()">
-⬇ Export
-</button>
-
-<button onclick="reloadSystem()">
-🚀 Reload Engine
-</button>
-
+<button onclick="generateUsers()">⚡ Generate Users</button>
+<button onclick="toggleTheme()">🌙 Theme</button>
+<button onclick="exportUsers()">⬇ Export</button>
+<button onclick="reloadSystem()">🚀 Reload</button>
 </div>
-
 </div>
-
-<!-- =========================
-CONTAINER
-========================= -->
 
 <div class="container">
-
-<!-- =========================
-SIDEBAR
-========================= -->
 
 <div class="sidebar">
 
 <h3>📂 Management</h3>
 
-<button class="side-btn active">
-👥 All Users
-</button>
-
-<button class="side-btn">
-⭐ Premium Users
-</button>
-
-<button class="side-btn">
-🔒 Blocked Users
-</button>
-
-<button class="side-btn">
-🟢 Online Users
-</button>
-
-<button class="side-btn">
-📺 Active Streams
-</button>
-
-<button class="side-btn">
-💳 Subscription Plans
-</button>
-
-<button class="side-btn">
-📡 IPTV Sessions
-</button>
-
-<button class="side-btn">
-🧠 AI Monitoring
-</button>
-
-<button class="side-btn">
-⚙ System Settings
-</button>
-
-<button class="side-btn">
-🛡 Security Logs
-</button>
+<button class="side-btn active">👥 All Users</button>
+<button class="side-btn">⭐ Premium Users</button>
+<button class="side-btn">🔒 Blocked Users</button>
+<button class="side-btn">🟢 Online Users</button>
+<button class="side-btn">📺 Active Streams</button>
+<button class="side-btn">💳 Subscription Plans</button>
+<button class="side-btn">📡 IPTV Sessions</button>
+<button class="side-btn">🧠 AI Monitoring</button>
+<button class="side-btn">⚙ System Settings</button>
+<button class="side-btn">🛡 Security Logs</button>
 
 <hr style="margin:20px 0;border:0;border-top:1px solid #1e293b;">
 
-<h3>📡 LIVE STREAM</h3>
+<h3>📡 LIVE IPTV</h3>
 
 <div class="player-box">
-
-<div class="live">
-🔴 LIVE
+<div class="live">🔴 LIVE</div>
+<video id="video" controls autoplay muted playsinline></video>
 </div>
 
-<video
-id="video"
-controls
-autoplay
-muted
-playsinline
-></video>
+<h3>📺 CHANNELS</h3>
+<div id="channelList" class="channel-list"></div>
 
 </div>
-
-</div>
-
-<!-- =========================
-MAIN
-========================= -->
 
 <div class="main">
 
-<!-- =========================
-STATS
-========================= -->
-
 <div class="stats-grid">
-
-<div class="stat-card">
-<h4>Total Users</h4>
-<h2 id="totalUsers">0</h2>
+<div class="stat-card"><h4>Total Users</h4><h2 id="totalUsers">0</h2></div>
+<div class="stat-card"><h4>Premium</h4><h2 id="premiumUsers">0</h2></div>
+<div class="stat-card"><h4>Blocked</h4><h2 id="blockedUsers">0</h2></div>
+<div class="stat-card"><h4>Online</h4><h2 id="onlineUsers">0</h2></div>
+<div class="stat-card"><h4>Streams</h4><h2 id="streamUsers">0</h2></div>
+<div class="stat-card"><h4>Channels</h4><h2 id="channelCount">0</h2></div>
 </div>
-
-<div class="stat-card">
-<h4>Premium</h4>
-<h2 id="premiumUsers">0</h2>
-</div>
-
-<div class="stat-card">
-<h4>Blocked</h4>
-<h2 id="blockedUsers">0</h2>
-</div>
-
-<div class="stat-card">
-<h4>Online</h4>
-<h2 id="onlineUsers">0</h2>
-</div>
-
-<div class="stat-card">
-<h4>Streams</h4>
-<h2 id="streamUsers">0</h2>
-</div>
-
-<div class="stat-card">
-<h4>Server Load</h4>
-<h2 id="serverLoad">0%</h2>
-</div>
-
-</div>
-
-<!-- =========================
-TOOLS
-========================= -->
 
 <div class="toolbar">
-
-<input
-type="text"
-placeholder="Search users..."
-oninput="searchUsers(this.value)"
->
+<input type="text" placeholder="Search users..." oninput="searchUsers(this.value)">
 
 <select onchange="sortUsers(this.value)">
 <option value="az">Sort A-Z</option>
@@ -572,32 +427,14 @@ oninput="searchUsers(this.value)"
 <option value="online">Online First</option>
 </select>
 
-<button onclick="generateUsers()">
-➕ Add Users
-</button>
-
-<button onclick="blockAll()">
-🔒 Block Random
-</button>
-
-<button onclick="unblockAll()">
-🔓 Unblock All
-</button>
-
+<button onclick="blockAll()">🔒 Block Random</button>
+<button onclick="unblockAll()">🔓 Unblock All</button>
 </div>
 
-<!-- =========================
-TABLE
-========================= -->
-
 <div class="table-wrap">
-
 <table>
-
 <thead>
-
 <tr>
-
 <th>ID</th>
 <th>User</th>
 <th>Email</th>
@@ -609,250 +446,198 @@ TABLE
 <th>Bandwidth</th>
 <th>Expiry</th>
 <th>Actions</th>
-
 </tr>
-
 </thead>
-
 <tbody id="userTable"></tbody>
-
 </table>
-
 </div>
 
 </div>
-
 </div>
 
 <script>
 
-/* =========================
-GLOBAL STATE
-========================= */
-
 let users = [];
 let filteredUsers = [];
 let dark = true;
+let channels = [];
+let hlsPlayer = null;
 
-const maxUsers = 1000000;
+const maxUsers = 5000;
 
-/* =========================
-STREAM PLAYER
-========================= */
+async function loadIPTV(){
 
-const stream =
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+try{
 
-const video =
-document.getElementById("video");
+const [channelRes,streamRes,logoRes] = await Promise.all([
+fetch("https://iptv-org.github.io/api/channels.json").then(r=>r.json()),
+fetch("https://iptv-org.github.io/api/streams.json").then(r=>r.json()),
+fetch("https://iptv-org.github.io/api/logos.json").then(r=>r.json())
+]);
 
-if(Hls.isSupported()){
+const channelMap = {};
+const logoMap = {};
 
-const hls = new Hls();
+channelRes.forEach(ch=>{
+if(!ch.closed && !ch.is_nsfw){
+channelMap[ch.id] = ch;
+}
+});
 
-hls.loadSource(stream);
+logoRes.forEach(lg=>{
+if(!logoMap[lg.channel]){
+logoMap[lg.channel] = lg.url;
+}
+});
 
-hls.attachMedia(video);
+const used = {};
+
+streamRes.forEach(st=>{
+
+if(!st.url || used[st.url]) return;
+if(st.url.includes("youtube") || st.url.includes("twitch")) return;
+
+used[st.url] = true;
+
+const meta = channelMap[st.channel] || {};
+
+channels.push({
+id:channels.length+1,
+name:meta.name || st.title || "Unknown",
+url:st.url,
+country:meta.country || "N/A",
+category:meta.categories ? meta.categories[0] : "General",
+logo:logoMap[st.channel] || ""
+});
+
+});
+
+document.getElementById("channelCount").innerText = channels.length.toLocaleString();
+
+renderChannels();
+
+if(channels.length){
+playChannel(channels[0].url);
+}
+
+}catch(err){
+console.error(err);
+alert("Failed to load IPTV API");
+}
 
 }
 
-/* =========================
-GENERATE USERS
-========================= */
+function renderChannels(limit=150){
 
-function generateUsers(){
+const wrap = document.getElementById("channelList");
+wrap.innerHTML = "";
 
-users = [];
+channels.slice(0,limit).forEach(ch=>{
 
-const countries = [
-"Nigeria",
-"USA",
-"UK",
-"India",
-"France",
-"Germany",
-"Brazil",
-"Canada"
-];
+const div = document.createElement("div");
+div.className = "channel-item";
 
-for(let i=1;i<=maxUsers;i++){
+div.onclick = ()=>{
+playChannel(ch.url);
+};
 
-users.push({
+div.innerHTML = `
+<div class="channel-logo">
+${ch.logo ? `<img src="${ch.logo}">` : "📺"}
+</div>
+<div class="channel-info">
+<div class="channel-name">${ch.name}</div>
+<div class="channel-meta">${ch.country} • ${ch.category}</div>
+</div>`;
 
-id:i,
-
-name:"BTECH_USER_"+i,
-
-email:"user"+i+"@btechtv.com",
-
-premium:
-Math.random() > 0.6,
-
-blocked:
-Math.random() > 0.95,
-
-online:
-Math.random() > 0.5,
-
-streaming:
-Math.random() > 0.4,
-
-devices:
-Math.floor(Math.random()*5)+1,
-
-country:
-countries[
-Math.floor(
-Math.random()*countries.length
-)
-],
-
-bandwidth:
-Math.floor(
-Math.random()*1000
-)+" Mbps",
-
-expiry:
-"2027-"+String(
-Math.floor(Math.random()*12)+1
-).padStart(2,"0")+"-"+String(
-Math.floor(Math.random()*28)+1
-).padStart(2,"0")
+wrap.appendChild(div);
 
 });
 
 }
 
+function playChannel(url){
+
+const video = document.getElementById("video");
+
+if(hlsPlayer){
+hlsPlayer.destroy();
+}
+
+if(Hls.isSupported()){
+
+hlsPlayer = new Hls();
+hlsPlayer.loadSource(url);
+hlsPlayer.attachMedia(video);
+
+}else{
+video.src = url;
+}
+
+}
+
+function generateUsers(){
+
+users = [];
+
+const countries = ["Nigeria","USA","UK","India","France","Germany","Brazil","Canada"];
+
+for(let i=1;i<=maxUsers;i++){
+
+users.push({
+id:i,
+name:"BTECH_USER_"+i,
+email:"user"+i+"@btechtv.com",
+premium:Math.random() > 0.6,
+blocked:Math.random() > 0.95,
+online:Math.random() > 0.5,
+streaming:Math.random() > 0.4,
+devices:Math.floor(Math.random()*5)+1,
+country:countries[Math.floor(Math.random()*countries.length)],
+bandwidth:Math.floor(Math.random()*1000)+" Mbps",
+expiry:"2027-"+String(Math.floor(Math.random()*12)+1).padStart(2,"0")+"-"+String(Math.floor(Math.random()*28)+1).padStart(2,"0")
+});
+
+}
+
 filteredUsers = [...users];
-
 updateStats();
-
 renderUsers();
 
 }
 
-/* =========================
-RENDER USERS
-========================= */
-
 function renderUsers(limit=500){
 
-const table =
-document.getElementById(
-"userTable"
-);
-
+const table = document.getElementById("userTable");
 table.innerHTML = "";
 
-filteredUsers
-.slice(0,limit)
-.forEach(user=>{
+filteredUsers.slice(0,limit).forEach(user=>{
 
-const tr =
-document.createElement("tr");
+const tr = document.createElement("tr");
 
 tr.innerHTML = `
-
 <td>${user.id}</td>
-
 <td>
-
 <div class="user-box">
-
-<div class="avatar">
-${user.name.charAt(0)}
+<div class="avatar">${user.name.charAt(0)}</div>
+<div><strong>${user.name}</strong></div>
 </div>
-
-<div>
-<strong>${user.name}</strong>
-</div>
-
-</div>
-
 </td>
-
 <td>${user.email}</td>
-
-<td>
-<span class="badge ${
-user.premium
-? 'premium'
-: 'free'
-}">
-${user.premium
-? 'PREMIUM'
-: 'FREE'}
-</span>
-</td>
-
-<td>
-<span class="badge ${
-user.blocked
-? 'blocked'
-: 'active'
-}">
-${user.blocked
-? 'BLOCKED'
-: 'ACTIVE'}
-</span>
-</td>
-
-<td>
-<span class="badge ${
-user.streaming
-? 'online'
-: 'offline'
-}">
-${user.streaming
-? 'STREAMING'
-: 'OFFLINE'}
-</span>
-</td>
-
+<td><span class="badge ${user.premium ? 'premium' : 'free'}">${user.premium ? 'PREMIUM' : 'FREE'}</span></td>
+<td><span class="badge ${user.blocked ? 'blocked' : 'active'}">${user.blocked ? 'BLOCKED' : 'ACTIVE'}</span></td>
+<td><span class="badge ${user.streaming ? 'online' : 'offline'}">${user.streaming ? 'STREAMING' : 'OFFLINE'}</span></td>
 <td>${user.devices}</td>
-
 <td>${user.country}</td>
-
 <td>${user.bandwidth}</td>
-
 <td>${user.expiry}</td>
-
 <td>
-
 <div class="action-buttons">
-
-<button
-class="small-btn edit"
-onclick="editUser(${user.id})"
->
-Edit
-</button>
-
-<button
-class="small-btn ${
-user.blocked
-? 'unlock'
-: 'lock'
-}"
-onclick="toggleBlock(${user.id})"
->
-${user.blocked
-? 'Unlock'
-: 'Block'}
-</button>
-
-<button
-class="small-btn delete"
-onclick="deleteUser(${user.id})"
->
-Delete
-</button>
-
+<button class="small-btn edit" onclick="editUser(${user.id})">Edit</button>
+<button class="small-btn ${user.blocked ? 'unlock' : 'lock'}" onclick="toggleBlock(${user.id})">${user.blocked ? 'Unlock' : 'Block'}</button>
+<button class="small-btn delete" onclick="deleteUser(${user.id})">Delete</button>
 </div>
-
-</td>
-
-`;
+</td>`;
 
 table.appendChild(tr);
 
@@ -860,310 +645,129 @@ table.appendChild(tr);
 
 }
 
-/* =========================
-STATS
-========================= */
-
 function updateStats(){
 
-document.getElementById(
-"totalUsers"
-).innerText =
-users.length.toLocaleString();
-
-document.getElementById(
-"premiumUsers"
-).innerText =
-users.filter(
-u=>u.premium
-).length.toLocaleString();
-
-document.getElementById(
-"blockedUsers"
-).innerText =
-users.filter(
-u=>u.blocked
-).length.toLocaleString();
-
-document.getElementById(
-"onlineUsers"
-).innerText =
-users.filter(
-u=>u.online
-).length.toLocaleString();
-
-document.getElementById(
-"streamUsers"
-).innerText =
-users.filter(
-u=>u.streaming
-).length.toLocaleString();
-
-document.getElementById(
-"serverLoad"
-).innerText =
-Math.floor(
-Math.random()*100
-)+"%";
+document.getElementById("totalUsers").innerText = users.length.toLocaleString();
+document.getElementById("premiumUsers").innerText = users.filter(u=>u.premium).length.toLocaleString();
+document.getElementById("blockedUsers").innerText = users.filter(u=>u.blocked).length.toLocaleString();
+document.getElementById("onlineUsers").innerText = users.filter(u=>u.online).length.toLocaleString();
+document.getElementById("streamUsers").innerText = users.filter(u=>u.streaming).length.toLocaleString();
 
 }
 
-/* =========================
-SEARCH
-========================= */
-
 function searchUsers(q){
 
-const value =
-q.toLowerCase();
+const value = q.toLowerCase();
 
-filteredUsers =
-users.filter(u=>
-
-u.name
-.toLowerCase()
-.includes(value)
-
-||
-
-u.email
-.toLowerCase()
-.includes(value)
-
-||
-
-u.country
-.toLowerCase()
-.includes(value)
-
+filteredUsers = users.filter(u=>
+u.name.toLowerCase().includes(value) ||
+u.email.toLowerCase().includes(value) ||
+u.country.toLowerCase().includes(value)
 );
 
 renderUsers();
 
 }
-
-/* =========================
-SORT
-========================= */
 
 function sortUsers(type){
 
 if(type==="az"){
-
-filteredUsers.sort(
-(a,b)=>
-a.name.localeCompare(b.name)
-);
-
+filteredUsers.sort((a,b)=>a.name.localeCompare(b.name));
 }
 
 if(type==="za"){
-
-filteredUsers.sort(
-(a,b)=>
-b.name.localeCompare(a.name)
-);
-
+filteredUsers.sort((a,b)=>b.name.localeCompare(a.name));
 }
 
 if(type==="premium"){
-
-filteredUsers.sort(
-(a,b)=>
-b.premium-a.premium
-);
-
+filteredUsers.sort((a,b)=>b.premium-a.premium);
 }
 
 if(type==="online"){
-
-filteredUsers.sort(
-(a,b)=>
-b.online-a.online
-);
-
+filteredUsers.sort((a,b)=>b.online-a.online);
 }
 
 renderUsers();
 
 }
-
-/* =========================
-ACTIONS
-========================= */
 
 function toggleBlock(id){
 
-const user =
-users.find(
-u=>u.id===id
-);
+const user = users.find(u=>u.id===id);
 
 if(user){
-
-user.blocked =
-!user.blocked;
-
+user.blocked = !user.blocked;
 updateStats();
-
 renderUsers();
-
 }
 
 }
 
 function deleteUser(id){
 
-users =
-users.filter(
-u=>u.id!==id
-);
-
-filteredUsers =
-filteredUsers.filter(
-u=>u.id!==id
-);
+users = users.filter(u=>u.id!==id);
+filteredUsers = filteredUsers.filter(u=>u.id!==id);
 
 updateStats();
-
 renderUsers();
 
 }
 
 function editUser(id){
-
-alert(
-"Editing User ID: "+id
-);
-
+alert("Editing User ID: "+id);
 }
 
 function blockAll(){
-
 users.forEach(user=>{
-
 if(Math.random()>0.7){
-
 user.blocked=true;
-
 }
-
 });
-
 updateStats();
-
 renderUsers();
-
 }
 
 function unblockAll(){
-
 users.forEach(user=>{
-
 user.blocked=false;
-
 });
-
 updateStats();
-
 renderUsers();
-
 }
-
-/* =========================
-EXPORT
-========================= */
 
 function exportUsers(){
 
-const blob =
-new Blob(
-[
-JSON.stringify(users,null,2)
-],
-{
-type:"application/json"
-}
-);
+const blob = new Blob([JSON.stringify(users,null,2)],{type:"application/json"});
 
-const a =
-document.createElement("a");
-
-a.href =
-URL.createObjectURL(blob);
-
-a.download =
-"btech-tv-users.json";
-
+const a = document.createElement("a");
+a.href = URL.createObjectURL(blob);
+a.download = "btech-tv-users.json";
 a.click();
 
 }
-
-/* =========================
-THEME
-========================= */
 
 function toggleTheme(){
 
 dark=!dark;
 
-document.documentElement
-.style.setProperty(
-"--bg",
-dark
-?"#08111f"
-:"#f1f5f9"
-);
-
-document.documentElement
-.style.setProperty(
-"--panel",
-dark
-?"#111827"
-:"#ffffff"
-);
-
-document.documentElement
-.style.setProperty(
-"--card",
-dark
-?"#1b2438"
-:"#e2e8f0"
-);
-
-document.documentElement
-.style.setProperty(
-"--text",
-dark
-?"#ffffff"
-:"#000000"
-);
+document.documentElement.style.setProperty("--bg",dark ? "#08111f" : "#f1f5f9");
+document.documentElement.style.setProperty("--panel",dark ? "#111827" : "#ffffff");
+document.documentElement.style.setProperty("--card",dark ? "#1b2438" : "#e2e8f0");
+document.documentElement.style.setProperty("--text",dark ? "#ffffff" : "#000000");
 
 }
-
-/* =========================
-AUTO UPDATE
-========================= */
 
 setInterval(()=>{
 
 if(users.length){
 
-for(let i=0;i<500;i++){
+for(let i=0;i<200;i++){
 
-const random =
-Math.floor(
-Math.random()*users.length
-);
+const random = Math.floor(Math.random()*users.length);
 
 if(users[random]){
-
-users[random].online =
-Math.random()>0.5;
-
-users[random].streaming =
-Math.random()>0.4;
-
+users[random].online = Math.random()>0.5;
+users[random].streaming = Math.random()>0.4;
 }
 
 }
@@ -1174,21 +778,12 @@ updateStats();
 
 },5000);
 
-/* =========================
-RELOAD
-========================= */
-
 function reloadSystem(){
-
 location.reload();
-
 }
 
-/* =========================
-START
-========================= */
-
 generateUsers();
+loadIPTV();
 
 </script>
 
