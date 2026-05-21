@@ -1,8 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
 
 <title>BTECH-TV WORLD IPTV</title>
 
@@ -15,6 +19,7 @@ ROOT
 ========================= */
 
 :root{
+
 --bg:#0b0f1a;
 --panel:#111827;
 --card:#1b2438;
@@ -22,7 +27,7 @@ ROOT
 --accent:#00bfff;
 --text:#ffffff;
 --muted:#94a3b8;
---border:rgba(255,255,255,.06);
+
 }
 
 /* =========================
@@ -43,8 +48,8 @@ overflow:hidden;
 }
 
 button{
-border:none;
 cursor:pointer;
+border:none;
 }
 
 /* =========================
@@ -57,16 +62,14 @@ background:var(--panel);
 display:flex;
 align-items:center;
 justify-content:space-between;
-padding:0 15px;
-border-bottom:1px solid var(--border);
-gap:15px;
+padding:0 20px;
+border-bottom:1px solid rgba(255,255,255,.05);
 }
 
 .logo{
-font-size:22px;
+font-size:24px;
 font-weight:bold;
 color:var(--accent);
-white-space:nowrap;
 }
 
 .top-buttons{
@@ -76,11 +79,11 @@ overflow:auto;
 }
 
 .top-buttons button{
-padding:10px 14px;
+padding:10px 15px;
 background:var(--card);
 color:white;
 border-radius:8px;
-font-size:12px;
+font-size:13px;
 transition:.3s;
 white-space:nowrap;
 }
@@ -109,13 +112,12 @@ width:260px;
 background:#0f172a;
 overflow-y:auto;
 padding:15px;
-border-right:1px solid var(--border);
+border-right:1px solid rgba(255,255,255,.05);
 }
 
 .sidebar h3{
 margin-bottom:15px;
 color:var(--accent);
-font-size:16px;
 }
 
 .cat{
@@ -153,8 +155,8 @@ height:340px;
 background:black;
 position:relative;
 display:flex;
-align-items:center;
 justify-content:center;
+align-items:center;
 }
 
 .player video{
@@ -169,8 +171,8 @@ position:absolute;
 top:15px;
 left:15px;
 background:red;
-padding:7px 15px;
-border-radius:20px;
+padding:8px 15px;
+border-radius:30px;
 font-size:12px;
 font-weight:bold;
 z-index:5;
@@ -179,12 +181,12 @@ z-index:5;
 .overlay{
 position:absolute;
 inset:0;
-background:rgba(0,0,0,.88);
+background:rgba(0,0,0,.9);
 display:flex;
 flex-direction:column;
 align-items:center;
 justify-content:center;
-z-index:20;
+z-index:10;
 }
 
 .overlay h1{
@@ -202,12 +204,12 @@ NOW PLAYING
 
 .now-playing{
 background:var(--panel);
-padding:15px;
+padding:15px 20px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-border-top:1px solid var(--border);
-border-bottom:1px solid var(--border);
+border-top:1px solid rgba(255,255,255,.05);
+border-bottom:1px solid rgba(255,255,255,.05);
 }
 
 .now-info h2{
@@ -216,22 +218,20 @@ margin-bottom:5px;
 }
 
 .now-info p{
-font-size:13px;
 color:var(--muted);
+font-size:13px;
 }
 
 .controls{
 display:flex;
 gap:10px;
-flex-wrap:wrap;
 }
 
 .controls button{
-padding:10px 14px;
+padding:10px 15px;
 background:var(--card);
 color:white;
 border-radius:8px;
-transition:.3s;
 }
 
 .controls button:hover{
@@ -245,12 +245,10 @@ SEARCH
 .search-box{
 padding:12px;
 background:var(--panel);
-display:flex;
-gap:10px;
 }
 
 .search-box input{
-flex:1;
+width:100%;
 padding:12px;
 border:none;
 border-radius:10px;
@@ -267,7 +265,8 @@ flex:1;
 overflow-y:auto;
 padding:15px;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+grid-template-columns:
+repeat(auto-fill,minmax(280px,1fr));
 gap:12px;
 }
 
@@ -285,13 +284,13 @@ border:1px solid transparent;
 
 .channel:hover{
 background:var(--hover);
-border-color:var(--accent);
 transform:translateY(-2px);
+border-color:var(--accent);
 }
 
 .channel.active{
-background:#00bfff22;
 border-color:var(--accent);
+background:#00bfff22;
 }
 
 .left{
@@ -328,8 +327,8 @@ color:#cbd5e1;
 .status{
 display:flex;
 flex-direction:column;
-align-items:flex-end;
 gap:6px;
+align-items:flex-end;
 }
 
 .badge{
@@ -355,11 +354,6 @@ background:#f59e0b;
 background:#2563eb;
 }
 
-.fav{
-font-size:18px;
-cursor:pointer;
-}
-
 /* =========================
 MOBILE
 ========================= */
@@ -371,22 +365,17 @@ display:none;
 }
 
 .player{
-height:240px;
+height:250px;
 }
 
 .channels{
 grid-template-columns:1fr;
 }
 
-.now-playing{
-flex-direction:column;
-align-items:flex-start;
-gap:10px;
-}
-
 }
 
 </style>
+
 </head>
 
 <body>
@@ -431,8 +420,8 @@ Europe
 Asia
 </button>
 
-<button onclick="showFavorites(this)">
-Favorites
+<button onclick="filterCat('USA',this)">
+USA
 </button>
 
 <button onclick="toggleTheme()">
@@ -449,7 +438,9 @@ LAYOUT
 
 <div class="container">
 
-<!-- SIDEBAR -->
+<!-- =========================
+SIDEBAR
+========================= -->
 
 <div class="sidebar">
 
@@ -457,28 +448,83 @@ LAYOUT
 🌍 WORLD CHANNELS
 </h3>
 
-<div class="cat" onclick="filterCat('Nigeria')">🇳🇬 Nigeria</div>
-<div class="cat" onclick="filterCat('South Africa')">🇿🇦 South Africa</div>
-<div class="cat" onclick="filterCat('Ghana')">🇬🇭 Ghana</div>
-<div class="cat" onclick="filterCat('Kenya')">🇰🇪 Kenya</div>
-<div class="cat" onclick="filterCat('UK')">🇬🇧 UK</div>
-<div class="cat" onclick="filterCat('France')">🇫🇷 France</div>
-<div class="cat" onclick="filterCat('Germany')">🇩🇪 Germany</div>
-<div class="cat" onclick="filterCat('Italy')">🇮🇹 Italy</div>
-<div class="cat" onclick="filterCat('Spain')">🇪🇸 Spain</div>
-<div class="cat" onclick="filterCat('India')">🇮🇳 India</div>
-<div class="cat" onclick="filterCat('China')">🇨🇳 China</div>
-<div class="cat" onclick="filterCat('Japan')">🇯🇵 Japan</div>
-<div class="cat" onclick="filterCat('South Korea')">🇰🇷 Korea</div>
-<div class="cat" onclick="filterCat('Pakistan')">🇵🇰 Pakistan</div>
-<div class="cat" onclick="filterCat('USA')">🇺🇸 USA</div>
-<div class="cat" onclick="filterCat('Canada')">🇨🇦 Canada</div>
-<div class="cat" onclick="filterCat('Brazil')">🇧🇷 Brazil</div>
-<div class="cat" onclick="filterCat('Australia')">🇦🇺 Australia</div>
+<div class="cat" onclick="filterCat('Nigeria')">
+🇳🇬 Nigeria
+</div>
+
+<div class="cat" onclick="filterCat('South Africa')">
+🇿🇦 South Africa
+</div>
+
+<div class="cat" onclick="filterCat('Ghana')">
+🇬🇭 Ghana
+</div>
+
+<div class="cat" onclick="filterCat('Kenya')">
+🇰🇪 Kenya
+</div>
+
+<div class="cat" onclick="filterCat('UK')">
+🇬🇧 UK
+</div>
+
+<div class="cat" onclick="filterCat('France')">
+🇫🇷 France
+</div>
+
+<div class="cat" onclick="filterCat('Germany')">
+🇩🇪 Germany
+</div>
+
+<div class="cat" onclick="filterCat('Italy')">
+🇮🇹 Italy
+</div>
+
+<div class="cat" onclick="filterCat('Spain')">
+🇪🇸 Spain
+</div>
+
+<div class="cat" onclick="filterCat('India')">
+🇮🇳 India
+</div>
+
+<div class="cat" onclick="filterCat('China')">
+🇨🇳 China
+</div>
+
+<div class="cat" onclick="filterCat('Japan')">
+🇯🇵 Japan
+</div>
+
+<div class="cat" onclick="filterCat('South Korea')">
+🇰🇷 Korea
+</div>
+
+<div class="cat" onclick="filterCat('Pakistan')">
+🇵🇰 Pakistan
+</div>
+
+<div class="cat" onclick="filterCat('USA')">
+🇺🇸 USA
+</div>
+
+<div class="cat" onclick="filterCat('Canada')">
+🇨🇦 Canada
+</div>
+
+<div class="cat" onclick="filterCat('Brazil')">
+🇧🇷 Brazil
+</div>
+
+<div class="cat" onclick="filterCat('Australia')">
+🇦🇺 Australia
+</div>
 
 </div>
 
-<!-- MAIN -->
+<!-- =========================
+MAIN
+========================= -->
 
 <div class="main">
 
@@ -497,12 +543,15 @@ autoplay
 playsinline
 ></video>
 
-<div class="overlay" id="overlay">
+<div
+class="overlay"
+id="overlay"
+>
 
 <h1>🚀</h1>
 
 <p>
-Loading IPTV Channels...
+Loading BTECH-TV WORLD IPTV...
 </p>
 
 </div>
@@ -535,14 +584,6 @@ Global IPTV Streaming
 Next ▶
 </button>
 
-<button onclick="togglePiP()">
-📺 PiP
-</button>
-
-<button onclick="shareChannel()">
-🔗 Share
-</button>
-
 </div>
 
 </div>
@@ -553,7 +594,7 @@ Next ▶
 
 <input
 type="text"
-placeholder="Search IPTV channels..."
+placeholder="Search world IPTV channels..."
 oninput="searchChannels(this.value)"
 >
 
@@ -561,7 +602,10 @@ oninput="searchChannels(this.value)"
 
 <!-- CHANNELS -->
 
-<div class="channels" id="channelList"></div>
+<div
+class="channels"
+id="channelList"
+></div>
 
 </div>
 
@@ -570,117 +614,114 @@ oninput="searchChannels(this.value)"
 <script>
 
 /* =========================
+ENGINE
+========================= */
+
+const ENGINE={
+
+maxChannels:10000,
+renderLimit:300
+
+};
+
+/* =========================
 GLOBAL
 ========================= */
 
-let all=[];
+let channels=[];
 let filteredChannels=[];
 let currentIndex=0;
+let currentPage=0;
 let currentHls=null;
 let dark=true;
 
-let favorites=
-JSON.parse(
-localStorage.getItem("btechFavs")||"[]"
-);
-
 /* =========================
-LOAD IPTV API
+STREAMS
 ========================= */
 
-async function loadChannels(){
+const streams=[
 
-try{
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
 
-const [channelsData,streamsData,logosData]=
-await Promise.all([
+"https://test-streams.mux.dev/test_001/stream.m3u8",
 
-fetch(
-"https://iptv-org.github.io/api/channels.json"
-).then(r=>r.json()),
+"https://test-streams.mux.dev/test_002/stream.m3u8",
 
-fetch(
-"https://iptv-org.github.io/api/streams.json"
-).then(r=>r.json()),
+"https://test-streams.mux.dev/test_003/stream.m3u8"
 
-fetch(
-"https://iptv-org.github.io/api/logos.json"
-).then(r=>r.json())
+];
 
-]);
+/* =========================
+WORLD CATEGORIES
+========================= */
 
-const channelMap={};
-const logoMap={};
+const categories=[
 
-channelsData.forEach(c=>{
+"Nigeria",
+"Ghana",
+"South Africa",
+"Kenya",
+"Egypt",
+"UK",
+"France",
+"Germany",
+"Italy",
+"Spain",
+"USA",
+"Canada",
+"Brazil",
+"Mexico",
+"India",
+"China",
+"Japan",
+"South Korea",
+"Pakistan",
+"Australia",
+"Sports",
+"Movies",
+"News",
+"Music",
+"Kids",
+"Africa",
+"Europe",
+"Asia"
 
-channelMap[c.id]=c;
+];
 
-});
+/* =========================
+GENERATE CHANNELS
+========================= */
 
-logosData.forEach(l=>{
+function generateChannels(){
 
-if(!logoMap[l.channel]){
+for(let i=1;i<=ENGINE.maxChannels;i++){
 
-logoMap[l.channel]=l.url;
+let cat=
+categories[
+i % categories.length
+];
 
-}
+channels.push({
 
-});
-
-let seen={};
-let id=1;
-
-streamsData.forEach(stream=>{
-
-if(
-!stream.url
-||
-seen[stream.url]
-)return;
-
-seen[stream.url]=1;
-
-const ch=
-channelMap[stream.channel]||{};
-
-all.push({
-
-id:id++,
+id:i,
 
 name:
-ch.name
-||
-stream.title
-||
-"Unknown",
+cat+
+" TV "+
+i,
 
-category:
-ch.categories
-&&
-ch.categories.length
-?
-ch.categories[0]
-:
-"General",
-
-country:
-ch.country
-||
-"",
+category:cat,
 
 logo:
-logoMap[stream.channel]
-||
 "https://via.placeholder.com/60",
 
 type:
-Math.random()>.7
+i % 3===0
 ?"paid"
 :"free",
 
 status:
-Math.random()>.85
+i % 10===0
 ?"locked"
 :"unlocked",
 
@@ -690,16 +731,15 @@ Math.random()*1000000
 ),
 
 url:
-stream.url,
-
-chId:
-stream.channel
-
-});
+streams[
+i % streams.length
+]
 
 });
 
-filteredChannels=[...all];
+}
+
+filteredChannels=[...channels];
 
 renderChannels();
 
@@ -707,33 +747,36 @@ document.getElementById(
 "overlay"
 ).style.display="none";
 
-}catch(err){
-
-console.error(err);
-
-alert(
-"Failed to load IPTV API"
-);
-
-}
-
 }
 
 /* =========================
 RENDER CHANNELS
 ========================= */
 
-function renderChannels(){
+function renderChannels(reset=true){
 
 const box=
 document.getElementById(
 "channelList"
 );
 
+if(reset){
+
 box.innerHTML="";
+currentPage=0;
+
+}
+
+const start=
+currentPage*
+ENGINE.renderLimit;
+
+const end=
+start+
+ENGINE.renderLimit;
 
 filteredChannels
-.slice(0,500)
+.slice(start,end)
 .forEach((c,index)=>{
 
 const div=
@@ -745,10 +788,7 @@ div.innerHTML=`
 
 <div class="left">
 
-<img
-src="${c.logo}"
-onerror="this.src='https://via.placeholder.com/60'"
->
+<img src="${c.logo}">
 
 <div class="info">
 
@@ -758,8 +798,7 @@ onerror="this.src='https://via.placeholder.com/60'"
 
 <small>
 ${c.category}
-•
-👥 ${c.viewers.toLocaleString()}
+• 👥 ${c.viewers.toLocaleString()}
 </small>
 
 </div>
@@ -786,20 +825,13 @@ ${c.status==='locked'
 ${c.status}
 </span>
 
-<div
-class="fav"
-onclick="event.stopPropagation();toggleFav(${c.id})"
->
-${favorites.includes(c.id)?'⭐':'☆'}
-</div>
-
 </div>
 
 `;
 
 div.onclick=
 ()=>playChannel(
-index,
+start+index,
 div
 );
 
@@ -808,6 +840,36 @@ box.appendChild(div);
 });
 
 }
+
+/* =========================
+INFINITE SCROLL
+========================= */
+
+document
+.getElementById(
+"channelList"
+)
+.addEventListener(
+"scroll",
+function(){
+
+if(
+
+this.scrollTop+
+this.clientHeight
+>=
+this.scrollHeight-100
+
+){
+
+currentPage++;
+
+renderChannels(false);
+
+}
+
+}
+);
 
 /* =========================
 PLAY CHANNEL
@@ -852,22 +914,10 @@ channel.url
 
 currentHls.attachMedia(video);
 
-currentHls.on(
-Hls.Events.MANIFEST_PARSED,
-function(){
-
-video.play();
-
-}
-
-);
-
 }else{
 
 video.src=
 channel.url;
-
-video.play();
 
 }
 
@@ -916,7 +966,7 @@ function prevChannel(){
 
 currentIndex--;
 
-if(currentIndex<0){
+if(currentIndex < 0){
 
 currentIndex=
 filteredChannels.length-1;
@@ -935,30 +985,14 @@ function filterCat(cat,btn=null){
 
 if(cat==="All"){
 
-filteredChannels=[...all];
+filteredChannels=[...channels];
 
 }else{
 
 filteredChannels=
-all.filter(c=>
+channels.filter(c=>
 
-(
 c.category
-||
-''
-)
-.toLowerCase()
-.includes(
-cat.toLowerCase()
-)
-
-||
-
-(
-c.country
-||
-''
-)
 .toLowerCase()
 .includes(
 cat.toLowerCase()
@@ -967,105 +1001,6 @@ cat.toLowerCase()
 );
 
 }
-
-activateButton(btn);
-
-renderChannels();
-
-}
-
-/* =========================
-SEARCH
-========================= */
-
-function searchChannels(q){
-
-const value=
-q.toLowerCase();
-
-filteredChannels=
-all.filter(c=>
-
-c.name
-.toLowerCase()
-.includes(value)
-
-||
-
-(
-c.category
-||
-''
-)
-.toLowerCase()
-.includes(value)
-
-||
-
-(
-c.country
-||
-''
-)
-.toLowerCase()
-.includes(value)
-
-);
-
-renderChannels();
-
-}
-
-/* =========================
-FAVORITES
-========================= */
-
-function toggleFav(id){
-
-if(
-favorites.includes(id)
-){
-
-favorites=
-favorites.filter(
-f=>f!==id
-);
-
-}else{
-
-favorites.push(id);
-
-}
-
-localStorage.setItem(
-"btechFavs",
-JSON.stringify(favorites)
-);
-
-renderChannels();
-
-}
-
-function showFavorites(btn){
-
-filteredChannels=
-all.filter(c=>
-
-favorites.includes(c.id)
-
-);
-
-activateButton(btn);
-
-renderChannels();
-
-}
-
-/* =========================
-ACTIVE BUTTON
-========================= */
-
-function activateButton(btn){
 
 document
 .querySelectorAll(
@@ -1086,6 +1021,36 @@ btn.classList.add(
 );
 
 }
+
+renderChannels();
+
+}
+
+/* =========================
+SEARCH
+========================= */
+
+function searchChannels(q){
+
+const value=
+q.toLowerCase();
+
+filteredChannels=
+channels.filter(c=>
+
+c.name
+.toLowerCase()
+.includes(value)
+
+||
+
+c.category
+.toLowerCase()
+.includes(value)
+
+);
+
+renderChannels();
 
 }
 
@@ -1113,87 +1078,7 @@ dark
 :"#000000"
 );
 
-document.documentElement
-.style.setProperty(
-"--panel",
-dark
-?"#111827"
-:"#ffffff"
-);
-
 }
-
-/* =========================
-PIP
-========================= */
-
-function togglePiP(){
-
-const video=
-document.getElementById(
-"video"
-);
-
-if(
-document.pictureInPictureElement
-){
-
-document
-.exitPictureInPicture();
-
-}else{
-
-video
-.requestPictureInPicture();
-
-}
-
-}
-
-/* =========================
-SHARE
-========================= */
-
-function shareChannel(){
-
-const channel=
-filteredChannels[currentIndex];
-
-if(!channel)return;
-
-const url=
-location.href+
-"#"+
-encodeURIComponent(
-channel.name
-);
-
-navigator.clipboard
-.writeText(url);
-
-alert(
-"Channel link copied!"
-);
-
-}
-
-/* =========================
-KEYBOARD
-========================= */
-
-document.addEventListener(
-"keydown",
-e=>{
-
-if(e.key==="ArrowRight")
-nextChannel();
-
-if(e.key==="ArrowLeft")
-prevChannel();
-
-}
-
-);
 
 /* =========================
 LIVE VIEWERS UPDATE
@@ -1201,16 +1086,16 @@ LIVE VIEWERS UPDATE
 
 setInterval(()=>{
 
-for(let i=0;i<100;i++){
+for(let i=0;i<500;i++){
 
 const random=
 Math.floor(
-Math.random()*all.length
+Math.random()*channels.length
 );
 
-if(all[random]){
+if(channels[random]){
 
-all[random].viewers=
+channels[random].viewers=
 Math.floor(
 Math.random()*1000000
 );
@@ -1222,10 +1107,10 @@ Math.random()*1000000
 },5000);
 
 /* =========================
-START
+START ENGINE
 ========================= */
 
-loadChannels();
+generateChannels();
 
 </script>
 
