@@ -506,5 +506,137 @@ live educational channels and cloud-based education management.
 
 </div>
 
+
+<script>
+
+const stats = {
+students:12450,
+assignments:8920,
+projects:3120,
+channels:150
+};
+
+function animateStats(){
+const statNumbers=document.querySelectorAll('.stat h2');
+
+statNumbers.forEach((el,index)=>{
+let target=parseInt(el.innerText.replace(/[^0-9]/g,''));
+let count=0;
+let speed=Math.ceil(target/80);
+
+const timer=setInterval(()=>{
+count+=speed;
+
+if(count>=target){
+count=target;
+clearInterval(timer);
+}
+
+if(index===3){
+el.innerText=count+'+';
+}else{
+el.innerText=count.toLocaleString();
+}
+
+},20);
+});
+}
+
+function activateChannels(){
+const buttons=document.querySelectorAll('.channel button');
+
+buttons.forEach(btn=>{
+btn.addEventListener('click',()=>{
+
+const card=btn.closest('.channel');
+const title=card.querySelector('h2').innerText;
+
+btn.innerText='ACTIVE';
+btn.style.background='#16a34a';
+btn.style.color='white';
+
+showNotification(title+' Activated Successfully');
+
+});
+});
+}
+
+function liveClock(){
+const footer=document.querySelector('.footer');
+
+const clock=document.createElement('div');
+clock.id='liveClock';
+clock.style.marginTop='20px';
+clock.style.color='#00bfff';
+clock.style.fontWeight='bold';
+clock.style.fontSize='18px';
+
+footer.appendChild(clock);
+
+setInterval(()=>{
+clock.innerText='🟢 LIVE SYSTEM ONLINE • '+new Date().toLocaleString();
+},1000);
+}
+
+function showNotification(message){
+
+const note=document.createElement('div');
+
+note.innerText=message;
+note.style.position='fixed';
+note.style.top='20px';
+note.style.right='20px';
+note.style.background='#00bfff';
+note.style.color='black';
+note.style.padding='15px 20px';
+note.style.borderRadius='12px';
+note.style.fontWeight='bold';
+note.style.zIndex='9999';
+note.style.boxShadow='0 10px 30px rgba(0,0,0,.4)';
+
+document.body.appendChild(note);
+
+setTimeout(()=>{
+note.remove();
+},3000);
+}
+
+function activateAI(){
+
+const launchBtn=document.querySelector('.primary');
+const adminBtn=document.querySelector('.secondary');
+
+launchBtn.addEventListener('click',()=>{
+showNotification('🚀 AI Education System Activated');
+});
+
+adminBtn.addEventListener('click',()=>{
+showNotification('⚙ Admin Panel Opened');
+});
+
+}
+
+function liveAIEngine(){
+
+const bars=document.querySelectorAll('.progress div');
+
+setInterval(()=>{
+
+bars.forEach(bar=>{
+const random=Math.floor(Math.random()*25)+70;
+bar.style.width=random+'%';
+});
+
+},3000);
+}
+
+animateStats();
+activateChannels();
+liveClock();
+activateAI();
+liveAIEngine();
+
+</script>
+
 </body>
 </html>
