@@ -1,101 +1,414 @@
-<div class="ai-channel-card">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<div class="channel-header">
-<div class="channel-icon">📘</div>
-
-<div class="channel-info">
-<h2>AI Homework Channel</h2>
-
-<p>
-Automatically generate and solve homework with instant grading system.
-</p>
-</div>
-</div>
-
-<button class="open-btn">
-🚀 Open Channel
-</button>
-
-</div>
+<title>Live AI Homework Channel</title>
 
 <style>
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#050816;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+min-height:100vh;
+padding:20px;
+overflow:hidden;
+}
+
+.bg{
+position:absolute;
+width:800px;
+height:800px;
+background:linear-gradient(45deg,#00e5ff,#7c3aed);
+filter:blur(150px);
+opacity:0.12;
+border-radius:50%;
+z-index:-1;
+}
+
 .ai-channel-card{
+width:100%;
+max-width:1100px;
 background:#111827;
 border:1px solid #1e293b;
-border-radius:28px;
-padding:28px;
+border-radius:35px;
+padding:35px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:35px;
+box-shadow:0 0 50px rgba(0,255,255,0.08);
+}
+
+.left{
 display:flex;
-align-items:center;
-justify-content:space-between;
-gap:20px;
-transition:0.3s;
-box-shadow:0 0 30px rgba(0,255,255,0.05);
+flex-direction:column;
+justify-content:center;
 }
 
-.ai-channel-card:hover{
-border-color:#00e5ff;
-transform:translateY(-4px);
+.badge{
+display:inline-block;
+padding:10px 18px;
+border-radius:50px;
+background:rgba(0,255,120,0.15);
+color:#00ff90;
+font-weight:bold;
+margin-bottom:25px;
+width:max-content;
+animation:pulse 1.5s infinite;
 }
 
-.channel-header{
-display:flex;
-align-items:center;
-gap:18px;
+@keyframes pulse{
+0%{opacity:1;}
+50%{opacity:0.5;}
+100%{opacity:1;}
 }
 
-.channel-icon{
-width:70px;
-height:70px;
-border-radius:20px;
+.icon{
+width:90px;
+height:90px;
+border-radius:25px;
 background:linear-gradient(45deg,#00e5ff,#7c3aed);
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:32px;
+font-size:45px;
+margin-bottom:25px;
 }
 
-.channel-info h2{
-font-size:28px;
-margin-bottom:8px;
-color:white;
+.left h1{
+font-size:55px;
+margin-bottom:20px;
+font-weight:900;
 }
 
-.channel-info p{
-font-size:15px;
-line-height:1.7;
+.left p{
+font-size:17px;
+line-height:1.8;
 color:#94a3b8;
-max-width:500px;
+margin-bottom:30px;
 }
 
-.open-btn{
-padding:15px 28px;
+.actions{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+margin-bottom:35px;
+}
+
+button{
+padding:16px 28px;
 border:none;
-border-radius:15px;
-background:#00e5ff;
-color:black;
-font-weight:bold;
+border-radius:16px;
 font-size:15px;
+font-weight:bold;
 cursor:pointer;
 transition:0.3s;
 }
 
-.open-btn:hover{
-background:white;
-transform:scale(1.05);
+.primary{
+background:#00e5ff;
+color:black;
 }
 
-@media(max-width:768px){
+.primary:hover{
+background:white;
+transform:translateY(-3px);
+}
+
+.secondary{
+background:#0f172a;
+color:white;
+border:1px solid #1e293b;
+}
+
+.secondary:hover{
+border-color:#00e5ff;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+}
+
+.stat{
+background:#0f172a;
+padding:22px;
+border-radius:22px;
+text-align:center;
+border:1px solid #1e293b;
+}
+
+.stat h2{
+font-size:38px;
+margin-bottom:8px;
+}
+
+.right{
+background:#0f172a;
+border-radius:30px;
+padding:30px;
+border:1px solid #1e293b;
+}
+
+.top{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:25px;
+}
+
+.live{
+background:rgba(0,255,120,0.15);
+color:#00ff90;
+padding:10px 16px;
+border-radius:50px;
+font-weight:bold;
+}
+
+.panel{
+background:#111827;
+padding:22px;
+border-radius:22px;
+margin-bottom:18px;
+border:1px solid transparent;
+transition:0.3s;
+}
+
+.panel:hover{
+border-color:#00e5ff;
+}
+
+.panel h3{
+margin-bottom:10px;
+font-size:20px;
+}
+
+.panel p{
+color:#94a3b8;
+line-height:1.7;
+font-size:14px;
+margin-bottom:15px;
+}
+
+.output{
+background:black;
+padding:15px;
+border-radius:15px;
+font-size:14px;
+color:#00ff90;
+min-height:80px;
+overflow:auto;
+border:1px solid #1e293b;
+}
+
+textarea{
+width:100%;
+height:120px;
+background:black;
+border:1px solid #1e293b;
+border-radius:15px;
+padding:15px;
+color:white;
+resize:none;
+margin-bottom:15px;
+}
+
+@media(max-width:950px){
 
 .ai-channel-card{
-flex-direction:column;
-align-items:flex-start;
+grid-template-columns:1fr;
 }
 
-.open-btn{
-width:100%;
+.stats{
+grid-template-columns:1fr;
+}
+
+.left h1{
+font-size:42px;
 }
 
 }
 
 </style>
+</head>
+<body>
+
+<div class="bg"></div>
+
+<div class="ai-channel-card">
+
+<div class="left">
+
+<div class="badge">
+● LIVE AI SYSTEM ACTIVE
+</div>
+
+<div class="icon">
+📘
+</div>
+
+<h1>
+AI Homework Channel
+</h1>
+
+<p>
+Automatically generate, solve and grade student homework
+with instant AI analysis, real-time educational monitoring
+and smart academic assistance.
+</p>
+
+<div class="actions">
+
+<button class="primary" onclick="openChannel()">
+🚀 Open Channel
+</button>
+
+<button class="secondary" onclick="generateHomework()">
+📝 Generate Homework
+</button>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+<h2 style="color:#00e5ff;">100K+</h2>
+<p>Students</p>
+</div>
+
+<div class="stat">
+<h2 style="color:#00ff90;">24/7</h2>
+<p>AI Active</p>
+</div>
+
+<div class="stat">
+<h2 style="color:#bb86fc;">98%</h2>
+<p>Accuracy</p>
+</div>
+
+</div>
+
+</div>
+
+<div class="right">
+
+<div class="top">
+<h2>🤖 Functional Dashboard</h2>
+
+<div class="live">
+LIVE
+</div>
+</div>
+
+<div class="panel">
+
+<h3>
+📥 Enter Homework Question
+</h3>
+
+<textarea id="question" placeholder="Type homework question here..."></textarea>
+
+<button class="primary" onclick="solveHomework()">
+⚡ Solve with AI
+</button>
+
+</div>
+
+<div class="panel">
+
+<h3>
+📊 AI Output
+</h3>
+
+<div class="output" id="output">
+AI system ready...
+</div>
+
+</div>
+
+<div class="panel">
+
+<h3>
+📈 Live System Activity
+</h3>
+
+<p>Students Online: <span id="students">8540</span></p>
+<p>Assignments Solved: <span id="assignments">2450</span></p>
+<p>Projects Generated: <span id="projects">1200</span></p>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function openChannel(){
+
+document.getElementById("output").innerHTML =
+"✅ AI Homework Channel Activated Successfully.";
+
+}
+
+function generateHomework(){
+
+document.getElementById("output").innerHTML =
+"📝 New AI homework assignment generated successfully.";
+
+}
+
+function solveHomework(){
+
+let question = document.getElementById("question").value;
+
+if(question.trim() === ""){
+alert("Please enter homework question.");
+return;
+}
+
+document.getElementById("output").innerHTML =
+"🤖 AI is solving: <br><br>" +
+question +
+"<br><br>✅ Homework solved successfully with instant grading.";
+
+}
+
+setInterval(()=>{
+
+let students =
+document.getElementById("students");
+
+let assignments =
+document.getElementById("assignments");
+
+let projects =
+document.getElementById("projects");
+
+students.innerHTML =
+parseInt(students.innerHTML) + Math.floor(Math.random()*3);
+
+assignments.innerHTML =
+parseInt(assignments.innerHTML) + Math.floor(Math.random()*2);
+
+projects.innerHTML =
+parseInt(projects.innerHTML) + 1;
+
+},5000);
+
+</script>
+
+</body>
+</html>
