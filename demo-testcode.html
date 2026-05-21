@@ -18,7 +18,6 @@ ROOT
 ========================= */
 
 :root{
-
 --bg:#0b0f1a;
 --panel:#111827;
 --card:#1b2438;
@@ -29,7 +28,6 @@ ROOT
 --success:#16a34a;
 --danger:#ef4444;
 --warning:#f59e0b;
-
 }
 
 /* =========================
@@ -400,6 +398,10 @@ background:#2563eb;
 background:#ef4444;
 }
 
+.country{
+background:#2563eb;
+}
+
 .fav{
 font-size:20px;
 cursor:pointer;
@@ -553,10 +555,6 @@ flex-direction:column;
 
 <body>
 
-<!-- =========================
-TOPBAR
-========================= -->
-
 <div class="topbar">
 
 <div class="logo">
@@ -589,6 +587,18 @@ All
 📰 News
 </button>
 
+<button onclick="filterType('country',this)">
+🌍 Countries
+</button>
+
+<button onclick="filterType('category',this)">
+🎞 Categories
+</button>
+
+<button onclick="filterType('language',this)">
+🗣 Languages
+</button>
+
 <button onclick="showLocked(this)">
 🔒 Locked
 </button>
@@ -601,15 +611,7 @@ All
 
 </div>
 
-<!-- =========================
-CONTAINER
-========================= -->
-
 <div class="container">
-
-<!-- =========================
-SIDEBAR
-========================= -->
 
 <div class="sidebar">
 
@@ -621,6 +623,8 @@ SIDEBAR
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/in.m3u','India')">🇮🇳 India</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/fr.m3u','France')">🇫🇷 France</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/de.m3u','Germany')">🇩🇪 Germany</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/br.m3u','Brazil')">🇧🇷 Brazil</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/za.m3u','South Africa')">🇿🇦 South Africa</div>
 
 <h3>🎬 Categories</h3>
 
@@ -629,6 +633,20 @@ SIDEBAR
 <div class="cat" onclick="filterGroup('News')">📰 News</div>
 <div class="cat" onclick="filterGroup('Kids')">👶 Kids</div>
 <div class="cat" onclick="filterGroup('Music')">🎵 Music</div>
+
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/news.m3u','News')">📰 News Feed</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/sport.m3u','Sports')">⚽ Sports Feed</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/movies.m3u','Movies')">🎥 Movies Feed</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/music.m3u','Music')">🎵 Music Feed</div>
+
+<h3>🗣 Languages</h3>
+
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/eng.m3u','English')">🇬🇧 English</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/spa.m3u','Spanish')">🇪🇸 Spanish</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/ara.m3u','Arabic')">🇸🇦 Arabic</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/fra.m3u','French')">🇫🇷 French</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/hin.m3u','Hindi')">🇮🇳 Hindi</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/zho.m3u','Chinese')">🇨🇳 Chinese</div>
 
 <h3>⚙ SUPER ADMIN MENU</h3>
 
@@ -656,6 +674,18 @@ SIDEBAR
 </div>
 </a>
 
+<a class="menu-link" href="https://btech-tv.netlify.app/user_manager-settings">
+<div class="cat">
+🔒 user Manager
+</div>
+</a>
+
+<a class="menu-link" href="https://btech-tv.netlify.app/quiz-channels">
+<div class="cat">
+🧠 QUIZ Channels
+</div>
+</a>
+
 <div class="cat" onclick="generateVirtualChannels()">
 🚀 Generate 100K Engine
 </div>
@@ -664,15 +694,13 @@ SIDEBAR
 🌍 Load Global Feeds
 </div>
 
+<div class="cat" onclick="loadExtraPlaylists()">
+🚀 Load Extra Playlists
 </div>
 
-<!-- =========================
-MAIN
-========================= -->
+</div>
 
 <div class="main">
-
-<!-- PLAYER -->
 
 <div class="player">
 
@@ -698,8 +726,6 @@ Loading BTECH-TV Channels...
 </div>
 
 </div>
-
-<!-- NOW PLAYING -->
 
 <div class="now-playing">
 
@@ -745,8 +771,6 @@ Next ▶
 
 </div>
 
-<!-- STATS -->
-
 <div class="stats">
 
 <div id="statsText">
@@ -758,8 +782,6 @@ Next ▶
 </div>
 
 </div>
-
-<!-- SEARCH -->
 
 <div class="search-box">
 
@@ -776,15 +798,9 @@ oninput="searchChannels(this.value)"
 
 </div>
 
-<!-- CHANNEL LIST -->
-
 <div class="channels" id="channelList"></div>
 
 </div>
-
-<!-- =========================
-RIGHT PANEL
-========================= -->
 
 <div class="rightpanel">
 
@@ -889,10 +905,8 @@ ENGINE CONFIG
 ========================= */
 
 const ENGINE={
-
 maxChannels:100000,
 renderLimit:250
-
 };
 
 /* =========================
@@ -908,18 +922,24 @@ let currentHls=null;
 let dark=true;
 let autoPlay=true;
 let autoSkip=true;
+let activeTab='all';
 
 let favs=
 JSON.parse(
-localStorage.getItem('btech_favs')||'{}'
+localStorage.getItem('btech_favs')||
+localStorage.getItem('atv_favs')||
+'{}'
 );
 
 let recent=
 JSON.parse(
-localStorage.getItem('btech_recent')||'[]'
+localStorage.getItem('btech_recent')||
+localStorage.getItem('atv_recent')||
+'[]'
 );
 
 let deadChannels={};
+let aliveCh={};
 
 /* =========================
 PLAYLISTS
@@ -928,13 +948,9 @@ PLAYLISTS
 const extraFeeds=[
 
 'https://iptv-org.github.io/iptv/index.m3u',
-
 'https://iptv-org.github.io/iptv/index.country.m3u',
-
 'https://iptv-org.github.io/iptv/index.category.m3u',
-
 'https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8',
-
 'https://raw.githubusercontent.com/freecasthub/public-iptv/main/playlist.m3u'
 
 ];
@@ -942,17 +958,13 @@ const extraFeeds=[
 const backupStreams=[
 
 "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-
 "https://test-streams.mux.dev/test_001/stream.m3u8",
-
 "https://test-streams.mux.dev/test_002/stream.m3u8",
-
 "https://test-streams.mux.dev/test_003/stream.m3u8"
 
 ];
 
 const categories=[
-
 "Sports",
 "Movies",
 "News",
@@ -963,7 +975,6 @@ const categories=[
 "USA",
 "UK",
 "Entertainment"
-
 ];
 
 /* =========================
@@ -973,12 +984,9 @@ CLOCK
 function tick(){
 
 document.getElementById('clock').innerText=
-
 new Date().toLocaleTimeString([],{
-
 hour:'2-digit',
 minute:'2-digit'
-
 });
 
 }
@@ -987,14 +995,42 @@ setInterval(tick,1000);
 tick();
 
 /* =========================
+FLAG
+========================= */
+
+function flag(cc){
+if(!cc||cc.length!==2)return '🌐';
+const a=0x1F1E6;
+return String.fromCodePoint(
+a+cc.charCodeAt(0)-65,
+a+cc.charCodeAt(1)-65
+);
+}
+
+/* =========================
+OVERLAY
+========================= */
+
+function showOverlay(text){
+
+document.getElementById('overlay').style.display='flex';
+document.getElementById('overlayText').innerText=text;
+
+}
+
+function hideOverlay(){
+
+document.getElementById('overlay').style.display='none';
+
+}
+
+/* =========================
 LOAD PLAYLIST
 ========================= */
 
 async function loadPlaylist(url,group){
 
-showOverlay(
-'Loading '+group+' Channels...'
-);
+showOverlay('Loading '+group+' Channels...');
 
 allChannels=[];
 
@@ -1029,9 +1065,7 @@ LOAD EXTRA FEEDS
 
 async function loadExtraFeeds(){
 
-showOverlay(
-'Loading Global IPTV Feeds...'
-);
+showOverlay('Loading Global IPTV Feeds...');
 
 for(const url of extraFeeds){
 
@@ -1051,6 +1085,41 @@ console.log(err);
 }
 
 generateVirtualChannels();
+
+filteredChannels=[...allChannels];
+
+renderChannels(true);
+
+updateStats();
+
+hideOverlay();
+
+}
+
+/* =========================
+LOAD EXTRA PLAYLISTS
+========================= */
+
+async function loadExtraPlaylists(){
+
+showOverlay('Loading Global BTECH-TV Feeds...');
+
+for(let url of extraFeeds){
+
+try{
+
+const res=await fetch(url);
+const text=await res.text();
+
+parseM3U(text,'Global Feed');
+
+}catch(err){
+
+console.log(err);
+
+}
+
+}
 
 filteredChannels=[...allChannels];
 
@@ -1091,6 +1160,11 @@ info.match(/group-title="(.*?)"/)?.[1]
 ||
 group;
 
+const country=
+info.match(/tvg-country="(.*?)"/)?.[1]
+||
+'';
+
 allChannels.push({
 
 id:allChannels.length+1,
@@ -1099,14 +1173,14 @@ name:name,
 
 group:category,
 
+country:country,
+
 logo:logo,
 
 url:url,
 
 viewers:
-Math.floor(
-Math.random()*1000000
-),
+Math.floor(Math.random()*1000000),
 
 type:
 Math.random()>0.7
@@ -1147,13 +1221,13 @@ allChannels.push({
 
 id:allChannels.length+1,
 
-name:
-'BTECH '+cat+' LIVE '+i,
+name:'BTECH '+cat+' LIVE '+i,
 
 group:cat,
 
-logo:
-'https://via.placeholder.com/60',
+country:'',
+
+logo:'https://via.placeholder.com/60',
 
 url:
 backupStreams[
@@ -1161,9 +1235,7 @@ i % backupStreams.length
 ],
 
 viewers:
-Math.floor(
-Math.random()*1000000
-),
+Math.floor(Math.random()*1000000),
 
 type:
 i % 3===0
@@ -1219,6 +1291,10 @@ div.classList.add('active');
 
 }
 
+let badge='LIVE';
+
+if(deadChannels[c.id]) badge='OFF';
+
 div.innerHTML=`
 
 <div class="left">
@@ -1231,6 +1307,7 @@ onerror="this.src='https://via.placeholder.com/60'"
 <div class="info">
 
 <h4>
+${flag(c.country)}
 ${deadChannels[c.id]?'⚫':'🔴'}
 ${c.name}
 </h4>
@@ -1248,6 +1325,10 @@ ${c.group}
 
 <span class="badge ${c.type==='free'?'free':'paid'}">
 ${c.type.toUpperCase()}
+</span>
+
+<span class="badge ${deadChannels[c.id] ? 'dead' : 'country'}">
+${badge}
 </span>
 
 <span class="badge ${c.status}">
@@ -1307,7 +1388,8 @@ if(Hls.isSupported()){
 
 currentHls=new Hls({
 enableWorker:true,
-lowLatencyMode:true
+lowLatencyMode:true,
+maxBufferLength:15
 });
 
 currentHls.loadSource(channel.url);
@@ -1323,6 +1405,11 @@ if(autoPlay){
 video.play();
 
 }
+
+aliveCh[channel.id]=1;
+delete deadChannels[channel.id];
+
+renderChannels(true);
 
 }
 );
@@ -1458,7 +1545,17 @@ FILTERS
 
 function setTab(type,btn){
 
-setActive(btn);
+activeTab=type;
+
+document
+.querySelectorAll('.top-buttons button')
+.forEach(b=>{
+b.classList.remove('active');
+});
+
+if(btn){
+btn.classList.add('active');
+}
 
 if(type==='all'){
 
@@ -1519,6 +1616,20 @@ renderChannels(true);
 
 }
 
+function filterType(type,btn){
+
+document
+.querySelectorAll('.top-buttons button')
+.forEach(b=>{
+b.classList.remove('active');
+});
+
+if(btn){
+btn.classList.add('active');
+}
+
+}
+
 function showLocked(btn){
 
 setActive(btn);
@@ -1537,15 +1648,11 @@ function setActive(btn){
 document
 .querySelectorAll('.top-buttons button')
 .forEach(b=>{
-
 b.classList.remove('active');
-
 });
 
 if(btn){
-
 btn.classList.add('active');
-
 }
 
 }
@@ -1568,6 +1675,11 @@ favs[id]=1;
 
 localStorage.setItem(
 'btech_favs',
+JSON.stringify(favs)
+);
+
+localStorage.setItem(
+'atv_favs',
 JSON.stringify(favs)
 );
 
@@ -1596,11 +1708,13 @@ recent.slice(0,30);
 }
 
 localStorage.setItem(
-
 'btech_recent',
-
 JSON.stringify(recent)
+);
 
+localStorage.setItem(
+'atv_recent',
+JSON.stringify(recent)
 );
 
 }
@@ -1648,7 +1762,6 @@ function toggleAutoSkip(){
 autoSkip=!autoSkip;
 
 document.getElementById('skipBtn').innerText=
-
 autoSkip
 ?'⏭ Auto Skip'
 :'⏭ Skip OFF';
@@ -1701,7 +1814,6 @@ STATS
 function updateStats(){
 
 document.getElementById('statsText').innerText=
-
 filteredChannels.length+
 ' Channels Loaded';
 
@@ -1725,24 +1837,6 @@ c=>!deadChannels[c.id]
 
 document.getElementById('loadedCount').innerText=
 allChannels.length.toLocaleString();
-
-}
-
-/* =========================
-OVERLAY
-========================= */
-
-function showOverlay(text){
-
-document.getElementById('overlay').style.display='flex';
-
-document.getElementById('overlayText').innerText=text;
-
-}
-
-function hideOverlay(){
-
-document.getElementById('overlay').style.display='none';
 
 }
 
