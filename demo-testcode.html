@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
 
 <title>📺 BTECH-TV PRO ULTRA MAX WORLD</title>
 
@@ -15,6 +18,7 @@ ROOT
 ========================= */
 
 :root{
+
 --bg:#0b0f1a;
 --panel:#111827;
 --card:#1b2438;
@@ -25,7 +29,12 @@ ROOT
 --success:#16a34a;
 --danger:#ef4444;
 --warning:#f59e0b;
+
 }
+
+/* =========================
+GLOBAL
+========================= */
 
 *{
 margin:0;
@@ -50,11 +59,11 @@ TOPBAR
 ========================= */
 
 .topbar{
-height:65px;
+height:70px;
 background:var(--panel);
 display:flex;
-justify-content:space-between;
 align-items:center;
+justify-content:space-between;
 padding:0 20px;
 border-bottom:1px solid rgba(255,255,255,.05);
 position:sticky;
@@ -66,6 +75,7 @@ z-index:999;
 font-size:24px;
 font-weight:bold;
 color:var(--accent);
+white-space:nowrap;
 }
 
 .top-buttons{
@@ -75,11 +85,11 @@ overflow:auto;
 }
 
 .top-buttons button{
-padding:10px 15px;
+padding:10px 16px;
 background:var(--card);
-border-radius:8px;
 color:white;
-font-weight:bold;
+border-radius:10px;
+font-size:13px;
 transition:.3s;
 white-space:nowrap;
 }
@@ -96,7 +106,7 @@ LAYOUT
 
 .container{
 display:flex;
-height:calc(100vh - 65px);
+height:calc(100vh - 70px);
 }
 
 /* =========================
@@ -106,21 +116,21 @@ SIDEBAR
 .sidebar{
 width:300px;
 background:#0f172a;
-padding:15px;
 overflow-y:auto;
+padding:15px;
 border-right:1px solid rgba(255,255,255,.05);
 }
 
 .sidebar h3{
-margin:15px 0 10px;
+margin:18px 0 10px;
 color:var(--accent);
 font-size:16px;
 }
 
 .cat{
+background:var(--card);
 padding:12px;
 margin-bottom:10px;
-background:var(--card);
 border-radius:10px;
 cursor:pointer;
 transition:.3s;
@@ -134,17 +144,8 @@ transform:translateX(4px);
 
 .menu-link{
 display:block;
-padding:12px;
-margin-bottom:10px;
-background:var(--card);
-border-radius:10px;
-color:white;
 text-decoration:none;
-transition:.3s;
-}
-
-.menu-link:hover{
-background:var(--hover);
+color:white;
 }
 
 /* =========================
@@ -163,7 +164,7 @@ PLAYER
 ========================= */
 
 .player{
-height:350px;
+height:340px;
 background:black;
 position:relative;
 display:flex;
@@ -230,8 +231,8 @@ margin-bottom:5px;
 }
 
 .now-info p{
-font-size:13px;
 color:var(--muted);
+font-size:13px;
 }
 
 .clock{
@@ -259,22 +260,6 @@ background:var(--hover);
 }
 
 /* =========================
-STATS BAR
-========================= */
-
-.stats{
-padding:8px 15px;
-background:#0f172a;
-font-size:12px;
-color:var(--muted);
-border-bottom:1px solid rgba(255,255,255,.05);
-display:flex;
-justify-content:space-between;
-flex-wrap:wrap;
-gap:10px;
-}
-
-/* =========================
 SEARCH
 ========================= */
 
@@ -283,7 +268,6 @@ padding:12px;
 background:var(--panel);
 display:flex;
 gap:10px;
-border-bottom:1px solid rgba(255,255,255,.05);
 }
 
 .search-box input,
@@ -300,7 +284,23 @@ flex:1;
 }
 
 /* =========================
-CHANNELS
+STATS BAR
+========================= */
+
+.stats{
+padding:10px 15px;
+background:#0f172a;
+font-size:12px;
+color:var(--muted);
+border-bottom:1px solid rgba(255,255,255,.05);
+display:flex;
+justify-content:space-between;
+flex-wrap:wrap;
+gap:10px;
+}
+
+/* =========================
+CHANNEL GRID
 ========================= */
 
 .channels{
@@ -319,7 +319,6 @@ border-radius:12px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-gap:10px;
 cursor:pointer;
 transition:.3s;
 border:1px solid transparent;
@@ -347,8 +346,8 @@ overflow:hidden;
 width:60px;
 height:60px;
 border-radius:10px;
-background:black;
 object-fit:cover;
+background:black;
 }
 
 .info{
@@ -398,11 +397,7 @@ background:#2563eb;
 }
 
 .dead{
-background:var(--danger);
-}
-
-.liveBadge{
-background:var(--success);
+background:#ef4444;
 }
 
 .fav{
@@ -426,14 +421,14 @@ overflow-y:auto;
 border-left:1px solid rgba(255,255,255,.05);
 }
 
-.panel-card{
+.card-box{
 background:var(--card);
 padding:15px;
 border-radius:12px;
 margin-bottom:15px;
 }
 
-.panel-card h3{
+.card-box h3{
 margin-bottom:15px;
 color:var(--accent);
 }
@@ -444,32 +439,32 @@ grid-template-columns:1fr 1fr;
 gap:10px;
 }
 
-.stat-box{
+.stat{
 background:#0f172a;
 padding:15px;
 border-radius:10px;
 text-align:center;
 }
 
-.stat-box h4{
+.stat h4{
 font-size:12px;
 margin-bottom:8px;
 color:#cbd5e1;
 }
 
-.stat-box p{
-font-size:20px;
+.stat p{
+font-size:22px;
 font-weight:bold;
 color:var(--accent);
 }
 
-.settings-row{
+.setting{
 display:flex;
 justify-content:space-between;
 align-items:center;
 background:#0f172a;
 padding:12px;
-border-radius:8px;
+border-radius:10px;
 margin-top:10px;
 }
 
@@ -488,26 +483,26 @@ height:0;
 
 .slider{
 position:absolute;
+cursor:pointer;
 top:0;
 left:0;
 right:0;
 bottom:0;
 background:#334155;
-border-radius:30px;
 transition:.4s;
-cursor:pointer;
+border-radius:30px;
 }
 
 .slider:before{
-content:"";
 position:absolute;
+content:"";
 height:18px;
 width:18px;
 left:3px;
 bottom:3px;
 background:white;
-border-radius:50%;
 transition:.4s;
+border-radius:50%;
 }
 
 input:checked + .slider{
@@ -522,9 +517,12 @@ transform:translateX(26px);
 MOBILE
 ========================= */
 
-@media(max-width:1000px){
+@media(max-width:1100px){
 
-.sidebar,
+.sidebar{
+display:none;
+}
+
 .rightpanel{
 display:none;
 }
@@ -579,19 +577,19 @@ All
 🕘 Recent
 </button>
 
-<button onclick="filterCategory('Sports',this)">
+<button onclick="filterGroup('Sports',this)">
 ⚽ Sports
 </button>
 
-<button onclick="filterCategory('Movies',this)">
+<button onclick="filterGroup('Movies',this)">
 🎬 Movies
 </button>
 
-<button onclick="filterCategory('News',this)">
+<button onclick="filterGroup('News',this)">
 📰 News
 </button>
 
-<button onclick="filterLocked(this)">
+<button onclick="showLocked(this)">
 🔒 Locked
 </button>
 
@@ -602,6 +600,10 @@ All
 </div>
 
 </div>
+
+<!-- =========================
+CONTAINER
+========================= -->
 
 <div class="container">
 
@@ -615,12 +617,10 @@ SIDEBAR
 
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ng.m3u','Nigeria')">🇳🇬 Nigeria</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/us.m3u','USA')">🇺🇸 USA</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/uk.m3u','United Kingdom')">🇬🇧 UK</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/uk.m3u','UK')">🇬🇧 United Kingdom</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/in.m3u','India')">🇮🇳 India</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/fr.m3u','France')">🇫🇷 France</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/de.m3u','Germany')">🇩🇪 Germany</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/br.m3u','Brazil')">🇧🇷 Brazil</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/za.m3u','South Africa')">🇿🇦 South Africa</div>
 
 <h3>🎬 Categories</h3>
 
@@ -629,39 +629,44 @@ SIDEBAR
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/movies.m3u','Movies')">🎥 Movies</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/music.m3u','Music')">🎵 Music</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/kids.m3u','Kids')">👶 Kids</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/documentary.m3u','Documentary')">📚 Documentary</div>
 
 <h3>🗣 Languages</h3>
 
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/eng.m3u','English')">🇬🇧 English</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/spa.m3u','Spanish')">🇪🇸 Spanish</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/ara.m3u','Arabic')">🇸🇦 Arabic</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/fra.m3u','French')">🇫🇷 French</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/hin.m3u','Hindi')">🇮🇳 Hindi</div>
 
-<h3>⚙ Admin</h3>
+<h3>⚙ SUPER ADMIN MENU</h3>
 
 <a class="menu-link" href="https://superadminbtech-tv.netlify.app/super_admin">
-⚙ Super Admin
+<div class="cat">
+⚙ Super Admin Dashboard
+</div>
 </a>
 
 <a class="menu-link" href="https://superadminbtech-tv.netlify.app/user_manager">
+<div class="cat">
 👥 User Manager
+</div>
 </a>
 
 <a class="menu-link" href="https://superadminbtech-tv.netlify.app/pay_to-view">
+<div class="cat">
 💳 Pay To View
+</div>
 </a>
 
 <a class="menu-link" href="https://superadminbtech-tv.netlify.app/locked_channels">
+<div class="cat">
 🔒 Locked Channels
+</div>
 </a>
 
 <a class="menu-link" href="https://btech-tv.netlify.app/quiz-channels">
+<div class="cat">
 🧠 Quiz Channels
+</div>
 </a>
-
-<h3>🚀 Extra Feeds</h3>
 
 <div class="cat" onclick="loadExtraFeeds()">
 🚀 Load Global Feeds
@@ -695,7 +700,7 @@ playsinline
 <h1>🚀</h1>
 
 <p id="overlayText">
-Initializing BTECH-TV Engine...
+Loading BTECH-TV Channels...
 </p>
 
 </div>
@@ -740,7 +745,7 @@ Next ▶
 🔗 Share
 </button>
 
-<button id="autoSkipBtn" onclick="toggleAutoSkip()">
+<button onclick="toggleAutoSkip()" id="skipBtn">
 ⏭ Auto Skip
 </button>
 
@@ -752,13 +757,12 @@ Next ▶
 
 <div class="stats">
 
-<div id="stats">
+<div id="statsText">
 0 Channels Loaded
 </div>
 
-<div>
-Favorites:
-<span id="favCount">0</span>
+<div id="liveStats">
+🟢 LIVE SYSTEM ACTIVE
 </div>
 
 </div>
@@ -780,7 +784,7 @@ oninput="searchChannels(this.value)"
 
 </div>
 
-<!-- CHANNELS -->
+<!-- CHANNEL LIST -->
 
 <div class="channels" id="channelList"></div>
 
@@ -792,94 +796,69 @@ RIGHT PANEL
 
 <div class="rightpanel">
 
-<div class="panel-card">
+<div class="card-box">
 
-<h3>
-📊 SYSTEM STATS
-</h3>
+<h3>📊 SYSTEM STATS</h3>
 
 <div class="stats-grid">
 
-<div class="stat-box">
+<div class="stat">
 <h4>Total</h4>
-<p id="totalChannels">0</p>
+<p id="total">0</p>
 </div>
 
-<div class="stat-box">
+<div class="stat">
 <h4>Favorites</h4>
-<p id="favoritesCount">0</p>
+<p id="favCount">0</p>
 </div>
 
-<div class="stat-box">
+<div class="stat">
 <h4>Locked</h4>
 <p id="lockedCount">0</p>
 </div>
 
-<div class="stat-box">
-<h4>Dead</h4>
-<p id="deadCount">0</p>
+<div class="stat">
+<h4>Live</h4>
+<p id="liveCount">0</p>
 </div>
 
 </div>
 
 </div>
 
-<div class="panel-card">
+<div class="card-box">
 
-<h3>
-⚙ SETTINGS
-</h3>
+<h3>⚙ SETTINGS</h3>
 
-<div class="settings-row">
+<div class="setting">
 
 <span>Auto Play</span>
 
 <label class="switch">
-
-<input
-type="checkbox"
-checked
-onchange="autoPlay=this.checked"
->
-
+<input type="checkbox" checked onchange="autoPlay=this.checked">
 <span class="slider"></span>
-
 </label>
 
 </div>
 
-<div class="settings-row">
-
-<span>Auto Skip</span>
-
-<label class="switch">
-
-<input
-type="checkbox"
-checked
-onchange="toggleAutoSkip()"
->
-
-<span class="slider"></span>
-
-</label>
-
-</div>
-
-<div class="settings-row">
+<div class="setting">
 
 <span>Dark Theme</span>
 
 <label class="switch">
-
-<input
-type="checkbox"
-checked
-onchange="toggleTheme()"
->
-
+<input type="checkbox" checked onchange="toggleTheme()">
 <span class="slider"></span>
+</label>
 
+</div>
+
+<div class="setting">
+
+<span>Auto Skip Dead</span>
+
+<label class="switch">
+<input type="checkbox" checked onchange="toggleAutoSkip()">
+<span class="slider"></span>
 </label>
 
 </div>
@@ -893,31 +872,38 @@ onchange="toggleTheme()"
 <script>
 
 /* =========================
-GLOBAL VARIABLES
+GLOBAL STATE
 ========================= */
 
 let allChannels=[];
 let filteredChannels=[];
 let currentIndex=0;
 let currentHls=null;
+
 let dark=true;
 let autoPlay=true;
-let autoSkipOn=true;
+let autoSkip=true;
 
-let favs=JSON.parse(localStorage.getItem('btech_favs')||'{}');
-let recent=JSON.parse(localStorage.getItem('btech_recent')||'[]');
+let favs=
+JSON.parse(
+localStorage.getItem('btech_favs')||'{}'
+);
+
+let recent=
+JSON.parse(
+localStorage.getItem('btech_recent')||'[]'
+);
 
 let deadChannels={};
-let aliveChannels={};
-
-/* =========================
-EXTRA FEEDS
-========================= */
 
 const extraFeeds=[
+
 'https://iptv-org.github.io/iptv/index.m3u',
+
 'https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8',
+
 'https://raw.githubusercontent.com/freecasthub/public-iptv/main/playlist.m3u'
+
 ];
 
 /* =========================
@@ -927,9 +913,12 @@ CLOCK
 function tick(){
 
 document.getElementById('clock').innerText=
+
 new Date().toLocaleTimeString([],{
+
 hour:'2-digit',
 minute:'2-digit'
+
 });
 
 }
@@ -938,46 +927,14 @@ setInterval(tick,1000);
 tick();
 
 /* =========================
-FLAGS
-========================= */
-
-function flag(cc){
-
-if(!cc || cc.length!==2) return '🌐';
-
-const a=0x1F1E6;
-
-return String.fromCodePoint(
-a+cc.charCodeAt(0)-65,
-a+cc.charCodeAt(1)-65
-);
-
-}
-
-/* =========================
-OVERLAY
-========================= */
-
-function showOverlay(text){
-
-document.getElementById('overlay').style.display='flex';
-document.getElementById('overlayText').innerText=text;
-
-}
-
-function hideOverlay(){
-
-document.getElementById('overlay').style.display='none';
-
-}
-
-/* =========================
 LOAD PLAYLIST
 ========================= */
 
 async function loadPlaylist(url,group){
 
-showOverlay('Loading '+group+' channels...');
+showOverlay(
+'Loading '+group+' Channels...'
+);
 
 allChannels=[];
 
@@ -991,13 +948,15 @@ parseM3U(text,group);
 filteredChannels=[...allChannels];
 
 renderChannels();
+
 updateStats();
 
 hideOverlay();
 
 }catch(err){
 
-console.error(err);
+console.log(err);
+
 alert('Failed to load playlist');
 
 }
@@ -1010,9 +969,11 @@ LOAD EXTRA FEEDS
 
 async function loadExtraFeeds(){
 
-showOverlay('Loading Global Feeds...');
+showOverlay(
+'Loading Global IPTV Feeds...'
+);
 
-for(let url of extraFeeds){
+for(const url of extraFeeds){
 
 try{
 
@@ -1032,6 +993,7 @@ console.log(err);
 filteredChannels=[...allChannels];
 
 renderChannels();
+
 updateStats();
 
 hideOverlay();
@@ -1057,25 +1019,32 @@ if(!url || !url.startsWith('http')) continue;
 
 const name=info.split(',').pop();
 
-const logoMatch=info.match(/tvg-logo="(.*?)"/);
-const logo=logoMatch ? logoMatch[1] : 'https://via.placeholder.com/60';
-
-const countryMatch=info.match(/tvg-country="(.*?)"/);
-const country=countryMatch ? countryMatch[1] : '';
+const logo=
+info.match(/tvg-logo="(.*?)"/)?.[1]
+||
+'https://via.placeholder.com/60';
 
 allChannels.push({
 
 id:allChannels.length+1,
+
 name:name,
-url:url,
+
+group:group,
+
 logo:logo,
-country:country,
-category:group,
 
-type:Math.random()>0.7 ? 'paid':'free',
-status:Math.random()>0.9 ? 'locked':'unlocked',
+url:url,
 
-viewers:Math.floor(Math.random()*1000000)
+type:
+Math.random()>0.7
+?'paid'
+:'free',
+
+status:
+Math.random()>0.9
+?'locked'
+:'unlocked'
 
 });
 
@@ -1091,7 +1060,8 @@ RENDER CHANNELS
 
 function renderChannels(){
 
-const box=document.getElementById('channelList');
+const box=
+document.getElementById('channelList');
 
 box.innerHTML='';
 
@@ -1102,7 +1072,9 @@ const div=document.createElement('div');
 div.className='channel';
 
 if(index===currentIndex){
+
 div.classList.add('active');
+
 }
 
 div.innerHTML=`
@@ -1117,15 +1089,12 @@ onerror="this.src='https://via.placeholder.com/60'"
 <div class="info">
 
 <h4>
-${flag(c.country)}
-${deadChannels[c.id] ? '⚫':'🔴'}
+${deadChannels[c.id]?'⚫':'🔴'}
 ${c.name}
 </h4>
 
 <small>
-${c.category}
-•
-👥 ${c.viewers.toLocaleString()}
+${c.group}
 </small>
 
 </div>
@@ -1138,21 +1107,20 @@ ${c.category}
 ${c.type.toUpperCase()}
 </span>
 
-<span class="badge ${
-deadChannels[c.id]
-?'dead'
-:c.status==='locked'
-?'locked'
-:'liveBadge'
-}">
-${deadChannels[c.id] ? 'OFF':'LIVE'}
+<span class="badge ${c.status}">
+${c.status.toUpperCase()}
 </span>
 
 <div
-class="fav ${favs[c.id] ? 'on':''}"
-onclick="event.stopPropagation();toggleFav(${c.id})"
+class="fav ${favs[c.id]?'on':''}"
+onclick="
+event.stopPropagation();
+toggleFav(${c.id})
+"
 >
-${favs[c.id] ? '★':'☆'}
+
+${favs[c.id]?'★':'☆'}
+
 </div>
 
 </div>
@@ -1177,62 +1145,73 @@ currentIndex=index;
 
 const channel=filteredChannels[index];
 
-document.getElementById('channelName').innerText=channel.name;
-document.getElementById('channelGroup').innerText=channel.category;
+document.getElementById('channelName').innerText=
+channel.name;
 
-const video=document.getElementById('videoPlayer');
+document.getElementById('channelGroup').innerText=
+channel.group;
+
+const video=
+document.getElementById('videoPlayer');
 
 if(currentHls){
+
 currentHls.destroy();
+
 }
 
 if(Hls.isSupported()){
 
 currentHls=new Hls({
-enableWorker:true,
-lowLatencyMode:true,
-maxBufferLength:15
+enableWorker:true
 });
 
 currentHls.loadSource(channel.url);
+
 currentHls.attachMedia(video);
 
-currentHls.on(Hls.Events.MANIFEST_PARSED,function(){
-
-aliveChannels[channel.id]=1;
-delete deadChannels[channel.id];
+currentHls.on(
+Hls.Events.MANIFEST_PARSED,
+()=>{
 
 if(autoPlay){
+
 video.play();
+
 }
 
-renderChannels();
+}
+);
 
-});
-
-currentHls.on(Hls.Events.ERROR,function(event,data){
+currentHls.on(
+Hls.Events.ERROR,
+(event,data)=>{
 
 if(data.fatal){
 
 deadChannels[channel.id]=1;
 
 renderChannels();
-updateStats();
 
-if(autoSkipOn){
+if(autoSkip){
+
 nextChannel();
-}
 
 }
 
-});
+}
+
+}
+);
 
 }else{
 
 video.src=channel.url;
 
 if(autoPlay){
+
 video.play();
+
 }
 
 }
@@ -1252,7 +1231,9 @@ function nextChannel(){
 currentIndex++;
 
 if(currentIndex>=filteredChannels.length){
+
 currentIndex=0;
+
 }
 
 playChannel(currentIndex);
@@ -1264,7 +1245,10 @@ function prevChannel(){
 currentIndex--;
 
 if(currentIndex<0){
-currentIndex=filteredChannels.length-1;
+
+currentIndex=
+filteredChannels.length-1;
+
 }
 
 playChannel(currentIndex);
@@ -1279,13 +1263,18 @@ function searchChannels(q){
 
 const value=q.toLowerCase();
 
-filteredChannels=allChannels.filter(c=>
+filteredChannels=
+allChannels.filter(c=>
 
-(c.name||'').toLowerCase().includes(value)
+(c.name||'')
+.toLowerCase()
+.includes(value)
 
 ||
 
-(c.category||'').toLowerCase().includes(value)
+(c.group||'')
+.toLowerCase()
+.includes(value)
 
 );
 
@@ -1301,13 +1290,15 @@ function sortChannels(type){
 
 if(type==='az'){
 
-filteredChannels.sort((a,b)=>
+filteredChannels.sort(
+(a,b)=>
 a.name.localeCompare(b.name)
 );
 
 }else{
 
-filteredChannels.sort((a,b)=>
+filteredChannels.sort(
+(a,b)=>
 b.name.localeCompare(a.name)
 );
 
@@ -1323,17 +1314,21 @@ FILTERS
 
 function setTab(type,btn){
 
-document.querySelectorAll('.top-buttons button')
-.forEach(b=>b.classList.remove('active'));
-
-btn.classList.add('active');
+setActive(btn);
 
 if(type==='all'){
+
 filteredChannels=[...allChannels];
+
 }
 
 if(type==='favs'){
-filteredChannels=allChannels.filter(c=>favs[c.id]);
+
+filteredChannels=
+allChannels.filter(
+c=>favs[c.id]
+);
+
 }
 
 if(type==='recent'){
@@ -1342,10 +1337,15 @@ filteredChannels=[];
 
 recent.forEach(id=>{
 
-const found=allChannels.find(c=>c.id===id);
+const found=
+allChannels.find(
+c=>c.id===id
+);
 
 if(found){
+
 filteredChannels.push(found);
+
 }
 
 });
@@ -1356,18 +1356,18 @@ renderChannels();
 
 }
 
-function filterCategory(cat,btn){
+function filterGroup(group,btn){
 
-document.querySelectorAll('.top-buttons button')
-.forEach(b=>b.classList.remove('active'));
+setActive(btn);
 
-btn.classList.add('active');
+filteredChannels=
+allChannels.filter(c=>
 
-filteredChannels=allChannels.filter(c=>
-
-(c.category||'')
+(c.group||'')
 .toLowerCase()
-.includes(cat.toLowerCase())
+.includes(
+group.toLowerCase()
+)
 
 );
 
@@ -1375,18 +1375,34 @@ renderChannels();
 
 }
 
-function filterLocked(btn){
+function showLocked(btn){
 
-document.querySelectorAll('.top-buttons button')
-.forEach(b=>b.classList.remove('active'));
+setActive(btn);
 
-btn.classList.add('active');
-
-filteredChannels=allChannels.filter(c=>
-c.status==='locked'
+filteredChannels=
+allChannels.filter(
+c=>c.status==='locked'
 );
 
 renderChannels();
+
+}
+
+function setActive(btn){
+
+document
+.querySelectorAll('.top-buttons button')
+.forEach(b=>{
+
+b.classList.remove('active');
+
+});
+
+if(btn){
+
+btn.classList.add('active');
+
+}
 
 }
 
@@ -1397,9 +1413,13 @@ FAVORITES
 function toggleFav(id){
 
 if(favs[id]){
+
 delete favs[id];
+
 }else{
+
 favs[id]=1;
+
 }
 
 localStorage.setItem(
@@ -1408,6 +1428,7 @@ JSON.stringify(favs)
 );
 
 updateStats();
+
 renderChannels();
 
 }
@@ -1418,17 +1439,24 @@ RECENT
 
 function addRecent(id){
 
-recent=recent.filter(r=>r!==id);
+recent=
+recent.filter(r=>r!==id);
 
 recent.unshift(id);
 
 if(recent.length>30){
-recent=recent.slice(0,30);
+
+recent=
+recent.slice(0,30);
+
 }
 
 localStorage.setItem(
+
 'btech_recent',
+
 JSON.stringify(recent)
+
 );
 
 }
@@ -1441,25 +1469,45 @@ function toggleTheme(){
 
 dark=!dark;
 
-document.documentElement.style.setProperty(
+document.documentElement
+.style.setProperty(
 '--bg',
 dark?'#0b0f1a':'#f1f5f9'
 );
 
-document.documentElement.style.setProperty(
+document.documentElement
+.style.setProperty(
 '--panel',
 dark?'#111827':'#ffffff'
 );
 
-document.documentElement.style.setProperty(
+document.documentElement
+.style.setProperty(
 '--card',
 dark?'#1b2438':'#e2e8f0'
 );
 
-document.documentElement.style.setProperty(
+document.documentElement
+.style.setProperty(
 '--text',
 dark?'#ffffff':'#000000'
 );
+
+}
+
+/* =========================
+AUTO SKIP
+========================= */
+
+function toggleAutoSkip(){
+
+autoSkip=!autoSkip;
+
+document.getElementById('skipBtn').innerText=
+
+autoSkip
+?'⏭ Auto Skip'
+:'⏭ Skip OFF';
 
 }
 
@@ -1469,7 +1517,8 @@ PIP
 
 function togglePiP(){
 
-const video=document.getElementById('videoPlayer');
+const video=
+document.getElementById('videoPlayer');
 
 if(document.pictureInPictureElement){
 
@@ -1489,54 +1538,64 @@ SHARE
 
 function shareChannel(){
 
-const channel=filteredChannels[currentIndex];
+const channel=
+filteredChannels[currentIndex];
 
 if(!channel) return;
 
-navigator.clipboard.writeText(channel.url);
+navigator.clipboard
+.writeText(channel.url);
 
-alert('Channel URL copied!');
-
-}
-
-/* =========================
-AUTO SKIP
-========================= */
-
-function toggleAutoSkip(){
-
-autoSkipOn=!autoSkipOn;
-
-document.getElementById('autoSkipBtn').innerText=
-autoSkipOn
-?'⏭ Auto Skip'
-:'⏭ Skip OFF';
+alert('Channel URL Copied!');
 
 }
 
 /* =========================
-UPDATE STATS
+STATS
 ========================= */
 
 function updateStats(){
 
-document.getElementById('stats').innerText=
-filteredChannels.length + ' Channels Loaded';
+document.getElementById('statsText').innerText=
+
+filteredChannels.length+
+' Channels Loaded';
+
+document.getElementById('total').innerText=
+allChannels.length;
 
 document.getElementById('favCount').innerText=
 Object.keys(favs).length;
 
-document.getElementById('totalChannels').innerText=
-allChannels.length.toLocaleString();
-
-document.getElementById('favoritesCount').innerText=
-Object.keys(favs).length;
-
 document.getElementById('lockedCount').innerText=
-allChannels.filter(c=>c.status==='locked').length;
 
-document.getElementById('deadCount').innerText=
-Object.keys(deadChannels).length;
+allChannels.filter(
+c=>c.status==='locked'
+).length;
+
+document.getElementById('liveCount').innerText=
+
+allChannels.filter(
+c=>!deadChannels[c.id]
+).length;
+
+}
+
+/* =========================
+OVERLAY
+========================= */
+
+function showOverlay(text){
+
+document.getElementById('overlay').style.display='flex';
+
+document.getElementById('overlayText').innerText=text;
+
+}
+
+function hideOverlay(){
+
+document.getElementById('overlay').style.display='none';
 
 }
 
@@ -1544,42 +1603,24 @@ Object.keys(deadChannels).length;
 KEYBOARD
 ========================= */
 
-document.addEventListener('keydown',function(e){
+document.addEventListener(
+'keydown',
+function(e){
 
 if(e.key==='ArrowRight'){
+
 nextChannel();
+
 }
 
 if(e.key==='ArrowLeft'){
+
 prevChannel();
+
 }
 
-});
-
-/* =========================
-LIVE VIEWER UPDATE
-========================= */
-
-setInterval(()=>{
-
-for(let i=0;i<200;i++){
-
-const random=Math.floor(
-Math.random()*allChannels.length
+}
 );
-
-if(allChannels[random]){
-
-allChannels[random].viewers=
-Math.floor(Math.random()*1000000);
-
-}
-
-}
-
-renderChannels();
-
-},5000);
 
 /* =========================
 BOOT
