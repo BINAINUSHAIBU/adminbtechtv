@@ -1,5 +1,549 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html><!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BTECH-TV USER MANAGER DASHBOARD</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+
+/* =========================
+ROOT
+========================= */
+
+:root{
+--bg:#08111f;
+--panel:#111827;
+--card:#1b2438;
+--hover:#26344f;
+--accent:#00d4ff;
+--accent2:#00ff99;
+--danger:#ef4444;
+--warning:#f59e0b;
+--text:#ffffff;
+--muted:#94a3b8;
+}
+
+/* =========================
+GLOBAL
+========================= */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
+
+button{
+border:none;
+cursor:pointer;
+}
+
+/* =========================
+TOPBAR
+========================= */
+
+.topbar{
+height:70px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 20px;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.logo{
+font-size:24px;
+font-weight:bold;
+color:var(--accent);
+}
+
+.top-actions{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.top-actions button{
+padding:10px 16px;
+border-radius:10px;
+background:var(--card);
+color:white;
+transition:.3s;
+font-size:13px;
+}
+
+.top-actions button:hover{
+background:var(--accent);
+color:black;
+}
+
+/* =========================
+LAYOUT
+========================= */
+
+.container{
+display:flex;
+height:calc(100vh - 70px);
+}
+
+/* =========================
+SIDEBAR
+========================= */
+
+.sidebar{
+width:280px;
+background:#0f172a;
+padding:15px;
+overflow-y:auto;
+border-right:1px solid rgba(255,255,255,.05);
+}
+
+.sidebar h3{
+margin-bottom:15px;
+color:var(--accent);
+}
+
+.side-btn{
+width:100%;
+padding:14px;
+margin-bottom:10px;
+background:var(--card);
+border-radius:12px;
+color:white;
+text-align:left;
+transition:.3s;
+}
+
+.side-btn:hover,
+.side-btn.active{
+background:var(--accent);
+color:black;
+transform:translateX(4px);
+}
+
+/* =========================
+MAIN
+========================= */
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+/* =========================
+TOP CENTER STREAM
+========================= */
+
+.top-stream-wrap{
+width:100%;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:20px;
+background:#0f172a;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.top-stream-title{
+font-size:22px;
+font-weight:bold;
+color:var(--accent);
+margin-bottom:15px;
+text-align:center;
+}
+
+.player-box{
+width:90%;
+max-width:900px;
+height:380px;
+background:black;
+position:relative;
+border-radius:18px;
+overflow:hidden;
+box-shadow:0 0 30px rgba(0,212,255,.25);
+border:2px solid rgba(0,212,255,.2);
+}
+
+.player-box video{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.live{
+position:absolute;
+top:15px;
+left:15px;
+background:red;
+padding:8px 14px;
+border-radius:30px;
+font-size:12px;
+font-weight:bold;
+z-index:10;
+}
+
+/* =========================
+DASHBOARD STATS
+========================= */
+
+.stats-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+padding:15px;
+background:var(--panel);
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.stat-card{
+background:var(--card);
+padding:20px;
+border-radius:14px;
+}
+
+.stat-card h4{
+color:var(--muted);
+font-size:13px;
+margin-bottom:10px;
+}
+
+.stat-card h2{
+font-size:30px;
+color:var(--accent);
+}
+
+/* =========================
+TOOLS
+========================= */
+
+.toolbar{
+display:flex;
+gap:10px;
+padding:15px;
+background:#0f172a;
+flex-wrap:wrap;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.toolbar input,
+.toolbar select{
+padding:12px;
+border:none;
+border-radius:10px;
+background:var(--card);
+color:white;
+}
+
+.toolbar input{
+flex:1;
+min-width:220px;
+}
+
+.toolbar button{
+padding:12px 16px;
+border-radius:10px;
+background:var(--accent);
+font-weight:bold;
+color:black;
+}
+
+/* =========================
+TABLE
+========================= */
+
+.table-wrap{
+flex:1;
+overflow:auto;
+padding:15px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+min-width:1400px;
+}
+
+thead{
+background:var(--panel);
+position:sticky;
+top:0;
+z-index:10;
+}
+
+th{
+padding:14px;
+text-align:left;
+font-size:13px;
+color:var(--accent);
+}
+
+td{
+padding:14px;
+border-bottom:1px solid rgba(255,255,255,.05);
+font-size:13px;
+}
+
+tr{
+background:var(--card);
+transition:.3s;
+}
+
+tr:hover{
+background:var(--hover);
+}
+
+/* =========================
+MOBILE
+========================= */
+
+@media(max-width:1000px){
+
+.sidebar{
+display:none;
+}
+
+.container{
+flex-direction:column;
+}
+
+.stats-grid{
+grid-template-columns:1fr 1fr;
+}
+
+.player-box{
+height:250px;
+width:100%;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+TOPBAR
+========================= -->
+
+<div class="topbar">
+
+<div class="logo">
+📺 BTECH-TV USER MANAGER
+</div>
+
+<div class="top-actions">
+
+<button>⚡ Generate Users</button>
+<button>🌙 Theme</button>
+<button>⬇ Export</button>
+<button>🚀 Reload</button>
+
+</div>
+
+</div>
+
+<!-- =========================
+CONTAINER
+========================= -->
+
+<div class="container">
+
+<!-- =========================
+SIDEBAR
+========================= -->
+
+<div class="sidebar">
+
+<h3>📂 Management</h3>
+
+<button class="side-btn active">👥 All Users</button>
+<button class="side-btn">⭐ Premium Users</button>
+<button class="side-btn">🔒 Blocked Users</button>
+<button class="side-btn">🟢 Online Users</button>
+<button class="side-btn">📺 Active Streams</button>
+<button class="side-btn">💳 Subscription Plans</button>
+<button class="side-btn">📡 IPTV Sessions</button>
+<button class="side-btn">🧠 AI Monitoring</button>
+<button class="side-btn">⚙ System Settings</button>
+<button class="side-btn">🛡 Security Logs</button>
+
+</div>
+
+<!-- =========================
+MAIN
+========================= -->
+
+<div class="main">
+
+<!-- =========================
+TOP CENTER LIVE STREAM
+========================= -->
+
+<div class="top-stream-wrap">
+
+<div class="top-stream-title">
+📡 LIVE STREAM CENTER
+</div>
+
+<div class="player-box">
+
+<div class="live">
+🔴 LIVE
+</div>
+
+<video
+id="video"
+controls
+autoplay
+muted
+playsinline
+></video>
+
+</div>
+
+</div>
+
+<!-- =========================
+STATS
+========================= -->
+
+<div class="stats-grid">
+
+<div class="stat-card">
+<h4>Total Users</h4>
+<h2>1,000,000</h2>
+</div>
+
+<div class="stat-card">
+<h4>Premium</h4>
+<h2>650,000</h2>
+</div>
+
+<div class="stat-card">
+<h4>Blocked</h4>
+<h2>12,500</h2>
+</div>
+
+<div class="stat-card">
+<h4>Online</h4>
+<h2>520,000</h2>
+</div>
+
+</div>
+
+<!-- =========================
+TOOLS
+========================= -->
+
+<div class="toolbar">
+
+<input
+type="text"
+placeholder="Search users..."
+>
+
+<select>
+<option>Sort A-Z</option>
+<option>Sort Z-A</option>
+<option>Premium First</option>
+<option>Online First</option>
+</select>
+
+<button>➕ Add Users</button>
+
+</div>
+
+<!-- =========================
+TABLE
+========================= -->
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+
+<tr>
+<th>ID</th>
+<th>User</th>
+<th>Email</th>
+<th>Status</th>
+<th>Country</th>
+</tr>
+
+</thead>
+
+<tbody>
+
+<tr>
+<td>1</td>
+<td>BTECH_USER_1</td>
+<td>user1@btechtv.com</td>
+<td>ONLINE</td>
+<td>Nigeria</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>BTECH_USER_2</td>
+<td>user2@btechtv.com</td>
+<td>OFFLINE</td>
+<td>USA</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* =========================
+STREAM PLAYER
+========================= */
+
+const stream =
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+
+const video =
+document.getElementById("video");
+
+if(Hls.isSupported()){
+
+const hls = new Hls();
+
+hls.loadSource(stream);
+
+hls.attachMedia(video);
+
+}
+
+</script>
+
+</body>
+</html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
