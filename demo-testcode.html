@@ -5,7 +5,802 @@
 <meta charset="UTF-8">
 <meta
 name="viewport"
+content="width=device-width, initi<!-- =========================================
+BTECH-TV WORLD
+FULL FEATURES SHOWCASE VERSION
+ALL FEATURES CLEARLY DISPLAYED
+========================================= -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
 content="width=device-width, initial-scale=1.0"
+/>
+
+<title>BTECH-TV WORLD</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+
+:root{
+--bg:#0b0f1a;
+--panel:#111827;
+--card:#1b2438;
+--hover:#2b3a5a;
+--accent:#00bfff;
+--text:#ffffff;
+--muted:#94a3b8;
+--success:#16a34a;
+--danger:#ef4444;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
+
+/* =========================
+TOPBAR
+========================= */
+
+.topbar{
+height:70px;
+background:#111827;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 20px;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.logo{
+font-size:25px;
+font-weight:bold;
+color:var(--accent);
+text-shadow:0 0 12px #00bfff55;
+}
+
+.top-buttons{
+display:flex;
+gap:10px;
+overflow:auto;
+}
+
+.top-buttons button{
+padding:10px 16px;
+border:none;
+background:var(--card);
+color:white;
+border-radius:10px;
+font-size:13px;
+font-weight:bold;
+cursor:pointer;
+transition:.25s;
+white-space:nowrap;
+}
+
+.top-buttons button:hover,
+.top-buttons button.active{
+background:var(--accent);
+color:black;
+}
+
+/* =========================
+LAYOUT
+========================= */
+
+.container{
+display:flex;
+height:calc(100vh - 70px);
+}
+
+/* =========================
+SIDEBAR
+========================= */
+
+.sidebar{
+width:320px;
+background:#0f172a;
+overflow-y:auto;
+padding:15px;
+border-right:1px solid rgba(255,255,255,.05);
+}
+
+.sidebar h3{
+margin:16px 0 10px;
+color:var(--accent);
+font-size:16px;
+}
+
+.cat{
+background:var(--card);
+padding:13px;
+border-radius:12px;
+margin-bottom:10px;
+cursor:pointer;
+transition:.25s;
+font-size:14px;
+border:1px solid transparent;
+}
+
+.cat:hover{
+background:var(--hover);
+border-color:#00bfff55;
+transform:translateX(4px);
+}
+
+.menu-item{
+display:block;
+padding:13px;
+background:var(--card);
+border-radius:10px;
+margin-bottom:10px;
+text-decoration:none;
+color:white;
+transition:.25s;
+}
+
+.menu-item:hover{
+background:var(--hover);
+}
+
+/* =========================
+MAIN AREA
+========================= */
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+/* =========================
+FEATURE BAR
+========================= */
+
+.feature-bar{
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:10px;
+padding:12px;
+background:#08111f;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.feature-card{
+background:var(--card);
+padding:12px;
+border-radius:12px;
+text-align:center;
+transition:.25s;
+}
+
+.feature-card:hover{
+background:var(--hover);
+transform:translateY(-2px);
+}
+
+.feature-card h4{
+font-size:14px;
+margin-top:8px;
+}
+
+.feature-card p{
+font-size:11px;
+color:var(--muted);
+margin-top:4px;
+}
+
+/* =========================
+PLAYER
+========================= */
+
+.player{
+height:350px;
+background:black;
+position:relative;
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+}
+
+.player video{
+width:100%;
+height:100%;
+object-fit:contain;
+background:black;
+}
+
+.live{
+position:absolute;
+top:15px;
+left:15px;
+background:red;
+padding:8px 15px;
+border-radius:30px;
+font-size:12px;
+font-weight:bold;
+z-index:5;
+animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+0%{opacity:1;}
+50%{opacity:.5;}
+100%{opacity:1;}
+}
+
+.overlay{
+position:absolute;
+inset:0;
+background:rgba(0,0,0,.92);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+z-index:10;
+}
+
+.overlay h1{
+font-size:65px;
+margin-bottom:10px;
+}
+
+.overlay p{
+color:var(--muted);
+}
+
+/* =========================
+NOW PLAYING
+========================= */
+
+.now-playing{
+background:#111827;
+padding:15px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-top:1px solid rgba(255,255,255,.05);
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.now-info h2{
+font-size:18px;
+margin-bottom:4px;
+}
+
+.now-info p{
+font-size:13px;
+color:var(--muted);
+}
+
+.clock{
+font-size:12px;
+margin-top:5px;
+color:var(--muted);
+}
+
+.controls{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.controls button{
+padding:10px 15px;
+border:none;
+background:var(--card);
+color:white;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+transition:.25s;
+}
+
+.controls button:hover{
+background:var(--hover);
+}
+
+/* =========================
+STATS
+========================= */
+
+.stats{
+padding:10px 15px;
+background:#08111f;
+font-size:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:1px solid rgba(255,255,255,.05);
+color:var(--muted);
+}
+
+/* =========================
+SEARCH
+========================= */
+
+.search-box{
+padding:12px;
+background:#111827;
+display:flex;
+gap:10px;
+}
+
+.search-box input,
+.search-box select{
+padding:12px;
+border:none;
+background:#0f172a;
+border-radius:10px;
+color:white;
+outline:none;
+}
+
+.search-box input{
+flex:1;
+}
+
+/* =========================
+CHANNELS
+========================= */
+
+.channels{
+flex:1;
+overflow-y:auto;
+padding:15px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(290px,1fr));
+gap:12px;
+}
+
+.channel{
+background:var(--card);
+padding:14px;
+border-radius:14px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+cursor:pointer;
+transition:.25s;
+border:1px solid transparent;
+}
+
+.channel:hover{
+background:var(--hover);
+border-color:var(--accent);
+transform:translateY(-2px);
+}
+
+.channel.active{
+border-color:var(--accent);
+background:#00bfff22;
+}
+
+.left{
+display:flex;
+gap:12px;
+align-items:center;
+overflow:hidden;
+}
+
+.left img{
+width:60px;
+height:60px;
+border-radius:12px;
+object-fit:cover;
+background:black;
+}
+
+.info{
+overflow:hidden;
+}
+
+.info h4{
+font-size:14px;
+margin-bottom:5px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.info small{
+color:#cbd5e1;
+}
+
+.status{
+display:flex;
+flex-direction:column;
+align-items:flex-end;
+gap:6px;
+}
+
+.badge{
+padding:5px 10px;
+border-radius:20px;
+font-size:11px;
+font-weight:bold;
+}
+
+.free{
+background:#16a34a;
+}
+
+.country{
+background:#2563eb;
+}
+
+.dead{
+background:#ef4444;
+}
+
+.fav{
+font-size:20px;
+cursor:pointer;
+}
+
+.fav.on{
+color:gold;
+}
+
+/* =========================
+MOBILE
+========================= */
+
+@media(max-width:1000px){
+
+.feature-bar{
+grid-template-columns:repeat(2,1fr);
+}
+
+.sidebar{
+display:none;
+}
+
+.channels{
+grid-template-columns:1fr;
+}
+
+.player{
+height:250px;
+}
+
+.topbar{
+flex-direction:column;
+height:auto;
+padding:10px;
+gap:10px;
+}
+
+.now-playing{
+flex-direction:column;
+align-items:flex-start;
+gap:12px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+TOPBAR
+========================= -->
+
+<div class="topbar">
+
+<div class="logo">
+📺 BTECH-TV WORLD
+</div>
+
+<div class="top-buttons">
+<button class="active">All</button>
+<button>⭐ Favorites</button>
+<button>🕘 Recent</button>
+<button>🌍 Countries</button>
+<button>🎬 Categories</button>
+<button>🗣 Languages</button>
+<button>🎨 Theme</button>
+</div>
+
+</div>
+
+<div class="container">
+
+<!-- =========================
+SIDEBAR
+========================= -->
+
+<div class="sidebar">
+
+<h3>🌍 Countries</h3>
+
+<div class="cat">🇳🇬 Nigeria IPTV</div>
+<div class="cat">🇺🇸 USA IPTV</div>
+<div class="cat">🇬🇧 UK IPTV</div>
+<div class="cat">🇮🇳 India IPTV</div>
+<div class="cat">🇫🇷 France IPTV</div>
+<div class="cat">🇩🇪 Germany IPTV</div>
+<div class="cat">🇿🇦 South Africa IPTV</div>
+
+<h3>🎬 Categories</h3>
+
+<div class="cat">📰 News Channels</div>
+<div class="cat">⚽ Sports Channels</div>
+<div class="cat">🎥 Movies Channels</div>
+<div class="cat">🎵 Music Channels</div>
+<div class="cat">👶 Kids Channels</div>
+
+<h3>🗣 Languages</h3>
+
+<div class="cat">🇬🇧 English</div>
+<div class="cat">🇪🇸 Spanish</div>
+<div class="cat">🇸🇦 Arabic</div>
+<div class="cat">🇫🇷 French</div>
+
+<a class="menu-item" href="#">
+🔒 User Manager Dashboard
+</a>
+
+<a class="menu-item" href="#">
+🧠 AI Quiz Channels
+</a>
+
+<a class="menu-item" href="#">
+🚀 Ultra Fast Global Feeds
+</a>
+
+</div>
+
+<!-- =========================
+MAIN
+========================= -->
+
+<div class="main">
+
+<!-- =========================
+FEATURES
+========================= -->
+
+<div class="feature-bar">
+
+<div class="feature-card">
+<div>⚡</div>
+<h4>Ultra Fast Play</h4>
+<p>Low latency IPTV streaming</p>
+</div>
+
+<div class="feature-card">
+<div>📺</div>
+<h4>PiP Mode</h4>
+<p>Watch in floating window</p>
+</div>
+
+<div class="feature-card">
+<div>⭐</div>
+<h4>Favorites</h4>
+<p>Save your best channels</p>
+</div>
+
+<div class="feature-card">
+<div>🌍</div>
+<h4>Global IPTV</h4>
+<p>Worldwide live channels</p>
+</div>
+
+<div class="feature-card">
+<div>🎬</div>
+<h4>HD Quality</h4>
+<p>High quality live streams</p>
+</div>
+
+</div>
+
+<!-- =========================
+PLAYER
+========================= -->
+
+<div class="player">
+
+<div class="live">
+🔴 LIVE
+</div>
+
+<video
+id="video"
+controls
+autoplay
+playsinline
+muted
+preload="auto">
+</video>
+
+<div class="overlay" id="overlay">
+<h1>🚀</h1>
+<p>Loading IPTV Channels...</p>
+</div>
+
+</div>
+
+<!-- =========================
+NOW PLAYING
+========================= -->
+
+<div class="now-playing">
+
+<div class="now-info">
+<h2>BTECH-TV Sports HD</h2>
+<p>Global IPTV Streaming System</p>
+<div class="clock" id="clock"></div>
+</div>
+
+<div class="controls">
+<button>◀ Prev</button>
+<button>Next ▶</button>
+<button>📺 PiP</button>
+<button>🔗 Share</button>
+<button>⏭ Auto Skip</button>
+</div>
+
+</div>
+
+<!-- =========================
+STATS
+========================= -->
+
+<div class="stats">
+
+<span>
+15,000+ Channels Loaded
+</span>
+
+<span>
+⚡ Ultra Fast Streaming Enabled
+</span>
+
+</div>
+
+<!-- =========================
+SEARCH
+========================= -->
+
+<div class="search-box">
+
+<input
+type="text"
+placeholder="Search BTECH-TV channels..."
+>
+
+<select>
+<option>Sort A-Z</option>
+<option>Sort Z-A</option>
+</select>
+
+</div>
+
+<!-- =========================
+CHANNELS
+========================= -->
+
+<div class="channels">
+
+<div class="channel active">
+
+<div class="left">
+<img src="https://via.placeholder.com/60">
+<div class="info">
+<h4>🇺🇸 ESPN Sports HD</h4>
+<small>Sports Channel</small>
+</div>
+</div>
+
+<div class="status">
+<span class="badge free">FREE</span>
+<span class="badge country">LIVE</span>
+<div class="fav on">★</div>
+</div>
+
+</div>
+
+<div class="channel">
+
+<div class="left">
+<img src="https://via.placeholder.com/60">
+<div class="info">
+<h4>🇬🇧 BBC News</h4>
+<small>News Channel</small>
+</div>
+</div>
+
+<div class="status">
+<span class="badge free">FREE</span>
+<span class="badge country">LIVE</span>
+<div class="fav">☆</div>
+</div>
+
+</div>
+
+<div class="channel">
+
+<div class="left">
+<img src="https://via.placeholder.com/60">
+<div class="info">
+<h4>🇳🇬 Africa Magic</h4>
+<small>Entertainment</small>
+</div>
+</div>
+
+<div class="status">
+<span class="badge free">FREE</span>
+<span class="badge country">LIVE</span>
+<div class="fav">☆</div>
+</div>
+
+</div>
+
+<div class="channel">
+
+<div class="left">
+<img src="https://via.placeholder.com/60">
+<div class="info">
+<h4>🇮🇳 Bollywood HD</h4>
+<small>Movies Channel</small>
+</div>
+</div>
+
+<div class="status">
+<span class="badge free">FREE</span>
+<span class="badge country">LIVE</span>
+<div class="fav">☆</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function tick(){
+
+document.getElementById('clock').innerText=
+new Date().toLocaleTimeString([],{
+hour:'2-digit',
+minute:'2-digit',
+second:'2-digit'
+});
+
+}
+
+setInterval(tick,1000);
+
+tick();
+
+</script>
+
+</body>
+</html>al-scale=1.0"
 />
 
 <title>BTECH-TV WORLD</title>
