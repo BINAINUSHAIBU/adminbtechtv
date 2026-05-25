@@ -2,26 +2,22 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
 
-<title>IPTV SUPER ADMIN DASHBOARD</title>
+<title>IPTV SUPER ADMIN</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-}
-
 body{
+margin:0;
+font-family:Arial;
 background:#07111f;
 color:white;
 display:flex;
 }
-
-/* SIDEBAR */
 
 .sidebar{
 width:240px;
@@ -29,29 +25,23 @@ background:#0f172a;
 height:100vh;
 padding:20px;
 position:fixed;
+overflow:auto;
 }
 
 .logo{
-font-size:26px;
+font-size:25px;
 font-weight:bold;
-margin-bottom:30px;
 color:#00ffd5;
+margin-bottom:30px;
 }
 
 .menu{
 padding:15px;
-margin:10px 0;
 background:#162033;
+margin:10px 0;
 border-radius:10px;
 cursor:pointer;
 }
-
-.menu:hover{
-background:#00ffd5;
-color:black;
-}
-
-/* MAIN */
 
 .main{
 margin-left:260px;
@@ -59,10 +49,52 @@ padding:20px;
 width:100%;
 }
 
-.topbar{
-display:flex;
-justify-content:space-between;
-margin-bottom:25px;
+.card{
+background:#111827;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+}
+
+.stat{
+background:#0f172a;
+padding:20px;
+border-radius:10px;
+}
+
+.number{
+font-size:30px;
+color:#00ffd5;
+}
+
+.player{
+
+width:100%;
+height:450px;
+background:black;
+border-radius:10px;
+}
+
+.channel{
+
+background:#162033;
+padding:15px;
+margin:10px;
+border-radius:10px;
+cursor:pointer;
+
+}
+
+.channel:hover{
+background:#00ffd5;
+color:black;
 }
 
 .search{
@@ -70,87 +102,12 @@ padding:12px;
 width:300px;
 border:none;
 border-radius:10px;
-}
-
-.admin{
-background:#00ffd5;
-padding:12px;
-border-radius:50px;
-color:black;
-font-weight:bold;
-}
-
-/* CARD */
-
-.card{
-background:#111827;
-padding:25px;
-border-radius:20px;
-margin-bottom:25px;
-box-shadow:0 0 20px rgba(0,255,255,.1);
-}
-
-.big{
-font-size:35px;
-font-weight:bold;
-margin:10px 0;
-}
-
-.price{
-font-size:50px;
-color:#00ff8c;
-}
-
-.btn{
-padding:14px 25px;
-border:none;
-background:#00ffd5;
-border-radius:12px;
-font-weight:bold;
-cursor:pointer;
-margin-top:20px;
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-}
-
-.stat{
-background:#0f172a;
-padding:20px;
-border-radius:15px;
-}
-
-.number{
-font-size:35px;
-color:#00ffd5;
-font-weight:bold;
-margin-top:10px;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:20px;
-}
-
-td,th{
-padding:15px;
-border-bottom:1px solid #222;
-}
-
-.online{
-color:lime;
-}
-
-.offline{
-color:red;
+margin-bottom:20px;
 }
 
 </style>
 </head>
+
 
 <body>
 
@@ -164,10 +121,8 @@ color:red;
 <div class="menu">Users</div>
 <div class="menu">Subscriptions</div>
 <div class="menu">Live Channels</div>
-<div class="menu">Movies / VOD</div>
+<div class="menu">Movies</div>
 <div class="menu">Servers</div>
-<div class="menu">Payments</div>
-<div class="menu">Support</div>
 <div class="menu">Logout</div>
 
 </div>
@@ -176,55 +131,24 @@ color:red;
 
 <div class="main">
 
-<div class="topbar">
-
 <input
 class="search"
-placeholder="Search users/channels">
-
-<div class="admin">
-SUPER ADMIN
-</div>
-
-</div>
-
+placeholder="Search channel..."
+onkeyup="searchChannel(this.value)">
 
 
 <div class="card">
 
 <h1>🔥 24 Hour Free Trial</h1>
 
-<div class="price">$00</div>
+<h2 style="color:lime">$00</h2>
 
-<p style="margin-top:20px">
-
-✔ High Performance Server<br><br>
-
-✔ +28,000 Live IPTV Channels<br><br>
-
-✔ +100,000 Movies & TV Shows<br><br>
-
-✔ Live TV + EPG Guide<br><br>
-
-✔ Movies and VOD Shows<br><br>
-
-✔ PPV and Sports Events<br><br>
-
-✔ Always Uptime Server<br><br>
-
-✔ 4K / UHD / FHD / HD Channels<br><br>
-
-✔ TV Guide (EPG)<br><br>
-
-✔ Support All Devices<br><br>
-
-✔ 24/7 Live Chat Support
-
-</p>
-
-<button class="btn">
-CREATE FREE TRIAL
-</button>
++28000 Live IPTV Channels<br>
++100,000 Movies & Shows<br>
+4K / UHD / FHD<br>
+Sports Events<br>
+EPG Guide<br>
+24/7 Support
 
 </div>
 
@@ -233,45 +157,97 @@ CREATE FREE TRIAL
 <div class="grid">
 
 <div class="stat">
-Active Users
-<div class="number">
-24,820
-</div>
+Users
+<div class="number">24K</div>
 </div>
 
 <div class="stat">
-Premium Users
-<div class="number">
-8,510
-</div>
+Channels
+<div class="number">28K+</div>
 </div>
 
 <div class="stat">
-Live Channels
-<div class="number">
-28,000+
-</div>
+VOD
+<div class="number">100K+</div>
 </div>
 
 <div class="stat">
-Movies/VOD
-<div class="number">
-100K+
-</div>
+Servers
+<div class="number">12</div>
 </div>
 
-<div class="stat">
-Online Servers
-<div class="number">
-12
-</div>
 </div>
 
-<div class="stat">
-Revenue
-<div class="number">
-$89K
+
+
+<div class="card">
+
+<h2>📡 Live IPTV Player</h2>
+
+<video
+id="video"
+class="player"
+controls
+autoplay>
+</video>
+
 </div>
+
+
+
+<div class="card">
+
+<h2>Live Channels</h2>
+
+<div id="channels">
+
+<div class="channel"
+onclick="play(
+'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+)">
+⚽ Super Sports HD
+</div>
+
+
+<div class="channel"
+onclick="play(
+'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+)">
+🎬 Movie Max HD
+</div>
+
+
+<div class="channel"
+onclick="play(
+'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+)">
+📰 Global News
+</div>
+
+
+<div class="channel"
+onclick="play(
+'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+)">
+👶 Kids Cartoon TV
+</div>
+
+
+<div class="channel"
+onclick="play(
+'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+)">
+🎵 Music Live
+</div>
+
+
+<div class="channel"
+onclick="play(
+'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8'
+)">
+🏀 NBA Sports
+</div>
+
 </div>
 
 </div>
@@ -282,79 +258,75 @@ $89K
 
 <h2>Server Status</h2>
 
-<table>
+EU Server → ONLINE ✅<br><br>
 
-<tr>
-<th>Server</th>
-<th>Status</th>
-<th>Load</th>
-</tr>
+US Server → ONLINE ✅<br><br>
 
-<tr>
-<td>EU SERVER 1</td>
-<td class="online">ONLINE</td>
-<td>32%</td>
-</tr>
+Africa Server → ONLINE ✅
 
-<tr>
-<td>US SERVER</td>
-<td class="online">ONLINE</td>
-<td>61%</td>
-</tr>
+</div>
 
-<tr>
-<td>AFRICA NODE</td>
-<td class="online">ONLINE</td>
-<td>28%</td>
-</tr>
-
-<tr>
-<td>ASIA SERVER</td>
-<td class="offline">OFFLINE</td>
-<td>0%</td>
-</tr>
-
-</table>
 
 </div>
 
 
 
-<div class="card">
+<script>
 
-<h2>Recent Users</h2>
+function play(url){
 
-<table>
+let video=
+document.getElementById("video");
 
-<tr>
-<th>User</th>
-<th>Plan</th>
-<th>Status</th>
-</tr>
+if(Hls.isSupported()){
 
-<tr>
-<td>john01</td>
-<td>24H Trial</td>
-<td class="online">Active</td>
-</tr>
+let hls=new Hls();
 
-<tr>
-<td>mike88</td>
-<td>Premium</td>
-<td class="online">Active</td>
-</tr>
+hls.loadSource(url);
 
-<tr>
-<td>sarah11</td>
-<td>Expired</td>
-<td class="offline">Expired</td>
-</tr>
+hls.attachMedia(video);
 
-</table>
+}
 
-</div>
+else{
 
-</div>
+video.src=url;
+
+}
+
+}
+
+
+
+function searchChannel(txt){
+
+txt=
+txt.toLowerCase();
+
+let channels=
+document.querySelectorAll(".channel");
+
+channels.forEach(c=>{
+
+c.style.display=
+c.innerText
+.toLowerCase()
+.includes(txt)
+
+?
+
+"block"
+
+:
+
+"none";
+
+});
+
+}
+
+</script>
+
 
 </body>
 </html>
