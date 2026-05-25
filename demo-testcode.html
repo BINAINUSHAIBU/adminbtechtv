@@ -1383,6 +1383,336 @@ loadPlaylist(
 );
 
 </script>
+  <script>
+
+async function playChannel(index){
+
+currentIndex=index;
+
+const channel=filteredChannels[index];
+
+if(!channel){
+return;
+}
+
+document.getElementById('channelName').innerText=
+channel.name;
+
+document.getElementById('channelGroup').innerText=
+channel.group;
+
+document.getElementById('overlay').style.display='flex';
+
+document.getElementById('overlayText').innerText=
+'Buffering '+channel.name+'...';
+
+try{
+
+if(currentHls){
+
+currentHls.stopLoad();
+
+currentHls.detachMedia();
+
+currentHls.destroy();
+
+currentHls=null;
+
+}
+
+video.pause();
+
+video.removeAttribute('src');
+
+video.load();
+
+video.autoplay=true;
+
+video.muted=false;
+
+video.playsInline=true;
+
+video.setAttribute('playsinline','true');
+
+video.setAttribute('webkit-playsinline','true');
+
+/* =========================
+ULTRA SMOOTH HLS SETTINGS
+========================= */
+
+if(Hls.isSupported()){
+
+currentHls=new Hls({
+
+debug:false,
+
+enableWorker:true,
+
+lowLatencyMode:true,
+
+backBufferLength:90,
+
+maxBufferLength:120,
+
+maxMaxBufferLength:180,
+
+liveSyncDuration:2,
+
+liveMaxLatencyDuration:4,
+
+maxBufferHole:1,
+
+highBufferWatchdogPeriod:2,
+
+nudgeOffset:0.1,
+
+nudgeMaxRetry:10,
+
+maxFragLookUpTolerance:0.25,
+
+startFragPrefetch:true,
+
+capLevelToPlayerSize:true,
+
+testBandwidth:true,
+
+abrEwmaFastLive:3,
+
+abrEwmaSlowLive:9,
+
+abrBandWidthFactor:0.95,
+
+abrBandWidthUpFactor:0.7,
+
+manifestLoadingTimeOut:15000,
+
+manifestLoadingMaxRetry:6,
+
+manifestLoadingRetryDelay:1000,
+
+levelLoadingTimeOut:15000,
+
+fragLoadingTimeOut:20000,
+
+fragLoadingMaxRetry:8,
+
+fragLoadingRetryDelay:1000,
+
+appendErrorMaxRetry:10
+
+});
+
+currentHls.loadSource(channel.url);
+
+currentHls.attachMedia(video);
+
+/* =========================
+READY TO PLAY
+========================= */
+
+currentHls.on(
+Hls.Events.MANIFEST_PARSED,
+function(){
+
+video.play().then(()=>{
+
+document.getElementById('overlay').style.display='none';
+
+}).catch(()=>{});
+
+aliveCh[channel.id]=1;
+
+delete deadCh[channel.id];
+
+renderChannels();
+
+}
+);
+
+/* =========================
+AUTO RECOVERY
+========================= */
+
+currentHls.on(
+Hls.Events.ERROR,
+function(event,data){
+
+console.log('HLS ERROR:',data);
+
+if(data.fatal){
+
+switch(data.type){
+
+case Hls.ErrorTypes.NETWORK_ERROR:
+
+console.log('Network error recovery...');
+
+currentHls.startLoad();
+
+break;
+
+case Hls.ErrorTypes.MEDIA_ERROR:
+
+console.log('Media error recovery...');
+
+currentHls.recoverMediaError();
+
+break;
+
+default:
+
+deadCh[channel.id]=1;
+
+renderChannels();
+
+if(autoSkipOn){
+nextChannel();
+}
+
+break;
+
+}
+
+}
+
+}
+);
+
+/* =========================
+BUFFER MONITOR
+========================= */
+
+video.addEventListener('waiting',()=>{
+
+document.getElementById('overlay').style.display='flex';
+
+document.getElementById('overlayText').innerText=
+'Reconnecting Stream...';
+
+});
+
+video.addEventListener('playing',()=>{
+
+document.getElementById('overlay').style.display='none';
+
+});
+
+video.addEventListener('stalled',()=>{
+
+if(currentHls){
+
+currentHls.startLoad();
+
+}
+
+});
+
+video.addEventListener('error',()=>{
+
+if(autoSkipOn){
+nextChannel();
+}
+
+});
+
+}else if(video.canPlayType('application/vnd.apple.mpegurl')){
+
+video.src=channel.url;
+
+video.play();
+
+document.getElementById('overlay').style.display='none';
+
+}else{
+
+video.src=channel.url;
+
+video.play();
+
+document.getElementById('overlay').style.display='none';
+
+}
+
+/* =========================
+SAVE RECENTS
+========================= */
+
+addRecent(channel.id);
+
+renderChannels();
+
+}catch(err){
+
+console.log(err);
+
+if(autoSkipOn){
+nextChannel();
+}
+
+}
+
+}
+
+/* =========================
+PRELOAD NEXT CHANNEL
+========================= */
+
+function preloadNext(){
+
+const next=filteredChannels[currentIndex+1];
+
+if(!next){
+return;
+}
+
+const link=document.createElement('link');
+
+link.rel='preconnect';
+
+link.href=next.url;
+
+document.head.appendChild(link);
+
+}
+
+setInterval(preloadNext,15000);
+
+/* =========================
+AUTO INTERNET SPEED CHECK
+========================= */
+
+setInterval(()=>{
+
+if(navigator.onLine===false){
+
+document.getElementById('overlay').style.display='flex';
+
+document.getElementById('overlayText').innerText=
+'Waiting For Internet Connection...';
+
+}else{
+
+document.getElementById('overlay').style.display='none';
+
+}
+
+},3000);
+
+/* =========================
+MEMORY CLEANER
+========================= */
+
+setInterval(()=>{
+
+if(currentHls){
+
+currentHls.removeLevel(0);
+
+}
+
+},600000);
+
+</script>
 
 </body>
 </html>
