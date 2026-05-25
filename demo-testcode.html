@@ -1,337 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<meta charset="UTF-8"/>
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0"
-/>
-
-<meta name="theme-color" content="#0b0f1a"/>
-
-<title>BTECH-TV WORLD DSTV</title>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<title>IPTV SUPER ADMIN DASHBOARD</title>
 
 <style>
-
-:root{
---bg:#0b0f1a;
---panel:#111827;
---card:#1b2438;
---hover:#2b3a5a;
---accent:#00bfff;
---text:#ffffff;
---muted:#94a3b8;
---danger:#ef4444;
-}
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-html,
-body{
-width:100%;
-height:100%;
-background:var(--bg);
-color:var(--text);
-overflow:hidden;
+font-family:Arial;
 }
 
 body{
-display:flex;
-flex-direction:column;
-}
-
-/* TOPBAR */
-
-.topbar{
-height:70px;
-background:var(--panel);
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 20px;
-border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-.logo{
-font-size:24px;
-font-weight:bold;
-color:var(--accent);
-}
-
-.top-buttons{
-display:flex;
-gap:10px;
-overflow-x:auto;
-}
-
-.top-buttons button{
-padding:10px 16px;
-border:none;
-border-radius:8px;
-background:var(--card);
+background:#07111f;
 color:white;
-cursor:pointer;
-transition:.3s;
-}
-
-.top-buttons button:hover{
-background:var(--accent);
-color:black;
-}
-
-/* LAYOUT */
-
-.container{
-flex:1;
 display:flex;
-overflow:hidden;
 }
 
 /* SIDEBAR */
 
 .sidebar{
-width:280px;
+width:240px;
 background:#0f172a;
-overflow-y:auto;
+height:100vh;
+padding:20px;
+position:fixed;
+}
+
+.logo{
+font-size:26px;
+font-weight:bold;
+margin-bottom:30px;
+color:#00ffd5;
+}
+
+.menu{
 padding:15px;
-border-right:1px solid rgba(255,255,255,.05);
-}
-
-.sidebar h3{
-margin-bottom:15px;
-color:var(--accent);
-}
-
-.cat{
-padding:12px;
-background:var(--card);
+margin:10px 0;
+background:#162033;
 border-radius:10px;
-margin-bottom:10px;
 cursor:pointer;
-transition:.3s;
 }
 
-.cat:hover{
-background:var(--hover);
-transform:translateX(4px);
+.menu:hover{
+background:#00ffd5;
+color:black;
 }
 
 /* MAIN */
 
 .main{
-flex:1;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-}
-
-/* PLAYER */
-
-.player{
-height:350px;
-background:black;
-position:relative;
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
-.player video{
+margin-left:260px;
+padding:20px;
 width:100%;
-height:100%;
-object-fit:contain;
-background:black;
 }
 
-.live{
-position:absolute;
-top:15px;
-left:15px;
-background:red;
-padding:8px 14px;
-border-radius:30px;
-font-size:12px;
+.topbar{
+display:flex;
+justify-content:space-between;
+margin-bottom:25px;
+}
+
+.search{
+padding:12px;
+width:300px;
+border:none;
+border-radius:10px;
+}
+
+.admin{
+background:#00ffd5;
+padding:12px;
+border-radius:50px;
+color:black;
 font-weight:bold;
-z-index:5;
 }
 
-/* NOW PLAYING */
+/* CARD */
 
-.now-playing{
-background:var(--panel);
-padding:15px 20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-top:1px solid rgba(255,255,255,.05);
-border-bottom:1px solid rgba(255,255,255,.05);
-}
-
-.now-info h2{
-font-size:18px;
-margin-bottom:5px;
-}
-
-.now-info p{
-font-size:13px;
-color:var(--muted);
-}
-
-.controls{
-display:flex;
-gap:10px;
-}
-
-.controls button{
-padding:10px 14px;
-background:var(--card);
-border:none;
-border-radius:8px;
-color:white;
-cursor:pointer;
-transition:.3s;
-}
-
-.controls button:hover{
-background:var(--hover);
-}
-
-/* SEARCH */
-
-.search-box{
-padding:12px;
-background:var(--panel);
-display:flex;
-gap:10px;
-}
-
-.search-box input{
-flex:1;
-padding:12px;
-border:none;
-border-radius:10px;
-background:#0f172a;
-color:white;
-}
-
-/* CHANNELS */
-
-.channels{
-flex:1;
-overflow-y:auto;
-padding:15px;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-gap:12px;
-}
-
-.channel{
-background:var(--card);
-padding:14px;
-border-radius:12px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-cursor:pointer;
-transition:.3s;
-border:1px solid transparent;
-}
-
-.channel:hover{
-background:var(--hover);
-border-color:var(--accent);
-transform:translateY(-2px);
-}
-
-.channel.active{
-border-color:var(--accent);
-background:#00bfff22;
-}
-
-.left{
-display:flex;
-gap:12px;
-align-items:center;
-overflow:hidden;
-}
-
-.left img{
-width:60px;
-height:60px;
-border-radius:10px;
-object-fit:cover;
-background:black;
-}
-
-.info h4{
-font-size:14px;
-margin-bottom:5px;
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis;
-}
-
-.info small{
-font-size:12px;
-color:#cbd5e1;
-}
-
-.status{
-display:flex;
-flex-direction:column;
-gap:6px;
-align-items:flex-end;
-}
-
-.badge{
-padding:5px 10px;
+.card{
+background:#111827;
+padding:25px;
 border-radius:20px;
-font-size:11px;
+margin-bottom:25px;
+box-shadow:0 0 20px rgba(0,255,255,.1);
+}
+
+.big{
+font-size:35px;
 font-weight:bold;
-background:#16a34a;
+margin:10px 0;
 }
 
-.fav{
-font-size:20px;
+.price{
+font-size:50px;
+color:#00ff8c;
+}
+
+.btn{
+padding:14px 25px;
+border:none;
+background:#00ffd5;
+border-radius:12px;
+font-weight:bold;
 cursor:pointer;
+margin-top:20px;
 }
 
-.fav.on{
-color:gold;
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
 }
 
-/* MOBILE */
-
-@media(max-width:900px){
-
-.container{
-flex-direction:column;
+.stat{
+background:#0f172a;
+padding:20px;
+border-radius:15px;
 }
 
-.sidebar{
+.number{
+font-size:35px;
+color:#00ffd5;
+font-weight:bold;
+margin-top:10px;
+}
+
+table{
 width:100%;
-max-height:250px;
-border-right:none;
-border-bottom:1px solid rgba(255,255,255,.05);
+border-collapse:collapse;
+margin-top:20px;
 }
 
-.player{
-height:250px;
+td,th{
+padding:15px;
+border-bottom:1px solid #222;
 }
 
-.channels{
-grid-template-columns:1fr;
+.online{
+color:lime;
 }
 
+.offline{
+color:red;
 }
 
 </style>
@@ -339,437 +154,207 @@ grid-template-columns:1fr;
 
 <body>
 
-<div class="topbar">
-
-<div class="logo">
-📺 BTECH-TV WORLD DSTV
-</div>
-
-<div class="top-buttons">
-
-<button onclick="loadDstvChannels()">
-DSTV Channels
-</button>
-
-<button onclick="toggleTheme()">
-Theme
-</button>
-
-</div>
-
-</div>
-
-<div class="container">
-
 <div class="sidebar">
 
-<h3>🌍 Africa Magic</h3>
-
-<div class="cat" onclick="playChannelById('151')">
-🎬 Africa Magic Showcase
+<div class="logo">
+📺 IPTV ADMIN
 </div>
 
-<div class="cat" onclick="playChannelById('152')">
-🎥 Africa Magic Epic
+<div class="menu">Dashboard</div>
+<div class="menu">Users</div>
+<div class="menu">Subscriptions</div>
+<div class="menu">Live Channels</div>
+<div class="menu">Movies / VOD</div>
+<div class="menu">Servers</div>
+<div class="menu">Payments</div>
+<div class="menu">Support</div>
+<div class="menu">Logout</div>
+
 </div>
 
-<div class="cat" onclick="playChannelById('154')">
-👨‍👩‍👧 Africa Magic Family
-</div>
 
-</div>
 
 <div class="main">
 
-<div class="player">
-
-<div class="live">
-🔴 LIVE
-</div>
-
-<video
-id="video"
-controls
-autoplay
-playsinline
-webkit-playsinline
-preload="auto"
-></video>
-
-</div>
-
-<div class="now-playing">
-
-<div class="now-info">
-
-<h2 id="channelName">
-No Channel Selected
-</h2>
-
-<p id="channelGroup">
-DSTV Africa Magic
-</p>
-
-</div>
-
-<div class="controls">
-
-<button onclick="prevChannel()">
-◀ Prev
-</button>
-
-<button onclick="nextChannel()">
-Next ▶
-</button>
-
-<button onclick="togglePiP()">
-📺 PiP
-</button>
-
-</div>
-
-</div>
-
-<div class="search-box">
+<div class="topbar">
 
 <input
-type="text"
-placeholder="Search DSTV channels..."
-oninput="searchChannels(this.value)"
->
+class="search"
+placeholder="Search users/channels">
 
-</div>
-
-<div class="channels" id="channelList"></div>
-
+<div class="admin">
+SUPER ADMIN
 </div>
 
 </div>
 
-<script>
 
-/* =========================
-STATE
-========================= */
 
-let all=[];
+<div class="card">
 
-let filteredChannels=[];
+<h1>🔥 24 Hour Free Trial</h1>
 
-let currentIndex=0;
+<div class="price">$00</div>
 
-let currentHls=null;
+<p style="margin-top:20px">
 
-let dark=true;
+✔ High Performance Server<br><br>
 
-const video=document.getElementById('video');
+✔ +28,000 Live IPTV Channels<br><br>
 
-/* =========================
-DSTV XML CHANNELS
-========================= */
+✔ +100,000 Movies & TV Shows<br><br>
 
-const dstvChannels=`
+✔ Live TV + EPG Guide<br><br>
 
-<channel id="151">
-<display-name>Africa Magic Showcase</display-name>
-<icon src="https://03mcdecdnimagerepository.blob.core.windows.net/epguideimage/channel/AME.png"/>
-<url>https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8</url>
-</channel>
+✔ Movies and VOD Shows<br><br>
 
-<channel id="152">
-<display-name>Africa Magic Epic</display-name>
-<icon src="https://03mcdecdnimagerepository.blob.core.windows.net/epguideimage/channel/IA9.png"/>
-<url>https://test-streams.mux.dev/test_001/stream.m3u8</url>
-</channel>
+✔ PPV and Sports Events<br><br>
 
-<channel id="154">
-<display-name>Africa Magic Family</display-name>
-<icon src="https://03mcdecdnimagerepository.blob.core.windows.net/epguideimage/channel/AFM.png"/>
-<url>https://test-streams.mux.dev/dai-discontinuity-daterange/hls.m3u8</url>
-</channel>
+✔ Always Uptime Server<br><br>
 
-`;
+✔ 4K / UHD / FHD / HD Channels<br><br>
 
-/* =========================
-LOAD DSTV CHANNELS
-========================= */
+✔ TV Guide (EPG)<br><br>
 
-function loadDstvChannels(){
+✔ Support All Devices<br><br>
 
-all=[];
+✔ 24/7 Live Chat Support
 
-const parser=new DOMParser();
+</p>
 
-const xml=parser.parseFromString(
-'<root>'+dstvChannels+'</root>',
-'text/xml'
-);
+<button class="btn">
+CREATE FREE TRIAL
+</button>
 
-const channels=xml.querySelectorAll('channel');
+</div>
 
-channels.forEach(ch=>{
 
-all.push({
 
-id:ch.getAttribute('id'),
+<div class="grid">
 
-name:ch.querySelector('display-name').textContent,
+<div class="stat">
+Active Users
+<div class="number">
+24,820
+</div>
+</div>
 
-logo:ch.querySelector('icon').getAttribute('src'),
+<div class="stat">
+Premium Users
+<div class="number">
+8,510
+</div>
+</div>
 
-url:ch.querySelector('url').textContent,
+<div class="stat">
+Live Channels
+<div class="number">
+28,000+
+</div>
+</div>
 
-group:'DSTV Africa Magic',
+<div class="stat">
+Movies/VOD
+<div class="number">
+100K+
+</div>
+</div>
 
-country:'NG'
+<div class="stat">
+Online Servers
+<div class="number">
+12
+</div>
+</div>
 
-});
-
-});
-
-filteredChannels=[...all];
-
-renderChannels();
-
-}
-
-/* =========================
-RENDER CHANNELS
-========================= */
-
-function renderChannels(){
-
-const box=document.getElementById('channelList');
-
-box.innerHTML='';
-
-filteredChannels.forEach((c,index)=>{
-
-const div=document.createElement('div');
-
-div.className='channel';
-
-if(index===currentIndex){
-div.classList.add('active');
-}
-
-div.innerHTML=`
-
-<div class="left">
-
-<img
-src="${c.logo}"
-onerror="this.src='https://via.placeholder.com/60'"
->
-
-<div class="info">
-
-<h4>${c.name}</h4>
-
-<small>${c.group}</small>
-
+<div class="stat">
+Revenue
+<div class="number">
+$89K
+</div>
 </div>
 
 </div>
 
-<div class="status">
 
-<span class="badge">
-LIVE
-</span>
 
-<div class="fav">
-★
+<div class="card">
+
+<h2>Server Status</h2>
+
+<table>
+
+<tr>
+<th>Server</th>
+<th>Status</th>
+<th>Load</th>
+</tr>
+
+<tr>
+<td>EU SERVER 1</td>
+<td class="online">ONLINE</td>
+<td>32%</td>
+</tr>
+
+<tr>
+<td>US SERVER</td>
+<td class="online">ONLINE</td>
+<td>61%</td>
+</tr>
+
+<tr>
+<td>AFRICA NODE</td>
+<td class="online">ONLINE</td>
+<td>28%</td>
+</tr>
+
+<tr>
+<td>ASIA SERVER</td>
+<td class="offline">OFFLINE</td>
+<td>0%</td>
+</tr>
+
+</table>
+
+</div>
+
+
+
+<div class="card">
+
+<h2>Recent Users</h2>
+
+<table>
+
+<tr>
+<th>User</th>
+<th>Plan</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>john01</td>
+<td>24H Trial</td>
+<td class="online">Active</td>
+</tr>
+
+<tr>
+<td>mike88</td>
+<td>Premium</td>
+<td class="online">Active</td>
+</tr>
+
+<tr>
+<td>sarah11</td>
+<td>Expired</td>
+<td class="offline">Expired</td>
+</tr>
+
+</table>
+
 </div>
 
 </div>
-
-`;
-
-div.onclick=()=>playChannel(index);
-
-box.appendChild(div);
-
-});
-
-}
-
-/* =========================
-PLAY CHANNEL
-========================= */
-
-function playChannel(index){
-
-currentIndex=index;
-
-const channel=filteredChannels[index];
-
-if(!channel){
-return;
-}
-
-document.getElementById('channelName').innerText=
-channel.name;
-
-document.getElementById('channelGroup').innerText=
-channel.group;
-
-if(currentHls){
-currentHls.destroy();
-}
-
-video.pause();
-
-video.removeAttribute('src');
-
-video.load();
-
-if(Hls.isSupported()){
-
-currentHls=new Hls();
-
-currentHls.loadSource(channel.url);
-
-currentHls.attachMedia(video);
-
-currentHls.on(
-Hls.Events.MANIFEST_PARSED,
-function(){
-
-video.play().catch(()=>{});
-
-}
-);
-
-}else{
-
-video.src=channel.url;
-
-video.play().catch(()=>{});
-
-}
-
-renderChannels();
-
-}
-
-/* =========================
-PLAY BY ID
-========================= */
-
-function playChannelById(id){
-
-const index=filteredChannels.findIndex(
-c=>c.id===id
-);
-
-if(index!==-1){
-playChannel(index);
-}
-
-}
-
-/* =========================
-NEXT / PREV
-========================= */
-
-function nextChannel(){
-
-currentIndex++;
-
-if(currentIndex>=filteredChannels.length){
-currentIndex=0;
-}
-
-playChannel(currentIndex);
-
-}
-
-function prevChannel(){
-
-currentIndex--;
-
-if(currentIndex<0){
-currentIndex=filteredChannels.length-1;
-}
-
-playChannel(currentIndex);
-
-}
-
-/* =========================
-SEARCH
-========================= */
-
-function searchChannels(q){
-
-const value=q.toLowerCase();
-
-filteredChannels=all.filter(c=>
-
-c.name.toLowerCase().includes(value)
-
-);
-
-renderChannels();
-
-}
-
-/* =========================
-THEME
-========================= */
-
-function toggleTheme(){
-
-dark=!dark;
-
-document.documentElement.style.setProperty(
-'--bg',
-dark?'#0b0f1a':'#f1f5f9'
-);
-
-document.documentElement.style.setProperty(
-'--panel',
-dark?'#111827':'#ffffff'
-);
-
-document.documentElement.style.setProperty(
-'--card',
-dark?'#1b2438':'#e2e8f0'
-);
-
-document.documentElement.style.setProperty(
-'--text',
-dark?'#ffffff':'#000000'
-);
-
-}
-
-/* =========================
-PIP
-========================= */
-
-function togglePiP(){
-
-if(document.pictureInPictureElement){
-
-document.exitPictureInPicture();
-
-}else if(document.pictureInPictureEnabled){
-
-video.requestPictureInPicture();
-
-}
-
-}
-
-/* =========================
-AUTO LOAD
-========================= */
-
-loadDstvChannels();
-
-</script>
 
 </body>
 </html>
