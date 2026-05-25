@@ -2394,5 +2394,381 @@ loadPlaylist(
 );
 
 </script>
+  <script>
+
+async function playChannel(index){
+
+currentIndex=index;
+
+const channel=filteredChannels[index];
+
+if(!channel){
+return;
+}
+
+document.getElementById('channelName').innerText=
+channel.name;
+
+document.getElementById('channelGroup').innerText=
+channel.group;
+
+document.getElementById('overlay').style.display='flex';
+
+document.getElementById('overlayText').innerText=
+'Loading HD Stream...';
+
+try{
+
+/* CLEAN OLD PLAYER */
+
+if(currentHls){
+
+currentHls.stopLoad();
+
+currentHls.detachMedia();
+
+currentHls.destroy();
+
+currentHls=null;
+
+}
+
+video.pause();
+
+video.removeAttribute('src');
+
+video.load();
+
+video.autoplay=true;
+
+video.preload='auto';
+
+video.playsInline=true;
+
+video.setAttribute('playsinline','true');
+
+video.setAttribute('webkit-playsinline','true');
+
+/* =========================
+ULTRA FAST HD ENGINE
+========================= */
+
+if(Hls.isSupported()){
+
+currentHls=new Hls({
+
+debug:false,
+
+enableWorker:true,
+
+lowLatencyMode:true,
+
+liveDurationInfinity:true,
+
+backBufferLength:120,
+
+maxBufferLength:300,
+
+maxMaxBufferLength:600,
+
+maxBufferHole:0.5,
+
+highBufferWatchdogPeriod:1,
+
+nudgeOffset:0.05,
+
+nudgeMaxRetry:20,
+
+startFragPrefetch:true,
+
+capLevelToPlayerSize:true,
+
+startLevel:-1,
+
+testBandwidth:true,
+
+abrEwmaFastLive:2,
+
+abrEwmaSlowLive:5,
+
+abrBandWidthFactor:1,
+
+abrBandWidthUpFactor:0.9,
+
+manifestLoadingTimeOut:10000,
+
+manifestLoadingMaxRetry:10,
+
+manifestLoadingRetryDelay:500,
+
+levelLoadingTimeOut:10000,
+
+fragLoadingTimeOut:15000,
+
+fragLoadingMaxRetry:15,
+
+fragLoadingRetryDelay:500,
+
+appendErrorMaxRetry:20,
+
+enableSoftwareAES:true
+
+});
+
+/* LOAD STREAM */
+
+currentHls.loadSource(channel.url);
+
+currentHls.attachMedia(video);
+
+/* FAST START */
+
+currentHls.on(
+Hls.Events.MANIFEST_PARSED,
+function(){
+
+video.play().then(()=>{
+
+document.getElementById('overlay').style.display='none';
+
+}).catch(()=>{});
+
+aliveCh[channel.id]=1;
+
+delete deadCh[channel.id];
+
+renderChannels();
+
+}
+);
+
+/* =========================
+NO AUTO SKIP
+========================= */
+
+currentHls.on(
+Hls.Events.ERROR,
+function(event,data){
+
+console.log('STREAM ERROR:',data);
+
+if(data.fatal){
+
+switch(data.type){
+
+case Hls.ErrorTypes.NETWORK_ERROR:
+
+document.getElementById('overlay').style.display='flex';
+
+document.getElementById('overlayText').innerText=
+'Reconnecting HD Stream...';
+
+currentHls.startLoad();
+
+break;
+
+case Hls.ErrorTypes.MEDIA_ERROR:
+
+document.getElementById('overlay').style.display='flex';
+
+document.getElementById('overlayText').innerText=
+'Recovering Video...';
+
+currentHls.recoverMediaError();
+
+break;
+
+default:
+
+document.getElementById('overlay').style.display='flex';
+
+document.getElementById('overlayText').innerText=
+'Retrying Channel...';
+
+setTimeout(()=>{
+
+currentHls.loadSource(channel.url);
+
+currentHls.attachMedia(video);
+
+},2000);
+
+break;
+
+}
+
+}
+
+}
+);
+
+/* =========================
+BUFFER RECOVERY
+========================= */
+
+video.addEventListener('waiting',()=>{
+
+document.getElementById('overlay').style.display='flex';
+
+document.getElementById('overlayText').innerText=
+'Buffering HD Stream...';
+
+});
+
+video.addEventListener('playing',()=>{
+
+document.getElementById('overlay').style.display='none';
+
+});
+
+video.addEventListener('stalled',()=>{
+
+if(currentHls){
+
+currentHls.startLoad();
+
+}
+
+});
+
+video.addEventListener('suspend',()=>{
+
+if(currentHls){
+
+currentHls.startLoad();
+
+}
+
+});
+
+video.addEventListener('error',()=>{
+
+document.getElementById('overlay').style.display='flex';
+
+document.getElementById('overlayText').innerText=
+'Recovering Playback...';
+
+});
+
+/* =========================
+SMART QUALITY BOOST
+========================= */
+
+currentHls.on(
+Hls.Events.LEVEL_SWITCHED,
+function(event,data){
+
+console.log(
+'HD LEVEL:',
+data.level
+);
+
+}
+);
+
+}else{
+
+video.src=channel.url;
+
+video.play().then(()=>{
+
+document.getElementById('overlay').style.display='none';
+
+});
+
+}
+
+/* SAVE RECENT */
+
+addRecent(channel.id);
+
+renderChannels();
+
+/* PRELOAD NEXT STREAM */
+
+setTimeout(()=>{
+
+const next=
+filteredChannels[currentIndex+1];
+
+if(next){
+
+fetch(next.url,{
+method:'HEAD',
+mode:'no-cors'
+}).catch(()=>{});
+
+}
+
+},3000);
+
+}catch(err){
+
+console.log(err);
+
+document.getElementById('overlay').style.display='flex';
+
+document.getElementById('overlayText').innerText=
+'Retrying Stream...';
+
+setTimeout(()=>{
+
+playChannel(index);
+
+},3000);
+
+}
+
+}
+
+/* =========================
+ANTI FREEZE ENGINE
+========================= */
+
+setInterval(()=>{
+
+if(video.readyState<2){
+
+if(currentHls){
+
+currentHls.startLoad();
+
+}
+
+}
+
+},5000);
+
+/* =========================
+AUTO MEMORY CLEANER
+========================= */
+
+setInterval(()=>{
+
+if(window.gc){
+window.gc();
+}
+
+},600000);
+
+/* =========================
+KEEP STREAM ACTIVE
+========================= */
+
+document.addEventListener('visibilitychange',()=>{
+
+if(!document.hidden){
+
+if(video.paused){
+
+video.play().catch(()=>{});
+
+}
+
+}
+
+});
+
+</script>
 </body>
 </html>
