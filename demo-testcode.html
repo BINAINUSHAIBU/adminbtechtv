@@ -1,4 +1,4 @@
-```html
+```html id="v9r2xc"
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +13,6 @@
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <style>
 
@@ -157,7 +156,7 @@ object-fit:cover;
 .overlay{
 position:fixed;
 inset:0;
-background:rgba(0,0,0,.9);
+background:rgba(0,0,0,.92);
 display:flex;
 justify-content:center;
 align-items:center;
@@ -217,35 +216,43 @@ grid-template-columns:1fr;
 <input
 id="authEmail"
 type="email"
-placeholder="Email"
 value="demo@btechtv.com"
+readonly
 >
 
 <input
 id="authPassword"
 type="password"
-placeholder="Password"
 value="Demo1234"
+readonly
 >
 
 <button
 onclick="loginUser()"
-style="width:100%;background:#16a34a;margin-bottom:10px;"
+style="
+width:100%;
+background:#16a34a;
+"
 >
 Login
 </button>
 
-<button
-onclick="registerUser()"
-style="width:100%;background:#00bfff;color:black;"
->
-Create Account
-</button>
-
 <p
 id="authMsg"
-style="margin-top:15px;font-size:13px;"
+style="
+margin-top:15px;
+font-size:13px;
+"
 ></p>
+
+<p style="
+margin-top:15px;
+font-size:12px;
+color:#94a3b8;
+text-align:center;
+">
+Demo Access Enabled
+</p>
 
 </div>
 
@@ -261,24 +268,32 @@ style="display:none;"
 
 <div class="auth-box">
 
-<h2 style="margin-bottom:20px;color:#00bfff;">
+<h2 style="
+margin-bottom:20px;
+color:#00bfff;
+">
 👤 Profile
 </h2>
 
 <p id="profileEmail"></p>
-<p id="trialStatus"></p>
-<p id="subscriptionStatus"></p>
 
 <button
 onclick="logoutUser()"
-style="width:100%;margin-top:15px;background:#ef4444;"
+style="
+width:100%;
+margin-top:20px;
+background:#ef4444;
+"
 >
 Logout
 </button>
 
 <button
 onclick="closeProfile()"
-style="width:100%;margin-top:10px;"
+style="
+width:100%;
+margin-top:10px;
+"
 >
 Close
 </button>
@@ -319,28 +334,28 @@ Theme
 
 <div
 class="cat"
-onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ng.m3u','Nigeria')"
+onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ng.m3u')"
 >
 🇳🇬 Nigeria
 </div>
 
 <div
 class="cat"
-onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/us.m3u','USA')"
+onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/us.m3u')"
 >
 🇺🇸 USA
 </div>
 
 <div
 class="cat"
-onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/news.m3u','News')"
+onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/news.m3u')"
 >
 📰 News
 </div>
 
 <div
 class="cat"
-onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/sport.m3u','Sports')"
+onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/sport.m3u')"
 >
 ⚽ Sports
 </div>
@@ -372,7 +387,10 @@ oninput="searchChannels(this.value)"
 
 </div>
 
-<div class="channels" id="channelList"></div>
+<div
+class="channels"
+id="channelList"
+></div>
 
 </div>
 
@@ -390,95 +408,35 @@ authDomain:"YOUR_PROJECT.firebaseapp.com",
 
 projectId:"YOUR_PROJECT_ID",
 
-storageBucket:"YOUR_PROJECT.appspot.com",
-
-messagingSenderId:"XXXX",
-
-appId:"XXXX"
+appId:"YOUR_APP_ID"
 
 };
 
 firebase.initializeApp(firebaseConfig);
 
 const auth=firebase.auth();
-const db=firebase.firestore();
 
 /* VARIABLES */
 
 let all=[];
 let filteredChannels=[];
-let currentIndex=0;
 let currentHls=null;
-let currentUser=null;
-let userData=null;
+let currentIndex=0;
 let dark=true;
 
 let favs=
-JSON.parse(localStorage.getItem('atv_favs')||'{}');
+JSON.parse(localStorage.getItem('favs')||'{}');
 
 const video=
 document.getElementById('video');
-
-/* REGISTER */
-
-async function registerUser(){
-
-const email=
-document.getElementById('authEmail').value;
-
-const password=
-document.getElementById('authPassword').value;
-
-try{
-
-const res=
-await auth.createUserWithEmailAndPassword(
-email,
-password
-);
-
-const uid=res.user.uid;
-
-const now=Date.now();
-
-const trialEnds=
-now+(7*24*60*60*1000);
-
-await db.collection('users').doc(uid).set({
-
-email,
-
-createdAt:now,
-
-trialEnds,
-
-subscriptionActive:false,
-
-favorites:[]
-
-});
-
-document.getElementById('authMsg').innerText=
-'✅ Account Created';
-
-}catch(err){
-
-document.getElementById('authMsg').innerText=
-err.message;
-
-}
-
-}
 
 /* LOGIN */
 
 async function loginUser(){
 
-const email=
-document.getElementById('authEmail').value;
+const email='demo@btechtv.com';
 
-const password=
-document.getElementById('authPassword').value;
+const password='Demo1234';
 
 try{
 
@@ -498,20 +456,11 @@ err.message;
 
 /* AUTH */
 
-auth.onAuthStateChanged(async(user)=>{
+auth.onAuthStateChanged((user)=>{
 
 if(user){
 
-currentUser=user;
-
 document.getElementById('authModal').style.display='none';
-
-const doc=
-await db.collection('users')
-.doc(user.uid)
-.get();
-
-userData=doc.data();
 
 }else{
 
@@ -521,9 +470,9 @@ document.getElementById('authModal').style.display='flex';
 
 });
 
-/* PLAYLIST */
+/* LOAD PLAYLIST */
 
-async function loadPlaylist(url,group){
+async function loadPlaylist(url){
 
 const res=await fetch(url);
 
@@ -531,7 +480,7 @@ const text=await res.text();
 
 all=[];
 
-parseM3U(text,group);
+parseM3U(text);
 
 filteredChannels=[...all];
 
@@ -541,7 +490,7 @@ renderChannels();
 
 /* PARSE */
 
-function parseM3U(data,group){
+function parseM3U(data){
 
 const lines=data.split('\\n');
 
@@ -550,6 +499,7 @@ for(let i=0;i<lines.length;i++){
 if(lines[i].startsWith('#EXTINF')){
 
 const info=lines[i];
+
 const url=lines[i+1];
 
 if(!url || !url.startsWith('http')){
@@ -565,11 +515,9 @@ all.push({
 
 id:all.length+1,
 
-name,
+name:name,
 
-url,
-
-group,
+url:url,
 
 logo:
 logoMatch
@@ -612,8 +560,6 @@ onerror="this.src='https://via.placeholder.com/60'"
 
 <h4>${c.name}</h4>
 
-<small>${c.group}</small>
-
 </div>
 
 </div>
@@ -638,21 +584,6 @@ box.appendChild(div);
 /* PLAY */
 
 function playChannel(index){
-
-if(userData){
-
-const trialValid=
-Date.now()<userData.trialEnds;
-
-if(!trialValid && !userData.subscriptionActive){
-
-alert('Trial Expired');
-
-return;
-
-}
-
-}
 
 currentIndex=index;
 
@@ -694,7 +625,7 @@ video.play();
 
 /* FAVORITES */
 
-async function toggleFav(id){
+function toggleFav(id){
 
 if(favs[id]){
 delete favs[id];
@@ -703,7 +634,7 @@ favs[id]=1;
 }
 
 localStorage.setItem(
-'atv_favs',
+'favs',
 JSON.stringify(favs)
 );
 
@@ -721,10 +652,6 @@ filteredChannels=all.filter(c=>
 
 c.name.toLowerCase().includes(value)
 
-||
-
-c.group.toLowerCase().includes(value)
-
 );
 
 renderChannels();
@@ -735,32 +662,16 @@ renderChannels();
 
 function openProfile(){
 
-if(!currentUser){
+const user=auth.currentUser;
+
+if(!user){
 return;
 }
 
 document.getElementById('profilePanel').style.display='flex';
 
 document.getElementById('profileEmail').innerText=
-'Email: '+currentUser.email;
-
-const daysLeft=Math.ceil(
-(userData.trialEnds-Date.now())
-/
-(1000*60*60*24)
-);
-
-document.getElementById('trialStatus').innerText=
-'Trial: '+
-(daysLeft>0
-? daysLeft+' days left'
-: 'Expired');
-
-document.getElementById('subscriptionStatus').innerText=
-'Subscription: '+
-(userData.subscriptionActive
-? 'ACTIVE'
-: 'INACTIVE');
+'Email: '+user.email;
 
 }
 
@@ -769,6 +680,8 @@ function closeProfile(){
 document.getElementById('profilePanel').style.display='none';
 
 }
+
+/* LOGOUT */
 
 async function logoutUser(){
 
@@ -809,8 +722,7 @@ dark ? '#ffffff':'#000000'
 /* START */
 
 loadPlaylist(
-'https://iptv-org.github.io/iptv/index.country.m3u',
-'World IPTV'
+'https://iptv-org.github.io/iptv/index.country.m3u'
 );
 
 </script>
