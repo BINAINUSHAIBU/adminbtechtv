@@ -1,9 +1,12 @@
+
+
+
 <!-- ULTRA MERGED FULL ONE-PAGE VERSION -->
-<!-- UPGRADED EDITION - ALL FEATURES PRESERVED -->
-<!-- ALL CHANNELS + IPTV + FAVORITES + RECENTS + AUTOSKIP -->
-<!-- PiP + SHARE + THEME + SEARCH + GLOBAL FEEDS -->
-<!-- RESPONSIVE + FAST + MOBILE + DESKTOP -->
-<!-- NO FEATURES REMOVED -->
+<!-- ALL FEATURES + ALL CHANNELS + EXTRA FEEDS + RESPONSIVE + IPTV -->
+<!-- FAVORITES + RECENTS + AUTOSKIP + PiP + SHARE + THEME -->
+<!-- COUNTRIES + CATEGORIES + LANGUAGES + GLOBAL FEEDS -->
+<!-- USER MANAGER + QUIZ CHANNELS -->
+<!-- MOBILE + DESKTOP OPTIMIZED -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,13 +33,10 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
 --card:#1b2438;
 --hover:#2b3a5a;
 --accent:#00bfff;
---accent2:#22c55e;
 --text:#ffffff;
 --muted:#94a3b8;
 --success:#16a34a;
 --danger:#ef4444;
---warning:#f59e0b;
---shadow:0 10px 25px rgba(0,0,0,.35);
 }
 
 *{
@@ -54,7 +54,6 @@ height:100%;
 background:var(--bg);
 color:var(--text);
 overflow:hidden;
-scroll-behavior:smooth;
 }
 
 body{
@@ -68,8 +67,7 @@ TOPBAR
 
 .topbar{
 min-height:70px;
-background:rgba(17,24,39,.96);
-backdrop-filter:blur(10px);
+background:var(--panel);
 display:flex;
 align-items:center;
 justify-content:space-between;
@@ -77,9 +75,6 @@ padding:12px 20px;
 border-bottom:1px solid rgba(255,255,255,.05);
 gap:15px;
 flex-wrap:wrap;
-position:sticky;
-top:0;
-z-index:999;
 }
 
 .logo{
@@ -87,19 +82,6 @@ font-size:24px;
 font-weight:bold;
 color:var(--accent);
 white-space:nowrap;
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-.logo span{
-animation:pulse 2s infinite;
-}
-
-@keyframes pulse{
-0%{transform:scale(1);}
-50%{transform:scale(1.1);}
-100%{transform:scale(1);}
 }
 
 .top-buttons{
@@ -119,21 +101,18 @@ padding:10px 16px;
 background:var(--card);
 color:white;
 border:none;
-border-radius:10px;
+border-radius:8px;
 cursor:pointer;
 font-size:13px;
 transition:.3s;
 white-space:nowrap;
 flex-shrink:0;
-font-weight:bold;
-box-shadow:var(--shadow);
 }
 
 .top-buttons button:hover,
 .top-buttons button.active{
-background:linear-gradient(135deg,var(--accent),#3b82f6);
+background:var(--accent);
 color:black;
-transform:translateY(-2px);
 }
 
 /* =========================
@@ -148,45 +127,33 @@ min-height:0;
 }
 
 .sidebar{
-width:320px;
+width:310px;
 background:#0f172a;
 overflow-y:auto;
 padding:15px;
 border-right:1px solid rgba(255,255,255,.05);
 -webkit-overflow-scrolling:touch;
-scrollbar-width:thin;
-}
-
-.sidebar::-webkit-scrollbar{
-width:6px;
-}
-
-.sidebar::-webkit-scrollbar-thumb{
-background:var(--accent);
-border-radius:20px;
 }
 
 .sidebar h3{
-margin:18px 0 12px;
+margin:15px 0 10px;
 color:var(--accent);
 font-size:16px;
 }
 
 .cat{
 background:var(--card);
-padding:13px;
+padding:12px;
 margin-bottom:10px;
-border-radius:12px;
+border-radius:10px;
 cursor:pointer;
 transition:.3s;
 font-size:14px;
-border:1px solid transparent;
 }
 
 .cat:hover{
 background:var(--hover);
-transform:translateX(5px);
-border-color:var(--accent);
+transform:translateX(4px);
 }
 
 .main{
@@ -228,11 +195,6 @@ border-radius:30px;
 font-size:12px;
 font-weight:bold;
 z-index:5;
-animation:blink 1s infinite;
-}
-
-@keyframes blink{
-50%{opacity:.5;}
 }
 
 .overlay{
@@ -255,26 +217,6 @@ margin-bottom:15px;
 
 .overlay p{
 color:var(--muted);
-}
-
-/* =========================
-LOADER
-========================= */
-
-.loader{
-width:55px;
-height:55px;
-border:5px solid rgba(255,255,255,.1);
-border-top-color:var(--accent);
-border-radius:50%;
-animation:spin 1s linear infinite;
-margin-bottom:20px;
-}
-
-@keyframes spin{
-to{
-transform:rotate(360deg);
-}
 }
 
 /* =========================
@@ -320,15 +262,13 @@ padding:10px 15px;
 background:var(--card);
 color:white;
 border:none;
-border-radius:10px;
+border-radius:8px;
 cursor:pointer;
 transition:.3s;
-font-weight:bold;
 }
 
 .controls button:hover{
 background:var(--hover);
-transform:translateY(-2px);
 }
 
 /* =========================
@@ -336,16 +276,11 @@ SEARCH
 ========================= */
 
 .stats{
-padding:10px 15px;
+padding:8px 15px;
 background:#0f172a;
 font-size:12px;
 color:var(--muted);
 border-bottom:1px solid rgba(255,255,255,.05);
-display:flex;
-justify-content:space-between;
-align-items:center;
-flex-wrap:wrap;
-gap:10px;
 }
 
 .search-box{
@@ -360,11 +295,10 @@ flex-wrap:wrap;
 .search-box select{
 padding:12px;
 border:none;
-border-radius:12px;
+border-radius:10px;
 background:#0f172a;
 color:white;
 min-height:48px;
-outline:none;
 }
 
 .search-box input{
@@ -389,7 +323,7 @@ gap:12px;
 .channel{
 background:var(--card);
 padding:14px;
-border-radius:16px;
+border-radius:12px;
 display:flex;
 justify-content:space-between;
 align-items:center;
@@ -397,33 +331,11 @@ cursor:pointer;
 transition:.3s;
 border:1px solid transparent;
 gap:10px;
-position:relative;
-overflow:hidden;
-}
-
-.channel::before{
-content:'';
-position:absolute;
-top:0;
-left:-100%;
-width:100%;
-height:100%;
-background:linear-gradient(
-90deg,
-transparent,
-rgba(255,255,255,.08),
-transparent
-);
-transition:.6s;
-}
-
-.channel:hover::before{
-left:100%;
 }
 
 .channel:hover{
 background:var(--hover);
-transform:translateY(-3px);
+transform:translateY(-2px);
 border-color:var(--accent);
 }
 
@@ -443,11 +355,10 @@ min-width:0;
 .left img{
 width:60px;
 height:60px;
-border-radius:12px;
+border-radius:10px;
 object-fit:cover;
 background:black;
 flex-shrink:0;
-box-shadow:var(--shadow);
 }
 
 .info{
@@ -497,47 +408,13 @@ background:#2563eb;
 background:var(--danger);
 }
 
-.buffering{
-background:var(--warning);
-}
-
 .fav{
-font-size:22px;
+font-size:20px;
 cursor:pointer;
-transition:.3s;
-}
-
-.fav:hover{
-transform:scale(1.2);
 }
 
 .fav.on{
 color:gold;
-}
-
-/* =========================
-TOAST
-========================= */
-
-.toast{
-position:fixed;
-bottom:25px;
-right:25px;
-background:var(--panel);
-padding:14px 18px;
-border-radius:12px;
-z-index:99999;
-box-shadow:var(--shadow);
-transform:translateY(120px);
-opacity:0;
-transition:.4s;
-font-size:14px;
-border-left:4px solid var(--accent);
-}
-
-.toast.show{
-transform:translateY(0);
-opacity:1;
 }
 
 /* =========================
@@ -547,7 +424,7 @@ RESPONSIVE
 @media(max-width:1000px){
 
 .sidebar{
-width:250px;
+width:240px;
 }
 
 .player{
@@ -666,7 +543,7 @@ height:70vh;
 <div class="topbar">
 
 <div class="logo">
-<span>📺</span> BTECH-TV WORLD
+📺 BTECH-TV WORLD
 </div>
 
 <div class="top-buttons">
@@ -719,6 +596,21 @@ Theme
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/za.m3u','South Africa')">🇿🇦 South Africa</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ca.m3u','Canada')">🇨🇦 Canada</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/au.m3u','Australia')">🇦🇺 Australia</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/jp.m3u','Japan')">🇯🇵 Japan</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/kr.m3u','South Korea')">🇰🇷 South Korea</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/cn.m3u','China')">🇨🇳 China</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/es.m3u','Spain')">🇪🇸 Spain</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/it.m3u','Italy')">🇮🇹 Italy</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ru.m3u','Russia')">🇷🇺 Russia</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/tr.m3u','Turkey')">🇹🇷 Turkey</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/mx.m3u','Mexico')">🇲🇽 Mexico</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ae.m3u','UAE')">🇦🇪 UAE</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/sa.m3u','Saudi Arabia')">🇸🇦 Saudi Arabia</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/eg.m3u','Egypt')">🇪🇬 Egypt</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ar.m3u','Argentina')">🇦🇷 Argentina</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/pk.m3u','Pakistan')">🇵🇰 Pakistan</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/id.m3u','Indonesia')">🇮🇩 Indonesia</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ph.m3u','Philippines')">🇵🇭 Philippines</div>
 
 <h3>🎬 Categories</h3>
 
@@ -728,12 +620,24 @@ Theme
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/music.m3u','Music')">🎵 Music</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/kids.m3u','Kids')">👶 Kids</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/comedy.m3u','Comedy')">😂 Comedy</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/documentary.m3u','Documentary')">📚 Documentary</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/business.m3u','Business')">💼 Business</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/cooking.m3u','Cooking')">🍳 Cooking</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/education.m3u','Education')">📖 Education</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/science.m3u','Science')">🔬 Science</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/travel.m3u','Travel')">✈ Travel</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/weather.m3u','Weather')">🌦 Weather</div>
 
 <h3>🗣 Languages</h3>
 
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/eng.m3u','English')">🇬🇧 English</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/spa.m3u','Spanish')">🇪🇸 Spanish</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/ara.m3u','Arabic')">🇸🇦 Arabic</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/fra.m3u','French')">🇫🇷 French</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/hin.m3u','Hindi')">🇮🇳 Hindi</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/zho.m3u','Chinese')">🇨🇳 Chinese</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/por.m3u','Portuguese')">🇵🇹 Portuguese</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/rus.m3u','Russian')">🇷🇺 Russian</div>
 
 <hr style="margin:15px 0;border:0;border-top:1px solid #1f2937;">
 
@@ -780,8 +684,6 @@ preload="auto"
 
 <div class="overlay" id="overlay">
 
-<div class="loader"></div>
-
 <h1>🚀</h1>
 
 <p id="overlayText">
@@ -821,14 +723,6 @@ Global BTECH-TV Streaming
 ⏭ Auto Skip
 </button>
 
-<button onclick="toggleFullscreen()">
-⛶ Fullscreen
-</button>
-
-<button onclick="refreshPlayer()">
-🔄 Refresh
-</button>
-
 </div>
 
 </div>
@@ -858,8 +752,6 @@ oninput="searchChannels(this.value)"
 </div>
 
 </div>
-
-<div class="toast" id="toast"></div>
 
 <script>
 
@@ -892,20 +784,6 @@ const extraFeeds=[
 'https://raw.githubusercontent.com/freecasthub/public-iptv/main/playlist.m3u'
 
 ];
-
-function showToast(text){
-
-const toast=document.getElementById('toast');
-
-toast.innerText=text;
-
-toast.classList.add('show');
-
-setTimeout(()=>{
-toast.classList.remove('show');
-},2500);
-
-}
 
 function tick(){
 
@@ -962,8 +840,6 @@ renderChannels();
 updateStats();
 
 document.getElementById('overlay').style.display='none';
-
-showToast(group+' channels loaded');
 
 }catch(err){
 
@@ -1079,8 +955,6 @@ renderChannels();
 updateStats();
 
 document.getElementById('overlay').style.display='none';
-
-showToast('Global feeds loaded');
 
 }
 
@@ -1217,8 +1091,6 @@ delete deadCh[channel.id];
 
 renderChannels();
 
-showToast('Playing: '+channel.name);
-
 }
 );
 
@@ -1231,8 +1103,6 @@ if(data.fatal){
 deadCh[channel.id]=1;
 
 renderChannels();
-
-showToast('Channel unavailable');
 
 if(autoSkipOn){
 nextChannel();
@@ -1260,14 +1130,6 @@ video.play().catch(()=>{});
 addRecent(channel.id);
 
 renderChannels();
-
-}
-
-function refreshPlayer(){
-
-playChannel(currentIndex);
-
-showToast('Refreshing player');
 
 }
 
@@ -1315,10 +1177,8 @@ function toggleFav(id){
 
 if(favs[id]){
 delete favs[id];
-showToast('Removed from favorites');
 }else{
 favs[id]=1;
-showToast('Added to favorites');
 }
 
 localStorage.setItem(
@@ -1395,8 +1255,6 @@ document
 
 btn.classList.add('active');
 
-showToast(type+' filter selected');
-
 }
 
 function nextChannel(){
@@ -1437,20 +1295,6 @@ video.requestPictureInPicture();
 
 }
 
-function toggleFullscreen(){
-
-if(!document.fullscreenElement){
-
-video.requestFullscreen();
-
-}else{
-
-document.exitFullscreen();
-
-}
-
-}
-
 function shareChannel(){
 
 const channel=
@@ -1471,7 +1315,7 @@ url:channel.url
 
 navigator.clipboard.writeText(channel.url);
 
-showToast('Channel URL copied!');
+alert('Channel URL copied!');
 
 }
 
@@ -1485,12 +1329,6 @@ document.getElementById('autoSkipBtn').innerText=
 autoSkipOn
 ? '⏭ Auto Skip'
 : '⏭ Skip OFF';
-
-showToast(
-autoSkipOn
-? 'Auto skip enabled'
-: 'Auto skip disabled'
-);
 
 }
 
@@ -1518,21 +1356,13 @@ document.documentElement.style.setProperty(
 dark ? '#ffffff':'#000000'
 );
 
-showToast(
-dark
-? 'Dark mode enabled'
-: 'Light mode enabled'
-);
-
 }
 
 function updateStats(){
 
-document.getElementById('stats').innerHTML=
-`
-<span>${filteredChannels.length} Channels Loaded</span>
-<span>Favorites: ${Object.keys(favs).length}</span>
-`;
+document.getElementById('stats').innerText=
+filteredChannels.length +
+' Channels Loaded';
 
 }
 
@@ -1546,18 +1376,6 @@ if(e.key==='ArrowLeft'){
 prevChannel();
 }
 
-if(e.key==='f'){
-toggleFullscreen();
-}
-
-});
-
-video.addEventListener('waiting',()=>{
-showToast('Buffering...');
-});
-
-video.addEventListener('playing',()=>{
-document.getElementById('overlay').style.display='none';
 });
 
 loadPlaylist(
