@@ -1384,93 +1384,80 @@ loadPlaylist(
 );
 
 </script>
-  <script>
+<script>
+
+/* =========================================
+BTECH-TV WORLD — ULTRA PRO MAX UPGRADE
+FAST • STABLE • HD • ZERO FORMAT CHANGE
+========================================= */
 
 /* =========================
-ULTRA STABLE NETWORK ENGINE
+GLOBAL PLAYER ENGINE
 ========================= */
 
-let reconnecting=false;
-let retryCount=0;
-let maxRetries=999;
+const STREAM_CONFIG={
 
-/* INTERNET MONITOR */
+AUTO_RECOVER:true,
+SMART_BUFFER:true,
+ULTRA_HD:true,
+NETWORK_PROTECTION:true,
+MEMORY_OPTIMIZER:true,
+PRELOAD_NEXT:true,
+CACHE_STREAMS:true
 
-function monitorConnection(){
+};
 
-if(!navigator.onLine){
-
-document.getElementById('overlay').style.display='flex';
-
-document.getElementById('overlayText').innerText=
-'📡 Waiting For Network...';
-
-video.pause();
-
-}else{
-
-if(video.paused){
-
-video.play().catch(()=>{});
-
-}
-
-document.getElementById('overlay').style.display='none';
-
-}
-
-}
-
-window.addEventListener('online',()=>{
-
-retryCount=0;
-
-document.getElementById('overlay').style.display='flex';
-
-document.getElementById('overlayText').innerText=
-'🔄 Reconnecting Stream...';
-
-setTimeout(()=>{
-
-if(currentIndex>=0){
-
-playChannel(currentIndex);
-
-}
-
-},1500);
-
-});
-
-window.addEventListener('offline',monitorConnection);
-
-setInterval(monitorConnection,4000);
+let streamCache={};
+let reconnectAttempts=0;
+let streamHealth=100;
+let lastPlaybackTime=0;
+let freezeDetector=null;
 
 /* =========================
-VIDEO STABILITY BOOST
+VIDEO OPTIMIZATION
 ========================= */
 
-video.setAttribute('crossorigin','anonymous');
-
-video.setAttribute('preload','auto');
+video.preload='auto';
 
 video.autoplay=true;
 
-video.muted=false;
-
-video.volume=1;
-
 video.controls=true;
 
-/* KEEP VIDEO PLAYING */
+video.playsInline=true;
 
-async function keepVideoAlive(){
+video.disablePictureInPicture=false;
+
+video.controlsList='nodownload';
+
+video.setAttribute('playsinline','true');
+
+video.setAttribute('webkit-playsinline','true');
+
+video.setAttribute('crossorigin','anonymous');
+
+/* =========================
+ULTRA NETWORK BOOST
+========================= */
+
+async function optimizeNetwork(){
 
 try{
 
-if(video.paused && navigator.onLine){
+if('connection' in navigator){
 
-await video.play();
+const net=navigator.connection;
+
+console.log('NETWORK TYPE:',net.effectiveType);
+
+if(net.effectiveType==='4g'){
+
+Hls.DefaultConfig.maxBufferLength=400;
+
+}else{
+
+Hls.DefaultConfig.maxBufferLength=180;
+
+}
 
 }
 
@@ -1482,10 +1469,272 @@ console.log(err);
 
 }
 
-setInterval(keepVideoAlive,5000);
+optimizeNetwork();
 
 /* =========================
-SMART BUFFER RECOVERY
+ADVANCED PLAY FUNCTION
+========================= */
+
+async function playChannel(index){
+
+currentIndex=index;
+
+const channel=filteredChannels[index];
+
+if(!channel){
+return;
+}
+
+document.getElementById('overlay').style.display='flex';
+
+document.getElementById('overlayText').innerText=
+'⚡ Starting Ultra HD Stream...';
+
+document.getElementById('channelName').innerText=
+channel.name;
+
+document.getElementById('channelGroup').innerText=
+channel.group;
+
+try{
+
+/* CLEAN OLD STREAM */
+
+if(currentHls){
+
+try{
+
+currentHls.stopLoad();
+
+currentHls.detachMedia();
+
+currentHls.destroy();
+
+}catch(e){}
+
+currentHls=null;
+
+}
+
+video.pause();
+
+video.removeAttribute('src');
+
+video.load();
+
+/* =========================
+SUPER HLS CONFIG
+========================= */
+
+if(Hls.isSupported()){
+
+currentHls=new Hls({
+
+debug:false,
+
+enableWorker:true,
+
+lowLatencyMode:true,
+
+liveDurationInfinity:true,
+
+backBufferLength:180,
+
+maxBufferLength:500,
+
+maxMaxBufferLength:800,
+
+liveSyncDuration:1,
+
+liveMaxLatencyDuration:2,
+
+maxBufferHole:0.1,
+
+highBufferWatchdogPeriod:1,
+
+nudgeOffset:0.05,
+
+nudgeMaxRetry:50,
+
+maxFragLookUpTolerance:0.1,
+
+startFragPrefetch:true,
+
+capLevelToPlayerSize:true,
+
+startLevel:-1,
+
+testBandwidth:true,
+
+abrEwmaFastLive:1,
+
+abrEwmaSlowLive:3,
+
+abrBandWidthFactor:1,
+
+abrBandWidthUpFactor:1,
+
+manifestLoadingTimeOut:8000,
+
+manifestLoadingMaxRetry:20,
+
+manifestLoadingRetryDelay:300,
+
+levelLoadingTimeOut:8000,
+
+fragLoadingTimeOut:12000,
+
+fragLoadingMaxRetry:30,
+
+fragLoadingRetryDelay:300,
+
+appendErrorMaxRetry:50,
+
+enableSoftwareAES:true,
+
+stretchShortVideoTrack:true,
+
+progressive:true
+
+});
+
+/* LOAD STREAM */
+
+currentHls.loadSource(channel.url);
+
+currentHls.attachMedia(video);
+
+/* =========================
+FAST START PLAY
+========================= */
+
+currentHls.on(
+Hls.Events.MANIFEST_PARSED,
+async function(){
+
+try{
+
+await video.play();
+
+document.getElementById('overlay').style.display='none';
+
+aliveCh[channel.id]=1;
+
+delete deadCh[channel.id];
+
+renderChannels();
+
+}catch(err){
+
+console.log(err);
+
+}
+
+}
+);
+
+/* =========================
+SMART ERROR RECOVERY
+========================= */
+
+currentHls.on(
+Hls.Events.ERROR,
+function(event,data){
+
+console.log('STREAM EVENT:',data);
+
+if(data.fatal){
+
+switch(data.type){
+
+case Hls.ErrorTypes.NETWORK_ERROR:
+
+document.getElementById('overlayText').innerText=
+'📡 Recovering Network...';
+
+currentHls.startLoad();
+
+break;
+
+case Hls.ErrorTypes.MEDIA_ERROR:
+
+document.getElementById('overlayText').innerText=
+'🎬 Repairing Video...';
+
+currentHls.recoverMediaError();
+
+break;
+
+default:
+
+document.getElementById('overlayText').innerText=
+'🔄 Reloading Stream...';
+
+setTimeout(()=>{
+
+playChannel(currentIndex);
+
+},1000);
+
+break;
+
+}
+
+}
+
+}
+);
+
+/* =========================
+QUALITY AUTO BOOST
+========================= */
+
+currentHls.on(
+Hls.Events.LEVEL_SWITCHED,
+function(event,data){
+
+console.log('QUALITY LEVEL:',data.level);
+
+}
+);
+
+}else{
+
+video.src=channel.url;
+
+await video.play();
+
+document.getElementById('overlay').style.display='none';
+
+}
+
+/* =========================
+SAVE RECENT
+========================= */
+
+addRecent(channel.id);
+
+renderChannels();
+
+}catch(err){
+
+console.log(err);
+
+document.getElementById('overlayText').innerText=
+'⚠ Retrying Stream...';
+
+setTimeout(()=>{
+
+playChannel(index);
+
+},2000);
+
+}
+
+}
+
+/* =========================
+ANTI BUFFER SYSTEM
 ========================= */
 
 video.addEventListener('waiting',()=>{
@@ -1493,7 +1742,7 @@ video.addEventListener('waiting',()=>{
 document.getElementById('overlay').style.display='flex';
 
 document.getElementById('overlayText').innerText=
-'⚡ Optimizing Stream Buffer...';
+'⚡ Optimizing Playback...';
 
 if(currentHls){
 
@@ -1506,8 +1755,6 @@ currentHls.startLoad();
 video.addEventListener('playing',()=>{
 
 document.getElementById('overlay').style.display='none';
-
-retryCount=0;
 
 });
 
@@ -1523,202 +1770,94 @@ currentHls.recoverMediaError();
 
 });
 
-video.addEventListener('suspend',()=>{
+video.addEventListener('error',()=>{
+
+if(currentHls){
+
+currentHls.recoverMediaError();
+
+}
+
+});
+
+/* =========================
+ANTI FREEZE DETECTOR
+========================= */
+
+freezeDetector=setInterval(()=>{
+
+if(video.currentTime===lastPlaybackTime &&
+!video.paused &&
+!video.seeking){
+
+console.log('FREEZE DETECTED');
 
 if(currentHls){
 
 currentHls.startLoad();
 
+currentHls.recoverMediaError();
+
 }
 
-});
+}
 
-video.addEventListener('canplay',()=>{
+lastPlaybackTime=video.currentTime;
 
-document.getElementById('overlay').style.display='none';
-
-});
+},4000);
 
 /* =========================
-AUTO STREAM REPAIR
+PRELOAD NEXT STREAM
 ========================= */
 
-function repairStream(){
+function preloadNextStream(){
 
-if(reconnecting){
+if(!STREAM_CONFIG.PRELOAD_NEXT){
 return;
 }
 
-reconnecting=true;
+const next=
+filteredChannels[currentIndex+1];
+
+if(!next){
+return;
+}
+
+fetch(next.url,{
+method:'HEAD',
+mode:'no-cors',
+cache:'force-cache'
+}).catch(()=>{});
+
+}
+
+setInterval(preloadNextStream,15000);
+
+/* =========================
+AUTO INTERNET RECOVERY
+========================= */
+
+window.addEventListener('offline',()=>{
 
 document.getElementById('overlay').style.display='flex';
 
 document.getElementById('overlayText').innerText=
-'🛠 Repairing Stream...';
+'📴 No Internet Connection';
+
+});
+
+window.addEventListener('online',()=>{
+
+document.getElementById('overlayText').innerText=
+'📶 Internet Restored';
 
 setTimeout(()=>{
-
-try{
-
-if(currentHls){
-
-currentHls.startLoad();
-
-currentHls.recoverMediaError();
-
-}
-
-video.play().catch(()=>{});
-
-}catch(err){
-
-console.log(err);
-
-}
-
-reconnecting=false;
-
-},2000);
-
-}
-
-setInterval(()=>{
-
-if(video.readyState<2){
-
-repairStream();
-
-}
-
-},7000);
-
-/* =========================
-ULTRA LOW BUFFER SETTINGS
-========================= */
-
-if(Hls.isSupported()){
-
-Hls.DefaultConfig.maxBufferLength=300;
-
-Hls.DefaultConfig.maxMaxBufferLength=600;
-
-Hls.DefaultConfig.liveSyncDuration=1;
-
-Hls.DefaultConfig.liveMaxLatencyDuration=3;
-
-Hls.DefaultConfig.backBufferLength=120;
-
-Hls.DefaultConfig.startFragPrefetch=true;
-
-Hls.DefaultConfig.enableWorker=true;
-
-Hls.DefaultConfig.lowLatencyMode=true;
-
-}
-
-/* =========================
-ANTI FREEZE ENGINE
-========================= */
-
-setInterval(()=>{
-
-if(video.currentTime>0 &&
-video.paused===false &&
-video.readyState===2){
-
-video.playbackRate=1.01;
-
-setTimeout(()=>{
-
-video.playbackRate=1;
-
-},1000);
-
-}
-
-},10000);
-
-/* =========================
-MEMORY + CACHE OPTIMIZER
-========================= */
-
-function cleanMemory(){
-
-try{
-
-if(currentHls){
-
-currentHls.trigger(Hls.Events.BUFFER_FLUSHING);
-
-}
-
-}catch(err){
-
-console.log(err);
-
-}
-
-}
-
-setInterval(cleanMemory,300000);
-
-/* =========================
-AUTO QUALITY STABILIZER
-========================= */
-
-if(currentHls){
-
-currentHls.on(
-Hls.Events.FRAG_BUFFERED,
-function(){
-
-retryCount=0;
-
-}
-);
-
-currentHls.on(
-Hls.Events.ERROR,
-function(event,data){
-
-console.log('HLS RECOVERY:',data);
-
-if(data.fatal){
-
-retryCount++;
-
-if(retryCount<maxRetries){
-
-switch(data.type){
-
-case Hls.ErrorTypes.NETWORK_ERROR:
-
-currentHls.startLoad();
-
-break;
-
-case Hls.ErrorTypes.MEDIA_ERROR:
-
-currentHls.recoverMediaError();
-
-break;
-
-default:
 
 playChannel(currentIndex);
 
-break;
+},1000);
 
-}
-
-}
-
-}
-
-}
-);
-
-}
+});
 
 /* =========================
 WAKE LOCK
@@ -1726,7 +1865,7 @@ WAKE LOCK
 
 let wakeLock=null;
 
-async function enableWakeLock(){
+async function activateWakeLock(){
 
 try{
 
@@ -1745,48 +1884,19 @@ console.log(err);
 
 }
 
-enableWakeLock();
-
-document.addEventListener('visibilitychange',()=>{
-
-if(document.visibilityState==='visible'){
-
-enableWakeLock();
-
-}
-
-});
+activateWakeLock();
 
 /* =========================
-AUTO SPEED CHECK
+RAM CLEANER
 ========================= */
 
-async function checkSpeed(){
+function optimizeMemory(){
 
 try{
 
-const start=Date.now();
+if(currentHls){
 
-await fetch(
-'https://www.google.com/favicon.ico',
-{
-mode:'no-cors',
-cache:'no-cache'
-}
-);
-
-const speed=Date.now()-start;
-
-if(speed>3000){
-
-document.getElementById('overlay').style.display='flex';
-
-document.getElementById('overlayText').innerText=
-'🐢 Slow Network Detected...';
-
-}else{
-
-document.getElementById('overlay').style.display='none';
+currentHls.trigger(Hls.Events.BUFFER_FLUSHING);
 
 }
 
@@ -1798,7 +1908,68 @@ console.log(err);
 
 }
 
-setInterval(checkSpeed,20000);
+setInterval(optimizeMemory,300000);
+
+/* =========================
+SMART PERFORMANCE BOOST
+========================= */
+
+setInterval(()=>{
+
+if(video.readyState<3){
+
+if(currentHls){
+
+currentHls.startLoad();
+
+}
+
+}
+
+},5000);
+
+/* =========================
+KEYBOARD SPEED CONTROL
+========================= */
+
+document.addEventListener('keydown',e=>{
+
+if(e.key==='ArrowUp'){
+
+video.volume=Math.min(1,video.volume+0.1);
+
+}
+
+if(e.key==='ArrowDown'){
+
+video.volume=Math.max(0,video.volume-0.1);
+
+}
+
+if(e.key===' '){
+
+if(video.paused){
+
+video.play();
+
+}else{
+
+video.pause();
+
+}
+
+}
+
+});
+
+/* =========================
+AUTO START
+========================= */
+
+loadPlaylist(
+'https://iptv-org.github.io/iptv/index.country.m3u',
+'World IPTV'
+);
 
 </script>
 
