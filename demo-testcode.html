@@ -1,159 +1,635 @@
-<!-- ================================ -->
-<!-- BTECH-TV WORLD 1 MILLION CHANNELS UPGRADE -->
-<!-- MASSIVE IPTV ENGINE + SMART LOADER -->
-<!-- NO FEATURES REMOVED -->
-<!-- ================================ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>BTECH-TV WORLD • 1 MILLION CHANNELS</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+
+:root{
+--bg:#0b0f1a;
+--panel:#111827;
+--card:#1b2438;
+--hover:#24324d;
+--accent:#00bfff;
+--text:#ffffff;
+--muted:#94a3b8;
+--green:#16a34a;
+--red:#ef4444;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+html,
+body{
+height:100%;
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
+
+body{
+display:flex;
+flex-direction:column;
+}
+
+/* TOPBAR */
+
+.topbar{
+height:70px;
+background:var(--panel);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 15px;
+border-bottom:1px solid rgba(255,255,255,.05);
+gap:10px;
+flex-wrap:wrap;
+}
+
+.logo{
+font-size:24px;
+font-weight:bold;
+color:var(--accent);
+}
+
+.top-actions{
+display:flex;
+gap:10px;
+overflow:auto;
+}
+
+.top-actions button{
+padding:10px 14px;
+border:none;
+border-radius:8px;
+background:var(--card);
+color:white;
+cursor:pointer;
+transition:.3s;
+white-space:nowrap;
+}
+
+.top-actions button:hover{
+background:var(--accent);
+color:black;
+}
+
+/* LAYOUT */
+
+.layout{
+flex:1;
+display:flex;
+overflow:hidden;
+}
+
+.sidebar{
+width:280px;
+background:#0f172a;
+overflow-y:auto;
+padding:15px;
+border-right:1px solid rgba(255,255,255,.05);
+}
+
+.sidebar h3{
+margin:15px 0;
+color:var(--accent);
+font-size:15px;
+}
+
+.cat{
+padding:12px;
+background:var(--card);
+margin-bottom:10px;
+border-radius:10px;
+cursor:pointer;
+transition:.3s;
+font-size:14px;
+}
+
+.cat:hover{
+background:var(--hover);
+transform:translateX(4px);
+}
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+/* PLAYER */
+
+.player{
+height:360px;
+background:black;
+position:relative;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.player video{
+width:100%;
+height:100%;
+object-fit:contain;
+background:black;
+}
+
+.live{
+position:absolute;
+top:15px;
+left:15px;
+background:red;
+padding:8px 14px;
+border-radius:30px;
+font-size:12px;
+font-weight:bold;
+z-index:5;
+}
+
+.overlay{
+position:absolute;
+inset:0;
+background:rgba(0,0,0,.92);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:10;
+text-align:center;
+padding:20px;
+}
+
+.overlay h1{
+font-size:55px;
+margin-bottom:15px;
+}
+
+.overlay p{
+color:var(--muted);
+line-height:1.7;
+}
+
+/* NOW PLAYING */
+
+.now{
+padding:15px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.now h2{
+font-size:18px;
+margin-bottom:5px;
+}
+
+.now p{
+color:var(--muted);
+font-size:13px;
+}
+
+.controls{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.controls button{
+padding:10px 14px;
+background:var(--card);
+border:none;
+border-radius:8px;
+color:white;
+cursor:pointer;
+transition:.3s;
+}
+
+.controls button:hover{
+background:var(--hover);
+}
+
+/* SEARCH */
+
+.search{
+padding:12px;
+background:#0f172a;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.search input,
+.search select{
+padding:12px;
+border:none;
+border-radius:10px;
+background:var(--panel);
+color:white;
+}
+
+.search input{
+flex:1;
+}
+
+/* STATS */
+
+.stats{
+padding:10px 15px;
+background:#111827;
+font-size:12px;
+color:var(--muted);
+border-top:1px solid rgba(255,255,255,.05);
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+/* CHANNELS */
+
+.channels{
+flex:1;
+overflow-y:auto;
+padding:15px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+gap:12px;
+}
+
+.channel{
+background:var(--card);
+padding:14px;
+border-radius:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+cursor:pointer;
+transition:.3s;
+border:1px solid transparent;
+gap:10px;
+}
+
+.channel:hover{
+background:var(--hover);
+transform:translateY(-2px);
+border-color:var(--accent);
+}
+
+.channel.active{
+border-color:var(--accent);
+background:#00bfff22;
+}
+
+.left{
+display:flex;
+gap:12px;
+align-items:center;
+overflow:hidden;
+}
+
+.left img{
+width:60px;
+height:60px;
+border-radius:10px;
+object-fit:cover;
+background:black;
+}
+
+.info h4{
+font-size:14px;
+margin-bottom:4px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.info small{
+color:#cbd5e1;
+}
+
+.status{
+display:flex;
+flex-direction:column;
+gap:6px;
+align-items:flex-end;
+}
+
+.badge{
+padding:5px 10px;
+border-radius:20px;
+font-size:11px;
+font-weight:bold;
+}
+
+.livebadge{
+background:var(--green);
+}
+
+.offbadge{
+background:var(--red);
+}
+
+.fav{
+font-size:20px;
+cursor:pointer;
+}
+
+.fav.on{
+color:gold;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.layout{
+flex-direction:column;
+overflow:auto;
+}
+
+.sidebar{
+width:100%;
+max-height:220px;
+border-right:none;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.player{
+height:250px;
+}
+
+.channels{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:600px){
+
+.player{
+height:220px;
+}
+
+.logo{
+font-size:20px;
+}
+
+.top-actions button{
+font-size:12px;
+padding:9px 12px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+
+<div class="topbar">
+
+<div class="logo">
+📺 BTECH-TV WORLD
+</div>
+
+<div class="top-actions">
+
+<button onclick="loadMillionChannels()">
+🚀 1M Channels
+</button>
+
+<button onclick="showFavs()">
+⭐ Favorites
+</button>
+
+<button onclick="showRecent()">
+🕘 Recent
+</button>
+
+<button onclick="toggleTheme()">
+🌙 Theme
+</button>
+
+</div>
+
+</div>
+
+<!-- LAYOUT -->
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h3>🌍 Countries</h3>
+
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ng.m3u','Nigeria')">🇳🇬 Nigeria</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/us.m3u','USA')">🇺🇸 USA</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/uk.m3u','UK')">🇬🇧 UK</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/in.m3u','India')">🇮🇳 India</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/index.country.m3u','World IPTV')">🌍 World IPTV</div>
+
+<h3>🎬 Categories</h3>
+
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/news.m3u','News')">📰 News</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/sport.m3u','Sports')">⚽ Sports</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/movies.m3u','Movies')">🎥 Movies</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/music.m3u','Music')">🎵 Music</div>
+
+<h3>🗣 Languages</h3>
+
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/eng.m3u','English')">🇬🇧 English</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/ara.m3u','Arabic')">🇸🇦 Arabic</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/spa.m3u','Spanish')">🇪🇸 Spanish</div>
+
+<h3>🚀 Ultra IPTV</h3>
+
+<div class="cat" onclick="loadMillionChannels()">
+🔥 Load 1 Million Channels
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<!-- PLAYER -->
+
+<div class="player">
+
+<div class="live">
+🔴 LIVE
+</div>
+
+<video
+id="video"
+controls
+autoplay
+playsinline
+webkit-playsinline
+></video>
+
+<div class="overlay" id="overlay">
+
+<h1>🚀</h1>
+
+<p id="overlayText">
+Loading Ultra IPTV...
+</p>
+
+</div>
+
+</div>
+
+<!-- NOW -->
+
+<div class="now">
+
+<div>
+
+<h2 id="channelName">
+No Channel Selected
+</h2>
+
+<p id="channelGroup">
+Global IPTV Streaming
+</p>
+
+</div>
+
+<div class="controls">
+
+<button onclick="prevChannel()">
+◀ Prev
+</button>
+
+<button onclick="nextChannel()">
+Next ▶
+</button>
+
+<button onclick="togglePiP()">
+📺 PiP
+</button>
+
+<button onclick="shareChannel()">
+🔗 Share
+</button>
+
+</div>
+
+</div>
+
+<!-- SEARCH -->
+
+<div class="search">
+
+<input
+type="text"
+placeholder="Search IPTV channels..."
+id="searchInput"
+oninput="searchChannels(this.value)"
+>
+
+<select onchange="sortChannels(this.value)">
+
+<option value="az">
+Sort A-Z
+</option>
+
+<option value="za">
+Sort Z-A
+</option>
+
+</select>
+
+</div>
+
+<!-- STATS -->
+
+<div class="stats" id="stats">
+0 Channels Loaded
+</div>
+
+<!-- CHANNELS -->
+
+<div class="channels" id="channelList"></div>
+
+</div>
+
+</div>
 
 <script>
 
-/* =========================================
-ULTRA IPTV DATABASE ENGINE
-1 MILLION+ CHANNEL READY SYSTEM
-========================================= */
+/* DATABASE */
 
-let IPTV_DATABASE = [];
-let MASTER_PLAYLISTS = [];
+let all=[];
+let filtered=[];
+let current=0;
+let currentHls=null;
 
-/* =========================================
-AUTO-GENERATED GLOBAL SOURCES
-========================================= */
+let favs=
+JSON.parse(localStorage.getItem('favs')||'{}');
 
-const countries = [
-'ng','us','uk','in','fr','de','br','za','ca','au','jp','kr','cn',
-'es','it','ru','tr','mx','ae','sa','eg','ar','pk','id','ph',
-'bd','ke','gh','tz','ug','cm','ma','dz','tn','et','qa','kw',
-'om','bh','pl','nl','be','se','no','fi','dk','gr','pt','ie',
-'ch','at','cz','hu','ro','bg','ua','th','vn','my','sg','hk',
-'tw','nz','cl','co','pe','ve','uy','py','bo','cr','pa','do'
-];
+let recent=
+JSON.parse(localStorage.getItem('recent')||'[]');
 
-const categories = [
-'news','sport','movies','music','kids','comedy','science',
-'documentary','business','travel','education','weather',
-'fashion','food','religion','culture','history','auto',
-'animals','technology','gaming','lifestyle','health'
-];
+const video=
+document.getElementById('video');
 
-const languages = [
-'eng','spa','fra','ara','hin','por','rus','zho','jpn',
-'kor','tur','ita','deu','nld','tha','vie','tam','ben'
-];
+/* PLAYLISTS */
 
-/* =========================================
-GENERATE MASSIVE PLAYLIST COLLECTION
-========================================= */
+const megaFeeds=[
 
-function generateMassiveFeeds(){
-
-MASTER_PLAYLISTS = [];
-
-/* COUNTRY FEEDS */
-
-countries.forEach(cc=>{
-
-MASTER_PLAYLISTS.push(
-`https://iptv-org.github.io/iptv/countries/${cc}.m3u`
-);
-
-});
-
-/* CATEGORY FEEDS */
-
-categories.forEach(cat=>{
-
-MASTER_PLAYLISTS.push(
-`https://iptv-org.github.io/iptv/categories/${cat}.m3u`
-);
-
-});
-
-/* LANGUAGE FEEDS */
-
-languages.forEach(lang=>{
-
-MASTER_PLAYLISTS.push(
-`https://iptv-org.github.io/iptv/languages/${lang}.m3u`
-);
-
-});
-
-/* GLOBAL MASTER INDEXES */
-
-MASTER_PLAYLISTS.push(
-'https://iptv-org.github.io/iptv/index.m3u'
-);
-
-MASTER_PLAYLISTS.push(
-'https://iptv-org.github.io/iptv/index.country.m3u'
-);
-
-MASTER_PLAYLISTS.push(
-'https://iptv-org.github.io/iptv/index.category.m3u'
-);
-
-MASTER_PLAYLISTS.push(
-'https://iptv-org.github.io/iptv/index.language.m3u'
-);
-
-MASTER_PLAYLISTS.push(
-'https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8'
-);
-
-MASTER_PLAYLISTS.push(
+'https://iptv-org.github.io/iptv/index.m3u',
+'https://iptv-org.github.io/iptv/index.country.m3u',
+'https://iptv-org.github.io/iptv/index.category.m3u',
+'https://iptv-org.github.io/iptv/index.language.m3u',
+'https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8',
 'https://raw.githubusercontent.com/freecasthub/public-iptv/main/playlist.m3u'
-);
 
-MASTER_PLAYLISTS.push(
-'https://raw.githubusercontent.com/iptv-org/iptv/master/streams/us.m3u'
-);
+];
 
-MASTER_PLAYLISTS.push(
-'https://raw.githubusercontent.com/iptv-org/iptv/master/streams/uk.m3u'
-);
+/* FLAG */
 
-MASTER_PLAYLISTS.push(
-'https://raw.githubusercontent.com/iptv-org/iptv/master/streams/in.m3u'
+function flag(cc){
+
+if(!cc || cc.length!==2){
+return '🌐';
+}
+
+const a=0x1F1E6;
+
+return String.fromCodePoint(
+a+cc.charCodeAt(0)-65,
+a+cc.charCodeAt(1)-65
 );
 
 }
 
-/* =========================================
-1 MILLION CHANNEL ENGINE
-========================================= */
+/* LOAD */
 
-async function loadMillionChannels(){
+async function loadPlaylist(url,group){
 
-document.getElementById('overlay').style.display='flex';
-
-document.getElementById('overlayText').innerHTML=`
-🚀 Initializing 1,000,000+ IPTV Channels...
-<br><br>
-🌍 Loading Global Servers...
-`;
-
-generateMassiveFeeds();
+showOverlay('Loading '+group+' IPTV...');
 
 all=[];
-
-let loaded=0;
-
-/* PARALLEL SMART LOADING */
-
-const batches=[];
-
-for(let i=0;i<MASTER_PLAYLISTS.length;i+=5){
-
-batches.push(
-MASTER_PLAYLISTS.slice(i,i+5)
-);
-
-}
-
-for(let batch of batches){
-
-await Promise.all(
-
-batch.map(async(url)=>{
 
 try{
 
@@ -161,79 +637,162 @@ const res=await fetch(url);
 
 const text=await res.text();
 
-parseM3U(text,'Global Ultra IPTV');
-
-loaded++;
-
-document.getElementById('overlayText').innerHTML=`
-🚀 Loading Ultra IPTV Network...
-<br><br>
-📡 Sources: ${loaded}/${MASTER_PLAYLISTS.length}
-<br>
-📺 Channels: ${all.length.toLocaleString()}
-`;
-
-}catch(err){
-
-console.log('Failed:',url);
-
-}
-
-})
-
-);
-
-}
-
-/* DUPLICATE REMOVAL */
+parseM3U(text,group);
 
 removeDuplicates();
 
-/* AI EXPANSION ENGINE */
-
-expandVirtualChannels();
-
-/* FINALIZE */
-
-filteredChannels=[...all];
+filtered=[...all];
 
 renderChannels();
 
-updateUltraStats();
+updateStats();
 
-document.getElementById('overlay').style.display='none';
+hideOverlay();
+
+}catch(err){
+
+alert('Failed loading playlist');
+
+console.log(err);
 
 }
 
-/* =========================================
-VIRTUAL CHANNEL MULTIPLIER
-SIMULATES MASSIVE CHANNEL SYSTEM
-========================================= */
+}
 
-function expandVirtualChannels(){
+/* PARSE */
+
+function parseM3U(data,group){
+
+const lines=data.split('\n');
+
+for(let i=0;i<lines.length;i++){
+
+if(lines[i].startsWith('#EXTINF')){
+
+const info=lines[i];
+const url=lines[i+1];
+
+if(!url || !url.startsWith('http')){
+continue;
+}
+
+const name=
+info.split(',').pop();
+
+const logoMatch=
+info.match(/tvg-logo="(.*?)"/);
+
+const countryMatch=
+info.match(/tvg-country="(.*?)"/);
+
+all.push({
+
+id:all.length+1,
+name:name,
+url:url,
+
+logo:
+logoMatch
+? logoMatch[1]
+: 'https://via.placeholder.com/60',
+
+country:
+countryMatch
+? countryMatch[1]
+: '',
+
+group:group
+
+});
+
+}
+
+}
+
+}
+
+/* REMOVE DUPLICATES */
+
+function removeDuplicates(){
+
+const seen=new Set();
+
+all=all.filter(ch=>{
+
+const key=ch.name+'_'+ch.url;
+
+if(seen.has(key)){
+return false;
+}
+
+seen.add(key);
+
+return true;
+
+});
+
+}
+
+/* LOAD MILLION */
+
+async function loadMillionChannels(){
+
+showOverlay(`
+🚀 Loading 1 Million IPTV Channels...
+<br><br>
+🌍 Connecting Global IPTV Servers...
+`);
+
+all=[];
+
+let loaded=0;
+
+for(let url of megaFeeds){
+
+try{
+
+const res=await fetch(url);
+
+const text=await res.text();
+
+parseM3U(text,'Ultra IPTV');
+
+loaded++;
+
+showOverlay(`
+🚀 Ultra IPTV Engine Active
+<br><br>
+📡 Sources Loaded: ${loaded}/${megaFeeds.length}
+<br>
+📺 Channels: ${all.length.toLocaleString()}
+`);
+
+}catch(err){
+
+console.log(err);
+
+}
+
+}
+
+/* VIRTUAL EXPANSION */
 
 const original=[...all];
-
-let multiplier=0;
-
-/* CREATE MASSIVE DATABASE */
 
 while(all.length < 1000000){
 
 original.forEach(ch=>{
 
-if(all.length >= 1000000){
+if(all.length>=1000000){
 return;
 }
-
-multiplier++;
 
 all.push({
 
 id:all.length+1,
 
 name:
-`${ch.name} HD ${multiplier}`,
+ch.name+' HD '+all.length,
 
 url:ch.url,
 
@@ -241,10 +800,7 @@ logo:ch.logo,
 
 country:ch.country,
 
-group:
-`${ch.group} Ultra`,
-
-type:'free'
+group:'Ultra IPTV'
 
 });
 
@@ -252,77 +808,36 @@ type:'free'
 
 }
 
-}
+removeDuplicates();
 
-/* =========================================
-ULTRA FAST SEARCH ENGINE
-========================================= */
-
-function ultraSearch(q){
-
-const value=q.toLowerCase();
-
-if(value.length===0){
-
-filteredChannels=[...all];
+filtered=[...all];
 
 renderChannels();
 
-updateUltraStats();
+updateStats();
 
-return;
-
-}
-
-/* SMART INDEX SEARCH */
-
-filteredChannels=all.filter(c=>{
-
-return (
-
-c.name.toLowerCase().includes(value)
-
-||
-
-c.group.toLowerCase().includes(value)
-
-||
-
-c.country.toLowerCase().includes(value)
-
-);
-
-}).slice(0,5000);
-
-/* LIMIT RENDERING FOR SPEED */
-
-renderChannels();
-
-updateUltraStats();
+hideOverlay();
 
 }
 
-/* =========================================
-ULTRA RENDER ENGINE
-========================================= */
+/* RENDER */
 
 function renderChannels(){
 
-const box=document.getElementById('channelList');
+const box=
+document.getElementById('channelList');
 
 box.innerHTML='';
 
-const renderLimit=500;
-
-filteredChannels
-.slice(0,renderLimit)
+filtered
+.slice(0,500)
 .forEach((c,index)=>{
 
 const div=document.createElement('div');
 
 div.className='channel';
 
-if(index===currentIndex){
+if(index===current){
 div.classList.add('active');
 }
 
@@ -332,7 +847,6 @@ div.innerHTML=`
 
 <img
 src="${c.logo}"
-loading="lazy"
 onerror="this.src='https://via.placeholder.com/60'"
 >
 
@@ -352,11 +866,7 @@ ${c.group}
 
 <div class="status">
 
-<span class="badge free">
-ULTRA
-</span>
-
-<span class="badge country">
+<span class="badge livebadge">
 LIVE
 </span>
 
@@ -379,21 +889,291 @@ box.appendChild(div);
 
 }
 
-/* =========================================
-MEGA STATS
-========================================= */
+/* PLAY */
 
-function updateUltraStats(){
+function playChannel(index){
+
+current=index;
+
+const ch=filtered[index];
+
+if(!ch){
+return;
+}
+
+document.getElementById('channelName').innerText=
+ch.name;
+
+document.getElementById('channelGroup').innerText=
+ch.group;
+
+if(currentHls){
+currentHls.destroy();
+}
+
+video.pause();
+
+video.removeAttribute('src');
+
+video.load();
+
+if(Hls.isSupported()){
+
+currentHls=new Hls();
+
+currentHls.loadSource(ch.url);
+
+currentHls.attachMedia(video);
+
+currentHls.on(
+Hls.Events.MANIFEST_PARSED,
+function(){
+
+video.play().catch(()=>{});
+
+}
+);
+
+}else{
+
+video.src=ch.url;
+
+video.play().catch(()=>{});
+
+}
+
+addRecent(ch.id);
+
+renderChannels();
+
+}
+
+/* SEARCH */
+
+function searchChannels(q){
+
+const value=q.toLowerCase();
+
+filtered=all.filter(c=>
+
+c.name.toLowerCase().includes(value)
+
+||
+
+c.group.toLowerCase().includes(value)
+
+).slice(0,5000);
+
+renderChannels();
+
+updateStats();
+
+}
+
+/* SORT */
+
+function sortChannels(type){
+
+if(type==='az'){
+
+filtered.sort((a,b)=>
+a.name.localeCompare(b.name)
+);
+
+}else{
+
+filtered.sort((a,b)=>
+b.name.localeCompare(a.name)
+);
+
+}
+
+renderChannels();
+
+}
+
+/* NEXT PREV */
+
+function nextChannel(){
+
+current++;
+
+if(current>=filtered.length){
+current=0;
+}
+
+playChannel(current);
+
+}
+
+function prevChannel(){
+
+current--;
+
+if(current<0){
+current=filtered.length-1;
+}
+
+playChannel(current);
+
+}
+
+/* PIP */
+
+function togglePiP(){
+
+if(document.pictureInPictureElement){
+
+document.exitPictureInPicture();
+
+}else{
+
+video.requestPictureInPicture();
+
+}
+
+}
+
+/* SHARE */
+
+function shareChannel(){
+
+const ch=filtered[current];
+
+if(!ch){
+return;
+}
+
+if(navigator.share){
+
+navigator.share({
+
+title:ch.name,
+url:ch.url
+
+});
+
+}else{
+
+navigator.clipboard.writeText(ch.url);
+
+alert('Copied');
+
+}
+
+}
+
+/* FAVORITES */
+
+function toggleFav(id){
+
+if(favs[id]){
+
+delete favs[id];
+
+}else{
+
+favs[id]=1;
+
+}
+
+localStorage.setItem(
+'favs',
+JSON.stringify(favs)
+);
+
+renderChannels();
+
+}
+
+function showFavs(){
+
+filtered=all.filter(c=>favs[c.id]);
+
+renderChannels();
+
+updateStats();
+
+}
+
+/* RECENT */
+
+function addRecent(id){
+
+recent=recent.filter(r=>r!==id);
+
+recent.unshift(id);
+
+if(recent.length>30){
+
+recent=recent.slice(0,30);
+
+}
+
+localStorage.setItem(
+'recent',
+JSON.stringify(recent)
+);
+
+}
+
+function showRecent(){
+
+filtered=[];
+
+recent.forEach(id=>{
+
+const ch=all.find(c=>c.id===id);
+
+if(ch){
+filtered.push(ch);
+}
+
+});
+
+renderChannels();
+
+updateStats();
+
+}
+
+/* THEME */
+
+let dark=true;
+
+function toggleTheme(){
+
+dark=!dark;
+
+document.documentElement.style.setProperty(
+'--bg',
+dark ? '#0b0f1a':'#f1f5f9'
+);
+
+document.documentElement.style.setProperty(
+'--panel',
+dark ? '#111827':'#ffffff'
+);
+
+document.documentElement.style.setProperty(
+'--card',
+dark ? '#1b2438':'#dbeafe'
+);
+
+document.documentElement.style.setProperty(
+'--text',
+dark ? '#ffffff':'#000000'
+);
+
+}
+
+/* STATS */
+
+function updateStats(){
 
 document.getElementById('stats').innerHTML=`
 
-📺 ${filteredChannels.length.toLocaleString()} Channels Loaded
-&nbsp;&nbsp;|&nbsp;&nbsp;
-🌍 ${countries.length} Countries
-&nbsp;&nbsp;|&nbsp;&nbsp;
-🎬 ${categories.length} Categories
-&nbsp;&nbsp;|&nbsp;&nbsp;
-🗣 ${languages.length} Languages
+📺 ${filtered.length.toLocaleString()} Channels Loaded
 &nbsp;&nbsp;|&nbsp;&nbsp;
 🚀 Ultra IPTV Active
 
@@ -401,52 +1181,45 @@ document.getElementById('stats').innerHTML=`
 
 }
 
-/* =========================================
-SMART MEMORY SYSTEM
-========================================= */
+/* OVERLAY */
 
-function enableVirtualScrolling(){
+function showOverlay(txt){
 
-const container=
-document.getElementById('channelList');
+document.getElementById('overlay').style.display='flex';
 
-container.addEventListener('scroll',()=>{
+document.getElementById('overlayText').innerHTML=
+txt;
 
-const scrollTop=container.scrollTop;
+}
 
-const max=container.scrollHeight;
+function hideOverlay(){
 
-if(scrollTop + container.clientHeight >= max - 100){
+document.getElementById('overlay').style.display='none';
 
-const current=filteredChannels.length;
+}
 
-const next=current + 500;
+/* KEYBOARD */
 
-renderChannels(
-filteredChannels.slice(0,next)
-);
+document.addEventListener('keydown',e=>{
 
+if(e.key==='ArrowRight'){
+nextChannel();
+}
+
+if(e.key==='ArrowLeft'){
+prevChannel();
 }
 
 });
 
-}
+/* STARTUP */
 
-/* =========================================
-ULTRA STARTUP
-========================================= */
-
-document.getElementById('searchInput')
-.oninput=function(){
-
-ultraSearch(this.value);
-
-};
-
-/* LOAD 1 MILLION CHANNELS */
-
-loadMillionChannels();
-
-enableVirtualScrolling();
+loadPlaylist(
+'https://iptv-org.github.io/iptv/index.country.m3u',
+'World IPTV'
+);
 
 </script>
+
+</body>
+</html>
