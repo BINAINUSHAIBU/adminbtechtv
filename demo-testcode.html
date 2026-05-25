@@ -1,8 +1,3 @@
-
-<!-- FULL MERGED ONE-PAGE VERSION -->
-<!-- ALL FEATURES PRESERVED + MORE COUNTRIES + MORE CHANNEL CATEGORIES -->
-<!-- RESPONSIVE + IPTV + FAVORITES + RECENTS + GLOBAL FEEDS -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +11,7 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
 
 <meta name="theme-color" content="#0b0f1a"/>
 
-<title>BTECH-TV WORLD</title>
+<title>BTECH-TV WORLD PREMIUM</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -54,6 +49,160 @@ overflow:hidden;
 body{
 display:flex;
 flex-direction:column;
+}
+
+/* =========================
+LOGIN SCREEN
+========================= */
+
+.auth-screen{
+position:fixed;
+inset:0;
+background:#020617;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:99999;
+padding:20px;
+}
+
+.auth-card{
+width:100%;
+max-width:420px;
+background:var(--panel);
+padding:30px;
+border-radius:20px;
+box-shadow:0 0 30px rgba(0,0,0,.5);
+}
+
+.auth-card h1{
+font-size:28px;
+margin-bottom:10px;
+color:var(--accent);
+text-align:center;
+}
+
+.auth-card p{
+color:var(--muted);
+margin-bottom:20px;
+text-align:center;
+font-size:14px;
+}
+
+.auth-card input{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+margin-bottom:15px;
+background:#0f172a;
+color:white;
+font-size:15px;
+}
+
+.auth-card button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:var(--accent);
+color:black;
+font-weight:bold;
+font-size:15px;
+cursor:pointer;
+transition:.3s;
+}
+
+.auth-card button:hover{
+opacity:.9;
+}
+
+.trial-box{
+margin-top:20px;
+padding:15px;
+background:#0f172a;
+border-radius:12px;
+font-size:13px;
+color:#cbd5e1;
+line-height:1.7;
+}
+
+/* =========================
+DASHBOARD
+========================= */
+
+.dashboard{
+display:none;
+background:var(--panel);
+padding:15px 20px;
+border-bottom:1px solid rgba(255,255,255,.05);
+flex-wrap:wrap;
+gap:15px;
+align-items:center;
+justify-content:space-between;
+}
+
+.user-box{
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.avatar{
+width:55px;
+height:55px;
+border-radius:50%;
+background:var(--accent);
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:22px;
+font-weight:bold;
+color:black;
+}
+
+.user-details h3{
+font-size:16px;
+margin-bottom:4px;
+}
+
+.user-details p{
+font-size:12px;
+color:var(--muted);
+}
+
+.dashboard-stats{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.stat-card{
+background:var(--card);
+padding:12px 16px;
+border-radius:12px;
+min-width:120px;
+text-align:center;
+}
+
+.stat-card h4{
+font-size:18px;
+margin-bottom:5px;
+color:var(--accent);
+}
+
+.stat-card small{
+color:var(--muted);
+}
+
+.logout-btn{
+padding:12px 18px;
+border:none;
+border-radius:12px;
+background:var(--danger);
+color:white;
+cursor:pointer;
+font-weight:bold;
 }
 
 /* =========================
@@ -121,7 +270,7 @@ min-height:0;
 }
 
 .sidebar{
-width:310px;
+width:320px;
 background:#0f172a;
 overflow-y:auto;
 padding:15px;
@@ -452,6 +601,11 @@ flex-direction:column;
 width:100%;
 }
 
+.dashboard{
+flex-direction:column;
+align-items:flex-start;
+}
+
 }
 
 </style>
@@ -459,10 +613,100 @@ width:100%;
 
 <body>
 
+<!-- LOGIN -->
+
+<div class="auth-screen" id="authScreen">
+
+<div class="auth-card">
+
+<h1>📺 BTECH-TV PREMIUM</h1>
+
+<p>
+Start your FREE 7 Days Trial
+</p>
+
+<input type="text" id="username" placeholder="Username">
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="password" placeholder="Password">
+
+<button onclick="loginUser()">
+START FREE TRIAL
+</button>
+
+<div class="trial-box">
+
+✅ 7 Days Premium Access<br>
+✅ Unlimited IPTV Channels<br>
+✅ Favorites & Dashboard<br>
+✅ Global Sports & Movies<br>
+✅ Watch on Mobile & TV
+
+</div>
+
+</div>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div class="dashboard" id="dashboard">
+
+<div class="user-box">
+
+<div class="avatar" id="avatar">
+B
+</div>
+
+<div class="user-details">
+
+<h3 id="userDisplay">
+Guest User
+</h3>
+
+<p id="trialInfo">
+7 Days Trial Active
+</p>
+
+</div>
+
+</div>
+
+<div class="dashboard-stats">
+
+<div class="stat-card">
+<h4 id="daysLeft">7</h4>
+<small>Days Left</small>
+</div>
+
+<div class="stat-card">
+<h4 id="favCount">0</h4>
+<small>Favorites</small>
+</div>
+
+<div class="stat-card">
+<h4 id="watchCount">0</h4>
+<small>Watched</small>
+</div>
+
+<div class="stat-card">
+<h4>5000+</h4>
+<small>Channels</small>
+</div>
+
+</div>
+
+<button class="logout-btn" onclick="logoutUser()">
+Logout
+</button>
+
+</div>
+
+<!-- TOPBAR -->
+
 <div class="topbar">
 
 <div class="logo">
-📺 BTECH-TV WORLD
+📺 BTECH-TV WORLD PREMIUM
 </div>
 
 <div class="top-buttons">
@@ -487,6 +731,8 @@ Theme
 
 </div>
 
+<!-- MAIN CONTAINER -->
+
 <div class="container">
 
 <div class="sidebar">
@@ -509,12 +755,6 @@ Theme
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/es.m3u','Spain')">🇪🇸 Spain</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/it.m3u','Italy')">🇮🇹 Italy</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ru.m3u','Russia')">🇷🇺 Russia</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/tr.m3u','Turkey')">🇹🇷 Turkey</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/mx.m3u','Mexico')">🇲🇽 Mexico</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ae.m3u','UAE')">🇦🇪 UAE</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/sa.m3u','Saudi Arabia')">🇸🇦 Saudi Arabia</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/eg.m3u','Egypt')">🇪🇬 Egypt</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ar.m3u','Argentina')">🇦🇷 Argentina</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/pk.m3u','Pakistan')">🇵🇰 Pakistan</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/id.m3u','Indonesia')">🇮🇩 Indonesia</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ph.m3u','Philippines')">🇵🇭 Philippines</div>
@@ -531,19 +771,6 @@ Theme
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/business.m3u','Business')">💼 Business</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/cooking.m3u','Cooking')">🍳 Cooking</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/education.m3u','Education')">📖 Education</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/travel.m3u','Travel')">✈ Travel</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/weather.m3u','Weather')">🌦 Weather</div>
-
-<h3>🗣 Languages</h3>
-
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/eng.m3u','English')">🇬🇧 English</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/spa.m3u','Spanish')">🇪🇸 Spanish</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/ara.m3u','Arabic')">🇸🇦 Arabic</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/fra.m3u','French')">🇫🇷 French</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/hin.m3u','Hindi')">🇮🇳 Hindi</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/zho.m3u','Chinese')">🇨🇳 Chinese</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/por.m3u','Portuguese')">🇵🇹 Portuguese</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/rus.m3u','Russian')">🇷🇺 Russian</div>
 
 <h3>➕ Extra Feeds</h3>
 
@@ -567,7 +794,6 @@ controls
 autoplay
 playsinline
 webkit-playsinline
-preload="auto"
 ></video>
 
 <div class="overlay" id="overlay">
@@ -643,6 +869,112 @@ oninput="searchChannels(this.value)"
 
 <script>
 
+/* =========================
+LOGIN SYSTEM
+========================= */
+
+let watchCount=0;
+
+function loginUser(){
+
+const username=document.getElementById('username').value;
+const email=document.getElementById('email').value;
+const password=document.getElementById('password').value;
+
+if(!username || !email || !password){
+
+alert('Please complete all fields');
+return;
+
+}
+
+const startDate=new Date();
+const endDate=new Date();
+
+endDate.setDate(endDate.getDate()+7);
+
+const user={
+
+username,
+email,
+password,
+start:startDate.getTime(),
+end:endDate.getTime()
+
+};
+
+localStorage.setItem(
+'btech_user',
+JSON.stringify(user)
+);
+
+showDashboard(user);
+
+}
+
+function showDashboard(user){
+
+document.getElementById('authScreen').style.display='none';
+
+document.getElementById('dashboard').style.display='flex';
+
+document.getElementById('userDisplay').innerText=user.username;
+
+document.getElementById('avatar').innerText=
+user.username.charAt(0).toUpperCase();
+
+updateTrial(user);
+
+}
+
+function updateTrial(user){
+
+const now=new Date().getTime();
+
+const distance=user.end-now;
+
+const days=Math.ceil(
+distance/(1000*60*60*24)
+);
+
+document.getElementById('daysLeft').innerText=
+days>0 ? days : 0;
+
+if(days<=0){
+
+alert('Your trial has expired');
+
+logoutUser();
+
+}
+
+}
+
+function logoutUser(){
+
+localStorage.removeItem('btech_user');
+
+location.reload();
+
+}
+
+(function(){
+
+const saved=
+JSON.parse(localStorage.getItem('btech_user'));
+
+if(saved){
+
+showDashboard(saved);
+
+}
+
+})();
+
+/* =========================
+IPTV SYSTEM
+========================= */
+
 let all=[];
 let filteredChannels=[];
 let currentIndex=0;
@@ -666,9 +998,7 @@ const extraFeeds=[
 'https://iptv-org.github.io/iptv/index.m3u',
 'https://iptv-org.github.io/iptv/index.country.m3u',
 'https://iptv-org.github.io/iptv/index.category.m3u',
-'https://iptv-org.github.io/iptv/index.language.m3u',
-'https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8',
-'https://raw.githubusercontent.com/freecasthub/public-iptv/main/playlist.m3u'
+'https://iptv-org.github.io/iptv/index.language.m3u'
 
 ];
 
@@ -846,8 +1176,7 @@ document.getElementById('overlay').style.display='none';
 
 function renderChannels(){
 
-const box=
-document.getElementById('channelList');
+const box=document.getElementById('channelList');
 
 box.innerHTML='';
 
@@ -888,7 +1217,7 @@ ${c.group}
 <div class="status">
 
 <span class="badge free">
-FREE
+PREMIUM
 </span>
 
 <span class="badge ${
@@ -921,6 +1250,11 @@ box.appendChild(div);
 function playChannel(index){
 
 currentIndex=index;
+
+watchCount++;
+
+document.getElementById('watchCount').innerText=
+watchCount;
 
 const channel=filteredChannels[index];
 
@@ -1058,6 +1392,9 @@ localStorage.setItem(
 'atv_favs',
 JSON.stringify(favs)
 );
+
+document.getElementById('favCount').innerText=
+Object.keys(favs).length;
 
 renderChannels();
 
@@ -1223,7 +1560,7 @@ function updateStats(){
 
 document.getElementById('stats').innerText=
 filteredChannels.length +
-' Channels Loaded';
+' Premium Channels Loaded';
 
 }
 
@@ -1241,7 +1578,7 @@ prevChannel();
 
 loadPlaylist(
 'https://iptv-org.github.io/iptv/index.country.m3u',
-'World IPTV'
+'World IPTV Premium'
 );
 
 </script>
