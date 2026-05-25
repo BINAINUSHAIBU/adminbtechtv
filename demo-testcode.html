@@ -1,3 +1,6 @@
+<!-- MERGED VERSION -->
+<!-- ALL FEATURES PRESERVED FROM BOTH FILES -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,7 +54,9 @@ display:flex;
 flex-direction:column;
 }
 
-/* TOPBAR */
+/* =========================
+TOPBAR
+========================= */
 
 .topbar{
 min-height:70px;
@@ -102,7 +107,9 @@ background:var(--accent);
 color:black;
 }
 
-/* LAYOUT */
+/* =========================
+LAYOUT
+========================= */
 
 .container{
 flex:1;
@@ -149,7 +156,9 @@ overflow:hidden;
 min-width:0;
 }
 
-/* PLAYER */
+/* =========================
+PLAYER
+========================= */
 
 .player{
 height:350px;
@@ -202,7 +211,9 @@ margin-bottom:15px;
 color:var(--muted);
 }
 
-/* NOW PLAYING */
+/* =========================
+NOW PLAYING
+========================= */
 
 .now-playing{
 background:var(--panel);
@@ -252,7 +263,9 @@ transition:.3s;
 background:var(--hover);
 }
 
-/* SEARCH */
+/* =========================
+SEARCH
+========================= */
 
 .stats{
 padding:8px 15px;
@@ -285,7 +298,9 @@ flex:1;
 min-width:220px;
 }
 
-/* CHANNELS */
+/* =========================
+CHANNELS
+========================= */
 
 .channels{
 flex:1;
@@ -394,9 +409,28 @@ cursor:pointer;
 color:gold;
 }
 
-/* RESPONSIVE */
+/* =========================
+RESPONSIVE
+========================= */
+
+@media(max-width:1000px){
+
+.sidebar{
+width:240px;
+}
+
+.player{
+height:300px;
+}
+
+}
 
 @media(max-width:900px){
+
+html,
+body{
+overflow:auto;
+}
 
 .container{
 flex-direction:column;
@@ -419,10 +453,94 @@ grid-template-columns:1fr;
 padding-bottom:120px;
 }
 
+.topbar{
+flex-wrap:wrap;
+}
+
+.now-playing{
+flex-direction:column;
+align-items:flex-start;
+}
+
+.search-box{
+flex-direction:column;
+}
+
+.search-box input,
+.search-box select{
+width:100%;
+}
+
+.controls{
+width:100%;
+}
+
+.controls button{
+flex:1;
+min-width:120px;
+}
+
+}
+
+@media(max-width:600px){
+
+.logo{
+font-size:20px;
+}
+
+.player{
+height:220px;
+}
+
+.overlay h1{
+font-size:45px;
+}
+
+.channel{
+padding:12px;
+}
+
+.left img{
+width:50px;
+height:50px;
+}
+
+}
+
+@media(max-width:380px){
+
+.player{
+height:200px;
+}
+
+.logo{
+font-size:18px;
+}
+
+.top-buttons button{
+font-size:12px;
+padding:9px 12px;
+}
+
+}
+
+/* =========================
+LANDSCAPE PHONES
+========================= */
+
+@media (max-height:500px) and (orientation:landscape){
+
+.sidebar{
+display:none;
+}
+
+.player{
+height:70vh;
+}
+
 }
 
 </style>
-
 </head>
 
 <body>
@@ -445,6 +563,18 @@ All
 
 <button onclick="setTab('recent',this)">
 🕘 Recent
+</button>
+
+<button onclick="filterType('country',this)">
+🌍 Countries
+</button>
+
+<button onclick="filterType('category',this)">
+🎬 Categories
+</button>
+
+<button onclick="filterType('language',this)">
+🗣 Languages
 </button>
 
 <button onclick="toggleTheme()">
@@ -501,6 +631,24 @@ Theme
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/fra.m3u','French')">🇫🇷 French</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/hin.m3u','Hindi')">🇮🇳 Hindi</div>
 <div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/zho.m3u','Chinese')">🇨🇳 Chinese</div>
+
+<hr style="margin:15px 0;border:0;border-top:1px solid #1f2937;">
+
+<a
+href="https://btech-tv.netlify.app/user_manager-settings"
+style="color:white;text-decoration:none;display:block;padding:10px 0;"
+>
+🔒 user Manager
+</a>
+
+<hr style="margin:15px 0;border:0;border-top:1px solid #1f2937;">
+
+<a
+href="https://btech-tv.netlify.app/quiz-channels"
+style="color:white;text-decoration:none;display:block;padding:10px 0;"
+>
+🔒 QUIZ Channels
+</a>
 
 <h3>➕ Extra Feeds</h3>
 
@@ -602,6 +750,7 @@ let filteredChannels=[];
 let currentIndex=0;
 let currentHls=null;
 let dark=true;
+let activeTab='all';
 let autoSkipOn=true;
 
 let favs=JSON.parse(localStorage.getItem('atv_favs')||'{}');
@@ -609,6 +758,7 @@ let favs=JSON.parse(localStorage.getItem('atv_favs')||'{}');
 let recent=JSON.parse(localStorage.getItem('atv_recent')||'[]');
 
 let deadCh={};
+let aliveCh={};
 
 const video=document.getElementById('video');
 
@@ -725,7 +875,8 @@ name:name,
 url:url,
 logo:logo,
 group:group,
-country:country
+country:country,
+type:'free'
 });
 
 }
@@ -759,7 +910,7 @@ async function loadExtraPlaylists(){
 document.getElementById('overlay').style.display='flex';
 
 document.getElementById('overlayText').innerText=
-'Loading Global Feeds...';
+'Loading Global BTECH-TV Feeds...';
 
 for(let url of extraFeeds){
 
@@ -807,6 +958,12 @@ if(index===currentIndex){
 div.classList.add('active');
 }
 
+let badge='LIVE';
+
+if(deadCh[c.id]){
+badge='OFF';
+}
+
 div.innerHTML=`
 
 <div class="left">
@@ -832,7 +989,7 @@ onerror="this.src='https://via.placeholder.com/60'"
 <span class="badge free">FREE</span>
 
 <span class="badge ${deadCh[c.id] ? 'dead':'country'}">
-${deadCh[c.id] ? 'OFF':'LIVE'}
+${badge}
 </span>
 
 <div
@@ -890,7 +1047,10 @@ backBufferLength:30,
 maxBufferLength:10,
 maxMaxBufferLength:15,
 liveSyncDuration:3,
-liveMaxLatencyDuration:5
+liveMaxLatencyDuration:5,
+capLevelToPlayerSize:true,
+manifestLoadingTimeOut:20000,
+fragLoadingTimeOut:20000
 
 });
 
@@ -903,6 +1063,8 @@ Hls.Events.MANIFEST_PARSED,
 function(){
 
 video.play().catch(()=>{});
+
+aliveCh[channel.id]=1;
 
 delete deadCh[channel.id];
 
@@ -929,6 +1091,12 @@ nextChannel();
 
 }
 );
+
+}else if(video.canPlayType('application/vnd.apple.mpegurl')){
+
+video.src=channel.url;
+
+video.play().catch(()=>{});
 
 }else{
 
@@ -1006,6 +1174,8 @@ renderChannels();
 
 function setTab(type,btn){
 
+activeTab=type;
+
 document
 .querySelectorAll('.top-buttons button')
 .forEach(b=>b.classList.remove('active'));
@@ -1037,6 +1207,16 @@ filteredChannels.push(ch);
 }
 
 renderChannels();
+
+}
+
+function filterType(type,btn){
+
+document
+.querySelectorAll('.top-buttons button')
+.forEach(b=>b.classList.remove('active'));
+
+btn.classList.add('active');
 
 }
 
