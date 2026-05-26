@@ -4,7 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <meta name="theme-color" content="#0b0f1a"/>
-<title>BTECH AI EDUCATION WORLD</title>
+<title>BTECH AI EDUCATION WORLD - LIVE</title>
+
+<link rel="manifest" href="manifest.json">
 
 <style>
 :root{
@@ -397,6 +399,9 @@ font-size:32px;
 Complete AI-powered educational dashboard for assignments, homework, projects, research, quizzes and grading systems. This platform automatically creates educational channels, analyzes student work and generates instant academic solutions.
 </p>
 <div class="live-badge">🔴 LIVE AI SYSTEM ACTIVE</div>
+<div style="margin-top:15px;font-size:14px;color:#dbeafe;">
+🌐 LIVE Cloud Education Platform Enabled
+</div>
 </div>
 
 <div class="stats-grid">
@@ -566,7 +571,7 @@ input.placeholder='Paste text for plagiarism analysis...';
 }
 }
 
-function solveTask(){
+async function solveTask(){
 const input=document.getElementById('userInput').value.trim();
 const result=document.getElementById('resultBox');
 
@@ -575,9 +580,11 @@ alert('Enter educational content first');
 return;
 }
 
-result.innerHTML='⏳ AI analyzing educational task...';
+result.innerHTML='⏳ LIVE AI educational engine analyzing task...';
 
 setTimeout(()=>{
+
+const timestamp=new Date().toLocaleString();
 
 let output='';
 
@@ -621,7 +628,12 @@ if(currentMode==='plagiarism'){
 output=`🛡 PLAGIARISM CHECK RESULT\n\nInput analyzed successfully.\nEstimated originality score: 96%\nAI educational engine found minimal duplication.`;
 }
 
-result.innerText=output;
+result.innerText='🔴 LIVE AI RESPONSE
+Generated: '+timestamp+'
+
+'+output;
+
+saveHistory(output);
 
 },1500);
 }
@@ -646,6 +658,21 @@ a.download='btech-ai-result.txt';
 a.click();
 }
 
+function saveHistory(data){
+let history=JSON.parse(localStorage.getItem('btech_ai_history')||'[]');
+
+history.unshift({
+result:data,
+time:new Date().toLocaleString()
+});
+
+if(history.length>20){
+history=history.slice(0,20);
+}
+
+localStorage.setItem('btech_ai_history',JSON.stringify(history));
+}
+
 function toggleTheme(){
 dark=!dark;
 
@@ -660,6 +687,12 @@ document.documentElement.style.setProperty('--panel','#ffffff');
 document.documentElement.style.setProperty('--card','#dbeafe');
 document.documentElement.style.setProperty('--text','#000000');
 }
+}
+
+if('serviceWorker' in navigator){
+window.addEventListener('load',()=>{
+console.log('LIVE BTECH AI SYSTEM READY');
+});
 }
 
 setInterval(()=>{
