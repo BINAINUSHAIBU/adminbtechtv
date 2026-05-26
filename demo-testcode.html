@@ -706,6 +706,63 @@ assignments.innerText=(48932+Math.floor(Math.random()*100)).toLocaleString();
 projects.innerText=(7201+Math.floor(Math.random()*20)).toLocaleString();
 },4000);
 </script>
+  <script>
+const OPENAI_API_KEY = "YOUR_API_KEY_HERE";
+
+async function solveTask() {
+
+const input = document.getElementById('userInput').value.trim();
+const result = document.getElementById('resultBox');
+
+if(!input){
+alert("Enter a question");
+return;
+}
+
+result.innerHTML = "⏳ LIVE AI ENGINE THINKING...";
+
+try {
+
+const response = await fetch(
+"https://api.openai.com/v1/chat/completions",
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer " + OPENAI_API_KEY
+},
+body:JSON.stringify({
+model:"gpt-4o-mini",
+messages:[
+{
+role:"system",
+content:"You are BTECH AI Education Engine. Solve educational questions accurately."
+},
+{
+role:"user",
+content:input
+}
+],
+temperature:0.3
+})
+}
+);
+
+const data = await response.json();
+
+result.innerText =
+"🤖 LIVE AI SOLUTION\n\n" +
+data.choices[0].message.content;
+
+} catch(err){
+
+result.innerText =
+"❌ AI Engine Error: " + err.message;
+
+}
+
+}
+</script>
 
 </body>
 </html>
