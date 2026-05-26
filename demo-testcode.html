@@ -1,14 +1,27 @@
 
+<!-- FULL MERGED ONE-PAGE VERSION -->
+<!-- ALL FEATURES PRESERVED + MORE COUNTRIES + MORE CHANNEL CATEGORIES -->
+<!-- RESPONSIVE + IPTV + FAVORITES + RECENTS + GLOBAL FEEDS -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+<meta charset="UTF-8"/>
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+/>
+
 <meta name="theme-color" content="#0b0f1a"/>
-<title>BTECH AI EDUCATION WORLD</title>
+
+<title>BTECH-TV WORLD</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+
 :root{
 --bg:#0b0f1a;
 --panel:#111827;
@@ -29,7 +42,8 @@ font-family:Arial,sans-serif;
 -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
+html,
+body{
 width:100%;
 height:100%;
 background:var(--bg);
@@ -41,6 +55,10 @@ body{
 display:flex;
 flex-direction:column;
 }
+
+/* =========================
+TOPBAR
+========================= */
 
 .topbar{
 min-height:70px;
@@ -91,6 +109,10 @@ background:var(--accent);
 color:black;
 }
 
+/* =========================
+LAYOUT
+========================= */
+
 .container{
 flex:1;
 display:flex;
@@ -99,11 +121,12 @@ min-height:0;
 }
 
 .sidebar{
-width:290px;
+width:310px;
 background:#0f172a;
 overflow-y:auto;
 padding:15px;
 border-right:1px solid rgba(255,255,255,.05);
+-webkit-overflow-scrolling:touch;
 }
 
 .sidebar h3{
@@ -114,9 +137,9 @@ font-size:16px;
 
 .cat{
 background:var(--card);
-padding:14px;
+padding:12px;
 margin-bottom:10px;
-border-radius:12px;
+border-radius:10px;
 cursor:pointer;
 transition:.3s;
 font-size:14px;
@@ -135,159 +158,267 @@ overflow:hidden;
 min-width:0;
 }
 
-.hero{
-height:250px;
-background:linear-gradient(135deg,#00bfff,#0f172a,#2563eb);
+/* =========================
+PLAYER
+========================= */
+
+.player{
+height:360px;
+background:black;
+position:relative;
 display:flex;
-flex-direction:column;
 justify-content:center;
 align-items:center;
-text-align:center;
-padding:20px;
+overflow:hidden;
 }
 
-.hero h1{
-font-size:45px;
-margin-bottom:15px;
-}
-
-.hero p{
-max-width:800px;
-line-height:1.6;
-color:#dbeafe;
-}
-
-.dashboard{
-padding:20px;
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:15px;
-overflow-y:auto;
-}
-
-.card{
-background:var(--card);
-padding:20px;
-border-radius:18px;
-transition:.3s;
-border:1px solid rgba(255,255,255,.05);
-}
-
-.card:hover{
-transform:translateY(-5px);
-background:var(--hover);
-}
-
-.card h2{
-font-size:18px;
-margin-bottom:10px;
-}
-
-.card p{
-color:var(--muted);
-font-size:14px;
-line-height:1.6;
-margin-bottom:15px;
-}
-
-.card button{
+.player video{
 width:100%;
-padding:12px;
-border:none;
-border-radius:10px;
-background:var(--accent);
-color:black;
-font-weight:bold;
-cursor:pointer;
+height:100%;
+object-fit:contain;
+background:black;
 }
 
-.workspace{
-background:var(--panel);
-padding:20px;
-border-top:1px solid rgba(255,255,255,.05);
-}
-
-.workspace h2{
-margin-bottom:15px;
-}
-
-textarea{
-width:100%;
-height:180px;
-background:#0f172a;
-color:white;
-border:none;
-border-radius:14px;
-padding:15px;
-resize:none;
-font-size:15px;
-margin-bottom:15px;
-}
-
-.actions{
-display:flex;
-gap:12px;
-flex-wrap:wrap;
-}
-
-.actions button{
-padding:12px 18px;
-border:none;
-border-radius:10px;
-background:var(--card);
-color:white;
-cursor:pointer;
-font-weight:bold;
-}
-
-.actions button:hover{
-background:var(--accent);
-color:black;
-}
-
-.result{
-margin-top:20px;
-background:#0f172a;
-padding:18px;
-border-radius:14px;
-max-height:260px;
-overflow-y:auto;
-line-height:1.7;
-white-space:pre-wrap;
-}
-
-.stats-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:15px;
-padding:20px;
-}
-
-.stat-box{
-background:var(--card);
-padding:20px;
-border-radius:16px;
-text-align:center;
-}
-
-.stat-box h3{
-font-size:30px;
-color:var(--accent);
-margin-bottom:8px;
-}
-
-.live-badge{
+.live{
+position:absolute;
+top:15px;
+left:15px;
 background:red;
-padding:8px 15px;
+padding:8px 14px;
 border-radius:30px;
 font-size:12px;
 font-weight:bold;
-display:inline-block;
-margin-top:12px;
+z-index:5;
 }
 
+.overlay{
+position:absolute;
+inset:0;
+background:rgba(0,0,0,.9);
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+z-index:10;
+text-align:center;
+padding:20px;
+}
+
+.overlay h1{
+font-size:60px;
+margin-bottom:15px;
+}
+
+.overlay p{
+color:var(--muted);
+}
+
+/* =========================
+NOW PLAYING
+========================= */
+
+.now-playing{
+background:var(--panel);
+padding:15px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+border-top:1px solid rgba(255,255,255,.05);
+border-bottom:1px solid rgba(255,255,255,.05);
+flex-wrap:wrap;
+}
+
+.now-info h2{
+font-size:18px;
+margin-bottom:5px;
+}
+
+.now-info p{
+color:var(--muted);
+font-size:13px;
+}
+
+.clock{
+font-size:12px;
+color:var(--muted);
+margin-top:5px;
+}
+
+.controls{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.controls button{
+padding:10px 15px;
+background:var(--card);
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+transition:.3s;
+}
+
+.controls button:hover{
+background:var(--hover);
+}
+
+/* =========================
+SEARCH
+========================= */
+
+.stats{
+padding:8px 15px;
+background:#0f172a;
+font-size:12px;
+color:var(--muted);
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.search-box{
+padding:12px;
+background:var(--panel);
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.search-box input,
+.search-box select{
+padding:12px;
+border:none;
+border-radius:10px;
+background:#0f172a;
+color:white;
+min-height:48px;
+}
+
+.search-box input{
+flex:1;
+min-width:220px;
+}
+
+/* =========================
+CHANNELS
+========================= */
+
+.channels{
+flex:1;
+overflow-y:auto;
+padding:15px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+gap:12px;
+-webkit-overflow-scrolling:touch;
+}
+
+.channel{
+background:var(--card);
+padding:14px;
+border-radius:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+cursor:pointer;
+transition:.3s;
+border:1px solid transparent;
+gap:10px;
+}
+
+.channel:hover{
+background:var(--hover);
+transform:translateY(-2px);
+border-color:var(--accent);
+}
+
+.channel.active{
+border-color:var(--accent);
+background:#00bfff22;
+}
+
+.left{
+display:flex;
+gap:12px;
+align-items:center;
+overflow:hidden;
+min-width:0;
+}
+
+.left img{
+width:60px;
+height:60px;
+border-radius:10px;
+object-fit:cover;
+background:black;
+flex-shrink:0;
+}
+
+.info{
+overflow:hidden;
+min-width:0;
+}
+
+.info h4{
+font-size:14px;
+margin-bottom:5px;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.info small{
+color:#cbd5e1;
+display:block;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.status{
+display:flex;
+flex-direction:column;
+gap:6px;
+align-items:flex-end;
+}
+
+.badge{
+padding:5px 10px;
+border-radius:20px;
+font-size:11px;
+font-weight:bold;
+}
+
+.free{
+background:#16a34a;
+}
+
+.country{
+background:#2563eb;
+}
+
+.dead{
+background:var(--danger);
+}
+
+.fav{
+font-size:20px;
+cursor:pointer;
+}
+
+.fav.on{
+color:gold;
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+
 @media(max-width:900px){
-html,body{
+
+html,
+body{
 overflow:auto;
 }
 
@@ -298,383 +429,822 @@ overflow:auto;
 
 .sidebar{
 width:100%;
+max-height:260px;
 border-right:none;
 border-bottom:1px solid rgba(255,255,255,.05);
 }
 
-.hero h1{
-font-size:32px;
+.player{
+height:250px;
 }
+
+.channels{
+grid-template-columns:1fr;
+padding-bottom:120px;
 }
+
+.search-box{
+flex-direction:column;
+}
+
+.search-box input,
+.search-box select{
+width:100%;
+}
+
+}
+
 </style>
 </head>
+
 <body>
 
 <div class="topbar">
-<div class="logo">🤖 BTECH AI EDUCATION WORLD</div>
+
+<div class="logo">
+📺 BTECH-TV WORLD
+</div>
 
 <div class="top-buttons">
-<button class="active" onclick="showSection('dashboard',this)">Dashboard</button>
-<button onclick="showSection('assignment',this)">📝 Assignments</button>
-<button onclick="showSection('homework',this)">📚 Homework</button>
-<button onclick="showSection('project',this)">🚀 Projects</button>
-<button onclick="showSection('quiz',this)">🧠 Quiz AI</button>
-<button onclick="toggleTheme()">Theme</button>
+
+<button class="active" onclick="setTab('all',this)">
+All
+</button>
+
+<button onclick="setTab('favs',this)">
+⭐ Favorites
+</button>
+
+<button onclick="setTab('recent',this)">
+🕘 Recent
+</button>
+
+<button onclick="toggleTheme()">
+Theme
+</button>
+
 </div>
+
 </div>
 
 <div class="container">
 
 <div class="sidebar">
 
-<h3>🤖 AI Education Channels</h3>
+<h3>🌍 Countries</h3>
 
-<div class="cat" onclick="loadPrompt('assignment')">
-📝 Assignment Solver Channel
-</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ng.m3u','Nigeria')">🇳🇬 Nigeria</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/us.m3u','USA')">🇺🇸 USA</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/uk.m3u','UK')">🇬🇧 UK</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/in.m3u','India')">🇮🇳 India</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/fr.m3u','France')">🇫🇷 France</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/de.m3u','Germany')">🇩🇪 Germany</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/br.m3u','Brazil')">🇧🇷 Brazil</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/za.m3u','South Africa')">🇿🇦 South Africa</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ca.m3u','Canada')">🇨🇦 Canada</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/au.m3u','Australia')">🇦🇺 Australia</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/jp.m3u','Japan')">🇯🇵 Japan</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/kr.m3u','South Korea')">🇰🇷 South Korea</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/cn.m3u','China')">🇨🇳 China</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/es.m3u','Spain')">🇪🇸 Spain</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/it.m3u','Italy')">🇮🇹 Italy</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ru.m3u','Russia')">🇷🇺 Russia</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/tr.m3u','Turkey')">🇹🇷 Turkey</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/mx.m3u','Mexico')">🇲🇽 Mexico</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ae.m3u','UAE')">🇦🇪 UAE</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/sa.m3u','Saudi Arabia')">🇸🇦 Saudi Arabia</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/eg.m3u','Egypt')">🇪🇬 Egypt</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ar.m3u','Argentina')">🇦🇷 Argentina</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/pk.m3u','Pakistan')">🇵🇰 Pakistan</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/id.m3u','Indonesia')">🇮🇩 Indonesia</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ph.m3u','Philippines')">🇵🇭 Philippines</div>
 
-<div class="cat" onclick="loadPrompt('homework')">
-📚 Homework AI Channel
-</div>
+<h3>🎬 Categories</h3>
 
-<div class="cat" onclick="loadPrompt('project')">
-🚀 Project Generator Channel
-</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/news.m3u','News')">📰 News</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/sport.m3u','Sports')">⚽ Sports</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/movies.m3u','Movies')">🎥 Movies</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/music.m3u','Music')">🎵 Music</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/kids.m3u','Kids')">👶 Kids</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/comedy.m3u','Comedy')">😂 Comedy</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/documentary.m3u','Documentary')">📚 Documentary</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/business.m3u','Business')">💼 Business</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/cooking.m3u','Cooking')">🍳 Cooking</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/education.m3u','Education')">📖 Education</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/travel.m3u','Travel')">✈ Travel</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/weather.m3u','Weather')">🌦 Weather</div>
 
-<div class="cat" onclick="loadPrompt('research')">
-🔬 Research Assistant Channel
-</div>
+<h3>🗣 Languages</h3>
 
-<div class="cat" onclick="loadPrompt('quiz')">
-🧠 Quiz & CBT Solver
-</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/eng.m3u','English')">🇬🇧 English</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/spa.m3u','Spanish')">🇪🇸 Spanish</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/ara.m3u','Arabic')">🇸🇦 Arabic</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/fra.m3u','French')">🇫🇷 French</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/hin.m3u','Hindi')">🇮🇳 Hindi</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/zho.m3u','Chinese')">🇨🇳 Chinese</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/por.m3u','Portuguese')">🇵🇹 Portuguese</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/rus.m3u','Russian')">🇷🇺 Russian</div>
 
-<div class="cat" onclick="loadPrompt('math')">
-➗ Mathematics Solver
-</div>
+<h3>➕ Extra Feeds</h3>
 
-<div class="cat" onclick="loadPrompt('coding')">
-💻 Coding & Programming AI
-</div>
-
-<div class="cat" onclick="loadPrompt('presentation')">
-📊 Presentation Creator
-</div>
-
-<div class="cat" onclick="loadPrompt('grading')">
-📈 Smart Grading System
-</div>
-
-<div class="cat" onclick="loadPrompt('plagiarism')">
-🛡 Plagiarism Checker
-</div>
-
-<hr style="margin:20px 0;border:0;border-top:1px solid #1f2937;">
-
-<h3>📡 LIVE AI STATUS</h3>
-
-<div class="cat">
-🟢 AI Assignment Engine Active
-</div>
-
-<div class="cat">
-🟢 Homework Analysis Running
-</div>
-
-<div class="cat">
-🟢 Project Generator Online
-</div>
-
-<div class="cat">
-🟢 Smart Education Cloud Ready
+<div class="cat" onclick="loadExtraPlaylists()">
+🚀 Load Global Feeds
 </div>
 
 </div>
 
 <div class="main">
 
-<div class="hero">
-<h1>🤖 AUTO AI EDUCATION SYSTEM</h1>
-<p>
-Complete AI-powered educational dashboard for assignments, homework, projects, research, quizzes and grading systems. This platform automatically creates educational channels, analyzes student work and generates instant academic solutions.
+<div class="player">
+
+<div class="live">
+🔴 LIVE
+</div>
+
+<video
+id="video"
+controls
+autoplay
+playsinline
+webkit-playsinline
+preload="auto"
+></video>
+
+<div class="overlay" id="overlay">
+
+<h1>🚀</h1>
+
+<p id="overlayText">
+Loading IPTV Channels...
 </p>
-<div class="live-badge">🔴 LIVE AI SYSTEM ACTIVE</div>
+
 </div>
 
-<div class="stats-grid">
-<div class="stat-box">
-<h3 id="students">12,450</h3>
-<p>Students Online</p>
 </div>
 
-<div class="stat-box">
-<h3 id="assignments">48,932</h3>
-<p>Assignments Solved</p>
-</div>
+<div class="now-playing">
 
-<div class="stat-box">
-<h3 id="projects">7,201</h3>
-<p>Projects Generated</p>
-</div>
+<div class="now-info">
 
-<div class="stat-box">
-<h3 id="accuracy">99%</h3>
-<p>AI Accuracy</p>
-</div>
-</div>
+<h2 id="channelName">
+No Channel Selected
+</h2>
 
-<div class="dashboard" id="dashboard">
-
-<div class="card">
-<h2>📝 AI Assignment Solver</h2>
-<p>
-Automatically solve university assignments, accounting tasks, business questions, economics, management and educational coursework instantly.
+<p id="channelGroup">
+Global Streaming
 </p>
-<button onclick="loadPrompt('assignment')">Launch Assignment AI</button>
-</div>
 
-<div class="card">
-<h2>📚 Homework Assistant</h2>
-<p>
-Upload homework questions and receive smart AI explanations, calculations, summaries and detailed academic answers.
-</p>
-<button onclick="loadPrompt('homework')">Open Homework AI</button>
-</div>
-
-<div class="card">
-<h2>🚀 Project Builder</h2>
-<p>
-Generate complete student projects including chapters, abstract, methodology, references and conclusions.
-</p>
-<button onclick="loadPrompt('project')">Generate Project</button>
-</div>
-
-<div class="card">
-<h2>🧠 CBT & Quiz System</h2>
-<p>
-Create quizzes, objective tests, AI-generated questions and live educational competitions for students.
-</p>
-<button onclick="loadPrompt('quiz')">Start Quiz AI</button>
-</div>
-
-<div class="card">
-<h2>💻 Coding Education Lab</h2>
-<p>
-Generate HTML, CSS, JavaScript, Python and programming solutions with instant debugging support.
-</p>
-<button onclick="loadPrompt('coding')">Open Coding AI</button>
-</div>
-
-<div class="card">
-<h2>📊 Smart Analytics</h2>
-<p>
-Track student performance, monitor progress, calculate scores and visualize educational statistics.
-</p>
-<button onclick="loadPrompt('grading')">View Analytics</button>
+<div class="clock" id="clock">
+--:--
 </div>
 
 </div>
 
-<div class="workspace">
-<h2 id="workspaceTitle">📝 AI Workspace</h2>
+<div class="controls">
 
-<textarea id="userInput" placeholder="Type assignment, homework, project or educational question here..."></textarea>
+<button onclick="prevChannel()">◀ Prev</button>
+<button onclick="nextChannel()">Next ▶</button>
+<button onclick="togglePiP()">📺 PiP</button>
+<button onclick="shareChannel()">🔗 Share</button>
 
-<div class="actions">
-<button onclick="solveTask()">🤖 Solve with AI</button>
-<button onclick="clearWorkspace()">🗑 Clear</button>
-<button onclick="copyResult()">📋 Copy Answer</button>
-<button onclick="downloadResult()">⬇ Download</button>
-</div>
+<button id="autoSkipBtn" onclick="toggleAutoSkip()">
+⏭ Auto Skip
+</button>
 
-<div class="result" id="resultBox">
-AI educational results will appear here...
-</div>
 </div>
 
 </div>
+
+<div class="stats" id="stats">
+0 Channels Loaded
+</div>
+
+<div class="search-box">
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search channels..."
+oninput="searchChannels(this.value)"
+>
+
+<select onchange="sortChannels(this.value)">
+<option value="az">Sort A-Z</option>
+<option value="za">Sort Z-A</option>
+</select>
+
+</div>
+
+<div class="channels" id="channelList"></div>
+
+</div>
+
 </div>
 
 <script>
-let dark=true;
-let currentMode='assignment';
 
-function showSection(section,btn){
-document.querySelectorAll('.top-buttons button').forEach(b=>{
-b.classList.remove('active');
+let all=[];
+let filteredChannels=[];
+let currentIndex=0;
+let currentHls=null;
+let autoSkipOn=true;
+let dark=true;
+
+let favs=
+JSON.parse(localStorage.getItem('atv_favs') || '{}');
+
+let recent=
+JSON.parse(localStorage.getItem('atv_recent') || '[]');
+
+let deadCh={};
+let aliveCh={};
+
+const video=document.getElementById('video');
+
+const extraFeeds=[
+
+'https://iptv-org.github.io/iptv/index.m3u',
+'https://iptv-org.github.io/iptv/index.country.m3u',
+'https://iptv-org.github.io/iptv/index.category.m3u',
+'https://iptv-org.github.io/iptv/index.language.m3u',
+'https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8',
+'https://raw.githubusercontent.com/freecasthub/public-iptv/main/playlist.m3u'
+
+];
+
+function tick(){
+
+document.getElementById('clock').innerText=
+new Date().toLocaleTimeString([],{
+hour:'2-digit',
+minute:'2-digit'
 });
 
-if(btn){
-btn.classList.add('active');
 }
 
-loadPrompt(section);
+setInterval(tick,1000);
+
+tick();
+
+function flag(cc){
+
+if(!cc || cc.length!==2){
+return '🌐';
 }
 
-function loadPrompt(type){
-currentMode=type;
+const a=0x1F1E6;
 
-const title=document.getElementById('workspaceTitle');
-const input=document.getElementById('userInput');
+return String.fromCodePoint(
+a+cc.charCodeAt(0)-65,
+a+cc.charCodeAt(1)-65
+);
 
-if(type==='assignment'){
-title.innerText='📝 AI Assignment Solver';
-input.placeholder='Paste assignment question here...';
 }
 
-if(type==='homework'){
-title.innerText='📚 Homework Assistant';
-input.placeholder='Paste homework task here...';
+async function loadPlaylist(url,group){
+
+document.getElementById('overlay').style.display='flex';
+
+document.getElementById('overlayText').innerText=
+'Loading '+group+' channels...';
+
+all=[];
+
+try{
+
+const res=await fetch(url);
+
+const text=await res.text();
+
+parseM3U(text,group);
+
+removeDuplicates();
+
+filteredChannels=[...all];
+
+renderChannels();
+
+updateStats();
+
+document.getElementById('overlay').style.display='none';
+
+}catch(err){
+
+alert('Failed to load playlist');
+
+console.error(err);
+
 }
 
-if(type==='project'){
-title.innerText='🚀 Project Generator';
-input.placeholder='Enter project topic here...';
 }
 
-if(type==='research'){
-title.innerText='🔬 Research Assistant';
-input.placeholder='Enter research topic here...';
+function parseM3U(data,group){
+
+const lines=data.split('\n');
+
+for(let i=0;i<lines.length;i++){
+
+if(lines[i].startsWith('#EXTINF')){
+
+const info=lines[i];
+const url=lines[i+1];
+
+if(!url || !url.startsWith('http')){
+continue;
 }
 
-if(type==='quiz'){
-title.innerText='🧠 Quiz Generator';
-input.placeholder='Enter subject to generate quiz...';
+const name=info.split(',').pop();
+
+const logoMatch=
+info.match(/tvg-logo="(.*?)"/);
+
+const countryMatch=
+info.match(/tvg-country="(.*?)"/);
+
+all.push({
+
+id:all.length+1,
+name:name,
+url:url,
+
+logo:
+logoMatch
+? logoMatch[1]
+: 'https://via.placeholder.com/60',
+
+country:
+countryMatch
+? countryMatch[1]
+: '',
+
+group:group
+
+});
+
 }
 
-if(type==='math'){
-title.innerText='➗ Mathematics Solver';
-input.placeholder='Enter mathematical problem...';
 }
 
-if(type==='coding'){
-title.innerText='💻 Coding AI Assistant';
-input.placeholder='Enter programming task...';
 }
 
-if(type==='presentation'){
-title.innerText='📊 Presentation Creator';
-input.placeholder='Enter presentation topic...';
+function removeDuplicates(){
+
+const seen=new Set();
+
+all=all.filter(ch=>{
+
+const key=ch.name+'_'+ch.url;
+
+if(seen.has(key)){
+return false;
 }
 
-if(type==='grading'){
-title.innerText='📈 Smart Grading System';
-input.placeholder='Enter student scores or grading request...';
+seen.add(key);
+
+return true;
+
+});
+
 }
 
-if(type==='plagiarism'){
-title.innerText='🛡 Plagiarism Checker';
-input.placeholder='Paste text for plagiarism analysis...';
-}
+async function loadExtraPlaylists(){
+
+document.getElementById('overlay').style.display='flex';
+
+document.getElementById('overlayText').innerText=
+'Loading Global Feeds...';
+
+for(let url of extraFeeds){
+
+try{
+
+const res=await fetch(url);
+
+const text=await res.text();
+
+parseM3U(text,'Global Feed');
+
+}catch(err){
+
+console.log(err);
+
 }
 
-function solveTask(){
-const input=document.getElementById('userInput').value.trim();
-const result=document.getElementById('resultBox');
+}
 
-if(!input){
-alert('Enter educational content first');
+removeDuplicates();
+
+filteredChannels=[...all];
+
+renderChannels();
+
+updateStats();
+
+document.getElementById('overlay').style.display='none';
+
+}
+
+function renderChannels(){
+
+const box=
+document.getElementById('channelList');
+
+box.innerHTML='';
+
+filteredChannels.forEach((c,index)=>{
+
+const div=document.createElement('div');
+
+div.className='channel';
+
+if(index===currentIndex){
+div.classList.add('active');
+}
+
+div.innerHTML=`
+
+<div class="left">
+
+<img
+src="${c.logo}"
+loading="lazy"
+onerror="this.src='https://via.placeholder.com/60'"
+>
+
+<div class="info">
+
+<h4>
+${flag(c.country)} ${c.name}
+</h4>
+
+<small>
+${c.group}
+</small>
+
+</div>
+
+</div>
+
+<div class="status">
+
+<span class="badge free">
+FREE
+</span>
+
+<span class="badge ${
+deadCh[c.id]
+? 'dead'
+: 'country'
+}">
+${deadCh[c.id] ? 'OFF':'LIVE'}
+</span>
+
+<div
+class="fav ${favs[c.id] ? 'on':''}"
+onclick="event.stopPropagation();toggleFav(${c.id})"
+>
+${favs[c.id] ? '★':'☆'}
+</div>
+
+</div>
+
+`;
+
+div.onclick=()=>playChannel(index);
+
+box.appendChild(div);
+
+});
+
+}
+
+function playChannel(index){
+
+currentIndex=index;
+
+const channel=filteredChannels[index];
+
+if(!channel){
 return;
 }
 
-result.innerHTML='⏳ AI analyzing educational task...';
+document.getElementById('channelName').innerText=
+channel.name;
 
-setTimeout(()=>{
+document.getElementById('channelGroup').innerText=
+channel.group;
 
-let output='';
-
-if(currentMode==='assignment'){
-output=`📝 ASSIGNMENT SOLUTION\n\nQuestion:\n${input}\n\nAI Analysis:\n1. Problem identified successfully.\n2. Educational concepts analyzed.\n3. Academic solution generated.\n\nConclusion:\nThis assignment has been solved using the BTECH AI Education Engine.`;
+if(currentHls){
+currentHls.destroy();
 }
 
-if(currentMode==='homework'){
-output=`📚 HOMEWORK ANSWER\n\nHomework:\n${input}\n\nAI Explanation:\nThe homework has been reviewed and solved step-by-step with smart educational analysis.`;
+video.pause();
+
+video.removeAttribute('src');
+
+video.load();
+
+if(Hls.isSupported()){
+
+currentHls=new Hls({
+
+enableWorker:true,
+lowLatencyMode:true,
+maxBufferLength:10
+
+});
+
+currentHls.loadSource(channel.url);
+
+currentHls.attachMedia(video);
+
+currentHls.on(
+Hls.Events.MANIFEST_PARSED,
+function(){
+
+video.play().catch(()=>{});
+
+aliveCh[channel.id]=1;
+
+delete deadCh[channel.id];
+
+renderChannels();
+
+}
+);
+
+currentHls.on(
+Hls.Events.ERROR,
+function(event,data){
+
+if(data.fatal){
+
+deadCh[channel.id]=1;
+
+renderChannels();
+
+if(autoSkipOn){
+nextChannel();
 }
 
-if(currentMode==='project'){
-output=`🚀 PROJECT GENERATOR\n\nProject Topic:\n${input}\n\nGenerated Chapters:\nChapter 1 - Introduction\nChapter 2 - Literature Review\nChapter 3 - Methodology\nChapter 4 - Data Analysis\nChapter 5 - Conclusion and Recommendation\n\nStatus: Complete project structure generated successfully.`;
 }
 
-if(currentMode==='research'){
-output=`🔬 RESEARCH REPORT\n\nResearch Topic:\n${input}\n\nAI generated a research outline, objectives, methodology and references for the selected topic.`;
+}
+);
+
+}else{
+
+video.src=channel.url;
+
+video.play().catch(()=>{});
+
 }
 
-if(currentMode==='quiz'){
-output=`🧠 QUIZ GENERATED\n\nSubject:\n${input}\n\n1. What is Artificial Intelligence?\nA. Robot\nB. Smart Computer System\nC. Phone\nD. Browser\n\n2. Which language is used for web development?\nA. HTML\nB. Water\nC. Engine\nD. Printer`;
+addRecent(channel.id);
+
+renderChannels();
+
 }
 
-if(currentMode==='math'){
-output=`➗ MATHEMATICS SOLVER\n\nQuestion:\n${input}\n\nAI Mathematical Analysis:\n- Formula identified\n- Calculation processed\n- Step-by-step explanation generated\n\nFinal Answer: Solution computed successfully.`;
+function searchChannels(q){
+
+const value=q.toLowerCase();
+
+filteredChannels=all.filter(c=>
+
+c.name.toLowerCase().includes(value)
+
+||
+
+c.group.toLowerCase().includes(value)
+
+);
+
+renderChannels();
+
+updateStats();
+
 }
 
-if(currentMode==='coding'){
-output=`💻 CODING SOLUTION\n\nProgramming Task:\n${input}\n\nGenerated Solution:\n\nfunction startAI(){\n  console.log('BTECH AI SYSTEM ACTIVE');\n}\n\nstartAI();`;
+function sortChannels(type){
+
+if(type==='az'){
+
+filteredChannels.sort((a,b)=>
+a.name.localeCompare(b.name)
+);
+
+}else{
+
+filteredChannels.sort((a,b)=>
+b.name.localeCompare(a.name)
+);
+
 }
 
-if(currentMode==='presentation'){
-output=`📊 PRESENTATION GENERATED\n\nTopic:\n${input}\n\nSlides:\n1. Introduction\n2. Objectives\n3. Main Discussion\n4. Analysis\n5. Conclusion\n6. References`;
+renderChannels();
+
 }
 
-if(currentMode==='grading'){
-output=`📈 SMART GRADING ANALYSIS\n\nInput:\n${input}\n\nAI grading engine calculated student performance, average score and ranking successfully.`;
+function toggleFav(id){
+
+if(favs[id]){
+delete favs[id];
+}else{
+favs[id]=1;
 }
 
-if(currentMode==='plagiarism'){
-output=`🛡 PLAGIARISM CHECK RESULT\n\nInput analyzed successfully.\nEstimated originality score: 96%\nAI educational engine found minimal duplication.`;
+localStorage.setItem(
+'atv_favs',
+JSON.stringify(favs)
+);
+
+renderChannels();
+
 }
 
-result.innerText=output;
+function addRecent(id){
 
-},1500);
+recent=recent.filter(r=>r!==id);
+
+recent.unshift(id);
+
+if(recent.length>30){
+recent=recent.slice(0,30);
 }
 
-function clearWorkspace(){
-document.getElementById('userInput').value='';
-document.getElementById('resultBox').innerText='AI educational results will appear here...';
+localStorage.setItem(
+'atv_recent',
+JSON.stringify(recent)
+);
+
 }
 
-function copyResult(){
-const text=document.getElementById('resultBox').innerText;
-navigator.clipboard.writeText(text);
-alert('AI result copied successfully');
+function setTab(type,btn){
+
+document
+.querySelectorAll('.top-buttons button')
+.forEach(b=>b.classList.remove('active'));
+
+btn.classList.add('active');
+
+if(type==='all'){
+filteredChannels=[...all];
 }
 
-function downloadResult(){
-const text=document.getElementById('resultBox').innerText;
-const blob=new Blob([text],{type:'text/plain'});
-const a=document.createElement('a');
-a.href=URL.createObjectURL(blob);
-a.download='btech-ai-result.txt';
-a.click();
+if(type==='favs'){
+filteredChannels=all.filter(c=>favs[c.id]);
+}
+
+if(type==='recent'){
+
+filteredChannels=[];
+
+recent.forEach(id=>{
+
+const ch=all.find(c=>c.id===id);
+
+if(ch){
+filteredChannels.push(ch);
+}
+
+});
+
+}
+
+renderChannels();
+
+updateStats();
+
+}
+
+function nextChannel(){
+
+currentIndex++;
+
+if(currentIndex>=filteredChannels.length){
+currentIndex=0;
+}
+
+playChannel(currentIndex);
+
+}
+
+function prevChannel(){
+
+currentIndex--;
+
+if(currentIndex<0){
+currentIndex=filteredChannels.length-1;
+}
+
+playChannel(currentIndex);
+
+}
+
+function togglePiP(){
+
+if(document.pictureInPictureElement){
+
+document.exitPictureInPicture();
+
+}else if(document.pictureInPictureEnabled){
+
+video.requestPictureInPicture();
+
+}
+
+}
+
+function shareChannel(){
+
+const channel=
+filteredChannels[currentIndex];
+
+if(!channel){
+return;
+}
+
+if(navigator.share){
+
+navigator.share({
+title:channel.name,
+url:channel.url
+});
+
+}else{
+
+navigator.clipboard.writeText(channel.url);
+
+alert('Channel URL copied');
+
+}
+
+}
+
+function toggleAutoSkip(){
+
+autoSkipOn=!autoSkipOn;
+
+document.getElementById('autoSkipBtn').innerText=
+autoSkipOn
+? '⏭ Auto Skip'
+: '⏭ Skip OFF';
+
 }
 
 function toggleTheme(){
+
 dark=!dark;
 
-if(dark){
-document.documentElement.style.setProperty('--bg','#0b0f1a');
-document.documentElement.style.setProperty('--panel','#111827');
-document.documentElement.style.setProperty('--card','#1b2438');
-document.documentElement.style.setProperty('--text','#ffffff');
-}else{
-document.documentElement.style.setProperty('--bg','#f1f5f9');
-document.documentElement.style.setProperty('--panel','#ffffff');
-document.documentElement.style.setProperty('--card','#dbeafe');
-document.documentElement.style.setProperty('--text','#000000');
-}
+document.documentElement.style.setProperty(
+'--bg',
+dark ? '#0b0f1a':'#f1f5f9'
+);
+
+document.documentElement.style.setProperty(
+'--panel',
+dark ? '#111827':'#ffffff'
+);
+
+document.documentElement.style.setProperty(
+'--card',
+dark ? '#1b2438':'#e2e8f0'
+);
+
+document.documentElement.style.setProperty(
+'--text',
+dark ? '#ffffff':'#000000'
+);
+
 }
 
-setInterval(()=>{
-const students=document.getElementById('students');
-const assignments=document.getElementById('assignments');
-const projects=document.getElementById('projects');
+function updateStats(){
 
-students.innerText=(12450+Math.floor(Math.random()*50)).toLocaleString();
-assignments.innerText=(48932+Math.floor(Math.random()*100)).toLocaleString();
-projects.innerText=(7201+Math.floor(Math.random()*20)).toLocaleString();
-},4000);
+document.getElementById('stats').innerText=
+filteredChannels.length +
+' Channels Loaded';
+
+}
+
+document.addEventListener('keydown',function(e){
+
+if(e.key==='ArrowRight'){
+nextChannel();
+}
+
+if(e.key==='ArrowLeft'){
+prevChannel();
+}
+
+});
+
+loadPlaylist(
+'https://iptv-org.github.io/iptv/index.country.m3u',
+'World IPTV'
+);
+
 </script>
-  apiKey:'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'
 
 </body>
 </html>
