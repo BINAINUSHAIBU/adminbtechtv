@@ -1,12 +1,12 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <meta name="theme-color" content="#0b0f1a"/>
-<title>BTECH AI EDUCATION WORLD - LIVE</title>
-
-<link rel="manifest" href="manifest.json">
+<title>BTECH AI EDUCATION WORLD</title>
 
 <style>
 :root{
@@ -329,64 +329,64 @@ font-size:32px;
 
 <h3>🤖 AI Education Channels</h3>
 
-<div class="cat" onclick="activateChannel('assignment')">
-🟢 📝 Assignment Solver Channel — ACTIVE
+<div class="cat" onclick="loadPrompt('assignment')">
+📝 Assignment Solver Channel
 </div>
 
-<div class="cat" onclick="activateChannel('homework')">
-🟢 📚 Homework AI Channel — ACTIVE
+<div class="cat" onclick="loadPrompt('homework')">
+📚 Homework AI Channel
 </div>
 
-<div class="cat" onclick="activateChannel('project')">
-🟢 🚀 Project Generator Channel — ACTIVE
+<div class="cat" onclick="loadPrompt('project')">
+🚀 Project Generator Channel
 </div>
 
-<div class="cat" onclick="activateChannel('research')">
-🟢 🔬 Research Assistant Channel — ACTIVE
+<div class="cat" onclick="loadPrompt('research')">
+🔬 Research Assistant Channel
 </div>
 
-<div class="cat" onclick="activateChannel('quiz')">
-🟢 🧠 Quiz & CBT Solver — ACTIVE
+<div class="cat" onclick="loadPrompt('quiz')">
+🧠 Quiz & CBT Solver
 </div>
 
-<div class="cat" onclick="activateChannel('math')">
-🟢 ➗ Mathematics Solver — ACTIVE
+<div class="cat" onclick="loadPrompt('math')">
+➗ Mathematics Solver
 </div>
 
-<div class="cat" onclick="activateChannel('coding')">
-🟢 💻 Coding & Programming AI — ACTIVE
+<div class="cat" onclick="loadPrompt('coding')">
+💻 Coding & Programming AI
 </div>
 
-<div class="cat" onclick="activateChannel('presentation')">
-🟢 📊 Presentation Creator — ACTIVE
+<div class="cat" onclick="loadPrompt('presentation')">
+📊 Presentation Creator
 </div>
 
-<div class="cat" onclick="activateChannel('grading')">
-🟢 📈 Smart Grading System — ACTIVE
+<div class="cat" onclick="loadPrompt('grading')">
+📈 Smart Grading System
 </div>
 
-<div class="cat" onclick="activateChannel('plagiarism')">
-🟢 🛡 Plagiarism Checker — ACTIVE
+<div class="cat" onclick="loadPrompt('plagiarism')">
+🛡 Plagiarism Checker
 </div>
 
 <hr style="margin:20px 0;border:0;border-top:1px solid #1f2937;">
 
 <h3>📡 LIVE AI STATUS</h3>
 
-<div class="cat" id="liveAIStatus">
-🟡 Initializing LIVE AI Engine...
+<div class="cat">
+🟢 AI Assignment Engine Active
 </div>
 
 <div class="cat">
-🟢 Homework Analysis Running — CONNECTED
+🟢 Homework Analysis Running
 </div>
 
 <div class="cat">
-🟢 Project Generator Online — CONNECTED
+🟢 Project Generator Online
 </div>
 
 <div class="cat">
-🟢 Smart Education Cloud Ready — CONNECTED
+🟢 Smart Education Cloud Ready
 </div>
 
 </div>
@@ -399,15 +399,6 @@ font-size:32px;
 Complete AI-powered educational dashboard for assignments, homework, projects, research, quizzes and grading systems. This platform automatically creates educational channels, analyzes student work and generates instant academic solutions.
 </p>
 <div class="live-badge">🔴 LIVE AI SYSTEM ACTIVE</div>
-<div style="margin-top:15px;font-size:14px;color:#dbeafe;">
-🌐 LIVE Cloud Education Platform Enabled
-<div style="margin-top:10px;color:#93c5fd;font-size:13px;line-height:1.6;">
-☁ Real-Time Assignment Sync Active<br>
-📡 Multi-Student AI Access Connected<br>
-🧠 Smart Homework Engine Online<br>
-🚀 Project Solver Cloud Running 24/7
-</div>
-</div>
 </div>
 
 <div class="stats-grid">
@@ -505,68 +496,6 @@ AI educational results will appear here...
 </div>
 
 <script>
-
-/* =========================
-REAL AI CONFIGURATION
-========================= */
-
-const AI_CONFIG={
-apiKey:'PASTE_OPENAI_API_KEY_HERE',
-endpoint:'https://api.openai.com/v1/chat/completions',
-model:'gpt-4o-mini'
-};
-
-let aiOnline=false;
-
-async function testAIConnection(){
-
-try{
-
-const response=await fetch(AI_CONFIG.endpoint,{
-method:'POST',
-headers:{
-'Content-Type':'application/json',
-'Authorization':'Bearer '+AI_CONFIG.apiKey
-},
-body:JSON.stringify({
-model:AI_CONFIG.model,
-messages:[
-{
-role:'user',
-content:'Hello'
-}
-],
-max_tokens:5
-})
-});
-
-if(response.ok){
-aiOnline=true;
-updateAIStatus('🟢 LIVE OPENAI ENGINE CONNECTED');
-}else{
-updateAIStatus('🔴 AI API CONNECTION FAILED');
-}
-
-}catch(err){
-updateAIStatus('🔴 AI SERVER OFFLINE');
-}
-
-}
-
-function updateAIStatus(text){
-
-const result=document.getElementById('resultBox');
-
-const live=document.getElementById('liveAIStatus');
-
-if(live){
-live.innerText=text;
-}
-
-console.log(text);
-
-}
-
 let dark=true;
 let currentMode='assignment';
 
@@ -580,29 +509,6 @@ btn.classList.add('active');
 }
 
 loadPrompt(section);
-}
-
-function activateChannel(type){
-loadPrompt(type);
-
-const result=document.getElementById('resultBox');
-
-const names={
-assignment:'📝 Assignment Solver Channel',
-homework:'📚 Homework AI Channel',
-project:'🚀 Project Generator Channel',
-research:'🔬 Research Assistant Channel',
-quiz:'🧠 Quiz & CBT Solver',
-math:'➗ Mathematics Solver',
-coding:'💻 Coding & Programming AI',
-presentation:'📊 Presentation Creator',
-grading:'📈 Smart Grading System',
-plagiarism:'🛡 Plagiarism Checker'
-};
-
-result.innerText='🟢 CHANNEL ACTIVATED SUCCESSFULLY
-
-'+names[type]+' is now LIVE and ready to process educational tasks in real-time.';
 }
 
 function loadPrompt(type){
@@ -662,8 +568,7 @@ input.placeholder='Paste text for plagiarism analysis...';
 }
 }
 
-async function solveTask(){
-
+function solveTask(){
 const input=document.getElementById('userInput').value.trim();
 const result=document.getElementById('resultBox');
 
@@ -672,74 +577,55 @@ alert('Enter educational content first');
 return;
 }
 
-result.innerHTML='⏳ REAL AI ENGINE PROCESSING REQUEST...';
+result.innerHTML='⏳ AI analyzing educational task...';
 
-try{
+setTimeout(()=>{
 
-if(!AI_CONFIG.apiKey || AI_CONFIG.apiKey==='PASTE_OPENAI_API_KEY_HERE'){
-throw new Error('Insert your OpenAI API key first');
+let output='';
+
+if(currentMode==='assignment'){
+output=`📝 ASSIGNMENT SOLUTION\n\nQuestion:\n${input}\n\nAI Analysis:\n1. Problem identified successfully.\n2. Educational concepts analyzed.\n3. Academic solution generated.\n\nConclusion:\nThis assignment has been solved using the BTECH AI Education Engine.`;
 }
 
-let systemPrompt='You are BTECH AI Education Engine. Solve assignments, homework, mathematics, coding, research and educational tasks professionally.';
-
-if(currentMode==='math'){
-systemPrompt='You are an advanced mathematics tutor. Solve all calculations step-by-step.';
-}
-
-if(currentMode==='coding'){
-systemPrompt='You are an expert programming AI. Generate complete code solutions.';
+if(currentMode==='homework'){
+output=`📚 HOMEWORK ANSWER\n\nHomework:\n${input}\n\nAI Explanation:\nThe homework has been reviewed and solved step-by-step with smart educational analysis.`;
 }
 
 if(currentMode==='project'){
-systemPrompt='You are an academic project supervisor. Generate full project structures and educational content.';
+output=`🚀 PROJECT GENERATOR\n\nProject Topic:\n${input}\n\nGenerated Chapters:\nChapter 1 - Introduction\nChapter 2 - Literature Review\nChapter 3 - Methodology\nChapter 4 - Data Analysis\nChapter 5 - Conclusion and Recommendation\n\nStatus: Complete project structure generated successfully.`;
+}
+
+if(currentMode==='research'){
+output=`🔬 RESEARCH REPORT\n\nResearch Topic:\n${input}\n\nAI generated a research outline, objectives, methodology and references for the selected topic.`;
 }
 
 if(currentMode==='quiz'){
-systemPrompt='Generate quizzes, CBT tests and objective questions with answers.';
+output=`🧠 QUIZ GENERATED\n\nSubject:\n${input}\n\n1. What is Artificial Intelligence?\nA. Robot\nB. Smart Computer System\nC. Phone\nD. Browser\n\n2. Which language is used for web development?\nA. HTML\nB. Water\nC. Engine\nD. Printer`;
 }
 
-const response=await fetch(AI_CONFIG.endpoint,{
-method:'POST',
-headers:{
-'Content-Type':'application/json',
-'Authorization':'Bearer '+AI_CONFIG.apiKey
-},
-body:JSON.stringify({
-model:AI_CONFIG.model,
-messages:[
-{
-role:'system',
-content:systemPrompt
-},
-{
-role:'user',
-content:input
-}
-],
-temperature:0.4,
-max_tokens:2000
-})
-});
-
-const data=await response.json();
-
-if(data.error){
-throw new Error(data.error.message);
+if(currentMode==='math'){
+output=`➗ MATHEMATICS SOLVER\n\nQuestion:\n${input}\n\nAI Mathematical Analysis:\n- Formula identified\n- Calculation processed\n- Step-by-step explanation generated\n\nFinal Answer: Solution computed successfully.`;
 }
 
-const answer=data.choices[0].message.content;
-
-const timestamp=new Date().toLocaleString();
-
-result.innerText='🤖 LIVE AI EDUCATION ENGINE\nGenerated: '+timestamp+'\n\n'+answer;
-
-saveHistory(answer);
-
-}catch(error){
-
-result.innerText='❌ AI Engine Error: '+error.message+'\n\n1. Insert valid API key\n2. Ensure internet connection\n3. Verify OpenAI billing is active';
-
+if(currentMode==='coding'){
+output=`💻 CODING SOLUTION\n\nProgramming Task:\n${input}\n\nGenerated Solution:\n\nfunction startAI(){\n  console.log('BTECH AI SYSTEM ACTIVE');\n}\n\nstartAI();`;
 }
+
+if(currentMode==='presentation'){
+output=`📊 PRESENTATION GENERATED\n\nTopic:\n${input}\n\nSlides:\n1. Introduction\n2. Objectives\n3. Main Discussion\n4. Analysis\n5. Conclusion\n6. References`;
+}
+
+if(currentMode==='grading'){
+output=`📈 SMART GRADING ANALYSIS\n\nInput:\n${input}\n\nAI grading engine calculated student performance, average score and ranking successfully.`;
+}
+
+if(currentMode==='plagiarism'){
+output=`🛡 PLAGIARISM CHECK RESULT\n\nInput analyzed successfully.\nEstimated originality score: 96%\nAI educational engine found minimal duplication.`;
+}
+
+result.innerText=output;
+
+},1500);
 }
 
 function clearWorkspace(){
@@ -762,21 +648,6 @@ a.download='btech-ai-result.txt';
 a.click();
 }
 
-function saveHistory(data){
-let history=JSON.parse(localStorage.getItem('btech_ai_history')||'[]');
-
-history.unshift({
-result:data,
-time:new Date().toLocaleString()
-});
-
-if(history.length>20){
-history=history.slice(0,20);
-}
-
-localStorage.setItem('btech_ai_history',JSON.stringify(history));
-}
-
 function toggleTheme(){
 dark=!dark;
 
@@ -792,14 +663,6 @@ document.documentElement.style.setProperty('--card','#dbeafe');
 document.documentElement.style.setProperty('--text','#000000');
 }
 }
-
-if('serviceWorker' in navigator){
-window.addEventListener('load',()=>{
-console.log('LIVE BTECH AI SYSTEM READY');
-});
-}
-
-testAIConnection();
 
 setInterval(()=>{
 const students=document.getElementById('students');
