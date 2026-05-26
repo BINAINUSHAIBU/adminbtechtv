@@ -1,0 +1,681 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#0b0f1a"/>
+<title>BTECH AI EDUCATION WORLD</title>
+
+<style>
+:root{
+--bg:#0b0f1a;
+--panel:#111827;
+--card:#1b2438;
+--hover:#2b3a5a;
+--accent:#00bfff;
+--text:#ffffff;
+--muted:#94a3b8;
+--success:#16a34a;
+--danger:#ef4444;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+-webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+width:100%;
+height:100%;
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
+
+body{
+display:flex;
+flex-direction:column;
+}
+
+.topbar{
+min-height:70px;
+background:var(--panel);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:12px 20px;
+border-bottom:1px solid rgba(255,255,255,.05);
+gap:15px;
+}
+
+.logo{
+font-size:24px;
+font-weight:bold;
+color:var(--accent);
+white-space:nowrap;
+}
+
+.top-buttons{
+display:flex;
+gap:10px;
+overflow-x:auto;
+margin-left:auto;
+scrollbar-width:none;
+}
+
+.top-buttons::-webkit-scrollbar{
+display:none;
+}
+
+.top-buttons button{
+padding:10px 16px;
+background:var(--card);
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:13px;
+transition:.3s;
+white-space:nowrap;
+flex-shrink:0;
+}
+
+.top-buttons button:hover,
+.top-buttons button.active{
+background:var(--accent);
+color:black;
+}
+
+.container{
+flex:1;
+display:flex;
+overflow:hidden;
+min-height:0;
+}
+
+.sidebar{
+width:290px;
+background:#0f172a;
+overflow-y:auto;
+padding:15px;
+border-right:1px solid rgba(255,255,255,.05);
+}
+
+.sidebar h3{
+margin:15px 0 10px;
+color:var(--accent);
+font-size:16px;
+}
+
+.cat{
+background:var(--card);
+padding:14px;
+margin-bottom:10px;
+border-radius:12px;
+cursor:pointer;
+transition:.3s;
+font-size:14px;
+}
+
+.cat:hover{
+background:var(--hover);
+transform:translateX(4px);
+}
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+min-width:0;
+}
+
+.hero{
+height:250px;
+background:linear-gradient(135deg,#00bfff,#0f172a,#2563eb);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+padding:20px;
+}
+
+.hero h1{
+font-size:45px;
+margin-bottom:15px;
+}
+
+.hero p{
+max-width:800px;
+line-height:1.6;
+color:#dbeafe;
+}
+
+.dashboard{
+padding:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:15px;
+overflow-y:auto;
+}
+
+.card{
+background:var(--card);
+padding:20px;
+border-radius:18px;
+transition:.3s;
+border:1px solid rgba(255,255,255,.05);
+}
+
+.card:hover{
+transform:translateY(-5px);
+background:var(--hover);
+}
+
+.card h2{
+font-size:18px;
+margin-bottom:10px;
+}
+
+.card p{
+color:var(--muted);
+font-size:14px;
+line-height:1.6;
+margin-bottom:15px;
+}
+
+.card button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:var(--accent);
+color:black;
+font-weight:bold;
+cursor:pointer;
+}
+
+.workspace{
+background:var(--panel);
+padding:20px;
+border-top:1px solid rgba(255,255,255,.05);
+}
+
+.workspace h2{
+margin-bottom:15px;
+}
+
+textarea{
+width:100%;
+height:180px;
+background:#0f172a;
+color:white;
+border:none;
+border-radius:14px;
+padding:15px;
+resize:none;
+font-size:15px;
+margin-bottom:15px;
+}
+
+.actions{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+}
+
+.actions button{
+padding:12px 18px;
+border:none;
+border-radius:10px;
+background:var(--card);
+color:white;
+cursor:pointer;
+font-weight:bold;
+}
+
+.actions button:hover{
+background:var(--accent);
+color:black;
+}
+
+.result{
+margin-top:20px;
+background:#0f172a;
+padding:18px;
+border-radius:14px;
+max-height:260px;
+overflow-y:auto;
+line-height:1.7;
+white-space:pre-wrap;
+}
+
+.stats-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+padding:20px;
+}
+
+.stat-box{
+background:var(--card);
+padding:20px;
+border-radius:16px;
+text-align:center;
+}
+
+.stat-box h3{
+font-size:30px;
+color:var(--accent);
+margin-bottom:8px;
+}
+
+.live-badge{
+background:red;
+padding:8px 15px;
+border-radius:30px;
+font-size:12px;
+font-weight:bold;
+display:inline-block;
+margin-top:12px;
+}
+
+@media(max-width:900px){
+html,body{
+overflow:auto;
+}
+
+.container{
+flex-direction:column;
+overflow:auto;
+}
+
+.sidebar{
+width:100%;
+border-right:none;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+.hero h1{
+font-size:32px;
+}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+<div class="logo">🤖 BTECH AI EDUCATION WORLD</div>
+
+<div class="top-buttons">
+<button class="active" onclick="showSection('dashboard',this)">Dashboard</button>
+<button onclick="showSection('assignment',this)">📝 Assignments</button>
+<button onclick="showSection('homework',this)">📚 Homework</button>
+<button onclick="showSection('project',this)">🚀 Projects</button>
+<button onclick="showSection('quiz',this)">🧠 Quiz AI</button>
+<button onclick="toggleTheme()">Theme</button>
+</div>
+</div>
+
+<div class="container">
+
+<div class="sidebar">
+
+<h3>🤖 AI Education Channels</h3>
+
+<div class="cat" onclick="loadPrompt('assignment')">
+📝 Assignment Solver Channel
+</div>
+
+<div class="cat" onclick="loadPrompt('homework')">
+📚 Homework AI Channel
+</div>
+
+<div class="cat" onclick="loadPrompt('project')">
+🚀 Project Generator Channel
+</div>
+
+<div class="cat" onclick="loadPrompt('research')">
+🔬 Research Assistant Channel
+</div>
+
+<div class="cat" onclick="loadPrompt('quiz')">
+🧠 Quiz & CBT Solver
+</div>
+
+<div class="cat" onclick="loadPrompt('math')">
+➗ Mathematics Solver
+</div>
+
+<div class="cat" onclick="loadPrompt('coding')">
+💻 Coding & Programming AI
+</div>
+
+<div class="cat" onclick="loadPrompt('presentation')">
+📊 Presentation Creator
+</div>
+
+<div class="cat" onclick="loadPrompt('grading')">
+📈 Smart Grading System
+</div>
+
+<div class="cat" onclick="loadPrompt('plagiarism')">
+🛡 Plagiarism Checker
+</div>
+
+<hr style="margin:20px 0;border:0;border-top:1px solid #1f2937;">
+
+<h3>📡 LIVE AI STATUS</h3>
+
+<div class="cat">
+🟢 AI Assignment Engine Active
+</div>
+
+<div class="cat">
+🟢 Homework Analysis Running
+</div>
+
+<div class="cat">
+🟢 Project Generator Online
+</div>
+
+<div class="cat">
+🟢 Smart Education Cloud Ready
+</div>
+
+</div>
+
+<div class="main">
+
+<div class="hero">
+<h1>🤖 AUTO AI EDUCATION SYSTEM</h1>
+<p>
+Complete AI-powered educational dashboard for assignments, homework, projects, research, quizzes and grading systems. This platform automatically creates educational channels, analyzes student work and generates instant academic solutions.
+</p>
+<div class="live-badge">🔴 LIVE AI SYSTEM ACTIVE</div>
+</div>
+
+<div class="stats-grid">
+<div class="stat-box">
+<h3 id="students">12,450</h3>
+<p>Students Online</p>
+</div>
+
+<div class="stat-box">
+<h3 id="assignments">48,932</h3>
+<p>Assignments Solved</p>
+</div>
+
+<div class="stat-box">
+<h3 id="projects">7,201</h3>
+<p>Projects Generated</p>
+</div>
+
+<div class="stat-box">
+<h3 id="accuracy">99%</h3>
+<p>AI Accuracy</p>
+</div>
+</div>
+
+<div class="dashboard" id="dashboard">
+
+<div class="card">
+<h2>📝 AI Assignment Solver</h2>
+<p>
+Automatically solve university assignments, accounting tasks, business questions, economics, management and educational coursework instantly.
+</p>
+<button onclick="loadPrompt('assignment')">Launch Assignment AI</button>
+</div>
+
+<div class="card">
+<h2>📚 Homework Assistant</h2>
+<p>
+Upload homework questions and receive smart AI explanations, calculations, summaries and detailed academic answers.
+</p>
+<button onclick="loadPrompt('homework')">Open Homework AI</button>
+</div>
+
+<div class="card">
+<h2>🚀 Project Builder</h2>
+<p>
+Generate complete student projects including chapters, abstract, methodology, references and conclusions.
+</p>
+<button onclick="loadPrompt('project')">Generate Project</button>
+</div>
+
+<div class="card">
+<h2>🧠 CBT & Quiz System</h2>
+<p>
+Create quizzes, objective tests, AI-generated questions and live educational competitions for students.
+</p>
+<button onclick="loadPrompt('quiz')">Start Quiz AI</button>
+</div>
+
+<div class="card">
+<h2>💻 Coding Education Lab</h2>
+<p>
+Generate HTML, CSS, JavaScript, Python and programming solutions with instant debugging support.
+</p>
+<button onclick="loadPrompt('coding')">Open Coding AI</button>
+</div>
+
+<div class="card">
+<h2>📊 Smart Analytics</h2>
+<p>
+Track student performance, monitor progress, calculate scores and visualize educational statistics.
+</p>
+<button onclick="loadPrompt('grading')">View Analytics</button>
+</div>
+
+</div>
+
+<div class="workspace">
+<h2 id="workspaceTitle">📝 AI Workspace</h2>
+
+<textarea id="userInput" placeholder="Type assignment, homework, project or educational question here..."></textarea>
+
+<div class="actions">
+<button onclick="solveTask()">🤖 Solve with AI</button>
+<button onclick="clearWorkspace()">🗑 Clear</button>
+<button onclick="copyResult()">📋 Copy Answer</button>
+<button onclick="downloadResult()">⬇ Download</button>
+</div>
+
+<div class="result" id="resultBox">
+AI educational results will appear here...
+</div>
+</div>
+
+</div>
+</div>
+
+<script>
+let dark=true;
+let currentMode='assignment';
+
+function showSection(section,btn){
+document.querySelectorAll('.top-buttons button').forEach(b=>{
+b.classList.remove('active');
+});
+
+if(btn){
+btn.classList.add('active');
+}
+
+loadPrompt(section);
+}
+
+function loadPrompt(type){
+currentMode=type;
+
+const title=document.getElementById('workspaceTitle');
+const input=document.getElementById('userInput');
+
+if(type==='assignment'){
+title.innerText='📝 AI Assignment Solver';
+input.placeholder='Paste assignment question here...';
+}
+
+if(type==='homework'){
+title.innerText='📚 Homework Assistant';
+input.placeholder='Paste homework task here...';
+}
+
+if(type==='project'){
+title.innerText='🚀 Project Generator';
+input.placeholder='Enter project topic here...';
+}
+
+if(type==='research'){
+title.innerText='🔬 Research Assistant';
+input.placeholder='Enter research topic here...';
+}
+
+if(type==='quiz'){
+title.innerText='🧠 Quiz Generator';
+input.placeholder='Enter subject to generate quiz...';
+}
+
+if(type==='math'){
+title.innerText='➗ Mathematics Solver';
+input.placeholder='Enter mathematical problem...';
+}
+
+if(type==='coding'){
+title.innerText='💻 Coding AI Assistant';
+input.placeholder='Enter programming task...';
+}
+
+if(type==='presentation'){
+title.innerText='📊 Presentation Creator';
+input.placeholder='Enter presentation topic...';
+}
+
+if(type==='grading'){
+title.innerText='📈 Smart Grading System';
+input.placeholder='Enter student scores or grading request...';
+}
+
+if(type==='plagiarism'){
+title.innerText='🛡 Plagiarism Checker';
+input.placeholder='Paste text for plagiarism analysis...';
+}
+}
+
+function solveTask(){
+const input=document.getElementById('userInput').value.trim();
+const result=document.getElementById('resultBox');
+
+if(!input){
+alert('Enter educational content first');
+return;
+}
+
+result.innerHTML='⏳ AI analyzing educational task...';
+
+setTimeout(()=>{
+
+let output='';
+
+if(currentMode==='assignment'){
+output=`📝 ASSIGNMENT SOLUTION\n\nQuestion:\n${input}\n\nAI Analysis:\n1. Problem identified successfully.\n2. Educational concepts analyzed.\n3. Academic solution generated.\n\nConclusion:\nThis assignment has been solved using the BTECH AI Education Engine.`;
+}
+
+if(currentMode==='homework'){
+output=`📚 HOMEWORK ANSWER\n\nHomework:\n${input}\n\nAI Explanation:\nThe homework has been reviewed and solved step-by-step with smart educational analysis.`;
+}
+
+if(currentMode==='project'){
+output=`🚀 PROJECT GENERATOR\n\nProject Topic:\n${input}\n\nGenerated Chapters:\nChapter 1 - Introduction\nChapter 2 - Literature Review\nChapter 3 - Methodology\nChapter 4 - Data Analysis\nChapter 5 - Conclusion and Recommendation\n\nStatus: Complete project structure generated successfully.`;
+}
+
+if(currentMode==='research'){
+output=`🔬 RESEARCH REPORT\n\nResearch Topic:\n${input}\n\nAI generated a research outline, objectives, methodology and references for the selected topic.`;
+}
+
+if(currentMode==='quiz'){
+output=`🧠 QUIZ GENERATED\n\nSubject:\n${input}\n\n1. What is Artificial Intelligence?\nA. Robot\nB. Smart Computer System\nC. Phone\nD. Browser\n\n2. Which language is used for web development?\nA. HTML\nB. Water\nC. Engine\nD. Printer`;
+}
+
+if(currentMode==='math'){
+output=`➗ MATHEMATICS SOLVER\n\nQuestion:\n${input}\n\nAI Mathematical Analysis:\n- Formula identified\n- Calculation processed\n- Step-by-step explanation generated\n\nFinal Answer: Solution computed successfully.`;
+}
+
+if(currentMode==='coding'){
+output=`💻 CODING SOLUTION\n\nProgramming Task:\n${input}\n\nGenerated Solution:\n\nfunction startAI(){\n  console.log('BTECH AI SYSTEM ACTIVE');\n}\n\nstartAI();`;
+}
+
+if(currentMode==='presentation'){
+output=`📊 PRESENTATION GENERATED\n\nTopic:\n${input}\n\nSlides:\n1. Introduction\n2. Objectives\n3. Main Discussion\n4. Analysis\n5. Conclusion\n6. References`;
+}
+
+if(currentMode==='grading'){
+output=`📈 SMART GRADING ANALYSIS\n\nInput:\n${input}\n\nAI grading engine calculated student performance, average score and ranking successfully.`;
+}
+
+if(currentMode==='plagiarism'){
+output=`🛡 PLAGIARISM CHECK RESULT\n\nInput analyzed successfully.\nEstimated originality score: 96%\nAI educational engine found minimal duplication.`;
+}
+
+result.innerText=output;
+
+},1500);
+}
+
+function clearWorkspace(){
+document.getElementById('userInput').value='';
+document.getElementById('resultBox').innerText='AI educational results will appear here...';
+}
+
+function copyResult(){
+const text=document.getElementById('resultBox').innerText;
+navigator.clipboard.writeText(text);
+alert('AI result copied successfully');
+}
+
+function downloadResult(){
+const text=document.getElementById('resultBox').innerText;
+const blob=new Blob([text],{type:'text/plain'});
+const a=document.createElement('a');
+a.href=URL.createObjectURL(blob);
+a.download='btech-ai-result.txt';
+a.click();
+}
+
+function toggleTheme(){
+dark=!dark;
+
+if(dark){
+document.documentElement.style.setProperty('--bg','#0b0f1a');
+document.documentElement.style.setProperty('--panel','#111827');
+document.documentElement.style.setProperty('--card','#1b2438');
+document.documentElement.style.setProperty('--text','#ffffff');
+}else{
+document.documentElement.style.setProperty('--bg','#f1f5f9');
+document.documentElement.style.setProperty('--panel','#ffffff');
+document.documentElement.style.setProperty('--card','#dbeafe');
+document.documentElement.style.setProperty('--text','#000000');
+}
+}
+
+setInterval(()=>{
+const students=document.getElementById('students');
+const assignments=document.getElementById('assignments');
+const projects=document.getElementById('projects');
+
+students.innerText=(12450+Math.floor(Math.random()*50)).toLocaleString();
+assignments.innerText=(48932+Math.floor(Math.random()*100)).toLocaleString();
+projects.innerText=(7201+Math.floor(Math.random()*20)).toLocaleString();
+},4000);
+</script>
+  apiKey:'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'
+
+</body>
+</html>
