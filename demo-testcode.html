@@ -1,11 +1,5 @@
 
 
-
-
-
-
-
-
 <!-- ULTRA MERGED FULL ONE-PAGE VERSION -->
 <!-- ALL FEATURES + ALL CHANNELS + EXTRA FEEDS + RESPONSIVE + IPTV -->
 <!-- FAVORITES + RECENTS + AUTOSKIP + PiP + SHARE + THEME -->
@@ -1387,6 +1381,317 @@ loadPlaylist(
 'https://iptv-org.github.io/iptv/index.country.m3u',
 'World IPTV'
 );
+
+</script>
+
+  <script>
+
+function playChannel(index){
+
+currentIndex=index;
+
+const channel=filteredChannels[index];
+
+if(!channel){
+return;
+}
+
+document.getElementById('channelName').innerText=
+channel.name;
+
+document.getElementById('channelGroup').innerText=
+channel.group;
+
+const overlay=document.getElementById('overlay');
+const overlayText=document.getElementById('overlayText');
+
+overlay.style.display='flex';
+overlayText.innerText='Connecting to HD Stream...';
+
+if(currentHls){
+currentHls.destroy();
+currentHls=null;
+}
+
+video.pause();
+
+video.removeAttribute('src');
+
+video.load();
+
+video.autoplay=true;
+video.muted=false;
+video.playsInline=true;
+video.setAttribute('playsinline','true');
+
+const startPlayback=()=>{
+
+video.play()
+.then(()=>{
+
+overlay.style.display='none';
+
+aliveCh[channel.id]=1;
+
+delete deadCh[channel.id];
+
+renderChannels();
+
+})
+.catch(()=>{
+
+overlayText.innerText='Tap screen to play';
+
+});
+
+};
+
+if(Hls.isSupported()){
+
+currentHls=new Hls({
+
+debug:false,
+
+enableWorker:true,
+
+lowLatencyMode:false,
+
+backBufferLength:90,
+
+maxBufferLength:120,
+
+maxMaxBufferLength:180,
+
+liveSyncDurationCount:3,
+
+liveMaxLatencyDurationCount:10,
+
+maxLiveSyncPlaybackRate:1.5,
+
+manifestLoadingTimeOut:30000,
+
+manifestLoadingMaxRetry:8,
+
+manifestLoadingRetryDelay:2000,
+
+levelLoadingTimeOut:30000,
+
+fragLoadingTimeOut:40000,
+
+fragLoadingMaxRetry:10,
+
+fragLoadingRetryDelay:2000,
+
+startLevel:-1,
+
+capLevelToPlayerSize:true,
+
+autoStartLoad:true,
+
+startFragPrefetch:true,
+
+testBandwidth:true,
+
+abrEwmaFastLive:3,
+
+abrEwmaSlowLive:9,
+
+abrBandWidthFactor:0.95,
+
+abrBandWidthUpFactor:0.7,
+
+progressive:true,
+
+stretchShortVideoTrack:true,
+
+liveDurationInfinity:true,
+
+highBufferWatchdogPeriod:2,
+
+nudgeOffset:0.1,
+
+nudgeMaxRetry:10,
+
+maxStarvationDelay:6,
+
+maxLoadingDelay:6,
+
+enableSoftwareAES:true
+
+});
+
+currentHls.loadSource(channel.url);
+
+currentHls.attachMedia(video);
+
+currentHls.on(Hls.Events.MANIFEST_PARSED,function(){
+
+overlayText.innerText='Optimizing HD Stream...';
+
+startPlayback();
+
+});
+
+currentHls.on(Hls.Events.LEVEL_SWITCHED,function(event,data){
+
+const quality=
+currentHls.levels[data.level];
+
+if(quality){
+
+document.getElementById('stats').innerText=
+filteredChannels.length+
+' Channels Loaded • '+
+quality.height+'p HD';
+
+}
+
+});
+
+currentHls.on(Hls.Events.ERROR,function(event,data){
+
+console.log('HLS ERROR:',data);
+
+if(data.fatal){
+
+switch(data.type){
+
+case Hls.ErrorTypes.NETWORK_ERROR:
+
+overlay.style.display='flex';
+
+overlayText.innerText=
+'Reconnecting Network Stream...';
+
+currentHls.startLoad();
+
+break;
+
+case Hls.ErrorTypes.MEDIA_ERROR:
+
+overlay.style.display='flex';
+
+overlayText.innerText=
+'Repairing Video Stream...';
+
+currentHls.recoverMediaError();
+
+break;
+
+default:
+
+overlay.style.display='flex';
+
+overlayText.innerText=
+'Reloading Stable Stream...';
+
+setTimeout(()=>{
+
+playChannel(currentIndex);
+
+},3000);
+
+break;
+
+}
+
+}
+
+});
+
+}else if(video.canPlayType('application/vnd.apple.mpegurl')){
+
+video.src=channel.url;
+
+video.addEventListener('loadedmetadata',()=>{
+
+startPlayback();
+
+});
+
+video.addEventListener('waiting',()=>{
+
+overlay.style.display='flex';
+
+overlayText.innerText='Buffering HD Stream...';
+
+});
+
+video.addEventListener('playing',()=>{
+
+overlay.style.display='none';
+
+});
+
+video.addEventListener('error',()=>{
+
+overlay.style.display='flex';
+
+overlayText.innerText='Recovering Stream...';
+
+setTimeout(()=>{
+
+video.load();
+
+startPlayback();
+
+},3000);
+
+});
+
+}else{
+
+video.src=channel.url;
+
+startPlayback();
+
+}
+
+video.addEventListener('waiting',()=>{
+
+overlay.style.display='flex';
+
+overlayText.innerText='Optimizing Network Speed...';
+
+});
+
+video.addEventListener('playing',()=>{
+
+overlay.style.display='none';
+
+});
+
+video.addEventListener('stalled',()=>{
+
+overlay.style.display='flex';
+
+overlayText.innerText='Recovering Stable Playback...';
+
+});
+
+video.addEventListener('canplay',()=>{
+
+overlay.style.display='none';
+
+});
+
+video.addEventListener('suspend',()=>{
+
+console.log('Stream suspended');
+
+});
+
+video.addEventListener('progress',()=>{
+
+overlay.style.display='none';
+
+});
+
+addRecent(channel.id);
+
+renderChannels();
+
+}
 
 </script>
 
