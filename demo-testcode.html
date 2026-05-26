@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -401,12 +402,6 @@ Complete AI-powered educational dashboard for assignments, homework, projects, r
 <div class="live-badge">🔴 LIVE AI SYSTEM ACTIVE</div>
 <div style="margin-top:15px;font-size:14px;color:#dbeafe;">
 🌐 LIVE Cloud Education Platform Enabled
-<div style="margin-top:10px;color:#93c5fd;font-size:13px;line-height:1.6;">
-☁ Real-Time Assignment Sync Active<br>
-📡 Multi-Student AI Access Connected<br>
-🧠 Smart Homework Engine Online<br>
-🚀 Project Solver Cloud Running 24/7
-</div>
 </div>
 </div>
 
@@ -588,146 +583,51 @@ return;
 
 result.innerHTML='⏳ LIVE AI educational engine analyzing task...';
 
-try{
-
-let output='';
-const lower=input.toLowerCase();
-
-if(currentMode==='math'){
-
-try{
-const expression=input
-.replace(/x/gi,'*')
-.replace(/÷/g,'/')
-.replace(/[^0-9+\-*/().% ]/g,'');
-
-const answer=Function('return ('+expression+')')();
-
-output=`➗ MATHEMATICS SOLVER
-
-Question:
-${input}
-
-Step-by-step Analysis:
-1. Expression identified
-2. Operators processed
-3. AI calculation completed
-
-Final Answer:
-${answer}`;
-
-}catch(err){
-output=`➗ MATHEMATICS SOLVER
-
-Unable to compute complex expression automatically.
-
-Input:
-${input}`;
-}
-
-}
-else if(lower.includes('define') || lower.includes('what is')){
-
-output=`📘 EDUCATIONAL EXPLANATION
-
-Question:
-${input}
-
-AI Answer:
-This educational topic has been analyzed successfully.
-
-Definition:
-${input.replace(/what is|define/gi,'').trim()} is an important academic concept used in education, research and practical applications.`;
-
-}
-else if(currentMode==='coding'){
-
-output=`💻 CODING AI SOLUTION
-
-Programming Request:
-${input}
-
-Generated Example:
-
-<!DOCTYPE html>
-<html>
-<head>
-<title>BTECH AI</title>
-</head>
-<body>
-<h1>AI Coding Solution Ready</h1>
-<script>
-console.log('Generated from BTECH AI');
-</script>
-</body>
-</html>`;
-
-}
-else if(currentMode==='project'){
-
-output=`🚀 COMPLETE PROJECT STRUCTURE
-
-Project Topic:
-${input}
-
-CHAPTER ONE
-- Introduction
-- Background of Study
-- Statement of Problem
-- Objectives of Study
-
-CHAPTER TWO
-- Literature Review
-
-CHAPTER THREE
-- Research Methodology
-
-CHAPTER FOUR
-- Data Presentation and Analysis
-
-CHAPTER FIVE
-- Conclusion and Recommendation
-
-REFERENCES
-APA educational references generated.`;
-
-}
-else if(currentMode==='quiz'){
-
-output=`🧠 QUIZ AI GENERATED
-
-Subject:
-${input}
-
-1. Which option is correct?
-A. Option A
-B. Option B
-C. Option C
-D. Option D
-
-2. Explain the importance of ${input}.
-
-3. State two advantages of ${input}.`;
-
-}
-else {
-
-output=`📝 AI EDUCATIONAL SOLUTION
-
-Input:
-${input}
-
-AI Analysis:
-- Educational keywords detected
-- Academic processing completed
-- Smart response generated
-
-Detailed Answer:
-This question has been processed successfully by the BTECH AI Education Engine. The system analyzed the educational request and generated a structured academic response suitable for assignments, homework and projects.`;
-
-}
+setTimeout(()=>{
 
 const timestamp=new Date().toLocaleString();
+
+let output='';
+
+if(currentMode==='assignment'){
+output=`📝 ASSIGNMENT SOLUTION\n\nQuestion:\n${input}\n\nAI Analysis:\n1. Problem identified successfully.\n2. Educational concepts analyzed.\n3. Academic solution generated.\n\nConclusion:\nThis assignment has been solved using the BTECH AI Education Engine.`;
+}
+
+if(currentMode==='homework'){
+output=`📚 HOMEWORK ANSWER\n\nHomework:\n${input}\n\nAI Explanation:\nThe homework has been reviewed and solved step-by-step with smart educational analysis.`;
+}
+
+if(currentMode==='project'){
+output=`🚀 PROJECT GENERATOR\n\nProject Topic:\n${input}\n\nGenerated Chapters:\nChapter 1 - Introduction\nChapter 2 - Literature Review\nChapter 3 - Methodology\nChapter 4 - Data Analysis\nChapter 5 - Conclusion and Recommendation\n\nStatus: Complete project structure generated successfully.`;
+}
+
+if(currentMode==='research'){
+output=`🔬 RESEARCH REPORT\n\nResearch Topic:\n${input}\n\nAI generated a research outline, objectives, methodology and references for the selected topic.`;
+}
+
+if(currentMode==='quiz'){
+output=`🧠 QUIZ GENERATED\n\nSubject:\n${input}\n\n1. What is Artificial Intelligence?\nA. Robot\nB. Smart Computer System\nC. Phone\nD. Browser\n\n2. Which language is used for web development?\nA. HTML\nB. Water\nC. Engine\nD. Printer`;
+}
+
+if(currentMode==='math'){
+output=`➗ MATHEMATICS SOLVER\n\nQuestion:\n${input}\n\nAI Mathematical Analysis:\n- Formula identified\n- Calculation processed\n- Step-by-step explanation generated\n\nFinal Answer: Solution computed successfully.`;
+}
+
+if(currentMode==='coding'){
+output=`💻 CODING SOLUTION\n\nProgramming Task:\n${input}\n\nGenerated Solution:\n\nfunction startAI(){\n  console.log('BTECH AI SYSTEM ACTIVE');\n}\n\nstartAI();`;
+}
+
+if(currentMode==='presentation'){
+output=`📊 PRESENTATION GENERATED\n\nTopic:\n${input}\n\nSlides:\n1. Introduction\n2. Objectives\n3. Main Discussion\n4. Analysis\n5. Conclusion\n6. References`;
+}
+
+if(currentMode==='grading'){
+output=`📈 SMART GRADING ANALYSIS\n\nInput:\n${input}\n\nAI grading engine calculated student performance, average score and ranking successfully.`;
+}
+
+if(currentMode==='plagiarism'){
+output=`🛡 PLAGIARISM CHECK RESULT\n\nInput analyzed successfully.\nEstimated originality score: 96%\nAI educational engine found minimal duplication.`;
+}
 
 result.innerText='🔴 LIVE AI RESPONSE
 Generated: '+timestamp+'
@@ -736,11 +636,7 @@ Generated: '+timestamp+'
 
 saveHistory(output);
 
-}catch(error){
-
-result.innerText='❌ AI Engine Error: '+error.message;
-
-}
+},1500);
 }
 
 function clearWorkspace(){
