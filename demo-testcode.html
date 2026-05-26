@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 
-<meta charset="UTF-8"/>
+<meta charset="UTF-8" />
 
 <meta
 name="viewport"
 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
 />
 
-<title>MEGA GLOBAL IPTV</title>
+<title>MEGA GLOBAL IPTV PRO</title>
 
 <style>
 
@@ -52,7 +52,7 @@ height:calc(100vh - 60px);
 }
 
 .sidebar{
-width:340px;
+width:360px;
 background:#0f0f0f;
 overflow-y:auto;
 border-right:1px solid #222;
@@ -81,14 +81,14 @@ border-top:1px solid #222;
 flex-wrap:wrap;
 }
 
-.controls input{
+.controls input,
+.controls select{
 flex:1;
 padding:10px;
 background:#222;
 border:none;
 color:#fff;
 border-radius:6px;
-min-width:180px;
 }
 
 .controls button{
@@ -111,19 +111,21 @@ background:#161616;
 border-radius:8px;
 cursor:pointer;
 transition:0.2s;
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
+position:relative;
 }
 
 .channel:hover{
 background:#1f1f1f;
 }
 
+.channel.active{
+border:1px solid #00ff99;
+}
+
 .channel-name{
 font-size:14px;
 font-weight:bold;
+padding-right:30px;
 }
 
 .channel-meta{
@@ -132,78 +134,64 @@ color:#999;
 margin-top:4px;
 }
 
-.q{
-color:#00ff99;
-font-size:11px;
-margin-left:5px;
-}
-
-.fav{
+.fav-btn{
+position:absolute;
+right:10px;
+top:10px;
 font-size:18px;
-color:#ffaa00;
 cursor:pointer;
 }
 
-#nowPlaying{
+.category-title{
+margin:15px 0 8px;
+font-size:15px;
+color:#00ff99;
+font-weight:bold;
+}
+
+.player-info{
+padding:12px;
+background:#0f0f0f;
+border-top:1px solid #222;
+}
+
+.player-info h2{
+font-size:18px;
+margin-bottom:6px;
+}
+
+.player-info p{
+font-size:13px;
+color:#aaa;
+}
+
+.top-tabs{
+display:flex;
+gap:8px;
 padding:10px;
 background:#111;
-border-top:1px solid #222;
-font-size:14px;
-color:#00ff99;
-}
-
-#epg{
-padding:8px 10px;
-font-size:13px;
-color:#ccc;
-background:#0c0c0c;
-border-top:1px solid #222;
-}
-
-.tabs{
-display:flex;
-gap:6px;
-padding:10px;
-background:#0a0a0a;
 border-bottom:1px solid #222;
-flex-wrap:wrap;
 }
 
 .tab{
 padding:8px 12px;
-background:#191919;
+background:#1b1b1b;
 border-radius:6px;
 cursor:pointer;
-font-size:12px;
+font-size:13px;
 }
 
 .tab.active{
 background:#00aa66;
 }
 
-.customBox{
-padding:10px;
-border-top:1px solid #222;
+::-webkit-scrollbar{
+width:8px;
 }
 
-.customBox input{
-width:100%;
-padding:10px;
-margin-bottom:8px;
-background:#181818;
-border:none;
-border-radius:6px;
-color:#fff;
-}
-
-.customBox button{
-width:100%;
-padding:10px;
-background:#00aa66;
-border:none;
-border-radius:6px;
-color:#fff;
-cursor:pointer;
+::-webkit-scrollbar-thumb{
+background:#333;
+border-radius:10px;
 }
 
 @media(max-width:900px){
@@ -222,7 +210,11 @@ height:55vh;
 }
 
 video{
-height:40vh;
+height:38vh;
+}
+
+.controls{
+padding:8px;
 }
 
 }
@@ -230,12 +222,11 @@ height:40vh;
 </style>
 
 </head>
-
 <body>
 
 <header>
 
-<h1>🌍 MEGA GLOBAL IPTV</h1>
+<h1>🌍 MEGA GLOBAL IPTV PRO</h1>
 
 <div id="status">
 LOADING CHANNELS...
@@ -247,43 +238,23 @@ LOADING CHANNELS...
 
 <div class="sidebar">
 
-<div class="tabs">
+<div class="top-tabs">
 
-<div class="tab active" id="tab-all" onclick="setTab('all')">
-ALL
+<div class="tab active" onclick="switchTab('all',this)">
+All
 </div>
 
-<div class="tab" id="tab-favs" onclick="setTab('favs')">
-FAVORITES
+<div class="tab" onclick="switchTab('favorites',this)">
+Favorites
 </div>
 
-<div class="tab" id="tab-recent" onclick="setTab('recent')">
-RECENT
+<div class="tab" onclick="switchTab('recent',this)">
+Recent
 </div>
 
 </div>
 
 <div id="channelList"></div>
-
-<div class="customBox">
-
-<input
-type="text"
-id="customName"
-placeholder="Custom Channel Name"
-/>
-
-<input
-type="text"
-id="customUrl"
-placeholder="https://stream.m3u8"
-/>
-
-<button onclick="addCustomChannel()">
-ADD CUSTOM CHANNEL
-</button>
-
-</div>
 
 </div>
 
@@ -296,12 +267,16 @@ autoplay
 playsinline
 ></video>
 
-<div id="nowPlaying">
-NO CHANNEL PLAYING
-</div>
+<div class="player-info">
 
-<div id="epg">
-NO PROGRAM INFO
+<h2 id="nowPlaying">
+No Channel Playing
+</h2>
+
+<p id="channelMeta">
+Select a channel to start streaming
+</p>
+
 </div>
 
 <div class="controls">
@@ -312,6 +287,26 @@ id="search"
 placeholder="Search channels..."
 />
 
+<select id="qualityFilter">
+
+<option value="">
+All Quality
+</option>
+
+<option value="4K">
+4K
+</option>
+
+<option value="1080p">
+1080p
+</option>
+
+<option value="HD">
+HD
+</option>
+
+</select>
+
 <button onclick="loadChannels()">
 Reload
 </button>
@@ -320,12 +315,8 @@ Reload
 Next
 </button>
 
-<button onclick="prevChannel()">
-Prev
-</button>
-
-<button onclick="togglePiP()">
-PiP
+<button onclick="toggleFullscreen()">
+Fullscreen
 </button>
 
 </div>
@@ -338,49 +329,24 @@ PiP
 
 <script>
 
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 // STATE
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 
 var all=[];
 var filtered=[];
 var currentIndex=0;
-var currentChannel=null;
+var currentTab='all';
 var hls=null;
 
 var favs=JSON.parse(localStorage.getItem('mega_favs')||'{}');
 var recent=JSON.parse(localStorage.getItem('mega_recent')||'[]');
 
 var deadCh={};
-var aliveCh={};
 
-var activeTab='all';
-
-// ─────────────────────────────
-// FEEDS
-// ─────────────────────────────
-
-var extraFeeds=[
-
-{name:'Nigeria IPTV',url:'https://iptv-org.github.io/iptv/countries/ng.m3u'},
-{name:'USA IPTV',url:'https://iptv-org.github.io/iptv/countries/us.m3u'},
-{name:'UK IPTV',url:'https://iptv-org.github.io/iptv/countries/uk.m3u'},
-{name:'India IPTV',url:'https://iptv-org.github.io/iptv/countries/in.m3u'},
-{name:'Sports IPTV',url:'https://iptv-org.github.io/iptv/categories/sports.m3u'},
-{name:'Movies IPTV',url:'https://iptv-org.github.io/iptv/categories/movies.m3u'},
-{name:'News IPTV',url:'https://iptv-org.github.io/iptv/categories/news.m3u'},
-{name:'Music IPTV',url:'https://iptv-org.github.io/iptv/categories/music.m3u'},
-{name:'Kids IPTV',url:'https://iptv-org.github.io/iptv/categories/kids.m3u'},
-{name:'Entertainment IPTV',url:'https://iptv-org.github.io/iptv/categories/entertainment.m3u'},
-{name:'Anime IPTV',url:'https://iptv-org.github.io/iptv/categories/anime.m3u'},
-{name:'Religious IPTV',url:'https://iptv-org.github.io/iptv/categories/religious.m3u'},
-{name:'Global IPTV Master',url:'https://iptv-org.github.io/iptv/index.m3u'}
-
-];
-
-// ─────────────────────────────
-// FLAG
-// ─────────────────────────────
+// ─────────────────────────────────────────────
+// COUNTRY FLAG
+// ─────────────────────────────────────────────
 
 function flag(cc){
 
@@ -395,9 +361,29 @@ a+cc.charCodeAt(1)-65
 
 }
 
-// ─────────────────────────────
+// ─────────────────────────────────────────────
+// EXTRA FEEDS
+// ─────────────────────────────────────────────
+
+var extraFeeds=[
+
+{name:'Nigeria IPTV',url:'https://iptv-org.github.io/iptv/countries/ng.m3u'},
+{name:'USA IPTV',url:'https://iptv-org.github.io/iptv/countries/us.m3u'},
+{name:'UK IPTV',url:'https://iptv-org.github.io/iptv/countries/uk.m3u'},
+{name:'India IPTV',url:'https://iptv-org.github.io/iptv/countries/in.m3u'},
+{name:'Sports IPTV',url:'https://iptv-org.github.io/iptv/categories/sports.m3u'},
+{name:'Movies IPTV',url:'https://iptv-org.github.io/iptv/categories/movies.m3u'},
+{name:'News IPTV',url:'https://iptv-org.github.io/iptv/categories/news.m3u'},
+{name:'Kids IPTV',url:'https://iptv-org.github.io/iptv/categories/kids.m3u'},
+{name:'Anime IPTV',url:'https://iptv-org.github.io/iptv/categories/anime.m3u'},
+{name:'Entertainment IPTV',url:'https://iptv-org.github.io/iptv/categories/entertainment.m3u'},
+{name:'Global IPTV Master',url:'https://iptv-org.github.io/iptv/index.m3u'}
+
+];
+
+// ─────────────────────────────────────────────
 // COUNTRY DETECTION
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 
 function detectCountry(name){
 
@@ -406,35 +392,24 @@ name=(name||'').toLowerCase();
 var map={
 
 'nigeria':'NG',
-'lagos':'NG',
-'abuja':'NG',
-
 'usa':'US',
 'cnn':'US',
-
 'bbc':'GB',
-'uk':'GB',
-
 'india':'IN',
 'zee':'IN',
-
 'pakistan':'PK',
-
-'ghana':'GH',
-'kenya':'KE',
-'south africa':'ZA',
-
+'al jazeera':'QA',
 'france':'FR',
 'germany':'DE',
 'italy':'IT',
 'spain':'ES',
-
+'turkey':'TR',
 'canada':'CA',
 'brazil':'BR',
-
 'japan':'JP',
 'korea':'KR',
-'china':'CN'
+'china':'CN',
+'south africa':'ZA'
 
 };
 
@@ -452,9 +427,9 @@ return null;
 
 }
 
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 // PARSE M3U
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 
 function parseM3U(text){
 
@@ -509,9 +484,9 @@ return channels;
 
 }
 
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 // LOAD CHANNELS
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 
 async function loadChannels(){
 
@@ -554,13 +529,13 @@ filtered=all;
 renderChannels();
 
 document.getElementById('status').innerText=
-'🌍 MEGA IPTV ACTIVE · '+all.length+' CHANNELS';
+'🌍 IPTV ACTIVE · '+all.length+' CHANNELS';
 
 }
 
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 // RENDER CHANNELS
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 
 function renderChannels(){
 
@@ -576,33 +551,18 @@ div.className='channel';
 
 div.innerHTML=`
 
-<div>
+<div class="fav-btn"
+onclick="event.stopPropagation();toggleFav('${c.name}')">
+${favs[c.name]?'⭐':'☆'}
+</div>
 
 <div class="channel-name">
-
-${c.cc?flag(c.cc)+' ':''}
-
-${c.name}
-
-${c.q?'<span class="q">'+c.q+'</span>':''}
-
+${c.cc?flag(c.cc)+' ':''}${c.name}
+${c.q?'<span style="color:#00ff99;font-size:11px"> '+c.q+'</span>':''}
 </div>
 
 <div class="channel-meta">
-
 ${c.category}
-
-</div>
-
-</div>
-
-<div
-class="fav"
-onclick="event.stopPropagation();toggleFav('${c.name.replace(/'/g,"\\'")}')"
->
-
-${favs[c.name]?'★':'☆'}
-
 </div>
 
 `;
@@ -611,11 +571,7 @@ div.onclick=function(){
 
 currentIndex=index;
 
-currentChannel=c;
-
-playChannel(c.url);
-
-addRecent(c.name);
+playChannel(c);
 
 };
 
@@ -625,19 +581,20 @@ list.appendChild(div);
 
 }
 
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 // PLAY CHANNEL
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 
-function playChannel(url){
+function playChannel(c){
 
 var video=document.getElementById('video');
 
-document.getElementById('nowPlaying').innerText=
-'▶ PLAYING: '+currentChannel.name;
+document.getElementById('nowPlaying').innerText=c.name;
 
-document.getElementById('epg').innerText=
-'📺 CATEGORY: '+currentChannel.category;
+document.getElementById('channelMeta').innerText=
+(c.category||'Unknown')+' • '+(c.q||'Live');
+
+addRecent(c.name);
 
 if(Hls.isSupported()){
 
@@ -645,11 +602,9 @@ if(hls){
 hls.destroy();
 }
 
-hls=new Hls({
-enableWorker:true
-});
+hls=new Hls();
 
-hls.loadSource(url);
+hls.loadSource(c.url);
 
 hls.attachMedia(video);
 
@@ -657,19 +612,17 @@ hls.on(Hls.Events.MANIFEST_PARSED,function(){
 
 video.play();
 
-aliveCh[url]=1;
-
 });
 
 hls.on(Hls.Events.ERROR,function(){
 
-deadCh[url]=1;
+deadCh[c.url]=1;
 
 });
 
 }else{
 
-video.src=url;
+video.src=c.url;
 
 video.play();
 
@@ -677,9 +630,9 @@ video.play();
 
 }
 
-// ─────────────────────────────
-// NEXT / PREV
-// ─────────────────────────────
+// ─────────────────────────────────────────────
+// NEXT CHANNEL
+// ─────────────────────────────────────────────
 
 function nextChannel(){
 
@@ -693,33 +646,13 @@ currentIndex=0;
 
 }
 
-currentChannel=filtered[currentIndex];
-
-playChannel(currentChannel.url);
+playChannel(filtered[currentIndex]);
 
 }
 
-function prevChannel(){
-
-if(filtered.length===0)return;
-
-currentIndex--;
-
-if(currentIndex<0){
-
-currentIndex=filtered.length-1;
-
-}
-
-currentChannel=filtered[currentIndex];
-
-playChannel(currentChannel.url);
-
-}
-
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 // FAVORITES
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 
 function toggleFav(name){
 
@@ -738,13 +671,13 @@ localStorage.setItem(
 JSON.stringify(favs)
 );
 
-renderChannels();
+applyFilters();
 
 }
 
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 // RECENT
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 
 function addRecent(name){
 
@@ -756,9 +689,9 @@ return r!==name;
 
 recent.unshift(name);
 
-if(recent.length>20){
+if(recent.length>30){
 
-recent=recent.slice(0,20);
+recent=recent.slice(0,30);
 
 }
 
@@ -769,44 +702,47 @@ JSON.stringify(recent)
 
 }
 
-// ─────────────────────────────
-// SEARCH
-// ─────────────────────────────
+// ─────────────────────────────────────────────
+// FILTERS
+// ─────────────────────────────────────────────
 
-document
-.getElementById('search')
-.addEventListener('input',function(){
-
-doFilter();
-
-});
-
-// ─────────────────────────────
-// FILTER
-// ─────────────────────────────
-
-function doFilter(){
+function applyFilters(){
 
 var q=document
 .getElementById('search')
 .value
 .toLowerCase();
 
+var quality=
+document.getElementById('qualityFilter').value;
+
 filtered=all.filter(function(c){
 
-var ok=
+var ok=true;
+
+if(q){
+
+ok=
 c.name.toLowerCase().includes(q) ||
 (c.category||'').toLowerCase().includes(q);
 
-if(activeTab==='favs'){
+}
 
-ok=ok&&favs[c.name];
+if(ok && quality){
+
+ok=c.q===quality;
 
 }
 
-if(activeTab==='recent'){
+if(ok && currentTab==='favorites'){
 
-ok=ok&&recent.includes(c.name);
+ok=favs[c.name];
+
+}
+
+if(ok && currentTab==='recent'){
+
+ok=recent.includes(c.name);
 
 }
 
@@ -818,111 +754,59 @@ renderChannels();
 
 }
 
-// ─────────────────────────────
-// TABS
-// ─────────────────────────────
-
-function setTab(tab){
-
-activeTab=tab;
+// ─────────────────────────────────────────────
+// SEARCH
+// ─────────────────────────────────────────────
 
 document
-.querySelectorAll('.tab')
-.forEach(function(t){
+.getElementById('search')
+.addEventListener('input',applyFilters);
+
+document
+.getElementById('qualityFilter')
+.addEventListener('change',applyFilters);
+
+// ─────────────────────────────────────────────
+// TABS
+// ─────────────────────────────────────────────
+
+function switchTab(tab,el){
+
+currentTab=tab;
+
+document.querySelectorAll('.tab').forEach(function(t){
 
 t.classList.remove('active');
 
 });
 
-document
-.getElementById('tab-'+tab)
-.classList.add('active');
+el.classList.add('active');
 
-doFilter();
+applyFilters();
 
 }
 
-// ─────────────────────────────
-// CUSTOM CHANNELS
-// ─────────────────────────────
+// ─────────────────────────────────────────────
+// FULLSCREEN
+// ─────────────────────────────────────────────
 
-function addCustomChannel(){
+function toggleFullscreen(){
 
-var name=document
-.getElementById('customName')
-.value
-.trim();
+var video=document.getElementById('video');
 
-var url=document
-.getElementById('customUrl')
-.value
-.trim();
+if(video.requestFullscreen){
 
-if(!url){
-
-alert('ENTER STREAM URL');
-
-return;
-
-}
-
-if(!name){
-
-name='Custom Channel';
-
-}
-
-var ch={
-
-name:name,
-url:url,
-category:'Custom IPTV',
-cc:null
-
-};
-
-all.unshift(ch);
-
-filtered=all;
-
-renderChannels();
-
-document.getElementById('customName').value='';
-document.getElementById('customUrl').value='';
-
-}
-
-// ─────────────────────────────
-// PiP
-// ─────────────────────────────
-
-function togglePiP(){
-
-var v=document.getElementById('video');
-
-if(document.pictureInPictureElement){
-
-document.exitPictureInPicture();
-
-}else{
-
-if(v.requestPictureInPicture){
-
-v.requestPictureInPicture();
+video.requestFullscreen();
 
 }
 
 }
 
-}
-
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 // KEYBOARD
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 
 document.addEventListener('keydown',function(e){
-
-if(e.target.tagName==='INPUT')return;
 
 if(e.key==='ArrowDown'){
 
@@ -930,17 +814,11 @@ nextChannel();
 
 }
 
-if(e.key==='ArrowUp'){
-
-prevChannel();
-
-}
-
 });
 
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 // START
-// ─────────────────────────────
+// ─────────────────────────────────────────────
 
 loadChannels();
 
