@@ -1,266 +1,375 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Church Live Streaming Dashboard</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BTECH CHURCH TV NETWORK PRO MAX</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#070b14;
-color:#fff;
+:root{
+--bg:#07111f;
+--panel:#0f172a;
+--card:#182338;
+--accent:#ffd700;
+--text:#ffffff;
+--muted:#94a3b8;
+--hover:#233250;
 }
 
-header{
-background:#0f1c33;
-padding:15px;
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+
+body{
+background:var(--bg);
+color:var(--text);
+height:100vh;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+/* TOPBAR */
+.topbar{
+height:65px;
+background:var(--panel);
 display:flex;
 justify-content:space-between;
 align-items:center;
-border-bottom:2px solid #1f3a66;
+padding:10px 15px;
 }
 
-header h1{
-font-size:18px;
-}
+.logo{color:var(--accent);font-size:20px;font-weight:bold;}
 
-.container{
-display:flex;
-height:calc(100vh - 60px);
-}
-
-.sidebar{
-width:340px;
-background:#0b1426;
-padding:15px;
-overflow:auto;
-border-right:2px solid #14284a;
-}
-
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-}
-
-.card{
-background:#111c33;
-padding:12px;
-border-radius:10px;
-margin-bottom:10px;
-}
-
-input, textarea{
-width:100%;
-padding:10px;
-margin-top:5px;
+.topbar button{
+margin-left:8px;
+padding:8px 10px;
 border:none;
-border-radius:6px;
-background:#070b14;
-color:#fff;
-}
-
-button{
-width:100%;
-padding:10px;
-border:none;
-border-radius:6px;
+border-radius:8px;
 cursor:pointer;
-font-weight:bold;
-margin-top:10px;
+background:var(--card);
+color:white;
 }
 
-.btn-save{background:#00c853;color:#000;}
-.btn-live{background:#ff2d2d;color:#fff;}
-.btn-stop{background:#ff9800;color:#000;}
+/* LAYOUT */
+.container{flex:1;display:flex;overflow:hidden;}
 
-.viewer{
-flex:1;
-background:#000;
+/* SIDEBAR */
+.sidebar{
+width:300px;
+background:#08101d;
+overflow:auto;
+padding:10px;
+}
+
+.church{
+padding:12px;
+margin-bottom:8px;
+background:var(--card);
+border-radius:10px;
+cursor:pointer;
+transition:.3s;
+}
+.church:hover{background:var(--hover);transform:translateX(5px);}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;}
+
+/* PLAYER */
+.player{
+height:360px;
+background:black;
+position:relative;
 display:flex;
 align-items:center;
 justify-content:center;
-position:relative;
 }
 
-video, iframe{
+video{
 width:100%;
 height:100%;
+object-fit:cover;
 }
 
-.liveBadge{
+.overlay{
+position:absolute;
+inset:0;
+background:rgba(0,0,0,.8);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+}
+
+.live{
 position:absolute;
 top:10px;
 left:10px;
 background:red;
 padding:6px 12px;
-border-radius:6px;
-display:none;
-font-weight:bold;
+border-radius:20px;
+font-size:12px;
 }
 
-.program{
+/* INFO */
+.info{
 padding:10px;
-background:#0f1c33;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+flex-wrap:wrap;
+}
+
+.controls button{
+margin:3px;
+padding:8px;
+border:none;
 border-radius:8px;
-margin-top:8px;
+background:var(--card);
+color:white;
 cursor:pointer;
 }
 
-.program:hover{
-background:#15284a;
+/* CHANNEL GRID */
+.channels{
+flex:1;
+overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:10px;
+padding:10px;
 }
 
-.brand{
-font-size:12px;
-opacity:0.8;
+.channel{
+background:var(--card);
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+display:flex;
+justify-content:space-between;
+}
+.channel:hover{background:var(--hover);}
+.active{border:2px solid var(--accent);}
+
+.fav{cursor:pointer;font-size:18px;}
+
+/* MODAL */
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.8);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.modal-box{
+background:white;
+color:black;
+padding:20px;
+border-radius:10px;
+width:300px;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:5px 0;
+}
+
+/* CAMERA */
+.camera{
+display:none;
+position:fixed;
+inset:0;
+background:black;
+z-index:99;
+}
+
+.camera video{
+width:100%;
+height:100%;
+object-fit:cover;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>✝ Church Live Streaming Dashboard</h1>
-<div class="brand">Powered by Live Worship System</div>
-</header>
+<!-- TOP -->
+<div class="topbar">
+<div class="logo">📺 BTECH CHURCH TV PRO</div>
+<div>
+<button onclick="openLogin()">🔐 Login</button>
+<button onclick="openCamera()">📷 Live Camera</button>
+<button onclick="toggleTheme()">🎨 Theme</button>
+</div>
+</div>
 
+<!-- MAIN -->
 <div class="container">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="card">
-<h3>Create Church Program</h3>
+<h3>⛪ Church Channels</h3>
 
-<input id="title" placeholder="Service Title (e.g Sunday Service)">
-<textarea id="desc" placeholder="Message / Description"></textarea>
-<input id="stream" placeholder="Stream URL (YouTube / HLS / MP4)">
-
-<button class="btn-save" onclick="saveProgram()">Save Program</button>
-<button class="btn-live" onclick="goLive()">🔴 Go Live</button>
-<button class="btn-stop" onclick="stopLive()">⛔ Stop Live</button>
+<div class="church" onclick="loadChannel(0)">
+✝ :contentReference[oaicite:0]{index=0}
 </div>
 
-<div class="card">
-<h3>Programs Schedule</h3>
-<div id="list"></div>
-</div>
+<div class="church" onclick="loadChannel(1)">✝ Living Faith Church</div>
+<div class="church" onclick="loadChannel(2)">✝ Christ Embassy</div>
+<div class="church" onclick="loadChannel(3)">✝ Dunamis International</div>
+
+<h3>📡 Live Services</h3>
+<div class="church">🙏 Prayer Stream</div>
+<div class="church">📖 Bible Study</div>
+<div class="church">🎵 Worship Live</div>
 
 </div>
 
-<!-- MAIN VIEWER -->
+<!-- MAIN AREA -->
 <div class="main">
 
-<div class="viewer">
+<div class="player">
+<div class="live">🔴 LIVE</div>
 
-<div class="liveBadge" id="live">🔴 LIVE SERVICE</div>
+<video id="video" autoplay controls></video>
 
-<video id="video" controls></video>
-<iframe id="frame" style="display:none;border:none;"></iframe>
-
+<div class="overlay" id="overlay">
+<h2>✝ Church TV Network</h2>
+<p id="status">Loading streams...</p>
+</div>
 </div>
 
+<div class="info">
+<div>
+<h3 id="title">Welcome</h3>
+<small id="group">Global Church Network</small>
 </div>
 
+<div class="controls">
+<button onclick="prev()">◀</button>
+<button onclick="next()">▶</button>
+<button onclick="pip()">📺 PiP</button>
+<button onclick="share()">🔗</button>
+</div>
+</div>
+
+<div class="channels" id="list"></div>
+
+</div>
+</div>
+
+<!-- LOGIN -->
+<div class="modal" id="loginModal">
+<div class="modal-box">
+<h3>Login</h3>
+<input id="user" placeholder="Username">
+<input id="pass" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+</div>
+</div>
+
+<!-- CAMERA -->
+<div class="camera" id="cameraBox">
+<video id="cam" autoplay></video>
 </div>
 
 <script>
 
-let programs = JSON.parse(localStorage.getItem("church_programs") || "[]");
-let hls = null;
+let video=document.getElementById("video");
+let cam=document.getElementById("cam");
+
+let channels=[
+{name:"RCCG Live TV",group:"Nigeria Church",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Worship Live",group:"Global Worship",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
+{name:"Prayer Network",group:"Prayer",url:"https://test-streams.mux.dev/dai-discontinuity-deltatre/manifest.m3u8"},
+{name:"Bible Study TV",group:"Teaching",url:"https://test-streams.mux.dev/pts_shift/master.m3u8"}
+];
+
+let index=0;
+let fav={};
 
 function render(){
-let list = document.getElementById("list");
-list.innerHTML = "";
-
-programs.forEach((p,i)=>{
-let div = document.createElement("div");
-div.className = "program";
-div.innerHTML = `
-<b>${p.title}</b><br>
-<small>${p.desc}</small>
+let list=document.getElementById("list");
+list.innerHTML="";
+channels.forEach((c,i)=>{
+let div=document.createElement("div");
+div.className="channel"+(i===index?" active":"");
+div.innerHTML=`
+<div>
+<b>${c.name}</b><br>
+<small>${c.group}</small>
+</div>
+<div class="fav" onclick="event.stopPropagation();favToggle('${c.name}')">⭐</div>
 `;
-
-div.onclick = ()=>play(i);
+div.onclick=()=>loadChannel(i);
 list.appendChild(div);
 });
 }
 
-function saveProgram(){
-let title = document.getElementById("title").value;
-let desc = document.getElementById("desc").value;
-let stream = document.getElementById("stream").value;
-
-if(!title || !stream){
-alert("Please fill required fields");
-return;
-}
-
-programs.push({title, desc, stream});
-localStorage.setItem("church_programs", JSON.stringify(programs));
-
-render();
-alert("Church program saved!");
-}
-
-function play(index){
-let p = programs[index];
-loadStream(p.stream);
-}
-
-function loadStream(url){
-
-let video = document.getElementById("video");
-let frame = document.getElementById("frame");
-
-document.getElementById("live").style.display = "block";
-
-frame.style.display = "none";
-video.style.display = "block";
-
-if(url.includes("youtube.com") || url.includes("youtu.be")){
-video.style.display = "none";
-frame.style.display = "block";
-frame.src = url.replace("watch?v=", "embed/");
-return;
-}
+function loadChannel(i){
+index=i;
+document.getElementById("title").innerText=channels[i].name;
+document.getElementById("group").innerText=channels[i].group;
 
 if(Hls.isSupported()){
-if(hls) hls.destroy();
-
-hls = new Hls();
-hls.loadSource(url);
+let hls=new Hls();
+hls.loadSource(channels[i].url);
 hls.attachMedia(video);
-hls.on(Hls.Events.MANIFEST_PARSED, ()=>video.play());
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
 }else{
-video.src = url;
-video.play();
+video.src=channels[i].url;
 }
-}
-
-function goLive(){
-document.getElementById("live").style.display = "block";
-alert("✝ Church LIVE Broadcast Started");
+document.getElementById("overlay").style.display="none";
+render();
 }
 
-function stopLive(){
-document.getElementById("live").style.display = "none";
+function next(){index=(index+1)%channels.length;loadChannel(index);}
+function prev(){index=(index-1+channels.length)%channels.length;loadChannel(index);}
 
-let video = document.getElementById("video");
-video.pause();
-video.src = "";
+function pip(){video.requestPictureInPicture();}
 
-document.getElementById("frame").src = "";
-document.getElementById("frame").style.display = "none";
+function share(){
+navigator.clipboard.writeText(channels[index].url);
+alert("Copied");
+}
+
+/* LOGIN */
+function openLogin(){document.getElementById("loginModal").style.display="flex";}
+function login(){
+let u=document.getElementById("user").value;
+let p=document.getElementById("pass").value;
+if(u==="admin" && p==="1234"){
+alert("Login Success");
+document.getElementById("loginModal").style.display="none";
+}else alert("Wrong credentials");
+}
+
+/* CAMERA */
+function openCamera(){
+document.getElementById("cameraBox").style.display="block";
+navigator.mediaDevices.getUserMedia({video:true,audio:false})
+.then(stream=>cam.srcObject=stream);
+}
+
+/* THEME */
+function toggleTheme(){
+document.body.style.background=
+document.body.style.background==="#fff"?"#07111f":"#fff";
+}
+
+/* FAVORITE */
+function favToggle(name){
+fav[name]=!fav[name];
+alert(name+" updated favorite");
 }
 
 render();
+loadChannel(0);
 
 </script>
 
