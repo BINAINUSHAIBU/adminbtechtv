@@ -1,199 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>BTECH CHURCH TV NETWORK + LIVE DASHBOARD</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Church TV Network Pro Max</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-:root{
---bg:#07111f;
---panel:#0f172a;
---card:#182338;
---accent:#ffd700;
---text:#ffffff;
---muted:#94a3b8;
---hover:#233250;
---danger:#ef4444;
---success:#16a34a;
-}
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
 body{
-background:var(--bg);
-color:var(--text);
-height:100vh;
-display:flex;
-flex-direction:column;
-overflow:hidden;
+margin:0;
+font-family:Arial;
+background:#070b14;
+color:#fff;
 }
 
-/* TOPBAR */
 .topbar{
-height:65px;
-background:var(--panel);
 display:flex;
 justify-content:space-between;
+padding:10px;
+background:#0f172a;
 align-items:center;
-padding:10px 15px;
-border-bottom:1px solid rgba(255,255,255,.05);
 }
 
-.logo{
-font-size:18px;
-font-weight:bold;
-color:var(--accent);
-}
-
-.topbar button{
-padding:8px 12px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-background:var(--card);
-color:white;
-}
-
-/* LAYOUT */
 .container{
-flex:1;
 display:flex;
-overflow:hidden;
+height:calc(100vh - 50px);
 }
 
-/* SIDEBAR */
 .sidebar{
-width:340px;
-background:#08101d;
-padding:12px;
-overflow:auto;
-border-right:1px solid rgba(255,255,255,.05);
-}
-
-.sidebar h3{
-margin:12px 0;
-color:var(--accent);
-font-size:14px;
-}
-
-/* PROGRAM CARD */
-.card{
-background:var(--card);
-padding:10px;
-border-radius:10px;
-margin-bottom:10px;
-}
-
-input,textarea{
-width:100%;
-padding:8px;
-margin-top:5px;
-border:none;
-border-radius:6px;
+width:320px;
 background:#0b1220;
-color:white;
-}
-
-button{
-width:100%;
-margin-top:8px;
 padding:10px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-font-weight:bold;
+overflow:auto;
 }
 
-.btn-save{background:#16a34a;color:black;}
-.btn-live{background:#ef4444;color:white;}
-.btn-stop{background:#f59e0b;color:black;}
-
-/* CHANNEL LIST */
-.channel{
-background:var(--card);
-padding:10px;
-margin-bottom:8px;
-border-radius:8px;
-cursor:pointer;
-}
-
-.channel:hover{
-background:var(--hover);
-}
-
-/* MAIN */
 .main{
 flex:1;
 display:flex;
 flex-direction:column;
 }
 
-/* PLAYER */
 .player{
-height:360px;
+height:300px;
 background:black;
 position:relative;
 }
 
-.player video, .player iframe{
+video,iframe{
 width:100%;
 height:100%;
 }
 
-.live-badge{
+.live{
 position:absolute;
 top:10px;
 left:10px;
 background:red;
-padding:6px 12px;
+padding:5px 10px;
 border-radius:20px;
-font-size:12px;
 display:none;
 }
 
-/* INFO BAR */
-.info{
-background:var(--panel);
+.card{
+background:#111827;
 padding:10px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+margin-bottom:10px;
+border-radius:8px;
 }
 
-/* PROGRAM LIST */
-.program-item{
-background:var(--card);
+input,textarea{
+width:100%;
+padding:8px;
+margin-top:5px;
+border-radius:6px;
+border:none;
+background:#0b1220;
+color:white;
+}
+
+button{
+width:100%;
 padding:8px;
 margin-top:6px;
+border:none;
 border-radius:6px;
 cursor:pointer;
 }
 
-/* SEARCH */
-.search{
-padding:10px;
-background:var(--panel);
-display:flex;
-gap:10px;
+.btn1{background:#22c55e;}
+.btn2{background:#ef4444;}
+.btn3{background:#f59e0b;}
+
+.program{
+padding:8px;
+background:#1f2937;
+margin-top:5px;
+cursor:pointer;
+border-radius:6px;
 }
 
-.search input{
-flex:1;
-}
-
-/* GRID */
-.grid{
+.chat{
 flex:1;
 overflow:auto;
 padding:10px;
+background:#111827;
+}
+
+.msg{
+padding:6px;
+background:#1f2937;
+margin-bottom:5px;
+border-radius:6px;
 }
 
 </style>
@@ -201,10 +119,9 @@ padding:10px;
 
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
-<div class="logo">✝ BTECH CHURCH TV NETWORK</div>
-<button onclick="toggleLivePanel()">📡 Live Admin</button>
+<div>✝ CHURCH TV PRO MAX</div>
+<button onclick="login()">Admin Login</button>
 </div>
 
 <div class="container">
@@ -212,28 +129,29 @@ padding:10px;
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<h3>✝ LIVE PROGRAM DASHBOARD</h3>
-
 <div class="card">
-<input id="title" placeholder="Program Title">
-<textarea id="desc" placeholder="Description"></textarea>
-<input id="stream" placeholder="Stream URL (YouTube / HLS / MP4)">
+<h3>📡 Live Program Dashboard</h3>
 
-<button class="btn-save" onclick="saveProgram()">Save Program</button>
-<button class="btn-live" onclick="goLive()">🔴 Go Live</button>
-<button class="btn-stop" onclick="stopLive()">⛔ Stop</button>
+<input id="title" placeholder="Title">
+<textarea id="desc" placeholder="Description"></textarea>
+<input id="stream" placeholder="Stream URL">
+
+<button class="btn1" onclick="save()">Save Program</button>
+<button class="btn2" onclick="goLive()">Go Live</button>
+<button class="btn3" onclick="stop()">Stop</button>
 </div>
 
-<h3>📺 Saved Programs</h3>
-<div id="programList"></div>
+<div class="card">
+<h3>Programs</h3>
+<div id="list"></div>
+</div>
 
-<hr style="margin:10px 0;border:1px solid #1f2a44">
-
-<h3>⛪ Church Channels</h3>
-<div class="channel" onclick="loadChannel('RCCG LIVE')">✝ RCCG Live</div>
-<div class="channel" onclick="loadChannel('Living Faith')">✝ Living Faith</div>
-<div class="channel" onclick="loadChannel('Christ Embassy')">✝ Christ Embassy</div>
-<div class="channel" onclick="loadChannel('Dunamis')">✝ Dunamis</div>
+<div class="card">
+<h3>⛪ Channels</h3>
+<div class="program" onclick="load('RCCG LIVE')">RCCG LIVE</div>
+<div class="program" onclick="load('Living Faith')">Living Faith</div>
+<div class="program" onclick="load('Christ Embassy')">Christ Embassy</div>
+</div>
 
 </div>
 
@@ -242,25 +160,17 @@ padding:10px;
 
 <div class="player">
 
-<div class="live-badge" id="liveBadge">🔴 LIVE</div>
+<div class="live" id="live">🔴 LIVE</div>
 
 <video id="video" controls></video>
 <iframe id="frame" style="display:none;border:none;"></iframe>
 
 </div>
 
-<div class="info">
-<div>
-<b id="nowTitle">Welcome</b><br>
-<small id="nowDesc">Church Streaming Platform</small>
-</div>
-</div>
+<!-- CHAT -->
+<div class="chat" id="chat"></div>
 
-<div class="search">
-<input id="search" oninput="searchPrograms(this.value)" placeholder="Search programs...">
-</div>
-
-<div class="grid" id="grid"></div>
+<input id="msg" placeholder="Type message..." onkeydown="send(event)">
 
 </div>
 
@@ -268,65 +178,56 @@ padding:10px;
 
 <script>
 
-let programs = JSON.parse(localStorage.getItem("church_programs") || "[]");
-let currentHls = null;
+let programs = JSON.parse(localStorage.getItem("church") || "[]");
+let logged=false;
+let hls=null;
 
-function renderPrograms(){
-let list = document.getElementById("programList");
-let grid = document.getElementById("grid");
+function login(){
+let pass=prompt("Enter Admin Password");
+if(pass==="rccg123"){
+logged=true;
+alert("Admin Logged In");
+}else{
+alert("Wrong Password");
+}
+}
 
-list.innerHTML = "";
-grid.innerHTML = "";
+function save(){
+if(!logged){alert("Login required");return;}
 
+programs.push({
+title:title.value,
+desc:desc.value,
+stream:stream.value
+});
+
+localStorage.setItem("church",JSON.stringify(programs));
+render();
+}
+
+function render(){
+list.innerHTML="";
 programs.forEach((p,i)=>{
-
-let item = `<div class="program-item" onclick="playProgram(${i})">
-<b>${p.title}</b><br>
-<small>${p.desc}</small>
+list.innerHTML+=`
+<div class="program" onclick="play(${i})">
+<b>${p.title}</b><br><small>${p.desc}</small>
 </div>`;
-
-list.innerHTML += item;
-grid.innerHTML += item;
-
 });
 }
 
-function saveProgram(){
-let title = document.getElementById("title").value;
-let desc = document.getElementById("desc").value;
-let stream = document.getElementById("stream").value;
-
-if(!title || !stream){
-alert("Fill required fields");
-return;
+function play(i){
+let p=programs[i];
+loadStream(p.stream);
 }
 
-programs.push({title,desc,stream});
-localStorage.setItem("church_programs",JSON.stringify(programs));
+function loadStream(url){
 
-renderPrograms();
-alert("Saved!");
-}
-
-function playProgram(i){
-let p = programs[i];
-loadStream(p.stream,p.title,p.desc);
-}
-
-function loadStream(url,title,desc){
-
-let video = document.getElementById("video");
-let frame = document.getElementById("frame");
-
-document.getElementById("nowTitle").innerText = title || "Live";
-document.getElementById("nowDesc").innerText = desc || "";
-
-document.getElementById("liveBadge").style.display="block";
+live.style.display="block";
 
 if(url.includes("youtube")){
 video.style.display="none";
 frame.style.display="block";
-frame.src = url.replace("watch?v=","embed/");
+frame.src=url.replace("watch?v=","embed/");
 return;
 }
 
@@ -334,50 +235,38 @@ frame.style.display="none";
 video.style.display="block";
 
 if(Hls.isSupported()){
-if(currentHls) currentHls.destroy();
-
-currentHls = new Hls();
-currentHls.loadSource(url);
-currentHls.attachMedia(video);
-currentHls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
-}else{
-video.src = url;
-video.play();
+if(hls)hls.destroy();
+hls=new Hls();
+hls.loadSource(url);
+hls.attachMedia(video);
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
 }
 }
 
 function goLive(){
-document.getElementById("liveBadge").style.display="block";
-alert("🔴 Church LIVE Started");
+live.style.display="block";
+alert("LIVE STARTED ✝");
 }
 
-function stopLive(){
-document.getElementById("liveBadge").style.display="none";
-
-let video = document.getElementById("video");
+function stop(){
+live.style.display="none";
 video.pause();
 video.src="";
-
-document.getElementById("frame").src="";
+frame.src="";
 }
 
-function loadChannel(name){
-document.getElementById("nowTitle").innerText = name;
-document.getElementById("nowDesc").innerText = "Live Church Broadcast";
+function load(name){
+alert("Loading "+name);
 }
 
-function searchPrograms(q){
-q = q.toLowerCase();
-document.querySelectorAll(".program-item").forEach(el=>{
-el.style.display = el.innerText.toLowerCase().includes(q) ? "block":"none";
-});
+function send(e){
+if(e.key==="Enter"){
+chat.innerHTML+=`<div class="msg">👤 ${msg.value}</div>`;
+msg.value="";
+}
 }
 
-function toggleLivePanel(){
-alert("Live Admin Panel Active");
-}
-
-renderPrograms();
+render();
 
 </script>
 
