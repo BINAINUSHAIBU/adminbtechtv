@@ -1,169 +1,266 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Church Live Streaming Dashboard</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BTECH CHURCH TV NETWORK + LIVE DASHBOARD</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#070b14;
-color:#fff;
+:root{
+--bg:#07111f;
+--panel:#0f172a;
+--card:#182338;
+--accent:#ffd700;
+--text:#ffffff;
+--muted:#94a3b8;
+--hover:#233250;
+--danger:#ef4444;
+--success:#16a34a;
 }
 
-header{
-background:#0f1c33;
-padding:15px;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+height:100vh;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+/* TOPBAR */
+.topbar{
+height:65px;
+background:var(--panel);
 display:flex;
 justify-content:space-between;
 align-items:center;
-border-bottom:2px solid #1f3a66;
+padding:10px 15px;
+border-bottom:1px solid rgba(255,255,255,.05);
 }
 
-header h1{
+.logo{
 font-size:18px;
+font-weight:bold;
+color:var(--accent);
 }
 
+.topbar button{
+padding:8px 12px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+background:var(--card);
+color:white;
+}
+
+/* LAYOUT */
 .container{
+flex:1;
 display:flex;
-height:calc(100vh - 60px);
+overflow:hidden;
 }
 
+/* SIDEBAR */
 .sidebar{
 width:340px;
-background:#0b1426;
-padding:15px;
+background:#08101d;
+padding:12px;
 overflow:auto;
-border-right:2px solid #14284a;
+border-right:1px solid rgba(255,255,255,.05);
 }
 
+.sidebar h3{
+margin:12px 0;
+color:var(--accent);
+font-size:14px;
+}
+
+/* PROGRAM CARD */
+.card{
+background:var(--card);
+padding:10px;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+input,textarea{
+width:100%;
+padding:8px;
+margin-top:5px;
+border:none;
+border-radius:6px;
+background:#0b1220;
+color:white;
+}
+
+button{
+width:100%;
+margin-top:8px;
+padding:10px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.btn-save{background:#16a34a;color:black;}
+.btn-live{background:#ef4444;color:white;}
+.btn-stop{background:#f59e0b;color:black;}
+
+/* CHANNEL LIST */
+.channel{
+background:var(--card);
+padding:10px;
+margin-bottom:8px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.channel:hover{
+background:var(--hover);
+}
+
+/* MAIN */
 .main{
 flex:1;
 display:flex;
 flex-direction:column;
 }
 
-.card{
-background:#111c33;
-padding:12px;
-border-radius:10px;
-margin-bottom:10px;
-}
-
-input, textarea{
-width:100%;
-padding:10px;
-margin-top:5px;
-border:none;
-border-radius:6px;
-background:#070b14;
-color:#fff;
-}
-
-button{
-width:100%;
-padding:10px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-font-weight:bold;
-margin-top:10px;
-}
-
-.btn-save{background:#00c853;color:#000;}
-.btn-live{background:#ff2d2d;color:#fff;}
-.btn-stop{background:#ff9800;color:#000;}
-
-.viewer{
-flex:1;
-background:#000;
-display:flex;
-align-items:center;
-justify-content:center;
+/* PLAYER */
+.player{
+height:360px;
+background:black;
 position:relative;
 }
 
-video, iframe{
+.player video, .player iframe{
 width:100%;
 height:100%;
 }
 
-.liveBadge{
+.live-badge{
 position:absolute;
 top:10px;
 left:10px;
 background:red;
 padding:6px 12px;
-border-radius:6px;
+border-radius:20px;
+font-size:12px;
 display:none;
-font-weight:bold;
 }
 
-.program{
+/* INFO BAR */
+.info{
+background:var(--panel);
 padding:10px;
-background:#0f1c33;
-border-radius:8px;
-margin-top:8px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+/* PROGRAM LIST */
+.program-item{
+background:var(--card);
+padding:8px;
+margin-top:6px;
+border-radius:6px;
 cursor:pointer;
 }
 
-.program:hover{
-background:#15284a;
+/* SEARCH */
+.search{
+padding:10px;
+background:var(--panel);
+display:flex;
+gap:10px;
 }
 
-.brand{
-font-size:12px;
-opacity:0.8;
+.search input{
+flex:1;
 }
+
+/* GRID */
+.grid{
+flex:1;
+overflow:auto;
+padding:10px;
+}
+
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>✝ Church Live Streaming Dashboard</h1>
-<div class="brand">Powered by Live Worship System</div>
-</header>
+<!-- TOPBAR -->
+<div class="topbar">
+<div class="logo">✝ BTECH CHURCH TV NETWORK</div>
+<button onclick="toggleLivePanel()">📡 Live Admin</button>
+</div>
 
 <div class="container">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="card">
-<h3>Create Church Program</h3>
+<h3>✝ LIVE PROGRAM DASHBOARD</h3>
 
-<input id="title" placeholder="Service Title (e.g Sunday Service)">
-<textarea id="desc" placeholder="Message / Description"></textarea>
+<div class="card">
+<input id="title" placeholder="Program Title">
+<textarea id="desc" placeholder="Description"></textarea>
 <input id="stream" placeholder="Stream URL (YouTube / HLS / MP4)">
 
 <button class="btn-save" onclick="saveProgram()">Save Program</button>
 <button class="btn-live" onclick="goLive()">🔴 Go Live</button>
-<button class="btn-stop" onclick="stopLive()">⛔ Stop Live</button>
+<button class="btn-stop" onclick="stopLive()">⛔ Stop</button>
 </div>
 
-<div class="card">
-<h3>Programs Schedule</h3>
-<div id="list"></div>
-</div>
+<h3>📺 Saved Programs</h3>
+<div id="programList"></div>
+
+<hr style="margin:10px 0;border:1px solid #1f2a44">
+
+<h3>⛪ Church Channels</h3>
+<div class="channel" onclick="loadChannel('RCCG LIVE')">✝ RCCG Live</div>
+<div class="channel" onclick="loadChannel('Living Faith')">✝ Living Faith</div>
+<div class="channel" onclick="loadChannel('Christ Embassy')">✝ Christ Embassy</div>
+<div class="channel" onclick="loadChannel('Dunamis')">✝ Dunamis</div>
 
 </div>
 
-<!-- MAIN VIEWER -->
+<!-- MAIN -->
 <div class="main">
 
-<div class="viewer">
+<div class="player">
 
-<div class="liveBadge" id="live">🔴 LIVE SERVICE</div>
+<div class="live-badge" id="liveBadge">🔴 LIVE</div>
 
 <video id="video" controls></video>
 <iframe id="frame" style="display:none;border:none;"></iframe>
 
 </div>
+
+<div class="info">
+<div>
+<b id="nowTitle">Welcome</b><br>
+<small id="nowDesc">Church Streaming Platform</small>
+</div>
+</div>
+
+<div class="search">
+<input id="search" oninput="searchPrograms(this.value)" placeholder="Search programs...">
+</div>
+
+<div class="grid" id="grid"></div>
 
 </div>
 
@@ -172,22 +269,25 @@ opacity:0.8;
 <script>
 
 let programs = JSON.parse(localStorage.getItem("church_programs") || "[]");
-let hls = null;
+let currentHls = null;
 
-function render(){
-let list = document.getElementById("list");
+function renderPrograms(){
+let list = document.getElementById("programList");
+let grid = document.getElementById("grid");
+
 list.innerHTML = "";
+grid.innerHTML = "";
 
 programs.forEach((p,i)=>{
-let div = document.createElement("div");
-div.className = "program";
-div.innerHTML = `
+
+let item = `<div class="program-item" onclick="playProgram(${i})">
 <b>${p.title}</b><br>
 <small>${p.desc}</small>
-`;
+</div>`;
 
-div.onclick = ()=>play(i);
-list.appendChild(div);
+list.innerHTML += item;
+grid.innerHTML += item;
+
 });
 }
 
@@ -197,46 +297,49 @@ let desc = document.getElementById("desc").value;
 let stream = document.getElementById("stream").value;
 
 if(!title || !stream){
-alert("Please fill required fields");
+alert("Fill required fields");
 return;
 }
 
-programs.push({title, desc, stream});
-localStorage.setItem("church_programs", JSON.stringify(programs));
+programs.push({title,desc,stream});
+localStorage.setItem("church_programs",JSON.stringify(programs));
 
-render();
-alert("Church program saved!");
+renderPrograms();
+alert("Saved!");
 }
 
-function play(index){
-let p = programs[index];
-loadStream(p.stream);
+function playProgram(i){
+let p = programs[i];
+loadStream(p.stream,p.title,p.desc);
 }
 
-function loadStream(url){
+function loadStream(url,title,desc){
 
 let video = document.getElementById("video");
 let frame = document.getElementById("frame");
 
-document.getElementById("live").style.display = "block";
+document.getElementById("nowTitle").innerText = title || "Live";
+document.getElementById("nowDesc").innerText = desc || "";
 
-frame.style.display = "none";
-video.style.display = "block";
+document.getElementById("liveBadge").style.display="block";
 
-if(url.includes("youtube.com") || url.includes("youtu.be")){
-video.style.display = "none";
-frame.style.display = "block";
-frame.src = url.replace("watch?v=", "embed/");
+if(url.includes("youtube")){
+video.style.display="none";
+frame.style.display="block";
+frame.src = url.replace("watch?v=","embed/");
 return;
 }
 
-if(Hls.isSupported()){
-if(hls) hls.destroy();
+frame.style.display="none";
+video.style.display="block";
 
-hls = new Hls();
-hls.loadSource(url);
-hls.attachMedia(video);
-hls.on(Hls.Events.MANIFEST_PARSED, ()=>video.play());
+if(Hls.isSupported()){
+if(currentHls) currentHls.destroy();
+
+currentHls = new Hls();
+currentHls.loadSource(url);
+currentHls.attachMedia(video);
+currentHls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
 }else{
 video.src = url;
 video.play();
@@ -244,22 +347,37 @@ video.play();
 }
 
 function goLive(){
-document.getElementById("live").style.display = "block";
-alert("✝ Church LIVE Broadcast Started");
+document.getElementById("liveBadge").style.display="block";
+alert("🔴 Church LIVE Started");
 }
 
 function stopLive(){
-document.getElementById("live").style.display = "none";
+document.getElementById("liveBadge").style.display="none";
 
 let video = document.getElementById("video");
 video.pause();
-video.src = "";
+video.src="";
 
-document.getElementById("frame").src = "";
-document.getElementById("frame").style.display = "none";
+document.getElementById("frame").src="";
 }
 
-render();
+function loadChannel(name){
+document.getElementById("nowTitle").innerText = name;
+document.getElementById("nowDesc").innerText = "Live Church Broadcast";
+}
+
+function searchPrograms(q){
+q = q.toLowerCase();
+document.querySelectorAll(".program-item").forEach(el=>{
+el.style.display = el.innerText.toLowerCase().includes(q) ? "block":"none";
+});
+}
+
+function toggleLivePanel(){
+alert("Live Admin Panel Active");
+}
+
+renderPrograms();
 
 </script>
 
