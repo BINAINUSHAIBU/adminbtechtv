@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BTECH-TV WORLD ULTRA MAX X</title>
+<title>BTECH-TV WORLD ULTRA MAX X SUPER ADMIN</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
@@ -13,7 +15,7 @@
 --card:#172033;
 --hover:#22304d;
 --accent:#00d4ff;
---text:#fff;
+--text:#ffffff;
 --free:#16a34a;
 --locked:#ef4444;
 --premium:#8b5cf6;
@@ -29,17 +31,18 @@ font-family:Arial,sans-serif;
 body{
 background:var(--bg);
 color:var(--text);
+overflow:hidden;
+display:flex;
+flex-direction:column;
+height:100vh;
 }
 
 .topbar{
 display:flex;
 gap:8px;
 padding:10px;
-overflow:auto;
+overflow-x:auto;
 background:#0f172a;
-position:sticky;
-top:0;
-z-index:999;
 }
 
 .topbar button{
@@ -47,140 +50,45 @@ padding:10px 14px;
 border:none;
 border-radius:10px;
 background:var(--card);
-color:white;
+color:#fff;
 cursor:pointer;
 white-space:nowrap;
 }
 
 .container{
+flex:1;
 display:grid;
 grid-template-columns:320px 1fr;
-min-height:100vh;
+overflow:hidden;
 }
 
 .sidebar{
-background:#0b1220;
+overflow:auto;
 padding:15px;
-overflow-y:auto;
-}
-
-.sidebar h3{
-color:var(--accent);
-margin:15px 0 10px;
-}
-
-.cat{
-background:var(--card);
-padding:12px;
-border-radius:10px;
-margin-bottom:8px;
-cursor:pointer;
+background:#0b1220;
 }
 
 .main{
-padding:15px;
+display:flex;
+flex-direction:column;
+overflow:hidden;
 }
 
 .player{
 height:380px;
 background:black;
-border-radius:15px;
+position:relative;
 display:flex;
 align-items:center;
 justify-content:center;
-position:relative;
-overflow:hidden;
-}
-
-.live{
-position:absolute;
-top:15px;
-left:15px;
-background:red;
-padding:8px 12px;
-border-radius:20px;
-font-size:12px;
-font-weight:bold;
-}
-
-.overlay{
-text-align:center;
-}
-
-.overlay h1{
-font-size:70px;
-}
-
-.now-playing{
-background:var(--panel);
-padding:15px;
-margin-top:10px;
-border-radius:12px;
-display:flex;
-justify-content:space-between;
-flex-wrap:wrap;
-gap:10px;
-}
-
-.controls{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-}
-
-.controls button{
-padding:10px;
-border:none;
-border-radius:10px;
-background:var(--card);
-color:white;
-cursor:pointer;
-}
-
-.search{
-margin-top:15px;
-}
-
-.search input{
-width:100%;
-padding:14px;
-border:none;
-border-radius:12px;
-background:#0f172a;
-color:white;
-}
-
-.channel-control{
-margin-top:20px;
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:15px;
-}
-
-.control-card{
-padding:20px;
-border-radius:15px;
-}
-
-.free{
-background:rgba(22,163,74,.15);
-border:1px solid var(--free);
-}
-
-.locked{
-background:rgba(239,68,68,.15);
-border:1px solid var(--locked);
-}
-
-.premium{
-background:rgba(139,92,246,.15);
-border:1px solid var(--premium);
 }
 
 .channels{
-margin-top:20px;
+flex:1;
+overflow:auto;
+padding:15px;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
 gap:12px;
 }
 
@@ -192,71 +100,41 @@ cursor:pointer;
 }
 
 .badge{
-display:inline-block;
-margin-top:10px;
 padding:5px 10px;
 border-radius:20px;
 font-size:11px;
 font-weight:bold;
 }
 
-.badge.free{
-background:var(--free);
-}
-
-.badge.locked{
-background:var(--locked);
-}
-
-.badge.premium{
-background:var(--premium);
-}
-
-@media(max-width:900px){
-
-.container{
-grid-template-columns:1fr;
-}
-
-.sidebar{
-max-height:350px;
-}
-
-.player{
-height:240px;
-}
-
-}
+.free{background:var(--free);}
+.locked{background:var(--locked);}
+.premium{background:var(--premium);}
 
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-
 <div class="topbar">
 
-<button>All</button>
-<button>⭐ Favorites</button>
-<button>🕘 Recent</button>
-<button>🚀 Ultra Feeds</button>
-<button>🌙 Theme</button>
-<button>⛶ Fullscreen</button>
-<button>🎲 Shuffle</button>
-<button>📺 Mini Player</button>
-<button>⏰ Sleep Timer</button>
-<button>📡 Scan</button>
-<button>⚡ Boost</button>
-<button>⬇ Export</button>
-<button>⚙ Admin</button>
-<button>🛡 Super Admin</button>
-<button>👥 User Manager</button>
+<button onclick="setTab('all')">All</button>
+<button onclick="setTab('favorites')">⭐ Favorites</button>
+<button onclick="setTab('recent')">🕘 Recent</button>
+<button onclick="loadUltraFeeds()">🚀 Ultra Feeds</button>
+<button onclick="toggleTheme()">🌙 Theme</button>
+<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+<button onclick="shuffleChannels()">🎲 Shuffle</button>
+<button onclick="toggleMiniPlayer()">📺 Mini Player</button>
+<button onclick="sleepTimer()">⏰ Sleep Timer</button>
+<button onclick="scanStreams()">📡 Scan</button>
+<button onclick="speedBoost()">⚡ Boost</button>
+<button onclick="exportFavorites()">⬇ Export</button>
+<button onclick="openAdmin()">⚙ Admin</button>
+<button onclick="openSuperAdmin()">🛡 Super Admin</button>
+<button onclick="openUserManager()">👥 User Manager</button>
 
 </div>
 
 <div class="container">
-
-<!-- SIDEBAR -->
 
 <div class="sidebar">
 
@@ -330,102 +208,29 @@ height:240px;
 
 </div>
 
-<!-- MAIN -->
-
 <div class="main">
 
 <div class="player">
-
-<div class="live">🔴 LIVE</div>
-
-<div class="overlay">
-<h1>🚀</h1>
-<p>Loading Ultra IPTV...</p>
+<video id="video" controls autoplay></video>
 </div>
 
-</div>
-
-<div class="now-playing">
-
-<div>
-<h2>No Channel Selected</h2>
-<p>BTECH-TV WORLD ULTRA MAX X</p>
-</div>
-
-<div class="controls">
-<button>◀ Prev</button>
-<button>Next ▶</button>
-<button>📺 PiP</button>
-<button>🔗 Share</button>
-<button>🔊 Mute</button>
-</div>
-
-</div>
-
-<div class="search">
-<input type="text" placeholder="Search IPTV Channels...">
-</div>
-
-<!-- CHANNEL CONTROL -->
-
-<div class="channel-control">
-
-<div class="control-card free">
-<h2>🟢 FREE CHANNELS</h2>
-<p>Always Playable</p>
-<p>No Restrictions</p>
-</div>
-
-<div class="control-card locked">
-<h2>🔒 LOCKED CHANNELS</h2>
-<p>Blocked For Normal Users</p>
-<p>Admin Access Required</p>
-</div>
-
-<div class="control-card premium">
-<h2>💎 PREMIUM CHANNELS</h2>
-<p>VIP Or Admin Access Only</p>
-</div>
-
-</div>
-
-<!-- CHANNEL DASHBOARD -->
-
-<div class="channels">
+<div class="channels" id="channelList">
 
 <div class="channel">
 BBC News HD
-<br>
-<span class="badge free">FREE</span>
-</div>
-
-<div class="channel">
-CNN International
-<br>
+<br><br>
 <span class="badge free">FREE</span>
 </div>
 
 <div class="channel">
 Admin Sports Feed
-<br>
-<span class="badge locked">LOCKED</span>
-</div>
-
-<div class="channel">
-Super Admin Feed
-<br>
+<br><br>
 <span class="badge locked">LOCKED</span>
 </div>
 
 <div class="channel">
 Sky Sports UHD
-<br>
-<span class="badge premium">PREMIUM</span>
-</div>
-
-<div class="channel">
-BeIN Sports VIP
-<br>
+<br><br>
 <span class="badge premium">PREMIUM</span>
 </div>
 
@@ -434,6 +239,60 @@ BeIN Sports VIP
 </div>
 
 </div>
+
+<script>
+
+const SUPER_ADMIN=true;
+
+function openSuperAdmin(){
+alert("🛡 SUPER ADMIN PANEL");
+}
+
+function openAdmin(){
+alert("⚙ ADMIN PANEL");
+}
+
+function openUserManager(){
+alert("👥 USER MANAGER");
+}
+
+function loadUltraFeeds(){
+alert("🚀 ULTRA FEEDS LOADED");
+}
+
+function scanStreams(){
+alert("📡 STREAM SCAN STARTED");
+}
+
+function speedBoost(){
+alert("⚡ BOOST ENABLED");
+}
+
+function toggleFullscreen(){
+document.documentElement.requestFullscreen();
+}
+
+function toggleTheme(){
+document.body.classList.toggle("light");
+}
+
+function shuffleChannels(){
+alert("🎲 CHANNELS SHUFFLED");
+}
+
+function toggleMiniPlayer(){
+alert("📺 MINI PLAYER");
+}
+
+function sleepTimer(){
+alert("⏰ SLEEP TIMER SET");
+}
+
+function exportFavorites(){
+alert("⬇ FAVORITES EXPORTED");
+}
+
+</script>
 
 </body>
 </html>
