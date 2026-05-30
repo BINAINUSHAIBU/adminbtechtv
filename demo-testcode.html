@@ -1,298 +1,65 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BTECH-TV WORLD ULTRA MAX X SUPER ADMIN</title>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
+<title>BTECH-TV ULTRA MAX X Enterprise</title>
 <style>
-
-:root{
---bg:#050816;
---panel:#111827;
---card:#172033;
---hover:#22304d;
---accent:#00d4ff;
---text:#ffffff;
---free:#16a34a;
---locked:#ef4444;
---premium:#8b5cf6;
-}
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:var(--bg);
-color:var(--text);
-overflow:hidden;
-display:flex;
-flex-direction:column;
-height:100vh;
-}
-
-.topbar{
-display:flex;
-gap:8px;
-padding:10px;
-overflow-x:auto;
-background:#0f172a;
-}
-
-.topbar button{
-padding:10px 14px;
-border:none;
-border-radius:10px;
-background:var(--card);
-color:#fff;
-cursor:pointer;
-white-space:nowrap;
-}
-
-.container{
-flex:1;
-display:grid;
-grid-template-columns:320px 1fr;
-overflow:hidden;
-}
-
-.sidebar{
-overflow:auto;
-padding:15px;
-background:#0b1220;
-}
-
-.main{
-display:flex;
-flex-direction:column;
-overflow:hidden;
-}
-
-.player{
-height:380px;
-background:black;
-position:relative;
-display:flex;
-align-items:center;
-justify-content:center;
-}
-
-.channels{
-flex:1;
-overflow:auto;
-padding:15px;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-gap:12px;
-}
-
-.channel{
-background:var(--card);
-padding:15px;
-border-radius:12px;
-cursor:pointer;
-}
-
-.badge{
-padding:5px 10px;
-border-radius:20px;
-font-size:11px;
-font-weight:bold;
-}
-
-.free{background:var(--free);}
-.locked{background:var(--locked);}
-.premium{background:var(--premium);}
-
+:root{--bg:#050816;--panel:#111827;--card:#172033;--accent:#00d4ff;--text:#fff}
+*{box-sizing:border-box;font-family:Arial,sans-serif}
+body{margin:0;background:var(--bg);color:var(--text)}
+.topbar{display:flex;gap:8px;overflow:auto;padding:10px;background:#0f172a}
+.topbar button,.cat{background:var(--card);color:#fff;border:none;border-radius:10px;padding:10px;cursor:pointer}
+.layout{display:grid;grid-template-columns:300px 1fr;min-height:100vh}
+.sidebar{padding:12px;background:#0b1220;overflow:auto}
+.main{padding:12px}
+.player{height:320px;background:#000;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin-top:15px}
+.channel{background:var(--card);padding:12px;border-radius:10px}
+.badge{padding:4px 8px;border-radius:20px;font-size:12px}
+.free{background:#16a34a}.locked{background:#ef4444}.premium{background:#8b5cf6}
 </style>
 </head>
 <body>
-
 <div class="topbar">
-
-<button onclick="setTab('all')">All</button>
-<button onclick="setTab('favorites')">⭐ Favorites</button>
-<button onclick="setTab('recent')">🕘 Recent</button>
-<button onclick="loadUltraFeeds()">🚀 Ultra Feeds</button>
-<button onclick="toggleTheme()">🌙 Theme</button>
-<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
-<button onclick="shuffleChannels()">🎲 Shuffle</button>
-<button onclick="toggleMiniPlayer()">📺 Mini Player</button>
-<button onclick="sleepTimer()">⏰ Sleep Timer</button>
-<button onclick="scanStreams()">📡 Scan</button>
-<button onclick="speedBoost()">⚡ Boost</button>
-<button onclick="exportFavorites()">⬇ Export</button>
-<button onclick="openAdmin()">⚙ Admin</button>
-<button onclick="openSuperAdmin()">🛡 Super Admin</button>
-<button onclick="openUserManager()">👥 User Manager</button>
-
+<button>⭐ Favorites</button><button>🕘 Recent</button><button>🚀 Ultra Feeds</button>
+<button>🌙 Theme</button><button>⛶ Fullscreen</button><button>🎲 Shuffle</button>
+<button>📺 Mini Player</button><button>⏰ Sleep Timer</button><button>📡 Scan</button>
+<button>⚡ Boost</button><button>⬇ Export</button><button>⚙ Admin</button>
+<button>🛡 Super Admin</button><button>👥 User Manager</button>
 </div>
-
-<div class="container">
-
+<div class="layout">
 <div class="sidebar">
-
 <h3>🌍 Countries</h3>
-
-<div class="cat">🇳🇬 Nigeria</div>
-<div class="cat">🇺🇸 USA</div>
-<div class="cat">🇬🇧 UK</div>
-<div class="cat">🇮🇳 India</div>
-<div class="cat">🇫🇷 France</div>
-<div class="cat">🇩🇪 Germany</div>
-<div class="cat">🇧🇷 Brazil</div>
-<div class="cat">🇿🇦 South Africa</div>
-<div class="cat">🇨🇦 Canada</div>
-<div class="cat">🇦🇺 Australia</div>
-<div class="cat">🇯🇵 Japan</div>
-<div class="cat">🇰🇷 South Korea</div>
-<div class="cat">🇨🇳 China</div>
-<div class="cat">🇪🇸 Spain</div>
-<div class="cat">🇮🇹 Italy</div>
-<div class="cat">🇹🇷 Turkey</div>
-<div class="cat">🇲🇽 Mexico</div>
-<div class="cat">🇦🇪 UAE</div>
-<div class="cat">🇸🇦 Saudi Arabia</div>
-<div class="cat">🇪🇬 Egypt</div>
-<div class="cat">🇦🇷 Argentina</div>
-<div class="cat">🇵🇰 Pakistan</div>
-<div class="cat">🇮🇩 Indonesia</div>
-<div class="cat">🇵🇭 Philippines</div>
-<div class="cat">🇦🇱 Albania</div>
-
+<div class="cat">🇳🇬 Nigeria</div><div class="cat">🇺🇸 USA</div><div class="cat">🇬🇧 UK</div>
+<div class="cat">🇮🇳 India</div><div class="cat">🇫🇷 France</div><div class="cat">🇩🇪 Germany</div>
 <h3>🎬 Categories</h3>
-
-<div class="cat">📰 News</div>
-<div class="cat">⚽ Sports</div>
-<div class="cat">🎬 Movies</div>
-<div class="cat">🎵 Music</div>
-<div class="cat">👶 Kids</div>
-<div class="cat">😂 Comedy</div>
-<div class="cat">📚 Documentary</div>
-<div class="cat">💼 Business</div>
-<div class="cat">🔬 Science</div>
-<div class="cat">✈ Travel</div>
-
+<div class="cat">📰 News</div><div class="cat">⚽ Sports</div><div class="cat">🎬 Movies</div>
+<div class="cat">🎵 Music</div><div class="cat">👶 Kids</div>
 <h3>🗣 Languages</h3>
-
-<div class="cat">🇬🇧 English</div>
-<div class="cat">🇪🇸 Spanish</div>
-<div class="cat">🇸🇦 Arabic</div>
-<div class="cat">🇫🇷 French</div>
-<div class="cat">🇮🇳 Hindi</div>
-<div class="cat">🇨🇳 Chinese</div>
-<div class="cat">🇵🇹 Portuguese</div>
-
+<div class="cat">🇬🇧 English</div><div class="cat">🇪🇸 Spanish</div><div class="cat">🇸🇦 Arabic</div>
 <h3>🔥 Premium Features</h3>
-
-<div class="cat">📡 Scan Streams</div>
-<div class="cat">⚡ Speed Boost</div>
-<div class="cat">📺 Picture in Picture</div>
-<div class="cat">🗑 Clear Recents</div>
-<div class="cat">⏺ Record Mode</div>
-<div class="cat">🚀 Global Feeds</div>
-<div class="cat">🛠 Repair Streams</div>
-<div class="cat">🧠 Memory Optimizer</div>
-<div class="cat">🔒 User Manager</div>
-<div class="cat">🧠 Quiz Channels</div>
-<div class="cat">🔒 Locked Channels</div>
-<div class="cat">🔒 Assignment Channels</div>
-<div class="cat">🔒 Demo Test Version</div>
-<div class="cat">🚀 Extra Feeds</div>
-
+<div class="cat">📡 Scan Streams</div><div class="cat">⚡ Speed Boost</div>
+<div class="cat">🔒 Locked Channels</div><div class="cat">🚀 Extra Feeds</div>
 </div>
-
 <div class="main">
-
-<div class="player">
-<video id="video" controls autoplay></video>
+<div class="player"><h1>🚀 BTECH-TV</h1></div>
+<h2>🔒 Channel Control</h2>
+<ul>
+<li>Free Channels → Always Playable</li>
+<li>Locked Channels → Admin Access Required</li>
+<li>Premium Channels → VIP or Super Admin Only</li>
+</ul>
+<div class="grid">
+<div class="channel">BBC News<br><span class="badge free">FREE</span></div>
+<div class="channel">Admin Feed<br><span class="badge locked">LOCKED</span></div>
+<div class="channel">Sky Sports UHD<br><span class="badge premium">PREMIUM</span></div>
 </div>
-
-<div class="channels" id="channelList">
-
-<div class="channel">
-BBC News HD
-<br><br>
-<span class="badge free">FREE</span>
 </div>
-
-<div class="channel">
-Admin Sports Feed
-<br><br>
-<span class="badge locked">LOCKED</span>
 </div>
-
-<div class="channel">
-Sky Sports UHD
-<br><br>
-<span class="badge premium">PREMIUM</span>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
 <script>
-
-const SUPER_ADMIN=true;
-
-function openSuperAdmin(){
-alert("🛡 SUPER ADMIN PANEL");
-}
-
-function openAdmin(){
-alert("⚙ ADMIN PANEL");
-}
-
-function openUserManager(){
-alert("👥 USER MANAGER");
-}
-
-function loadUltraFeeds(){
-alert("🚀 ULTRA FEEDS LOADED");
-}
-
-function scanStreams(){
-alert("📡 STREAM SCAN STARTED");
-}
-
-function speedBoost(){
-alert("⚡ BOOST ENABLED");
-}
-
-function toggleFullscreen(){
-document.documentElement.requestFullscreen();
-}
-
-function toggleTheme(){
-document.body.classList.toggle("light");
-}
-
-function shuffleChannels(){
-alert("🎲 CHANNELS SHUFFLED");
-}
-
-function toggleMiniPlayer(){
-alert("📺 MINI PLAYER");
-}
-
-function sleepTimer(){
-alert("⏰ SLEEP TIMER SET");
-}
-
-function exportFavorites(){
-alert("⬇ FAVORITES EXPORTED");
-}
-
+console.log("Enterprise starter build");
 </script>
-
 </body>
 </html>
