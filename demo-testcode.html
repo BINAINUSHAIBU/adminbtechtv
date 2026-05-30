@@ -1,503 +1,120 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BTECH-TV WORLD ULTRA MAX X ENTERPRISE</title>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BTECH-TV WORLD ULTRA MAX X V2 ENTERPRISE</title>
 <style>
-
 :root{
---bg:#050816;
---panel:#111827;
---card:#172033;
---hover:#22304d;
---accent:#00d4ff;
---success:#16a34a;
---danger:#ef4444;
---premium:#8b5cf6;
---text:#fff;
+--bg:#050816;--panel:#111827;--card:#172033;--hover:#22304d;
+--accent:#00d4ff;--success:#16a34a;--danger:#ef4444;--premium:#8b5cf6;--text:#fff;
 }
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:var(--bg);
-color:var(--text);
-height:100vh;
-overflow:hidden;
-}
-
-/* TOPBAR */
-
-.topbar{
-height:60px;
-background:#0f172a;
-display:flex;
-align-items:center;
-gap:10px;
-padding:10px;
-overflow:auto;
-}
-
-.logo{
-font-size:22px;
-font-weight:bold;
-color:var(--accent);
-}
-
-.btn{
-padding:10px 14px;
-background:var(--card);
-border:none;
-color:white;
-border-radius:10px;
-cursor:pointer;
-}
-
-/* DASHBOARD */
-
-.dashboard{
-height:calc(100vh - 60px);
-display:grid;
-grid-template-columns:280px 1fr 340px;
-}
-
-/* SIDEBAR */
-
-.sidebar{
-background:#0b1220;
-overflow:auto;
-padding:15px;
-}
-
-.sidebar h3{
-color:var(--accent);
-margin:15px 0;
-}
-
-.menu{
-padding:12px;
-background:var(--card);
-border-radius:10px;
-margin-bottom:10px;
-cursor:pointer;
-}
-
-/* CENTER */
-
-.center{
-display:flex;
-flex-direction:column;
-overflow:hidden;
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(6,1fr);
-gap:10px;
-padding:10px;
-}
-
-.stat{
-background:var(--card);
-padding:15px;
-border-radius:12px;
-text-align:center;
-}
-
-.player-zone{
-position:relative;
-padding:10px;
-}
-
-.player{
-height:340px;
-background:black;
-border-radius:14px;
-overflow:hidden;
-position:relative;
-}
-
-.player video{
-width:100%;
-height:100%;
-}
-
-.live{
-position:absolute;
-top:10px;
-left:10px;
-background:red;
-padding:6px 12px;
-border-radius:20px;
-font-size:12px;
-}
-
-/* MINI MONITOR */
-
-.mini-monitor{
-position:absolute;
-right:20px;
-top:20px;
-width:220px;
-height:130px;
-border:2px solid var(--accent);
-background:black;
-border-radius:12px;
-overflow:hidden;
-z-index:100;
-}
-
-.mini-monitor video{
-width:100%;
-height:100%;
-}
-
-/* SEARCH */
-
-.search{
-padding:10px;
-}
-
-.search input{
-width:100%;
-padding:12px;
-background:#0f172a;
-color:white;
-border:none;
-border-radius:10px;
-}
-
-/* CHANNEL GRID */
-
-.channels{
-flex:1;
-overflow:auto;
-padding:10px;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-gap:12px;
-}
-
-.channel{
-background:var(--card);
-padding:12px;
-border-radius:12px;
-}
-
-.channel img{
-width:60px;
-height:60px;
-border-radius:10px;
-}
-
-.actions{
-display:flex;
-gap:5px;
-margin-top:10px;
-flex-wrap:wrap;
-}
-
-/* RIGHT PANEL */
-
-.right{
-background:#0b1220;
-overflow:auto;
-padding:15px;
-}
-
-.panel{
-background:var(--card);
-padding:15px;
-border-radius:12px;
-margin-bottom:15px;
-}
-
-/* SUPER ADMIN */
-
-.admin{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.95);
-display:none;
-justify-content:center;
-align-items:center;
-z-index:99999;
-}
-
-.admin-box{
-width:95%;
-max-width:1200px;
-background:#111827;
-padding:30px;
-border-radius:20px;
-}
-
-.admin-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:15px;
-}
-
-@media(max-width:1200px){
-.dashboard{
-grid-template-columns:1fr;
-}
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:var(--bg);color:var(--text)}
+.topbar{display:flex;gap:8px;overflow:auto;padding:12px;background:#0f172a;position:sticky;top:0}
+.topbar button,.side-item{background:var(--card);color:#fff;border:none;border-radius:10px;padding:10px;cursor:pointer}
+.layout{display:grid;grid-template-columns:280px 1fr}
+.sidebar{height:calc(100vh - 60px);overflow:auto;padding:12px;background:#0b1220}
+.side-item{display:block;margin-bottom:8px}
+.main{padding:15px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.card{background:var(--card);padding:15px;border-radius:12px}
+.player{height:340px;background:#000;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:15px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.module{background:var(--card);padding:15px;border-radius:12px}
+.table-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;padding:10px;border-bottom:1px solid #333}
+.badge{padding:4px 8px;border-radius:20px}
+.locked{background:var(--danger)} .unlocked{background:var(--success)} .premium{background:var(--premium)}
 </style>
 </head>
-
 <body>
 
-<!-- TOPBAR -->
-
 <div class="topbar">
-
-<div class="logo">
-📺 BTECH-TV WORLD ULTRA MAX X
+<button>Dashboard</button><button>Channels</button><button>Movies</button>
+<button>Series</button><button>Users</button><button>Resellers</button>
+<button>Subscriptions</button><button>Wallet</button><button>Payments</button>
+<button>Analytics</button><button>Ads</button><button>EPG</button>
+<button>Notifications</button><button>Settings</button>
 </div>
 
-<button class="btn" onclick="loadUltraFeeds()">🚀 Feeds</button>
-<button class="btn" onclick="toggleTheme()">🌙 Theme</button>
-<button class="btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
-<button class="btn" onclick="openSuperAdmin()">🛡 Super Admin</button>
-<button class="btn" onclick="backupSystem()">💾 Backup</button>
-
-</div>
-
-<div class="dashboard">
-
-<!-- LEFT SIDEBAR -->
-
+<div class="layout">
 <div class="sidebar">
-
-<h3>🌍 Countries</h3>
-
-<div class="menu">🇳🇬 Nigeria</div>
-<div class="menu">🇺🇸 USA</div>
-<div class="menu">🇬🇧 UK</div>
-<div class="menu">🇮🇳 India</div>
-
-<h3>🎬 Categories</h3>
-
-<div class="menu">📰 News</div>
-<div class="menu">⚽ Sports</div>
-<div class="menu">🎬 Movies</div>
-
-<h3>🔥 Premium</h3>
-
-<div class="menu" onclick="showLocked()">
-🔒 Locked Channels
+<div class="side-item">📊 Enterprise Dashboard</div>
+<div class="side-item">📺 IPTV Channels</div>
+<div class="side-item">🎬 Movies Library</div>
+<div class="side-item">📽 Series Manager</div>
+<div class="side-item">🔒 Locked Channels</div>
+<div class="side-item">🔓 Unlocked Channels</div>
+<div class="side-item">💎 Premium Content</div>
+<div class="side-item">👥 User Manager</div>
+<div class="side-item">🏢 Reseller Manager</div>
+<div class="side-item">💳 Subscription Plans</div>
+<div class="side-item">💰 Wallet Center</div>
+<div class="side-item">🎟 Coupon Manager</div>
+<div class="side-item">📅 EPG Manager</div>
+<div class="side-item">📢 Push Notifications</div>
+<div class="side-item">📡 Stream Monitoring</div>
+<div class="side-item">📈 Analytics</div>
+<div class="side-item">📝 Exam Jackpot</div>
+<div class="side-item">⚙ System Settings</div>
 </div>
 
-<div class="menu" onclick="showPremium()">
-💎 Premium Channels
-</div>
-
-</div>
-
-<!-- CENTER -->
-
-<div class="center">
+<div class="main">
 
 <div class="stats">
-
-<div class="stat">
-Channels
-<h2 id="totalChannels">0</h2>
+<div class="card"><h3>Total Channels</h3><h1>12,540</h1></div>
+<div class="card"><h3>Premium</h3><h1>4,210</h1></div>
+<div class="card"><h3>Users</h3><h1>56,823</h1></div>
+<div class="card"><h3>Resellers</h3><h1>250</h1></div>
+<div class="card"><h3>Revenue</h3><h1>$98K</h1></div>
+<div class="card"><h3>Online</h3><h1>5,823</h1></div>
 </div>
-
-<div class="stat">
-Locked
-<h2 id="lockedChannels">0</h2>
-</div>
-
-<div class="stat">
-Premium
-<h2 id="premiumChannels">0</h2>
-</div>
-
-<div class="stat">
-Users
-<h2 id="totalUsers">0</h2>
-</div>
-
-<div class="stat">
-Resellers
-<h2 id="totalResellers">0</h2>
-</div>
-
-<div class="stat">
-Online
-<h2 id="onlineStreams">0</h2>
-</div>
-
-</div>
-
-<div class="player-zone">
 
 <div class="player">
+<h2>Ultra IPTV Monitor / Preview Player</h2>
+</div>
 
-<div class="live">🔴 LIVE</div>
+<div class="grid">
+<div class="module"><h3>Super Admin Controls</h3><br>
+<button onclick="msg('Global Lock')">Global Lock</button>
+<button onclick="msg('Global Unlock')">Global Unlock</button>
+<button onclick="msg('Backup')">Backup</button>
+<button onclick="msg('Restart')">Restart</button>
+</div>
 
-<video id="video" controls autoplay></video>
+<div class="module"><h3>Authentication</h3><br>
+<p>✓ Email Login</p>
+<p>✓ Phone Login</p>
+<p>✓ Google Login</p>
+<p>✓ Subscription Login</p>
+<p>✓ Role Permissions</p>
+</div>
 
-<div class="mini-monitor">
-<video id="miniVideo" muted autoplay></video>
+<div class="module"><h3>Payments</h3><br>
+<p>Wallet</p><p>Coupons</p><p>Referrals</p><p>Subscriptions</p>
+</div>
+
+<div class="module"><h3>Quiz Jackpot</h3><br>
+<p>MCQ Exams</p><p>Audio Questions</p><p>Image Questions</p><p>Winner Ranking</p>
+</div>
+</div>
+
+<br>
+
+<div class="module">
+<h3>Channel Management</h3><br>
+<div class="table-row"><b>Channel</b><b>Status</b><b>Type</b><b>Action</b></div>
+<div class="table-row"><div>BBC News</div><div><span class="badge unlocked">UNLOCKED</span></div><div>FREE</div><div>LOCK</div></div>
+<div class="table-row"><div>Sky Sports</div><div><span class="badge locked">LOCKED</span></div><div><span class="badge premium">PREMIUM</span></div><div>UNLOCK</div></div>
+<div class="table-row"><div>Discovery</div><div><span class="badge unlocked">UNLOCKED</span></div><div>FREE</div><div>EDIT</div></div>
 </div>
 
 </div>
-
-</div>
-
-<div class="search">
-<input id="search" placeholder="Search IPTV Channels">
-</div>
-
-<div class="channels" id="channels"></div>
-
-</div>
-
-<!-- RIGHT PANEL -->
-
-<div class="right">
-
-<div class="panel">
-<h3>📡 Stream Monitoring</h3>
-<p>Online Streams: <span id="streamCount">0</span></p>
-<p>CPU Usage: 23%</p>
-<p>RAM Usage: 48%</p>
-</div>
-
-<div class="panel">
-<h3>👥 User Manager</h3>
-<input id="userName">
-<button class="btn" onclick="addUser()">Add User</button>
-<div id="users"></div>
-</div>
-
-<div class="panel">
-<h3>🤝 Reseller Manager</h3>
-<input id="resellerName">
-<button class="btn">Add Reseller</button>
-</div>
-
-<div class="panel">
-<h3>💰 Wallet System</h3>
-<p>Total Wallet Balance</p>
-<h2>$0.00</h2>
-</div>
-
-<div class="panel">
-<h3>🎟 Coupon System</h3>
-<button class="btn">Generate Coupon</button>
-</div>
-
-<div class="panel">
-<h3>📊 Analytics</h3>
-<p>Total Views</p>
-<p>Premium Sales</p>
-<p>Revenue</p>
-</div>
-
-</div>
-
-</div>
-
-<!-- SUPER ADMIN -->
-
-<div class="admin" id="admin">
-
-<div class="admin-box">
-
-<h2>🛡 SUPER ADMIN CONTROL CENTER</h2>
-
-<div class="admin-grid">
-
-<button class="btn">📡 Scan Streams</button>
-<button class="btn">🛠 Repair Streams</button>
-<button class="btn">⚡ Speed Boost</button>
-<button class="btn">💎 Premium Batch</button>
-<button class="btn">🔒 Lock All</button>
-<button class="btn">🔓 Unlock All</button>
-<button class="btn">👥 User Manager</button>
-<button class="btn">🤝 Reseller Manager</button>
-<button class="btn">💳 Subscription Plans</button>
-<button class="btn">🎟 Coupon Manager</button>
-<button class="btn">💰 Wallet Manager</button>
-<button class="btn">📈 Analytics Dashboard</button>
-<button class="btn">📺 Channel Manager</button>
-<button class="btn">🎬 Movie Manager</button>
-<button class="btn">📡 Stream Monitoring</button>
-<button class="btn">💾 Backup System</button>
-
-</div>
-
-</div>
-
 </div>
 
 <script>
-
-let channels=[];
-let users=JSON.parse(localStorage.users||"[]");
-
-function addUser(){
-let n=document.getElementById("userName").value;
-if(!n)return;
-users.push({name:n});
-localStorage.users=JSON.stringify(users);
-renderUsers();
-}
-
-function renderUsers(){
-document.getElementById("users").innerHTML=
-users.map(u=>"<div>"+u.name+"</div>").join("");
-document.getElementById("totalUsers").innerText=users.length;
-}
-
-function openSuperAdmin(){
-document.getElementById("admin").style.display="flex";
-}
-
-function toggleFullscreen(){
-if(!document.fullscreenElement){
-document.documentElement.requestFullscreen();
-}else{
-document.exitFullscreen();
-}
-}
-
-function backupSystem(){
-
-const data={
-channels,
-users
-};
-
-const blob=new Blob(
-[JSON.stringify(data,null,2)],
-{type:'application/json'}
-);
-
-const a=document.createElement('a');
-a.href=URL.createObjectURL(blob);
-a.download='btech-tv-backup.json';
-a.click();
-
-}
-
-renderUsers();
-
+function msg(t){ alert(t + " executed"); }
 </script>
 
 </body>
