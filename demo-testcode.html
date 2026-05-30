@@ -3,276 +3,268 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#050816">
-<title>BTECH-TV LOCKED & UNLOCKED DASHBOARD</title>
+<title>BTECH-TV LOGIN DASHBOARD</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-:root{
---bg:#050816;
---panel:#111827;
---card:#172033;
---hover:#22304d;
---accent:#00d4ff;
---text:#fff;
---free:#16a34a;
---locked:#ef4444;
---premium:#8b5cf6;
-}
-
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-
 body{
-background:var(--bg);
-color:var(--text);
+margin:0;
+font-family:Arial;
+background:#050816;
+color:white;
 display:flex;
-flex-direction:column;
 height:100vh;
 overflow:hidden;
 }
 
-/* TOPBAR */
+/* LOGIN */
+.login{
+position:fixed;
+inset:0;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#000;
+flex-direction:column;
+gap:10px;
+}
+
+.login input{
+padding:10px;
+width:200px;
+border:none;
+border-radius:8px;
+}
+
+.login button{
+padding:10px 20px;
+background:#00d4ff;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* APP */
+.app{
+display:none;
+width:100%;
+height:100%;
+}
+
+/* SIDEBAR */
+.sidebar{
+width:250px;
+background:#111827;
+padding:10px;
+overflow:auto;
+}
+
+.channel{
+padding:10px;
+margin:5px 0;
+background:#172033;
+border-radius:8px;
+cursor:pointer;
+position:relative;
+}
+
+.locked{
+background:#ef4444;
+}
+
+.premium{
+background:#8b5cf6;
+}
+
+/* MAIN */
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+video{
+width:100%;
+height:350px;
+background:black;
+}
+
 .topbar{
 display:flex;
 gap:10px;
 padding:10px;
 background:#0f172a;
-overflow-x:auto;
 }
 
-.topbar button{
-padding:10px;
+button{
+padding:8px;
 border:none;
-border-radius:8px;
-background:var(--card);
-color:#fff;
-cursor:pointer;
-white-space:nowrap;
-}
-
-/* LAYOUT */
-.container{display:flex;flex:1;overflow:hidden;}
-
-.sidebar{
-width:320px;
-overflow-y:auto;
-background:#0b1220;
-padding:10px;
-}
-
-.cat{
-padding:10px;
-margin:5px 0;
-background:var(--card);
-border-radius:10px;
+border-radius:6px;
 cursor:pointer;
 }
-
-/* MAIN */
-.main{flex:1;display:flex;flex-direction:column;}
-
-.player{
-height:340px;
-background:black;
-position:relative;
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
-video{width:100%;height:100%;object-fit:contain;}
-
-.live{
-position:absolute;
-top:10px;
-left:10px;
-background:red;
-padding:5px 10px;
-border-radius:20px;
-font-size:12px;
-}
-
-/* CHANNELS */
-.channels{
-flex:1;
-overflow-y:auto;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(230px,1fr));
-gap:10px;
-padding:10px;
-}
-
-.channel{
-background:var(--card);
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-position:relative;
-}
-
-.badge{
-position:absolute;
-top:8px;
-right:8px;
-padding:4px 8px;
-border-radius:20px;
-font-size:10px;
-}
-
-.free{background:var(--free);}
-.locked{background:var(--locked);}
-.premium{background:var(--premium);}
 </style>
 </head>
 
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-<div style="color:#00d4ff;font-weight:bold">📺 BTECH-TV DASHBOARD</div>
-
-<button onclick="setView('all')">All</button>
-<button onclick="setView('free')">Unlocked</button>
-<button onclick="setView('locked')">🔒 Locked</button>
-<button onclick="setView('premium')">💎 Premium</button>
-<button onclick="unlockAll()">🛡 Admin Unlock</button>
-<button onclick="shuffle()">🎲 Shuffle</button>
+<!-- LOGIN SCREEN -->
+<div class="login" id="login">
+<h2>🔐 BTECH-TV LOGIN</h2>
+<input id="user" placeholder="Username">
+<input id="pass" placeholder="Password" type="password">
+<button onclick="login()">Login</button>
 </div>
 
-<!-- LAYOUT -->
-<div class="container">
+<!-- APP -->
+<div class="app" id="app">
 
-<!-- SIDEBAR -->
-<div class="sidebar">
+<div class="sidebar" id="list"></div>
 
-<h3>🌍 Countries</h3>
-<div class="cat" onclick="loadCountry('Nigeria')">🇳🇬 Nigeria</div>
-<div class="cat" onclick="loadCountry('USA')">🇺🇸 USA</div>
-<div class="cat" onclick="loadCountry('UK')">🇬🇧 UK</div>
-<div class="cat" onclick="loadCountry('India')">🇮🇳 India</div>
-<div class="cat" onclick="loadCountry('France')">🇫🇷 France</div>
-<div class="cat" onclick="loadCountry('Germany')">🇩🇪 Germany</div>
-
-<h3>🎬 Categories</h3>
-<div class="cat">📰 News</div>
-<div class="cat">⚽ Sports</div>
-<div class="cat">🎬 Movies</div>
-<div class="cat">🎵 Music</div>
-<div class="cat">👶 Kids</div>
-
-<h3>🗣 Languages</h3>
-<div class="cat">🇬🇧 English</div>
-<div class="cat">🇪🇸 Spanish</div>
-<div class="cat">🇸🇦 Arabic</div>
-
-</div>
-
-<!-- MAIN -->
 <div class="main">
 
-<div class="player">
-<div class="live">🔴 LIVE</div>
+<div class="topbar">
+<button onclick="filter('all')">All</button>
+<button onclick="filter('free')">Free</button>
+<button onclick="filter('locked')">Locked</button>
+<button onclick="unlockVIP()">💎 Unlock VIP</button>
+<button onclick="logout()">Logout</button>
+</div>
+
 <video id="video" controls autoplay></video>
-</div>
-
-<div class="channels" id="list"></div>
 
 </div>
-
 </div>
 
 <script>
 
-let all = [];
-let filtered = [];
-let currentView = "all";
+let userRole = "guest";
+
+let channels = [
+{name:"News HD", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"free"},
+{name:"Sports Live", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"locked"},
+{name:"Movies VIP", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"premium"},
+{name:"Music TV", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"free"}
+];
+
+let filtered = [...channels];
 
 const video = document.getElementById("video");
 
-/* SAMPLE CHANNELS WITH LOCK SYSTEM */
-function loadData(){
-all = [
-{name:"News HD", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"free"},
-{name:"Sports Live", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"locked"},
-{name:"Movies Max", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"premium"},
-{name:"Music TV", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"free"},
-{name:"VIP Football", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"locked"}
-];
+/* LOGIN SYSTEM */
+function login(){
 
-filtered = [...all];
-render();
+let u = document.getElementById("user").value;
+let p = document.getElementById("pass").value;
+
+if(u === "admin" && p === "admin123"){
+userRole = "admin";
 }
 
-/* VIEW SYSTEM */
-function setView(type){
-currentView = type;
-
-if(type === "all") filtered = [...all];
-if(type === "free") filtered = all.filter(c=>c.type==="free");
-if(type === "locked") filtered = all.filter(c=>c.type==="locked");
-if(type === "premium") filtered = all.filter(c=>c.type==="premium");
-
-render();
+else if(u === "vip"){
+userRole = "vip";
 }
 
-/* ADMIN UNLOCK */
-function unlockAll(){
-all.forEach(c=>c.type="free");
-setView("all");
-alert("ALL CHANNELS UNLOCKED 🔓");
+else{
+userRole = "user";
+}
+
+localStorage.setItem("role", userRole);
+
+document.getElementById("login").style.display="none";
+document.getElementById("app").style.display="flex";
+
+render();
+
+}
+
+/* LOAD ROLE */
+function loadRole(){
+let r = localStorage.getItem("role");
+if(r){
+userRole = r;
+document.getElementById("login").style.display="none";
+document.getElementById("app").style.display="flex";
+render();
+}
 }
 
 /* RENDER */
 function render(){
-let box = document.getElementById("list");
-box.innerHTML = "";
 
-filtered.forEach((c,i)=>{
+let box = document.getElementById("list");
+box.innerHTML="";
+
+filtered.forEach((c)=>{
 
 let div = document.createElement("div");
-div.className="channel";
-
-let badgeClass = c.type;
+div.className="channel " + c.type;
 
 div.innerHTML = `
-<div><b>${c.name}</b></div>
-<span class="badge ${badgeClass}">
-${c.type.toUpperCase()}
-</span>
+<b>${c.name}</b><br>
+<small>${c.type.toUpperCase()}</small>
 `;
 
-div.onclick=()=>play(c);
+div.onclick = ()=>play(c);
 
 box.appendChild(div);
 
 });
+
 }
 
-/* PLAY */
+/* PLAY CONTROL */
 function play(c){
 
-if(c.type === "locked"){
-alert("🔒 This channel is LOCKED. Upgrade required.");
+// LOCK LOGIC
+if(c.type === "locked" && userRole !== "admin"){
+alert("🔒 Locked Channel - VIP Required");
+return;
+}
+
+if(c.type === "premium" && userRole !== "vip" && userRole !== "admin"){
+alert("💎 Premium Channel - Upgrade Required");
 return;
 }
 
 video.src = c.url;
 video.play();
+
 }
 
-/* FEATURES */
-function shuffle(){
-filtered.sort(()=>Math.random()-0.5);
+/* FILTERS */
+function filter(type){
+
+if(type === "all") filtered = channels;
+
+if(type === "free") filtered = channels.filter(c=>c.type==="free");
+
+if(type === "locked") filtered = channels.filter(c=>c.type==="locked");
+
 render();
+
 }
 
-function loadCountry(name){
-alert("Loading channels from " + name);
+/* VIP UNLOCK */
+function unlockVIP(){
+if(userRole === "admin"){
+channels.forEach(c=>{
+if(c.type === "locked") c.type="free";
+});
+alert("ALL LOCKED CHANNELS UNLOCKED 🔓");
+render();
+}else{
+alert("Admin Only Feature");
+}
 }
 
-/* INIT */
-loadData();
+/* LOGOUT */
+function logout(){
+localStorage.removeItem("role");
+location.reload();
+}
+
+loadRole();
 
 </script>
 
