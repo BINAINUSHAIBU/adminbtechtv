@@ -2,271 +2,438 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV LOGIN DASHBOARD</title>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BTECH-TV WORLD ULTRA MAX X</title>
 
 <style>
-body{
+
+:root{
+--bg:#050816;
+--panel:#111827;
+--card:#172033;
+--hover:#22304d;
+--accent:#00d4ff;
+--text:#fff;
+--free:#16a34a;
+--locked:#ef4444;
+--premium:#8b5cf6;
+}
+
+*{
 margin:0;
-font-family:Arial;
-background:#050816;
-color:white;
-display:flex;
-height:100vh;
-overflow:hidden;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
-/* LOGIN */
-.login{
-position:fixed;
-inset:0;
-display:flex;
-justify-content:center;
-align-items:center;
-background:#000;
-flex-direction:column;
-gap:10px;
-}
-
-.login input{
-padding:10px;
-width:200px;
-border:none;
-border-radius:8px;
-}
-
-.login button{
-padding:10px 20px;
-background:#00d4ff;
-border:none;
-border-radius:8px;
-cursor:pointer;
-}
-
-/* APP */
-.app{
-display:none;
-width:100%;
-height:100%;
-}
-
-/* SIDEBAR */
-.sidebar{
-width:250px;
-background:#111827;
-padding:10px;
-overflow:auto;
-}
-
-.channel{
-padding:10px;
-margin:5px 0;
-background:#172033;
-border-radius:8px;
-cursor:pointer;
-position:relative;
-}
-
-.locked{
-background:#ef4444;
-}
-
-.premium{
-background:#8b5cf6;
-}
-
-/* MAIN */
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-}
-
-video{
-width:100%;
-height:350px;
-background:black;
+body{
+background:var(--bg);
+color:var(--text);
 }
 
 .topbar{
 display:flex;
-gap:10px;
+gap:8px;
 padding:10px;
+overflow:auto;
 background:#0f172a;
+position:sticky;
+top:0;
+z-index:999;
 }
 
-button{
-padding:8px;
+.topbar button{
+padding:10px 14px;
 border:none;
-border-radius:6px;
+border-radius:10px;
+background:var(--card);
+color:white;
+cursor:pointer;
+white-space:nowrap;
+}
+
+.container{
+display:grid;
+grid-template-columns:320px 1fr;
+min-height:100vh;
+}
+
+.sidebar{
+background:#0b1220;
+padding:15px;
+overflow-y:auto;
+}
+
+.sidebar h3{
+color:var(--accent);
+margin:15px 0 10px;
+}
+
+.cat{
+background:var(--card);
+padding:12px;
+border-radius:10px;
+margin-bottom:8px;
 cursor:pointer;
 }
+
+.main{
+padding:15px;
+}
+
+.player{
+height:380px;
+background:black;
+border-radius:15px;
+display:flex;
+align-items:center;
+justify-content:center;
+position:relative;
+overflow:hidden;
+}
+
+.live{
+position:absolute;
+top:15px;
+left:15px;
+background:red;
+padding:8px 12px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+}
+
+.overlay{
+text-align:center;
+}
+
+.overlay h1{
+font-size:70px;
+}
+
+.now-playing{
+background:var(--panel);
+padding:15px;
+margin-top:10px;
+border-radius:12px;
+display:flex;
+justify-content:space-between;
+flex-wrap:wrap;
+gap:10px;
+}
+
+.controls{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.controls button{
+padding:10px;
+border:none;
+border-radius:10px;
+background:var(--card);
+color:white;
+cursor:pointer;
+}
+
+.search{
+margin-top:15px;
+}
+
+.search input{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#0f172a;
+color:white;
+}
+
+.channel-control{
+margin-top:20px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:15px;
+}
+
+.control-card{
+padding:20px;
+border-radius:15px;
+}
+
+.free{
+background:rgba(22,163,74,.15);
+border:1px solid var(--free);
+}
+
+.locked{
+background:rgba(239,68,68,.15);
+border:1px solid var(--locked);
+}
+
+.premium{
+background:rgba(139,92,246,.15);
+border:1px solid var(--premium);
+}
+
+.channels{
+margin-top:20px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+gap:12px;
+}
+
+.channel{
+background:var(--card);
+padding:15px;
+border-radius:12px;
+cursor:pointer;
+}
+
+.badge{
+display:inline-block;
+margin-top:10px;
+padding:5px 10px;
+border-radius:20px;
+font-size:11px;
+font-weight:bold;
+}
+
+.badge.free{
+background:var(--free);
+}
+
+.badge.locked{
+background:var(--locked);
+}
+
+.badge.premium{
+background:var(--premium);
+}
+
+@media(max-width:900px){
+
+.container{
+grid-template-columns:1fr;
+}
+
+.sidebar{
+max-height:350px;
+}
+
+.player{
+height:240px;
+}
+
+}
+
 </style>
 </head>
-
 <body>
 
-<!-- LOGIN SCREEN -->
-<div class="login" id="login">
-<h2>🔐 BTECH-TV LOGIN</h2>
-<input id="user" placeholder="Username">
-<input id="pass" placeholder="Password" type="password">
-<button onclick="login()">Login</button>
+<!-- TOPBAR -->
+
+<div class="topbar">
+
+<button>All</button>
+<button>⭐ Favorites</button>
+<button>🕘 Recent</button>
+<button>🚀 Ultra Feeds</button>
+<button>🌙 Theme</button>
+<button>⛶ Fullscreen</button>
+<button>🎲 Shuffle</button>
+<button>📺 Mini Player</button>
+<button>⏰ Sleep Timer</button>
+<button>📡 Scan</button>
+<button>⚡ Boost</button>
+<button>⬇ Export</button>
+<button>⚙ Admin</button>
+<button>🛡 Super Admin</button>
+<button>👥 User Manager</button>
+
 </div>
 
-<!-- APP -->
-<div class="app" id="app">
+<div class="container">
 
-<div class="sidebar" id="list"></div>
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h3>🌍 Countries</h3>
+
+<div class="cat">🇳🇬 Nigeria</div>
+<div class="cat">🇺🇸 USA</div>
+<div class="cat">🇬🇧 UK</div>
+<div class="cat">🇮🇳 India</div>
+<div class="cat">🇫🇷 France</div>
+<div class="cat">🇩🇪 Germany</div>
+<div class="cat">🇧🇷 Brazil</div>
+<div class="cat">🇿🇦 South Africa</div>
+<div class="cat">🇨🇦 Canada</div>
+<div class="cat">🇦🇺 Australia</div>
+<div class="cat">🇯🇵 Japan</div>
+<div class="cat">🇰🇷 South Korea</div>
+<div class="cat">🇨🇳 China</div>
+<div class="cat">🇪🇸 Spain</div>
+<div class="cat">🇮🇹 Italy</div>
+<div class="cat">🇹🇷 Turkey</div>
+<div class="cat">🇲🇽 Mexico</div>
+<div class="cat">🇦🇪 UAE</div>
+<div class="cat">🇸🇦 Saudi Arabia</div>
+<div class="cat">🇪🇬 Egypt</div>
+<div class="cat">🇦🇷 Argentina</div>
+<div class="cat">🇵🇰 Pakistan</div>
+<div class="cat">🇮🇩 Indonesia</div>
+<div class="cat">🇵🇭 Philippines</div>
+<div class="cat">🇦🇱 Albania</div>
+
+<h3>🎬 Categories</h3>
+
+<div class="cat">📰 News</div>
+<div class="cat">⚽ Sports</div>
+<div class="cat">🎬 Movies</div>
+<div class="cat">🎵 Music</div>
+<div class="cat">👶 Kids</div>
+<div class="cat">😂 Comedy</div>
+<div class="cat">📚 Documentary</div>
+<div class="cat">💼 Business</div>
+<div class="cat">🔬 Science</div>
+<div class="cat">✈ Travel</div>
+
+<h3>🗣 Languages</h3>
+
+<div class="cat">🇬🇧 English</div>
+<div class="cat">🇪🇸 Spanish</div>
+<div class="cat">🇸🇦 Arabic</div>
+<div class="cat">🇫🇷 French</div>
+<div class="cat">🇮🇳 Hindi</div>
+<div class="cat">🇨🇳 Chinese</div>
+<div class="cat">🇵🇹 Portuguese</div>
+
+<h3>🔥 Premium Features</h3>
+
+<div class="cat">📡 Scan Streams</div>
+<div class="cat">⚡ Speed Boost</div>
+<div class="cat">📺 Picture in Picture</div>
+<div class="cat">🗑 Clear Recents</div>
+<div class="cat">⏺ Record Mode</div>
+<div class="cat">🚀 Global Feeds</div>
+<div class="cat">🛠 Repair Streams</div>
+<div class="cat">🧠 Memory Optimizer</div>
+<div class="cat">🔒 User Manager</div>
+<div class="cat">🧠 Quiz Channels</div>
+<div class="cat">🔒 Locked Channels</div>
+<div class="cat">🔒 Assignment Channels</div>
+<div class="cat">🔒 Demo Test Version</div>
+<div class="cat">🚀 Extra Feeds</div>
+
+</div>
+
+<!-- MAIN -->
 
 <div class="main">
 
-<div class="topbar">
-<button onclick="filter('all')">All</button>
-<button onclick="filter('free')">Free</button>
-<button onclick="filter('locked')">Locked</button>
-<button onclick="unlockVIP()">💎 Unlock VIP</button>
-<button onclick="logout()">Logout</button>
+<div class="player">
+
+<div class="live">🔴 LIVE</div>
+
+<div class="overlay">
+<h1>🚀</h1>
+<p>Loading Ultra IPTV...</p>
 </div>
 
-<video id="video" controls autoplay></video>
-
-</div>
 </div>
 
-<script>
+<div class="now-playing">
 
-let userRole = "guest";
+<div>
+<h2>No Channel Selected</h2>
+<p>BTECH-TV WORLD ULTRA MAX X</p>
+</div>
 
-let channels = [
-{name:"News HD", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"free"},
-{name:"Sports Live", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"locked"},
-{name:"Movies VIP", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"premium"},
-{name:"Music TV", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8", type:"free"}
-];
+<div class="controls">
+<button>◀ Prev</button>
+<button>Next ▶</button>
+<button>📺 PiP</button>
+<button>🔗 Share</button>
+<button>🔊 Mute</button>
+</div>
 
-let filtered = [...channels];
+</div>
 
-const video = document.getElementById("video");
+<div class="search">
+<input type="text" placeholder="Search IPTV Channels...">
+</div>
 
-/* LOGIN SYSTEM */
-function login(){
+<!-- CHANNEL CONTROL -->
 
-let u = document.getElementById("user").value;
-let p = document.getElementById("pass").value;
+<div class="channel-control">
 
-if(u === "admin" && p === "admin123"){
-userRole = "admin";
-}
+<div class="control-card free">
+<h2>🟢 FREE CHANNELS</h2>
+<p>Always Playable</p>
+<p>No Restrictions</p>
+</div>
 
-else if(u === "vip"){
-userRole = "vip";
-}
+<div class="control-card locked">
+<h2>🔒 LOCKED CHANNELS</h2>
+<p>Blocked For Normal Users</p>
+<p>Admin Access Required</p>
+</div>
 
-else{
-userRole = "user";
-}
+<div class="control-card premium">
+<h2>💎 PREMIUM CHANNELS</h2>
+<p>VIP Or Admin Access Only</p>
+</div>
 
-localStorage.setItem("role", userRole);
+</div>
 
-document.getElementById("login").style.display="none";
-document.getElementById("app").style.display="flex";
+<!-- CHANNEL DASHBOARD -->
 
-render();
+<div class="channels">
 
-}
+<div class="channel">
+BBC News HD
+<br>
+<span class="badge free">FREE</span>
+</div>
 
-/* LOAD ROLE */
-function loadRole(){
-let r = localStorage.getItem("role");
-if(r){
-userRole = r;
-document.getElementById("login").style.display="none";
-document.getElementById("app").style.display="flex";
-render();
-}
-}
+<div class="channel">
+CNN International
+<br>
+<span class="badge free">FREE</span>
+</div>
 
-/* RENDER */
-function render(){
+<div class="channel">
+Admin Sports Feed
+<br>
+<span class="badge locked">LOCKED</span>
+</div>
 
-let box = document.getElementById("list");
-box.innerHTML="";
+<div class="channel">
+Super Admin Feed
+<br>
+<span class="badge locked">LOCKED</span>
+</div>
 
-filtered.forEach((c)=>{
+<div class="channel">
+Sky Sports UHD
+<br>
+<span class="badge premium">PREMIUM</span>
+</div>
 
-let div = document.createElement("div");
-div.className="channel " + c.type;
+<div class="channel">
+BeIN Sports VIP
+<br>
+<span class="badge premium">PREMIUM</span>
+</div>
 
-div.innerHTML = `
-<b>${c.name}</b><br>
-<small>${c.type.toUpperCase()}</small>
-`;
+</div>
 
-div.onclick = ()=>play(c);
+</div>
 
-box.appendChild(div);
-
-});
-
-}
-
-/* PLAY CONTROL */
-function play(c){
-
-// LOCK LOGIC
-if(c.type === "locked" && userRole !== "admin"){
-alert("🔒 Locked Channel - VIP Required");
-return;
-}
-
-if(c.type === "premium" && userRole !== "vip" && userRole !== "admin"){
-alert("💎 Premium Channel - Upgrade Required");
-return;
-}
-
-video.src = c.url;
-video.play();
-
-}
-
-/* FILTERS */
-function filter(type){
-
-if(type === "all") filtered = channels;
-
-if(type === "free") filtered = channels.filter(c=>c.type==="free");
-
-if(type === "locked") filtered = channels.filter(c=>c.type==="locked");
-
-render();
-
-}
-
-/* VIP UNLOCK */
-function unlockVIP(){
-if(userRole === "admin"){
-channels.forEach(c=>{
-if(c.type === "locked") c.type="free";
-});
-alert("ALL LOCKED CHANNELS UNLOCKED 🔓");
-render();
-}else{
-alert("Admin Only Feature");
-}
-}
-
-/* LOGOUT */
-function logout(){
-localStorage.removeItem("role");
-location.reload();
-}
-
-loadRole();
-
-</script>
+</div>
 
 </body>
 </html>
