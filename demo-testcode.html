@@ -1,103 +1,166 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV WORLD ULTRA MAX X - Enterprise IPTV Super Admin</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Functional IPTV Super Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
-body{margin:0;background:#050816;color:#fff;font-family:Arial,sans-serif}
-.header{padding:15px;background:#0f172a;display:flex;gap:10px;flex-wrap:wrap}
-.header button{padding:10px;border:0;border-radius:8px}
-.layout{display:grid;grid-template-columns:280px 1fr 320px;height:calc(100vh - 70px)}
-.sidebar,.right{background:#0b1220;overflow:auto;padding:15px}
-.center{padding:15px;overflow:auto}
-.monitor{height:320px;background:#000;border:2px solid #00d4ff;border-radius:16px;display:flex;align-items:center;justify-content:center}
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:15px 0}
-.card{background:#172033;padding:15px;border-radius:12px}
-.channels{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
-.channel{background:#172033;padding:12px;border-radius:12px}
-.actions button{margin:2px}
+body{margin:0;background:#08111f;color:#fff;font-family:Arial}
+.top{background:#111827;padding:12px;display:flex;gap:8px;flex-wrap:wrap}
+.btn{padding:8px 12px;border:0;border-radius:8px;cursor:pointer}
+.wrap{display:grid;grid-template-columns:260px 1fr 320px;min-height:100vh}
+.left,.right{background:#0f172a;padding:12px;overflow:auto}
+.main{padding:12px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.card{background:#172033;padding:12px;border-radius:12px}
+video{width:100%;height:320px;background:#000;border-radius:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:12px}
+.ch{background:#172033;padding:10px;border-radius:10px}
+input{width:100%;padding:8px;margin:5px 0;background:#111827;color:white;border:1px solid #333}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="header">
-<button>Dashboard</button>
-<button>Channels</button>
-<button>Movies</button>
-<button>Users</button>
-<button>Resellers</button>
-<button>Analytics</button>
-<button>Ads</button>
-<button>Wallet</button>
-<button>Coupons</button>
-<button>EPG</button>
-<button>Payments</button>
-<button>Super Admin</button>
+<div class="top">
+<button class="btn" onclick="exportData()">Backup</button>
+<button class="btn" onclick="lockAll()">Lock All</button>
+<button class="btn" onclick="unlockAll()">Unlock All</button>
+<button class="btn" onclick="premiumBatch()">Premium Batch</button>
 </div>
 
-<div class="layout">
-<div class="sidebar">
-<h3>Countries</h3>
-<p>All IPTV Countries</p>
-<h3>Categories</h3>
-<p>News, Sports, Movies, Music, Kids, Documentary</p>
-<h3>Languages</h3>
-<p>English, Arabic, French, Spanish, Hindi...</p>
+<div class="wrap">
+<div class="left">
+<h3>Playlist</h3>
+<input id="m3u" placeholder="M3U URL">
+<button class="btn" onclick="loadPlaylist()">Load M3U</button>
+
+<h3>Add User</h3>
+<input id="userName" placeholder="Username">
+<button class="btn" onclick="addUser()">Create User</button>
+<div id="users"></div>
 </div>
 
-<div class="center">
-<div class="monitor">
-<h1>📺 CENTER IPTV MONITOR</h1>
-</div>
-
+<div class="main">
 <div class="stats">
-<div class="card">Channels<br><h2>15,000+</h2></div>
-<div class="card">Locked<br><h2>1,250</h2></div>
-<div class="card">Unlocked<br><h2>13,750</h2></div>
-<div class="card">Users<br><h2>50,000+</h2></div>
-<div class="card">Revenue<br><h2>$250K</h2></div>
+<div class="card">Channels <h2 id="s1">0</h2></div>
+<div class="card">Locked <h2 id="s2">0</h2></div>
+<div class="card">Premium <h2 id="s3">0</h2></div>
+<div class="card">Users <h2 id="s4">0</h2></div>
 </div>
 
-<div class="channels">
-<div class="channel">
-<h3>ESPN HD</h3>
-<p>Status: 🔓 Unlocked</p>
-<div class="actions">
-<button>🔒 Lock</button>
-<button>🔓 Unlock</button>
-<button>♻ Restart</button>
-<button>✏ Edit</button>
-<button>🗑 Delete</button>
-</div>
-</div>
+<h3>IPTV Monitor</h3>
+<video id="video" controls autoplay></video>
 
-<div class="channel">
-<h3>Sky Sports</h3>
-<p>Status: 🔒 Locked</p>
-<div class="actions">
-<button>🔒 Lock</button>
-<button>🔓 Unlock</button>
-<button>♻ Restart</button>
-<button>✏ Edit</button>
-<button>🗑 Delete</button>
-</div>
-</div>
-</div>
+<div class="grid" id="channels"></div>
 </div>
 
 <div class="right">
-<h3>IPTV Control Center</h3>
-<button>Lock All</button><br><br>
-<button>Unlock All</button><br><br>
-<button>Enable All</button><br><br>
-<button>Disable All</button><br><br>
-<button>Scan Streams</button><br><br>
-<button>Repair Streams</button><br><br>
-<button>Backup System</button><br><br>
-<button>AI Optimizer</button><br><br>
-<button>Security Center</button>
+<h3>Monitoring</h3>
+<div class="card">CPU: 21%</div><br>
+<div class="card">RAM: 43%</div><br>
+<div class="card">Streams Online: <span id="online">0</span></div>
 </div>
 </div>
+
+<script>
+let channels=JSON.parse(localStorage.channels||'[]');
+let users=JSON.parse(localStorage.users||'[]');
+
+function save(){
+localStorage.channels=JSON.stringify(channels);
+localStorage.users=JSON.stringify(users);
+render();
+}
+
+async function loadPlaylist(){
+let url=document.getElementById('m3u').value;
+let text=await (await fetch(url)).text();
+channels=[];
+let lines=text.split('\n');
+for(let i=0;i<lines.length;i++){
+ if(lines[i].startsWith('#EXTINF')){
+  channels.push({
+   id:Date.now()+i,
+   name:lines[i].split(',').pop(),
+   url:lines[i+1]||'',
+   locked:false,
+   premium:false
+  });
+ }
+}
+save();
+}
+
+function play(url){
+let v=document.getElementById('video');
+if(Hls.isSupported() && url.includes('.m3u8')){
+ let hls=new Hls();
+ hls.loadSource(url);
+ hls.attachMedia(v);
+}else{
+ v.src=url;
+}
+}
+
+function toggleLock(id){
+let c=channels.find(x=>x.id===id);
+c.locked=!c.locked;
+save();
+}
+
+function togglePremium(id){
+let c=channels.find(x=>x.id===id);
+c.premium=!c.premium;
+save();
+}
+
+function lockAll(){channels.forEach(c=>c.locked=true);save();}
+function unlockAll(){channels.forEach(c=>c.locked=false);save();}
+function premiumBatch(){channels.forEach((c,i)=>{if(i%5===0)c.premium=true});save();}
+
+function addUser(){
+let n=document.getElementById('userName').value;
+if(!n)return;
+users.push({name:n});
+save();
+}
+
+function exportData(){
+let blob=new Blob([JSON.stringify({channels,users},null,2)],{type:'application/json'});
+let a=document.createElement('a');
+a.href=URL.createObjectURL(blob);
+a.download='iptv-backup.json';
+a.click();
+}
+
+function render(){
+document.getElementById('s1').innerText=channels.length;
+document.getElementById('s2').innerText=channels.filter(x=>x.locked).length;
+document.getElementById('s3').innerText=channels.filter(x=>x.premium).length;
+document.getElementById('s4').innerText=users.length;
+document.getElementById('online').innerText=channels.length;
+
+usersBox=document.getElementById('users');
+usersBox.innerHTML=users.map(u=>'<div class="card">'+u.name+'</div>').join('');
+
+let box=document.getElementById('channels');
+box.innerHTML='';
+channels.forEach(c=>{
+ let d=document.createElement('div');
+ d.className='ch';
+ d.innerHTML=`
+ <b>${c.name}</b><br><br>
+ Status: ${c.locked?'🔒 Locked':'🔓 Open'}<br>
+ ${c.premium?'💎 Premium':''}<br><br>
+ <button onclick="play('${c.url}')" class="btn">Play</button>
+ <button onclick="toggleLock(${c.id})" class="btn">Lock</button>
+ <button onclick="togglePremium(${c.id})" class="btn">Premium</button>`;
+ box.appendChild(d);
+});
+}
+render();
+</script>
 </body>
 </html>
