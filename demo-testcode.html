@@ -1,166 +1,504 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Functional IPTV Super Admin</title>
+<title>BTECH-TV WORLD ULTRA MAX X ENTERPRISE</title>
+
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
 <style>
-body{margin:0;background:#08111f;color:#fff;font-family:Arial}
-.top{background:#111827;padding:12px;display:flex;gap:8px;flex-wrap:wrap}
-.btn{padding:8px 12px;border:0;border-radius:8px;cursor:pointer}
-.wrap{display:grid;grid-template-columns:260px 1fr 320px;min-height:100vh}
-.left,.right{background:#0f172a;padding:12px;overflow:auto}
-.main{padding:12px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.card{background:#172033;padding:12px;border-radius:12px}
-video{width:100%;height:320px;background:#000;border-radius:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:12px}
-.ch{background:#172033;padding:10px;border-radius:10px}
-input{width:100%;padding:8px;margin:5px 0;background:#111827;color:white;border:1px solid #333}
-@media(max-width:900px){.wrap{grid-template-columns:1fr}}
+
+:root{
+--bg:#050816;
+--panel:#111827;
+--card:#172033;
+--hover:#22304d;
+--accent:#00d4ff;
+--success:#16a34a;
+--danger:#ef4444;
+--premium:#8b5cf6;
+--text:#fff;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+height:100vh;
+overflow:hidden;
+}
+
+/* TOPBAR */
+
+.topbar{
+height:60px;
+background:#0f172a;
+display:flex;
+align-items:center;
+gap:10px;
+padding:10px;
+overflow:auto;
+}
+
+.logo{
+font-size:22px;
+font-weight:bold;
+color:var(--accent);
+}
+
+.btn{
+padding:10px 14px;
+background:var(--card);
+border:none;
+color:white;
+border-radius:10px;
+cursor:pointer;
+}
+
+/* DASHBOARD */
+
+.dashboard{
+height:calc(100vh - 60px);
+display:grid;
+grid-template-columns:280px 1fr 340px;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+background:#0b1220;
+overflow:auto;
+padding:15px;
+}
+
+.sidebar h3{
+color:var(--accent);
+margin:15px 0;
+}
+
+.menu{
+padding:12px;
+background:var(--card);
+border-radius:10px;
+margin-bottom:10px;
+cursor:pointer;
+}
+
+/* CENTER */
+
+.center{
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(6,1fr);
+gap:10px;
+padding:10px;
+}
+
+.stat{
+background:var(--card);
+padding:15px;
+border-radius:12px;
+text-align:center;
+}
+
+.player-zone{
+position:relative;
+padding:10px;
+}
+
+.player{
+height:340px;
+background:black;
+border-radius:14px;
+overflow:hidden;
+position:relative;
+}
+
+.player video{
+width:100%;
+height:100%;
+}
+
+.live{
+position:absolute;
+top:10px;
+left:10px;
+background:red;
+padding:6px 12px;
+border-radius:20px;
+font-size:12px;
+}
+
+/* MINI MONITOR */
+
+.mini-monitor{
+position:absolute;
+right:20px;
+top:20px;
+width:220px;
+height:130px;
+border:2px solid var(--accent);
+background:black;
+border-radius:12px;
+overflow:hidden;
+z-index:100;
+}
+
+.mini-monitor video{
+width:100%;
+height:100%;
+}
+
+/* SEARCH */
+
+.search{
+padding:10px;
+}
+
+.search input{
+width:100%;
+padding:12px;
+background:#0f172a;
+color:white;
+border:none;
+border-radius:10px;
+}
+
+/* CHANNEL GRID */
+
+.channels{
+flex:1;
+overflow:auto;
+padding:10px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:12px;
+}
+
+.channel{
+background:var(--card);
+padding:12px;
+border-radius:12px;
+}
+
+.channel img{
+width:60px;
+height:60px;
+border-radius:10px;
+}
+
+.actions{
+display:flex;
+gap:5px;
+margin-top:10px;
+flex-wrap:wrap;
+}
+
+/* RIGHT PANEL */
+
+.right{
+background:#0b1220;
+overflow:auto;
+padding:15px;
+}
+
+.panel{
+background:var(--card);
+padding:15px;
+border-radius:12px;
+margin-bottom:15px;
+}
+
+/* SUPER ADMIN */
+
+.admin{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.95);
+display:none;
+justify-content:center;
+align-items:center;
+z-index:99999;
+}
+
+.admin-box{
+width:95%;
+max-width:1200px;
+background:#111827;
+padding:30px;
+border-radius:20px;
+}
+
+.admin-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+}
+
+@media(max-width:1200px){
+.dashboard{
+grid-template-columns:1fr;
+}
+}
+
 </style>
 </head>
+
 <body>
-<div class="top">
-<button class="btn" onclick="exportData()">Backup</button>
-<button class="btn" onclick="lockAll()">Lock All</button>
-<button class="btn" onclick="unlockAll()">Unlock All</button>
-<button class="btn" onclick="premiumBatch()">Premium Batch</button>
+
+<!-- TOPBAR -->
+
+<div class="topbar">
+
+<div class="logo">
+📺 BTECH-TV WORLD ULTRA MAX X
 </div>
 
-<div class="wrap">
-<div class="left">
-<h3>Playlist</h3>
-<input id="m3u" placeholder="M3U URL">
-<button class="btn" onclick="loadPlaylist()">Load M3U</button>
+<button class="btn" onclick="loadUltraFeeds()">🚀 Feeds</button>
+<button class="btn" onclick="toggleTheme()">🌙 Theme</button>
+<button class="btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
+<button class="btn" onclick="openSuperAdmin()">🛡 Super Admin</button>
+<button class="btn" onclick="backupSystem()">💾 Backup</button>
 
-<h3>Add User</h3>
-<input id="userName" placeholder="Username">
-<button class="btn" onclick="addUser()">Create User</button>
+</div>
+
+<div class="dashboard">
+
+<!-- LEFT SIDEBAR -->
+
+<div class="sidebar">
+
+<h3>🌍 Countries</h3>
+
+<div class="menu">🇳🇬 Nigeria</div>
+<div class="menu">🇺🇸 USA</div>
+<div class="menu">🇬🇧 UK</div>
+<div class="menu">🇮🇳 India</div>
+
+<h3>🎬 Categories</h3>
+
+<div class="menu">📰 News</div>
+<div class="menu">⚽ Sports</div>
+<div class="menu">🎬 Movies</div>
+
+<h3>🔥 Premium</h3>
+
+<div class="menu" onclick="showLocked()">
+🔒 Locked Channels
+</div>
+
+<div class="menu" onclick="showPremium()">
+💎 Premium Channels
+</div>
+
+</div>
+
+<!-- CENTER -->
+
+<div class="center">
+
+<div class="stats">
+
+<div class="stat">
+Channels
+<h2 id="totalChannels">0</h2>
+</div>
+
+<div class="stat">
+Locked
+<h2 id="lockedChannels">0</h2>
+</div>
+
+<div class="stat">
+Premium
+<h2 id="premiumChannels">0</h2>
+</div>
+
+<div class="stat">
+Users
+<h2 id="totalUsers">0</h2>
+</div>
+
+<div class="stat">
+Resellers
+<h2 id="totalResellers">0</h2>
+</div>
+
+<div class="stat">
+Online
+<h2 id="onlineStreams">0</h2>
+</div>
+
+</div>
+
+<div class="player-zone">
+
+<div class="player">
+
+<div class="live">🔴 LIVE</div>
+
+<video id="video" controls autoplay></video>
+
+<div class="mini-monitor">
+<video id="miniVideo" muted autoplay></video>
+</div>
+
+</div>
+
+</div>
+
+<div class="search">
+<input id="search" placeholder="Search IPTV Channels">
+</div>
+
+<div class="channels" id="channels"></div>
+
+</div>
+
+<!-- RIGHT PANEL -->
+
+<div class="right">
+
+<div class="panel">
+<h3>📡 Stream Monitoring</h3>
+<p>Online Streams: <span id="streamCount">0</span></p>
+<p>CPU Usage: 23%</p>
+<p>RAM Usage: 48%</p>
+</div>
+
+<div class="panel">
+<h3>👥 User Manager</h3>
+<input id="userName">
+<button class="btn" onclick="addUser()">Add User</button>
 <div id="users"></div>
 </div>
 
-<div class="main">
-<div class="stats">
-<div class="card">Channels <h2 id="s1">0</h2></div>
-<div class="card">Locked <h2 id="s2">0</h2></div>
-<div class="card">Premium <h2 id="s3">0</h2></div>
-<div class="card">Users <h2 id="s4">0</h2></div>
+<div class="panel">
+<h3>🤝 Reseller Manager</h3>
+<input id="resellerName">
+<button class="btn">Add Reseller</button>
 </div>
 
-<h3>IPTV Monitor</h3>
-<video id="video" controls autoplay></video>
-
-<div class="grid" id="channels"></div>
+<div class="panel">
+<h3>💰 Wallet System</h3>
+<p>Total Wallet Balance</p>
+<h2>$0.00</h2>
 </div>
 
-<div class="right">
-<h3>Monitoring</h3>
-<div class="card">CPU: 21%</div><br>
-<div class="card">RAM: 43%</div><br>
-<div class="card">Streams Online: <span id="online">0</span></div>
+<div class="panel">
+<h3>🎟 Coupon System</h3>
+<button class="btn">Generate Coupon</button>
 </div>
+
+<div class="panel">
+<h3>📊 Analytics</h3>
+<p>Total Views</p>
+<p>Premium Sales</p>
+<p>Revenue</p>
+</div>
+
+</div>
+
+</div>
+
+<!-- SUPER ADMIN -->
+
+<div class="admin" id="admin">
+
+<div class="admin-box">
+
+<h2>🛡 SUPER ADMIN CONTROL CENTER</h2>
+
+<div class="admin-grid">
+
+<button class="btn">📡 Scan Streams</button>
+<button class="btn">🛠 Repair Streams</button>
+<button class="btn">⚡ Speed Boost</button>
+<button class="btn">💎 Premium Batch</button>
+<button class="btn">🔒 Lock All</button>
+<button class="btn">🔓 Unlock All</button>
+<button class="btn">👥 User Manager</button>
+<button class="btn">🤝 Reseller Manager</button>
+<button class="btn">💳 Subscription Plans</button>
+<button class="btn">🎟 Coupon Manager</button>
+<button class="btn">💰 Wallet Manager</button>
+<button class="btn">📈 Analytics Dashboard</button>
+<button class="btn">📺 Channel Manager</button>
+<button class="btn">🎬 Movie Manager</button>
+<button class="btn">📡 Stream Monitoring</button>
+<button class="btn">💾 Backup System</button>
+
+</div>
+
+</div>
+
 </div>
 
 <script>
-let channels=JSON.parse(localStorage.channels||'[]');
-let users=JSON.parse(localStorage.users||'[]');
 
-function save(){
-localStorage.channels=JSON.stringify(channels);
-localStorage.users=JSON.stringify(users);
-render();
-}
-
-async function loadPlaylist(){
-let url=document.getElementById('m3u').value;
-let text=await (await fetch(url)).text();
-channels=[];
-let lines=text.split('\n');
-for(let i=0;i<lines.length;i++){
- if(lines[i].startsWith('#EXTINF')){
-  channels.push({
-   id:Date.now()+i,
-   name:lines[i].split(',').pop(),
-   url:lines[i+1]||'',
-   locked:false,
-   premium:false
-  });
- }
-}
-save();
-}
-
-function play(url){
-let v=document.getElementById('video');
-if(Hls.isSupported() && url.includes('.m3u8')){
- let hls=new Hls();
- hls.loadSource(url);
- hls.attachMedia(v);
-}else{
- v.src=url;
-}
-}
-
-function toggleLock(id){
-let c=channels.find(x=>x.id===id);
-c.locked=!c.locked;
-save();
-}
-
-function togglePremium(id){
-let c=channels.find(x=>x.id===id);
-c.premium=!c.premium;
-save();
-}
-
-function lockAll(){channels.forEach(c=>c.locked=true);save();}
-function unlockAll(){channels.forEach(c=>c.locked=false);save();}
-function premiumBatch(){channels.forEach((c,i)=>{if(i%5===0)c.premium=true});save();}
+let channels=[];
+let users=JSON.parse(localStorage.users||"[]");
 
 function addUser(){
-let n=document.getElementById('userName').value;
+let n=document.getElementById("userName").value;
 if(!n)return;
 users.push({name:n});
-save();
+localStorage.users=JSON.stringify(users);
+renderUsers();
 }
 
-function exportData(){
-let blob=new Blob([JSON.stringify({channels,users},null,2)],{type:'application/json'});
-let a=document.createElement('a');
+function renderUsers(){
+document.getElementById("users").innerHTML=
+users.map(u=>"<div>"+u.name+"</div>").join("");
+document.getElementById("totalUsers").innerText=users.length;
+}
+
+function openSuperAdmin(){
+document.getElementById("admin").style.display="flex";
+}
+
+function toggleFullscreen(){
+if(!document.fullscreenElement){
+document.documentElement.requestFullscreen();
+}else{
+document.exitFullscreen();
+}
+}
+
+function backupSystem(){
+
+const data={
+channels,
+users
+};
+
+const blob=new Blob(
+[JSON.stringify(data,null,2)],
+{type:'application/json'}
+);
+
+const a=document.createElement('a');
 a.href=URL.createObjectURL(blob);
-a.download='iptv-backup.json';
+a.download='btech-tv-backup.json';
 a.click();
+
 }
 
-function render(){
-document.getElementById('s1').innerText=channels.length;
-document.getElementById('s2').innerText=channels.filter(x=>x.locked).length;
-document.getElementById('s3').innerText=channels.filter(x=>x.premium).length;
-document.getElementById('s4').innerText=users.length;
-document.getElementById('online').innerText=channels.length;
+renderUsers();
 
-usersBox=document.getElementById('users');
-usersBox.innerHTML=users.map(u=>'<div class="card">'+u.name+'</div>').join('');
-
-let box=document.getElementById('channels');
-box.innerHTML='';
-channels.forEach(c=>{
- let d=document.createElement('div');
- d.className='ch';
- d.innerHTML=`
- <b>${c.name}</b><br><br>
- Status: ${c.locked?'🔒 Locked':'🔓 Open'}<br>
- ${c.premium?'💎 Premium':''}<br><br>
- <button onclick="play('${c.url}')" class="btn">Play</button>
- <button onclick="toggleLock(${c.id})" class="btn">Lock</button>
- <button onclick="togglePremium(${c.id})" class="btn">Premium</button>`;
- box.appendChild(d);
-});
-}
-render();
 </script>
+
 </body>
 </html>
