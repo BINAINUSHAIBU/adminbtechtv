@@ -3,59 +3,23 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>IPTV Pro Dashboard</title>
+<title>IPTV Business System Pro</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
 body{
 margin:0;
-font-family:Arial, sans-serif;
-background:#070b18;
+font-family:Arial;
+background:#060b18;
 color:#fff;
 display:flex;
 height:100vh;
-overflow:hidden;
 }
 
 .sidebar{
 width:320px;
 background:#0f172a;
-padding:15px;
+padding:12px;
 overflow-y:auto;
-}
-
-h2{
-font-size:16px;
-margin:10px 0;
-color:#38bdf8;
-}
-
-select,input{
-width:100%;
-padding:10px;
-margin:5px 0;
-border:none;
-border-radius:6px;
-outline:none;
-}
-
-.channel{
-padding:10px;
-margin:5px 0;
-background:#111c33;
-cursor:pointer;
-border-radius:6px;
-font-size:14px;
-transition:0.2s;
-display:flex;
-justify-content:space-between;
-}
-
-.channel:hover{
-background:#1e2a4a;
-}
-
-.channel small{
-color:#94a3b8;
 }
 
 .main{
@@ -65,28 +29,55 @@ flex-direction:column;
 }
 
 .topbar{
-padding:10px;
 background:#0f172a;
+padding:10px;
 display:flex;
-gap:10px;
+gap:8px;
 flex-wrap:wrap;
 }
 
 button{
 padding:8px 10px;
 border:none;
-border-radius:5px;
+border-radius:6px;
 cursor:pointer;
 background:#2563eb;
-color:white;
+color:#fff;
+font-size:12px;
+}
+
+button:hover{background:#1d4ed8;}
+
+input,select{
+width:100%;
+padding:8px;
+margin:5px 0;
+border-radius:6px;
+border:none;
+outline:none;
+}
+
+.channel{
+padding:10px;
+background:#111c33;
+margin:5px 0;
+border-radius:6px;
+cursor:pointer;
+display:flex;
+justify-content:space-between;
 font-size:13px;
 }
 
-button:hover{
-background:#1d4ed8;
+.channel:hover{background:#1e2a4a;}
+
+.badge{
+font-size:10px;
+background:#334155;
+padding:2px 6px;
+border-radius:5px;
 }
 
-.player{
+.videoBox{
 flex:1;
 background:black;
 display:flex;
@@ -99,46 +90,56 @@ width:100%;
 height:100%;
 }
 
-.badge{
-font-size:10px;
-padding:2px 6px;
-border-radius:4px;
-background:#334155;
+.sectionTitle{
+margin:10px 0 5px;
+font-size:13px;
+color:#38bdf8;
 }
 
-.searchBox{
-margin-top:10px;
+.hidden{display:none;}
+
+.loginBox{
+padding:20px;
 }
 
 </style>
 </head>
 <body>
 
+<!-- LOGIN -->
+<div id="login" class="sidebar">
+<h2>🔐 IPTV Login</h2>
+<input id="user" placeholder="Username" />
+<input id="pass" type="password" placeholder="Password" />
+<button onclick="login()">Login</button>
+</div>
+
+<!-- APP -->
+<div id="app" class="hidden" style="display:flex;width:100%;height:100%;">
+
 <div class="sidebar">
 <h2>🌍 Country</h2>
-<select id="countrySelect" onchange="loadChannels()">
+<select id="country" onchange="loadM3U()">
 <option value="ng">Nigeria</option>
 <option value="us">USA</option>
 <option value="gb">UK</option>
 <option value="in">India</option>
 <option value="za">South Africa</option>
-<option value="fr">France</option>
-<option value="de">Germany</option>
-<option value="br">Brazil</option>
 </select>
 
-<h2>📂 Category Filter</h2>
-<select id="categoryFilter" onchange="filterCategory()">
+<h2>📂 Playlist Manager</h2>
+<input id="m3uUrl" placeholder="Add M3U URL" />
+<button onclick="addPlaylist()">Add Playlist</button>
+
+<h2>📊 Categories</h2>
+<select id="category" onchange="filterCat()">
 <option value="all">All</option>
 <option value="Sports">Sports</option>
 <option value="News">News</option>
-<option value="Music">Music</option>
+<option value="Movies">Movies</option>
 <option value="Kids">Kids</option>
 <option value="Entertainment">Entertainment</option>
 </select>
-
-<h2>🔍 Search</h2>
-<input type="text" placeholder="Search channels..." onkeyup="searchChannel(this.value)" />
 
 <h2>📺 Channels</h2>
 <div id="channels"></div>
@@ -147,101 +148,113 @@ margin-top:10px;
 <div class="main">
 <div class="topbar">
 <button onclick="toggleFav()">⭐ Favorites</button>
-<button onclick="loadChannels()">🔄 Reload</button>
-<button onclick="clearPlayer()">⛔ Stop</button>
+<button onclick="toggleAdmin()">⚙ Admin</button>
+<button onclick="logout()">🚪 Logout</button>
 </div>
-<div class="player">
-<video id="video" controls autoplay></video>
+
+<div class="videoBox">
+<video id="video" controls></video>
 </div>
+</div>
+
 </div>
 
 <script>
-let allChannels = [];
-let filteredChannels = [];
-let favorites = JSON.parse(localStorage.getItem('fav') || '[]');
+let channels=[];
+let fav=JSON.parse(localStorage.getItem('fav')||'[]');
+let playlists=JSON.parse(localStorage.getItem('pls')||'[]');
+let isAdmin=false;
 
-async function loadChannels(){
-let country = document.getElementById('countrySelect').value;
-let url = `https://iptv-org.github.io/iptv/countries/${country}.m3u`;
+function login(){
+let u=document.getElementById('user').value;
+let p=document.getElementById('pass').value;
 
-let res = await fetch(url);
-let text = await res.text();
-parseM3U(text);
+if(u && p){
+document.getElementById('login').style.display='none';
+document.getElementById('app').classList.remove('hidden');
+loadM3U();
+}
 }
 
-function parseM3U(data){
-allChannels = [];
-let lines = data.split('\n');
-let name = '';
-let group = 'General';
+function logout(){location.reload();}
+
+async function loadM3U(){
+let country=document.getElementById('country').value;
+let url=`https://iptv-org.github.io/iptv/countries/${country}.m3u`;
+
+let res=await fetch(url);
+let text=await res.text();
+parse(text);
+}
+
+function addPlaylist(){
+let url=document.getElementById('m3uUrl').value;
+if(url){
+playlists.push(url);
+localStorage.setItem('pls',JSON.stringify(playlists));
+alert('Playlist added');
+}
+}
+
+function parse(data){
+channels=[];
+let lines=data.split('\n');
+let name='';
+let group='General';
 
 for(let i=0;i<lines.length;i++){
-if(lines[i].startsWith('#EXTINF')){
-name = lines[i].split(',')[1] || 'Unknown';
-let match = lines[i].match(/group-title="(.*?)"/);
-group = match ? match[1] : 'General';
+if(lines[i].includes('#EXTINF')){
+name=lines[i].split(',')[1]||'Unknown';
+let g=lines[i].match(/group-title="(.*?)"/);
+group=g?g[1]:'General';
 }else if(lines[i].startsWith('http')){
-allChannels.push({name,url:lines[i],group});
+channels.push({name,url:lines[i],group});
 }
 }
-filteredChannels = allChannels;
-renderChannels(allChannels);
+render(channels);
 }
 
-function renderChannels(list){
-let container = document.getElementById('channels');
-container.innerHTML = '';
+function render(list){
+let c=document.getElementById('channels');
+c.innerHTML='';
 
 list.forEach(ch=>{
-let div = document.createElement('div');
-div.className='channel';
-div.innerHTML = `<span>${ch.name}</span><small class='badge'>${ch.group}</small>`;
-div.onclick=()=>playChannel(ch.url);
-container.appendChild(div);
+let d=document.createElement('div');
+d.className='channel';
+d.innerHTML=`<span>${ch.name}</span><span class='badge'>${ch.group}</span>`;
+d.onclick=()=>play(ch.url);
+c.appendChild(d);
 });
 }
 
-function playChannel(url){
-let video = document.getElementById('video');
+function play(url){
+let v=document.getElementById('video');
+if(window.hls) window.hls.destroy();
 
 if(Hls.isSupported()){
-if(window.hls) window.hls.destroy();
-window.hls = new Hls();
+window.hls=new Hls();
 window.hls.loadSource(url);
-window.hls.attachMedia(video);
-}else{
-video.src = url;
-}
-video.play();
+window.hls.attachMedia(v);
+}else{v.src=url;}
+v.play();
 }
 
-function searchChannel(val){
-val = val.toLowerCase();
-let result = filteredChannels.filter(c=>c.name.toLowerCase().includes(val));
-renderChannels(result);
-}
-
-function filterCategory(){
-let cat = document.getElementById('categoryFilter').value;
-if(cat==='all'){
-filteredChannels = allChannels;
-}else{
-filteredChannels = allChannels.filter(c=>c.group.includes(cat));
-}
-renderChannels(filteredChannels);
+function filterCat(){
+let c=document.getElementById('category').value;
+if(c==='all') render(channels);
+else render(channels.filter(x=>x.group.includes(c)));
 }
 
 function toggleFav(){
-alert('Favorites system will be enabled in next upgrade');
+alert('Favorites feature upgrade coming next build');
 }
 
-function clearPlayer(){
-let video = document.getElementById('video');
-video.pause();
-video.src = '';
+function toggleAdmin(){
+isAdmin=!isAdmin;
+alert(isAdmin?'Admin Mode ON':'Admin Mode OFF');
 }
 
-loadChannels();
+loadM3U();
 </script>
 
 </body>
