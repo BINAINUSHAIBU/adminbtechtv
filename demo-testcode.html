@@ -2,26 +2,24 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Global IPTV Dashboard</title>
+<title>GLOBAL IPTV ONE PAGE SYSTEM</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
 margin:0;
 font-family:Arial;
-background:#0b0f1a;
-color:#fff;
+background:#0a0f1d;
+color:white;
 }
 
 header{
 padding:15px;
-background:#11182b;
+background:#111a33;
 display:flex;
 justify-content:space-between;
 align-items:center;
 }
-
-h1{font-size:18px;}
 
 .container{
 display:flex;
@@ -29,8 +27,8 @@ height:100vh;
 }
 
 .sidebar{
-width:250px;
-background:#0f1626;
+width:220px;
+background:#0f1730;
 padding:10px;
 overflow-y:auto;
 }
@@ -39,40 +37,43 @@ overflow-y:auto;
 width:100%;
 padding:10px;
 margin:5px 0;
-background:#1c2742;
-color:#fff;
 border:none;
+background:#1d2a55;
+color:white;
 cursor:pointer;
 border-radius:6px;
 }
 
 .sidebar button:hover{
-background:#2a3b66;
+background:#2c3f7a;
 }
 
 .main{
 flex:1;
-padding:20px;
+padding:15px;
 overflow-y:auto;
 }
 
 .card{
-background:#11182b;
-padding:15px;
-margin-bottom:10px;
+background:#141f3d;
+padding:12px;
+margin:10px 0;
 border-radius:10px;
 cursor:pointer;
 }
 
-video{
-width:100%;
-max-height:400px;
-background:#000;
-margin-top:10px;
-border-radius:10px;
+.card:hover{
+background:#1d2a55;
 }
 
-.search{
+video{
+width:100%;
+margin-top:10px;
+border-radius:10px;
+background:black;
+}
+
+input{
 width:100%;
 padding:10px;
 margin-bottom:10px;
@@ -85,26 +86,22 @@ border:none;
 <body>
 
 <header>
-<h1>🌍 Global IPTV Dashboard</h1>
-<div>Live Sports • Movies • TV</div>
+<h2>🌍 IPTV GLOBAL SYSTEM</h2>
+<div>Live TV • Sports • Movies</div>
 </header>
 
 <div class="container">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-
 <button onclick="loadChannels()">📺 Channels</button>
-<button onclick="loadSports()">🏆 Sports</button>
+<button onclick="loadSports()">⚽ Sports</button>
 <button onclick="loadMovies()">🎬 Movies</button>
-<button onclick="loadLiveMatches()">⚽ Live Matches</button>
-
+<button onclick="loadAdmin()">⚙ Admin</button>
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
-<input class="search" placeholder="Search channels..." onkeyup="searchChannel(this.value)">
+<input placeholder="Search..." onkeyup="search(this.value)">
 
 <div id="content"></div>
 
@@ -115,106 +112,135 @@ border:none;
 
 <script>
 
-const API = "https://api.globaliptv.com/v1";
+////////////////////////////////////////////////////
+// FAKE DATABASE (MOCK API)
+////////////////////////////////////////////////////
 
-let channelsData = [];
+const DB = {
+channels:[
+{id:1,name:"Sports HD",category:"Sports"},
+{id:2,name:"Movie Max",category:"Movies"},
+{id:3,name:"News 24",category:"News"}
+],
 
-// LOAD CHANNELS
-async function loadChannels(){
-let res = await fetch(API + "/channels");
-channelsData = await res.json();
-render(channelsData);
+sports:[
+{home:"Arsenal",away:"Chelsea",status:"LIVE",minute:"65"},
+{home:"Madrid",away:"Barca",status:"UPCOMING"}
+],
+
+movies:[
+{title:"Avengers Endgame",year:2019},
+{title:"Fast X",year:2023}
+]
+};
+
+let current = [];
+
+////////////////////////////////////////////////////
+// CHANNELS
+////////////////////////////////////////////////////
+
+function loadChannels(){
+current = DB.channels;
+render(current,"channel");
 }
 
+////////////////////////////////////////////////////
+// SPORTS
+////////////////////////////////////////////////////
+
+function loadSports(){
+let html = "<h3>⚽ Live Sports</h3>";
+DB.sports.forEach(m=>{
+html += `
+<div class="card">
+${m.home} vs ${m.away}<br>
+${m.status} ${m.minute||""}
+</div>`;
+});
+document.getElementById("content").innerHTML = html;
+}
+
+////////////////////////////////////////////////////
+// MOVIES
+////////////////////////////////////////////////////
+
+function loadMovies(){
+let html = "<h3>🎬 Movies</h3>";
+DB.movies.forEach(m=>{
+html += `
+<div class="card">
+${m.title} (${m.year})
+</div>`;
+});
+document.getElementById("content").innerHTML = html;
+}
+
+////////////////////////////////////////////////////
+// ADMIN PANEL
+////////////////////////////////////////////////////
+
+function loadAdmin(){
+document.getElementById("content").innerHTML = `
+<h3>⚙ Admin Panel</h3>
+
+<div class="card">Users: 1200</div>
+<div class="card">Active Streams: 45</div>
+<div class="card">Revenue: $5,000</div>
+
+<button onclick="addChannel()">+ Add Channel</button>
+`;
+}
+
+function addChannel(){
+let name = prompt("Channel Name");
+if(name){
+DB.channels.push({id:Date.now(),name,category:"Custom"});
+alert("Channel Added");
+loadChannels();
+}
+}
+
+////////////////////////////////////////////////////
+// RENDER
+////////////////////////////////////////////////////
+
+function render(data,type){
+let html = "<h3>📺 Channels</h3>";
+
+data.forEach(c=>{
+html += `
+<div class="card" onclick="play('${c.id || c.name}')">
+${c.name} - ${c.category}
+</div>`;
+});
+
+document.getElementById("content").innerHTML = html;
+}
+
+////////////////////////////////////////////////////
+// STREAM PLAYER (DEMO HLS)
+////////////////////////////////////////////////////
+
+function play(id){
+document.getElementById("player").src =
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+
+document.getElementById("player").play();
+}
+
+////////////////////////////////////////////////////
 // SEARCH
-function searchChannel(value){
-let filtered = channelsData.filter(c =>
-c.name.toLowerCase().includes(value.toLowerCase())
+////////////////////////////////////////////////////
+
+function search(q){
+let filtered = DB.channels.filter(c=>
+c.name.toLowerCase().includes(q.toLowerCase())
 );
 render(filtered);
 }
 
-// RENDER CHANNELS
-function render(data){
-let html = "";
-data.forEach(c=>{
-html += `
-<div class="card" onclick="playStream('${c.id}')">
-<h3>${c.name}</h3>
-<p>${c.category || "General"} • ${c.country || ""}</p>
-</div>
-`;
-});
-document.getElementById("content").innerHTML = html;
-}
-
-// PLAY STREAM
-async function playStream(id){
-let res = await fetch(API + "/streams/" + id);
-let data = await res.json();
-
-document.getElementById("player").src = data.stream_url;
-document.getElementById("player").play();
-}
-
-// SPORTS
-async function loadSports(){
-let res = await fetch(API + "/sports/live");
-let data = await res.json();
-
-let html = "<h2>⚽ Live Sports</h2>";
-
-data.forEach(m=>{
-html += `
-<div class="card">
-<h3>${m.home} vs ${m.away}</h3>
-<p>${m.league} • ${m.status}</p>
-</div>
-`;
-});
-
-document.getElementById("content").innerHTML = html;
-}
-
-// MOVIES
-async function loadMovies(){
-let res = await fetch(API + "/movies");
-let data = await res.json();
-
-let html = "<h2>🎬 Movies</h2>";
-
-data.forEach(m=>{
-html += `
-<div class="card">
-<h3>${m.title}</h3>
-<p>${m.year || ""}</p>
-</div>
-`;
-});
-
-document.getElementById("content").innerHTML = html;
-}
-
-// LIVE MATCHES
-async function loadLiveMatches(){
-let res = await fetch(API + "/sports/matches");
-let data = await res.json();
-
-let html = "<h2>🏆 Live Matches</h2>";
-
-data.forEach(m=>{
-html += `
-<div class="card">
-<h3>${m.home} vs ${m.away}</h3>
-<p>${m.status} • ${m.minute || ""}</p>
-</div>
-`;
-});
-
-document.getElementById("content").innerHTML = html;
-}
-
-// AUTO LOAD
+// INIT
 loadChannels();
 
 </script>
