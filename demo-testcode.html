@@ -1,276 +1,456 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Enterprise V5 Ultimate Control Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Enterprise IPTV Ultra Max</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+
 :root{
-  --bg:#050816;
-  --panel:#0b1224;
-  --card:#0f1a33;
-  --accent:#00e5ff;
-  --danger:#ff3b3b;
-  --ok:#00ff9d;
-  --text:#e6f0ff;
-  --muted:#7a8bb8;
+--bg:#050816;
+--panel:#0b1224;
+--card:#111b34;
+--accent:#00e5ff;
+--text:#fff;
 }
 
-*{box-sizing:border-box;font-family:Arial, sans-serif;}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
 
 body{
-  margin:0;
-  background:var(--bg);
-  color:var(--text);
+background:var(--bg);
+color:var(--text);
+height:100vh;
+overflow:hidden;
 }
 
-/* HEADER */
 header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:15px 20px;
-  background:linear-gradient(90deg,#06102a,#0b1a3a);
-  border-bottom:1px solid #1d2a4d;
+height:60px;
+background:#08142f;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 20px;
+font-weight:bold;
 }
 
-header h1{
-  font-size:18px;
-  margin:0;
-  color:var(--accent);
+.wrapper{
+display:grid;
+grid-template-columns:250px 1fr 300px;
+height:calc(100vh - 60px);
 }
 
-/* LAYOUT */
-.container{
-  display:grid;
-  grid-template-columns:250px 1fr 320px;
-  height:calc(100vh - 60px);
+.sidebar,
+.right{
+background:var(--panel);
+overflow:auto;
+padding:10px;
 }
 
-/* SIDEBAR */
-.sidebar{
-  background:var(--panel);
-  padding:15px;
-  overflow:auto;
-  border-right:1px solid #1d2a4d;
-}
-
-.menu-item{
-  padding:10px;
-  margin-bottom:8px;
-  background:var(--card);
-  border-radius:8px;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.menu-item:hover{
-  background:#13244a;
-}
-
-/* MAIN */
 .main{
-  padding:15px;
-  overflow:auto;
+padding:10px;
+overflow:auto;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:12px;
+.player{
+height:350px;
+background:#000;
+border-radius:10px;
+overflow:hidden;
+margin-bottom:10px;
+}
+
+video{
+width:100%;
+height:100%;
+}
+
+.menu{
+padding:12px;
+background:var(--card);
+margin-bottom:8px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.menu:hover{
+background:#162447;
 }
 
 .card{
-  background:var(--card);
-  padding:12px;
-  border-radius:10px;
-  border:1px solid #1d2a4d;
+background:var(--card);
+padding:12px;
+border-radius:10px;
+margin-bottom:10px;
 }
 
-.status{
-  font-size:12px;
-  margin-top:5px;
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+gap:10px;
 }
 
-.ok{color:var(--ok);}
-.bad{color:var(--danger);}
-
-/* PLAYER */
-.player-box{
-  background:#000;
-  height:220px;
-  border-radius:10px;
-  overflow:hidden;
-  margin-bottom:15px;
+button{
+padding:10px;
+border:none;
+background:var(--accent);
+border-radius:8px;
+cursor:pointer;
+width:100%;
+margin-top:8px;
 }
 
-/* RIGHT PANEL */
+input{
+width:100%;
+padding:12px;
+margin:10px 0;
+border:none;
+border-radius:8px;
+}
+
+.stat{
+padding:15px;
+background:var(--card);
+border-radius:10px;
+margin-bottom:10px;
+text-align:center;
+}
+
+@media(max-width:900px){
+
+.wrapper{
+grid-template-columns:1fr;
+}
+
+.sidebar,
 .right{
-  background:var(--panel);
-  padding:15px;
-  border-left:1px solid #1d2a4d;
-  overflow:auto;
+display:none;
 }
 
-.button{
-  padding:10px;
-  background:var(--accent);
-  color:#000;
-  border:none;
-  width:100%;
-  margin-bottom:10px;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:bold;
 }
 
-.locked{
-  background:#2a0b0b !important;
-  color:#ff8080;
-}
-
-.small{
-  font-size:12px;
-  color:var(--muted);
-}
 </style>
 </head>
-
 <body>
 
 <header>
-  <h1>🚀 ENTERPRISE V5 ULTIMATE CONTROL DASHBOARD</h1>
-  <div class="small">LIVE SYSTEM • SUPER ADMIN MODE</div>
+
+<div>🌍 Enterprise IPTV Ultra Max</div>
+
+<div>SUPER ADMIN</div>
+
 </header>
 
-<div class="container">
+<div class="wrapper">
 
-  <!-- SIDEBAR -->
-  <div class="sidebar">
-    <div class="menu-item">📊 Dashboard</div>
-    <div class="menu-item">📡 Live Streams</div>
-    <div class="menu-item">🎬 Movies</div>
-    <div class="menu-item">📺 Series</div>
-    <div class="menu-item">👥 Users</div>
-    <div class="menu-item">💳 Resellers</div>
-    <div class="menu-item">🔐 Security</div>
-    <div class="menu-item">⚙ Settings</div>
-  </div>
+<!-- LEFT -->
 
-  <!-- MAIN -->
-  <div class="main">
+<div class="sidebar">
 
-    <!-- PLAYER -->
-    <div class="player-box">
-      <video id="video" controls style="width:100%;height:100%;"></video>
-    </div>
+<h3>Countries</h3>
 
-    <div class="grid">
+<div id="countryList"></div>
 
-      <div class="card">
-        <h3>Live Channels</h3>
-        <div class="status ok">● ONLINE: 1,248</div>
-      </div>
+</div>
 
-      <div class="card">
-        <h3>Locked Channels</h3>
-        <div class="status bad">● RESTRICTED: 312</div>
-      </div>
+<!-- CENTER -->
 
-      <div class="card">
-        <h3>Active Users</h3>
-        <div class="status ok">● CONNECTED: 8,921</div>
-      </div>
+<div class="main">
 
-      <div class="card">
-        <h3>Server Status</h3>
-        <div class="status ok">● STABLE (99.9%)</div>
-      </div>
+<div class="player">
 
-    </div>
+<video id="video" controls autoplay></video>
 
-    <h3 style="margin-top:20px;">📡 Channel List</h3>
+</div>
 
-    <div class="grid">
+<input
+id="search"
+placeholder="Search channels..."
+onkeyup="searchChannels()">
 
-      <div class="card">
-        CNN NEWS
-        <div class="status ok">UNLOCKED</div>
-        <button class="button" onclick="playStream('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">PLAY</button>
-      </div>
+<div class="grid">
 
-      <div class="card">
-        SPORTS HD
-        <div class="status ok">UNLOCKED</div>
-        <button class="button" onclick="playStream('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">PLAY</button>
-      </div>
+<div class="card">
+<h3>Live Channels</h3>
+<p id="liveCount">0</p>
+</div>
 
-      <div class="card">
-        MOVIE PREMIUM
-        <div class="status bad">LOCKED</div>
-        <button class="button locked">UNLOCKED REQUIRED</button>
-      </div>
+<div class="card">
+<h3>Favorites</h3>
+<p id="favCount">0</p>
+</div>
 
-      <div class="card">
-        MUSIC LIVE
-        <div class="status ok">UNLOCKED</div>
-        <button class="button" onclick="playStream('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">PLAY</button>
-      </div>
+<div class="card">
+<h3>Countries</h3>
+<p id="countryCount">0</p>
+</div>
 
-    </div>
+<div class="card">
+<h3>Users</h3>
+<p>Admin</p>
+</div>
 
-  </div>
+</div>
 
-  <!-- RIGHT PANEL -->
-  <div class="right">
+<br>
 
-    <h3>🔐 Super Control</h3>
+<h2>Channels</h2>
 
-    <button class="button">Add Channel</button>
-    <button class="button">Add Movie</button>
-    <button class="button">Add User</button>
-    <button class="button">Add Reseller</button>
-    <button class="button">Analytics</button>
+<div id="channels"></div>
 
-    <h3>⚡ System Tools</h3>
+</div>
 
-    <button class="button">Stream Monitor</button>
-    <button class="button">EPG Manager</button>
-    <button class="button">Wallet System</button>
-    <button class="button">Ads Manager</button>
+<!-- RIGHT -->
 
-    <h3>🛡 Security Panel</h3>
+<div class="right">
 
-    <button class="button">IP Block List</button>
-    <button class="button">Device Control</button>
-    <button class="button">Login Tracker</button>
+<div class="stat">
+<h3>Admin Tools</h3>
+</div>
 
-  </div>
+<button onclick="backup()">Backup</button>
+
+<button onclick="toggleFullscreen()">
+Fullscreen
+</button>
+
+<button onclick="loadFavorites()">
+Favorites
+</button>
+
+<button onclick="clearFavorites()">
+Clear Favorites
+</button>
+
+</div>
 
 </div>
 
 <script>
-let video = document.getElementById("video");
+
+const CHANNELS={
+
+Nigeria:[
+{
+name:"NTA",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+},
+{
+name:"Channels TV",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+}
+],
+
+USA:[
+{
+name:"USA News",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+}
+],
+
+UK:[
+{
+name:"UK Sports",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+}
+],
+
+Canada:[
+{
+name:"Canada TV",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+}
+],
+
+India:[
+{
+name:"Bollywood TV",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+}
+]
+
+};
+
+let hls;
+let current=[];
+
+function init(){
+
+let c='';
+
+Object.keys(CHANNELS).forEach(country=>{
+
+c+=`
+<div class="menu"
+onclick="loadCountry('${country}')">
+${country}
+</div>
+`;
+
+});
+
+countryList.innerHTML=c;
+
+countryCount.innerText=
+Object.keys(CHANNELS).length;
+
+}
+
+function loadCountry(country){
+
+current=CHANNELS[country];
+
+renderChannels(current);
+
+}
+
+function renderChannels(arr){
+
+liveCount.innerText=arr.length;
+
+let html='';
+
+arr.forEach(ch=>{
+
+html+=`
+
+<div class="card">
+
+<h3>${ch.name}</h3>
+
+<button onclick="playStream('${ch.url}')">
+Play
+</button>
+
+<button onclick="favorite('${ch.name}')">
+Favorite
+</button>
+
+</div>
+
+`;
+
+});
+
+channels.innerHTML=html;
+
+}
 
 function playStream(url){
-  if(Hls.isSupported()){
-    let hls = new Hls();
-    hls.loadSource(url);
-    hls.attachMedia(video);
-    hls.on(Hls.Events.MANIFEST_PARSED, function(){
-      video.play();
-    });
-  } else if(video.canPlayType('application/vnd.apple.mpegurl')){
-    video.src = url;
-    video.play();
-  } else {
-    alert("HLS not supported");
-  }
+
+const video=
+document.getElementById('video');
+
+if(Hls.isSupported()){
+
+if(hls) hls.destroy();
+
+hls=new Hls();
+
+hls.loadSource(url);
+
+hls.attachMedia(video);
+
+}else{
+
+video.src=url;
+
 }
+
+}
+
+function favorite(name){
+
+let f=
+JSON.parse(
+localStorage.getItem('favs')||'[]'
+);
+
+if(!f.includes(name))
+f.push(name);
+
+localStorage.setItem(
+'favs',
+JSON.stringify(f)
+);
+
+favCount.innerText=f.length;
+
+}
+
+function loadFavorites(){
+
+let f=
+JSON.parse(
+localStorage.getItem('favs')||'[]'
+);
+
+alert(f.join("\n"));
+
+}
+
+function clearFavorites(){
+
+localStorage.removeItem('favs');
+
+favCount.innerText=0;
+
+}
+
+function searchChannels(){
+
+let q=
+search.value.toLowerCase();
+
+renderChannels(
+current.filter(x=>
+x.name.toLowerCase().includes(q)
+)
+);
+
+}
+
+function backup(){
+
+let data=
+JSON.stringify(CHANNELS);
+
+let blob=
+new Blob([data]);
+
+let a=
+document.createElement('a');
+
+a.href=
+URL.createObjectURL(blob);
+
+a.download='iptv_backup.json';
+
+a.click();
+
+}
+
+function toggleFullscreen(){
+
+if(!document.fullscreenElement)
+document.documentElement.requestFullscreen();
+else
+document.exitFullscreen();
+
+}
+
+init();
+
 </script>
 
 </body>
 </html>
+```
