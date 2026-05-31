@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Church Hosting Super Admin System</title>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<meta charset="UTF-8">
+<title>Global IPTV Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
 margin:0;
 font-family:Arial;
-background:#0b1220;
+background:#0b0f1a;
 color:#fff;
 }
 
 header{
-background:#111a2e;
 padding:15px;
-font-size:20px;
-font-weight:bold;
-text-align:center;
+background:#11182b;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
+
+h1{font-size:18px;}
 
 .container{
 display:flex;
@@ -29,311 +29,193 @@ height:100vh;
 }
 
 .sidebar{
-width:260px;
-background:#0f1a33;
-padding:15px;
-overflow:auto;
+width:250px;
+background:#0f1626;
+padding:10px;
+overflow-y:auto;
 }
 
 .sidebar button{
 width:100%;
 padding:10px;
 margin:5px 0;
+background:#1c2742;
+color:#fff;
 border:none;
 cursor:pointer;
-background:#1d2b4a;
-color:white;
-border-radius:5px;
+border-radius:6px;
 }
 
 .sidebar button:hover{
-background:#2d4370;
+background:#2a3b66;
 }
 
 .main{
 flex:1;
 padding:20px;
-overflow:auto;
+overflow-y:auto;
 }
 
 .card{
-background:#141f38;
+background:#11182b;
 padding:15px;
 margin-bottom:10px;
 border-radius:10px;
+cursor:pointer;
 }
 
-input, select{
+video{
+width:100%;
+max-height:400px;
+background:#000;
+margin-top:10px;
+border-radius:10px;
+}
+
+.search{
 width:100%;
 padding:10px;
-margin:5px 0;
-border-radius:5px;
+margin-bottom:10px;
+border-radius:6px;
 border:none;
 }
-
-.btn{
-padding:10px;
-background:#2e6bff;
-border:none;
-color:white;
-cursor:pointer;
-border-radius:5px;
-margin-top:5px;
-}
-
-.btn-danger{background:red;}
-.btn-green{background:green;}
-.btn-yellow{background:orange;}
-
-.small{
-font-size:12px;
-opacity:0.7;
-}
-
-.hidden{display:none;}
 </style>
 </head>
 
 <body>
 
-<header>⛪ CHURCH HOSTING SUPER ADMIN CONTROL PANEL</header>
+<header>
+<h1>🌍 Global IPTV Dashboard</h1>
+<div>Live Sports • Movies • TV</div>
+</header>
 
 <div class="container">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<button onclick="show('dashboard')">Dashboard</button>
-<button onclick="show('churches')">Church Management</button>
-<button onclick="show('channels')">Channel Manager</button>
-<button onclick="show('streams')">Live Streams</button>
-<button onclick="show('controls')">Super Controls</button>
-<button onclick="resetSystem()" class="btn-danger">RESET SYSTEM</button>
+
+<button onclick="loadChannels()">📺 Channels</button>
+<button onclick="loadSports()">🏆 Sports</button>
+<button onclick="loadMovies()">🎬 Movies</button>
+<button onclick="loadLiveMatches()">⚽ Live Matches</button>
+
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-<!-- DASHBOARD -->
-<div id="dashboard" class="card">
-<h2>📊 Dashboard</h2>
-<p>Total Churches: <span id="cCount">0</span></p>
-<p>Total Channels: <span id="chCount">0</span></p>
-<p>Blocked Items: <span id="bCount">0</span></p>
-</div>
+<input class="search" placeholder="Search channels..." onkeyup="searchChannel(this.value)">
 
-<!-- CHURCHES -->
-<div id="churches" class="card hidden">
-<h2>🏛 Church Management</h2>
+<div id="content"></div>
 
-<input id="churchName" placeholder="Church Name"/>
-<input id="churchLocation" placeholder="Location (Nigeria etc.)"/>
-
-<button class="btn" onclick="addChurch()">Add Church</button>
-
-<div id="churchList"></div>
-</div>
-
-<!-- CHANNELS -->
-<div id="channels" class="card hidden">
-<h2>📺 Channel Manager</h2>
-
-<select id="churchSelect"></select>
-<input id="channelName" placeholder="Channel Name"/>
-<input id="channelStream" placeholder="Stream URL (HLS / YouTube embed)"/>
-
-<button class="btn" onclick="addChannel()">Create Channel</button>
-
-<div id="channelList"></div>
-</div>
-
-<!-- STREAMS -->
-<div id="streams" class="card hidden">
-<h2>📡 Live Stream Tester</h2>
-
-<input id="testStream" placeholder="Enter stream URL"/>
-<button class="btn" onclick="playStream()">Play</button>
-
-<video id="video" controls style="width:100%;margin-top:10px;"></video>
-</div>
-
-<!-- CONTROLS -->
-<div id="controls" class="card hidden">
-<h2>🛠 Super Admin Controls</h2>
-
-<button class="btn btn-green" onclick="toggleSpeed()">⚡ Speed Boost</button>
-<button class="btn btn-yellow" onclick="restartSystem()">♻ Restart System</button>
-<button class="btn btn-danger" onclick="shutdown()">⛔ Shutdown System</button>
-
-<p class="small">Controls simulate global IPTV/network behavior</p>
-</div>
+<video id="player" controls></video>
 
 </div>
 </div>
 
 <script>
 
-let churches = JSON.parse(localStorage.getItem("churches") || "[]");
+const API = "https://api.globaliptv.com/v1";
 
-function save(){
-localStorage.setItem("churches", JSON.stringify(churches));
-updateUI();
+let channelsData = [];
+
+// LOAD CHANNELS
+async function loadChannels(){
+let res = await fetch(API + "/channels");
+channelsData = await res.json();
+render(channelsData);
 }
 
-function show(id){
-document.querySelectorAll(".card").forEach(c=>c.classList.add("hidden"));
-document.getElementById(id).classList.remove("hidden");
+// SEARCH
+function searchChannel(value){
+let filtered = channelsData.filter(c =>
+c.name.toLowerCase().includes(value.toLowerCase())
+);
+render(filtered);
 }
 
-function addChurch(){
-let name = churchName.value;
-let loc = churchLocation.value;
-
-if(!name) return alert("Enter church name");
-
-churches.push({
-name,
-loc,
-blocked:false,
-channels:[]
-});
-
-save();
-renderChurches();
-}
-
-function renderChurches(){
+// RENDER CHANNELS
+function render(data){
 let html = "";
-churches.forEach((c,i)=>{
+data.forEach(c=>{
 html += `
-<div class="card">
+<div class="card" onclick="playStream('${c.id}')">
 <h3>${c.name}</h3>
-<p>${c.loc}</p>
-<p>Status: ${c.blocked ? "🔴 Blocked" : "🟢 Active"}</p>
-
-<button class="btn btn-danger" onclick="toggleChurch(${i})">Block/Unblock</button>
-</div>`;
+<p>${c.category || "General"} • ${c.country || ""}</p>
+</div>
+`;
 });
-churchList.innerHTML = html;
-updateChurchDropdown();
+document.getElementById("content").innerHTML = html;
 }
 
-function toggleChurch(i){
-churches[i].blocked = !churches[i].blocked;
-save();
-renderChurches();
+// PLAY STREAM
+async function playStream(id){
+let res = await fetch(API + "/streams/" + id);
+let data = await res.json();
+
+document.getElementById("player").src = data.stream_url;
+document.getElementById("player").play();
 }
 
-function updateChurchDropdown(){
-churchSelect.innerHTML = "";
-churches.forEach((c,i)=>{
-let opt = document.createElement("option");
-opt.value = i;
-opt.textContent = c.name;
-churchSelect.appendChild(opt);
-});
-}
+// SPORTS
+async function loadSports(){
+let res = await fetch(API + "/sports/live");
+let data = await res.json();
 
-function addChannel(){
-let i = churchSelect.value;
-if(i === "") return;
+let html = "<h2>⚽ Live Sports</h2>";
 
-churches[i].channels.push({
-name: channelName.value,
-stream: channelStream.value,
-blocked:false
-});
-
-save();
-renderChannels();
-}
-
-function renderChannels(){
-let html = "";
-
-churches.forEach((c,ci)=>{
-c.channels.forEach((ch,ii)=>{
+data.forEach(m=>{
 html += `
 <div class="card">
-<h3>${ch.name} (${c.name})</h3>
-<p>${ch.stream}</p>
-
-<button class="btn btn-danger" onclick="toggleChannel(${ci},${ii})">
-Block/Unblock
-</button>
-</div>`;
-});
+<h3>${m.home} vs ${m.away}</h3>
+<p>${m.league} • ${m.status}</p>
+</div>
+`;
 });
 
-channelList.innerHTML = html;
+document.getElementById("content").innerHTML = html;
 }
 
-function toggleChannel(ci,ii){
-churches[ci].channels[ii].blocked =
-!churches[ci].channels[ii].blocked;
-save();
-renderChannels();
-}
+// MOVIES
+async function loadMovies(){
+let res = await fetch(API + "/movies");
+let data = await res.json();
 
-function playStream(){
-let url = testStream.value;
-let video = document.getElementById("video");
+let html = "<h2>🎬 Movies</h2>";
 
-if(Hls.isSupported() && url.includes(".m3u8")){
-let hls = new Hls();
-hls.loadSource(url);
-hls.attachMedia(video);
-}
-else{
-video.src = url;
-}
-video.play();
-}
-
-let speed = false;
-
-function toggleSpeed(){
-speed = !speed;
-alert(speed ? "⚡ Speed Boost ON" : "Speed Boost OFF");
-}
-
-function restartSystem(){
-alert("♻ System Restarted (simulation)");
-}
-
-function shutdown(){
-alert("⛔ System Shutdown (simulation)");
-}
-
-function resetSystem(){
-localStorage.clear();
-location.reload();
-}
-
-function updateUI(){
-document.getElementById("cCount").innerText = churches.length;
-
-let channels = 0;
-let blocked = 0;
-
-churches.forEach(c=>{
-channels += c.channels.length;
-if(c.blocked) blocked++;
-c.channels.forEach(ch=>{
-if(ch.blocked) blocked++;
-});
+data.forEach(m=>{
+html += `
+<div class="card">
+<h3>${m.title}</h3>
+<p>${m.year || ""}</p>
+</div>
+`;
 });
 
-document.getElementById("chCount").innerText = channels;
-document.getElementById("bCount").innerText = blocked;
+document.getElementById("content").innerHTML = html;
 }
 
-function init(){
-renderChurches();
-renderChannels();
-updateUI();
+// LIVE MATCHES
+async function loadLiveMatches(){
+let res = await fetch(API + "/sports/matches");
+let data = await res.json();
+
+let html = "<h2>🏆 Live Matches</h2>";
+
+data.forEach(m=>{
+html += `
+<div class="card">
+<h3>${m.home} vs ${m.away}</h3>
+<p>${m.status} • ${m.minute || ""}</p>
+</div>
+`;
+});
+
+document.getElementById("content").innerHTML = html;
 }
 
-init();
+// AUTO LOAD
+loadChannels();
 
 </script>
 
