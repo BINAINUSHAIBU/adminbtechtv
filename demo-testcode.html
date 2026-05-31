@@ -1,508 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>
-BTECH-TV WORLD ULTRA MAX X ENTERPRISE V5
-</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise V5 Ultimate Control Dashboard</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-
-/* ROOT */
 :root{
---bg:#050816;
---panel:#111827;
---card:#172033;
---hover:#22304d;
---accent:#00d4ff;
---success:#16a34a;
---danger:#ef4444;
---warning:#f59e0b;
---premium:#8b5cf6;
---text:#ffffff;
+  --bg:#050816;
+  --panel:#0b1224;
+  --card:#0f1a33;
+  --accent:#00e5ff;
+  --danger:#ff3b3b;
+  --ok:#00ff9d;
+  --text:#e6f0ff;
+  --muted:#7a8bb8;
 }
 
-/* MERGED CSS FROM BOTH FILES */
+*{box-sizing:border-box;font-family:Arial, sans-serif;}
 
-/* TOPBAR */
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* HEADER */
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 20px;
+  background:linear-gradient(90deg,#06102a,#0b1a3a);
+  border-bottom:1px solid #1d2a4d;
+}
+
+header h1{
+  font-size:18px;
+  margin:0;
+  color:var(--accent);
+}
+
+/* LAYOUT */
+.container{
+  display:grid;
+  grid-template-columns:250px 1fr 320px;
+  height:calc(100vh - 60px);
+}
+
 /* SIDEBAR */
+.sidebar{
+  background:var(--panel);
+  padding:15px;
+  overflow:auto;
+  border-right:1px solid #1d2a4d;
+}
+
+.menu-item{
+  padding:10px;
+  margin-bottom:8px;
+  background:var(--card);
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.menu-item:hover{
+  background:#13244a;
+}
+
+/* MAIN */
+.main{
+  padding:15px;
+  overflow:auto;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px;
+}
+
+.card{
+  background:var(--card);
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #1d2a4d;
+}
+
+.status{
+  font-size:12px;
+  margin-top:5px;
+}
+
+.ok{color:var(--ok);}
+.bad{color:var(--danger);}
+
 /* PLAYER */
-/* CHANNEL GRID */
-/* SEARCH */
-/* ADMIN PANEL */
-/* USER PANEL */
-/* RESELLER PANEL */
-/* PAYMENT PANEL */
-/* WALLET PANEL */
-/* ANALYTICS PANEL */
-/* RESPONSIVE MOBILE */
+.player-box{
+  background:#000;
+  height:220px;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:15px;
+}
 
-/* KEEP ALL EXISTING STYLES HERE */
+/* RIGHT PANEL */
+.right{
+  background:var(--panel);
+  padding:15px;
+  border-left:1px solid #1d2a4d;
+  overflow:auto;
+}
 
+.button{
+  padding:10px;
+  background:var(--accent);
+  color:#000;
+  border:none;
+  width:100%;
+  margin-bottom:10px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.locked{
+  background:#2a0b0b !important;
+  color:#ff8080;
+}
+
+.small{
+  font-size:12px;
+  color:var(--muted);
+}
 </style>
-
 </head>
 
 <body>
 
-<!-- TOP BAR -->
-
-<div class="topbar">
-
-<div class="logo">
-📺 BTECH-TV WORLD ULTRA MAX X ENTERPRISE V5
-</div>
-
-<button onclick="setTab('all')">📺 All</button>
-<button onclick="setTab('favs')">⭐ Favorites</button>
-<button onclick="setTab('recent')">🕘 Recent</button>
-
-<button onclick="loadUltraFeeds()">🚀 Ultra Feeds</button>
-<button onclick="toggleTheme()">🌙 Theme</button>
-<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
-<button onclick="shuffleChannels()">🎲 Shuffle</button>
-<button onclick="toggleMiniPlayer()">📺 Mini Player</button>
-<button onclick="sleepTimer()">⏰ Sleep Timer</button>
-
-<button onclick="scanStreams()">📡 Scan</button>
-<button onclick="speedBoost()">⚡ Boost</button>
-<button onclick="exportFavorites()">⬇ Export</button>
-
-<button onclick="openAdmin()">⚙ Admin</button>
-<button onclick="openSuperAdmin()">🛡 Super Admin</button>
-<button onclick="openUserManager()">👥 User Manager</button>
-<button onclick="openPayTV()">💳 Pay TV</button>
-
-<button onclick="openReseller()">💼 Reseller</button>
-<button onclick="openWallet()">💰 Wallet</button>
-<button onclick="openAnalytics()">📊 Analytics</button>
-
-</div>
+<header>
+  <h1>🚀 ENTERPRISE V5 ULTIMATE CONTROL DASHBOARD</h1>
+  <div class="small">LIVE SYSTEM • SUPER ADMIN MODE</div>
+</header>
 
 <div class="container">
 
-<!-- SIDEBAR -->
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="menu-item">📊 Dashboard</div>
+    <div class="menu-item">📡 Live Streams</div>
+    <div class="menu-item">🎬 Movies</div>
+    <div class="menu-item">📺 Series</div>
+    <div class="menu-item">👥 Users</div>
+    <div class="menu-item">💳 Resellers</div>
+    <div class="menu-item">🔐 Security</div>
+    <div class="menu-item">⚙ Settings</div>
+  </div>
 
-<div class="sidebar">
+  <!-- MAIN -->
+  <div class="main">
 
-<h3>🌍 Countries</h3>
+    <!-- PLAYER -->
+    <div class="player-box">
+      <video id="video" controls style="width:100%;height:100%;"></video>
+    </div>
 
-<div class="cat">🇳🇬 Nigeria</div>
-<div class="cat">🇺🇸 USA</div>
-<div class="cat">🇬🇧 UK</div>
-<div class="cat">🇮🇳 India</div>
-<div class="cat">🇫🇷 France</div>
-<div class="cat">🇩🇪 Germany</div>
-<div class="cat">🇧🇷 Brazil</div>
-<div class="cat">🇿🇦 South Africa</div>
-<div class="cat">🇨🇦 Canada</div>
-<div class="cat">🇦🇺 Australia</div>
-<div class="cat">🇯🇵 Japan</div>
-<div class="cat">🇰🇷 South Korea</div>
-<div class="cat">🇨🇳 China</div>
-<div class="cat">🇪🇸 Spain</div>
-<div class="cat">🇮🇹 Italy</div>
-<div class="cat">🇹🇷 Turkey</div>
-<div class="cat">🇲🇽 Mexico</div>
-<div class="cat">🇦🇪 UAE</div>
-<div class="cat">🇸🇦 Saudi Arabia</div>
-<div class="cat">🇪🇬 Egypt</div>
-<div class="cat">🇦🇷 Argentina</div>
-<div class="cat">🇵🇰 Pakistan</div>
-<div class="cat">🇮🇩 Indonesia</div>
-<div class="cat">🇵🇭 Philippines</div>
-<div class="cat">🇦🇱 Albania</div>
+    <div class="grid">
 
-<h3>🎬 Categories</h3>
+      <div class="card">
+        <h3>Live Channels</h3>
+        <div class="status ok">● ONLINE: 1,248</div>
+      </div>
 
-<div class="cat">📰 News</div>
-<div class="cat">⚽ Sports</div>
-<div class="cat">🎬 Movies</div>
-<div class="cat">🎵 Music</div>
-<div class="cat">👶 Kids</div>
-<div class="cat">😂 Comedy</div>
-<div class="cat">📚 Documentary</div>
-<div class="cat">💼 Business</div>
-<div class="cat">🔬 Science</div>
-<div class="cat">✈ Travel</div>
+      <div class="card">
+        <h3>Locked Channels</h3>
+        <div class="status bad">● RESTRICTED: 312</div>
+      </div>
 
-<h3>🗣 Languages</h3>
+      <div class="card">
+        <h3>Active Users</h3>
+        <div class="status ok">● CONNECTED: 8,921</div>
+      </div>
 
-<div class="cat">🇬🇧 English</div>
-<div class="cat">🇪🇸 Spanish</div>
-<div class="cat">🇸🇦 Arabic</div>
-<div class="cat">🇫🇷 French</div>
-<div class="cat">🇮🇳 Hindi</div>
-<div class="cat">🇨🇳 Chinese</div>
-<div class="cat">🇵🇹 Portuguese</div>
+      <div class="card">
+        <h3>Server Status</h3>
+        <div class="status ok">● STABLE (99.9%)</div>
+      </div>
 
-<h3>🔥 Premium Features</h3>
+    </div>
 
-<div class="cat">📡 Scan Streams</div>
-<div class="cat">⚡ Speed Boost</div>
-<div class="cat">📺 Picture in Picture</div>
-<div class="cat">🗑 Clear Recents</div>
-<div class="cat">⏺ Record Mode</div>
-<div class="cat">🚀 Global Feeds</div>
-<div class="cat">🛠 Repair Streams</div>
-<div class="cat">🧠 Memory Optimizer</div>
-<div class="cat">🔒 User Manager</div>
-<div class="cat">🧠 Quiz Channels</div>
-<div class="cat">🔒 Locked Channels</div>
-<div class="cat">💰 Wallet Manager</div>
-<div class="cat">📢 Notifications</div>
-<div class="cat">📊 Analytics</div>
+    <h3 style="margin-top:20px;">📡 Channel List</h3>
 
-</div>
+    <div class="grid">
 
-<!-- MAIN -->
+      <div class="card">
+        CNN NEWS
+        <div class="status ok">UNLOCKED</div>
+        <button class="button" onclick="playStream('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">PLAY</button>
+      </div>
 
-<div class="main">
+      <div class="card">
+        SPORTS HD
+        <div class="status ok">UNLOCKED</div>
+        <button class="button" onclick="playStream('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">PLAY</button>
+      </div>
 
-<div class="player">
+      <div class="card">
+        MOVIE PREMIUM
+        <div class="status bad">LOCKED</div>
+        <button class="button locked">UNLOCKED REQUIRED</button>
+      </div>
 
-<div class="live">
-🔴 LIVE
-</div>
+      <div class="card">
+        MUSIC LIVE
+        <div class="status ok">UNLOCKED</div>
+        <button class="button" onclick="playStream('https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8')">PLAY</button>
+      </div>
 
-<video id="video" controls></video>
+    </div>
 
-<div id="overlay" class="overlay">
+  </div>
 
-<h1>🚀</h1>
+  <!-- RIGHT PANEL -->
+  <div class="right">
 
-<p>
-BTECH-TV WORLD ULTRA MAX X
-</p>
+    <h3>🔐 Super Control</h3>
 
-</div>
+    <button class="button">Add Channel</button>
+    <button class="button">Add Movie</button>
+    <button class="button">Add User</button>
+    <button class="button">Add Reseller</button>
+    <button class="button">Analytics</button>
 
-</div>
+    <h3>⚡ System Tools</h3>
 
-<div class="now-playing">
+    <button class="button">Stream Monitor</button>
+    <button class="button">EPG Manager</button>
+    <button class="button">Wallet System</button>
+    <button class="button">Ads Manager</button>
 
-<h2 id="channelName">
-No Channel Selected
-</h2>
+    <h3>🛡 Security Panel</h3>
 
-</div>
+    <button class="button">IP Block List</button>
+    <button class="button">Device Control</button>
+    <button class="button">Login Tracker</button>
 
-<div class="search-box">
-
-<input
-type="text"
-placeholder="Search IPTV Channels..."
-oninput="searchChannels(this.value)"
->
-
-</div>
-
-<div id="channelList" class="channels"></div>
-
-</div>
-
-</div>
-
-<!-- SUPER ADMIN -->
-
-<div class="admin-panel" id="adminPanel">
-
-<div class="admin-box">
-
-<h2>
-🛡 SUPER ADMIN CONTROL CENTER
-</h2>
-
-<div class="admin-grid">
-
-<button>📡 Scan Streams</button>
-<button>🛠 Repair Streams</button>
-<button>⚡ Speed Boost</button>
-<button>🧠 Optimize Memory</button>
-
-<button>💾 Backup System</button>
-<button>♻ Restart Player</button>
-<button>⛔ Shutdown System</button>
-
-<button>💎 Premium Mode</button>
-
-<button>🔒 Lock All Channels</button>
-<button>🔓 Unlock All Channels</button>
-
-<button>👥 User Manager</button>
-<button>💳 Payment Gateway</button>
-<button>💰 Wallet Manager</button>
-
-<button>📊 Analytics</button>
-<button>📢 Notifications</button>
-<button>📺 EPG Manager</button>
-
-<button>🎟 Coupon Manager</button>
-<button>📦 Subscription Plans</button>
-<button>💼 Reseller Manager</button>
-
-</div>
-
-</div>
+  </div>
 
 </div>
 
 <script>
+let video = document.getElementById("video");
 
-/* MERGED IPTV ENGINE */
-
-/* HLS PLAYER */
-
-/* PLAYLIST LOADER */
-
-/* IPTV M3U PARSER */
-
-/* COUNTRIES */
-
-/* CATEGORIES */
-
-/* LANGUAGES */
-
-/* FAVORITES */
-
-/* RECENTS */
-
-/* LOCKED CHANNELS */
-
-/* PREMIUM CHANNELS */
-
-/* USER MANAGER */
-
-/* RESELLER MANAGER */
-
-/* PAYMENT */
-
-/* WALLET */
-
-/* ANALYTICS */
-
-/* NOTIFICATIONS */
-
-/* EPG */
-
-/* STREAM SCANNER */
-
-/* STREAM REPAIR */
-
-/* SPEED BOOST */
-
-/* EXPORT */
-
-/* BACKUP */
-
-/* RESTORE */
-
-/* MINI PLAYER */
-
-/* QUIZ CHANNELS */
-
-/* GLOBAL FEEDS */
-
-/* SUPER ADMIN */
-
-/* KEEP ALL FUNCTIONS FROM BOTH FILES HERE */
-
-loadUltraFeeds();
-
+function playStream(url){
+  if(Hls.isSupported()){
+    let hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, function(){
+      video.play();
+    });
+  } else if(video.canPlayType('application/vnd.apple.mpegurl')){
+    video.src = url;
+    video.play();
+  } else {
+    alert("HLS not supported");
+  }
+}
 </script>
-  /* =========================================================
-LIVE IPTV ENGINE V5 ENTERPRISE
-========================================================= */
-
-const LIVE_CONFIG = {
-
-autoStart:true,
-autoReconnect:true,
-reconnectDelay:3000,
-
-liveBadge:true,
-liveCounter:true,
-
-streamMonitor:true,
-repairEngine:true,
-
-premiumMode:false,
-
-ultraFeeds:true
-
-};
-
-/* =========================================================
-LIVE STATUS
-========================================================= */
-
-function enableLiveMode(){
-
-showOverlay("🔴 Connecting Live IPTV...");
-
-loadUltraFeeds();
-
-}
-
-function showLiveStatus(){
-
-const badge=document.createElement("div");
-
-badge.className="live";
-
-badge.innerHTML="🔴 LIVE";
-
-document.querySelector(".player")
-.appendChild(badge);
-
-}
-
-/* =========================================================
-AUTO RECONNECT
-========================================================= */
-
-function reconnectStream(){
-
-showOverlay("📡 Reconnecting Stream...");
-
-setTimeout(()=>{
-
-playChannel(currentIndex);
-
-},LIVE_CONFIG.reconnectDelay);
-
-}
-
-video.addEventListener("error",reconnectStream);
-
-/* =========================================================
-LIVE COUNTER
-========================================================= */
-
-function updateLiveStats(){
-
-document.getElementById("totalChannels").innerHTML=
-all.length;
-
-document.getElementById("liveChannels").innerHTML=
-filteredChannels.length;
-
-}
-
-/* =========================================================
-STREAM MONITOR
-========================================================= */
-
-function monitorStreams(){
-
-console.log("📡 Monitoring Streams");
-
-filteredChannels.forEach(channel=>{
-
-if(!channel.url){
-
-console.log("⚠ Broken Stream",channel.name);
-
-}
-
-});
-
-}
-
-/* =========================================================
-STREAM REPAIR
-========================================================= */
-
-function repairStreams(){
-
-showOverlay("🛠 Repairing Streams");
-
-setTimeout(()=>{
-
-hideOverlay();
-
-alert("Streams Repaired");
-
-},3000);
-
-}
-
-/* =========================================================
-ULTRA FEEDS
-========================================================= */
-
-async function loadUltraFeeds(){
-
-showOverlay("🚀 Loading Global IPTV");
-
-all=[];
-
-for(const feed of feeds){
-
-try{
-
-const response=await fetch(feed);
-
-const text=await response.text();
-
-parseM3U(text,"Ultra Feed");
-
-}catch(error){
-
-console.log(error);
-
-}
-
-}
-
-filteredChannels=[...all];
-
-renderChannels();
-
-updateLiveStats();
-
-hideOverlay();
-
-}
-
-/* =========================================================
-LIVE PLAYER
-========================================================= */
-
-function playLive(index){
-
-playChannel(index);
-
-showOverlay("🔴 Going Live...");
-
-setTimeout(()=>{
-
-hideOverlay();
-
-},1000);
-
-}
-
-/* =========================================================
-AUTO START
-========================================================= */
-
-window.onload=()=>{
-
-enableLiveMode();
-
-showLiveStatus();
-
-monitorStreams();
-
-};
-
 
 </body>
 </html>
