@@ -107,6 +107,9 @@ margin-right:4px;
 .paid{background:var(--paid)}
 .locked{background:var(--locked);color:#000}
 
+/* ADMIN BUTTONS */
+.admin-btn{display:none}
+
 /* RIGHT */
 .right{
 width:260px;
@@ -129,34 +132,29 @@ border-radius:8px;
 <!-- LOGIN -->
 <div id="login">
 <div class="box">
-<h3>🔐 ULTRA MAX LOGIN</h3>
-<p style="font-size:12px;opacity:.7">Demo password: <b>1234</b></p>
+<h3>🔐 ADMIN LOGIN</h3>
 <input id="pass" type="password" placeholder="Enter Password">
-<button onclick="login()">ENTER GOD MODE</button>
+<button onclick="login()">ENTER</button>
 </div>
 </div>
 
 <!-- TOPBAR -->
 <div class="topbar">
-<h3>🚀 ULTRA MAX 2026 GOD MODE ++</h3>
+<h3>🚀 ULTRA MAX IPTV</h3>
 <div id="status">LOCKED</div>
 </div>
 
 <div class="container">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-<h4>⚙ CONTROL PANEL</h4>
-
+<h4>⚙ CONTROL</h4>
 <button onclick="filterAll()">All</button>
 <button onclick="filterLocked()">Locked</button>
 <button onclick="filterFree()">Free</button>
 <button onclick="filterPaid()">Paid</button>
-
 <input placeholder="Search..." oninput="search(this.value)">
 </div>
 
-<!-- MAIN -->
 <div class="main">
 <div class="player">
 <video id="video" controls></video>
@@ -164,39 +162,62 @@ border-radius:8px;
 <div class="list" id="list"></div>
 </div>
 
-<!-- RIGHT -->
 <div class="right">
-<h4>📊 SYSTEM STATS</h4>
-
+<h4>📊 STATS</h4>
 <div class="stat">Total: <span id="t">0</span></div>
 <div class="stat">Free: <span id="f">0</span></div>
 <div class="stat">Paid: <span id="p">0</span></div>
 <div class="stat">Locked: <span id="l">0</span></div>
 
-<button onclick="lockAll()">🔒 Lock ALL</button>
-<button onclick="unlockAll()">🔓 Unlock ALL</button>
-<button onclick="deleteLocked()">❌ Delete Locked</button>
+<button class="admin-btn" onclick="lockAll()">🔒 Lock ALL</button>
+<button class="admin-btn" onclick="unlockAll()">🔓 Unlock ALL</button>
+<button class="admin-btn" onclick="deleteLocked()">❌ Delete Locked</button>
 </div>
 
 </div>
 
 <script>
 
-/* LOGIN */
+const ADMIN_PASS = "1234";
+let isAdmin = false;
+
+let channels = [];
+let filtered = [];
+
 function login(){
 const p=document.getElementById("pass").value;
-if(p==="1234"){
+
+if(p === ADMIN_PASS){
 document.getElementById("login").style.display="none";
-document.getElementById("status").innerText="BTECH-TV MODE ACTIVE";
+document.getElementById("status").innerText="ADMIN MODE ACTIVE";
+isAdmin = true;
+initAdminUI();
+loadAPI();
 }else alert("Wrong password");
 }
 
-/* IPTV ENGINE */
-let channels=[],filtered=[],cur=null;
+function initAdminUI(){
+document.querySelectorAll(".admin-btn")
+.forEach(b=>b.style.display=isAdmin?"block":"none");
+}
 
-/* LOAD IPTV API */
+/* SAVE */
+function saveState(){
+localStorage.setItem("channels", JSON.stringify(channels));
+}
+
+/* LOAD */
+function loadState(){
+const data = localStorage.getItem("channels");
+if(data) channels = JSON.parse(data);
+}
+
+/* IPTV LOAD */
 async function loadAPI(){
 try{
+
+loadState();
+
 const [ch,st,lg]=await Promise.all([
 fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
 fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
@@ -208,30 +229,27 @@ let map={},logos={};
 ch.forEach(c=>map[c.id]=c);
 lg.forEach(l=>logos[l.channel]=l.url);
 
+if(channels.length === 0){
 let seen={};
-
 st.forEach(s=>{
 if(!s.url || seen[s.url]) return;
 seen[s.url]=1;
 
 channels.push({
-id:channels.length,
-name:s.title || "Channel",
+name:s.title||"Channel",
 url:s.url,
 type:"free",
-status:"free",
-cc:map[s.channel]?.country || "",
-logo:logos[s.channel] || ""
+status:"free"
 });
 });
+}
 
 filtered=[...channels];
 render();
+stats();
 document.getElementById("status").innerText="LIVE: "+channels.length;
 
-}catch(e){
-console.log(e);
-}
+}catch(e){console.log(e);}
 }
 
 /* RENDER */
@@ -245,121 +263,89 @@ div.className="card";
 
 div.innerHTML=`
 <b>${c.name}</b><br>
-<span class="badge ${c.type}">${c.type}</span>
-<span class="badge ${c.status}">${c.status}</span>
+<span class="badge ${c.type||'free'}">${c.type||'free'}</span>
+<span class="badge ${c.status||'free'}">${c.status||'free'}</span>
 `;
 
-div.onclick=()=>play(i);
+/* CLICK = LOCK/UNLOCK */
+div.onclick=()=>toggleLock(i);
+
+/* DOUBLE CLICK = PLAY */
+div.ondblclick=()=>play(i);
+
 box.appendChild(div);
 });
 
 stats();
 }
 
-/* PLAY STREAM */
+/* PLAY */
 function play(i){
-const c=filtered[i];
 const v=document.getElementById("video");
+const c=filtered[i];
 
 if(Hls.isSupported()){
 const h=new Hls();
 h.loadSource(c.url);
 h.attachMedia(v);
-}else{
-v.src=c.url;
+}else v.src=c.url;
 }
-cur=c;
+
+/* TOGGLE LOCK */
+function toggleLock(i){
+if(!isAdmin) return alert("Admin only");
+
+channels[i].status =
+channels[i].status === "locked" ? "free" : "locked";
+
+saveState();
+render();
+stats();
 }
 
 /* FILTERS */
 function filterAll(){filtered=[...channels];render();}
 function filterLocked(){filtered=channels.filter(c=>c.status==="locked");render();}
-function filterFree(){filtered=channels.filter(c=>c.type==="free");render();}
+function filterFree(){filtered=channels.filter(c=>c.status!=="locked");render();}
 function filterPaid(){filtered=channels.filter(c=>c.type==="paid");render();}
 
 /* SEARCH */
 function search(v){
-filtered=channels.filter(c=>
-c.name.toLowerCase().includes(v.toLowerCase())
-);
+filtered=channels.filter(c=>c.name.toLowerCase().includes(v.toLowerCase()));
 render();
 }
 
-/* ADMIN */
-function lockAll(){channels.forEach(c=>c.status="locked");render();}
-function unlockAll(){channels.forEach(c=>c.status="free");render();}
+/* ADMIN ACTIONS */
+function lockAll(){
+channels.forEach(c=>c.status="locked");
+saveState();render();stats();
+}
+
+function unlockAll(){
+if(!isAdmin){
+const p=prompt("Enter password");
+if(p!==ADMIN_PASS) return alert("Denied");
+}
+
+channels.forEach(c=>c.status="free");
+saveState();render();stats();
+}
+
 function deleteLocked(){
-channels=channels.filter(c=>c.status!=="locked");
-render();
+channels = channels.filter(c=>c.status!=="locked");
+saveState();render();stats();
 }
 
 /* STATS */
 function stats(){
 document.getElementById("t").innerText=channels.length;
-document.getElementById("f").innerText=channels.filter(c=>c.type==="free").length;
+document.getElementById("f").innerText=channels.filter(c=>c.status!=="locked").length;
 document.getElementById("p").innerText=channels.filter(c=>c.type==="paid").length;
 document.getElementById("l").innerText=channels.filter(c=>c.status==="locked").length;
 }
 
 /* BOOT */
-loadAPI();
-
 </script>
-  /* =====================
-ADMIN FIXED SYSTEM
-===================== */
-
-function lockAll(){
-channels.forEach(c=>{
-c.status = "locked";
-});
-render();
-stats();
-}
-
-function unlockAll(){
-channels.forEach(c=>{
-// restore default type-based status
-c.status = c.type === "paid" ? "paid" : "free";
-});
-render();
-stats();
-}
-
-function deleteLocked(){
-channels = channels.filter(c => c.status !== "locked");
-filtered = [...channels];
-render();
-stats();
-}
-
-/* =====================
-FILTER FIXED LOGIC
-===================== */
-
-function filterAll(){
-filtered = [...channels];
-render();
-}
-
-function filterLocked(){
-filtered = channels.filter(c => c.status === "locked");
-render();
-}
-
-function filterFree(){
-filtered = channels.filter(c =>
-c.type === "free" && c.status !== "locked"
-);
-render();
-}
-
-function filterPaid(){
-filtered = channels.filter(c =>
-c.type === "paid" && c.status !== "locked"
-);
-render();
-}
 
 </body>
 </html>
