@@ -1,356 +1,339 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Church Hosting Super Admin System</title>
 
-<title>BTECH-TV CHURCH NETWORK</title>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
 body{
-background:#0a0f1d;
-color:white;
+margin:0;
+font-family:Arial;
+background:#0b1220;
+color:#fff;
 }
 
 header{
-background:#111827;
-padding:20px;
+background:#111a2e;
+padding:15px;
+font-size:20px;
+font-weight:bold;
+text-align:center;
+}
+
+.container{
 display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid #222;
+height:100vh;
 }
 
-.logo{
-font-size:28px;
-font-weight:bold;
-color:#00d4ff;
+.sidebar{
+width:260px;
+background:#0f1a33;
+padding:15px;
+overflow:auto;
 }
 
-.admin-btn{
-background:#00d4ff;
+.sidebar button{
+width:100%;
+padding:10px;
+margin:5px 0;
 border:none;
-padding:10px 20px;
-border-radius:8px;
 cursor:pointer;
-font-weight:bold;
+background:#1d2b4a;
+color:white;
+border-radius:5px;
 }
 
-.dashboard{
+.sidebar button:hover{
+background:#2d4370;
+}
+
+.main{
+flex:1;
 padding:20px;
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:15px;
-margin-bottom:20px;
+overflow:auto;
 }
 
 .card{
-background:#111827;
-padding:20px;
-border-radius:12px;
-box-shadow:0 0 10px rgba(0,0,0,.3);
-}
-
-.card h2{
-font-size:18px;
+background:#141f38;
+padding:15px;
 margin-bottom:10px;
+border-radius:10px;
 }
 
-.card .number{
-font-size:32px;
-font-weight:bold;
-color:#00ff99;
-}
-
-.section-title{
-margin:20px 0;
-font-size:24px;
-color:#00d4ff;
-}
-
-.toolbar{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-margin-bottom:20px;
-}
-
-.toolbar button{
-padding:12px 18px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-background:#00d4ff;
-font-weight:bold;
-}
-
-.church-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:20px;
-}
-
-.church{
-background:#111827;
-border-radius:12px;
-padding:20px;
-}
-
-.church h3{
-margin-bottom:10px;
-color:#00ff99;
-}
-
-.church p{
-margin:5px 0;
-}
-
-.controls{
-margin-top:15px;
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-}
-
-.controls button{
+input, select{
+width:100%;
 padding:10px;
+margin:5px 0;
+border-radius:5px;
 border:none;
-border-radius:6px;
+}
+
+.btn{
+padding:10px;
+background:#2e6bff;
+border:none;
+color:white;
 cursor:pointer;
+border-radius:5px;
+margin-top:5px;
 }
 
-.start{background:green;color:white;}
-.stop{background:red;color:white;}
-.edit{background:orange;color:white;}
-.delete{background:gray;color:white;}
+.btn-danger{background:red;}
+.btn-green{background:green;}
+.btn-yellow{background:orange;}
 
-.create-box{
-background:#111827;
-padding:20px;
-border-radius:12px;
-margin-bottom:20px;
+.small{
+font-size:12px;
+opacity:0.7;
 }
 
-input{
-width:100%;
-padding:12px;
-margin-top:10px;
-margin-bottom:10px;
-border:none;
-border-radius:6px;
-}
-
-.create-btn{
-background:#00ff99;
-padding:12px;
-width:100%;
-border:none;
-border-radius:8px;
-font-size:18px;
-cursor:pointer;
-}
-
-footer{
-text-align:center;
-padding:20px;
-margin-top:30px;
-background:#111827;
-}
-
+.hidden{display:none;}
 </style>
 </head>
+
 <body>
 
-<header>
-<div class="logo">📺 BTECH-TV CHURCH NETWORK</div>
-<button class="admin-btn">SUPER ADMIN</button>
-</header>
+<header>⛪ CHURCH HOSTING SUPER ADMIN CONTROL PANEL</header>
 
-<div class="dashboard">
+<div class="container">
 
-<div class="stats">
-
-<div class="card">
-<h2>Total Churches</h2>
-<div class="number" id="churchCount">4</div>
+<!-- SIDEBAR -->
+<div class="sidebar">
+<button onclick="show('dashboard')">Dashboard</button>
+<button onclick="show('churches')">Church Management</button>
+<button onclick="show('channels')">Channel Manager</button>
+<button onclick="show('streams')">Live Streams</button>
+<button onclick="show('controls')">Super Controls</button>
+<button onclick="resetSystem()" class="btn-danger">RESET SYSTEM</button>
 </div>
 
-<div class="card">
-<h2>Active Streams</h2>
-<div class="number">4</div>
+<!-- MAIN -->
+<div class="main">
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="card">
+<h2>📊 Dashboard</h2>
+<p>Total Churches: <span id="cCount">0</span></p>
+<p>Total Channels: <span id="chCount">0</span></p>
+<p>Blocked Items: <span id="bCount">0</span></p>
 </div>
 
-<div class="card">
-<h2>Total Members</h2>
-<div class="number">25,000</div>
+<!-- CHURCHES -->
+<div id="churches" class="card hidden">
+<h2>🏛 Church Management</h2>
+
+<input id="churchName" placeholder="Church Name"/>
+<input id="churchLocation" placeholder="Location (Nigeria etc.)"/>
+
+<button class="btn" onclick="addChurch()">Add Church</button>
+
+<div id="churchList"></div>
 </div>
 
-<div class="card">
-<h2>Monthly Revenue</h2>
-<div class="number">₦850,000</div>
+<!-- CHANNELS -->
+<div id="channels" class="card hidden">
+<h2>📺 Channel Manager</h2>
+
+<select id="churchSelect"></select>
+<input id="channelName" placeholder="Channel Name"/>
+<input id="channelStream" placeholder="Stream URL (HLS / YouTube embed)"/>
+
+<button class="btn" onclick="addChannel()">Create Channel</button>
+
+<div id="channelList"></div>
 </div>
 
+<!-- STREAMS -->
+<div id="streams" class="card hidden">
+<h2>📡 Live Stream Tester</h2>
+
+<input id="testStream" placeholder="Enter stream URL"/>
+<button class="btn" onclick="playStream()">Play</button>
+
+<video id="video" controls style="width:100%;margin-top:10px;"></video>
 </div>
 
-<h2 class="section-title">➕ Create Church</h2>
+<!-- CONTROLS -->
+<div id="controls" class="card hidden">
+<h2>🛠 Super Admin Controls</h2>
 
-<div class="create-box">
+<button class="btn btn-green" onclick="toggleSpeed()">⚡ Speed Boost</button>
+<button class="btn btn-yellow" onclick="restartSystem()">♻ Restart System</button>
+<button class="btn btn-danger" onclick="shutdown()">⛔ Shutdown System</button>
 
-<input type="text" id="churchName"
-placeholder="Church Name">
-
-<input type="text" id="churchDomain"
-placeholder="Subdomain">
-
-<button class="create-btn"
-onclick="createChurch()">
-Create Church Dashboard
-</button>
-
-</div>
-
-<h2 class="section-title">🛡 Super Admin Controls</h2>
-
-<div class="toolbar">
-
-<button>📡 Scan Streams</button>
-<button>⚡ Speed Boost</button>
-<button>💾 Backup All</button>
-<button>🔄 Restart System</button>
-<button>🧠 AI Monitor</button>
-<button>📊 Analytics</button>
-<button>🚨 Security</button>
-<button>💰 Revenue</button>
-
-</div>
-
-<h2 class="section-title">⛪ Hosted Churches</h2>
-
-<div class="church-grid" id="churchGrid">
-
-<div class="church">
-<h3>RCCG TV</h3>
-<p>Domain: rccg.btechtv.com</p>
-<p>Status: Active</p>
-
-<div class="controls">
-<button class="start">Start</button>
-<button class="stop">Stop</button>
-<button class="edit">Dashboard</button>
-<button class="delete">Delete</button>
-</div>
-</div>
-
-<div class="church">
-<h3>Winners Chapel TV</h3>
-<p>Domain: winners.btechtv.com</p>
-<p>Status: Active</p>
-
-<div class="controls">
-<button class="start">Start</button>
-<button class="stop">Stop</button>
-<button class="edit">Dashboard</button>
-<button class="delete">Delete</button>
-</div>
-</div>
-
-<div class="church">
-<h3>MFM TV</h3>
-<p>Domain: mfm.btechtv.com</p>
-<p>Status: Active</p>
-
-<div class="controls">
-<button class="start">Start</button>
-<button class="stop">Stop</button>
-<button class="edit">Dashboard</button>
-<button class="delete">Delete</button>
-</div>
-</div>
-
-<div class="church">
-<h3>Christ Embassy TV</h3>
-<p>Domain: christembassy.btechtv.com</p>
-<p>Status: Active</p>
-
-<div class="controls">
-<button class="start">Start</button>
-<button class="stop">Stop</button>
-<button class="edit">Dashboard</button>
-<button class="delete">Delete</button>
-</div>
+<p class="small">Controls simulate global IPTV/network behavior</p>
 </div>
 
 </div>
-
 </div>
-
-<footer>
-© 2026 BTECH-TV CHURCH NETWORK PLATFORM
-</footer>
 
 <script>
 
-function createChurch(){
+let churches = JSON.parse(localStorage.getItem("churches") || "[]");
 
-let name =
-document.getElementById("churchName").value;
-
-let domain =
-document.getElementById("churchDomain").value;
-
-if(name==="" || domain===""){
-alert("Enter church details");
-return;
+function save(){
+localStorage.setItem("churches", JSON.stringify(churches));
+updateUI();
 }
 
-let card = document.createElement("div");
+function show(id){
+document.querySelectorAll(".card").forEach(c=>c.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+}
 
-card.className="church";
+function addChurch(){
+let name = churchName.value;
+let loc = churchLocation.value;
 
-card.innerHTML=`
-<h3>${name}</h3>
-<p>Domain: ${domain}.btechtv.com</p>
-<p>Status: Active</p>
+if(!name) return alert("Enter church name");
 
-<div class="controls">
-<button class="start">Start</button>
-<button class="stop">Stop</button>
-<button class="edit">Dashboard</button>
-<button class="delete"
-onclick="this.parentElement.parentElement.remove()">
-Delete
+churches.push({
+name,
+loc,
+blocked:false,
+channels:[]
+});
+
+save();
+renderChurches();
+}
+
+function renderChurches(){
+let html = "";
+churches.forEach((c,i)=>{
+html += `
+<div class="card">
+<h3>${c.name}</h3>
+<p>${c.loc}</p>
+<p>Status: ${c.blocked ? "🔴 Blocked" : "🟢 Active"}</p>
+
+<button class="btn btn-danger" onclick="toggleChurch(${i})">Block/Unblock</button>
+</div>`;
+});
+churchList.innerHTML = html;
+updateChurchDropdown();
+}
+
+function toggleChurch(i){
+churches[i].blocked = !churches[i].blocked;
+save();
+renderChurches();
+}
+
+function updateChurchDropdown(){
+churchSelect.innerHTML = "";
+churches.forEach((c,i)=>{
+let opt = document.createElement("option");
+opt.value = i;
+opt.textContent = c.name;
+churchSelect.appendChild(opt);
+});
+}
+
+function addChannel(){
+let i = churchSelect.value;
+if(i === "") return;
+
+churches[i].channels.push({
+name: channelName.value,
+stream: channelStream.value,
+blocked:false
+});
+
+save();
+renderChannels();
+}
+
+function renderChannels(){
+let html = "";
+
+churches.forEach((c,ci)=>{
+c.channels.forEach((ch,ii)=>{
+html += `
+<div class="card">
+<h3>${ch.name} (${c.name})</h3>
+<p>${ch.stream}</p>
+
+<button class="btn btn-danger" onclick="toggleChannel(${ci},${ii})">
+Block/Unblock
 </button>
-</div>
-`;
+</div>`;
+});
+});
 
-document
-.getElementById("churchGrid")
-.appendChild(card);
-
-let count =
-document.querySelectorAll(".church").length;
-
-document
-.getElementById("churchCount")
-.innerText=count;
-
-document.getElementById("churchName").value="";
-document.getElementById("churchDomain").value="";
-
-alert("Church Created Successfully");
-
+channelList.innerHTML = html;
 }
+
+function toggleChannel(ci,ii){
+churches[ci].channels[ii].blocked =
+!churches[ci].channels[ii].blocked;
+save();
+renderChannels();
+}
+
+function playStream(){
+let url = testStream.value;
+let video = document.getElementById("video");
+
+if(Hls.isSupported() && url.includes(".m3u8")){
+let hls = new Hls();
+hls.loadSource(url);
+hls.attachMedia(video);
+}
+else{
+video.src = url;
+}
+video.play();
+}
+
+let speed = false;
+
+function toggleSpeed(){
+speed = !speed;
+alert(speed ? "⚡ Speed Boost ON" : "Speed Boost OFF");
+}
+
+function restartSystem(){
+alert("♻ System Restarted (simulation)");
+}
+
+function shutdown(){
+alert("⛔ System Shutdown (simulation)");
+}
+
+function resetSystem(){
+localStorage.clear();
+location.reload();
+}
+
+function updateUI(){
+document.getElementById("cCount").innerText = churches.length;
+
+let channels = 0;
+let blocked = 0;
+
+churches.forEach(c=>{
+channels += c.channels.length;
+if(c.blocked) blocked++;
+c.channels.forEach(ch=>{
+if(ch.blocked) blocked++;
+});
+});
+
+document.getElementById("chCount").innerText = channels;
+document.getElementById("bCount").innerText = blocked;
+}
+
+function init(){
+renderChurches();
+renderChannels();
+updateUI();
+}
+
+init();
 
 </script>
 
