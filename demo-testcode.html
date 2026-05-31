@@ -1,37 +1,310 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <style>
-    /* merged style.css */
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTECH-TV ULTRA MAX 2026</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+:root{
+--bg:#0b0f1a;
+--panel:#11182a;
+--card:#1b2438;
+--accent:#00bfff;
+--text:#fff;
+--free:#16a34a;
+--paid:#dc2626;
+--locked:#f59e0b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:var(--bg);color:var(--text);overflow:hidden}
+
+/* LOGIN */
+#login{
+position:fixed;inset:0;
+background:#000;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.box{
+width:300px;
+background:var(--panel);
+padding:20px;
+border-radius:10px;
+}
+
+input,button{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:6px;
+}
+
+button{
+background:var(--accent);
+font-weight:bold;
+cursor:pointer;
+}
+
+/* LAYOUT */
+.topbar{
+height:60px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 15px;
+}
+
+.container{display:flex;height:calc(100vh - 60px)}
+
+.sidebar{
+width:240px;
+background:#0f1628;
+padding:10px;
+overflow:auto;
+}
+
+.main{flex:1;display:flex;flex-direction:column}
+
+.player{height:260px;background:black}
+video{width:100%;height:100%;object-fit:contain}
+
+.list{
+flex:1;
+overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:10px;
+padding:10px;
+}
+
+.card{
+background:var(--card);
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+border:1px solid transparent;
+}
+
+.card:hover{border-color:var(--accent)}
+
+.badge{
+padding:4px 8px;
+border-radius:20px;
+font-size:11px;
+margin-right:4px;
+}
+
+.free{background:var(--free)}
+.paid{background:var(--paid)}
+.locked{background:var(--locked);color:#000}
+
+/* RIGHT */
+.right{
+width:260px;
+background:var(--panel);
+padding:10px;
+overflow:auto;
+}
+
+.stat{
+background:#0f1628;
+padding:10px;
+margin-bottom:8px;
+border-radius:8px;
+}
+</style>
 </head>
+
 <body>
 
-  <!-- IPTV Dashboard -->
-  <section id="dashboard"></section>
+<!-- LOGIN -->
+<div id="login">
+<div class="box">
+<h3>🔐 ULTRA MAX LOGIN</h3>
+<p style="font-size:12px;opacity:.7">Demo password: <b>1234</b></p>
+<input id="pass" type="password" placeholder="Enter Password">
+<button onclick="login()">ENTER GOD MODE</button>
+</div>
+</div>
 
-  <!-- Admin Login -->
-  <section id="admin-login"></section>
+<!-- TOPBAR -->
+<div class="topbar">
+<h3>🚀 ULTRA MAX 2026 GOD MODE ++</h3>
+<div id="status">LOCKED</div>
+</div>
 
-  <!-- Super Admin Panel -->
-  <section id="admin-panel"></section>
+<div class="container">
 
-  <!-- User Manager -->
-  <section id="user-manager"></section>
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h4>⚙ CONTROL PANEL</h4>
 
-  <!-- Quiz Channels -->
-  <section id="quiz-channels"></section>
+<button onclick="filterAll()">All</button>
+<button onclick="filterLocked()">Locked</button>
+<button onclick="filterFree()">Free</button>
+<button onclick="filterPaid()">Paid</button>
 
-  <!-- IPTV Player -->
-  <section id="player"></section>
+<input placeholder="Search..." oninput="search(this.value)">
+</div>
 
-  <script>
-    /* merged server.js logic that can run in browser */
-    /* merged dashboard scripts */
-    /* merged admin scripts */
-    /* merged user manager scripts */
-    /* merged IPTV engine */
-  </script>
+<!-- MAIN -->
+<div class="main">
+<div class="player">
+<video id="video" controls></video>
+</div>
+<div class="list" id="list"></div>
+</div>
+
+<!-- RIGHT -->
+<div class="right">
+<h4>📊 SYSTEM STATS</h4>
+
+<div class="stat">Total: <span id="t">0</span></div>
+<div class="stat">Free: <span id="f">0</span></div>
+<div class="stat">Paid: <span id="p">0</span></div>
+<div class="stat">Locked: <span id="l">0</span></div>
+
+<button onclick="lockAll()">🔒 Lock ALL</button>
+<button onclick="unlockAll()">🔓 Unlock ALL</button>
+<button onclick="deleteLocked()">❌ Delete Locked</button>
+</div>
+
+</div>
+
+<script>
+
+/* LOGIN */
+function login(){
+const p=document.getElementById("pass").value;
+if(p==="1234"){
+document.getElementById("login").style.display="none";
+document.getElementById("status").innerText="BTECH-TV MODE ACTIVE";
+}else alert("Wrong password");
+}
+
+/* IPTV ENGINE */
+let channels=[],filtered=[],cur=null;
+
+/* LOAD IPTV API */
+async function loadAPI(){
+try{
+const [ch,st,lg]=await Promise.all([
+fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
+fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
+fetch('https://iptv-org.github.io/api/logos.json').then(r=>r.json())
+]);
+
+let map={},logos={};
+
+ch.forEach(c=>map[c.id]=c);
+lg.forEach(l=>logos[l.channel]=l.url);
+
+let seen={};
+
+st.forEach(s=>{
+if(!s.url || seen[s.url]) return;
+seen[s.url]=1;
+
+channels.push({
+id:channels.length,
+name:s.title || "Channel",
+url:s.url,
+type:"free",
+status:"free",
+cc:map[s.channel]?.country || "",
+logo:logos[s.channel] || ""
+});
+});
+
+filtered=[...channels];
+render();
+document.getElementById("status").innerText="LIVE: "+channels.length;
+
+}catch(e){
+console.log(e);
+}
+}
+
+/* RENDER */
+function render(){
+const box=document.getElementById("list");
+box.innerHTML="";
+
+filtered.forEach((c,i)=>{
+const div=document.createElement("div");
+div.className="card";
+
+div.innerHTML=`
+<b>${c.name}</b><br>
+<span class="badge ${c.type}">${c.type}</span>
+<span class="badge ${c.status}">${c.status}</span>
+`;
+
+div.onclick=()=>play(i);
+box.appendChild(div);
+});
+
+stats();
+}
+
+/* PLAY STREAM */
+function play(i){
+const c=filtered[i];
+const v=document.getElementById("video");
+
+if(Hls.isSupported()){
+const h=new Hls();
+h.loadSource(c.url);
+h.attachMedia(v);
+}else{
+v.src=c.url;
+}
+cur=c;
+}
+
+/* FILTERS */
+function filterAll(){filtered=[...channels];render();}
+function filterLocked(){filtered=channels.filter(c=>c.status==="locked");render();}
+function filterFree(){filtered=channels.filter(c=>c.type==="free");render();}
+function filterPaid(){filtered=channels.filter(c=>c.type==="paid");render();}
+
+/* SEARCH */
+function search(v){
+filtered=channels.filter(c=>
+c.name.toLowerCase().includes(v.toLowerCase())
+);
+render();
+}
+
+/* ADMIN */
+function lockAll(){channels.forEach(c=>c.status="locked");render();}
+function unlockAll(){channels.forEach(c=>c.status="free");render();}
+function deleteLocked(){
+channels=channels.filter(c=>c.status!=="locked");
+render();
+}
+
+/* STATS */
+function stats(){
+document.getElementById("t").innerText=channels.length;
+document.getElementById("f").innerText=channels.filter(c=>c.type==="free").length;
+document.getElementById("p").innerText=channels.filter(c=>c.type==="paid").length;
+document.getElementById("l").innerText=channels.filter(c=>c.status==="locked").length;
+}
+
+/* BOOT */
+loadAPI();
+
+</script>
 
 </body>
 </html>
