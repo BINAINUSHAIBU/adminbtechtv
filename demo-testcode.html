@@ -348,6 +348,184 @@ NEXT UPGRADE:
 🔥 Mobile app (Android/iOS)
 🔥 Cloud CDN streaming
 ========================================= */
+  // =========================================
+// FULL NETFLIX + DSTV APP (COMPLETE FULL-STACK SCAFFOLD)
+// Backend: Node.js + Express + MongoDB
+// Frontend: React (Vite style)
+// =========================================
+
+/**************************************
+ * 1. BACKEND (server.js)
+ **************************************/
+
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const SECRET = "SECRET_KEY";
+
+mongoose.connect('mongodb://127.0.0.1:27017/stream_app');
+
+const User = mongoose.model('User', {
+  username: String,
+  password: String,
+  role: { type: String, default: "user" }
+});
+
+const Movie = mongoose.model('Movie', {
+  title: String,
+  url: String,
+  thumbnail: String,
+  category: String
+});
+
+const Channel = mongoose.model('Channel', {
+  name: String,
+  url: String,
+  country: String
+});
+
+// AUTH
+app.post('/api/register', async (req,res)=>{
+  const hash = await bcrypt.hash(req.body.password,10);
+  const u = await User.create({username:req.body.username,password:hash});
+  res.json(u);
+});
+
+app.post('/api/login', async (req,res)=>{
+  const u = await User.findOne({username:req.body.username});
+  if(!u) return res.json({error:"not found"});
+  const ok = await bcrypt.compare(req.body.password,u.password);
+  if(!ok) return res.json({error:"wrong"});
+  const token = jwt.sign({id:u._id,role:u.role},SECRET);
+  res.json({token});
+});
+
+function auth(req,res,next){
+  const t=req.headers.authorization;
+  if(!t) return res.sendStatus(401);
+  try{req.user=jwt.verify(t,SECRET);next();}catch(e){res.sendStatus(403);}
+}
+
+// CONTENT
+app.get('/api/home',auth,async(req,res)=>{
+  const movies = await Movie.find();
+  const live = await Channel.find();
+  res.json({movies,live});
+});
+
+// ADMIN
+app.post('/api/admin/movie',auth,async(req,res)=>{
+  const m = await Movie.create(req.body);
+  res.json(m);
+});
+
+app.post('/api/admin/channel',auth,async(req,res)=>{
+  const c = await Channel.create(req.body);
+  res.json(c);
+});
+
+app.listen(5000,()=>console.log("Backend running"));
+
+
+/**************************************
+ * 2. FRONTEND (React App)
+ **************************************/
+
+/* =========================
+   src/main.jsx
+========================= */
+
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <App />
+);
+
+
+/* =========================
+   src/App.jsx
+========================= */
+
+import { useState } from "react";
+
+export default function App(){
+
+  const [token,setToken] = useState("");
+  const [data,setData] = useState(null);
+
+  async function login(){
+    const res = await fetch("http://localhost:5000/api/login",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({username:"admin",password:"admin"})
+    });
+    const d = await res.json();
+    setToken(d.token);
+  }
+
+  async function load(){
+    const res = await fetch("http://localhost:5000/api/home",{
+      headers:{authorization:token}
+    });
+    const d = await res.json();
+    setData(d);
+  }
+
+  return (
+    <div style={{background:"#0b1224",color:"white",height:"100vh",padding:20}}>
+      <h1>Netflix + DSTV Platform</h1>
+
+      <button onClick={login}>Login</button>
+      <button onClick={load}>Load Content</button>
+
+      <h2>Movies</h2>
+      {data?.movies?.map(m=>(
+        <div key={m._id}>{m.title}</div>
+      ))}
+
+      <h2>Live TV</h2>
+      {data?.live?.map(l=>(
+        <div key={l._id}>{l.name}</div>
+      ))}
+    </div>
+  );
+}
+
+
+/**************************************
+ * 3. FEATURES
+ **************************************
+
+✔ Netflix VOD system
+✔ DSTV live TV system
+✔ React frontend
+✔ Node.js backend
+✔ MongoDB database
+✔ JWT authentication
+✔ Admin content upload
+
+
+/**************************************
+ * 4. NEXT UPGRADES
+ **************************************
+
+🔥 Full UI (Netflix clone design)
+🔥 Video player (HLS.js)
+🔥 Paystack subscription system
+🔥 AI recommendations
+🔥 Mobile app (React Native)
+🔥 Cloud deployment (AWS/Render)
+*/
+
 
 
 </body>
