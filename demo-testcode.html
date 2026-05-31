@@ -1,89 +1,358 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BTECH-TV WORLD ULTRA MAX X OFFLINE</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>BTECH-TV CHURCH NETWORK</title>
+
 <style>
-body{margin:0;font-family:Arial;background:#0b1220;color:#fff}
-header{background:#111827;padding:12px;text-align:center;font-weight:bold}
-.wrap{display:flex;height:calc(100vh - 50px)}
-aside{width:300px;background:#0f172a;padding:10px;overflow:auto}
-main{flex:1;display:flex;flex-direction:column}
-input{width:100%;padding:10px;border-radius:8px;border:0}
-.player{height:320px;background:#000;display:flex;align-items:center;justify-content:center}
-video{width:100%;height:100%}
-.channels{flex:1;overflow:auto;padding:10px}
-.channel{background:#1e293b;margin:8px 0;padding:10px;border-radius:8px;cursor:pointer}
-.channel:hover{background:#334155}
-.stats{padding:10px;background:#111827}
-button{padding:8px 12px;margin:4px;border:0;border-radius:6px;cursor:pointer}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#0a0f1d;
+color:white;
+}
+
+header{
+background:#111827;
+padding:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:1px solid #222;
+}
+
+.logo{
+font-size:28px;
+font-weight:bold;
+color:#00d4ff;
+}
+
+.admin-btn{
+background:#00d4ff;
+border:none;
+padding:10px 20px;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.dashboard{
+padding:20px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:15px;
+margin-bottom:20px;
+}
+
+.card{
+background:#111827;
+padding:20px;
+border-radius:12px;
+box-shadow:0 0 10px rgba(0,0,0,.3);
+}
+
+.card h2{
+font-size:18px;
+margin-bottom:10px;
+}
+
+.card .number{
+font-size:32px;
+font-weight:bold;
+color:#00ff99;
+}
+
+.section-title{
+margin:20px 0;
+font-size:24px;
+color:#00d4ff;
+}
+
+.toolbar{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin-bottom:20px;
+}
+
+.toolbar button{
+padding:12px 18px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+background:#00d4ff;
+font-weight:bold;
+}
+
+.church-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:20px;
+}
+
+.church{
+background:#111827;
+border-radius:12px;
+padding:20px;
+}
+
+.church h3{
+margin-bottom:10px;
+color:#00ff99;
+}
+
+.church p{
+margin:5px 0;
+}
+
+.controls{
+margin-top:15px;
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+}
+
+.controls button{
+padding:10px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.start{background:green;color:white;}
+.stop{background:red;color:white;}
+.edit{background:orange;color:white;}
+.delete{background:gray;color:white;}
+
+.create-box{
+background:#111827;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+margin-bottom:10px;
+border:none;
+border-radius:6px;
+}
+
+.create-btn{
+background:#00ff99;
+padding:12px;
+width:100%;
+border:none;
+border-radius:8px;
+font-size:18px;
+cursor:pointer;
+}
+
+footer{
+text-align:center;
+padding:20px;
+margin-top:30px;
+background:#111827;
+}
+
 </style>
 </head>
 <body>
-<header>📺 BTECH-TV WORLD ULTRA MAX X OFFLINE EDITION</header>
-<div class="wrap">
-<aside>
-<input id="search" placeholder="Search channels...">
-<div class="stats">Offline Demo • 5000 Capacity Engine Structure</div>
-</aside>
-<main>
-<div class="player">
-<video id="video" controls></video>
+
+<header>
+<div class="logo">📺 BTECH-TV CHURCH NETWORK</div>
+<button class="admin-btn">SUPER ADMIN</button>
+</header>
+
+<div class="dashboard">
+
+<div class="stats">
+
+<div class="card">
+<h2>Total Churches</h2>
+<div class="number" id="churchCount">4</div>
 </div>
-<div style="padding:10px">
-<button onclick="prevChannel()">◀ Prev</button>
-<button onclick="nextChannel()">Next ▶</button>
+
+<div class="card">
+<h2>Active Streams</h2>
+<div class="number">4</div>
 </div>
-<div class="channels" id="list"></div>
-</main>
+
+<div class="card">
+<h2>Total Members</h2>
+<div class="number">25,000</div>
 </div>
+
+<div class="card">
+<h2>Monthly Revenue</h2>
+<div class="number">₦850,000</div>
+</div>
+
+</div>
+
+<h2 class="section-title">➕ Create Church</h2>
+
+<div class="create-box">
+
+<input type="text" id="churchName"
+placeholder="Church Name">
+
+<input type="text" id="churchDomain"
+placeholder="Subdomain">
+
+<button class="create-btn"
+onclick="createChurch()">
+Create Church Dashboard
+</button>
+
+</div>
+
+<h2 class="section-title">🛡 Super Admin Controls</h2>
+
+<div class="toolbar">
+
+<button>📡 Scan Streams</button>
+<button>⚡ Speed Boost</button>
+<button>💾 Backup All</button>
+<button>🔄 Restart System</button>
+<button>🧠 AI Monitor</button>
+<button>📊 Analytics</button>
+<button>🚨 Security</button>
+<button>💰 Revenue</button>
+
+</div>
+
+<h2 class="section-title">⛪ Hosted Churches</h2>
+
+<div class="church-grid" id="churchGrid">
+
+<div class="church">
+<h3>RCCG TV</h3>
+<p>Domain: rccg.btechtv.com</p>
+<p>Status: Active</p>
+
+<div class="controls">
+<button class="start">Start</button>
+<button class="stop">Stop</button>
+<button class="edit">Dashboard</button>
+<button class="delete">Delete</button>
+</div>
+</div>
+
+<div class="church">
+<h3>Winners Chapel TV</h3>
+<p>Domain: winners.btechtv.com</p>
+<p>Status: Active</p>
+
+<div class="controls">
+<button class="start">Start</button>
+<button class="stop">Stop</button>
+<button class="edit">Dashboard</button>
+<button class="delete">Delete</button>
+</div>
+</div>
+
+<div class="church">
+<h3>MFM TV</h3>
+<p>Domain: mfm.btechtv.com</p>
+<p>Status: Active</p>
+
+<div class="controls">
+<button class="start">Start</button>
+<button class="stop">Stop</button>
+<button class="edit">Dashboard</button>
+<button class="delete">Delete</button>
+</div>
+</div>
+
+<div class="church">
+<h3>Christ Embassy TV</h3>
+<p>Domain: christembassy.btechtv.com</p>
+<p>Status: Active</p>
+
+<div class="controls">
+<button class="start">Start</button>
+<button class="stop">Stop</button>
+<button class="edit">Dashboard</button>
+<button class="delete">Delete</button>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<footer>
+© 2026 BTECH-TV CHURCH NETWORK PLATFORM
+</footer>
+
 <script>
-const channels=[];
-for(let i=1;i<=5000;i++){
- channels.push({
-  name:"Channel "+i,
-  group:"Demo Group "+((i%20)+1),
-  url:""
- });
-}
-let filtered=[...channels];
-let current=0;
 
-function render(){
- const box=document.getElementById("list");
- box.innerHTML="";
- filtered.slice(0,300).forEach((c,i)=>{
-   const d=document.createElement("div");
-   d.className="channel";
-   d.innerHTML="<b>"+c.name+"</b><br><small>"+c.group+"</small>";
-   d.onclick=()=>play(i);
-   box.appendChild(d);
- });
+function createChurch(){
+
+let name =
+document.getElementById("churchName").value;
+
+let domain =
+document.getElementById("churchDomain").value;
+
+if(name==="" || domain===""){
+alert("Enter church details");
+return;
 }
 
-function play(i){
- current=i;
- alert("Offline demo: attach your own M3U/HLS streams.");
+let card = document.createElement("div");
+
+card.className="church";
+
+card.innerHTML=`
+<h3>${name}</h3>
+<p>Domain: ${domain}.btechtv.com</p>
+<p>Status: Active</p>
+
+<div class="controls">
+<button class="start">Start</button>
+<button class="stop">Stop</button>
+<button class="edit">Dashboard</button>
+<button class="delete"
+onclick="this.parentElement.parentElement.remove()">
+Delete
+</button>
+</div>
+`;
+
+document
+.getElementById("churchGrid")
+.appendChild(card);
+
+let count =
+document.querySelectorAll(".church").length;
+
+document
+.getElementById("churchCount")
+.innerText=count;
+
+document.getElementById("churchName").value="";
+document.getElementById("churchDomain").value="";
+
+alert("Church Created Successfully");
+
 }
 
-function nextChannel(){
- current=(current+1)%filtered.length;
- play(current);
-}
-function prevChannel(){
- current=(current-1+filtered.length)%filtered.length;
- play(current);
-}
-
-document.getElementById("search").addEventListener("input",e=>{
- const q=e.target.value.toLowerCase();
- filtered=channels.filter(c=>c.name.toLowerCase().includes(q));
- render();
-});
-
-render();
 </script>
+
 </body>
 </html>
