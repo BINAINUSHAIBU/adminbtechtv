@@ -305,6 +305,61 @@ document.getElementById("l").innerText=channels.filter(c=>c.status==="locked").l
 loadAPI();
 
 </script>
+  /* =====================
+ADMIN FIXED SYSTEM
+===================== */
+
+function lockAll(){
+channels.forEach(c=>{
+c.status = "locked";
+});
+render();
+stats();
+}
+
+function unlockAll(){
+channels.forEach(c=>{
+// restore default type-based status
+c.status = c.type === "paid" ? "paid" : "free";
+});
+render();
+stats();
+}
+
+function deleteLocked(){
+channels = channels.filter(c => c.status !== "locked");
+filtered = [...channels];
+render();
+stats();
+}
+
+/* =====================
+FILTER FIXED LOGIC
+===================== */
+
+function filterAll(){
+filtered = [...channels];
+render();
+}
+
+function filterLocked(){
+filtered = channels.filter(c => c.status === "locked");
+render();
+}
+
+function filterFree(){
+filtered = channels.filter(c =>
+c.type === "free" && c.status !== "locked"
+);
+render();
+}
+
+function filterPaid(){
+filtered = channels.filter(c =>
+c.type === "paid" && c.status !== "locked"
+);
+render();
+}
 
 </body>
 </html>
