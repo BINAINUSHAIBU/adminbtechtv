@@ -3,28 +3,30 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>IPTV Dashboard</title>
+<title>IPTV Pro Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <style>
 body{
 margin:0;
 font-family:Arial, sans-serif;
-background:#0b1220;
+background:#070b18;
 color:#fff;
 display:flex;
 height:100vh;
+overflow:hidden;
 }
 
 .sidebar{
-width:300px;
-background:#111a2e;
+width:320px;
+background:#0f172a;
 padding:15px;
 overflow-y:auto;
 }
 
 h2{
-font-size:18px;
-margin-bottom:10px;
+font-size:16px;
+margin:10px 0;
+color:#38bdf8;
 }
 
 select,input{
@@ -33,25 +35,55 @@ padding:10px;
 margin:5px 0;
 border:none;
 border-radius:6px;
+outline:none;
 }
 
 .channel{
 padding:10px;
 margin:5px 0;
-background:#1a2742;
+background:#111c33;
 cursor:pointer;
 border-radius:6px;
 font-size:14px;
+transition:0.2s;
+display:flex;
+justify-content:space-between;
 }
 
 .channel:hover{
-background:#26395f;
+background:#1e2a4a;
+}
+
+.channel small{
+color:#94a3b8;
 }
 
 .main{
 flex:1;
 display:flex;
 flex-direction:column;
+}
+
+.topbar{
+padding:10px;
+background:#0f172a;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+button{
+padding:8px 10px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+background:#2563eb;
+color:white;
+font-size:13px;
+}
+
+button:hover{
+background:#1d4ed8;
 }
 
 .player{
@@ -67,36 +99,23 @@ width:100%;
 height:100%;
 }
 
-.topbar{
-padding:10px;
-background:#111a2e;
-display:flex;
-gap:10px;
+.badge{
+font-size:10px;
+padding:2px 6px;
+border-radius:4px;
+background:#334155;
 }
 
-button{
-padding:8px 10px;
-border:none;
-border-radius:5px;
-cursor:pointer;
-background:#2d6cdf;
-color:white;
+.searchBox{
+margin-top:10px;
 }
 
-button:hover{
-background:#1f4ea8;
-}
-
-.fav{
-background:#ffb400;
-color:#000;
-}
 </style>
 </head>
 <body>
 
 <div class="sidebar">
-<h2>🌍 IPTV Countries</h2>
+<h2>🌍 Country</h2>
 <select id="countrySelect" onchange="loadChannels()">
 <option value="ng">Nigeria</option>
 <option value="us">USA</option>
@@ -108,7 +127,18 @@ color:#000;
 <option value="br">Brazil</option>
 </select>
 
-<input type="text" id="search" placeholder="Search channels..." onkeyup="filterChannels()" />
+<h2>📂 Category Filter</h2>
+<select id="categoryFilter" onchange="filterCategory()">
+<option value="all">All</option>
+<option value="Sports">Sports</option>
+<option value="News">News</option>
+<option value="Music">Music</option>
+<option value="Kids">Kids</option>
+<option value="Entertainment">Entertainment</option>
+</select>
+
+<h2>🔍 Search</h2>
+<input type="text" placeholder="Search channels..." onkeyup="searchChannel(this.value)" />
 
 <h2>📺 Channels</h2>
 <div id="channels"></div>
@@ -118,14 +148,16 @@ color:#000;
 <div class="topbar">
 <button onclick="toggleFav()">⭐ Favorites</button>
 <button onclick="loadChannels()">🔄 Reload</button>
+<button onclick="clearPlayer()">⛔ Stop</button>
 </div>
 <div class="player">
-<video id="video" controls></video>
+<video id="video" controls autoplay></video>
 </div>
 </div>
 
 <script>
 let allChannels = [];
+let filteredChannels = [];
 let favorites = JSON.parse(localStorage.getItem('fav') || '[]');
 
 async function loadChannels(){
@@ -141,14 +173,18 @@ function parseM3U(data){
 allChannels = [];
 let lines = data.split('\n');
 let name = '';
+let group = 'General';
 
 for(let i=0;i<lines.length;i++){
 if(lines[i].startsWith('#EXTINF')){
-name = lines[i].split(',')[1];
+name = lines[i].split(',')[1] || 'Unknown';
+let match = lines[i].match(/group-title="(.*?)"/);
+group = match ? match[1] : 'General';
 }else if(lines[i].startsWith('http')){
-allChannels.push({name, url:lines[i]});
+allChannels.push({name,url:lines[i],group});
 }
 }
+filteredChannels = allChannels;
 renderChannels(allChannels);
 }
 
@@ -159,7 +195,7 @@ container.innerHTML = '';
 list.forEach(ch=>{
 let div = document.createElement('div');
 div.className='channel';
-div.innerText = ch.name;
+div.innerHTML = `<span>${ch.name}</span><small class='badge'>${ch.group}</small>`;
 div.onclick=()=>playChannel(ch.url);
 container.appendChild(div);
 });
@@ -169,23 +205,40 @@ function playChannel(url){
 let video = document.getElementById('video');
 
 if(Hls.isSupported()){
-let hls = new Hls();
-hls.loadSource(url);
-hls.attachMedia(video);
+if(window.hls) window.hls.destroy();
+window.hls = new Hls();
+window.hls.loadSource(url);
+window.hls.attachMedia(video);
 }else{
 video.src = url;
 }
 video.play();
 }
 
-function filterChannels(){
-let val = document.getElementById('search').value.toLowerCase();
-let filtered = allChannels.filter(c=>c.name.toLowerCase().includes(val));
-renderChannels(filtered);
+function searchChannel(val){
+val = val.toLowerCase();
+let result = filteredChannels.filter(c=>c.name.toLowerCase().includes(val));
+renderChannels(result);
+}
+
+function filterCategory(){
+let cat = document.getElementById('categoryFilter').value;
+if(cat==='all'){
+filteredChannels = allChannels;
+}else{
+filteredChannels = allChannels.filter(c=>c.group.includes(cat));
+}
+renderChannels(filteredChannels);
 }
 
 function toggleFav(){
-alert('Favorites feature coming next update');
+alert('Favorites system will be enabled in next upgrade');
+}
+
+function clearPlayer(){
+let video = document.getElementById('video');
+video.pause();
+video.src = '';
 }
 
 loadChannels();
