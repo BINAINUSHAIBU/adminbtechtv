@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>GLOBAL IPTV ONE PAGE SYSTEM</title>
+<title>GLOBAL CHURCH NETWORK</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -27,7 +27,7 @@ height:100vh;
 }
 
 .sidebar{
-width:220px;
+width:240px;
 background:#0f1730;
 padding:10px;
 overflow-y:auto;
@@ -80,28 +80,39 @@ margin-bottom:10px;
 border-radius:6px;
 border:none;
 }
+
+.badge{
+padding:3px 8px;
+background:#2c3f7a;
+border-radius:5px;
+font-size:12px;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<h2>🌍 IPTV GLOBAL SYSTEM</h2>
-<div>Live TV • Sports • Movies</div>
+<h2>⛪ GLOBAL CHURCH NETWORK</h2>
+<div>Live Worship • Sermons • Programs</div>
 </header>
 
 <div class="container">
 
+<!-- SIDEBAR -->
 <div class="sidebar">
-<button onclick="loadChannels()">📺 Channels</button>
-<button onclick="loadSports()">⚽ Sports</button>
-<button onclick="loadMovies()">🎬 Movies</button>
-<button onclick="loadAdmin()">⚙ Admin</button>
+
+<button onclick="loadChurches()">⛪ Churches</button>
+<button onclick="loadChannels()">📺 Church Channels</button>
+<button onclick="loadLivePrograms()">🔴 Live Programs</button>
+<button onclick="loadAdmin()">⚙ Super Admin</button>
+
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
-<input placeholder="Search..." onkeyup="search(this.value)">
+<input placeholder="Search churches or channels..." onkeyup="search(this.value)">
 
 <div id="content"></div>
 
@@ -113,135 +124,218 @@ border:none;
 <script>
 
 ////////////////////////////////////////////////////
-// FAKE DATABASE (MOCK API)
+// DATABASE (MULTI CHURCH SYSTEM)
 ////////////////////////////////////////////////////
 
 const DB = {
+churches:[
+{
+id:1,
+name:"Redeemed Christian Church",
+location:"Nigeria",
 channels:[
-{id:1,name:"Sports HD",category:"Sports"},
-{id:2,name:"Movie Max",category:"Movies"},
-{id:3,name:"News 24",category:"News"}
+{name:"RCCG Live Service",stream:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"RCCG Youth Program",stream:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
+]
+},
+{
+id:2,
+name:"Winner's Chapel",
+location:"Nigeria",
+channels:[
+{name:"Winners Sunday Service",stream:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
+]
+}
 ],
 
-sports:[
-{home:"Arsenal",away:"Chelsea",status:"LIVE",minute:"65"},
-{home:"Madrid",away:"Barca",status:"UPCOMING"}
-],
-
-movies:[
-{title:"Avengers Endgame",year:2019},
-{title:"Fast X",year:2023}
+livePrograms:[
+{
+church:"Redeemed Christian Church",
+title:"Sunday Worship Live",
+status:"LIVE",
+time:"10:00 AM"
+},
+{
+church:"Winner's Chapel",
+title:"Faith Service",
+status:"UPCOMING",
+time:"9:00 AM"
+}
 ]
 };
 
-let current = [];
+let currentView = [];
 
 ////////////////////////////////////////////////////
-// CHANNELS
+// LOAD CHURCHES
 ////////////////////////////////////////////////////
 
-function loadChannels(){
-current = DB.channels;
-render(current,"channel");
-}
+function loadChurches(){
+let html = "<h3>⛪ Churches</h3>";
 
-////////////////////////////////////////////////////
-// SPORTS
-////////////////////////////////////////////////////
-
-function loadSports(){
-let html = "<h3>⚽ Live Sports</h3>";
-DB.sports.forEach(m=>{
+DB.churches.forEach(c=>{
 html += `
-<div class="card">
-${m.home} vs ${m.away}<br>
-${m.status} ${m.minute||""}
-</div>`;
-});
-document.getElementById("content").innerHTML = html;
-}
-
-////////////////////////////////////////////////////
-// MOVIES
-////////////////////////////////////////////////////
-
-function loadMovies(){
-let html = "<h3>🎬 Movies</h3>";
-DB.movies.forEach(m=>{
-html += `
-<div class="card">
-${m.title} (${m.year})
-</div>`;
-});
-document.getElementById("content").innerHTML = html;
-}
-
-////////////////////////////////////////////////////
-// ADMIN PANEL
-////////////////////////////////////////////////////
-
-function loadAdmin(){
-document.getElementById("content").innerHTML = `
-<h3>⚙ Admin Panel</h3>
-
-<div class="card">Users: 1200</div>
-<div class="card">Active Streams: 45</div>
-<div class="card">Revenue: $5,000</div>
-
-<button onclick="addChannel()">+ Add Channel</button>
+<div class="card" onclick="openChurch(${c.id})">
+<strong>${c.name}</strong><br>
+<span class="badge">${c.location}</span>
+</div>
 `;
-}
-
-function addChannel(){
-let name = prompt("Channel Name");
-if(name){
-DB.channels.push({id:Date.now(),name,category:"Custom"});
-alert("Channel Added");
-loadChannels();
-}
-}
-
-////////////////////////////////////////////////////
-// RENDER
-////////////////////////////////////////////////////
-
-function render(data,type){
-let html = "<h3>📺 Channels</h3>";
-
-data.forEach(c=>{
-html += `
-<div class="card" onclick="play('${c.id || c.name}')">
-${c.name} - ${c.category}
-</div>`;
 });
 
 document.getElementById("content").innerHTML = html;
 }
 
 ////////////////////////////////////////////////////
-// STREAM PLAYER (DEMO HLS)
+// OPEN CHURCH CHANNELS
 ////////////////////////////////////////////////////
 
-function play(id){
-document.getElementById("player").src =
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+function openChurch(id){
+let church = DB.churches.find(c=>c.id==id);
 
+let html = `<h3>📺 ${church.name} Channels</h3>`;
+
+church.channels.forEach(ch=>{
+html += `
+<div class="card" onclick="play('${ch.stream}')">
+🎥 ${ch.name}
+</div>
+`;
+});
+
+document.getElementById("content").innerHTML = html;
+}
+
+////////////////////////////////////////////////////
+// PLAY STREAM
+////////////////////////////////////////////////////
+
+function play(url){
+document.getElementById("player").src = url;
 document.getElementById("player").play();
 }
 
 ////////////////////////////////////////////////////
-// SEARCH
+// LIVE PROGRAMS
+////////////////////////////////////////////////////
+
+function loadLivePrograms(){
+let html = "<h3>🔴 Live Church Programs</h3>";
+
+DB.livePrograms.forEach(p=>{
+html += `
+<div class="card">
+<strong>${p.title}</strong><br>
+${p.church}<br>
+<span class="badge">${p.status}</span> - ${p.time}
+</div>
+`;
+});
+
+document.getElementById("content").innerHTML = html;
+}
+
+////////////////////////////////////////////////////
+// CHANNELS VIEW (ALL CHURCH CHANNELS)
+////////////////////////////////////////////////////
+
+function loadChannels(){
+let html = "<h3>📺 All Church Channels</h3>";
+
+DB.churches.forEach(c=>{
+c.channels.forEach(ch=>{
+html += `
+<div class="card" onclick="play('${ch.stream}')">
+${ch.name} <br><span class="badge">${c.name}</span>
+</div>
+`;
+});
+});
+
+document.getElementById("content").innerHTML = html;
+}
+
+////////////////////////////////////////////////////
+// SUPER ADMIN PANEL
+////////////////////////////////////////////////////
+
+function loadAdmin(){
+document.getElementById("content").innerHTML = `
+<h3>⚙ Super Admin Dashboard</h3>
+
+<div class="card">⛪ Total Churches: ${DB.churches.length}</div>
+<div class="card">📺 Total Channels: ${DB.churches.reduce((a,b)=>a+b.channels.length,0)}</div>
+<div class="card">🔴 Live Programs: ${DB.livePrograms.length}</div>
+
+<button onclick="addChurch()">+ Add Church</button>
+<button onclick="addProgram()">+ Add Live Program</button>
+`;
+}
+
+////////////////////////////////////////////////////
+// ADD CHURCH
+////////////////////////////////////////////////////
+
+function addChurch(){
+let name = prompt("Church Name");
+let location = prompt("Location");
+
+if(name){
+DB.churches.push({
+id:Date.now(),
+name,
+location,
+channels:[]
+});
+alert("Church Added");
+loadAdmin();
+}
+}
+
+////////////////////////////////////////////////////
+// ADD LIVE PROGRAM
+////////////////////////////////////////////////////
+
+function addProgram(){
+let church = prompt("Church Name");
+let title = prompt("Program Title");
+
+DB.livePrograms.push({
+church,
+title,
+status:"LIVE",
+time:"NOW"
+});
+
+alert("Program Added");
+loadAdmin();
+}
+
+////////////////////////////////////////////////////
+// SEARCH SYSTEM
 ////////////////////////////////////////////////////
 
 function search(q){
-let filtered = DB.channels.filter(c=>
-c.name.toLowerCase().includes(q.toLowerCase())
+q = q.toLowerCase();
+
+let churches = DB.churches.filter(c =>
+c.name.toLowerCase().includes(q)
 );
-render(filtered);
+
+let html = "<h3>🔍 Search Results</h3>";
+
+churches.forEach(c=>{
+html += `
+<div class="card" onclick="openChurch(${c.id})">
+${c.name} - ${c.location}
+</div>
+`;
+});
+
+document.getElementById("content").innerHTML = html;
 }
 
 // INIT
-loadChannels();
+loadChurches();
 
 </script>
 
