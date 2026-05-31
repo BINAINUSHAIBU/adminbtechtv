@@ -1,272 +1,351 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ultra IPTV Dashboard</title>
+<title>BTECH-TV ULTRA MAX 2026</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#0f0f1a;
-color:white;
+:root{
+--bg:#0b0f1a;
+--panel:#11182a;
+--card:#1b2438;
+--accent:#00bfff;
+--text:#fff;
+--free:#16a34a;
+--paid:#dc2626;
+--locked:#f59e0b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:var(--bg);color:var(--text);overflow:hidden}
+
+/* LOGIN */
+#login{
+position:fixed;inset:0;
+background:#000;
 display:flex;
-height:100vh;
+align-items:center;
+justify-content:center;
+z-index:9999;
 }
 
-.left{
-width:30%;
-background:#15152a;
-overflow-y:auto;
-padding:10px;
+.box{
+width:300px;
+background:var(--panel);
+padding:20px;
+border-radius:10px;
 }
 
-.right{
-flex:1;
-display:flex;
-flex-direction:column;
-}
-
-.video{
-height:60%;
-background:black;
-}
-
-video{
+input,button{
 width:100%;
-height:100%;
-}
-
-.controls{
 padding:10px;
-background:#1c1c33;
-display:flex;
-gap:10px;
-flex-wrap:wrap;
+margin-top:10px;
+border:none;
+border-radius:6px;
 }
 
 button{
-padding:8px;
+background:var(--accent);
+font-weight:bold;
 cursor:pointer;
-border:none;
-border-radius:5px;
-background:#2d2d55;
-color:white;
 }
 
-input{
-padding:8px;
-width:95%;
-margin-bottom:10px;
+/* LAYOUT */
+.topbar{
+height:60px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 15px;
+}
+
+.container{display:flex;height:calc(100vh - 60px)}
+
+.sidebar{
+width:240px;
+background:#0f1628;
+padding:10px;
+overflow:auto;
+}
+
+.main{flex:1;display:flex;flex-direction:column}
+
+.player{height:260px;background:black}
+video{width:100%;height:100%;object-fit:contain}
+
+.list{
+flex:1;
+overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:10px;
+padding:10px;
 }
 
 .card{
+background:var(--card);
 padding:10px;
-margin:5px 0;
-background:#222244;
+border-radius:10px;
 cursor:pointer;
-border-radius:5px;
+border:1px solid transparent;
 }
+
+.card:hover{border-color:var(--accent)}
 
 .badge{
-font-size:12px;
-padding:2px 5px;
-border-radius:3px;
+padding:4px 8px;
+border-radius:20px;
+font-size:11px;
+margin-right:4px;
 }
 
-.free{background:green;}
-.locked{background:red;}
+.free{background:var(--free)}
+.paid{background:var(--paid)}
+.locked{background:var(--locked);color:#000}
 
-.stats{
+/* ADMIN BUTTONS */
+.admin-btn{display:none}
+
+/* RIGHT */
+.right{
+width:260px;
+background:var(--panel);
 padding:10px;
-background:#111;
+overflow:auto;
+}
+
+.stat{
+background:#0f1628;
+padding:10px;
+margin-bottom:8px;
+border-radius:8px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- LEFT PANEL -->
-<div class="left">
-
-<h3>📺 Channels</h3>
-
-<input id="search" placeholder="Search channels..." oninput="render()">
-
-<div class="stats">
-Total: <span id="t">0</span> |
-Free: <span id="f">0</span> |
-Locked: <span id="l">0</span>
+<!-- LOGIN -->
+<div id="login">
+<div class="box">
+<h3>🔐 ADMIN LOGIN</h3>
+<input id="pass" type="password" placeholder="Enter Password">
+<button onclick="login()">ENTER</button>
+</div>
 </div>
 
-<button onclick="lockAll()">🔒 Lock All</button>
-<button onclick="unlockAll()">🔓 Unlock All</button>
-<button onclick="shuffle()">🎲 Shuffle</button>
-
-<div id="list"></div>
+<!-- TOPBAR -->
+<div class="topbar">
+<h3>🚀 ULTRA MAX IPTV</h3>
+<div id="status">LOCKED</div>
 </div>
 
-<!-- RIGHT PANEL -->
-<div class="right">
+<div class="container">
 
-<div class="video">
+<div class="sidebar">
+<h4>⚙ CONTROL</h4>
+<button onclick="filterAll()">All</button>
+<button onclick="filterLocked()">Locked</button>
+<button onclick="filterFree()">Free</button>
+<button onclick="filterPaid()">Paid</button>
+<input placeholder="Search..." oninput="search(this.value)">
+</div>
+
+<div class="main">
+<div class="player">
 <video id="video" controls></video>
 </div>
-
-<div class="controls">
-
-<button onclick="toggleTheme()">🌙 Theme</button>
-<button onclick="toggleFS()">⛶ Fullscreen</button>
-<button onclick="pip()">📺 PiP</button>
-<button onclick="addFav()">⭐ Favorite</button>
-<button onclick="showFav()">⭐ Show Fav</button>
-<button onclick="showRecent()">🕘 Recent</button>
-
+<div class="list" id="list"></div>
 </div>
 
-<div id="status" style="padding:10px;">Ready</div>
+<div class="right">
+<h4>📊 STATS</h4>
+<div class="stat">Total: <span id="t">0</span></div>
+<div class="stat">Free: <span id="f">0</span></div>
+<div class="stat">Paid: <span id="p">0</span></div>
+<div class="stat">Locked: <span id="l">0</span></div>
+
+<button class="admin-btn" onclick="lockAll()">🔒 Lock ALL</button>
+<button class="admin-btn" onclick="unlockAll()">🔓 Unlock ALL</button>
+<button class="admin-btn" onclick="deleteLocked()">❌ Delete Locked</button>
+</div>
 
 </div>
 
 <script>
 
-let channels=[
-{name:"BBC",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",status:"free"},
-{name:"CNN",url:"https://test-streams.mux.dev/test.m3u8",status:"free"},
-{name:"Sports",url:"https://test-streams.mux.dev/dai-discontinuity-deltatre/manifest.m3u8",status:"free"},
-{name:"Movies",url:"https://test-streams.mux.dev/pts_shift/master.m3u8",status:"locked"}
-];
+const ADMIN_PASS = "1234";
+let isAdmin = false;
 
-let filtered=[...channels];
-let fav=JSON.parse(localStorage.getItem("fav")||"[]");
-let recent=[];
-let dark=true;
+let channels = [];
+let filtered = [];
+
+function login(){
+const p=document.getElementById("pass").value;
+
+if(p === ADMIN_PASS){
+document.getElementById("login").style.display="none";
+document.getElementById("status").innerText="ADMIN MODE ACTIVE";
+isAdmin = true;
+initAdminUI();
+loadAPI();
+}else alert("Wrong password");
+}
+
+function initAdminUI(){
+document.querySelectorAll(".admin-btn")
+.forEach(b=>b.style.display=isAdmin?"block":"none");
+}
+
+/* SAVE */
+function saveState(){
+localStorage.setItem("channels", JSON.stringify(channels));
+}
+
+/* LOAD */
+function loadState(){
+const data = localStorage.getItem("channels");
+if(data) channels = JSON.parse(data);
+}
+
+/* IPTV LOAD */
+async function loadAPI(){
+try{
+
+loadState();
+
+const [ch,st,lg]=await Promise.all([
+fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
+fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
+fetch('https://iptv-org.github.io/api/logos.json').then(r=>r.json())
+]);
+
+let map={},logos={};
+
+ch.forEach(c=>map[c.id]=c);
+lg.forEach(l=>logos[l.channel]=l.url);
+
+if(channels.length === 0){
+let seen={};
+st.forEach(s=>{
+if(!s.url || seen[s.url]) return;
+seen[s.url]=1;
+
+channels.push({
+name:s.title||"Channel",
+url:s.url,
+type:"free",
+status:"free"
+});
+});
+}
+
+filtered=[...channels];
+render();
+stats();
+document.getElementById("status").innerText="LIVE: "+channels.length;
+
+}catch(e){console.log(e);}
+}
 
 /* RENDER */
 function render(){
-
-let q=document.getElementById("search").value?.toLowerCase()||"";
-
-let list=document.getElementById("list");
-list.innerHTML="";
-
-filtered=channels.filter(c=>c.name.toLowerCase().includes(q));
+const box=document.getElementById("list");
+box.innerHTML="";
 
 filtered.forEach((c,i)=>{
-
-let div=document.createElement("div");
+const div=document.createElement("div");
 div.className="card";
 
 div.innerHTML=`
 <b>${c.name}</b><br>
-<span class="badge ${c.status}">${c.status}</span>
+<span class="badge ${c.type||'free'}">${c.type||'free'}</span>
+<span class="badge ${c.status||'free'}">${c.status||'free'}</span>
 `;
 
-div.onclick=()=>play(c);
+/* CLICK = LOCK/UNLOCK */
+div.onclick=()=>toggleLock(i);
 
-list.appendChild(div);
+/* DOUBLE CLICK = PLAY */
+div.ondblclick=()=>play(i);
+
+box.appendChild(div);
 });
 
 stats();
 }
 
 /* PLAY */
-function play(c){
-
-if(c.status==="locked"){
-alert("Channel Locked");
-return;
-}
-
-let video=document.getElementById("video");
+function play(i){
+const v=document.getElementById("video");
+const c=filtered[i];
 
 if(Hls.isSupported()){
-let hls=new Hls();
-hls.loadSource(c.url);
-hls.attachMedia(video);
-}else{
-video.src=c.url;
+const h=new Hls();
+h.loadSource(c.url);
+h.attachMedia(v);
+}else v.src=c.url;
 }
 
-video.play();
+/* TOGGLE LOCK */
+function toggleLock(i){
+if(!isAdmin) return alert("Admin only");
 
-document.getElementById("status").innerText="▶ "+c.name;
+channels[i].status =
+channels[i].status === "locked" ? "free" : "locked";
 
-recent.unshift(c.name);
-recent=recent.slice(0,5);
+saveState();
+render();
+stats();
+}
+
+/* FILTERS */
+function filterAll(){filtered=[...channels];render();}
+function filterLocked(){filtered=channels.filter(c=>c.status==="locked");render();}
+function filterFree(){filtered=channels.filter(c=>c.status!=="locked");render();}
+function filterPaid(){filtered=channels.filter(c=>c.type==="paid");render();}
+
+/* SEARCH */
+function search(v){
+filtered=channels.filter(c=>c.name.toLowerCase().includes(v.toLowerCase()));
+render();
+}
+
+/* ADMIN ACTIONS */
+function lockAll(){
+channels.forEach(c=>c.status="locked");
+saveState();render();stats();
+}
+
+function unlockAll(){
+if(!isAdmin){
+const p=prompt("Enter password");
+if(p!==ADMIN_PASS) return alert("Denied");
+}
+
+channels.forEach(c=>c.status="free");
+saveState();render();stats();
+}
+
+function deleteLocked(){
+channels = channels.filter(c=>c.status!=="locked");
+saveState();render();stats();
 }
 
 /* STATS */
 function stats(){
 document.getElementById("t").innerText=channels.length;
-document.getElementById("f").innerText=channels.filter(c=>c.status==="free").length;
+document.getElementById("f").innerText=channels.filter(c=>c.status!=="locked").length;
+document.getElementById("p").innerText=channels.filter(c=>c.type==="paid").length;
 document.getElementById("l").innerText=channels.filter(c=>c.status==="locked").length;
 }
 
-/* LOCK */
-function lockAll(){
-channels.forEach(c=>c.status="locked");
-render();
-}
-
-function unlockAll(){
-channels.forEach(c=>c.status="free");
-render();
-}
-
-/* FAVORITE */
-function addFav(){
-let current=document.getElementById("status").innerText.replace("▶ ","");
-fav.push(current);
-localStorage.setItem("fav",JSON.stringify(fav));
-alert("Added to favorites");
-}
-
-function showFav(){
-alert("Favorites:\n"+fav.join("\n"));
-}
-
-/* RECENT */
-function showRecent(){
-alert("Recent:\n"+recent.join("\n"));
-}
-
-/* THEME */
-function toggleTheme(){
-dark=!dark;
-document.body.style.background=dark?"#0f0f1a":"#eaeaea";
-document.body.style.color=dark?"white":"black";
-}
-
-/* FULLSCREEN */
-function toggleFS(){
-let v=document.getElementById("video");
-if(!document.fullscreenElement){
-v.requestFullscreen();
-}else{
-document.exitFullscreen();
-}
-}
-
-/* PiP */
-function pip(){
-let v=document.getElementById("video");
-if(document.pictureInPictureEnabled){
-v.requestPictureInPicture();
-}
-}
-
-/* SHUFFLE */
-function shuffle(){
-channels.sort(()=>Math.random()-0.5);
-render();
-}
-
-render();
-
+/* BOOT */
 </script>
 
 </body>
