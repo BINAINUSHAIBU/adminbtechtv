@@ -3,21 +3,23 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>IPTV Business System Pro</title>
+<title>IPTV Business Platform (Pro MAX)</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
 <style>
 body{
 margin:0;
 font-family:Arial;
-background:#060b18;
+background:#050816;
 color:#fff;
 display:flex;
 height:100vh;
+overflow:hidden;
 }
 
 .sidebar{
-width:320px;
-background:#0f172a;
+width:340px;
+background:#0b1224;
 padding:12px;
 overflow-y:auto;
 }
@@ -29,7 +31,7 @@ flex-direction:column;
 }
 
 .topbar{
-background:#0f172a;
+background:#0b1224;
 padding:10px;
 display:flex;
 gap:8px;
@@ -45,7 +47,6 @@ background:#2563eb;
 color:#fff;
 font-size:12px;
 }
-
 button:hover{background:#1d4ed8;}
 
 input,select{
@@ -65,7 +66,6 @@ border-radius:6px;
 cursor:pointer;
 display:flex;
 justify-content:space-between;
-font-size:13px;
 }
 
 .channel:hover{background:#1e2a4a;}
@@ -85,40 +85,32 @@ align-items:center;
 justify-content:center;
 }
 
-video{
-width:100%;
-height:100%;
-}
+video{width:100%;height:100%;}
 
-.sectionTitle{
-margin:10px 0 5px;
-font-size:13px;
-color:#38bdf8;
+.panel{
+background:#0f172a;
+padding:10px;
+margin-top:10px;
+border-radius:8px;
 }
 
 .hidden{display:none;}
 
-.loginBox{
-padding:20px;
+.tab{
+display:none;
 }
 
+.tab.active{
+display:block;
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
-<div id="login" class="sidebar">
-<h2>🔐 IPTV Login</h2>
-<input id="user" placeholder="Username" />
-<input id="pass" type="password" placeholder="Password" />
-<button onclick="login()">Login</button>
-</div>
-
-<!-- APP -->
-<div id="app" class="hidden" style="display:flex;width:100%;height:100%;">
-
+<!-- SIDEBAR -->
 <div class="sidebar">
-<h2>🌍 Country</h2>
+<h2>🌍 IPTV CONTROL CENTER</h2>
+
 <select id="country" onchange="loadM3U()">
 <option value="ng">Nigeria</option>
 <option value="us">USA</option>
@@ -127,33 +119,67 @@ padding:20px;
 <option value="za">South Africa</option>
 </select>
 
-<h2>📂 Playlist Manager</h2>
-<input id="m3uUrl" placeholder="Add M3U URL" />
-<button onclick="addPlaylist()">Add Playlist</button>
+<input id="search" placeholder="Search channels" onkeyup="search()" />
 
-<h2>📊 Categories</h2>
-<select id="category" onchange="filterCat()">
-<option value="all">All</option>
-<option value="Sports">Sports</option>
-<option value="News">News</option>
-<option value="Movies">Movies</option>
-<option value="Kids">Kids</option>
-<option value="Entertainment">Entertainment</option>
-</select>
+<div class="panel">
+<h3>📡 Xtream API</h3>
+<input placeholder="Server URL" id="xt_url" />
+<input placeholder="Username" id="xt_user" />
+<input placeholder="Password" id="xt_pass" />
+<button onclick="saveXtream()">Save Xtream</button>
+</div>
 
-<h2>📺 Channels</h2>
+<div class="panel">
+<h3>💳 Paystack</h3>
+<input placeholder="Public Key" id="pay_key" />
+<button onclick="savePay()">Save Payment</button>
+</div>
+
+<div class="panel">
+<h3>💾 Firebase (Cloud DB)</h3>
+<input placeholder="Project ID" id="fb_id" />
+<button onclick="saveFirebase()">Save DB</button>
+</div>
+
+<div class="panel">
+<h3>📺 Channels</h3>
 <div id="channels"></div>
 </div>
-
-<div class="main">
-<div class="topbar">
-<button onclick="toggleFav()">⭐ Favorites</button>
-<button onclick="toggleAdmin()">⚙ Admin</button>
-<button onclick="logout()">🚪 Logout</button>
 </div>
 
+<!-- MAIN -->
+<div class="main">
+
+<div class="topbar">
+<button onclick="showTab('player')">▶ Player</button>
+<button onclick="showTab('admin')">⚙ Admin</button>
+<button onclick="showTab('epg')">📺 EPG</button>
+<button onclick="notifyTest()">🔔 Notify</button>
+</div>
+
+<!-- PLAYER -->
+<div id="player" class="tab active">
 <div class="videoBox">
 <video id="video" controls></video>
+</div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin" class="tab">
+<div class="panel">
+<h3>👥 Admin Dashboard</h3>
+<p>User Management: Ready</p>
+<p>Subscription System: Ready</p>
+<p>Channel Upload: Ready</p>
+<button onclick="alert('Upgrade: Backend required for full admin control')">Activate Admin Backend</button>
+</div>
+</div>
+
+<!-- EPG -->
+<div id="epg" class="tab">
+<div class="panel">
+<h3>📺 TV Guide (EPG)</h3>
+<p>Loading schedule...</p>
 </div>
 </div>
 
@@ -161,39 +187,14 @@ padding:20px;
 
 <script>
 let channels=[];
-let fav=JSON.parse(localStorage.getItem('fav')||'[]');
-let playlists=JSON.parse(localStorage.getItem('pls')||'[]');
-let isAdmin=false;
 
-function login(){
-let u=document.getElementById('user').value;
-let p=document.getElementById('pass').value;
-
-if(u && p){
-document.getElementById('login').style.display='none';
-document.getElementById('app').classList.remove('hidden');
-loadM3U();
-}
-}
-
-function logout(){location.reload();}
-
+// LOAD M3U
 async function loadM3U(){
-let country=document.getElementById('country').value;
-let url=`https://iptv-org.github.io/iptv/countries/${country}.m3u`;
-
+let c=document.getElementById('country').value;
+let url=`https://iptv-org.github.io/iptv/countries/${c}.m3u`;
 let res=await fetch(url);
 let text=await res.text();
 parse(text);
-}
-
-function addPlaylist(){
-let url=document.getElementById('m3uUrl').value;
-if(url){
-playlists.push(url);
-localStorage.setItem('pls',JSON.stringify(playlists));
-alert('Playlist added');
-}
 }
 
 function parse(data){
@@ -204,21 +205,20 @@ let group='General';
 
 for(let i=0;i<lines.length;i++){
 if(lines[i].includes('#EXTINF')){
-name=lines[i].split(',')[1]||'Unknown';
+name=lines[i].split(',')[1]||'Channel';
 let g=lines[i].match(/group-title="(.*?)"/);
 group=g?g[1]:'General';
 }else if(lines[i].startsWith('http')){
 channels.push({name,url:lines[i],group});
 }
 }
-render(channels);
+render();
 }
 
-function render(list){
+function render(){
 let c=document.getElementById('channels');
 c.innerHTML='';
-
-list.forEach(ch=>{
+channels.forEach(ch=>{
 let d=document.createElement('div');
 d.className='channel';
 d.innerHTML=`<span>${ch.name}</span><span class='badge'>${ch.group}</span>`;
@@ -230,30 +230,61 @@ c.appendChild(d);
 function play(url){
 let v=document.getElementById('video');
 if(window.hls) window.hls.destroy();
-
 if(Hls.isSupported()){
 window.hls=new Hls();
 window.hls.loadSource(url);
 window.hls.attachMedia(v);
-}else{v.src=url;}
+}else v.src=url;
 v.play();
 }
 
-function filterCat(){
-let c=document.getElementById('category').value;
-if(c==='all') render(channels);
-else render(channels.filter(x=>x.group.includes(c)));
+function search(){
+let v=document.getElementById('search').value.toLowerCase();
+let f=channels.filter(c=>c.name.toLowerCase().includes(v));
+document.getElementById('channels').innerHTML='';
+f.forEach(ch=>{
+let d=document.createElement('div');
+d.className='channel';
+d.innerHTML=`<span>${ch.name}</span><span class='badge'>${ch.group}</span>`;
+d.onclick=()=>play(ch.url);
+document.getElementById('channels').appendChild(d);
+});
 }
 
-function toggleFav(){
-alert('Favorites feature upgrade coming next build');
+// SETTINGS
+function saveXtream(){
+localStorage.setItem('xtream',JSON.stringify({
+url:xt_url.value,user:xt_user.value,pass:xt_pass.value
+}));
+alert('Xtream Saved');
 }
 
-function toggleAdmin(){
-isAdmin=!isAdmin;
-alert(isAdmin?'Admin Mode ON':'Admin Mode OFF');
+function savePay(){
+localStorage.setItem('paystack',pay_key.value);
+alert('Paystack Saved');
 }
 
+function saveFirebase(){
+localStorage.setItem('firebase',fb_id.value);
+alert('Firebase Saved');
+}
+
+// UI TABS
+function showTab(id){
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+
+// NOTIFICATIONS
+function notifyTest(){
+if(Notification.permission==='granted'){
+new Notification('Live Match Alert 🔥',{
+body:'Your IPTV system is active'
+});
+}else Notification.requestPermission();
+}
+
+// INIT
 loadM3U();
 </script>
 
