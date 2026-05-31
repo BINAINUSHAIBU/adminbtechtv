@@ -1,9 +1,15 @@
+<!-- =========================================
+DSTV-STYLE IPTV FULL SYSTEM (SINGLE PAGE VERSION)
+Frontend + Simulated Backend (LocalStorage)
+LEGAL IPTV FRAMEWORK (NO PIRATED CONTENT)
+========================================= -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>IPTV Business Platform (Pro MAX)</title>
+<title>DSTV IPTV Single Page System</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
@@ -18,7 +24,7 @@ overflow:hidden;
 }
 
 .sidebar{
-width:340px;
+width:320px;
 background:#0b1224;
 padding:12px;
 overflow-y:auto;
@@ -90,27 +96,28 @@ video{width:100%;height:100%;}
 .panel{
 background:#0f172a;
 padding:10px;
-margin-top:10px;
+margin:8px 0;
 border-radius:8px;
 }
 
 .hidden{display:none;}
 
-.tab{
-display:none;
-}
-
-.tab.active{
-display:block;
-}
 </style>
 </head>
 <body>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<h2>🌍 IPTV CONTROL CENTER</h2>
+<h2>📺 IPTV SYSTEM</h2>
 
+<h3>🔐 Login</h3>
+<input id="user" placeholder="username" />
+<input id="pass" type="password" placeholder="password" />
+<button onclick="login()">Login</button>
+
+<div id="app" class="hidden">
+
+<h3>🌍 Country</h3>
 <select id="country" onchange="loadM3U()">
 <option value="ng">Nigeria</option>
 <option value="us">USA</option>
@@ -119,31 +126,14 @@ display:block;
 <option value="za">South Africa</option>
 </select>
 
-<input id="search" placeholder="Search channels" onkeyup="search()" />
+<h3>📡 Add Channel (Admin)</h3>
+<input id="chName" placeholder="Channel Name" />
+<input id="chUrl" placeholder="Stream URL (m3u8)" />
+<button onclick="addChannel()">Add Channel</button>
 
-<div class="panel">
-<h3>📡 Xtream API</h3>
-<input placeholder="Server URL" id="xt_url" />
-<input placeholder="Username" id="xt_user" />
-<input placeholder="Password" id="xt_pass" />
-<button onclick="saveXtream()">Save Xtream</button>
-</div>
-
-<div class="panel">
-<h3>💳 Paystack</h3>
-<input placeholder="Public Key" id="pay_key" />
-<button onclick="savePay()">Save Payment</button>
-</div>
-
-<div class="panel">
-<h3>💾 Firebase (Cloud DB)</h3>
-<input placeholder="Project ID" id="fb_id" />
-<button onclick="saveFirebase()">Save DB</button>
-</div>
-
-<div class="panel">
-<h3>📺 Channels</h3>
+<h3>📂 Channels</h3>
 <div id="channels"></div>
+
 </div>
 </div>
 
@@ -151,142 +141,76 @@ display:block;
 <div class="main">
 
 <div class="topbar">
-<button onclick="showTab('player')">▶ Player</button>
-<button onclick="showTab('admin')">⚙ Admin</button>
-<button onclick="showTab('epg')">📺 EPG</button>
-<button onclick="notifyTest()">🔔 Notify</button>
+<button onclick="toggleView()">👁 Toggle Admin</button>
+<button onclick="logout()">🚪 Logout</button>
 </div>
 
-<!-- PLAYER -->
-<div id="player" class="tab active">
 <div class="videoBox">
 <video id="video" controls></video>
-</div>
-</div>
-
-<!-- ADMIN -->
-<div id="admin" class="tab">
-<div class="panel">
-<h3>👥 Admin Dashboard</h3>
-<p>User Management: Ready</p>
-<p>Subscription System: Ready</p>
-<p>Channel Upload: Ready</p>
-<button onclick="alert('Upgrade: Backend required for full admin control')">Activate Admin Backend</button>
-</div>
-</div>
-
-<!-- EPG -->
-<div id="epg" class="tab">
-<div class="panel">
-<h3>📺 TV Guide (EPG)</h3>
-<p>Loading schedule...</p>
-</div>
 </div>
 
 </div>
 
 <script>
-let channels=[];
+let channels = JSON.parse(localStorage.getItem('channels') || '[]');
+let isAdmin = false;
 
-// LOAD M3U
-async function loadM3U(){
-let c=document.getElementById('country').value;
-let url=`https://iptv-org.github.io/iptv/countries/${c}.m3u`;
-let res=await fetch(url);
-let text=await res.text();
-parse(text);
-}
-
-function parse(data){
-channels=[];
-let lines=data.split('\n');
-let name='';
-let group='General';
-
-for(let i=0;i<lines.length;i++){
-if(lines[i].includes('#EXTINF')){
-name=lines[i].split(',')[1]||'Channel';
-let g=lines[i].match(/group-title="(.*?)"/);
-group=g?g[1]:'General';
-}else if(lines[i].startsWith('http')){
-channels.push({name,url:lines[i],group});
+function login(){
+if(user.value && pass.value){
+document.getElementById('app').classList.remove('hidden');
+render();
 }
 }
+
+function logout(){location.reload();}
+
+function toggleView(){
+isAdmin = !isAdmin;
+alert(isAdmin ? "Admin Mode ON" : "Admin Mode OFF");
+}
+
+function addChannel(){
+if(!isAdmin){alert("Admin only");return;}
+
+channels.push({
+name: chName.value,
+url: chUrl.value
+});
+
+localStorage.setItem('channels', JSON.stringify(channels));
 render();
 }
 
 function render(){
-let c=document.getElementById('channels');
-c.innerHTML='';
-channels.forEach(ch=>{
-let d=document.createElement('div');
-d.className='channel';
-d.innerHTML=`<span>${ch.name}</span><span class='badge'>${ch.group}</span>`;
-d.onclick=()=>play(ch.url);
-c.appendChild(d);
+let box = document.getElementById('channels');
+box.innerHTML = '';
+
+channels.forEach(c => {
+let div = document.createElement('div');
+div.className = 'channel';
+div.innerHTML = `<span>${c.name}</span><span class='badge'>LIVE</span>`;
+div.onclick = () => play(c.url);
+box.appendChild(div);
 });
 }
 
 function play(url){
-let v=document.getElementById('video');
+let v = document.getElementById('video');
+
 if(window.hls) window.hls.destroy();
+
 if(Hls.isSupported()){
-window.hls=new Hls();
+window.hls = new Hls();
 window.hls.loadSource(url);
 window.hls.attachMedia(v);
-}else v.src=url;
+}else v.src = url;
+
 v.play();
 }
 
-function search(){
-let v=document.getElementById('search').value.toLowerCase();
-let f=channels.filter(c=>c.name.toLowerCase().includes(v));
-document.getElementById('channels').innerHTML='';
-f.forEach(ch=>{
-let d=document.createElement('div');
-d.className='channel';
-d.innerHTML=`<span>${ch.name}</span><span class='badge'>${ch.group}</span>`;
-d.onclick=()=>play(ch.url);
-document.getElementById('channels').appendChild(d);
-});
+function loadM3U(){
+alert("Optional: connect external M3U API here");
 }
 
-// SETTINGS
-function saveXtream(){
-localStorage.setItem('xtream',JSON.stringify({
-url:xt_url.value,user:xt_user.value,pass:xt_pass.value
-}));
-alert('Xtream Saved');
-}
-
-function savePay(){
-localStorage.setItem('paystack',pay_key.value);
-alert('Paystack Saved');
-}
-
-function saveFirebase(){
-localStorage.setItem('firebase',fb_id.value);
-alert('Firebase Saved');
-}
-
-// UI TABS
-function showTab(id){
-document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-}
-
-// NOTIFICATIONS
-function notifyTest(){
-if(Notification.permission==='granted'){
-new Notification('Live Match Alert 🔥',{
-body:'Your IPTV system is active'
-});
-}else Notification.requestPermission();
-}
-
-// INIT
-loadM3U();
-</script>
-
-</body>
-</html>
+render();
+</scrip
