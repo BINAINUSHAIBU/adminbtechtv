@@ -1,155 +1,89 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Global Stream Platform</title>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTECH-TV WORLD ULTRA MAX X OFFLINE</title>
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#050816;
-color:#fff;
-display:flex;
-height:100vh;
-}
-
-.sidebar{
-width:320px;
-background:#0b1224;
-padding:10px;
-overflow:auto;
-}
-
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-}
-
-input,button{
-width:100%;
-padding:10px;
-margin:5px 0;
-border:none;
-border-radius:6px;
-}
-
-button{
-background:#2563eb;
-color:#fff;
-cursor:pointer;
-}
-
-button:hover{background:#1d4ed8;}
-
-.card{
-padding:10px;
-background:#111c33;
-margin:5px 0;
-border-radius:6px;
-cursor:pointer;
-}
-
-.card:hover{
-background:#1e2a4a;
-}
-
-video{
-width:100%;
-height:100%;
-background:black;
-}
+body{margin:0;font-family:Arial;background:#0b1220;color:#fff}
+header{background:#111827;padding:12px;text-align:center;font-weight:bold}
+.wrap{display:flex;height:calc(100vh - 50px)}
+aside{width:300px;background:#0f172a;padding:10px;overflow:auto}
+main{flex:1;display:flex;flex-direction:column}
+input{width:100%;padding:10px;border-radius:8px;border:0}
+.player{height:320px;background:#000;display:flex;align-items:center;justify-content:center}
+video{width:100%;height:100%}
+.channels{flex:1;overflow:auto;padding:10px}
+.channel{background:#1e293b;margin:8px 0;padding:10px;border-radius:8px;cursor:pointer}
+.channel:hover{background:#334155}
+.stats{padding:10px;background:#111827}
+button{padding:8px 12px;margin:4px;border:0;border-radius:6px;cursor:pointer}
 </style>
 </head>
-
 <body>
-
-<div class="sidebar">
-<h2>📺 IPTV LOGIN</h2>
-
-<input id="user" placeholder="username">
-<input id="pass" type="password" placeholder="password">
-<button onclick="login()">Login</button>
-
-<hr>
-
-<h3>➕ Add Channel</h3>
-<input id="name" placeholder="Channel name">
-<input id="url" placeholder="Stream URL (m3u8)">
-<button onclick="addChannel()">Add</button>
-
-<h3>📡 Channels</h3>
-<div id="list"></div>
-</div>
-
-<div class="main">
+<header>📺 BTECH-TV WORLD ULTRA MAX X OFFLINE EDITION</header>
+<div class="wrap">
+<aside>
+<input id="search" placeholder="Search channels...">
+<div class="stats">Offline Demo • 5000 Capacity Engine Structure</div>
+</aside>
+<main>
+<div class="player">
 <video id="video" controls></video>
 </div>
-
+<div style="padding:10px">
+<button onclick="prevChannel()">◀ Prev</button>
+<button onclick="nextChannel()">Next ▶</button>
+</div>
+<div class="channels" id="list"></div>
+</main>
+</div>
 <script>
-
-let logged = false;
-
-// Local database
-let channels = JSON.parse(localStorage.getItem("channels") || "[]");
-
-// LOGIN (simple demo)
-function login(){
-if(user.value && pass.value){
-logged = true;
-alert("Logged in successfully");
+const channels=[];
+for(let i=1;i<=5000;i++){
+ channels.push({
+  name:"Channel "+i,
+  group:"Demo Group "+((i%20)+1),
+  url:""
+ });
 }
-}
+let filtered=[...channels];
+let current=0;
 
-// ADD CHANNEL
-function addChannel(){
-if(!logged){
-alert("Please login first");
-return;
-}
-
-channels.push({
-name:name.value,
-url:url.value
-});
-
-localStorage.setItem("channels", JSON.stringify(channels));
-render();
-}
-
-// RENDER CHANNELS
 function render(){
-list.innerHTML = "";
-channels.forEach(c=>{
-let div = document.createElement("div");
-div.className = "card";
-div.innerText = c.name;
-div.onclick = ()=>play(c.url);
-list.appendChild(div);
+ const box=document.getElementById("list");
+ box.innerHTML="";
+ filtered.slice(0,300).forEach((c,i)=>{
+   const d=document.createElement("div");
+   d.className="channel";
+   d.innerHTML="<b>"+c.name+"</b><br><small>"+c.group+"</small>";
+   d.onclick=()=>play(i);
+   box.appendChild(d);
+ });
+}
+
+function play(i){
+ current=i;
+ alert("Offline demo: attach your own M3U/HLS streams.");
+}
+
+function nextChannel(){
+ current=(current+1)%filtered.length;
+ play(current);
+}
+function prevChannel(){
+ current=(current-1+filtered.length)%filtered.length;
+ play(current);
+}
+
+document.getElementById("search").addEventListener("input",e=>{
+ const q=e.target.value.toLowerCase();
+ filtered=channels.filter(c=>c.name.toLowerCase().includes(q));
+ render();
 });
-}
 
-// PLAY STREAM
-function play(url){
-let v = document.getElementById("video");
-
-if(Hls.isSupported()){
-let hls = new Hls();
-hls.loadSource(url);
-hls.attachMedia(v);
-}else{
-v.src = url;
-}
-
-v.play();
-}
-
-// INIT
 render();
-
 </script>
-
 </body>
 </html>
