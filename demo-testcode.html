@@ -2,36 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#050816">
-
-<title>BTECH-TV MEGA ULTRA MERGED 2026</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#050816"/>
+<title>BTECH-TV ULTRA MERGED SYSTEM</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
-/* =========================
-THEME
-========================= */
-
 :root{
 --bg:#050816;
---panel:#0f172a;
+--panel:#111827;
 --card:#172033;
 --hover:#22304d;
 --accent:#00d4ff;
---text:#fff;
---muted:#94a3b8;
---danger:#ef4444;
+--text:#ffffff;
 --success:#16a34a;
---premium:#8b5cf6;
---warning:#f59e0b;
+--danger:#ef4444;
+--warn:#f59e0b;
 }
-
-/* =========================
-GLOBAL
-========================= */
 
 *{
 margin:0;
@@ -44,29 +33,35 @@ body{
 background:var(--bg);
 color:var(--text);
 overflow:hidden;
+display:flex;
+flex-direction:column;
 }
 
-/* =========================
-TOPBAR
-========================= */
-
+/* TOPBAR */
 .topbar{
 display:flex;
-gap:10px;
+gap:8px;
 padding:10px;
-background:#0b1220;
+background:#0f172a;
 overflow-x:auto;
 border-bottom:1px solid rgba(255,255,255,.05);
 }
 
+.logo{
+color:var(--accent);
+font-weight:bold;
+font-size:18px;
+margin-right:10px;
+white-space:nowrap;
+}
+
 .topbar button{
-padding:10px 14px;
-border:none;
-border-radius:10px;
 background:var(--card);
+border:none;
+padding:8px 12px;
+border-radius:8px;
 color:white;
 cursor:pointer;
-white-space:nowrap;
 }
 
 .topbar button:hover{
@@ -74,39 +69,32 @@ background:var(--accent);
 color:black;
 }
 
-/* =========================
-LAYOUT
-========================= */
-
+/* LAYOUT */
 .container{
 display:flex;
-height:calc(100vh - 55px);
+flex:1;
+overflow:hidden;
 }
 
 /* SIDEBAR */
-
 .sidebar{
-width:300px;
+width:280px;
 background:#0b1220;
-overflow-y:auto;
 padding:10px;
-border-right:1px solid rgba(255,255,255,.05);
+overflow:auto;
 }
 
 .cat{
+background:var(--card);
 padding:10px;
 margin:6px 0;
-background:var(--card);
 border-radius:10px;
 cursor:pointer;
 }
 
-.cat:hover{
-background:var(--hover);
-}
+.cat:hover{background:var(--hover);}
 
 /* MAIN */
-
 .main{
 flex:1;
 display:flex;
@@ -114,30 +102,17 @@ flex-direction:column;
 }
 
 /* PLAYER */
-
 .player{
-height:360px;
+height:340px;
 background:black;
 position:relative;
 }
 
-.player video{
+video{
 width:100%;
 height:100%;
 object-fit:contain;
 }
-
-.live{
-position:absolute;
-top:10px;
-left:10px;
-background:red;
-padding:6px 10px;
-border-radius:20px;
-font-size:12px;
-}
-
-/* OVERLAY */
 
 .overlay{
 position:absolute;
@@ -149,17 +124,7 @@ justify-content:center;
 align-items:center;
 }
 
-/* NOW */
-
-.now{
-display:flex;
-justify-content:space-between;
-padding:10px;
-background:var(--panel);
-}
-
-/* CHANNELS */
-
+/* CHANNEL LIST */
 .channels{
 flex:1;
 overflow:auto;
@@ -178,48 +143,87 @@ display:flex;
 justify-content:space-between;
 }
 
-/* BADGES */
+.channel:hover{background:var(--hover);}
 
 .badge{
 padding:4px 8px;
-border-radius:10px;
+border-radius:20px;
 font-size:11px;
 }
 
 .free{background:var(--success);}
 .paid{background:var(--danger);}
-.locked{background:var(--warning);}
-.premium{background:var(--premium);}
+.locked{background:var(--warn);color:black;}
+
+/* ADMIN */
+.admin{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.9);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.admin-box{
+background:#111827;
+padding:20px;
+border-radius:12px;
+width:90%;
+max-width:700px;
+}
+
+.admin-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+}
+
+.admin-grid button{
+padding:12px;
+border:none;
+border-radius:8px;
+background:var(--card);
+color:white;
+cursor:pointer;
+}
 
 </style>
 </head>
 
 <body>
 
+<!-- TOPBAR -->
 <div class="topbar">
+<div class="logo">📺 BTECH-TV MERGED ENGINE</div>
 
-<button onclick="setTab('all')">All</button>
-<button onclick="setTab('favs')">⭐ Favorites</button>
-<button onclick="setTab('recent')">🕘 Recent</button>
-<button onclick="loadUltraFeeds()">🚀 Ultra Feeds</button>
-<button onclick="generateVirtualChannels()">100K Channels</button>
-<button onclick="toggleTheme()">🌙 Theme</button>
-<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
-<button onclick="openAdmin()">⚙ Admin</button>
-<button onclick="openSuperAdmin()">🛡 Super Admin</button>
+<button onclick="setMode('real')">Real IPTV</button>
+<button onclick="setMode('engine')">100K Engine</button>
+<button onclick="setMode('hybrid')">Hybrid</button>
 
+<button onclick="loadReal('https://iptv-org.github.io/iptv/countries/ng.m3u')">Nigeria</button>
+<button onclick="generate()">Generate</button>
+
+<button onclick="shuffle()">Shuffle</button>
+<button onclick="toggleTheme()">Theme</button>
+<button onclick="toggleFullscreen()">Fullscreen</button>
+<button onclick="openAdmin()">Admin</button>
 </div>
 
+<!-- LAYOUT -->
 <div class="container">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<h3>Categories</h3>
-<div class="cat" onclick="filterCat('Sports')">⚽ Sports</div>
-<div class="cat" onclick="filterCat('Movies')">🎬 Movies</div>
-<div class="cat" onclick="filterCat('News')">📰 News</div>
-<div class="cat" onclick="filterCat('VIP')">💎 VIP</div>
+<h3>🌍 Countries</h3>
+
+<div class="cat" onclick="loadReal('https://iptv-org.github.io/iptv/countries/us.m3u')">USA</div>
+<div class="cat" onclick="loadReal('https://iptv-org.github.io/iptv/countries/uk.m3u')">UK</div>
+<div class="cat" onclick="loadReal('https://iptv-org.github.io/iptv/countries/za.m3u')">South Africa</div>
+
+<h3>⚡ Engine</h3>
+<div class="cat" onclick="generate()">Generate 100K Channels</div>
 
 </div>
 
@@ -227,111 +231,109 @@ font-size:11px;
 <div class="main">
 
 <div class="player">
-
-<div class="live">LIVE</div>
-
+<div class="overlay" id="overlay">Loading...</div>
 <video id="video" controls autoplay></video>
-
-<div class="overlay" id="overlay">
-<h1>🚀</h1>
-<p>Loading Engine...</p>
-</div>
-
-</div>
-
-<div class="now">
-<h3 id="title">No Channel</h3>
-<button onclick="prev()">◀</button>
-<button onclick="next()">▶</button>
 </div>
 
 <div class="channels" id="list"></div>
 
 </div>
+
 </div>
 
-<!-- =========================
-SCRIPT ENGINE
-========================= -->
+<!-- ADMIN -->
+<div class="admin" id="admin">
+<div class="admin-box">
+
+<h2 style="color:#00d4ff">SUPER ADMIN</h2>
+
+<div class="admin-grid">
+<button onclick="alert('Scan')">Scan</button>
+<button onclick="alert('Repair')">Repair</button>
+<button onclick="alert('Boost')">Boost</button>
+<button onclick="alert('Backup')">Backup</button>
+<button onclick="location.reload()">Restart</button>
+<button onclick="closeAdmin()">Close</button>
+</div>
+
+</div>
+</div>
 
 <script>
 
-let all=[];
-let filtered=[];
-let index=0;
-let hls;
-let favs=JSON.parse(localStorage.getItem('favs')||'{}');
-let recent=JSON.parse(localStorage.getItem('recent')||'[]');
+let real=[];
+let engine=[];
+let display=[];
+let mode="real";
+let current=0;
+let hls=null;
 
-const feeds=[
-"https://iptv-org.github.io/iptv/index.m3u",
-"https://iptv-org.github.io/iptv/categories/sport.m3u",
-"https://iptv-org.github.io/iptv/categories/movies.m3u"
+const testStreams=[
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
 ];
 
-/* LOAD */
-
-async function loadUltraFeeds(){
-all=[];
-for(let url of feeds){
-try{
-let res=await fetch(url);
-let text=await res.text();
-parse(text);
-}catch(e){}
-}
-filtered=[...all];
+/* MODE */
+function setMode(m){
+mode=m;
+if(m==="real") display=real;
+if(m==="engine") display=engine;
+if(m==="hybrid") display=[...real,...engine];
 render();
 }
 
-/* PARSE */
+/* REAL IPTV */
+async function loadReal(url){
+document.getElementById("overlay").style.display="flex";
 
-function parse(data){
-let lines=data.split("\n");
+const res=await fetch(url);
+const text=await res.text();
+
+real=[];
+const lines=text.split("\n");
+
 for(let i=0;i<lines.length;i++){
 if(lines[i].includes("#EXTINF")){
-let url=lines[i+1];
-if(!url) continue;
-all.push({
-id:all.length+1,
-name:lines[i],
-url:url,
-group:"Feed",
-type:Math.random()>0.5?"free":"paid"
-});
-}
-}
-}
+const name=lines[i].split(",")[1]||"Channel";
+const url=lines[i+1];
 
-/* VIRTUAL 100K */
-
-function generateVirtualChannels(){
-for(let i=0;i<1000;i++){
-all.push({
-id:all.length+1,
-name:"BTECH CHANNEL "+i,
-url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-group:"Virtual",
+real.push({
+name,
+url,
 type:"free"
 });
 }
-filtered=[...all];
+}
+
+display=real;
+render();
+document.getElementById("overlay").style.display="none";
+}
+
+/* ENGINE */
+function generate(){
+engine=[];
+for(let i=0;i<1000;i++){
+engine.push({
+name:"ENGINE CHANNEL "+i,
+url:testStreams[i%testStreams.length],
+type:i%3===0?"paid":"free"
+});
+}
+
+display=engine;
 render();
 }
 
 /* RENDER */
-
 function render(){
-let box=document.getElementById('list');
-box.innerHTML='';
-filtered.forEach((c,i)=>{
-let div=document.createElement('div');
-div.className='channel';
+const box=document.getElementById("list");
+box.innerHTML="";
+
+display.forEach((c,i)=>{
+const div=document.createElement("div");
+div.className="channel";
 div.innerHTML=`
-<div>
-<b>${c.name}</b>
-<br><small>${c.group}</small>
-</div>
+<span>${c.name}</span>
 <span class="badge ${c.type}">${c.type}</span>
 `;
 div.onclick=()=>play(i);
@@ -340,11 +342,12 @@ box.appendChild(div);
 }
 
 /* PLAY */
-
 function play(i){
-index=i;
-let c=filtered[i];
-document.getElementById('title').innerText=c.name;
+current=i;
+const c=display[i];
+if(!c) return;
+
+const video=document.getElementById("video");
 
 if(hls) hls.destroy();
 
@@ -359,68 +362,28 @@ video.play();
 }
 }
 
-/* NEXT PREV */
-
-function next(){
-index++;
-if(index>=filtered.length) index=0;
-play(index);
-}
-
-function prev(){
-index--;
-if(index<0) index=filtered.length-1;
-play(index);
-}
-
-/* FILTER */
-
-function filterCat(cat){
-filtered=all.filter(c=>c.group.includes(cat));
+/* UTIL */
+function shuffle(){
+display.sort(()=>Math.random()-0.5);
 render();
 }
-
-/* TAB */
-
-function setTab(t){
-if(t=='all') filtered=[...all];
-if(t=='favs') filtered=all.filter(c=>favs[c.id]);
-if(t=='recent') filtered=recent.map(id=>all.find(c=>c.id==id)).filter(Boolean);
-render();
-}
-
-/* RECENT */
-
-function addRecent(id){
-recent.unshift(id);
-localStorage.setItem('recent',JSON.stringify(recent));
-}
-
-/* ADMIN */
-
-function openAdmin(){
-alert("Admin Panel Open");
-}
-
-function openSuperAdmin(){
-alert("Super Admin Mode Activated");
-}
-
-/* UI */
 
 function toggleTheme(){
-document.body.style.background=
-document.body.style.background==='#fff'?'#050816':'#fff';
+document.body.style.background =
+document.body.style.background==="#000"?"#050816":"#000";
 }
 
 function toggleFullscreen(){
+if(!document.fullscreenElement){
 document.documentElement.requestFullscreen();
+}else{
+document.exitFullscreen();
+}
 }
 
-/* BOOT */
-
-loadUltraFeeds();
-generateVirtualChannels();
+/* ADMIN */
+function openAdmin(){document.getElementById("admin").style.display="flex";}
+function closeAdmin(){document.getElementById("admin").style.display="none";}
 
 </script>
 
