@@ -1,106 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>CHURCH GLOBAL SUPER PLATFORM</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Church Super Platform</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#0a0f1d;
-color:white;
-}
-
-header{
-padding:15px;
-background:#111a33;
-display:flex;
-justify-content:space-between;
-}
-
-.container{
-display:flex;
-height:100vh;
-}
-
-.sidebar{
-width:260px;
-background:#0f1730;
-padding:10px;
-overflow-y:auto;
-}
-
-.sidebar button{
-width:100%;
-padding:10px;
-margin:5px 0;
-background:#1d2a55;
-color:white;
-border:none;
-border-radius:6px;
-cursor:pointer;
-}
-
-.sidebar button:hover{background:#2c3f7a}
-
-.main{
-flex:1;
-padding:15px;
-overflow-y:auto;
-}
-
-.card{
-background:#141f3d;
-padding:12px;
-margin:10px 0;
-border-radius:10px;
-cursor:pointer;
-}
-
-input,select{
-width:100%;
-padding:10px;
-margin:5px 0;
-border:none;
-border-radius:6px;
-}
-
-video{
-width:100%;
-border-radius:10px;
-margin-top:10px;
-background:black;
-}
+body{margin:0;font-family:Arial;background:#0a0f1d;color:#fff}
+header{padding:15px;background:#111a33;display:flex;justify-content:space-between}
+.container{display:flex;height:100vh}
+.sidebar{width:240px;background:#0f1730;padding:10px}
+button{width:100%;padding:10px;margin:5px 0;background:#1d2a55;color:white;border:none}
+.main{flex:1;padding:15px}
+.card{background:#141f3d;padding:10px;margin:10px 0}
+input{width:100%;padding:10px;margin:5px 0}
+video{width:100%;margin-top:10px}
 </style>
 </head>
 
 <body>
 
 <header>
-<h3>⛪ CHURCH SUPER PLATFORM</h3>
-<div>Admin Control Center</div>
+<h3>⛪ CHURCH PLATFORM</h3>
+<div>Super Admin System</div>
 </header>
 
 <div class="container">
 
 <div class="sidebar">
-
-<button onclick="dashboard()">📊 Dashboard</button>
-<button onclick="churches()">⛪ Churches</button>
-<button onclick="channels()">📺 Channels</button>
-<button onclick="live()">🔴 Live Stream</button>
-<button onclick="programs()">📅 Programs</button>
-<button onclick="donations()">💳 Donations</button>
-<button onclick="users()">👥 Users</button>
-<button onclick="analytics()">📈 Analytics</button>
-
+<button onclick="loadChurches()">Churches</button>
+<button onclick="loadChannels()">Channels</button>
+<button onclick="loadPrograms()">Programs</button>
+<button onclick="loadDonations()">Donations</button>
 </div>
 
 <div class="main">
 
-<input placeholder="Search system..." onkeyup="search(this.value)">
+<input placeholder="Search..." onkeyup="search(this.value)">
 
 <div id="content"></div>
 
@@ -111,184 +46,56 @@ background:black;
 
 <script>
 
-////////////////////////////////////////////////////
-// FAKE SYSTEM DATABASE
-////////////////////////////////////////////////////
+const API = "http://localhost:5000/api";
 
-const DB = {
-churches:[
-{name:"Redeemed Church",members:12000},
-{name:"Winners Chapel",members:8000}
-],
+async function loadChurches(){
+let res = await fetch(API+"/church");
+let data = await res.json();
 
-channels:[
-{name:"Sunday Live Service",church:"Redeemed"},
-{name:"Bible Study",church:"Winners"}
-],
-
-users:1200,
-donations:45000,
-views:98000
-};
-
-////////////////////////////////////////////////////
-// DASHBOARD
-////////////////////////////////////////////////////
-
-function dashboard(){
-document.getElementById("content").innerHTML=`
-<h3>📊 SUPER ADMIN DASHBOARD</h3>
-
-<div class="card">⛪ Churches: ${DB.churches.length}</div>
-<div class="card">👥 Users: ${DB.users}</div>
-<div class="card">💳 Donations: $${DB.donations}</div>
-<div class="card">👀 Live Views: ${DB.views}</div>
-`;
-}
-
-////////////////////////////////////////////////////
-// CHURCHES
-////////////////////////////////////////////////////
-
-function churches(){
-let html="<h3>⛪ Churches</h3>";
-
-DB.churches.forEach(c=>{
-html+=`
-<div class="card">
-<strong>${c.name}</strong><br>
-Members: ${c.members}
-</div>`;
-});
-
-document.getElementById("content").innerHTML=html;
-}
-
-////////////////////////////////////////////////////
-// CHANNELS
-////////////////////////////////////////////////////
-
-function channels(){
-let html="<h3>📺 Channels</h3>";
-
-DB.channels.forEach(c=>{
-html+=`
-<div class="card" onclick="play()">
-${c.name} - ${c.church}
-</div>`;
-});
-
-document.getElementById("content").innerHTML=html;
-}
-
-////////////////////////////////////////////////////
-// LIVE STREAM
-////////////////////////////////////////////////////
-
-function live(){
-document.getElementById("content").innerHTML=`
-<h3>🔴 Live Streaming Control</h3>
-
-<div class="card">
-OBS Stream Key: **************
-</div>
-
-<div class="card">
-Status: LIVE
-</div>
-
-<button onclick="play()">▶ Start Demo Stream</button>
-`;
-}
-
-function play(){
-document.getElementById("player").src=
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
-document.getElementById("player").play();
-}
-
-////////////////////////////////////////////////////
-// PROGRAMS
-////////////////////////////////////////////////////
-
-function programs(){
-document.getElementById("content").innerHTML=`
-<h3>📅 Program Scheduler</h3>
-
-<input placeholder="Church Name">
-<input placeholder="Program Title">
-<input type="datetime-local">
-
-<button onclick="alert('Program Scheduled')">Save</button>
-`;
-}
-
-////////////////////////////////////////////////////
-// DONATIONS
-////////////////////////////////////////////////////
-
-function donations(){
-document.getElementById("content").innerHTML=`
-<h3>💳 Donations System</h3>
-
-<input placeholder="Amount">
-<input placeholder="Church Name">
-
-<button onclick="alert('Donation Sent (Mock)')">Donate</button>
-
-<div class="card">
-Total Donations: $${DB.donations}
-</div>
-`;
-}
-
-////////////////////////////////////////////////////
-// USERS
-////////////////////////////////////////////////////
-
-function users(){
-document.getElementById("content").innerHTML=`
-<h3>👥 Users</h3>
-
-<div class="card">Total Users: ${DB.users}</div>
-<button onclick="alert('User Added')">Add User</button>
-`;
-}
-
-////////////////////////////////////////////////////
-// ANALYTICS
-////////////////////////////////////////////////////
-
-function analytics(){
-document.getElementById("content").innerHTML=`
-<h3>📈 Analytics</h3>
-
-<div class="card">Live Views: ${DB.views}</div>
-<div class="card">Engagement: High</div>
-<div class="card">Top Church: Redeemed Church</div>
-`;
-}
-
-////////////////////////////////////////////////////
-// SEARCH
-////////////////////////////////////////////////////
-
-function search(q){
-q=q.toLowerCase();
-
-let result=DB.channels.filter(c=>
-c.name.toLowerCase().includes(q)||
-c.church.toLowerCase().includes(q)
-);
-
-document.getElementById("content").innerHTML=
-result.map(r=>`
-<div class="card">${r.name} - ${r.church}</div>
+document.getElementById("content").innerHTML =
+data.map(c=>`
+<div class="card">${c.name} - ${c.location}</div>
 `).join("");
 }
 
-// INIT
-dashboard();
+async function loadChannels(){
+let res = await fetch(API+"/channel");
+let data = await res.json();
+
+document.getElementById("content").innerHTML =
+data.map(c=>`
+<div class="card" onclick="play('${c.streamUrl}')">
+${c.name}
+</div>
+`).join("");
+}
+
+async function loadPrograms(){
+let res = await fetch(API+"/program");
+let data = await res.json();
+
+document.getElementById("content").innerHTML =
+data.map(p=>`
+<div class="card">${p.title} - ${p.status}</div>
+`).join("");
+}
+
+async function loadDonations(){
+let res = await fetch(API+"/donation");
+let data = await res.json();
+
+document.getElementById("content").innerHTML =
+data.map(d=>`
+<div class="card">₦${d.amount}</div>
+`).join("");
+}
+
+function play(url){
+document.getElementById("player").src = url;
+document.getElementById("player").play();
+}
+
+loadChurches();
 
 </script>
 
