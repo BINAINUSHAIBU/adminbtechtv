@@ -388,5 +388,190 @@
 
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
   </script>
+  /* =========================================================
+SUPER ADMIN USER MANAGER
+========================================================= */
+
+let users =
+JSON.parse(
+localStorage.getItem("btech_users") || "[]"
+);
+
+function saveUsers(){
+
+localStorage.setItem(
+"btech_users",
+JSON.stringify(users)
+);
+
+renderUsers();
+
+}
+
+function createUser(){
+
+const username =
+document.getElementById("newUserName").value;
+
+const password =
+document.getElementById("newUserPass").value;
+
+const plan =
+document.getElementById("newUserPlan").value;
+
+if(!username || !password){
+
+alert("Enter username and password");
+return;
+
+}
+
+users.push({
+
+id:Date.now(),
+
+username,
+
+password,
+
+plan,
+
+active:true,
+
+created:new Date().toLocaleString(),
+
+watchTime:0
+
+});
+
+saveUsers();
+
+document.getElementById("newUserName").value="";
+document.getElementById("newUserPass").value="";
+
+}
+
+function deleteUser(id){
+
+if(!confirm("Delete User?")){
+return;
+}
+
+users =
+users.filter(u=>u.id!==id);
+
+saveUsers();
+
+}
+
+function toggleUser(id){
+
+const u=
+users.find(x=>x.id===id);
+
+if(!u){
+return;
+}
+
+u.active=!u.active;
+
+saveUsers();
+
+}
+
+function upgradeUser(id){
+
+const u=
+users.find(x=>x.id===id);
+
+if(!u){
+return;
+}
+
+u.plan="ULTRA";
+
+saveUsers();
+
+}
+
+function renderUsers(){
+
+const box=
+document.getElementById("usersTable");
+
+if(!box){
+return;
+}
+
+box.innerHTML="";
+
+users.forEach(u=>{
+
+box.innerHTML+=`
+
+<tr>
+
+<td>${u.username}</td>
+
+<td>
+<span class="badge premium">
+${u.plan}
+</span>
+</td>
+
+<td>
+
+<span class="badge ${
+u.active
+? 'free'
+: 'dead'
+}">
+${u.active
+? 'ACTIVE'
+: 'BLOCKED'}
+</span>
+
+</td>
+
+<td>
+
+<button onclick="toggleUser(${u.id})">
+${u.active ? '🚫 Block':'✅ Activate'}
+</button>
+
+<button onclick="upgradeUser(${u.id})">
+⬆ Upgrade
+</button>
+
+<button onclick="deleteUser(${u.id})">
+🗑 Delete
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("userStats").innerHTML=`
+
+📊 Total Users:
+<b>${users.length}</b>
+
+&nbsp;&nbsp;
+
+🟢 Active:
+<b>${users.filter(u=>u.active).length}</b>
+
+&nbsp;&nbsp;
+
+🔴 Blocked:
+<b>${users.filter(u=>!u.active).length}</b>
+
+`;
+
+}
 </body>
 </html>
