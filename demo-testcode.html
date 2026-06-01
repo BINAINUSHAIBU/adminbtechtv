@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>GLOBAL CHURCH NETWORK</title>
+<title>CHURCH GLOBAL SUPER PLATFORM</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -18,7 +18,6 @@ padding:15px;
 background:#111a33;
 display:flex;
 justify-content:space-between;
-align-items:center;
 }
 
 .container{
@@ -27,7 +26,7 @@ height:100vh;
 }
 
 .sidebar{
-width:240px;
+width:260px;
 background:#0f1730;
 padding:10px;
 overflow-y:auto;
@@ -37,16 +36,14 @@ overflow-y:auto;
 width:100%;
 padding:10px;
 margin:5px 0;
-border:none;
 background:#1d2a55;
 color:white;
-cursor:pointer;
+border:none;
 border-radius:6px;
+cursor:pointer;
 }
 
-.sidebar button:hover{
-background:#2c3f7a;
-}
+.sidebar button:hover{background:#2c3f7a}
 
 .main{
 flex:1;
@@ -62,30 +59,19 @@ border-radius:10px;
 cursor:pointer;
 }
 
-.card:hover{
-background:#1d2a55;
+input,select{
+width:100%;
+padding:10px;
+margin:5px 0;
+border:none;
+border-radius:6px;
 }
 
 video{
 width:100%;
-margin-top:10px;
 border-radius:10px;
+margin-top:10px;
 background:black;
-}
-
-input{
-width:100%;
-padding:10px;
-margin-bottom:10px;
-border-radius:6px;
-border:none;
-}
-
-.badge{
-padding:3px 8px;
-background:#2c3f7a;
-border-radius:5px;
-font-size:12px;
 }
 </style>
 </head>
@@ -93,26 +79,28 @@ font-size:12px;
 <body>
 
 <header>
-<h2>⛪ GLOBAL CHURCH NETWORK</h2>
-<div>Live Worship • Sermons • Programs</div>
+<h3>⛪ CHURCH SUPER PLATFORM</h3>
+<div>Admin Control Center</div>
 </header>
 
 <div class="container">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
 
-<button onclick="loadChurches()">⛪ Churches</button>
-<button onclick="loadChannels()">📺 Church Channels</button>
-<button onclick="loadLivePrograms()">🔴 Live Programs</button>
-<button onclick="loadAdmin()">⚙ Super Admin</button>
+<button onclick="dashboard()">📊 Dashboard</button>
+<button onclick="churches()">⛪ Churches</button>
+<button onclick="channels()">📺 Channels</button>
+<button onclick="live()">🔴 Live Stream</button>
+<button onclick="programs()">📅 Programs</button>
+<button onclick="donations()">💳 Donations</button>
+<button onclick="users()">👥 Users</button>
+<button onclick="analytics()">📈 Analytics</button>
 
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
-<input placeholder="Search churches or channels..." onkeyup="search(this.value)">
+<input placeholder="Search system..." onkeyup="search(this.value)">
 
 <div id="content"></div>
 
@@ -124,218 +112,183 @@ font-size:12px;
 <script>
 
 ////////////////////////////////////////////////////
-// DATABASE (MULTI CHURCH SYSTEM)
+// FAKE SYSTEM DATABASE
 ////////////////////////////////////////////////////
 
 const DB = {
 churches:[
-{
-id:1,
-name:"Redeemed Christian Church",
-location:"Nigeria",
-channels:[
-{name:"RCCG Live Service",stream:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"RCCG Youth Program",stream:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
-]
-},
-{
-id:2,
-name:"Winner's Chapel",
-location:"Nigeria",
-channels:[
-{name:"Winners Sunday Service",stream:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
-]
-}
+{name:"Redeemed Church",members:12000},
+{name:"Winners Chapel",members:8000}
 ],
 
-livePrograms:[
-{
-church:"Redeemed Christian Church",
-title:"Sunday Worship Live",
-status:"LIVE",
-time:"10:00 AM"
-},
-{
-church:"Winner's Chapel",
-title:"Faith Service",
-status:"UPCOMING",
-time:"9:00 AM"
-}
-]
+channels:[
+{name:"Sunday Live Service",church:"Redeemed"},
+{name:"Bible Study",church:"Winners"}
+],
+
+users:1200,
+donations:45000,
+views:98000
 };
 
-let currentView = [];
-
 ////////////////////////////////////////////////////
-// LOAD CHURCHES
+// DASHBOARD
 ////////////////////////////////////////////////////
 
-function loadChurches(){
-let html = "<h3>⛪ Churches</h3>";
+function dashboard(){
+document.getElementById("content").innerHTML=`
+<h3>📊 SUPER ADMIN DASHBOARD</h3>
+
+<div class="card">⛪ Churches: ${DB.churches.length}</div>
+<div class="card">👥 Users: ${DB.users}</div>
+<div class="card">💳 Donations: $${DB.donations}</div>
+<div class="card">👀 Live Views: ${DB.views}</div>
+`;
+}
+
+////////////////////////////////////////////////////
+// CHURCHES
+////////////////////////////////////////////////////
+
+function churches(){
+let html="<h3>⛪ Churches</h3>";
 
 DB.churches.forEach(c=>{
-html += `
-<div class="card" onclick="openChurch(${c.id})">
+html+=`
+<div class="card">
 <strong>${c.name}</strong><br>
-<span class="badge">${c.location}</span>
-</div>
-`;
+Members: ${c.members}
+</div>`;
 });
 
-document.getElementById("content").innerHTML = html;
+document.getElementById("content").innerHTML=html;
 }
 
 ////////////////////////////////////////////////////
-// OPEN CHURCH CHANNELS
+// CHANNELS
 ////////////////////////////////////////////////////
 
-function openChurch(id){
-let church = DB.churches.find(c=>c.id==id);
+function channels(){
+let html="<h3>📺 Channels</h3>";
 
-let html = `<h3>📺 ${church.name} Channels</h3>`;
-
-church.channels.forEach(ch=>{
-html += `
-<div class="card" onclick="play('${ch.stream}')">
-🎥 ${ch.name}
-</div>
-`;
+DB.channels.forEach(c=>{
+html+=`
+<div class="card" onclick="play()">
+${c.name} - ${c.church}
+</div>`;
 });
 
-document.getElementById("content").innerHTML = html;
+document.getElementById("content").innerHTML=html;
 }
 
 ////////////////////////////////////////////////////
-// PLAY STREAM
+// LIVE STREAM
 ////////////////////////////////////////////////////
 
-function play(url){
-document.getElementById("player").src = url;
+function live(){
+document.getElementById("content").innerHTML=`
+<h3>🔴 Live Streaming Control</h3>
+
+<div class="card">
+OBS Stream Key: **************
+</div>
+
+<div class="card">
+Status: LIVE
+</div>
+
+<button onclick="play()">▶ Start Demo Stream</button>
+`;
+}
+
+function play(){
+document.getElementById("player").src=
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 document.getElementById("player").play();
 }
 
 ////////////////////////////////////////////////////
-// LIVE PROGRAMS
+// PROGRAMS
 ////////////////////////////////////////////////////
 
-function loadLivePrograms(){
-let html = "<h3>🔴 Live Church Programs</h3>";
+function programs(){
+document.getElementById("content").innerHTML=`
+<h3>📅 Program Scheduler</h3>
 
-DB.livePrograms.forEach(p=>{
-html += `
+<input placeholder="Church Name">
+<input placeholder="Program Title">
+<input type="datetime-local">
+
+<button onclick="alert('Program Scheduled')">Save</button>
+`;
+}
+
+////////////////////////////////////////////////////
+// DONATIONS
+////////////////////////////////////////////////////
+
+function donations(){
+document.getElementById("content").innerHTML=`
+<h3>💳 Donations System</h3>
+
+<input placeholder="Amount">
+<input placeholder="Church Name">
+
+<button onclick="alert('Donation Sent (Mock)')">Donate</button>
+
 <div class="card">
-<strong>${p.title}</strong><br>
-${p.church}<br>
-<span class="badge">${p.status}</span> - ${p.time}
+Total Donations: $${DB.donations}
 </div>
 `;
-});
-
-document.getElementById("content").innerHTML = html;
 }
 
 ////////////////////////////////////////////////////
-// CHANNELS VIEW (ALL CHURCH CHANNELS)
+// USERS
 ////////////////////////////////////////////////////
 
-function loadChannels(){
-let html = "<h3>📺 All Church Channels</h3>";
+function users(){
+document.getElementById("content").innerHTML=`
+<h3>👥 Users</h3>
 
-DB.churches.forEach(c=>{
-c.channels.forEach(ch=>{
-html += `
-<div class="card" onclick="play('${ch.stream}')">
-${ch.name} <br><span class="badge">${c.name}</span>
-</div>
-`;
-});
-});
-
-document.getElementById("content").innerHTML = html;
-}
-
-////////////////////////////////////////////////////
-// SUPER ADMIN PANEL
-////////////////////////////////////////////////////
-
-function loadAdmin(){
-document.getElementById("content").innerHTML = `
-<h3>⚙ Super Admin Dashboard</h3>
-
-<div class="card">⛪ Total Churches: ${DB.churches.length}</div>
-<div class="card">📺 Total Channels: ${DB.churches.reduce((a,b)=>a+b.channels.length,0)}</div>
-<div class="card">🔴 Live Programs: ${DB.livePrograms.length}</div>
-
-<button onclick="addChurch()">+ Add Church</button>
-<button onclick="addProgram()">+ Add Live Program</button>
+<div class="card">Total Users: ${DB.users}</div>
+<button onclick="alert('User Added')">Add User</button>
 `;
 }
 
 ////////////////////////////////////////////////////
-// ADD CHURCH
+// ANALYTICS
 ////////////////////////////////////////////////////
 
-function addChurch(){
-let name = prompt("Church Name");
-let location = prompt("Location");
+function analytics(){
+document.getElementById("content").innerHTML=`
+<h3>📈 Analytics</h3>
 
-if(name){
-DB.churches.push({
-id:Date.now(),
-name,
-location,
-channels:[]
-});
-alert("Church Added");
-loadAdmin();
-}
+<div class="card">Live Views: ${DB.views}</div>
+<div class="card">Engagement: High</div>
+<div class="card">Top Church: Redeemed Church</div>
+`;
 }
 
 ////////////////////////////////////////////////////
-// ADD LIVE PROGRAM
-////////////////////////////////////////////////////
-
-function addProgram(){
-let church = prompt("Church Name");
-let title = prompt("Program Title");
-
-DB.livePrograms.push({
-church,
-title,
-status:"LIVE",
-time:"NOW"
-});
-
-alert("Program Added");
-loadAdmin();
-}
-
-////////////////////////////////////////////////////
-// SEARCH SYSTEM
+// SEARCH
 ////////////////////////////////////////////////////
 
 function search(q){
-q = q.toLowerCase();
+q=q.toLowerCase();
 
-let churches = DB.churches.filter(c =>
-c.name.toLowerCase().includes(q)
+let result=DB.channels.filter(c=>
+c.name.toLowerCase().includes(q)||
+c.church.toLowerCase().includes(q)
 );
 
-let html = "<h3>🔍 Search Results</h3>";
-
-churches.forEach(c=>{
-html += `
-<div class="card" onclick="openChurch(${c.id})">
-${c.name} - ${c.location}
-</div>
-`;
-});
-
-document.getElementById("content").innerHTML = html;
+document.getElementById("content").innerHTML=
+result.map(r=>`
+<div class="card">${r.name} - ${r.church}</div>
+`).join("");
 }
 
 // INIT
-loadChurches();
+dashboard();
 
 </script>
 
