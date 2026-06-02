@@ -1,239 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Church Global Hotel Booking Portal</title>
-
+<title>Global Hotel Booking Portal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#0b1220;
-color:#fff;
+body {font-family: Arial; margin:0; background:#0f172a; color:white;}
+header {padding:20px; background:#111827; text-align:center;}
+.container {padding:20px;}
+.search-box {display:flex; gap:10px; flex-wrap:wrap;}
+input, select {
+ padding:10px; border-radius:8px; border:none; width:200px;
 }
-
-header{
-background:#111a2e;
-padding:15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
+button {
+ padding:10px 20px; background:#22c55e; border:none;
+ color:white; border-radius:8px; cursor:pointer;
 }
-
-button{
-padding:10px;
-border:none;
-cursor:pointer;
-border-radius:6px;
+.hotel-grid {
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+ gap:15px; margin-top:20px;
 }
-
-.container{
-display:flex;
+.card {
+ background:#1f2937; padding:15px; border-radius:10px;
 }
-
-.sidebar{
-width:250px;
-background:#0f1a33;
-height:100vh;
-padding:10px;
+.role-bar {
+ display:flex; justify-content:space-between;
+ background:#111827; padding:10px;
 }
-
-.main{
-flex:1;
-padding:20px;
-}
-
-.card{
-background:#16213a;
-padding:15px;
-margin:10px 0;
-border-radius:10px;
-}
-
-input, select{
-width:100%;
-padding:10px;
-margin:5px 0;
-border-radius:6px;
-border:none;
-}
-
-.hotel{
-background:#1b2a4a;
-padding:10px;
-margin:10px 0;
-border-radius:8px;
-}
-
-.hidden{display:none;}
 </style>
 </head>
 
 <body>
 
 <header>
-<h2>⛪ Church Hotel Booking Portal</h2>
-<button onclick="toggleAdmin()">Super Admin</button>
+<h1>🌍 Global Hotel Booking Portal</h1>
+<p>Book hotels anywhere in the world</p>
 </header>
+
+<div class="role-bar">
+<button>👤 User</button>
+<button>🏨 Hotel Dashboard</button>
+<button>👑 Super Admin</button>
+</div>
 
 <div class="container">
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-<h3>Navigation</h3>
-<button onclick="show('home')">🏠 Home</button>
-<button onclick="show('search')">🔍 Search Hotels</button>
-<button onclick="show('bookings')">📦 My Bookings</button>
-<button onclick="show('church')">⛪ Church Pages</button>
-</div>
+<h2>Search Hotels</h2>
 
-<!-- MAIN -->
-<div class="main">
-
-<!-- HOME -->
-<div id="home">
-<div class="card">
-<h2>Welcome</h2>
-<p>Book hotels worldwide through your church network system.</p>
-</div>
-</div>
-
-<!-- SEARCH -->
-<div id="search" class="hidden">
-<div class="card">
-<h3>Search Hotels</h3>
-<input placeholder="City or Country"/>
+<div class="search-box">
+<input placeholder="City or Country">
+<input type="date">
+<input type="date">
 <select>
-<option>All Prices</option>
-<option>Budget</option>
-<option>Mid-range</option>
-<option>Luxury</option>
+<option>Guests</option>
+<option>1</option><option>2</option><option>3+</option>
 </select>
-<button onclick="searchHotels()">Search</button>
+<button>Search</button>
 </div>
 
-<div id="hotelList"></div>
-</div>
+<div class="hotel-grid">
 
-<!-- BOOKINGS -->
-<div id="bookings" class="hidden">
 <div class="card">
-<h3>My Bookings</h3>
-<div id="myBookings">No bookings yet</div>
-</div>
+<h3>Luxury Palace Hotel</h3>
+<p>📍 Dubai, UAE</p>
+<p>⭐ 4.8 Rating</p>
+<p>💰 $120/night</p>
+<button>Book Now</button>
 </div>
 
-<!-- CHURCH PAGES -->
-<div id="church" class="hidden">
 <div class="card">
-<h3>Create Church Page</h3>
-<input id="churchName" placeholder="Church Name"/>
-<input id="churchCountry" placeholder="Country"/>
-<button onclick="createChurch()">Create Page</button>
+<h3>Ocean View Resort</h3>
+<p>📍 Maldives</p>
+<p>⭐ 4.9 Rating</p>
+<p>💰 $250/night</p>
+<button>Book Now</button>
 </div>
 
-<div id="churchList"></div>
-</div>
-
-<!-- ADMIN -->
-<div id="admin" class="hidden">
 <div class="card">
-<h2>🔐 Super Admin Panel</h2>
-<p>Manage churches and global hotel listings</p>
-
-<input placeholder="Add Global Hotel Name" id="hotelName"/>
-<input placeholder="Location" id="hotelLocation"/>
-<button onclick="addHotel()">Add Hotel</button>
-</div>
-
-<div id="adminHotels"></div>
+<h3>City Comfort Inn</h3>
+<p>📍 London, UK</p>
+<p>⭐ 4.5 Rating</p>
+<p>💰 $90/night</p>
+<button>Book Now</button>
 </div>
 
 </div>
+
 </div>
-
-<script>
-
-let hotels = [
-{name:"Hilton Lagos", location:"Nigeria"},
-{name:"Marriott Dubai", location:"UAE"},
-{name:"London Grand Hotel", location:"UK"}
-];
-
-let bookings = [];
-let churches = [];
-
-function show(id){
-document.querySelectorAll('.main > div').forEach(d=>d.classList.add('hidden'));
-document.getElementById(id).classList.remove('hidden');
-}
-
-function toggleAdmin(){
-let admin = document.getElementById('admin');
-admin.classList.toggle('hidden');
-renderAdmin();
-}
-
-function searchHotels(){
-let list = document.getElementById("hotelList");
-list.innerHTML = "";
-hotels.forEach((h,i)=>{
-list.innerHTML += `
-<div class="hotel">
-<h4>${h.name}</h4>
-<p>${h.location}</p>
-<button onclick="bookHotel(${i})">Book Now</button>
-</div>`;
-});
-}
-
-function bookHotel(i){
-bookings.push(hotels[i]);
-alert("Hotel Booked!");
-renderBookings();
-}
-
-function renderBookings(){
-let b = document.getElementById("myBookings");
-b.innerHTML = bookings.map(x=>`<div class="hotel">${x.name} - ${x.location}</div>`).join("");
-}
-
-function createChurch(){
-let name = document.getElementById("churchName").value;
-let country = document.getElementById("churchCountry").value;
-
-churches.push({name,country});
-renderChurch();
-}
-
-function renderChurch(){
-let c = document.getElementById("churchList");
-c.innerHTML = churches.map(x=>`
-<div class="hotel">
-⛪ ${x.name} (${x.country})
-</div>
-`).join("");
-}
-
-function addHotel(){
-let name = document.getElementById("hotelName").value;
-let location = document.getElementById("hotelLocation").value;
-
-hotels.push({name,location});
-renderAdmin();
-}
-
-function renderAdmin(){
-let a = document.getElementById("adminHotels");
-a.innerHTML = hotels.map((h,i)=>`
-<div class="hotel">
-${h.name} - ${h.location}
-</div>
-`).join("");
-}
-
-</script>
 
 </body>
 </html>
