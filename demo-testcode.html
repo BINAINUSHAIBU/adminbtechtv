@@ -5,7 +5,223 @@
 <title>Global Hotel Booking SaaS</title>
 <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Global Hotel Booking SaaS</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
 
+<body class="bg-gray-100">
+
+<div class="max-w-6xl mx-auto p-4">
+
+<!-- HEADER -->
+<h1 class="text-3xl font-bold mb-4">🏨 Global Hotel SaaS (One Page System)</h1>
+
+<!-- AUTH -->
+<div id="authBox" class="bg-white p-4 rounded shadow mb-4">
+  <h2 class="text-xl font-bold">Login / Register</h2>
+  <input id="name" placeholder="Name" class="border p-2 m-1">
+  <input id="email" placeholder="Email" class="border p-2 m-1">
+  <input id="password" placeholder="Password" type="password" class="border p-2 m-1">
+  <select id="role" class="border p-2 m-1">
+    <option value="user">User</option>
+    <option value="owner">Hotel Owner</option>
+    <option value="admin">Admin</option>
+  </select>
+  <br>
+  <button onclick="register()" class="bg-green-500 text-white px-4 py-2 m-1">Register</button>
+  <button onclick="login()" class="bg-blue-500 text-white px-4 py-2 m-1">Login</button>
+</div>
+
+<!-- USER PANEL -->
+<div id="panel" class="hidden">
+
+<div class="flex justify-between items-center mb-4">
+  <h2 class="text-xl font-bold">Dashboard</h2>
+  <button onclick="logout()" class="bg-red-500 text-white px-3 py-1">Logout</button>
+</div>
+
+<!-- SEARCH -->
+<div class="bg-white p-3 rounded shadow mb-3">
+  <input id="search" placeholder="Search hotels..." class="border p-2 w-full">
+  <button onclick="renderHotels()" class="bg-black text-white px-4 py-2 mt-2">Search</button>
+</div>
+
+<!-- CREATE HOTEL (OWNER) -->
+<div id="ownerBox" class="hidden bg-white p-3 rounded shadow mb-3">
+  <h3 class="font-bold">🏨 Create Hotel</h3>
+  <input id="hname" placeholder="Hotel Name" class="border p-2 m-1">
+  <input id="hlocation" placeholder="Location" class="border p-2 m-1">
+  <input id="hprice" placeholder="Price" class="border p-2 m-1">
+  <button onclick="addHotel()" class="bg-green-600 text-white px-4 py-2">Add</button>
+</div>
+
+<!-- HOTEL LIST -->
+<div id="hotels"></div>
+
+<!-- BOOKINGS -->
+<div class="bg-white p-3 rounded shadow mt-4">
+  <h3 class="font-bold">📊 My Bookings</h3>
+  <div id="bookings"></div>
+</div>
+
+<!-- ADMIN -->
+<div id="adminBox" class="hidden bg-white p-3 rounded shadow mt-4">
+  <h3 class="font-bold">👑 Admin Panel</h3>
+  <div id="adminHotels"></div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+// ---------------- STORAGE ----------------
+let users = JSON.parse(localStorage.getItem("users") || "[]");
+let hotels = JSON.parse(localStorage.getItem("hotels") || "[]");
+let bookings = JSON.parse(localStorage.getItem("bookings") || "[]");
+let currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
+
+// ---------------- AUTH ----------------
+function register(){
+  const user = {
+    name: name.value,
+    email: email.value,
+    password: password.value,
+    role: role.value
+  };
+  users.push(user);
+  localStorage.setItem("users", JSON.stringify(users));
+  alert("Registered!");
+}
+
+function login(){
+  const user = users.find(u => u.email === email.value && u.password === password.value);
+  if(!user) return alert("Invalid login");
+
+  currentUser = user;
+  localStorage.setItem("currentUser", JSON.stringify(user));
+  loadUI();
+}
+
+// ---------------- LOGOUT ----------------
+function logout(){
+  localStorage.removeItem("currentUser");
+  location.reload();
+}
+
+// ---------------- ADD HOTEL ----------------
+function addHotel(){
+  hotels.push({
+    id: Date.now(),
+    name: hname.value,
+    location: hlocation.value,
+    price: hprice.value,
+    owner: currentUser.email,
+    approved: currentUser.role === "admin"
+  });
+
+  localStorage.setItem("hotels", JSON.stringify(hotels));
+  renderHotels();
+}
+
+// ---------------- BOOK HOTEL ----------------
+function bookHotel(id){
+  bookings.push({
+    id: Date.now(),
+    hotelId: id,
+    user: currentUser.email
+  });
+
+  localStorage.setItem("bookings", JSON.stringify(bookings));
+  renderBookings();
+}
+
+// ---------------- RENDER HOTELS ----------------
+function renderHotels(){
+  let q = search.value?.toLowerCase() || "";
+
+  let list = hotels.filter(h =>
+    h.name.toLowerCase().includes(q) ||
+    h.location.toLowerCase().includes(q)
+  );
+
+  document.getElementById("hotels").innerHTML = list.map(h => `
+    <div class="bg-white p-3 m-2 rounded shadow">
+      <h3 class="font-bold">${h.name}</h3>
+      <p>${h.location}</p>
+      <p>₦${h.price}</p>
+      <button onclick="bookHotel(${h.id})" class="bg-blue-500 text-white px-3 py-1 mt-2">Book</button>
+    </div>
+  `).join("");
+}
+
+// ---------------- BOOKINGS ----------------
+function renderBookings(){
+  let my = bookings.filter(b => b.user === currentUser.email);
+
+  document.getElementById("bookings").innerHTML = my.map(b => {
+    let hotel = hotels.find(h => h.id === b.hotelId);
+    return `<p>📍 ${hotel?.name || "Deleted"} booked</p>`;
+  }).join("");
+}
+
+// ---------------- ADMIN ----------------
+function renderAdmin(){
+  if(currentUser.role !== "admin") return;
+
+  document.getElementById("adminHotels").innerHTML =
+    hotels.map(h => `
+      <div class="border p-2 m-1">
+        <b>${h.name}</b> (${h.approved ? "Approved" : "Pending"})
+        <button onclick="approve(${h.id})" class="bg-green-500 text-white px-2">Approve</button>
+        <button onclick="removeHotel(${h.id})" class="bg-red-500 text-white px-2">Delete</button>
+      </div>
+    `).join("");
+}
+
+function approve(id){
+  hotels = hotels.map(h => h.id === id ? {...h, approved:true} : h);
+  localStorage.setItem("hotels", JSON.stringify(hotels));
+  renderAdmin();
+}
+
+function removeHotel(id){
+  hotels = hotels.filter(h => h.id !== id);
+  localStorage.setItem("hotels", JSON.stringify(hotels));
+  renderAdmin();
+}
+
+// ---------------- UI CONTROL ----------------
+function loadUI(){
+  if(!currentUser) return;
+
+  document.getElementById("authBox").classList.add("hidden");
+  document.getElementById("panel").classList.remove("hidden");
+
+  if(currentUser.role === "owner"){
+    document.getElementById("ownerBox").classList.remove("hidden");
+  }
+
+  if(currentUser.role === "admin"){
+    document.getElementById("adminBox").classList.remove("hidden");
+    renderAdmin();
+  }
+
+  renderHotels();
+  renderBookings();
+}
+
+loadUI();
+
+</script>
+
+</body>
+</html>
 <body class="bg-gray-100">
 
 <div class="max-w-6xl mx-auto p-4">
