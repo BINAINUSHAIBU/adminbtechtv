@@ -3,147 +3,237 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>BTECH-TV WORLD ULTRA MAX X</title>
+<title>Church Global Hotel Booking Portal</title>
 
 <style>
 body{
 margin:0;
-font-family:Arial, sans-serif;
-background:#0b0f1a;
+font-family:Arial;
+background:#0b1220;
 color:#fff;
 }
 
 header{
 background:#111a2e;
 padding:15px;
-text-align:center;
-font-size:20px;
-font-weight:bold;
-}
-
-nav{
 display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:10px;
+justify-content:space-between;
+align-items:center;
+}
+
+button{
 padding:10px;
-background:#0f172a;
-}
-
-nav button{
-padding:10px 12px;
 border:none;
-border-radius:8px;
 cursor:pointer;
-background:#1e293b;
-color:#fff;
-}
-
-nav button:hover{
-background:#334155;
+border-radius:6px;
 }
 
 .container{
-padding:15px;
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:15px;
+display:flex;
+}
+
+.sidebar{
+width:250px;
+background:#0f1a33;
+height:100vh;
+padding:10px;
+}
+
+.main{
+flex:1;
+padding:20px;
 }
 
 .card{
-background:#111827;
+background:#16213a;
 padding:15px;
-border-radius:12px;
-min-height:120px;
-box-shadow:0 0 10px rgba(0,0,0,0.4);
+margin:10px 0;
+border-radius:10px;
 }
 
-.card h3{
-margin:0 0 10px 0;
-font-size:16px;
-}
-
-.badge{
-display:inline-block;
-padding:4px 8px;
+input, select{
+width:100%;
+padding:10px;
+margin:5px 0;
 border-radius:6px;
-background:#2563eb;
-font-size:12px;
-margin:2px;
+border:none;
 }
 
-footer{
-text-align:center;
-padding:15px;
-background:#0f172a;
-margin-top:20px;
-font-size:12px;
-color:#94a3b8;
+.hotel{
+background:#1b2a4a;
+padding:10px;
+margin:10px 0;
+border-radius:8px;
 }
+
+.hidden{display:none;}
 </style>
 </head>
 
 <body>
 
 <header>
-🚀 BTECH-TV WORLD ULTRA MAX X
+<h2>⛪ Church Hotel Booking Portal</h2>
+<button onclick="toggleAdmin()">Super Admin</button>
 </header>
-
-<nav>
-<button>⭐ Favorites</button>
-<button>🕘 Recent</button>
-<button>🚀 Ultra Feeds</button>
-<button>🌙 Theme</button>
-<button>⛶ Fullscreen</button>
-<button>🎲 Shuffle</button>
-<button>📺 Mini Player</button>
-<button>⏰ Sleep Timer</button>
-<button>📡 Scan</button>
-<button>⚡ Boost</button>
-<button>⬇ Export</button>
-<button>🌍 Countries</button>
-</nav>
 
 <div class="container">
 
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h3>Navigation</h3>
+<button onclick="show('home')">🏠 Home</button>
+<button onclick="show('search')">🔍 Search Hotels</button>
+<button onclick="show('bookings')">📦 My Bookings</button>
+<button onclick="show('church')">⛪ Church Pages</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- HOME -->
+<div id="home">
 <div class="card">
-<h3>🌍 Countries</h3>
-<span class="badge">🇳🇬 Nigeria</span>
-<span class="badge">🇺🇸 USA</span>
-<span class="badge">🇬🇧 UK</span>
-<span class="badge">🇮🇳 India</span>
+<h2>Welcome</h2>
+<p>Book hotels worldwide through your church network system.</p>
+</div>
 </div>
 
+<!-- SEARCH -->
+<div id="search" class="hidden">
 <div class="card">
-<h3>📺 Live TV Panel</h3>
-<p>Stream IPTV channels, playlists, and live feeds here.</p>
+<h3>Search Hotels</h3>
+<input placeholder="City or Country"/>
+<select>
+<option>All Prices</option>
+<option>Budget</option>
+<option>Mid-range</option>
+<option>Luxury</option>
+</select>
+<button onclick="searchHotels()">Search</button>
 </div>
 
+<div id="hotelList"></div>
+</div>
+
+<!-- BOOKINGS -->
+<div id="bookings" class="hidden">
 <div class="card">
-<h3>⚡ Ultra Features</h3>
-<p>Boost mode, shuffle playback, mini-player & fullscreen support.</p>
+<h3>My Bookings</h3>
+<div id="myBookings">No bookings yet</div>
+</div>
 </div>
 
+<!-- CHURCH PAGES -->
+<div id="church" class="hidden">
 <div class="card">
-<h3>🕘 Smart History</h3>
-<p>Recent watched channels and auto resume support.</p>
+<h3>Create Church Page</h3>
+<input id="churchName" placeholder="Church Name"/>
+<input id="churchCountry" placeholder="Country"/>
+<button onclick="createChurch()">Create Page</button>
 </div>
 
+<div id="churchList"></div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin" class="hidden">
 <div class="card">
-<h3>🌙 UI Controls</h3>
-<p>Theme switcher, responsive layout, mobile optimized UI.</p>
+<h2>🔐 Super Admin Panel</h2>
+<p>Manage churches and global hotel listings</p>
+
+<input placeholder="Add Global Hotel Name" id="hotelName"/>
+<input placeholder="Location" id="hotelLocation"/>
+<button onclick="addHotel()">Add Hotel</button>
 </div>
 
-<div class="card">
-<h3>⬇ Export Tools</h3>
-<p>Export playlists, data backup, and settings management.</p>
+<div id="adminHotels"></div>
 </div>
 
 </div>
+</div>
 
-<footer>
-BTECH-TV WORLD ULTRA MAX X • One Page System UI
-</footer>
+<script>
+
+let hotels = [
+{name:"Hilton Lagos", location:"Nigeria"},
+{name:"Marriott Dubai", location:"UAE"},
+{name:"London Grand Hotel", location:"UK"}
+];
+
+let bookings = [];
+let churches = [];
+
+function show(id){
+document.querySelectorAll('.main > div').forEach(d=>d.classList.add('hidden'));
+document.getElementById(id).classList.remove('hidden');
+}
+
+function toggleAdmin(){
+let admin = document.getElementById('admin');
+admin.classList.toggle('hidden');
+renderAdmin();
+}
+
+function searchHotels(){
+let list = document.getElementById("hotelList");
+list.innerHTML = "";
+hotels.forEach((h,i)=>{
+list.innerHTML += `
+<div class="hotel">
+<h4>${h.name}</h4>
+<p>${h.location}</p>
+<button onclick="bookHotel(${i})">Book Now</button>
+</div>`;
+});
+}
+
+function bookHotel(i){
+bookings.push(hotels[i]);
+alert("Hotel Booked!");
+renderBookings();
+}
+
+function renderBookings(){
+let b = document.getElementById("myBookings");
+b.innerHTML = bookings.map(x=>`<div class="hotel">${x.name} - ${x.location}</div>`).join("");
+}
+
+function createChurch(){
+let name = document.getElementById("churchName").value;
+let country = document.getElementById("churchCountry").value;
+
+churches.push({name,country});
+renderChurch();
+}
+
+function renderChurch(){
+let c = document.getElementById("churchList");
+c.innerHTML = churches.map(x=>`
+<div class="hotel">
+⛪ ${x.name} (${x.country})
+</div>
+`).join("");
+}
+
+function addHotel(){
+let name = document.getElementById("hotelName").value;
+let location = document.getElementById("hotelLocation").value;
+
+hotels.push({name,location});
+renderAdmin();
+}
+
+function renderAdmin(){
+let a = document.getElementById("adminHotels");
+a.innerHTML = hotels.map((h,i)=>`
+<div class="hotel">
+${h.name} - ${h.location}
+</div>
+`).join("");
+}
+
+</script>
 
 </body>
 </html>
