@@ -1,1154 +1,252 @@
-
-
-
-<!-- ========================================================= -->
-<!-- BTECH-TV WORLD ULTRA MAX X -->
-<!-- EXTREME MERGED FULL ONE-PAGE IPTV ENGINE -->
-<!-- ALL FEATURES MERGED • NO FEATURES REMOVED -->
-<!-- GLOBAL CHANNELS • PREMIUM DASHBOARD • AI IPTV -->
-<!-- MULTI SOURCE • XTREAM • M3U • HLS • DASH -->
-<!-- FAVORITES • RECENTS • AUTOSKIP • PiP • SHARE -->
-<!-- MINI PLAYER • SLEEP TIMER • SPEED BOOST -->
-<!-- GLOBAL COUNTRIES • CATEGORIES • LANGUAGES -->
-<!-- USER MANAGER • QUIZ CHANNELS • PREMIUM UI -->
-<!-- MOBILE + DESKTOP OPTIMIZED • ULTRA ENGINE -->
-<!-- ========================================================= -->
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8"/>
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-/>
-
-<meta name="theme-color" content="#0b0f1a"/>
-
-<title>BTECH-TV WORLD ULTRA MAX X</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BTECH-TV WORLD ULTRA MAX X 2026</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-
 :root{
-
 --bg:#050816;
 --panel:#111827;
 --card:#172033;
---hover:#22304d;
 --accent:#00d4ff;
 --text:#ffffff;
 --muted:#94a3b8;
---success:#16a34a;
---danger:#ef4444;
---premium:#8b5cf6;
---gold:#facc15;
-
 }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
--webkit-tap-highlight-color:transparent;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden;}
 
-html,
-body{
-width:100%;
-height:100%;
-background:var(--bg);
-color:var(--text);
-overflow:hidden;
-}
-
-body{
-display:flex;
-flex-direction:column;
-}
-
-/* =========================================================
-TOPBAR
-========================================================= */
-
+/* TOPBAR */
 .topbar{
-
-min-height:72px;
-background:linear-gradient(90deg,#0f172a,#111827);
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:12px 18px;
-gap:12px;
-border-bottom:1px solid rgba(255,255,255,.05);
-flex-wrap:wrap;
-
+display:flex;justify-content:space-between;align-items:center;
+padding:10px 15px;background:#0f172a;border-bottom:1px solid #1e293b;
+}
+.logo{color:var(--accent);font-size:20px;font-weight:bold;}
+.btns button{
+margin-left:8px;padding:8px 12px;border:none;border-radius:8px;
+background:#172033;color:white;cursor:pointer;
 }
 
-.logo{
-
-font-size:24px;
-font-weight:bold;
-color:var(--accent);
-white-space:nowrap;
-
-}
-
-.top-buttons{
-
-display:flex;
-gap:10px;
-overflow-x:auto;
-margin-left:auto;
-scrollbar-width:none;
-
-}
-
-.top-buttons::-webkit-scrollbar{
-display:none;
-}
-
-.top-buttons button{
-
-padding:10px 16px;
-background:var(--card);
-color:white;
-border:none;
-border-radius:10px;
-cursor:pointer;
-transition:.3s;
-font-size:13px;
-white-space:nowrap;
-
-}
-
-.top-buttons button:hover,
-.top-buttons button.active{
-
-background:var(--accent);
-color:black;
-
-}
-
-/* =========================================================
-LAYOUT
-========================================================= */
-
-.container{
-
-flex:1;
-display:flex;
-overflow:hidden;
-min-height:0;
-
-}
-
-.sidebar{
-
-width:330px;
-background:#0b1220;
-overflow-y:auto;
-padding:15px;
-border-right:1px solid rgba(255,255,255,.05);
-
-}
-
-.main{
-
-flex:1;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-
-}
-
-/* =========================================================
-SIDEBAR
-========================================================= */
-
-.sidebar h3{
-
-margin:16px 0 10px;
-color:var(--accent);
-font-size:15px;
-
-}
-
-.cat{
-
-background:var(--card);
-padding:12px;
-margin-bottom:10px;
-border-radius:12px;
-cursor:pointer;
-transition:.3s;
-font-size:14px;
-
-}
-
-.cat:hover{
-
-background:var(--hover);
-transform:translateX(5px);
-
-}
-
-/* =========================================================
-PLAYER
-========================================================= */
-
-.player{
-
-height:390px;
-background:black;
-position:relative;
-display:flex;
-justify-content:center;
-align-items:center;
-overflow:hidden;
-
-}
-
-.player video{
-
-width:100%;
-height:100%;
-object-fit:contain;
-background:black;
-
-}
-
-.live{
-
-position:absolute;
-top:15px;
-left:15px;
-background:red;
-padding:8px 14px;
-border-radius:30px;
-font-size:12px;
-font-weight:bold;
-z-index:5;
-
-}
-
-.overlay{
-
-position:absolute;
-inset:0;
-background:rgba(0,0,0,.9);
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-z-index:10;
-
-}
-
-.overlay h1{
-
-font-size:70px;
-margin-bottom:15px;
-
-}
-
-.overlay p{
-
-color:#cbd5e1;
-
-}
-
-/* =========================================================
-MINI PLAYER
-========================================================= */
-
-.mini-player{
-
-position:fixed;
-right:15px;
-bottom:15px;
-width:240px;
-height:140px;
-background:black;
-border-radius:12px;
-overflow:hidden;
-z-index:999;
-display:none;
-box-shadow:0 0 20px rgba(0,0,0,.5);
-
-}
-
-.mini-player video{
-
-width:100%;
-height:100%;
-object-fit:cover;
-
-}
-
-/* =========================================================
-NOW PLAYING
-========================================================= */
-
-.now-playing{
-
-background:var(--panel);
-padding:14px 18px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-flex-wrap:wrap;
-
-}
-
-.controls{
-
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-
-}
-
-.controls button{
-
-padding:10px 15px;
-background:var(--card);
-border:none;
-border-radius:10px;
-cursor:pointer;
-color:white;
-
-}
-
-.controls button:hover{
-
-background:var(--hover);
-
-}
-
-.clock{
-
-font-size:12px;
-color:var(--muted);
-margin-top:6px;
-
-}
-
-/* =========================================================
-SEARCH
-========================================================= */
-
-.epg-box{
-
-background:#0f172a;
-padding:10px 15px;
-font-size:13px;
-color:#cbd5e1;
-border-bottom:1px solid rgba(255,255,255,.05);
-
-}
-
-.search-box{
-
-padding:12px;
-background:var(--panel);
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-
-}
-
-.search-box input,
-.search-box select{
-
-padding:12px;
-border:none;
-border-radius:10px;
-background:#0f172a;
-color:white;
-
-}
-
-.search-box input{
-
-flex:1;
-
-}
-
-/* =========================================================
-CHANNELS
-========================================================= */
-
-.channels{
-
-flex:1;
-overflow-y:auto;
-padding:15px;
+/* DASHBOARD */
+.dashboard{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-gap:12px;
-
-}
-
-.channel{
-
-background:var(--card);
-padding:14px;
-border-radius:14px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-cursor:pointer;
-transition:.3s;
-border:1px solid transparent;
-
-}
-
-.channel:hover{
-
-background:var(--hover);
-border-color:var(--accent);
-transform:translateY(-2px);
-
-}
-
-.channel.active{
-
-background:#00d4ff22;
-border-color:var(--accent);
-
-}
-
-.left{
-
-display:flex;
-gap:12px;
-align-items:center;
-overflow:hidden;
-
-}
-
-.left img{
-
-width:60px;
-height:60px;
-border-radius:12px;
-object-fit:cover;
-background:black;
-
-}
-
-.info h4{
-
-font-size:14px;
-margin-bottom:5px;
-
-}
-
-.info small{
-
-color:#cbd5e1;
-
-}
-
-.status{
-
-display:flex;
-flex-direction:column;
-gap:6px;
-align-items:flex-end;
-
-}
-
-.badge{
-
-padding:5px 10px;
-border-radius:20px;
-font-size:11px;
-font-weight:bold;
-
-}
-
-.free{
-background:#16a34a;
-}
-
-.country{
-background:#2563eb;
-}
-
-.dead{
-background:#ef4444;
-}
-
-.premium{
-background:var(--premium);
-}
-
-.fav{
-font-size:20px;
-cursor:pointer;
-}
-
-.fav.on{
-color:gold;
-}
-
-/* =========================================================
-STATS
-========================================================= */
-
-.stats{
-
-padding:10px 15px;
-background:#020617;
-font-size:12px;
-color:#94a3b8;
-
-}
-
-/* =========================================================
-FOOTER
-========================================================= */
-
-.footer-bar{
-
+grid-template-columns:repeat(4,1fr);
+gap:10px;
 padding:10px;
-text-align:center;
-font-size:12px;
 background:#020617;
-color:#94a3b8;
-
 }
-
-/* =========================================================
-RESPONSIVE
-========================================================= */
-
-@media(max-width:900px){
-
-.container{
-flex-direction:column;
-overflow:auto;
+.card{
+background:var(--card);padding:10px;border-radius:10px;text-align:center;
 }
+.card h3{font-size:12px;color:var(--muted);}
+.card span{font-size:18px;color:var(--accent);font-weight:bold;}
 
+/* LAYOUT */
+.container{flex:1;display:flex;overflow:hidden;}
+
+/* SIDEBAR */
 .sidebar{
-width:100%;
-max-height:260px;
+width:280px;background:#0b1220;overflow:auto;padding:10px;
 }
+.cat{padding:10px;background:var(--card);margin-bottom:8px;border-radius:8px;cursor:pointer;}
+.cat:hover{background:#22304d;}
 
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+
+/* PLAYER */
 .player{
-height:250px;
+height:350px;background:black;position:relative;
+}
+.player video{width:100%;height:100%;object-fit:contain;}
+.live{
+position:absolute;top:10px;left:10px;
+background:red;padding:6px 10px;border-radius:20px;font-size:12px;
 }
 
+/* SEARCH */
+.search{
+padding:8px;background:#111827;
+}
+.search input{
+width:100%;padding:10px;border:none;border-radius:8px;
+background:#0f172a;color:white;
+}
+
+/* CHANNEL LIST */
 .channels{
-grid-template-columns:1fr;
-padding-bottom:120px;
+flex:1;overflow:auto;display:grid;
+grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+gap:10px;padding:10px;
+}
+.channel{
+background:var(--card);padding:10px;border-radius:10px;
+cursor:pointer;transition:.3s;
+}
+.channel:hover{transform:translateY(-2px);border:1px solid var(--accent);}
+.channel small{color:var(--muted);}
+
+/* NOTIFY */
+.notify{
+position:fixed;top:80px;right:10px;z-index:9999;
+}
+.note{
+background:#172033;padding:10px;margin-bottom:8px;
+border-left:4px solid var(--accent);border-radius:8px;
 }
 
+/* LOGIN */
+.login{
+position:fixed;inset:0;background:rgba(0,0,0,.8);
+display:none;justify-content:center;align-items:center;
 }
-
+.box{
+background:#111827;padding:20px;border-radius:10px;width:300px;
+}
+.box input{
+width:100%;margin-bottom:10px;padding:10px;
+background:#0f172a;border:none;color:white;border-radius:8px;
+}
+.box button{
+width:100%;padding:10px;background:var(--accent);
+border:none;border-radius:8px;font-weight:bold;
+}
 </style>
-
 </head>
 
 <body>
 
-<!-- =========================================================
-TOPBAR
-========================================================= -->
-
+<!-- TOPBAR -->
 <div class="topbar">
+<div class="logo">📺 BTECH-TV ULTRA MAX X 2026</div>
 
-<div class="logo">
-📺 BTECH-TV WORLD ULTRA MAX X
+<div class="btns">
+<button onclick="loadSample()">Feeds</button>
+<button onclick="toggleLogin()">Login</button>
+<button onclick="toggleFullscreen()">Fullscreen</button>
+</div>
 </div>
 
-<div class="top-buttons">
-
-<button class="active" onclick="setTab('all',this)">
-All
-</button>
-
-<button onclick="setTab('favs',this)">
-⭐ Favorites
-</button>
-
-<button onclick="setTab('recent',this)">
-🕘 Recent
-</button>
-
-<button onclick="loadUltraFeeds()">
-🚀 Ultra Feeds
-</button>
-
-<button onclick="toggleTheme()">
-🌙 Theme
-</button>
-
-<button onclick="toggleFullscreen()">
-⛶ Fullscreen
-</button>
-
-<button onclick="shuffleChannels()">
-🎲 Shuffle
-</button>
-
-<button onclick="toggleMiniPlayer()">
-📺 Mini Player
-</button>
-
-<button onclick="sleepTimer()">
-⏰ Sleep Timer
-</button>
-
-<button onclick="scanStreams()">
-📡 Scan
-</button>
-
-<button onclick="speedBoost()">
-⚡ Boost
-</button>
-
-<button onclick="exportFavorites()">
-⬇ Export
-</button>
-
+<!-- DASHBOARD -->
+<div class="dashboard">
+<div class="card"><h3>Channels</h3><span id="tch">0</span></div>
+<div class="card"><h3>Favorites</h3><span id="favc">0</span></div>
+<div class="card"><h3>Recents</h3><span id="rec">0</span></div>
+<div class="card"><h3>Status</h3><span>ONLINE</span></div>
 </div>
 
-</div>
-
-<!-- =========================================================
-LAYOUT
-========================================================= -->
-
+<!-- MAIN -->
 <div class="container">
 
-<!-- =========================================================
-SIDEBAR
-========================================================= -->
-
+<!-- SIDEBAR -->
 <div class="sidebar">
-
-<h3>🌍 Countries</h3>
-
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ng.m3u','Nigeria')">🇳🇬 Nigeria</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/us.m3u','USA')">🇺🇸 USA</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/uk.m3u','UK')">🇬🇧 UK</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/in.m3u','India')">🇮🇳 India</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/fr.m3u','France')">🇫🇷 France</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/de.m3u','Germany')">🇩🇪 Germany</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/br.m3u','Brazil')">🇧🇷 Brazil</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/za.m3u','South Africa')">🇿🇦 South Africa</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ca.m3u','Canada')">🇨🇦 Canada</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/au.m3u','Australia')">🇦🇺 Australia</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/jp.m3u','Japan')">🇯🇵 Japan</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/kr.m3u','South Korea')">🇰🇷 South Korea</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/cn.m3u','China')">🇨🇳 China</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/es.m3u','Spain')">🇪🇸 Spain</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/it.m3u','Italy')">🇮🇹 Italy</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/tr.m3u','Turkey')">🇹🇷 Turkey</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/mx.m3u','Mexico')">🇲🇽 Mexico</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ae.m3u','UAE')">🇦🇪 UAE</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/sa.m3u','Saudi Arabia')">🇸🇦 Saudi Arabia</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/eg.m3u','Egypt')">🇪🇬 Egypt</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ar.m3u','Argentina')">🇦🇷 Argentina</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/pk.m3u','Pakistan')">🇵🇰 Pakistan</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/id.m3u','Indonesia')">🇮🇩 Indonesia</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ph.m3u','Philippines')">🇵🇭 Philippines</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/al.m3u','Albania')">🇦🇱 Albania</div>
-
-<h3>🎬 Categories</h3>
-
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/news.m3u','News')">📰 News</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/sport.m3u','Sports')">⚽ Sports</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/movies.m3u','Movies')">🎬 Movies</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/music.m3u','Music')">🎵 Music</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/kids.m3u','Kids')">👶 Kids</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/comedy.m3u','Comedy')">😂 Comedy</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/documentary.m3u','Documentary')">📚 Documentary</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/business.m3u','Business')">💼 Business</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/science.m3u','Science')">🔬 Science</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/travel.m3u','Travel')">✈ Travel</div>
-
-<h3>🗣 Languages</h3>
-
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/eng.m3u','English')">🇬🇧 English</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/spa.m3u','Spanish')">🇪🇸 Spanish</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/ara.m3u','Arabic')">🇸🇦 Arabic</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/fra.m3u','French')">🇫🇷 French</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/hin.m3u','Hindi')">🇮🇳 Hindi</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/zho.m3u','Chinese')">🇨🇳 Chinese</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/por.m3u','Portuguese')">🇵🇹 Portuguese</div>
-
-<h3>🔥 Premium Features</h3>
-
-<div class="cat" onclick="scanStreams()">📡 Scan Streams</div>
-<div class="cat" onclick="speedBoost()">⚡ Speed Boost</div>
-<div class="cat" onclick="togglePiP()">📺 Picture in Picture</div>
+<div class="cat" onclick="loadSample()">📡 Load IPTV</div>
 <div class="cat" onclick="clearRecents()">🗑 Clear Recents</div>
-<div class="cat" onclick="recordMode()">⏺ Record Mode</div>
-<div class="cat" onclick="loadUltraFeeds()">🚀 Global Feeds</div>
-<div class="cat" onclick="repairStreams()">🛠 Repair Streams</div>
-<div class="cat" onclick="optimizeMemory()">🧠 Memory Optimizer</div>
-
-<hr style="margin:15px 0;border:0;border-top:1px solid #1f2937;">
-
-<a
-href="https://btech-tv.netlify.app/user_manager-settings"
-style="color:white;text-decoration:none;display:block;padding:10px 0;"
->
-🔒 User Manager
-</a>
-
-<a
-href="https://btech-tv.netlify.app/quiz-channels"
-style="color:white;text-decoration:none;display:block;padding:10px 0;"
->
-🧠 Quiz Channels
-</a>
-
+<div class="cat" onclick="notify('⚡ Boost Enabled')">⚡ Boost</div>
 </div>
 
-<!-- =========================================================
-MAIN
-========================================================= -->
-
+<!-- MAIN AREA -->
 <div class="main">
 
+<!-- PLAYER -->
 <div class="player">
-
-<div class="live">
-🔴 LIVE
+<div class="live">🔴 LIVE</div>
+<video id="video" controls autoplay></video>
 </div>
 
-<video
-id="video"
-controls
-autoplay
-playsinline
-webkit-playsinline
-preload="auto"
-></video>
-
-<div class="overlay" id="overlay">
-
-<h1>🚀</h1>
-
-<p id="overlayText">
-Loading Ultra IPTV...
-</p>
-
+<!-- SEARCH -->
+<div class="search">
+<input id="search" placeholder="Search channels..." oninput="search(this.value)">
 </div>
 
-</div>
-
-<div class="now-playing">
-
-<div>
-
-<h2 id="channelName">
-No Channel Selected
-</h2>
-
-<p id="channelGroup">
-BTECH-TV ULTRA STREAM
-</p>
-
-<div class="clock" id="clock">
---:--
-</div>
+<!-- CHANNELS -->
+<div id="list" class="channels"></div>
 
 </div>
-
-<div class="controls">
-
-<button onclick="prevChannel()">◀ Prev</button>
-<button onclick="nextChannel()">Next ▶</button>
-<button onclick="togglePiP()">📺 PiP</button>
-<button onclick="shareChannel()">🔗 Share</button>
-<button onclick="muteToggle()">🔊 Mute</button>
-
-<button id="autoSkipBtn" onclick="toggleAutoSkip()">
-⏭ Auto Skip
-</button>
-
 </div>
 
+<!-- LOGIN -->
+<div class="login" id="login">
+<div class="box">
+<h3>Login</h3>
+<input placeholder="Email">
+<input type="password" placeholder="Password">
+<button onclick="toggleLogin()">Enter</button>
+</div>
 </div>
 
-<div class="epg-box">
-📡 Ultra EPG Ready • HD Adaptive Streaming • Auto Recovery Enabled
-</div>
-
-<div class="search-box">
-
-<input
-type="text"
-id="searchInput"
-placeholder="Search Ultra IPTV..."
-oninput="searchChannels(this.value)"
->
-
-<select onchange="sortChannels(this.value)">
-
-<option value="az">Sort A-Z</option>
-<option value="za">Sort Z-A</option>
-
-</select>
-
-</div>
-
-<div class="stats" id="stats">
-0 Channels Loaded
-</div>
-
-<div class="channels" id="channelList"></div>
-
-<div class="footer-bar">
-DESIGN BY BINAINU SHAIBU BTECH-TV WORLD ULTRA MAX X • EXTREME  ENGINE
-</div>
-
-</div>
-
-</div>
-
-<!-- =========================================================
-MINI PLAYER
-========================================================= -->
-
-<div class="mini-player" id="miniPlayer">
-
-<video id="miniVideo" muted autoplay playsinline></video>
-
-</div>
+<!-- NOTIFY -->
+<div class="notify" id="notify"></div>
 
 <script>
 
 let all=[];
-let filteredChannels=[];
-let currentIndex=0;
-let currentHls=null;
-let dark=true;
-let autoSkipOn=true;
+let fav={};
+let rec=[];
+let hls;
+const video=document.getElementById("video");
 
-const video=document.getElementById('video');
+/* NOTIFY */
+function notify(msg){
+const n=document.createElement("div");
+n.className="note";
+n.innerText=msg;
+document.getElementById("notify").appendChild(n);
+setTimeout(()=>n.remove(),3000);
+}
 
-const favs=
-JSON.parse(localStorage.getItem('atv_favs')||'{}');
+/* LOGIN */
+function toggleLogin(){
+const l=document.getElementById("login");
+l.style.display=l.style.display==="flex"?"none":"flex";
+}
 
-let recent=
-JSON.parse(localStorage.getItem('atv_recent')||'[]');
+/* FULLSCREEN */
+function toggleFullscreen(){
+if(!document.fullscreenElement){
+document.documentElement.requestFullscreen();
+}else{
+document.exitFullscreen();
+}
+}
 
-let deadCh={};
-let aliveCh={};
+/* SAMPLE DATA */
+function loadSample(){
 
-/* =========================================================
-EXTRA FEEDS
-========================================================= */
-
-const extraFeeds=[
-
-'https://iptv-org.github.io/iptv/index.m3u',
-'https://iptv-org.github.io/iptv/index.country.m3u',
-'https://iptv-org.github.io/iptv/index.category.m3u',
-'https://iptv-org.github.io/iptv/index.language.m3u',
-'https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8',
-'https://raw.githubusercontent.com/freecasthub/public-iptv/main/playlist.m3u'
-
+all=[
+{name:"BBC News",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",group:"News"},
+{name:"Sports Live",url:"https://test-streams.mux.dev/test_001/stream.m3u8",group:"Sports"},
+{name:"Movie Channel",url:"https://test-streams.mux.dev/dai-discontinuity-dash.mpd",group:"Movies"}
 ];
 
-const ultraMergedFeeds=[
-
-'https://iptv-org.github.io/iptv/countries/al.m3u',
-'https://iptv-org.github.io/iptv/languages/ara.m3u'
-
-];
-
-/* =========================================================
-CLOCK
-========================================================= */
-
-function tick(){
-
-document.getElementById('clock').innerText=
-new Date().toLocaleTimeString();
-
+render();
+notify("Channels Loaded");
 }
 
-setInterval(tick,1000);
+/* RENDER */
+function render(){
 
-tick();
+document.getElementById("tch").innerText=all.length;
+document.getElementById("favc").innerText=Object.keys(fav).length;
+document.getElementById("rec").innerText=rec.length;
 
-/* =========================================================
-HELPERS
-========================================================= */
+let box=document.getElementById("list");
+box.innerHTML="";
 
-function flag(cc){
+all.forEach((c,i)=>{
 
-if(!cc || cc.length!==2){
-return '🌐';
-}
-
-const a=0x1F1E6;
-
-return String.fromCodePoint(
-a+cc.charCodeAt(0)-65,
-a+cc.charCodeAt(1)-65
-);
-
-}
-
-function showOverlay(text){
-
-document.getElementById('overlay').style.display='flex';
-
-document.getElementById('overlayText').innerText=text;
-
-}
-
-function hideOverlay(){
-
-document.getElementById('overlay').style.display='none';
-
-}
-
-/* =========================================================
-PLAYLIST LOADER
-========================================================= */
-
-async function loadPlaylist(url,group){
-
-showOverlay('Loading '+group+' Channels...');
-
-all=[];
-
-try{
-
-const res=await fetch(url);
-const text=await res.text();
-
-parseM3U(text,group);
-
-removeDuplicates();
-
-filteredChannels=[...all];
-
-renderChannels();
-
-updateStats();
-
-hideOverlay();
-
-}catch(err){
-
-alert('Playlist Load Failed');
-
-}
-
-}
-
-function parseM3U(data,group){
-
-const lines=data.split('\n');
-
-for(let i=0;i<lines.length;i++){
-
-if(lines[i].startsWith('#EXTINF')){
-
-const info=lines[i];
-const url=lines[i+1];
-
-if(!url || !url.startsWith('http')){
-continue;
-}
-
-const name=info.split(',').pop();
-
-const logoMatch=
-info.match(/tvg-logo="(.*?)"/);
-
-const countryMatch=
-info.match(/tvg-country="(.*?)"/);
-
-all.push({
-
-id:all.length+1,
-name:name,
-url:url,
-
-logo:
-logoMatch
-? logoMatch[1]
-: 'https://via.placeholder.com/60',
-
-country:
-countryMatch
-? countryMatch[1]
-: '',
-
-group:group,
-type:'free'
-
-});
-
-}
-
-}
-
-}
-
-function removeDuplicates(){
-
-const seen=new Set();
-
-all=all.filter(ch=>{
-
-const key=ch.name+'_'+ch.url;
-
-if(seen.has(key)){
-return false;
-}
-
-seen.add(key);
-
-return true;
-
-});
-
-}
-
-/* =========================================================
-LOAD ULTRA FEEDS
-========================================================= */
-
-async function loadUltraFeeds(){
-
-showOverlay('Loading Ultra Global IPTV...');
-
-all=[];
-
-for(let url of extraFeeds){
-
-try{
-
-const res=await fetch(url);
-
-const text=await res.text();
-
-parseM3U(text,'Ultra Feed');
-
-}catch(err){
-
-console.log(err);
-
-}
-
-}
-
-for(let url of ultraMergedFeeds){
-
-try{
-
-const res=await fetch(url);
-
-const text=await res.text();
-
-parseM3U(text,'Arab + Albania');
-
-}catch(err){
-
-console.log(err);
-
-}
-
-}
-
-removeDuplicates();
-
-filteredChannels=[...all];
-
-renderChannels();
-
-updateStats();
-
-hideOverlay();
-
-}
-
-/* =========================================================
-RENDER
-========================================================= */
-
-function renderChannels(){
-
-const box=
-document.getElementById('channelList');
-
-box.innerHTML='';
-
-filteredChannels.forEach((c,index)=>{
-
-const div=document.createElement('div');
-
-div.className='channel';
-
-if(index===currentIndex){
-div.classList.add('active');
-}
-
+let div=document.createElement("div");
+div.className="channel";
 div.innerHTML=`
-
-<div class="left">
-
-<img
-src="${c.logo}"
-loading="lazy"
-onerror="this.src='https://via.placeholder.com/60'"
->
-
-<div class="info">
-
-<h4>${flag(c.country)} ${c.name}</h4>
-
+<b>${c.name}</b><br>
 <small>${c.group}</small>
-
-</div>
-
-</div>
-
-<div class="status">
-
-<span class="badge free">
-FREE
-</span>
-
-<span class="badge ${
-deadCh[c.id]
-? 'dead'
-: 'country'
-}">
-${deadCh[c.id] ? 'OFF':'LIVE'}
-</span>
-
-<div
-class="fav ${favs[c.id]?'on':''}"
-onclick="event.stopPropagation();toggleFav(${c.id})"
->
-${favs[c.id]?'★':'☆'}
-</div>
-
-</div>
-
 `;
 
-div.onclick=()=>playChannel(index);
+div.onclick=()=>play(c);
 
 box.appendChild(div);
 
@@ -1156,698 +254,60 @@ box.appendChild(div);
 
 }
 
-/* =========================================================
-PLAYER
-========================================================= */
+/* PLAY */
+function play(c){
 
-function playChannel(index){
+rec.unshift(c.name);
+rec=rec.slice(0,20);
 
-currentIndex=index;
+notify("Playing "+c.name);
 
-const channel=filteredChannels[index];
-
-if(!channel){
-return;
-}
-
-document.getElementById('channelName').innerText=
-channel.name;
-
-document.getElementById('channelGroup').innerText=
-channel.group;
-
-showOverlay('Connecting Stream...');
-
-if(currentHls){
-
-currentHls.destroy();
-currentHls=null;
-
-}
-
-video.pause();
-
-video.removeAttribute('src');
-
-video.load();
-
-const startPlayback=()=>{
-
-video.play()
-.then(()=>{
-
-hideOverlay();
-
-aliveCh[channel.id]=1;
-
-delete deadCh[channel.id];
-
-renderChannels();
-
-})
-.catch(()=>{
-
-showOverlay('Tap screen to play');
-
-});
-
-};
+if(hls)hls.destroy();
 
 if(Hls.isSupported()){
 
-currentHls=new Hls({
+hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(video);
 
-enableWorker:true,
-lowLatencyMode:true,
-backBufferLength:90,
-maxBufferLength:120,
-liveSyncDuration:3
-
+hls.on(Hls.Events.MANIFEST_PARSED,()=>{
+video.play();
 });
-
-currentHls.loadSource(channel.url);
-
-currentHls.attachMedia(video);
-
-currentHls.on(
-Hls.Events.MANIFEST_PARSED,
-function(){
-
-startPlayback();
-
-}
-);
-
-currentHls.on(
-Hls.Events.ERROR,
-function(event,data){
-
-if(data.fatal){
-
-deadCh[channel.id]=1;
-
-renderChannels();
-
-showOverlay('Recovering Stream...');
-
-if(autoSkipOn){
-
-setTimeout(()=>{
-nextChannel();
-},2000);
-
-}
-
-}
-
-}
-);
 
 }else{
-
-video.src=channel.url;
-
-startPlayback();
-
-}
-
-video.addEventListener('waiting',()=>{
-
-showOverlay('Buffering Stream...');
-
-});
-
-video.addEventListener('playing',()=>{
-
-hideOverlay();
-
-});
-
-addRecent(channel.id);
-
-renderChannels();
-
-}
-
-/* =========================================================
-SEARCH
-========================================================= */
-
-function searchChannels(q){
-
-q=q.toLowerCase();
-
-filteredChannels=all.filter(c=>
-
-c.name.toLowerCase().includes(q)
-
-||
-
-c.group.toLowerCase().includes(q)
-
-);
-
-renderChannels();
-
-updateStats();
-
-}
-
-/* =========================================================
-SORT
-========================================================= */
-
-function sortChannels(type){
-
-if(type==='az'){
-
-filteredChannels.sort((a,b)=>
-a.name.localeCompare(b.name)
-);
-
-}else{
-
-filteredChannels.sort((a,b)=>
-b.name.localeCompare(a.name)
-);
-
-}
-
-renderChannels();
-
-}
-
-/* =========================================================
-FAVORITES
-========================================================= */
-
-function toggleFav(id){
-
-if(favs[id]){
-delete favs[id];
-}else{
-favs[id]=1;
-}
-
-localStorage.setItem(
-'atv_favs',
-JSON.stringify(favs)
-);
-
-renderChannels();
-
-}
-
-function exportFavorites(){
-
-const data=JSON.stringify(favs,null,2);
-
-const blob=new Blob([data],{
-type:'application/json'
-});
-
-const a=document.createElement('a');
-
-a.href=URL.createObjectURL(blob);
-
-a.download='favorites.json';
-
-a.click();
-
-}
-
-/* =========================================================
-RECENTS
-========================================================= */
-
-function addRecent(id){
-
-recent=recent.filter(r=>r!==id);
-
-recent.unshift(id);
-
-if(recent.length>50){
-recent=recent.slice(0,50);
-}
-
-localStorage.setItem(
-'atv_recent',
-JSON.stringify(recent)
-);
-
-}
-
-function clearRecents(){
-
-recent=[];
-
-localStorage.removeItem('atv_recent');
-
-alert('Recents Cleared');
-
-}
-
-/* =========================================================
-TABS
-========================================================= */
-
-function setTab(type,btn){
-
-document
-.querySelectorAll('.top-buttons button')
-.forEach(b=>b.classList.remove('active'));
-
-btn.classList.add('active');
-
-if(type==='all'){
-filteredChannels=[...all];
-}
-
-if(type==='favs'){
-filteredChannels=all.filter(c=>favs[c.id]);
-}
-
-if(type==='recent'){
-
-filteredChannels=[];
-
-recent.forEach(id=>{
-
-const ch=all.find(c=>c.id===id);
-
-if(ch){
-filteredChannels.push(ch);
-}
-
-});
-
-}
-
-renderChannels();
-
-updateStats();
-
-}
-
-/* =========================================================
-UTILITIES
-========================================================= */
-
-function nextChannel(){
-
-currentIndex++;
-
-if(currentIndex>=filteredChannels.length){
-currentIndex=0;
-}
-
-playChannel(currentIndex);
-
-}
-
-function prevChannel(){
-
-currentIndex--;
-
-if(currentIndex<0){
-currentIndex=filteredChannels.length-1;
-}
-
-playChannel(currentIndex);
-
-}
-
-function togglePiP(){
-
-if(document.pictureInPictureElement){
-
-document.exitPictureInPicture();
-
-}else{
-
-video.requestPictureInPicture();
-
+video.src=c.url;
+video.play();
 }
 
 }
 
-function shareChannel(){
-
-const channel=
-filteredChannels[currentIndex];
-
-if(!channel){
-return;
-}
-
-navigator.clipboard.writeText(channel.url);
-
-alert('Stream URL Copied');
-
-}
-
-function muteToggle(){
-
-video.muted=!video.muted;
-
-}
-
-function toggleTheme(){
-
-dark=!dark;
-
-document.documentElement.style.setProperty(
-'--bg',
-dark ? '#050816':'#f1f5f9'
-);
-
-document.documentElement.style.setProperty(
-'--text',
-dark ? '#ffffff':'#000000'
-);
-
-}
-
-function toggleFullscreen(){
-
-if(!document.fullscreenElement){
-
-document.documentElement.requestFullscreen();
-
-}else{
-
-document.exitFullscreen();
-
-}
-
-}
-
-function shuffleChannels(){
-
-filteredChannels.sort(()=>Math.random()-0.5);
-
-renderChannels();
-
-}
-
-function speedBoost(){
-
-video.playbackRate=1.15;
-
-alert('Speed Boost Enabled');
-
-}
-
-function scanStreams(){
-
-alert('Ultra Stream Scan Activated');
-
-}
-
-function repairStreams(){
-
-alert('Auto Stream Repair Activated');
-
-}
-
-function optimizeMemory(){
-
-alert('Memory Optimized');
-
-}
-
-function recordMode(){
-
-alert('Record Mode Ready');
-
-}
-
-function sleepTimer(){
-
-setTimeout(()=>{
-
-video.pause();
-
-alert('Sleep Timer Ended');
-
-},1800000);
-
-alert('30 Minute Sleep Timer Started');
-
-}
-
-function toggleMiniPlayer(){
-
-const mini=
-document.getElementById('miniPlayer');
-
-if(mini.style.display==='block'){
-
-mini.style.display='none';
-
-}else{
-
-mini.style.display='block';
-
-document.getElementById('miniVideo').src=
-video.currentSrc;
-
-}
-
-}
-
-function toggleAutoSkip(){
-
-autoSkipOn=!autoSkipOn;
-
-document.getElementById('autoSkipBtn').innerText=
-autoSkipOn
-? '⏭ Auto Skip'
-: '⏭ Skip OFF';
-
-}
-
-function updateStats(){
-
-document.getElementById('stats').innerText=
-
-filteredChannels.length+
-
-' Channels Loaded • Ultra IPTV Active';
-
-}
-
-/* =========================================================
-KEYBOARD SHORTCUTS
-========================================================= */
-
-document.addEventListener('keydown',function(e){
-
-if(e.key==='ArrowRight'){
-nextChannel();
-}
-
-if(e.key==='ArrowLeft'){
-prevChannel();
-}
-
-if(e.key==='f'){
-toggleFullscreen();
-}
-
-});
-
-/* =========================================================
-AUTO LOAD
-========================================================= */
-
-loadUltraFeeds();
-
-</script>
-/* =========================================================
-SUPER ADMIN USER MANAGER
-========================================================= */
-
-let users =
-JSON.parse(
-localStorage.getItem("btech_users") || "[]"
-);
-
-function saveUsers(){
-
-localStorage.setItem(
-"btech_users",
-JSON.stringify(users)
-);
-
-renderUsers();
-
-}
-
-function createUser(){
-
-const username =
-document.getElementById("newUserName").value;
-
-const password =
-document.getElementById("newUserPass").value;
-
-const plan =
-document.getElementById("newUserPlan").value;
-
-if(!username || !password){
-
-alert("Enter username and password");
-return;
-
-}
-
-users.push({
-
-id:Date.now(),
-
-username,
-
-password,
-
-plan,
-
-active:true,
-
-created:new Date().toLocaleString(),
-
-watchTime:0
-
-});
-
-saveUsers();
-
-document.getElementById("newUserName").value="";
-document.getElementById("newUserPass").value="";
-
-}
-
-function deleteUser(id){
-
-if(!confirm("Delete User?")){
-return;
-}
-
-users =
-users.filter(u=>u.id!==id);
-
-saveUsers();
-
-}
-
-function toggleUser(id){
-
-const u=
-users.find(x=>x.id===id);
-
-if(!u){
-return;
-}
-
-u.active=!u.active;
-
-saveUsers();
-
-}
-
-function upgradeUser(id){
-
-const u=
-users.find(x=>x.id===id);
-
-if(!u){
-return;
-}
-
-u.plan="ULTRA";
-
-saveUsers();
-
-}
-
-function renderUsers(){
-
-const box=
-document.getElementById("usersTable");
-
-if(!box){
-return;
-}
-
+/* SEARCH */
+function search(v){
+v=v.toLowerCase();
+let box=document.getElementById("list");
 box.innerHTML="";
 
-users.forEach(u=>{
+all.filter(c=>c.name.toLowerCase().includes(v))
+.forEach(c=>{
 
-box.innerHTML+=`
-
-<tr>
-
-<td>${u.username}</td>
-
-<td>
-<span class="badge premium">
-${u.plan}
-</span>
-</td>
-
-<td>
-
-<span class="badge ${
-u.active
-? 'free'
-: 'dead'
-}">
-${u.active
-? 'ACTIVE'
-: 'BLOCKED'}
-</span>
-
-</td>
-
-<td>
-
-<button onclick="toggleUser(${u.id})">
-${u.active ? '🚫 Block':'✅ Activate'}
-</button>
-
-<button onclick="upgradeUser(${u.id})">
-⬆ Upgrade
-</button>
-
-<button onclick="deleteUser(${u.id})">
-🗑 Delete
-</button>
-
-</td>
-
-</tr>
-
-`;
+let div=document.createElement("div");
+div.className="channel";
+div.innerHTML=`<b>${c.name}</b><br><small>${c.group}</small>`;
+div.onclick=()=>play(c);
+box.appendChild(div);
 
 });
 
-document.getElementById("userStats").innerHTML=`
-
-📊 Total Users:
-<b>${users.length}</b>
-
-&nbsp;&nbsp;
-
-🟢 Active:
-<b>${users.filter(u=>u.active).length}</b>
-
-&nbsp;&nbsp;
-
-🔴 Blocked:
-<b>${users.filter(u=>!u.active).length}</b>
-
-`;
-
 }
+
+/* CLEAR RECENTS */
+function clearRecents(){
+rec=[];
+notify("Recents cleared");
+render();
+}
+
+</script>
+
 </body>
 </html>
