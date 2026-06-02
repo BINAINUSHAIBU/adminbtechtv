@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ULTRA STREAM - Netflix + DSTV Clone</title>
+<title>ULTRA STREAM OTT - Netflix + DSTV</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -21,43 +21,30 @@ overflow:hidden;
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:10px 15px;
+padding:10px;
 background:#111827;
 }
 
 .logo{
-font-size:20px;
-font-weight:bold;
 color:#00d4ff;
+font-size:18px;
+font-weight:bold;
 }
 
-.menu button{
-margin-left:8px;
-padding:8px 12px;
+button{
+padding:8px;
+margin:2px;
 border:none;
-border-radius:8px;
+border-radius:6px;
+cursor:pointer;
 background:#1f2937;
 color:white;
-cursor:pointer;
-}
-
-/* HERO */
-.hero{
-height:250px;
-background:linear-gradient(90deg,#111827,#1f2937);
-display:flex;
-align-items:center;
-padding:20px;
-}
-
-.hero h1{
-font-size:28px;
 }
 
 /* LAYOUT */
 .container{
 display:flex;
-height:calc(100vh - 300px);
+height:calc(100vh - 50px);
 }
 
 /* SIDEBAR */
@@ -68,38 +55,31 @@ padding:10px;
 overflow:auto;
 }
 
-.sidebar h3{
-color:#00d4ff;
-}
-
 .cat{
-padding:10px;
-margin-bottom:8px;
+padding:8px;
+margin-bottom:5px;
 background:#1f2937;
-border-radius:8px;
+border-radius:6px;
 cursor:pointer;
 }
 
-.cat:hover{
-background:#334155;
-}
+.cat:hover{background:#334155}
 
 /* MAIN */
 .main{
 flex:1;
 display:flex;
 flex-direction:column;
-overflow:hidden;
 }
 
 /* PLAYER */
 .player{
-height:300px;
+height:250px;
 background:black;
 position:relative;
 }
 
-.player video{
+video{
 width:100%;
 height:100%;
 }
@@ -109,37 +89,25 @@ position:absolute;
 top:10px;
 left:10px;
 background:red;
-padding:5px 10px;
-border-radius:20px;
+padding:5px;
+border-radius:5px;
 }
 
-/* ROWS */
-.rows{
+/* LIST */
+.list{
 flex:1;
 overflow:auto;
 padding:10px;
 }
 
-.row-title{
-margin:10px 0;
-color:#00d4ff;
-}
-
-.row{
-display:flex;
-overflow-x:auto;
-gap:10px;
-}
-
-.card{
-min-width:160px;
-height:90px;
+.item{
+padding:10px;
+margin-bottom:5px;
 background:#1f2937;
-border-radius:10px;
-display:flex;
-align-items:center;
-justify-content:center;
+border-radius:6px;
 cursor:pointer;
+display:flex;
+justify-content:space-between;
 }
 
 /* LOGIN */
@@ -152,182 +120,113 @@ align-items:center;
 justify-content:center;
 }
 
-.login-box{
+.box{
 background:#111827;
 padding:20px;
+width:250px;
 border-radius:10px;
-width:300px;
 }
 
-.login-box input{
+input{
 width:100%;
-padding:10px;
+padding:8px;
 margin:5px 0;
 background:#0f172a;
 border:none;
 color:white;
-}
-
-/* NOTIFY */
-.notify{
-position:fixed;
-top:80px;
-right:10px;
-}
-
-.note{
-background:#1f2937;
-padding:10px;
-margin-bottom:5px;
-border-left:4px solid #00d4ff;
 }
 </style>
 </head>
 
 <body>
 
+<!-- TOP BAR -->
 <div class="topbar">
-<div class="logo">📺 ULTRA STREAM</div>
-<div class="menu">
+<div class="logo">📺 ULTRA OTT</div>
+
+<div>
 <button onclick="showLogin()">Login</button>
-<button onclick="loadLive()">DSTV Live</button>
-<button onclick="loadMovies()">Netflix Movies</button>
+<button onclick="loadMovies()">Movies</button>
+<button onclick="loadLive()">Live TV</button>
+<button onclick="loadSeries()">Series</button>
 </div>
 </div>
 
-<div class="hero">
-<h1>Unlimited Movies • Series • Live TV</h1>
-</div>
-
+<!-- MAIN -->
 <div class="container">
 
+<!-- SIDEBAR -->
 <div class="sidebar">
 <h3>Categories</h3>
 <div class="cat" onclick="loadMovies()">🎬 Movies</div>
 <div class="cat" onclick="loadSeries()">📺 Series</div>
 <div class="cat" onclick="loadLive()">📡 Live TV</div>
-<div class="cat" onclick="notify('Premium Activated')">💎 Premium</div>
+<div class="cat" onclick="clearAll()">🧹 Clear</div>
 </div>
 
+<!-- MAIN CONTENT -->
 <div class="main">
 
 <div class="player">
 <div class="live">LIVE</div>
-<video id="video" controls autoplay></video>
+<video id="video" controls></video>
 </div>
 
-<div class="rows" id="rows"></div>
+<div class="list" id="list"></div>
 
 </div>
-
 </div>
 
 <!-- LOGIN -->
 <div class="login" id="login">
-<div class="login-box">
+<div class="box">
 <h3>Login</h3>
 <input placeholder="Email">
-<input type="password" placeholder="Password">
-<button onclick="closeLogin()">Enter</button>
+<input placeholder="Password" type="password">
+<button onclick="login()">Enter</button>
 </div>
 </div>
-
-<!-- NOTIFY -->
-<div class="notify" id="notify"></div>
 
 <script>
 
-let hls;
 let video=document.getElementById("video");
+let data=[];
 
-/* NOTIFY */
-function notify(msg){
-let n=document.createElement("div");
-n.className="note";
-n.innerText=msg;
-document.getElementById("notify").appendChild(n);
-setTimeout(()=>n.remove(),3000);
-}
-
-/* LOGIN */
-function showLogin(){
-document.getElementById("login").style.display="flex";
-}
-function closeLogin(){
-document.getElementById("login").style.display="none";
-notify("Welcome User");
-}
-
-/* SAMPLE CONTENT */
-function loadMovies(){
-
-render([
+/* DATABASE (SIMULATED BACKEND) */
+let DB={
+movies:[
 {name:"Action Movie",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"Drama Movie",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
-{name:"Sci-Fi Movie",url:"https://test-streams.mux.dev/dai-discontinuity-dash.mpd"}
-],"Netflix Movies");
-
-notify("Movies Loaded");
-}
-
-function loadSeries(){
-
-render([
-{name:"Series 1 Episode 1",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"Series 2 Episode 3",url:"https://test-streams.mux.dev/test_001/stream.m3u8"}
-],"Series");
-
-notify("Series Loaded");
-}
-
-function loadLive(){
-
-render([
+{name:"Drama Movie",url:"https://test-streams.mux.dev/test_001/stream.m3u8"}
+],
+series:[
+{name:"Episode 1",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Episode 2",url:"https://test-streams.mux.dev/test_001/stream.m3u8"}
+],
+live:[
 {name:"DSTV Sports",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
 {name:"News Live",url:"https://test-streams.mux.dev/test_001/stream.m3u8"}
-],"Live TV");
+]
+};
 
-notify("Live TV Loaded");
-}
-
-/* RENDER UI */
-function render(items,title){
-
-let box=document.getElementById("rows");
+/* RENDER */
+function render(items){
+let box=document.getElementById("list");
 box.innerHTML="";
 
-let h=document.createElement("div");
-h.className="row-title";
-h.innerText=title;
-box.appendChild(h);
-
-let row=document.createElement("div");
-row.className="row";
-
-items.forEach(v=>{
-
-let d=document.createElement("div");
-d.className="card";
-d.innerText=v.name;
-
-d.onclick=()=>play(v.url);
-
-row.appendChild(d);
-
+items.forEach(i=>{
+let div=document.createElement("div");
+div.className="item";
+div.innerHTML=`<span>${i.name}</span><span>▶</span>`;
+div.onclick=()=>play(i.url);
+box.appendChild(div);
 });
-
-box.appendChild(row);
 }
 
-/* PLAY VIDEO */
+/* PLAY */
 function play(url){
 
-notify("Playing Stream");
-
-if(hls)hls.destroy();
-
 if(Hls.isSupported()){
-hls=new Hls();
+let hls=new Hls();
 hls.loadSource(url);
 hls.attachMedia(video);
 hls.on(Hls.Events.MANIFEST_PARSED,()=>{
@@ -339,6 +238,52 @@ video.play();
 }
 
 }
+
+/* LOADERS */
+function loadMovies(){
+render(DB.movies);
+save("movies");
+}
+
+function loadSeries(){
+render(DB.series);
+save("series");
+}
+
+function loadLive(){
+render(DB.live);
+save("live");
+}
+
+/* LOCAL STORAGE BACKEND */
+function save(type){
+localStorage.setItem("last",type);
+}
+
+function restore(){
+let last=localStorage.getItem("last");
+if(last=="movies")loadMovies();
+if(last=="series")loadSeries();
+if(last=="live")loadLive();
+}
+
+/* LOGIN */
+function showLogin(){
+document.getElementById("login").style.display="flex";
+}
+
+function login(){
+document.getElementById("login").style.display="none";
+alert("Welcome User 🎉");
+}
+
+/* CLEAR */
+function clearAll(){
+document.getElementById("list").innerHTML="";
+}
+
+/* AUTO LOAD */
+restore();
 
 </script>
 
