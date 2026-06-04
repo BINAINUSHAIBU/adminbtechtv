@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Global TV Hub</title>
+<title>Global TV Hub PRO</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f0f1a;
+  font-family: Arial;
+  background: #0b0b1a;
   color: white;
 }
 
@@ -19,7 +19,6 @@ header {
   padding: 15px;
   text-align: center;
   font-size: 22px;
-  font-weight: bold;
   color: #00ffcc;
 }
 
@@ -30,17 +29,17 @@ header {
 
 /* SIDEBAR */
 .sidebar {
-  width: 250px;
-  background: #1c1c2e;
+  width: 260px;
   height: 100vh;
+  background: #1b1b2e;
   padding: 10px;
   overflow-y: auto;
 }
 
 .channel {
+  background: #2a2a44;
   padding: 10px;
-  margin: 5px 0;
-  background: #2a2a40;
+  margin: 8px 0;
   cursor: pointer;
   border-radius: 5px;
 }
@@ -62,27 +61,29 @@ video {
   background: black;
 }
 
-/* ADMIN PANEL */
+/* ADMIN */
 .admin {
   margin-top: 20px;
-  padding: 10px;
-  background: #1c1c2e;
+  background: #1b1b2e;
+  padding: 15px;
+  border-radius: 10px;
 }
 
 input, button {
   padding: 10px;
   margin: 5px;
-  width: 90%;
+  width: 95%;
+  border-radius: 5px;
+  border: none;
 }
 
 button {
   background: #00ffcc;
-  border: none;
   cursor: pointer;
 }
 
 button:hover {
-  background: #00b38f;
+  background: #00bfa6;
 }
 
 /* FOOTER */
@@ -90,7 +91,7 @@ footer {
   text-align: center;
   padding: 10px;
   background: #111;
-  color: #888;
+  color: gray;
 }
 </style>
 </head>
@@ -98,7 +99,7 @@ footer {
 <body>
 
 <header>
-📺 GLOBAL TV HUB — LIVE STREAM PLATFORM
+📺 GLOBAL TV HUB PRO — ONE PAGE OTT SYSTEM
 </header>
 
 <div class="container">
@@ -106,13 +107,7 @@ footer {
 <!-- SIDEBAR -->
 <div class="sidebar">
 <h3>📡 Channels</h3>
-
-<div class="channel" onclick="playChannel('channel1')">News Channel</div>
-<div class="channel" onclick="playChannel('channel2')">Sports Live</div>
-<div class="channel" onclick="playChannel('channel3')">Music TV</div>
-<div class="channel" onclick="playChannel('channel4')">Movie Channel</div>
-<div class="channel" onclick="playChannel('channel5')">Kids TV</div>
-
+<div id="channelList"></div>
 </div>
 
 <!-- MAIN -->
@@ -120,91 +115,92 @@ footer {
 
 <h2 id="title">Select a Channel</h2>
 
-<video id="player" controls autoplay>
-<source id="source" src="" type="application/x-mpegURL">
-</video>
+<video id="player" controls autoplay></video>
 
 <!-- ADMIN PANEL -->
 <div class="admin">
-<h3>🏢 Super Admin Panel (Demo)</h3>
+<h3>🏢 Admin Panel</h3>
 
-<input type="text" id="channelName" placeholder="Channel Name">
-<input type="text" id="streamURL" placeholder="Stream URL (.m3u8 or mp4)">
+<input id="name" placeholder="Channel Name">
+<input id="url" placeholder="Video URL (.m3u8 / mp4)">
 <button onclick="addChannel()">Add Channel</button>
 
-<h4>📡 Dynamic Channels</h4>
-<div id="dynamicChannels"></div>
+<h4>⚡ System Control</h4>
+<button onclick="resetChannels()">Reset Channels</button>
 </div>
 
 </div>
 </div>
 
 <footer>
-© 2026 Global TV Hub | OTT Streaming System
+© 2026 Global TV Hub PRO | OTT Streaming System
 </footer>
 
 <script>
-// STATIC CHANNELS
-let channels = {
-  channel1: {
-    name: "News Channel",
+
+// ================= INITIAL CHANNEL DATABASE =================
+let channels = [
+  {
+    name: "News Live",
     url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
   },
-  channel2: {
-    name: "Sports Live",
+  {
+    name: "Sports HD",
     url: "https://test-streams.mux.dev/test_001/stream.m3u8"
   },
-  channel3: {
-    name: "Music TV",
-    url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-  },
-  channel4: {
+  {
     name: "Movie Channel",
-    url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4"
-  },
-  channel5: {
-    name: "Kids TV",
-    url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4"
+    url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
   }
-};
+];
 
-// PLAY CHANNEL
-function playChannel(key) {
-  document.getElementById("title").innerText = channels[key].name;
-  document.getElementById("source").src = channels[key].url;
-  document.getElementById("player").load();
-}
-
-// ADD CHANNEL (ADMIN DEMO)
-function addChannel() {
-  let name = document.getElementById("channelName").value;
-  let url = document.getElementById("streamURL").value;
-
-  if (!name || !url) return alert("Fill all fields");
-
-  let id = "ch" + Object.keys(channels).length;
-
-  channels[id] = { name, url };
-
-  renderChannels();
-}
-
-// RENDER DYNAMIC CHANNELS
+// ================= RENDER CHANNELS =================
 function renderChannels() {
-  let container = document.getElementById("dynamicChannels");
-  container.innerHTML = "";
+  const list = document.getElementById("channelList");
+  list.innerHTML = "";
 
-  Object.keys(channels).forEach(key => {
-    let div = document.createElement("div");
+  channels.forEach((ch, index) => {
+    const div = document.createElement("div");
     div.className = "channel";
-    div.innerText = channels[key].name;
-    div.onclick = () => playChannel(key);
-    container.appendChild(div);
+    div.innerText = ch.name;
+
+    div.onclick = () => {
+      document.getElementById("title").innerText = ch.name;
+      document.getElementById("player").src = ch.url;
+    };
+
+    list.appendChild(div);
   });
+}
+
+// ================= ADD CHANNEL =================
+function addChannel() {
+  const name = document.getElementById("name").value;
+  const url = document.getElementById("url").value;
+
+  if (!name || !url) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  channels.push({ name, url });
+  renderChannels();
+
+  document.getElementById("name").value = "";
+  document.getElementById("url").value = "";
+}
+
+// ================= RESET SYSTEM =================
+function resetChannels() {
+  channels = [];
+  renderChannels();
+  document.getElementById("player").src = "";
+  document.getElementById("title").innerText = "Select a Channel";
 }
 
 // INIT
 renderChannels();
+
 </script>
 
 </body>
