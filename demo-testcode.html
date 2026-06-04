@@ -2,247 +2,199 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Global TV Hub PRO SaaS</title>
+<title>BTECH TV OTT SYSTEM</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial;
-  background: #0a0a1a;
-  color: white;
-}
-
-/* HEADER */
-header {
-  background: #111;
-  padding: 15px;
-  text-align: center;
-  font-size: 22px;
-  color: #00ffcc;
-}
-
-/* LAYOUT */
-.container {
-  display: flex;
-}
-
-/* SIDEBAR */
-.sidebar {
-  width: 260px;
-  height: 100vh;
-  background: #1c1c2e;
-  padding: 10px;
-  overflow-y: auto;
-}
-
-.channel {
-  padding: 10px;
-  margin: 8px 0;
-  background: #2a2a44;
-  cursor: pointer;
-  border-radius: 6px;
-}
-
-.channel:hover {
-  background: #00ffcc;
-  color: black;
-}
-
-/* MAIN */
-.main {
-  flex: 1;
-  padding: 20px;
-}
-
-video {
-  width: 100%;
-  max-height: 450px;
-  background: black;
-  border-radius: 10px;
-}
-
-/* ADMIN */
-.admin {
-  margin-top: 20px;
-  background: #1c1c2e;
-  padding: 15px;
-  border-radius: 10px;
-}
-
-input, button {
-  width: 95%;
-  padding: 10px;
-  margin: 5px;
-  border-radius: 5px;
-  border: none;
-}
-
-button {
-  background: #00ffcc;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #00bfa6;
-}
-
-/* DASHBOARD */
-.dashboard {
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-
-.card {
-  background: #1c1c2e;
-  padding: 10px;
-  border-radius: 10px;
-  text-align: center;
-}
-
-footer {
-  text-align: center;
-  padding: 10px;
-  background: #111;
-  color: gray;
-}
+body{margin:0;font-family:Arial;background:#0f172a;color:#fff}
+header{padding:15px;background:#111827;display:flex;justify-content:space-between}
+button{padding:8px 12px;border:none;cursor:pointer;border-radius:6px}
+input{padding:10px;margin:5px;width:90%}
+.container{padding:20px}
+.card{background:#1f2937;padding:15px;margin:10px;border-radius:10px}
+.row{display:flex;flex-wrap:wrap}
+.hidden{display:none}
+.blue{background:#2563eb;color:#fff}
+.red{background:#ef4444;color:#fff}
+.green{background:#22c55e;color:#fff}
 </style>
 </head>
 
 <body>
 
 <header>
-📺 GLOBAL TV HUB PRO — FULL OTT SAAS (DOCKER READY UI)
+<h2>📺 BTECH TV OTT</h2>
+<div>
+<button onclick="show('login')" class="blue">Login</button>
+<button onclick="show('register')" class="green">Register</button>
+<button onclick="logout()" class="red">Logout</button>
+</div>
 </header>
 
 <div class="container">
 
-<!-- SIDEBAR -->
-<div class="sidebar">
-<h3>📡 Channels</h3>
-<div id="channelList"></div>
+<!-- LOGIN -->
+<div id="login" class="card">
+<h3>Login</h3>
+<input id="loginEmail" placeholder="Email">
+<input id="loginPass" placeholder="Password" type="password">
+<button onclick="login()" class="blue">Login</button>
 </div>
 
-<!-- MAIN -->
-<div class="main">
-
-<h2 id="title">Select a Channel</h2>
-
-<video id="player" controls autoplay></video>
+<!-- REGISTER -->
+<div id="register" class="card hidden">
+<h3>Register</h3>
+<input id="regName" placeholder="Name">
+<input id="regEmail" placeholder="Email">
+<input id="regPass" placeholder="Password" type="password">
+<button onclick="register()" class="green">Register</button>
+</div>
 
 <!-- DASHBOARD -->
-<div class="dashboard">
-  <div class="card">👤 Users<br><span id="users">120</span></div>
-  <div class="card">📡 Channels<br><span id="channels">3</span></div>
-  <div class="card">💰 Revenue<br>₦250,000</div>
+<div id="dashboard" class="hidden">
+
+<h2>🎬 Channels</h2>
+<div id="channels" class="row"></div>
+
+<h2>➕ Admin Panel</h2>
+<div class="card">
+<input id="chName" placeholder="Channel Name">
+<input id="chUrl" placeholder="Stream URL (mp4 / m3u8)">
+<button onclick="addChannel()" class="green">Add Channel</button>
 </div>
-
-<!-- ADMIN PANEL -->
-<div class="admin">
-<h3>🏢 SaaS Admin Panel</h3>
-
-<input id="name" placeholder="Channel Name">
-<input id="url" placeholder="Stream URL (.m3u8 / mp4)">
-
-<button onclick="addChannel()">➕ Add Channel</button>
-<button onclick="resetSystem()">🗑 Reset Channels</button>
-<button onclick="seedSystem()">🔄 Restore Default</button>
-
-<h4>💳 Payments (Simulated)</h4>
-<button onclick="alert('Paystack Integration via backend API')">Subscribe User</button>
-<button onclick="alert('Stripe/PayPal support available in backend')">Enable Payments</button>
-
-<h4>🎥 Streaming (Docker RTMP)</h4>
-<button onclick="alert('RTMP: rtmp://server/live')">Show Stream Key</button>
 
 </div>
 
 </div>
-</div>
-
-<footer>
-© 2026 Global TV Hub PRO SaaS | Netflix + DSTV OTT System
-</footer>
 
 <script>
+/* =========================
+   SIMPLE LOCAL "BACKEND"
+========================= */
 
-/* ================= SIMULATED DATABASE ================= */
-let channels = [
-  {
-    name: "News Live",
-    url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-  },
-  {
-    name: "Sports HD",
-    url: "https://test-streams.mux.dev/test_001/stream.m3u8"
-  },
-  {
-    name: "Movie Channel",
-    url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-  }
-];
+let users = JSON.parse(localStorage.getItem("users") || "[]");
+let channels = JSON.parse(localStorage.getItem("channels") || "[]");
+let session = JSON.parse(localStorage.getItem("session") || "null");
 
-/* ================= RENDER ================= */
-function render() {
-  const list = document.getElementById("channelList");
-  list.innerHTML = "";
-
-  document.getElementById("channels").innerText = channels.length;
-
-  channels.forEach((ch, i) => {
-    const div = document.createElement("div");
-    div.className = "channel";
-    div.innerText = ch.name;
-
-    div.onclick = () => {
-      document.getElementById("title").innerText = ch.name;
-      document.getElementById("player").src = ch.url;
-    };
-
-    list.appendChild(div);
-  });
+/* =========================
+   NAV
+========================= */
+function show(page){
+  document.getElementById("login").classList.add("hidden");
+  document.getElementById("register").classList.add("hidden");
+  document.getElementById("dashboard").classList.add("hidden");
+  document.getElementById(page).classList.remove("hidden");
 }
 
-/* ================= ADD CHANNEL ================= */
-function addChannel() {
-  const name = document.getElementById("name").value;
-  const url = document.getElementById("url").value;
+/* =========================
+   REGISTER
+========================= */
+function register(){
+  let user = {
+    name: regName.value,
+    email: regEmail.value,
+    password: regPass.value,
+    isAdmin: false
+  };
 
-  if (!name || !url) {
-    alert("Fill all fields");
+  users.push(user);
+  localStorage.setItem("users", JSON.stringify(users));
+
+  alert("Registered!");
+  show("login");
+}
+
+/* =========================
+   LOGIN
+========================= */
+function login(){
+  let u = users.find(x => x.email === loginEmail.value && x.password === loginPass.value);
+
+  if(!u){
+    alert("Invalid login");
     return;
   }
 
-  channels.push({ name, url });
-  render();
+  session = u;
+  localStorage.setItem("session", JSON.stringify(session));
 
-  document.getElementById("name").value = "";
-  document.getElementById("url").value = "";
+  loadDashboard();
 }
 
-/* ================= RESET ================= */
-function resetSystem() {
-  channels = [];
-  render();
-  document.getElementById("player").src = "";
-  document.getElementById("title").innerText = "Select a Channel";
+/* =========================
+   LOGOUT
+========================= */
+function logout(){
+  localStorage.removeItem("session");
+  location.reload();
 }
 
-/* ================= SEED DEFAULT ================= */
-function seedSystem() {
-  channels = [
-    { name: "News Live", url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" },
-    { name: "Sports HD", url: "https://test-streams.mux.dev/test_001/stream.m3u8" },
-    { name: "Movie Channel", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" }
-  ];
-  render();
+/* =========================
+   LOAD DASHBOARD
+========================= */
+function loadDashboard(){
+  if(!session){
+    show("login");
+    return;
+  }
+
+  show("dashboard");
+  renderChannels();
 }
 
-/* INIT */
-render();
+/* =========================
+   ADD CHANNEL (ADMIN)
+========================= */
+function addChannel(){
+  let ch = {
+    name: chName.value,
+    url: chUrl.value
+  };
 
+  channels.push(ch);
+  localStorage.setItem("channels", JSON.stringify(channels));
+
+  renderChannels();
+}
+
+/* =========================
+   DELETE CHANNEL
+========================= */
+function deleteChannel(i){
+  channels.splice(i,1);
+  localStorage.setItem("channels", JSON.stringify(channels));
+  renderChannels();
+}
+
+/* =========================
+   RENDER CHANNELS
+========================= */
+function renderChannels(){
+  channels = JSON.parse(localStorage.getItem("channels") || "[]");
+
+  let html = "";
+
+  channels.forEach((c,i)=>{
+    html += `
+      <div class="card" style="width:200px">
+        <h4>${c.name}</h4>
+        <video width="100%" controls src="${c.url}"></video>
+        <button onclick="deleteChannel(${i})" class="red">Delete</button>
+      </div>
+    `;
+  });
+
+  document.getElementById("channels").innerHTML = html;
+}
+
+/* =========================
+   AUTO LOAD
+========================= */
+if(session){
+  loadDashboard();
+}else{
+  show("login");
+}
 </script>
 
 </body>
