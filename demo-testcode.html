@@ -2,198 +2,107 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BTECH TV OTT SYSTEM</title>
+<title>BTECH TV APK Builder</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body{margin:0;font-family:Arial;background:#0f172a;color:#fff}
-header{padding:15px;background:#111827;display:flex;justify-content:space-between}
-button{padding:8px 12px;border:none;cursor:pointer;border-radius:6px}
-input{padding:10px;margin:5px;width:90%}
-.container{padding:20px}
-.card{background:#1f2937;padding:15px;margin:10px;border-radius:10px}
-.row{display:flex;flex-wrap:wrap}
-.hidden{display:none}
-.blue{background:#2563eb;color:#fff}
-.red{background:#ef4444;color:#fff}
-.green{background:#22c55e;color:#fff}
+body{
+  margin:0;
+  font-family:Arial;
+  background:#0f172a;
+  color:white;
+}
+
+.container{
+  padding:20px;
+  text-align:center;
+}
+
+.card{
+  background:#1f2937;
+  padding:20px;
+  margin:15px auto;
+  max-width:600px;
+  border-radius:12px;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+.blue{background:#2563eb;color:white}
+.green{background:#22c55e;color:white}
+.purple{background:#a855f7;color:white}
+.orange{background:#f97316;color:white}
+
+iframe{
+  width:100%;
+  height:400px;
+  border:none;
+  border-radius:10px;
+}
+
+small{color:#94a3b8}
 </style>
 </head>
 
 <body>
 
-<header>
-<h2>📺 BTECH TV OTT</h2>
-<div>
-<button onclick="show('login')" class="blue">Login</button>
-<button onclick="show('register')" class="green">Register</button>
-<button onclick="logout()" class="red">Logout</button>
-</div>
-</header>
-
 <div class="container">
 
-<!-- LOGIN -->
-<div id="login" class="card">
-<h3>Login</h3>
-<input id="loginEmail" placeholder="Email">
-<input id="loginPass" placeholder="Password" type="password">
-<button onclick="login()" class="blue">Login</button>
-</div>
+<h1>📱 BTECH TV APK BUILDER</h1>
+<small>Convert your website into Android App</small>
 
-<!-- REGISTER -->
-<div id="register" class="card hidden">
-<h3>Register</h3>
-<input id="regName" placeholder="Name">
-<input id="regEmail" placeholder="Email">
-<input id="regPass" placeholder="Password" type="password">
-<button onclick="register()" class="green">Register</button>
-</div>
-
-<!-- DASHBOARD -->
-<div id="dashboard" class="hidden">
-
-<h2>🎬 Channels</h2>
-<div id="channels" class="row"></div>
-
-<h2>➕ Admin Panel</h2>
 <div class="card">
-<input id="chName" placeholder="Channel Name">
-<input id="chUrl" placeholder="Stream URL (mp4 / m3u8)">
-<button onclick="addChannel()" class="green">Add Channel</button>
+<h3>🌐 Live Website Preview</h3>
+
+<iframe src="https://btech-tv.netlify.app/"></iframe>
+
 </div>
 
+<div class="card">
+<h3>⚙️ APK BUILD OPTIONS</h3>
+
+<button class="blue">👉 WebView Android Studio Method</button>
+<button class="green">👉 Capacitor (Recommended)</button>
+<button class="purple">👉 Flutter Upgrade Version</button>
+</div>
+
+<div class="card">
+<h3>📦 WHAT YOU WILL GET</h3>
+<p>✔ Play Store APK</p>
+<p>✔ Mobile App Icon</p>
+<p>✔ Splash Screen</p>
+<p>✔ Full Screen IPTV App</p>
+<p>✔ Offline Install File (.apk)</p>
+</div>
+
+<div class="card">
+<h3>🚀 BUILD INSTRUCTIONS</h3>
+<p>1. Open Android Studio</p>
+<p>2. Create WebView project</p>
+<p>3. Load your site URL</p>
+<p>4. Build APK</p>
+<p>5. Install or upload to Play Store</p>
+</div>
+
+<div class="card">
+<h3>🔗 YOUR APP LINK</h3>
+<p>https://btech-tv.netlify.app/</p>
+<button class="orange" onclick="copyLink()">Copy Link</button>
 </div>
 
 </div>
 
 <script>
-/* =========================
-   SIMPLE LOCAL "BACKEND"
-========================= */
-
-let users = JSON.parse(localStorage.getItem("users") || "[]");
-let channels = JSON.parse(localStorage.getItem("channels") || "[]");
-let session = JSON.parse(localStorage.getItem("session") || "null");
-
-/* =========================
-   NAV
-========================= */
-function show(page){
-  document.getElementById("login").classList.add("hidden");
-  document.getElementById("register").classList.add("hidden");
-  document.getElementById("dashboard").classList.add("hidden");
-  document.getElementById(page).classList.remove("hidden");
-}
-
-/* =========================
-   REGISTER
-========================= */
-function register(){
-  let user = {
-    name: regName.value,
-    email: regEmail.value,
-    password: regPass.value,
-    isAdmin: false
-  };
-
-  users.push(user);
-  localStorage.setItem("users", JSON.stringify(users));
-
-  alert("Registered!");
-  show("login");
-}
-
-/* =========================
-   LOGIN
-========================= */
-function login(){
-  let u = users.find(x => x.email === loginEmail.value && x.password === loginPass.value);
-
-  if(!u){
-    alert("Invalid login");
-    return;
-  }
-
-  session = u;
-  localStorage.setItem("session", JSON.stringify(session));
-
-  loadDashboard();
-}
-
-/* =========================
-   LOGOUT
-========================= */
-function logout(){
-  localStorage.removeItem("session");
-  location.reload();
-}
-
-/* =========================
-   LOAD DASHBOARD
-========================= */
-function loadDashboard(){
-  if(!session){
-    show("login");
-    return;
-  }
-
-  show("dashboard");
-  renderChannels();
-}
-
-/* =========================
-   ADD CHANNEL (ADMIN)
-========================= */
-function addChannel(){
-  let ch = {
-    name: chName.value,
-    url: chUrl.value
-  };
-
-  channels.push(ch);
-  localStorage.setItem("channels", JSON.stringify(channels));
-
-  renderChannels();
-}
-
-/* =========================
-   DELETE CHANNEL
-========================= */
-function deleteChannel(i){
-  channels.splice(i,1);
-  localStorage.setItem("channels", JSON.stringify(channels));
-  renderChannels();
-}
-
-/* =========================
-   RENDER CHANNELS
-========================= */
-function renderChannels(){
-  channels = JSON.parse(localStorage.getItem("channels") || "[]");
-
-  let html = "";
-
-  channels.forEach((c,i)=>{
-    html += `
-      <div class="card" style="width:200px">
-        <h4>${c.name}</h4>
-        <video width="100%" controls src="${c.url}"></video>
-        <button onclick="deleteChannel(${i})" class="red">Delete</button>
-      </div>
-    `;
-  });
-
-  document.getElementById("channels").innerHTML = html;
-}
-
-/* =========================
-   AUTO LOAD
-========================= */
-if(session){
-  loadDashboard();
-}else{
-  show("login");
+function copyLink(){
+  navigator.clipboard.writeText("https://btech-tv.netlify.app/");
+  alert("Link copied!");
 }
 </script>
 
