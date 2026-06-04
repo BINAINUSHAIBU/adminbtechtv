@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Global TV Hub PRO</title>
+<title>Global TV Hub PRO SaaS</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body {
   margin: 0;
   font-family: Arial;
-  background: #0b0b1a;
+  background: #0a0a1a;
   color: white;
 }
 
@@ -31,17 +31,17 @@ header {
 .sidebar {
   width: 260px;
   height: 100vh;
-  background: #1b1b2e;
+  background: #1c1c2e;
   padding: 10px;
   overflow-y: auto;
 }
 
 .channel {
-  background: #2a2a44;
   padding: 10px;
   margin: 8px 0;
+  background: #2a2a44;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 6px;
 }
 
 .channel:hover {
@@ -57,22 +57,23 @@ header {
 
 video {
   width: 100%;
-  max-height: 500px;
+  max-height: 450px;
   background: black;
+  border-radius: 10px;
 }
 
-/* ADMIN */
+/* ADMIN PANEL */
 .admin {
   margin-top: 20px;
-  background: #1b1b2e;
+  background: #1c1c2e;
   padding: 15px;
   border-radius: 10px;
 }
 
 input, button {
+  width: 95%;
   padding: 10px;
   margin: 5px;
-  width: 95%;
   border-radius: 5px;
   border: none;
 }
@@ -99,14 +100,14 @@ footer {
 <body>
 
 <header>
-📺 GLOBAL TV HUB PRO — ONE PAGE OTT SYSTEM
+📺 GLOBAL TV HUB PRO — OTT SAAS PLATFORM (ONE PAGE)
 </header>
 
 <div class="container">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<h3>📡 Channels</h3>
+<h3>📡 TV Channels</h3>
 <div id="channelList"></div>
 </div>
 
@@ -119,26 +120,32 @@ footer {
 
 <!-- ADMIN PANEL -->
 <div class="admin">
-<h3>🏢 Admin Panel</h3>
+<h3>🏢 Super Admin Panel (SaaS Demo)</h3>
 
 <input id="name" placeholder="Channel Name">
-<input id="url" placeholder="Video URL (.m3u8 / mp4)">
-<button onclick="addChannel()">Add Channel</button>
+<input id="url" placeholder="Stream URL (.m3u8 / mp4)">
+<button onclick="addChannel()">➕ Add Channel</button>
 
-<h4>⚡ System Control</h4>
-<button onclick="resetChannels()">Reset Channels</button>
+<h4>⚡ SaaS Controls</h4>
+<button onclick="resetSystem()">Reset All Channels</button>
+<button onclick="seedSystem()">Restore Default Channels</button>
+
+<h4>💰 Monetization (Demo)</h4>
+<button onclick="alert('Subscription feature coming in backend upgrade')">Enable Subscription</button>
+<button onclick="alert('Ads system coming in backend upgrade')">Enable Ads</button>
+
 </div>
 
 </div>
 </div>
 
 <footer>
-© 2026 Global TV Hub PRO | OTT Streaming System
+© 2026 Global TV Hub PRO SaaS | Netflix-style OTT System
 </footer>
 
 <script>
 
-// ================= INITIAL CHANNEL DATABASE =================
+/* ================= FAKE DATABASE ================= */
 let channels = [
   {
     name: "News Live",
@@ -154,12 +161,12 @@ let channels = [
   }
 ];
 
-// ================= RENDER CHANNELS =================
-function renderChannels() {
+/* ================= RENDER ================= */
+function render() {
   const list = document.getElementById("channelList");
   list.innerHTML = "";
 
-  channels.forEach((ch, index) => {
+  channels.forEach((ch, i) => {
     const div = document.createElement("div");
     div.className = "channel";
     div.innerText = ch.name;
@@ -173,33 +180,43 @@ function renderChannels() {
   });
 }
 
-// ================= ADD CHANNEL =================
+/* ================= ADD CHANNEL ================= */
 function addChannel() {
   const name = document.getElementById("name").value;
   const url = document.getElementById("url").value;
 
   if (!name || !url) {
-    alert("Please fill all fields");
+    alert("Fill all fields");
     return;
   }
 
   channels.push({ name, url });
-  renderChannels();
+  render();
 
   document.getElementById("name").value = "";
   document.getElementById("url").value = "";
 }
 
-// ================= RESET SYSTEM =================
-function resetChannels() {
+/* ================= RESET ================= */
+function resetSystem() {
   channels = [];
-  renderChannels();
+  render();
   document.getElementById("player").src = "";
   document.getElementById("title").innerText = "Select a Channel";
 }
 
-// INIT
-renderChannels();
+/* ================= RESTORE DEFAULT ================= */
+function seedSystem() {
+  channels = [
+    { name: "News Live", url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" },
+    { name: "Sports HD", url: "https://test-streams.mux.dev/test_001/stream.m3u8" },
+    { name: "Movie Channel", url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" }
+  ];
+  render();
+}
+
+/* INIT */
+render();
 
 </script>
 
