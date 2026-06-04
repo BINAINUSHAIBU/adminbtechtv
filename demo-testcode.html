@@ -62,7 +62,7 @@ video {
   border-radius: 10px;
 }
 
-/* ADMIN PANEL */
+/* ADMIN */
 .admin {
   margin-top: 20px;
   background: #1c1c2e;
@@ -87,7 +87,21 @@ button:hover {
   background: #00bfa6;
 }
 
-/* FOOTER */
+/* DASHBOARD */
+.dashboard {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.card {
+  background: #1c1c2e;
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
+}
+
 footer {
   text-align: center;
   padding: 10px;
@@ -100,14 +114,14 @@ footer {
 <body>
 
 <header>
-📺 GLOBAL TV HUB PRO — OTT SAAS PLATFORM (ONE PAGE)
+📺 GLOBAL TV HUB PRO — FULL OTT SAAS (DOCKER READY UI)
 </header>
 
 <div class="container">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<h3>📡 TV Channels</h3>
+<h3>📡 Channels</h3>
 <div id="channelList"></div>
 </div>
 
@@ -118,21 +132,30 @@ footer {
 
 <video id="player" controls autoplay></video>
 
+<!-- DASHBOARD -->
+<div class="dashboard">
+  <div class="card">👤 Users<br><span id="users">120</span></div>
+  <div class="card">📡 Channels<br><span id="channels">3</span></div>
+  <div class="card">💰 Revenue<br>₦250,000</div>
+</div>
+
 <!-- ADMIN PANEL -->
 <div class="admin">
-<h3>🏢 Super Admin Panel (SaaS Demo)</h3>
+<h3>🏢 SaaS Admin Panel</h3>
 
 <input id="name" placeholder="Channel Name">
 <input id="url" placeholder="Stream URL (.m3u8 / mp4)">
+
 <button onclick="addChannel()">➕ Add Channel</button>
+<button onclick="resetSystem()">🗑 Reset Channels</button>
+<button onclick="seedSystem()">🔄 Restore Default</button>
 
-<h4>⚡ SaaS Controls</h4>
-<button onclick="resetSystem()">Reset All Channels</button>
-<button onclick="seedSystem()">Restore Default Channels</button>
+<h4>💳 Payments (Simulated)</h4>
+<button onclick="alert('Paystack Integration via backend API')">Subscribe User</button>
+<button onclick="alert('Stripe/PayPal support available in backend')">Enable Payments</button>
 
-<h4>💰 Monetization (Demo)</h4>
-<button onclick="alert('Subscription feature coming in backend upgrade')">Enable Subscription</button>
-<button onclick="alert('Ads system coming in backend upgrade')">Enable Ads</button>
+<h4>🎥 Streaming (Docker RTMP)</h4>
+<button onclick="alert('RTMP: rtmp://server/live')">Show Stream Key</button>
 
 </div>
 
@@ -140,12 +163,12 @@ footer {
 </div>
 
 <footer>
-© 2026 Global TV Hub PRO SaaS | Netflix-style OTT System
+© 2026 Global TV Hub PRO SaaS | Netflix + DSTV OTT System
 </footer>
 
 <script>
 
-/* ================= FAKE DATABASE ================= */
+/* ================= SIMULATED DATABASE ================= */
 let channels = [
   {
     name: "News Live",
@@ -165,6 +188,8 @@ let channels = [
 function render() {
   const list = document.getElementById("channelList");
   list.innerHTML = "";
+
+  document.getElementById("channels").innerText = channels.length;
 
   channels.forEach((ch, i) => {
     const div = document.createElement("div");
@@ -205,7 +230,7 @@ function resetSystem() {
   document.getElementById("title").innerText = "Select a Channel";
 }
 
-/* ================= RESTORE DEFAULT ================= */
+/* ================= SEED DEFAULT ================= */
 function seedSystem() {
   channels = [
     { name: "News Live", url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" },
