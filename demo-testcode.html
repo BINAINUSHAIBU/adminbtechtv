@@ -1,509 +1,261 @@
-<!-- ========================================================= -->
-<!-- BTECH-TV WORLD ULTRA MAX X V2.0 -->
-<!-- EXTREME ENGINE • ULTRA PERFORMANCE • SMART UI -->
-<!-- ========================================================= -->
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8"/>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-
-<meta name="theme-color" content="#030508"/>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#050a12">
 <title>BTECH-TV WORLD ULTRA MAX X</title>
-
-<!-- HLS.JS Library -->
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
-<!-- Font Awesome for Icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <style>
-
-/* =========================================================
-ROOT VARIABLES & THEMES
-========================================================= */
-
 :root{
-
---bg:#030508;
---panel:#0a0f16;
---card:#111b27;
---hover:#1a2636;
---accent:#00f2ff;
---accent-glow:rgba(0, 242, 255, 0.4);
---text:#ececf1;
---muted:#6e7681;
---border:#232f3e;
+--bg:#050a12;
+--panel:#0f1624;
+--card:#162036;
+--hover:#1e2d48;
+--accent:#00f0ff;
+--accent-dim:rgba(0, 240, 255, 0.1);
+--text:#e2e8f0;
+--muted:#64748b;
+--border:#263347;
 --success:#10b981;
 --danger:#ef4444;
---radius:12px;
---font:'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-
+--gold:#facc15;
 }
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;background:var(--bg);color:var(--text);overflow:hidden}
+body{display:flex;flex-direction:column}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--hover);border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:var(--accent)}
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:var(--font);
--webkit-tap-highlight-color:transparent;
-}
+/* TOPBAR */
+.topbar{min-height:60px;background:linear-gradient(90deg,var(--panel),#0a1019);display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px}
+.logo{font-size:18px;font-weight:800;color:var(--accent);display:flex;align-items:center;gap:8px;letter-spacing:0.5px}
+.logo i{font-size:22px;text-shadow:0 0 10px var(--accent)}
+.top-actions{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.top-actions::-webkit-scrollbar{display:none}
+.action-btn{padding:8px 14px;background:var(--card);border:none;border-radius:20px;color:var(--text);font-size:12px;cursor:pointer;transition:0.3s;white-space:nowrap}
+.action-btn:hover,.action-btn.active{background:var(--accent);color:#000;box-shadow:0 0 15px rgba(0,240,255,0.3)}
 
-html, body{
-width:100%;
-height:100%;
-background:var(--bg);
-color:var(--text);
-overflow:hidden;
-touch-action:manipulation;
-}
+/* LAYOUT */
+.layout{flex:1;display:flex;overflow:hidden;min-height:0}
+.sidebar{width:260px;background:var(--panel);border-right:1px solid var(--border);overflow-y:auto;padding:10px;display:flex;flex-direction:column}
+.sidebar.collapsed{width:0;padding:0}
+.side-content{flex:1;overflow-y:auto}
+.side-header{font-size:11px;text-transform:uppercase;color:var(--muted);margin:12px 0 6px;font-weight:700;letter-spacing:1px}
+.cat-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13px;transition:0.2s;margin-bottom:2px}
+.cat-item:hover{background:var(--hover);transform:translateX(3px)}
+.cat-item.active{background:var(--accent-dim);color:var(--accent);border-left:3px solid var(--accent)}
 
-body{
-display:flex;
-flex-direction:column;
-}
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#000}
+.main.expanded{flex:1}
 
-/* =========================================================
-SCROLLBARS
-========================================================= */
-
-::-webkit-scrollbar{
-width:6px;
-height:6px;
-}
-::-webkit-scrollbar-track{ background:transparent; }
-::-webkit-scrollbar-thumb{ background:var(--hover); border-radius:10px; }
-::-webkit-scrollbar-thumb:hover{ background:var(--accent); }
-
-/* =========================================================
-TOPBAR
-========================================================= */
-
-.topbar{
-height:60px;
-background:rgba(10,15,22,0.95);
-backdrop-filter:blur(10px);
-display:flex;
-align-items:center;
-padding:0 20px;
-border-bottom:1px solid var(--border);
-z-index:100;
-position:relative;
-}
-
-.logo{
-font-size:20px;
-font-weight:800;
-letter-spacing:1px;
-color:var(--accent);
-text-transform:uppercase;
-display:flex;
-align-items:center;
-gap:10px;
-text-shadow:0 0 10px var(--accent-glow);
-}
-
-.logo i{ font-size:24px; }
-
-.actions{
-margin-left:auto;
-display:flex;
-gap:12px;
-}
-
-.btn-icon{
-width:36px;
-height:36px;
-border-radius:50%;
-background:var(--card);
-color:var(--text);
-border:1px solid transparent;
-display:flex;
-align-items:center;
-justify-content:center;
-cursor:pointer;
-transition:all 0.2s;
-position:relative;
-}
-
-.btn-icon:hover, .btn-icon.active{
-background:var(--accent);
-color:var(--bg);
-box-shadow:0 0 15px var(--accent-glow);
-border-color:var(--accent);
-}
-
-/* =========================================================
-MAIN LAYOUT
-========================================================= */
-
-.layout{
-flex:1;
-display:flex;
-overflow:hidden;
-position:relative;
-}
-
-.sidebar{
-width:280px;
-background:var(--panel);
-border-right:1px solid var(--border);
-display:flex;
-flex-direction:column;
-transition:width 0.3s, transform 0.3s;
-overflow:hidden;
-z-index:50;
-}
-
-.sidebar.collapsed{
-width:0;
-transform:translateX(-100%);
-}
-
-.sidebar-content{
-flex:1;
-overflow-y:auto;
-padding:15px;
-}
-
-.section-title{
-font-size:11px;
-text-transform:uppercase;
-color:var(--muted);
-margin:15px 0 8px;
-font-weight:700;
-letter-spacing:1px;
-}
-
-.nav-item{
-padding:10px 12px;
-border-radius:var(--radius);
-color:var(--text);
-cursor:pointer;
-transition:0.2s;
-display:flex;
-align-items:center;
-gap:10px;
-font-size:14px;
-background:transparent;
-border:1px solid transparent;
-}
-
-.nav-item:hover{
-background:var(--card);
-border-color:var(--border);
-}
-
-.nav-item.active{
-background:linear-gradient(90deg, rgba(0,242,255,0.1), transparent);
-border-left:3px solid var(--accent);
-color:var(--accent);
-}
-
-/* =========================================================
-CONTENT AREA
-========================================================= */
-
-.main-content{
-flex:1;
-display:flex;
-flex-direction:column;
-position:relative;
-background:#000;
-}
-
-/* =========================================================
-VIDEO PLAYER
-========================================================= */
-
-.player-wrapper{
-width:100%;
-background:#000;
-position:relative;
-aspect-ratio:16/9;
-max-height:70vh;
-display:flex;
-align-items:center;
-justify-content:center;
-overflow:hidden;
-}
-
-video{
-width:100%;
-height:100%;
-object-fit:contain;
-background:#000;
-}
+/* PLAYER */
+.player-wrap{width:100%;height:60vh;background:#000;position:relative;display:flex;justify-content:center;align-items:center;overflow:hidden}
+video{width:100%;height:100%;object-fit:contain;background:#000}
+.live-badge{position:absolute;top:15px;left:15px;background:rgba(239,68,68,0.9);padding:6px 12px;border-radius:20px;font-size:11px;font-weight:bold;z-index:10;display:flex;align-items:center;gap:6px}
+.loader{position:absolute;inset:0;background:rgba(0,0,0,0.8);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:20;backdrop-filter:blur(5px)}
+.loader.hidden{display:none}
+.spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:15px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{font-size:14px;color:var(--accent)}
 
 /* CUSTOM CONTROLS */
-.controls-overlay{
-position:absolute;
-bottom:0;
-left:0;
-right:0;
-background:linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-padding:20px 15px 10px;
-opacity:0;
-transition:opacity 0.3s;
-pointer-events:none;
+.controls{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent);padding:20px 15px 10px;display:flex;flex-direction:column;gap:10px;opacity:0;transition:opacity 0.3s}
+.player-wrap:hover .controls,.player-wrap.paused .controls{opacity:1}
+.progress{flex:1;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;cursor:pointer;position:relative}
+.progress-fill{height:100%;background:var(--accent);width:0;border-radius:2px;transition:0.1s}
+.progress:hover{height:6px}
+.buttons{display:flex;justify-content:space-between;align-items:center}
+.btn-left,.btn-right{display:flex;gap:15px;align-items:center}
+.ctrl-btn{background:none;border:none;color:white;font-size:18px;cursor:pointer;transition:0.2s}
+.ctrl-btn:hover{color:var(--accent)}
+.time{font-size:12px;color:#ccc;font-family:monospace}
+.volume-wrap{display:flex;align-items:center;gap:8px}
+.vol-slider{width:60px;height:4px;-webkit-appearance:none;background:rgba(255,255,255,0.3);border-radius:2px}
+.vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;background:white;border-radius:50%;cursor:pointer}
+
+/* NOW PLAYING */
+.now-playing{background:var(--panel);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:15px;border-top:1px solid var(--border)}
+.np-details{flex:1;min-width:0}
+.np-title{font-size:14px;font-weight:bold;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np-meta{font-size:12px;color:var(--muted)}
+.control-btns{display:flex;gap:10px}
+.cbtn{padding:8px 14px;background:var(--card);border:none;border-radius:8px;color:var(--text);cursor:pointer;font-size:13px}
+.cbtn:hover{background:var(--hover)}
+
+/* SEARCH */
+.search-bar{background:var(--panel);padding:10px 15px;display:flex;gap:10px;border-top:1px solid var(--border)}
+.s-inp{flex:1;background:var(--card);border:none;padding:10px 14px;border-radius:8px;color:white;font-size:13px}
+.s-inp:focus{outline:1px solid var(--accent)}
+.s-sort{background:var(--card);border:none;padding:10px;border-radius:8px;color:white}
+
+/* CHANNELS */
+.channel-list{flex:1;overflow-y:auto;padding:15px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;align-content:start}
+.ch-item{background:var(--card);padding:12px;border-radius:10px;display:flex;gap:12px;align-items:center;cursor:pointer;transition:0.2s;border:1px solid transparent}
+.ch-item:hover{background:var(--hover);transform:translateY(-2px);border-color:var(--border)}
+.ch-item.active{background:rgba(0,240,255,0.1);border-color:var(--accent)}
+.ch-img{width:50px;height:50px;border-radius:8px;object-fit:cover;background:black}
+.ch-info{flex:1;min-width:0}
+.ch-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ch-group{font-size:11px;color:var(--muted);margin-top:3px}
+.ch-fav{font-size:16px;color:var(--muted);cursor:pointer}
+.ch-fav.on{color:var(--gold)}
+
+.stats{background:#020408;padding:8px 15px;font-size:11px;color:var(--muted);text-align:center}
+
+/* FOOTER */
+.footer{background:var(--panel);padding:10px;text-align:center;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
+.footer span{color:var(--accent)}
+
+/* RESPONSIVE */
+@media(max-width:800px){
+.sidebar{position:absolute;z-index:100;height:100%;width:80%;max-width:300px;box-shadow:5px 0 20px rgba(0,0,0,0.5);transform:translateX(-100%);transition:transform 0.3s}
+.sidebar.show{transform:translateX(0)}
+.player-wrap{height:45vh}
+.channel-list{grid-template-columns:1fr}
 }
+</style>
+</head>
+<body>
 
-.player-wrapper:hover .controls-overlay,
-.player-wrapper.paused .controls-overlay{
-opacity:1;
-pointer-events:all;
+<div class="topbar">
+<div class="logo"><i class="fas fa-tv"></i> BTECH-TV MAX X</div>
+<div class="top-actions">
+<button class="action-btn active" onclick="setTab('all',this)">All</button>
+<button class="action-btn" onclick="setTab('favs',this)">⭐</button>
+<button class="action-btn" onclick="setTab('recents',this)">🕘</button>
+<button class="action-btn" onclick="toggleSide()"><i class="fas fa-bars"></i></button>
+<button class="action-btn" onclick="toggleFS()">⛶</button>
+<button class="action-btn" onclick="shuffle()">🎲</button>
+</div>
+</div>
+
+<div class="layout">
+<div class="sidebar" id="sidebar">
+<div class="side-content">
+<div class="side-header">Countries</div>
+<div class="cat-item" onclick="loadList('ng','Nigeria')">🇳🇬 Nigeria</div>
+<div class="cat-item" onclick="loadList('us','USA')">🇺🇸 USA</div>
+<div class="cat-item" onclick="loadList('uk','UK')">🇬🇧 UK</div>
+<div class="cat-item" onclick="loadList('in','India')">🇮🇳 India</div>
+<div class="cat-item" onclick="loadList('fr','France')">🇫🇷 France</div>
+<div class="cat-item" onclick="loadList('de','Germany')">🇩🇪 Germany</div>
+<div class="cat-item" onclick="loadList('br','Brazil')">🇧🇷 Brazil</div>
+<div class="cat-item" onclick="loadList('ca','Canada')">🇨🇦 Canada</div>
+<div class="cat-item" onclick="loadList('za','S.Africa')">🇿🇦 South Africa</div>
+<div class="cat-item" onclick="loadList('cn','China')">🇨🇳 China</div>
+
+<div class="side-header">Categories</div>
+<div class="cat-item" onclick="loadCat('news','News')">📰 News</div>
+<div class="cat-item" onclick="loadCat('sports','Sports')">⚽ Sports</div>
+<div class="cat-item" onclick="loadCat('movies','Movies')">🎬 Movies</div>
+<div class="cat-item" onclick="loadCat('music','Music')">🎵 Music</div>
+<div class="cat-item" onclick="loadCat('kids','Kids')">👶 Kids</div>
+<div class="cat-item" onclick="loadCat('documentary','Documentary')">📚 Documentary</div>
+
+<div class="side-header">Premium</div>
+<div class="cat-item" onclick="scanAll()">⚡ Scan Streams</div>
+<div class="cat-item" onclick="loadAll()">🚀 Global Feeds</div>
+<div class="cat-item" onclick="clearRecents()">🗑 Clear History</div>
+</div>
+</div>
+
+<div class="main" id="main">
+<div class="player-wrap" id="playerWrap">
+<div class="live-badge" id="liveBadge" style="display:none"><span class="live-dot"></span> LIVE</div>
+<video id="video" playsinline webkit-playsinline></video>
+<div class="loader" id="loader">
+<div class="spinner"></div>
+<div class="loader-text" id="loadText">Connecting Ultra Stream...</div>
+</div>
+<div class="controls">
+<div class="progress" onclick="seek(event)">
+<div class="progress-fill" id="progress"></div>
+</div>
+<div class="buttons">
+<div class="btn-left">
+<button class="ctrl-btn" onclick="togglePlay()"><i class="fas fa-play" id="playIcon"></i></button>
+<button class="ctrl-btn" onclick="prev()"><i class="fas fa-step-backward"></i></button>
+<button class="ctrl-btn" onclick="next()"><i class="fas fa-step-forward"></i></button>
+<div class="volume-wrap">
+<button class="ctrl-btn" onclick="mute()"><i class="fas fa-volume-up" id="volIcon"></i></button>
+<input type="range" class="vol-slider" min="0" max="1" step="0.1" onchange="setVol(this.value)">
+</div>
+<span class="time" id="time">00:00 / 00:00</span>
+</div>
+<div class="btn-right">
+<button class="ctrl-btn" onclick="pip()"><i class="fas fa-picture-in-picture"></i></button>
+<button class="ctrl-btn" onclick="toggleFS()"><i class="fas fa-expand"></i></button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="now-playing">
+<div class="np-details">
+<div class="np-title" id="npTitle">No Channel Selected</div>
+<div class="np-meta" id="npMeta">BTECH-TV ULTRA ENGINE</div>
+</div>
+<div class="control-btns">
+<button class="cbtn" onclick="toggleFav()">⭐ <span id="favBtn">Fav</span></button>
+<button class="cbtn" onclick="share()">🔗 Share</button>
+<button class="cbtn" onclick="copyUrl()">📋 Copy</button>
+</div>
+</div>
+
+<div class="search-bar">
+<input type="text" class="s-inp" placeholder="Search channels..." oninput="search(this.value)">
+<select class="s-sort" onchange="sortList(this.value)">
+<option value="az">A-Z</option>
+<option value="za">Z-A</option>
+</select>
+</div>
+
+<div class="channel-list" id="chList"></div>
+
+<div class="stats" id="stats">0 Channels • Ready</div>
+</div>
+</div>
+
+<div class="footer">
+DESIGN BY <span>BINAINU SHAIBU</span> • BTECH-TV WORLD ULTRA MAX X
+</div>
+
+<script>
+const video=document.getElementById('video');
+const loader=document.getElementById('loader');
+const chList=document.getElementById('chList');
+let all=[],filt=[],curr=0,hls=null;
+let favs=JSON.parse(localStorage.getItem('btech_favs')||'{}');
+let recents=JSON.parse(localStorage.getItem('btech_recents')||'[]');
+
+// feeds
+const feeds=[
+'https://iptv-org.github.io/iptv/index.m3u',
+'https://iptv-org.github.io/iptv/countries/ng.m3u',
+'https://iptv-org.github.io/iptv/countries/us.m3u',
+'https://iptv-org.github.io/iptv/countries/uk.m3u',
+'https://iptv-org.github.io/iptv/countries/in.m3u',
+'https://iptv-org.github.io/iptv/countries/fr.m3u',
+'https://iptv-org.github.io/iptv/countries/de.m3u',
+'https://iptv-org.github.io/iptv/countries/br.m3u',
+'https://iptv-org.github.io/iptv/index.country.m3u'
+];
+
+// loader UI
+function showLoad(txt){
+document.getElementById('loadText').innerText=txt;
+loader.classList.remove('hidden');
 }
+function hideLoad(){loader.classList.add('hidden');document.getElementById('liveBadge').style.display='flex'}
 
-.progress-container{
-width:100%;
-height:4px;
-background:rgba(255,255,255,0.2);
-cursor:pointer;
-margin-bottom:10px;
-border-radius:2px;
-position:relative;
-}
-
-.progress-bar{
-height:100%;
-background:var(--accent);
-width:0%;
-border-radius:2px;
-transition:width 0.1s;
-}
-
-.progress-container:hover{
-height:6px;
-}
-
-.controls-row{
-display:flex;
-align-items:center;
-justify-content:space-between;
-color:white;
-}
-
-.left-controls, .right-controls{
-display:flex;
-align-items:center;
-gap:15px;
-}
-
-.ctrl-btn{
-background:none;
-border:none;
-color:white;
-font-size:16px;
-cursor:pointer;
-padding:5px;
-opacity:0.8;
-transition:0.2s;
-}
-
-.ctrl-btn:hover{ opacity:1; color:var(--accent); }
-
-.time-display{
-font-size:12px;
-font-family:monospace;
-color:#ccc;
-}
-
-/* Volume & Settings */
-.volume-container{
-display:flex;
-align-items:center;
-gap:8px;
-}
-
-.volume-slider{
-width:60px;
-height:4px;
--webkit-appearance:none;
-background:rgba(255,255,255,0.3);
-border-radius:2px;
-outline:none;
-}
-
-.volume-slider::-webkit-slider-thumb{
--webkit-appearance:none;
-width:12px;
-height:12px;
-background:white;
-border-radius:50%;
-cursor:pointer;
-}
-
-/* PIP & Fullscreen */
-.status-badge{
-position:absolute;
-top:15px;
-left:15px;
-background:rgba(0,0,0,0.6);
-padding:5px 10px;
-border-radius:20px;
-font-size:11px;
-font-weight:bold;
-display:flex;
-align-items:center;
-gap:6px;
-z-index:10;
-backdrop-filter:blur(4px);
-}
-
-/* Loading Spinner */
-.loader{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%, -50%);
-z-index:20;
-display:none;
-}
-
-.loader.active{ display:block; }
-
-.spinner{
-width:40px;
-height:40px;
-border:3px solid rgba(255,255,255,0.1);
-border-top-color:var(--accent);
-border-radius:50%;
-animation:spin 1s linear infinite;
-}
-
-@keyframes spin{ to{ transform:rotate(360deg); } }
-
-/* =========================================================
-NOW PLAYING BAR
-========================================================= */
-
-.now-playing{
-height:70px;
-background:var(--panel);
-border-top:1px solid var(--border);
-display:flex;
-align-items:center;
-padding:0 20px;
-gap:20px;
-}
-
-.np-info{ flex:1; }
-.np-title{ font-size:14px; font-weight:bold; color:var(--accent); }
-.np-group{ font-size:12px; color:var(--muted); }
-
-.np-controls{ display:flex; gap:10px; }
-
-/* =========================================================
-SEARCH & FILTER
-========================================================= */
-
-.filter-bar{
-height:50px;
-background:var(--panel);
-border-bottom:1px solid var(--border);
-display:flex;
-padding:0 15px;
-align-items:center;
-gap:10px;
-}
-
-.search-input{
-flex:1;
-background:var(--card);
-border:none;
-padding:8px 12px;
-border-radius:var(--radius);
-color:white;
-font-size:13px;
-}
-
-.search-input:focus{ outline:1px solid var(--accent); }
-
-/* =========================================================
-CHANNEL GRID
-========================================================= */
-
-.channel-grid{
-flex:1;
-overflow-y:auto;
-padding:15px;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-gap:12px;
-}
-
-.channel-card{
-background:var(--card);
-border-radius:var(--radius);
-padding:12px;
-display:flex;
-gap:12px;
-align-items:center;
-cursor:pointer;
-transition:all 0.2s;
-border:1px solid transparent;
-position:relative;
-overflow:hidden;
-}
-
-.channel-card::before{
-content:'';
-position:absolute;
-top:0; left:0; width:3px; height:100%;
-background:var(--accent);
-opacity:0;
-transition:opacity 0.2s;
-}
-
-.channel-card:hover{
-transform:translateY(-2px);
-background:var(--hover);
-border-color:var(--border);
-}
-
-.channel-card.active{
-border-color:var(--accent);
-background:rgba(0,242,255,0.05);
-}
-
-.channel-card.active::before{ opacity:1; }
-
-.ch-logo{
-width:48px;
-height:48px;
-border-radius:8px;
-object-fit:cover;
-background:#000;
-}
-
-.ch-info{ flex:1; overflow:hidden; }
-.ch-name{ font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.ch-meta{ font-size:11px; color:var(--muted); display:flex; justify-content:space-between; margin-top:4px; }
-
-/* Status Indicators */
-.live-dot{
-width:6px; height:6px; background:var(--success); border-radius:50%; display:inline-block; margin-right:4px;
-}
-.offline-dot{ background:var(--danger); }
-
-/* Load More Trigger */
-.loader-trigger{
-grid-column: 1 / -1;
-padding:20px;
-text-align:center;
-color:var(--muted);
-cursor:pointer;
-}
-.loader-trigger:hover{ color:var(--accent); }
-
-/* =========================================================
-RESPONSIVE
-========================================================= */
-
-@media(max-width:768px){
-.sidebar{ position:absolute; height:100%; z-index:200; box-shadow:5px 0 20px
+// fetch & parse
+async function loadList(code,name){
+showLoad('Loading '+name+'...');
+all=[];
+try{
+const res=await fetch('https://
