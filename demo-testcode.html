@@ -2,260 +2,177 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#050a12">
-<title>BTECH-TV WORLD ULTRA MAX X</title>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nigeria Emergency & Safety App</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 :root{
---bg:#050a12;
---panel:#0f1624;
---card:#162036;
---hover:#1e2d48;
---accent:#00f0ff;
---accent-dim:rgba(0, 240, 255, 0.1);
---text:#e2e8f0;
---muted:#64748b;
---border:#263347;
---success:#10b981;
+--primary:#10b981;
 --danger:#ef4444;
---gold:#facc15;
+--dark:#0f172a;
+--card:#1e293b;
+--text:#f8fafc;
+--muted:#94a3b8;
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;-webkit-tap-highlight-color:transparent}
-html,body{width:100%;height:100%;background:var(--bg);color:var(--text);overflow:hidden}
-body{display:flex;flex-direction:column}
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--hover);border-radius:10px}
-::-webkit-scrollbar-thumb:hover{background:var(--accent)}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:var(--dark);color:var(--text);min-height:100vh}
+.container{max-width:500px;margin:0 auto;padding:20px}
 
-/* TOPBAR */
-.topbar{min-height:60px;background:linear-gradient(90deg,var(--panel),#0a1019);display:flex;align-items:center;justify-content:space-between;padding:0 15px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px}
-.logo{font-size:18px;font-weight:800;color:var(--accent);display:flex;align-items:center;gap:8px;letter-spacing:0.5px}
-.logo i{font-size:22px;text-shadow:0 0 10px var(--accent)}
-.top-actions{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
-.top-actions::-webkit-scrollbar{display:none}
-.action-btn{padding:8px 14px;background:var(--card);border:none;border-radius:20px;color:var(--text);font-size:12px;cursor:pointer;transition:0.3s;white-space:nowrap}
-.action-btn:hover,.action-btn.active{background:var(--accent);color:#000;box-shadow:0 0 15px rgba(0,240,255,0.3)}
+.header{text-align:center;padding:20px 0}
+.header h1{color:var(--primary);font-size:24px;margin-bottom:5px}
+.header p{color:var(--muted);font-size:13px}
 
-/* LAYOUT */
-.layout{flex:1;display:flex;overflow:hidden;min-height:0}
-.sidebar{width:260px;background:var(--panel);border-right:1px solid var(--border);overflow-y:auto;padding:10px;display:flex;flex-direction:column}
-.sidebar.collapsed{width:0;padding:0}
-.side-content{flex:1;overflow-y:auto}
-.side-header{font-size:11px;text-transform:uppercase;color:var(--muted);margin:12px 0 6px;font-weight:700;letter-spacing:1px}
-.cat-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:13px;transition:0.2s;margin-bottom:2px}
-.cat-item:hover{background:var(--hover);transform:translateX(3px)}
-.cat-item.active{background:var(--accent-dim);color:var(--accent);border-left:3px solid var(--accent)}
+.emergency-banner{background:linear-gradient(135deg,#ef4444,#dc2626);padding:20px;border-radius:16px;text-align:center;margin-bottom:20px;box-shadow:0 4px 15px rgba(239,68,68,0.3)}
+.emergency-banner h2{font-size:28px;margin-bottom:10px}
+.sos-btn{width:120px;height:120px;border-radius:50%;background:white;border:none;color:var(--danger);font-size:24px;font-weight:bold;cursor:pointer;box-shadow:0 0 30px rgba(255,255,255,0.3);animation:pulse 2s infinite;margin:10px auto;display:block}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
 
-/* MAIN */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#000}
-.main.expanded{flex:1}
+.section{background:var(--card);border-radius:12px;padding:15px;margin-bottom:15px}
+.section-title{font-size:14px;color:var(--primary);margin-bottom:12px;display:flex;align-items:center;gap:8px}
 
-/* PLAYER */
-.player-wrap{width:100%;height:60vh;background:#000;position:relative;display:flex;justify-content:center;align-items:center;overflow:hidden}
-video{width:100%;height:100%;object-fit:contain;background:#000}
-.live-badge{position:absolute;top:15px;left:15px;background:rgba(239,68,68,0.9);padding:6px 12px;border-radius:20px;font-size:11px;font-weight:bold;z-index:10;display:flex;align-items:center;gap:6px}
-.loader{position:absolute;inset:0;background:rgba(0,0,0,0.8);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:20;backdrop-filter:blur(5px)}
-.loader.hidden{display:none}
-.spinner{width:40px;height:40px;border:3px solid rgba(255,255,255,0.1);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:15px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loader-text{font-size:14px;color:var(--accent)}
+.contact-item{background:#334155;padding:12px;border-radius:8px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center}
+.contact-info h4{font-size:14px}
+.contact-info p{font-size:12px;color:var(--muted)}
+.call-btn{background:var(--primary);color:white;border:none;padding:8px 16px;border-radius:20px;font-weight:bold;cursor:pointer}
 
-/* CUSTOM CONTROLS */
-.controls{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,0.9),transparent);padding:20px 15px 10px;display:flex;flex-direction:column;gap:10px;opacity:0;transition:opacity 0.3s}
-.player-wrap:hover .controls,.player-wrap.paused .controls{opacity:1}
-.progress{flex:1;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;cursor:pointer;position:relative}
-.progress-fill{height:100%;background:var(--accent);width:0;border-radius:2px;transition:0.1s}
-.progress:hover{height:6px}
-.buttons{display:flex;justify-content:space-between;align-items:center}
-.btn-left,.btn-right{display:flex;gap:15px;align-items:center}
-.ctrl-btn{background:none;border:none;color:white;font-size:18px;cursor:pointer;transition:0.2s}
-.ctrl-btn:hover{color:var(--accent)}
-.time{font-size:12px;color:#ccc;font-family:monospace}
-.volume-wrap{display:flex;align-items:center;gap:8px}
-.vol-slider{width:60px;height:4px;-webkit-appearance:none;background:rgba(255,255,255,0.3);border-radius:2px}
-.vol-slider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;background:white;border-radius:50%;cursor:pointer}
+.report-form input,.report-form select,.report-form textarea{width:100%;padding:12px;background:#334155;border:none;border-radius:8px;color:white;margin-bottom:10px}
+.report-form textarea{height:100px;resize:none}
+.submit-btn{width:100%;background:var(--danger);color:white;border:none;padding:14px;border-radius:8px;font-size:16px;font-weight:bold;cursor:pointer}
 
-/* NOW PLAYING */
-.now-playing{background:var(--panel);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:15px;border-top:1px solid var(--border)}
-.np-details{flex:1;min-width:0}
-.np-title{font-size:14px;font-weight:bold;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.np-meta{font-size:12px;color:var(--muted)}
-.control-btns{display:flex;gap:10px}
-.cbtn{padding:8px 14px;background:var(--card);border:none;border-radius:8px;color:var(--text);cursor:pointer;font-size:13px}
-.cbtn:hover{background:var(--hover)}
+.tip-item{background:#334155;padding:12px;border-radius:8px;margin-bottom:8px;border-left:3px solid var(--primary)}
+.tip-item h4{font-size:14px;margin-bottom:5px}
+.tip-item p{font-size:12px;color:var(--muted)}
 
-/* SEARCH */
-.search-bar{background:var(--panel);padding:10px 15px;display:flex;gap:10px;border-top:1px solid var(--border)}
-.s-inp{flex:1;background:var(--card);border:none;padding:10px 14px;border-radius:8px;color:white;font-size:13px}
-.s-inp:focus{outline:1px solid var(--accent)}
-.s-sort{background:var(--card);border:none;padding:10px;border-radius:8px;color:white}
-
-/* CHANNELS */
-.channel-list{flex:1;overflow-y:auto;padding:15px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;align-content:start}
-.ch-item{background:var(--card);padding:12px;border-radius:10px;display:flex;gap:12px;align-items:center;cursor:pointer;transition:0.2s;border:1px solid transparent}
-.ch-item:hover{background:var(--hover);transform:translateY(-2px);border-color:var(--border)}
-.ch-item.active{background:rgba(0,240,255,0.1);border-color:var(--accent)}
-.ch-img{width:50px;height:50px;border-radius:8px;object-fit:cover;background:black}
-.ch-info{flex:1;min-width:0}
-.ch-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ch-group{font-size:11px;color:var(--muted);margin-top:3px}
-.ch-fav{font-size:16px;color:var(--muted);cursor:pointer}
-.ch-fav.on{color:var(--gold)}
-
-.stats{background:#020408;padding:8px 15px;font-size:11px;color:var(--muted);text-align:center}
-
-/* FOOTER */
-.footer{background:var(--panel);padding:10px;text-align:center;font-size:11px;color:var(--muted);border-top:1px solid var(--border)}
-.footer span{color:var(--accent)}
-
-/* RESPONSIVE */
-@media(max-width:800px){
-.sidebar{position:absolute;z-index:100;height:100%;width:80%;max-width:300px;box-shadow:5px 0 20px rgba(0,0,0,0.5);transform:translateX(-100%);transition:transform 0.3s}
-.sidebar.show{transform:translateX(0)}
-.player-wrap{height:45vh}
-.channel-list{grid-template-columns:1fr}
-}
+.footer{text-align:center;padding:20px;color:var(--muted);font-size:12px}
 </style>
 </head>
 <body>
 
-<div class="topbar">
-<div class="logo"><i class="fas fa-tv"></i> BTECH-TV MAX X</div>
-<div class="top-actions">
-<button class="action-btn active" onclick="setTab('all',this)">All</button>
-<button class="action-btn" onclick="setTab('favs',this)">⭐</button>
-<button class="action-btn" onclick="setTab('recents',this)">🕘</button>
-<button class="action-btn" onclick="toggleSide()"><i class="fas fa-bars"></i></button>
-<button class="action-btn" onclick="toggleFS()">⛶</button>
-<button class="action-btn" onclick="shuffle()">🎲</button>
+<div class="container">
+<div class="header">
+<h1>🇳🇬 NIGERIA EMERGENCY</h1>
+<p>Emergency Contacts & Safety Guide</p>
+</div>
+
+<!-- SOS Banner -->
+<div class="emergency-banner">
+<h2>🚨 EMERGENCY SOS</h2>
+<p>Tap below to alert emergency services</p>
+<button class="sos-btn" onclick="callEmergency()">SOS</button>
+</div>
+
+<!-- Emergency Contacts -->
+<div class="section">
+<div class="section-title"><i class="fas fa-phone-alt"></i> Emergency Numbers</div>
+<div class="contact-item">
+<div class="contact-info">
+<h4>🇳🇬 Nigeria Police</h4>
+<p>General Emergency</p>
+</div>
+<button class="call-btn" onclick="callNum('112')">Call 112</button>
+</div>
+<div class="contact-item">
+<div class="contact-info">
+<h4>🚑 FRSC Ambulance</h4>
+<p>Road Emergency</p>
+</div>
+<button class="call-btn" onclick="callNum('122')">Call 122</button>
+</div>
+<div class="contact-item">
+<div class="contact-info">
+<h4>🔥 Fire Service</h4>
+<p>Fire Emergency</p>
+</div>
+<button class="call-btn" onclick="callNum('119')">Call 119</button>
 </div>
 </div>
 
-<div class="layout">
-<div class="sidebar" id="sidebar">
-<div class="side-content">
-<div class="side-header">Countries</div>
-<div class="cat-item" onclick="loadList('ng','Nigeria')">🇳🇬 Nigeria</div>
-<div class="cat-item" onclick="loadList('us','USA')">🇺🇸 USA</div>
-<div class="cat-item" onclick="loadList('uk','UK')">🇬🇧 UK</div>
-<div class="cat-item" onclick="loadList('in','India')">🇮🇳 India</div>
-<div class="cat-item" onclick="loadList('fr','France')">🇫🇷 France</div>
-<div class="cat-item" onclick="loadList('de','Germany')">🇩🇪 Germany</div>
-<div class="cat-item" onclick="loadList('br','Brazil')">🇧🇷 Brazil</div>
-<div class="cat-item" onclick="loadList('ca','Canada')">🇨🇦 Canada</div>
-<div class="cat-item" onclick="loadList('za','S.Africa')">🇿🇦 South Africa</div>
-<div class="cat-item" onclick="loadList('cn','China')">🇨🇳 China</div>
-
-<div class="side-header">Categories</div>
-<div class="cat-item" onclick="loadCat('news','News')">📰 News</div>
-<div class="cat-item" onclick="loadCat('sports','Sports')">⚽ Sports</div>
-<div class="cat-item" onclick="loadCat('movies','Movies')">🎬 Movies</div>
-<div class="cat-item" onclick="loadCat('music','Music')">🎵 Music</div>
-<div class="cat-item" onclick="loadCat('kids','Kids')">👶 Kids</div>
-<div class="cat-item" onclick="loadCat('documentary','Documentary')">📚 Documentary</div>
-
-<div class="side-header">Premium</div>
-<div class="cat-item" onclick="scanAll()">⚡ Scan Streams</div>
-<div class="cat-item" onclick="loadAll()">🚀 Global Feeds</div>
-<div class="cat-item" onclick="clearRecents()">🗑 Clear History</div>
+<!-- State Police -->
+<div class="section">
+<div class="section-title"><i class="fas fa-shield-alt"></i> State Police Commands</div>
+<div class="contact-item">
+<div class="contact-info">
+<h4>Lagos Police</h4>
+<p>Area: Lagos State</p>
+</div>
+<button class="call-btn" onclick="callNum('08123555100')">Call</button>
+</div>
+<div class="contact-item">
+<div class="contact-info">
+<h4>Abuja Police</h4>
+<p>Area: FCT</p>
+</div>
+<button class="call-btn" onclick="callNum('08032018101')">Call</button>
+</div>
+<div class="contact-item">
+<div class="contact-info">
+<h4>Rivers Police</h4>
+<p>Area: Port Harcourt</p>
+</div>
+<button class="call-btn" onclick="callNum('08032345000')">Call</button>
 </div>
 </div>
 
-<div class="main" id="main">
-<div class="player-wrap" id="playerWrap">
-<div class="live-badge" id="liveBadge" style="display:none"><span class="live-dot"></span> LIVE</div>
-<video id="video" playsinline webkit-playsinline></video>
-<div class="loader" id="loader">
-<div class="spinner"></div>
-<div class="loader-text" id="loadText">Connecting Ultra Stream...</div>
-</div>
-<div class="controls">
-<div class="progress" onclick="seek(event)">
-<div class="progress-fill" id="progress"></div>
-</div>
-<div class="buttons">
-<div class="btn-left">
-<button class="ctrl-btn" onclick="togglePlay()"><i class="fas fa-play" id="playIcon"></i></button>
-<button class="ctrl-btn" onclick="prev()"><i class="fas fa-step-backward"></i></button>
-<button class="ctrl-btn" onclick="next()"><i class="fas fa-step-forward"></i></button>
-<div class="volume-wrap">
-<button class="ctrl-btn" onclick="mute()"><i class="fas fa-volume-up" id="volIcon"></i></button>
-<input type="range" class="vol-slider" min="0" max="1" step="0.1" onchange="setVol(this.value)">
-</div>
-<span class="time" id="time">00:00 / 00:00</span>
-</div>
-<div class="btn-right">
-<button class="ctrl-btn" onclick="pip()"><i class="fas fa-picture-in-picture"></i></button>
-<button class="ctrl-btn" onclick="toggleFS()"><i class="fas fa-expand"></i></button>
-</div>
-</div>
-</div>
-</div>
-
-<div class="now-playing">
-<div class="np-details">
-<div class="np-title" id="npTitle">No Channel Selected</div>
-<div class="np-meta" id="npMeta">BTECH-TV ULTRA ENGINE</div>
-</div>
-<div class="control-btns">
-<button class="cbtn" onclick="toggleFav()">⭐ <span id="favBtn">Fav</span></button>
-<button class="cbtn" onclick="share()">🔗 Share</button>
-<button class="cbtn" onclick="copyUrl()">📋 Copy</button>
-</div>
-</div>
-
-<div class="search-bar">
-<input type="text" class="s-inp" placeholder="Search channels..." oninput="search(this.value)">
-<select class="s-sort" onchange="sortList(this.value)">
-<option value="az">A-Z</option>
-<option value="za">Z-A</option>
+<!-- Crime Report -->
+<div class="section">
+<div class="section-title"><i class="fas fa-file-alt"></i> Report Crime</div>
+<form class="report-form" onsubmit="submitReport(event)">
+<input type="text" id="repName" placeholder="Your Name (Optional)" required>
+<input type="tel" id="repPhone" placeholder="Your Phone">
+<select id="repType">
+<option value="theft">Theft/Robbery</option>
+<option value="kidnap">Kidnap/Abduction</option>
+<option value="fraud">Fraud/Scam</option>
+<option value="assault">Assault/Violence</option>
+<option value="other">Other</option>
 </select>
+<textarea id="repDesc" placeholder="Describe incident location & details..."></textarea>
+<button type="submit" class="submit-btn">📨 Submit Report</button>
+</form>
 </div>
 
-<div class="channel-list" id="chList"></div>
-
-<div class="stats" id="stats">0 Channels • Ready</div>
+<!-- Safety Tips -->
+<div class="section">
+<div class="section-title"><i class="fas fa-lightbulb"></i> Safety Tips</div>
+<div class="tip-item">
+<h4>🏠 Home Security</h4>
+<p>Install security doors, CCTV cameras, and maintain good lighting around your property.</p>
+</div>
+<div class="tip-item">
+<h4>🚗 Road Safety</h4>
+<p>Keep car doors locked, avoid driving with windows fully open in traffic, don't stop for unknown pedestrians.</p>
+</div>
+<div class="tip-item">
+<h4>📱 Online Safety</h4>
+<p>Never share personal info with strangers online. Beware of Ponzi schemes and romance scams.</p>
 </div>
 </div>
 
 <div class="footer">
-DESIGN BY <span>BINAINU SHAIBU</span> • BTECH-TV WORLD ULTRA MAX X
+<p>🇳🇬 Nigerian Safety App v1.0</p>
+<p>For immediate danger, call 112 or visit nearest Police Station</p>
+</div>
 </div>
 
 <script>
-const video=document.getElementById('video');
-const loader=document.getElementById('loader');
-const chList=document.getElementById('chList');
-let all=[],filt=[],curr=0,hls=null;
-let favs=JSON.parse(localStorage.getItem('btech_favs')||'{}');
-let recents=JSON.parse(localStorage.getItem('btech_recents')||'[]');
-
-// feeds
-const feeds=[
-'https://iptv-org.github.io/iptv/index.m3u',
-'https://iptv-org.github.io/iptv/countries/ng.m3u',
-'https://iptv-org.github.io/iptv/countries/us.m3u',
-'https://iptv-org.github.io/iptv/countries/uk.m3u',
-'https://iptv-org.github.io/iptv/countries/in.m3u',
-'https://iptv-org.github.io/iptv/countries/fr.m3u',
-'https://iptv-org.github.io/iptv/countries/de.m3u',
-'https://iptv-org.github.io/iptv/countries/br.m3u',
-'https://iptv-org.github.io/iptv/index.country.m3u'
-];
-
-// loader UI
-function showLoad(txt){
-document.getElementById('loadText').innerText=txt;
-loader.classList.remove('hidden');
+function callEmergency(){
+if(confirm('Call Nigeria Police Emergency Line 112?')){
+location.href='tel:112';
 }
-function hideLoad(){loader.classList.add('hidden');document.getElementById('liveBadge').style.display='flex'}
+}
+function callNum(num){
+if(confirm('Call '+num+'?')){
+location.href='tel:'+num;
+}
+}
+function submitReport(e){
+e.preventDefault();
+const type=document.getElementById('repType').value;
+const desc=document.getElementById('repDesc').value;
+alert('Report submitted successfully!\n\nType: '+type+'\n\nNote: Please also visit your local Police Station with any evidence.');
+document.querySelector('.report-form').reset();
+}
+</script>
 
-// fetch & parse
-async function loadList(code,name){
-showLoad('Loading '+name+'...');
-all=[];
-try{
-const res=await fetch('https://
+</body>
+</html>
