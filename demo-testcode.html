@@ -1,137 +1,509 @@
+<!-- ========================================================= -->
+<!-- BTECH-TV WORLD ULTRA MAX X V2.0 -->
+<!-- EXTREME ENGINE • ULTRA PERFORMANCE • SMART UI -->
+<!-- ========================================================= -->
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OTT TV</title>
+
+<meta charset="UTF-8"/>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+<meta name="theme-color" content="#030508"/>
+
+<title>BTECH-TV WORLD ULTRA MAX X</title>
+
+<!-- HLS.JS Library -->
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
-body {
-    margin: 0;
-    font-family: Arial;
-    background: #000;
-    color: white;
+
+/* =========================================================
+ROOT VARIABLES & THEMES
+========================================================= */
+
+:root{
+
+--bg:#030508;
+--panel:#0a0f16;
+--card:#111b27;
+--hover:#1a2636;
+--accent:#00f2ff;
+--accent-glow:rgba(0, 242, 255, 0.4);
+--text:#ececf1;
+--muted:#6e7681;
+--border:#232f3e;
+--success:#10b981;
+--danger:#ef4444;
+--radius:12px;
+--font:'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
 }
 
-header {
-    padding: 15px;
-    text-align: center;
-    background: #111;
-    font-size: 18px;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:var(--font);
+-webkit-tap-highlight-color:transparent;
 }
 
-#player {
-    width: 100%;
-    height: 220px;
-    background: black;
+html, body{
+width:100%;
+height:100%;
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+touch-action:manipulation;
 }
 
-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
+body{
+display:flex;
+flex-direction:column;
 }
 
-.channels {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 10px;
+/* =========================================================
+SCROLLBARS
+========================================================= */
+
+::-webkit-scrollbar{
+width:6px;
+height:6px;
+}
+::-webkit-scrollbar-track{ background:transparent; }
+::-webkit-scrollbar-thumb{ background:var(--hover); border-radius:10px; }
+::-webkit-scrollbar-thumb:hover{ background:var(--accent); }
+
+/* =========================================================
+TOPBAR
+========================================================= */
+
+.topbar{
+height:60px;
+background:rgba(10,15,22,0.95);
+backdrop-filter:blur(10px);
+display:flex;
+align-items:center;
+padding:0 20px;
+border-bottom:1px solid var(--border);
+z-index:100;
+position:relative;
 }
 
-.channel {
-    flex: 1 1 45%;
-    background: #222;
-    padding: 12px;
-    text-align: center;
-    border-radius: 8px;
-    cursor: pointer;
+.logo{
+font-size:20px;
+font-weight:800;
+letter-spacing:1px;
+color:var(--accent);
+text-transform:uppercase;
+display:flex;
+align-items:center;
+gap:10px;
+text-shadow:0 0 10px var(--accent-glow);
 }
 
-.channel:hover {
-    background: red;
+.logo i{ font-size:24px; }
+
+.actions{
+margin-left:auto;
+display:flex;
+gap:12px;
 }
 
-.footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    background: #111;
-    padding: 10px;
+.btn-icon{
+width:36px;
+height:36px;
+border-radius:50%;
+background:var(--card);
+color:var(--text);
+border:1px solid transparent;
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+transition:all 0.2s;
+position:relative;
 }
 
-button {
-    background: red;
-    border: none;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-}
-</style>
-</head>
-
-<body>
-
-<header>📺 MY OTT TV APP</header>
-
-<!-- PLAYER -->
-<div id="player">
-    <iframe id="screen" src="https://YOUR-IPTV-WEBSITE.com"></iframe>
-</div>
-
-<!-- CHANNELS -->
-<div class="channels">
-
-    <div class="channel" onclick="play('https://YOUR-IPTV-WEBSITE.com')">
-        🏠 Home
-    </div>
-
-    <div class="channel" onclick="play('https://example.com/live1.m3u8')">
-        📡 Live 1
-    </div>
-
-    <div class="channel" onclick="play('https://example.com/live2.m3u8')">
-        📡 Live 2
-    </div>
-
-    <div class="channel" onclick="play('https://example.com/movie.mp4')">
-        🎬 Movies
-    </div>
-
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-    <button onclick="home()">Home</button>
-    <button onclick="reload()">Reload</button>
-    <button onclick="fullscreen()">Fullscreen</button>
-</div>
-
-<script>
-
-function play(url){
-    document.getElementById("screen").src = url;
+.btn-icon:hover, .btn-icon.active{
+background:var(--accent);
+color:var(--bg);
+box-shadow:0 0 15px var(--accent-glow);
+border-color:var(--accent);
 }
 
-function home(){
-    document.getElementById("screen").src = "https://YOUR-IPTV-WEBSITE.com";
+/* =========================================================
+MAIN LAYOUT
+========================================================= */
+
+.layout{
+flex:1;
+display:flex;
+overflow:hidden;
+position:relative;
 }
 
-function reload(){
-    let frame = document.getElementById("screen");
-    frame.src = frame.src;
+.sidebar{
+width:280px;
+background:var(--panel);
+border-right:1px solid var(--border);
+display:flex;
+flex-direction:column;
+transition:width 0.3s, transform 0.3s;
+overflow:hidden;
+z-index:50;
 }
 
-function fullscreen(){
-    let el = document.getElementById("screen");
-    if (el.requestFullscreen) {
-        el.requestFullscreen();
-    }
+.sidebar.collapsed{
+width:0;
+transform:translateX(-100%);
 }
 
-</script>
+.sidebar-content{
+flex:1;
+overflow-y:auto;
+padding:15px;
+}
 
-</body>
-</html>
+.section-title{
+font-size:11px;
+text-transform:uppercase;
+color:var(--muted);
+margin:15px 0 8px;
+font-weight:700;
+letter-spacing:1px;
+}
+
+.nav-item{
+padding:10px 12px;
+border-radius:var(--radius);
+color:var(--text);
+cursor:pointer;
+transition:0.2s;
+display:flex;
+align-items:center;
+gap:10px;
+font-size:14px;
+background:transparent;
+border:1px solid transparent;
+}
+
+.nav-item:hover{
+background:var(--card);
+border-color:var(--border);
+}
+
+.nav-item.active{
+background:linear-gradient(90deg, rgba(0,242,255,0.1), transparent);
+border-left:3px solid var(--accent);
+color:var(--accent);
+}
+
+/* =========================================================
+CONTENT AREA
+========================================================= */
+
+.main-content{
+flex:1;
+display:flex;
+flex-direction:column;
+position:relative;
+background:#000;
+}
+
+/* =========================================================
+VIDEO PLAYER
+========================================================= */
+
+.player-wrapper{
+width:100%;
+background:#000;
+position:relative;
+aspect-ratio:16/9;
+max-height:70vh;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+}
+
+video{
+width:100%;
+height:100%;
+object-fit:contain;
+background:#000;
+}
+
+/* CUSTOM CONTROLS */
+.controls-overlay{
+position:absolute;
+bottom:0;
+left:0;
+right:0;
+background:linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+padding:20px 15px 10px;
+opacity:0;
+transition:opacity 0.3s;
+pointer-events:none;
+}
+
+.player-wrapper:hover .controls-overlay,
+.player-wrapper.paused .controls-overlay{
+opacity:1;
+pointer-events:all;
+}
+
+.progress-container{
+width:100%;
+height:4px;
+background:rgba(255,255,255,0.2);
+cursor:pointer;
+margin-bottom:10px;
+border-radius:2px;
+position:relative;
+}
+
+.progress-bar{
+height:100%;
+background:var(--accent);
+width:0%;
+border-radius:2px;
+transition:width 0.1s;
+}
+
+.progress-container:hover{
+height:6px;
+}
+
+.controls-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+color:white;
+}
+
+.left-controls, .right-controls{
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.ctrl-btn{
+background:none;
+border:none;
+color:white;
+font-size:16px;
+cursor:pointer;
+padding:5px;
+opacity:0.8;
+transition:0.2s;
+}
+
+.ctrl-btn:hover{ opacity:1; color:var(--accent); }
+
+.time-display{
+font-size:12px;
+font-family:monospace;
+color:#ccc;
+}
+
+/* Volume & Settings */
+.volume-container{
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.volume-slider{
+width:60px;
+height:4px;
+-webkit-appearance:none;
+background:rgba(255,255,255,0.3);
+border-radius:2px;
+outline:none;
+}
+
+.volume-slider::-webkit-slider-thumb{
+-webkit-appearance:none;
+width:12px;
+height:12px;
+background:white;
+border-radius:50%;
+cursor:pointer;
+}
+
+/* PIP & Fullscreen */
+.status-badge{
+position:absolute;
+top:15px;
+left:15px;
+background:rgba(0,0,0,0.6);
+padding:5px 10px;
+border-radius:20px;
+font-size:11px;
+font-weight:bold;
+display:flex;
+align-items:center;
+gap:6px;
+z-index:10;
+backdrop-filter:blur(4px);
+}
+
+/* Loading Spinner */
+.loader{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%, -50%);
+z-index:20;
+display:none;
+}
+
+.loader.active{ display:block; }
+
+.spinner{
+width:40px;
+height:40px;
+border:3px solid rgba(255,255,255,0.1);
+border-top-color:var(--accent);
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+/* =========================================================
+NOW PLAYING BAR
+========================================================= */
+
+.now-playing{
+height:70px;
+background:var(--panel);
+border-top:1px solid var(--border);
+display:flex;
+align-items:center;
+padding:0 20px;
+gap:20px;
+}
+
+.np-info{ flex:1; }
+.np-title{ font-size:14px; font-weight:bold; color:var(--accent); }
+.np-group{ font-size:12px; color:var(--muted); }
+
+.np-controls{ display:flex; gap:10px; }
+
+/* =========================================================
+SEARCH & FILTER
+========================================================= */
+
+.filter-bar{
+height:50px;
+background:var(--panel);
+border-bottom:1px solid var(--border);
+display:flex;
+padding:0 15px;
+align-items:center;
+gap:10px;
+}
+
+.search-input{
+flex:1;
+background:var(--card);
+border:none;
+padding:8px 12px;
+border-radius:var(--radius);
+color:white;
+font-size:13px;
+}
+
+.search-input:focus{ outline:1px solid var(--accent); }
+
+/* =========================================================
+CHANNEL GRID
+========================================================= */
+
+.channel-grid{
+flex:1;
+overflow-y:auto;
+padding:15px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+gap:12px;
+}
+
+.channel-card{
+background:var(--card);
+border-radius:var(--radius);
+padding:12px;
+display:flex;
+gap:12px;
+align-items:center;
+cursor:pointer;
+transition:all 0.2s;
+border:1px solid transparent;
+position:relative;
+overflow:hidden;
+}
+
+.channel-card::before{
+content:'';
+position:absolute;
+top:0; left:0; width:3px; height:100%;
+background:var(--accent);
+opacity:0;
+transition:opacity 0.2s;
+}
+
+.channel-card:hover{
+transform:translateY(-2px);
+background:var(--hover);
+border-color:var(--border);
+}
+
+.channel-card.active{
+border-color:var(--accent);
+background:rgba(0,242,255,0.05);
+}
+
+.channel-card.active::before{ opacity:1; }
+
+.ch-logo{
+width:48px;
+height:48px;
+border-radius:8px;
+object-fit:cover;
+background:#000;
+}
+
+.ch-info{ flex:1; overflow:hidden; }
+.ch-name{ font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ch-meta{ font-size:11px; color:var(--muted); display:flex; justify-content:space-between; margin-top:4px; }
+
+/* Status Indicators */
+.live-dot{
+width:6px; height:6px; background:var(--success); border-radius:50%; display:inline-block; margin-right:4px;
+}
+.offline-dot{ background:var(--danger); }
+
+/* Load More Trigger */
+.loader-trigger{
+grid-column: 1 / -1;
+padding:20px;
+text-align:center;
+color:var(--muted);
+cursor:pointer;
+}
+.loader-trigger:hover{ color:var(--accent); }
+
+/* =========================================================
+RESPONSIVE
+========================================================= */
+
+@media(max-width:768px){
+.sidebar{ position:absolute; height:100%; z-index:200; box-shadow:5px 0 20px
