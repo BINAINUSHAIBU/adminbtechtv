@@ -1,10 +1,11 @@
+
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BTECH CHURCH TV NETWORK - SUPER ADMIN</title>
+<title>BTECH CHURCH TV NETWORK</title>
 
 <style>
 
@@ -12,13 +13,11 @@
 --bg:#050816;
 --panel:#111827;
 --card:#172033;
---hover:#22304d;
 --accent:#00d4ff;
 --success:#16a34a;
 --danger:#ef4444;
 --gold:#facc15;
---text:#ffffff;
---muted:#94a3b8;
+--text:#fff;
 }
 
 *{
@@ -34,14 +33,14 @@ color:var(--text);
 overflow:hidden;
 }
 
-.header{
+.topbar{
 height:70px;
 background:#0f172a;
 display:flex;
-justify-content:space-between;
 align-items:center;
+justify-content:space-between;
 padding:0 20px;
-border-bottom:1px solid rgba(255,255,255,.05);
+border-bottom:1px solid #1e293b;
 }
 
 .logo{
@@ -50,28 +49,9 @@ font-weight:bold;
 color:var(--accent);
 }
 
-.top-buttons{
-display:flex;
-gap:10px;
-}
-
-.top-buttons button{
-padding:10px 15px;
-border:none;
-border-radius:8px;
-background:var(--card);
-color:white;
-cursor:pointer;
-}
-
-.top-buttons button:hover{
-background:var(--accent);
-color:black;
-}
-
 .container{
-height:calc(100vh - 70px);
 display:flex;
+height:calc(100vh - 70px);
 }
 
 .sidebar{
@@ -79,7 +59,7 @@ width:320px;
 background:#0b1220;
 overflow-y:auto;
 padding:15px;
-border-right:1px solid rgba(255,255,255,.05);
+border-right:1px solid #1e293b;
 }
 
 .main{
@@ -88,27 +68,26 @@ overflow:auto;
 padding:20px;
 }
 
-.sidebar h3{
-margin-bottom:10px;
-color:var(--accent);
-}
-
-.church{
+.church-card{
 background:var(--card);
 padding:15px;
 border-radius:12px;
-margin-bottom:10px;
+margin-bottom:12px;
 cursor:pointer;
 transition:.3s;
 }
 
-.church:hover{
-background:var(--hover);
+.church-card:hover{
+background:#22304d;
+}
+
+.church-card.active{
+border:2px solid var(--accent);
 }
 
 .stats{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
 gap:15px;
 margin-bottom:20px;
 }
@@ -116,100 +95,95 @@ margin-bottom:20px;
 .stat{
 background:var(--card);
 padding:20px;
-border-radius:15px;
+border-radius:12px;
 text-align:center;
 }
 
-.stat h1{
+.stat h2{
 color:var(--accent);
-font-size:32px;
 }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:15px;
-}
-
-.card{
-background:var(--card);
-padding:20px;
+.player{
+height:450px;
+background:black;
 border-radius:15px;
+overflow:hidden;
+position:relative;
+margin-bottom:20px;
 }
 
-.card h3{
-margin-bottom:15px;
-color:var(--accent);
-}
-
-.card button{
+.player video{
 width:100%;
-padding:12px;
-border:none;
-border-radius:8px;
-margin-top:8px;
-cursor:pointer;
+height:100%;
+object-fit:cover;
+}
+
+.live{
+position:absolute;
+top:15px;
+left:15px;
+background:red;
+padding:8px 15px;
+border-radius:30px;
 font-weight:bold;
 }
 
-.create{
-background:var(--success);
-color:white;
+.viewer{
+position:absolute;
+top:15px;
+right:15px;
+background:black;
+padding:8px 15px;
+border-radius:30px;
 }
 
-.edit{
-background:#f59e0b;
-color:white;
+.modules{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:15px;
 }
 
-.delete{
-background:var(--danger);
-color:white;
+.module{
+background:var(--card);
+padding:20px;
+border-radius:12px;
 }
 
-.primary{
-background:var(--accent);
-color:black;
+.module h3{
+margin-bottom:10px;
+color:var(--accent);
 }
 
-.stream{
-padding:10px;
+.btn{
+padding:12px 18px;
+border:none;
 border-radius:8px;
-margin-bottom:8px;
+cursor:pointer;
+font-weight:bold;
+background:var(--accent);
+color:#000;
 }
 
-.online{
-background:#16a34a22;
-}
-
-.offline{
-background:#ef444422;
-}
-
-.health{
-height:20px;
-background:#0f172a;
-border-radius:20px;
-overflow:hidden;
+.cameras{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
 margin-top:10px;
 }
 
-.health-fill{
-height:100%;
-background:var(--success);
-width:99%;
+.cam{
+background:#22304d;
+padding:10px;
+border-radius:8px;
+text-align:center;
+cursor:pointer;
 }
 
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-table th,
-table td{
-padding:12px;
-border-bottom:1px solid #1f2937;
-text-align:left;
+.schedule-item{
+background:#0f172a;
+padding:10px;
+border-radius:8px;
+margin-bottom:8px;
 }
 
 .footer{
@@ -217,40 +191,16 @@ margin-top:20px;
 padding:15px;
 text-align:center;
 background:#020617;
-border-radius:12px;
-}
-
-@media(max-width:900px){
-
-.container{
-flex-direction:column;
-}
-
-.sidebar{
-width:100%;
-height:250px;
-}
-
+border-radius:10px;
 }
 
 </style>
 </head>
-
 <body>
 
-<div class="header">
-
-<div class="logo">
-📺 BTECH CHURCH TV NETWORK
-</div>
-
-<div class="top-buttons">
-<button>➕ Create Church</button>
-<button>📊 Analytics</button>
-<button>💰 Donations</button>
-<button>🔒 Security</button>
-</div>
-
+<div class="topbar">
+<div class="logo">📺 BTECH CHURCH TV NETWORK</div>
+<div>🌍 Global Church Broadcasting Platform</div>
 </div>
 
 <div class="container">
@@ -259,15 +209,45 @@ height:250px;
 
 <h3>⛪ Churches</h3>
 
-<div class="church">📖 Synagogue TV</div>
-<div class="church">🔥 RCCG TV</div>
-<div class="church">🕊 Winners Chapel TV</div>
-<div class="church">🎤 Dunamis TV</div>
-<div class="church">📡 Christ Embassy TV</div>
-<div class="church">🙏 MFM TV</div>
-<div class="church">📚 Deeper Life TV</div>
-<div class="church">✝ Catholic TV</div>
-<div class="church">⛪ Anglican TV</div>
+<div class="church-card active">
+📖 Synagogue TV
+</div>
+
+<div class="church-card">
+🔥 RCCG TV
+</div>
+
+<div class="church-card">
+🕊 Winners Chapel TV
+</div>
+
+<div class="church-card">
+🎤 Dunamis TV
+</div>
+
+<div class="church-card">
+📡 Christ Embassy TV
+</div>
+
+<div class="church-card">
+🙏 MFM TV
+</div>
+
+<div class="church-card">
+📚 Deeper Life TV
+</div>
+
+<div class="church-card">
+✝ Catholic TV
+</div>
+
+<div class="church-card">
+⛪ Anglican TV
+</div>
+
+<button class="btn" style="width:100%;margin-top:10px;">
+➕ Add Church
+</button>
 
 </div>
 
@@ -276,150 +256,153 @@ height:250px;
 <div class="stats">
 
 <div class="stat">
-<h1>250</h1>
-<p>Total Churches</p>
+<h2>250</h2>
+<p>Churches</p>
 </div>
 
 <div class="stat">
-<h1>1200</h1>
-<p>Live Streams</p>
+<h2>1200</h2>
+<p>Live Cameras</p>
 </div>
 
 <div class="stat">
-<h1>1.5M</h1>
-<p>Global Viewers</p>
+<h2>1.5M</h2>
+<p>Viewers</p>
 </div>
 
 <div class="stat">
-<h1>$3.2M</h1>
-<p>Annual Donations</p>
+<h2>350</h2>
+<p>Admins</p>
 </div>
 
 </div>
 
-<div class="grid">
+<div class="player">
 
-<div class="card">
-<h3>⛪ Church Management</h3>
-<button class="create">Create Church</button>
-<button class="edit">Edit Church</button>
-<button class="delete">Delete Church</button>
+<div class="live">🔴 LIVE</div>
+
+<div class="viewer">
+👥 12,540 Watching
 </div>
 
-<div class="card">
-<h3>👥 Church Admins</h3>
-<button class="primary">Add Admin</button>
-<button class="primary">Manage Roles</button>
-<button class="primary">View Admins</button>
-</div>
-
-<div class="card">
-<h3>🔴 Monitor All Streams</h3>
-
-<div class="stream online">
-🟢 Synagogue TV Online
-</div>
-
-<div class="stream online">
-🟢 RCCG TV Online
-</div>
-
-<div class="stream offline">
-🔴 Winners TV Offline
-</div>
+<video controls autoplay></video>
 
 </div>
 
-<div class="card">
-<h3>📡 Stream Health</h3>
+<div class="modules">
 
-<div class="health">
-<div class="health-fill"></div>
-</div>
+<div class="module">
 
-<p>99.8% Uptime</p>
+<h3>📹 Camera Control</h3>
 
-</div>
+<div class="cameras">
 
-<div class="card">
-<h3>🌍 Multi-Country Churches</h3>
-
-<p>🇳🇬 Nigeria</p>
-<p>🇺🇸 USA</p>
-<p>🇬🇧 UK</p>
-<p>🇿🇦 South Africa</p>
-<p>🇨🇦 Canada</p>
-
-</div>
-
-<div class="card">
-<h3>🔒 Security Controls</h3>
-
-<button class="primary">Enable 2FA</button>
-<button class="primary">Lock Church</button>
-<button class="primary">Reset Password</button>
+<div class="cam">Main Altar</div>
+<div class="cam">Pulpit</div>
+<div class="cam">Choir</div>
+<div class="cam">Entrance</div>
 
 </div>
 
 </div>
 
-<div class="card" style="margin-top:20px;">
+<div class="module">
 
-<h3>💰 Donation Reports</h3>
+<h3>📅 Broadcast Schedule</h3>
 
-<table>
+<div class="schedule-item">
+06:00 AM Morning Prayer
+</div>
 
-<tr>
-<th>Church</th>
-<th>Today</th>
-<th>Month</th>
-</tr>
+<div class="schedule-item">
+09:00 AM Bible Study
+</div>
 
-<tr>
-<td>Synagogue TV</td>
-<td>$2,500</td>
-<td>$45,000</td>
-</tr>
+<div class="schedule-item">
+12:00 PM Worship Service
+</div>
 
-<tr>
-<td>RCCG TV</td>
-<td>$5,200</td>
-<td>$120,000</td>
-</tr>
+<div class="schedule-item">
+06:00 PM Revival
+</div>
 
-<tr>
-<td>Dunamis TV</td>
-<td>$3,100</td>
-<td>$65,000</td>
-</tr>
+</div>
 
-</table>
+<div class="module">
+
+<h3>💳 Donations</h3>
+
+<p>Total Donations</p>
+<h2>$52,000</h2>
+
+<button class="btn">
+Manage Donations
+</button>
+
+</div>
+
+<div class="module">
+
+<h3>👥 Members</h3>
+
+<p>Registered Members</p>
+<h2>25,000</h2>
+
+<button class="btn">
+View Members
+</button>
+
+</div>
+
+<div class="module">
+
+<h3>🎶 Church Radio</h3>
+
+<audio controls style="width:100%;">
+<source src="">
+</audio>
+
+</div>
+
+<div class="module">
+
+<h3>📊 Analytics</h3>
+
+<p>Live Viewers: 12,540</p>
+<p>Countries: 95</p>
+<p>Streams Online: 100%</p>
+
+</div>
+
+<div class="module">
+
+<h3>⚙ Church Settings</h3>
+
+<button class="btn">
+Open Dashboard
+</button>
+
+</div>
+
+<div class="module">
+
+<h3>🔐 Church Admins</h3>
+
+<p>Pastors</p>
+<p>Media Team</p>
+<p>Camera Operators</p>
+
+</div>
 
 </div>
 
 <div class="footer">
-BTECH CHURCH TV NETWORK • SUPER ADMIN DASHBOARD • ALL CHURCHES MANAGED FROM ONE PAGE
+BTECH CHURCH TV NETWORK • SUPER ADMIN • MULTI-CHURCH STREAMING PLATFORM
 </div>
 
 </div>
 
 </div>
-
-<script>
-
-function createChurch(){
-alert("Create Church");
-}
-
-function editChurch(){
-alert("Edit Church");
-}
-
-function deleteChurch(){
-alert("Delete Church");
-}
-
-</script>
 
 </body>
 </html>
