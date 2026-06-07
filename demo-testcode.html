@@ -1,3 +1,5 @@
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,7 +89,6 @@ background:var(--card);
 padding:20px;
 border-radius:15px;
 margin-bottom:20px;
-text-align:center;
 }
 
 .card h3{
@@ -127,18 +128,6 @@ text-align:center;
 .stat h1{
 color:var(--accent);
 }
-
-/* CENTER IPTV PLAYER */
-.iptv-center{
-display:flex;
-justify-content:center;
-margin-bottom:20px;
-}
-
-.iptv-box{
-width:100%;
-max-width:900px;
-}
 </style>
 </head>
 
@@ -168,7 +157,6 @@ max-width:900px;
 
 <div class="main">
 
-<!-- STATS -->
 <div class="stats">
 
 <div class="stat">
@@ -193,10 +181,7 @@ max-width:900px;
 
 </div>
 
-<!-- IPTV MOVED TO TOP CENTER HERE -->
-<div class="iptv-center">
-
-<div class="card iptv-box">
+<div class="card">
 
 <h3>📺 Live IPTV Player</h3>
 
@@ -213,9 +198,11 @@ type="text"
 id="search"
 placeholder="Search Channels..."
 onkeyup="filterChannels()"
-/>
+>
 
-<div id="channels" style="max-height:250px;overflow:auto;"></div>
+<div id="channels"
+style="max-height:250px;overflow:auto;">
+</div>
 
 <video id="video" controls></video>
 
@@ -224,55 +211,59 @@ onkeyup="filterChannels()"
 </div>
 
 </div>
-</div>
 
 <script>
 
-let allChannels = [];
+let allChannels=[];
 
 function loadChurchTV(country){
-document.getElementById("countrySelect").value = country;
+document.getElementById("countrySelect").value=country;
 loadChannels();
 }
 
 async function loadChannels(){
 
-let country =
+let country=
 document.getElementById("countrySelect").value;
 
-let url =
+let url=
 `https://iptv-org.github.io/iptv/countries/${country}.m3u`;
 
 try{
 
-let response = await fetch(url);
-let text = await response.text();
+let response=await fetch(url);
+let text=await response.text();
 
 parseM3U(text);
 
 }catch(error){
+
 console.error(error);
+
 }
 
 }
 
 function parseM3U(data){
 
-allChannels = [];
+allChannels=[];
 
-let lines = data.split('\n');
-let name = '';
+let lines=data.split('\n');
+let name='';
 
 for(let i=0;i<lines.length;i++){
 
 if(lines[i].startsWith('#EXTINF')){
-name = lines[i].split(',')[1];
+name=lines[i].split(',')[1];
 }
+
 else if(lines[i].startsWith('http')){
+
 allChannels.push({
 name:name,
 url:lines[i]
 });
+
 }
 
 }
@@ -283,18 +274,19 @@ renderChannels(allChannels);
 
 function renderChannels(list){
 
-let container = document.getElementById('channels');
+let container=
+document.getElementById('channels');
 
-container.innerHTML = '';
+container.innerHTML='';
 
 list.forEach(channel=>{
 
-let div = document.createElement('div');
+let div=document.createElement('div');
 
-div.className = 'church';
-div.innerHTML = '📺 ' + channel.name;
+div.className='church';
+div.innerHTML='📺 '+channel.name;
 
-div.onclick = () => playChannel(channel.url);
+div.onclick=()=>playChannel(channel.url);
 
 container.appendChild(div);
 
@@ -304,15 +296,19 @@ container.appendChild(div);
 
 function playChannel(url){
 
-let video = document.getElementById('video');
+let video=document.getElementById('video');
 
 if(Hls.isSupported()){
-let hls = new Hls();
+
+let hls=new Hls();
+
 hls.loadSource(url);
 hls.attachMedia(video);
-}
-else{
-video.src = url;
+
+}else{
+
+video.src=url;
+
 }
 
 video.play();
@@ -321,10 +317,12 @@ video.play();
 
 function filterChannels(){
 
-let val = document.getElementById('search')
+let val=
+document.getElementById('search')
 .value.toLowerCase();
 
-let filtered = allChannels.filter(c =>
+let filtered=
+allChannels.filter(c=>
 c.name.toLowerCase().includes(val)
 );
 
@@ -338,3 +336,4 @@ loadChannels();
 
 </body>
 </html>
+```
