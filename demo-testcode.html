@@ -2,253 +2,213 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BTECH-TV WORLD ULTRA MAX X</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Synagogue TV (576p) Live</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+
 :root{
- --bg:#08111f;
- --card:#121c2c;
- --accent:#00d4ff;
- --text:#fff;
+--bg:#050816;
+--card:#111827;
+--accent:#ff0000;
+--text:#ffffff;
 }
 
 *{
- margin:0;
- padding:0;
- box-sizing:border-box;
- font-family:Arial,sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
 body{
- background:var(--bg);
- color:var(--text);
- height:100vh;
- display:flex;
- flex-direction:column;
+background:var(--bg);
+color:var(--text);
 }
 
-header{
- background:#111827;
- padding:15px;
- display:flex;
- justify-content:space-between;
- align-items:center;
-}
-
-.logo{
- color:var(--accent);
- font-size:22px;
- font-weight:bold;
+.topbar{
+background:#111827;
+padding:15px;
+text-align:center;
+font-size:28px;
+font-weight:bold;
 }
 
 .player{
- height:35vh;
- background:#000;
+position:relative;
+height:65vh;
+background:black;
 }
 
-video{
- width:100%;
- height:100%;
+.player video{
+width:100%;
+height:100%;
+object-fit:cover;
 }
 
-.toolbar{
- display:flex;
- gap:10px;
- padding:10px;
- overflow:auto;
- background:#0f172a;
+.live{
+position:absolute;
+top:15px;
+left:15px;
+background:red;
+padding:8px 14px;
+border-radius:30px;
+font-weight:bold;
+animation:pulse 1s infinite;
 }
 
-.toolbar button{
- border:none;
- padding:10px;
- border-radius:8px;
- cursor:pointer;
+@keyframes pulse{
+50%{opacity:.5;}
 }
 
-.search{
- padding:10px;
+.info{
+padding:20px;
+text-align:center;
+background:#111827;
 }
 
-.search input{
- width:100%;
- padding:12px;
- border:none;
- border-radius:10px;
+.info h2{
+margin-bottom:10px;
 }
 
-.channels{
- flex:1;
- overflow:auto;
- padding:10px;
- display:grid;
- grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
- gap:10px;
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:15px;
+padding:20px;
 }
 
-.channel{
- background:var(--card);
- padding:12px;
- border-radius:12px;
- cursor:pointer;
+.card{
+background:var(--card);
+padding:20px;
+border-radius:12px;
+text-align:center;
 }
 
-.channel:hover{
- border:1px solid var(--accent);
+.card h3{
+margin-bottom:10px;
+color:#00d4ff;
 }
 
-@media(max-width:768px){
- .channels{
-   grid-template-columns:1fr;
- }
+.footer{
+background:#020617;
+padding:15px;
+text-align:center;
+font-size:13px;
 }
+
+button{
+padding:12px 20px;
+border:none;
+background:#00d4ff;
+color:black;
+font-weight:bold;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px;
+}
+
+button:hover{
+opacity:.9;
+}
+
 </style>
 </head>
 
 <body>
 
-<header>
-<div class="logo">📺 BTECH-TV WORLD ULTRA MAX X</div>
-</header>
+<div class="topbar">
+📖 SYNAGOGUE TV (576p)
+</div>
 
 <div class="player">
-<video id="video" controls autoplay></video>
+
+<div class="live">
+🔴 LIVE CAMERA
 </div>
 
-<div class="toolbar">
-<button onclick="loadFeeds()">🌍 Channels</button>
-<button onclick="toggleTheme()">🌙 Theme</button>
-<button onclick="shuffleChannels()">🎲 Shuffle</button>
-<button onclick="showFavorites()">⭐ Favorites</button>
+<video
+id="video"
+controls
+autoplay
+playsinline
+muted>
+</video>
+
 </div>
 
-<div class="search">
-<input type="text" id="search" placeholder="Search Channels..." onkeyup="searchChannels()">
+<div class="info">
+<h2>Live Worship Broadcast</h2>
+<p>24/7 Sanctuary Camera Transmission</p>
+
+<button onclick="playLive()">
+▶ Start Live Stream
+</button>
 </div>
 
-<div id="channelList" class="channels"></div>
+<div class="grid">
+
+<div class="card">
+<h3>🙏 Prayer Session</h3>
+<p>Live prayer broadcasts from the sanctuary.</p>
+</div>
+
+<div class="card">
+<h3>🎤 Sermons</h3>
+<p>Watch live teachings and messages.</p>
+</div>
+
+<div class="card">
+<h3>🎶 Worship</h3>
+<p>Live praise and worship services.</p>
+</div>
+
+<div class="card">
+<h3>📹 Camera Feed</h3>
+<p>Real-time church camera transmission.</p>
+</div>
+
+</div>
+
+<div class="footer">
+Synagogue TV • 576p Live Transmission • Powered by BTECH-TV
+</div>
 
 <script>
 
-let channels=[];
-let filtered=[];
+const STREAM_URL =
+"https://your-live-stream.m3u8";
 
-const feeds=[
-'https://iptv-org.github.io/iptv/index.m3u'
-];
+const video =
+document.getElementById("video");
 
-async function loadFeeds(){
-
-channels=[];
-
-for(const url of feeds){
-
-const txt=await fetch(url).then(r=>r.text());
-
-parseM3U(txt);
-
-}
-
-filtered=[...channels];
-
-renderChannels();
-
-}
-
-function parseM3U(data){
-
-const lines=data.split('\n');
-
-for(let i=0;i<lines.length;i++){
-
-if(lines[i].startsWith('#EXTINF')){
-
-channels.push({
-name:lines[i].split(',').pop(),
-url:lines[i+1]
-});
-
-}
-
-}
-
-}
-
-function renderChannels(){
-
-const box=document.getElementById('channelList');
-
-box.innerHTML='';
-
-filtered.forEach(ch=>{
-
-const div=document.createElement('div');
-
-div.className='channel';
-
-div.innerHTML=`<strong>${ch.name}</strong>`;
-
-div.onclick=()=>playChannel(ch.url);
-
-box.appendChild(div);
-
-});
-
-}
-
-function playChannel(url){
-
-const video=document.getElementById('video');
+function playLive(){
 
 if(Hls.isSupported()){
 
-const hls=new Hls();
+const hls = new Hls({
+lowLatencyMode:true
+});
 
-hls.loadSource(url);
-
+hls.loadSource(STREAM_URL);
 hls.attachMedia(video);
+
+hls.on(Hls.Events.MANIFEST_PARSED,function(){
+video.play();
+});
 
 }else{
 
-video.src=url;
+video.src = STREAM_URL;
+video.play();
 
 }
 
 }
 
-function searchChannels(){
-
-const q=document
-.getElementById('search')
-.value
-.toLowerCase();
-
-filtered=channels.filter(c=>
-c.name.toLowerCase().includes(q)
-);
-
-renderChannels();
-
-}
-
-function shuffleChannels(){
-
-filtered.sort(()=>Math.random()-0.5);
-
-renderChannels();
-
-}
-
-function toggleTheme(){
-
-document.body.classList.toggle('light');
-
-}
-
-loadFeeds();
+window.onload=playLive;
 
 </script>
 
