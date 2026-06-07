@@ -5,7 +5,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BTECH CHURCH TV NETWORK</title>
+<title>Synagogue TV Network</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
@@ -13,11 +15,9 @@
 --bg:#050816;
 --panel:#111827;
 --card:#172033;
---accent:#00d4ff;
---success:#16a34a;
---danger:#ef4444;
+--accent:#ff0000;
+--text:#ffffff;
 --gold:#facc15;
---text:#fff;
 }
 
 *{
@@ -30,86 +30,27 @@ font-family:Arial,sans-serif;
 body{
 background:var(--bg);
 color:var(--text);
-overflow:hidden;
 }
 
 .topbar{
-height:70px;
-background:#0f172a;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 20px;
-border-bottom:1px solid #1e293b;
-}
-
-.logo{
-font-size:24px;
-font-weight:bold;
-color:var(--accent);
-}
-
-.container{
-display:flex;
-height:calc(100vh - 70px);
-}
-
-.sidebar{
-width:320px;
-background:#0b1220;
-overflow-y:auto;
-padding:15px;
-border-right:1px solid #1e293b;
-}
-
-.main{
-flex:1;
-overflow:auto;
+background:#111827;
 padding:20px;
-}
-
-.church-card{
-background:var(--card);
-padding:15px;
-border-radius:12px;
-margin-bottom:12px;
-cursor:pointer;
-transition:.3s;
-}
-
-.church-card:hover{
-background:#22304d;
-}
-
-.church-card.active{
-border:2px solid var(--accent);
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:15px;
-margin-bottom:20px;
-}
-
-.stat{
-background:var(--card);
-padding:20px;
-border-radius:12px;
 text-align:center;
+font-size:30px;
+font-weight:bold;
+border-bottom:2px solid red;
 }
 
-.stat h2{
-color:var(--accent);
+.ticker{
+background:red;
+padding:10px;
+font-weight:bold;
 }
 
 .player{
-height:450px;
-background:black;
-border-radius:15px;
-overflow:hidden;
+height:60vh;
 position:relative;
-margin-bottom:20px;
+background:black;
 }
 
 .player video{
@@ -124,285 +65,291 @@ top:15px;
 left:15px;
 background:red;
 padding:8px 15px;
-border-radius:30px;
+border-radius:25px;
 font-weight:bold;
+animation:pulse 1s infinite;
 }
 
-.viewer{
+@keyframes pulse{
+50%{opacity:.5;}
+}
+
+.viewer-counter{
 position:absolute;
 top:15px;
 right:15px;
-background:black;
+background:#000;
 padding:8px 15px;
-border-radius:30px;
+border-radius:25px;
 }
 
-.modules{
+.camera-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:10px;
+padding:20px;
+}
+
+.cam{
+background:var(--card);
+padding:15px;
+text-align:center;
+border-radius:10px;
+cursor:pointer;
+}
+
+.cam:hover{
+background:#22304d;
+}
+
+.section{
+padding:20px;
+}
+
+.section h2{
+margin-bottom:15px;
+color:#00d4ff;
+}
+
+.schedule{
+display:grid;
+gap:10px;
+}
+
+.program{
+background:var(--card);
+padding:15px;
+border-radius:10px;
+}
+
+.cards{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:15px;
 }
 
-.module{
+.card{
 background:var(--card);
 padding:20px;
 border-radius:12px;
 }
 
-.module h3{
-margin-bottom:10px;
-color:var(--accent);
+.verse{
+font-size:18px;
+line-height:1.8;
 }
 
-.btn{
-padding:12px 18px;
+.donate-btn{
+padding:15px 25px;
 border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-background:var(--accent);
+background:var(--gold);
 color:#000;
-}
-
-.cameras{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:10px;
-margin-top:10px;
-}
-
-.cam{
-background:#22304d;
-padding:10px;
-border-radius:8px;
-text-align:center;
+font-weight:bold;
+border-radius:10px;
 cursor:pointer;
-}
-
-.schedule-item{
-background:#0f172a;
-padding:10px;
-border-radius:8px;
-margin-bottom:8px;
 }
 
 .footer{
-margin-top:20px;
-padding:15px;
+padding:20px;
 text-align:center;
 background:#020617;
-border-radius:10px;
+margin-top:20px;
+}
+
+audio{
+width:100%;
+margin-top:10px;
+}
+
+@media(max-width:768px){
+.player{
+height:300px;
+}
 }
 
 </style>
 </head>
+
 <body>
 
 <div class="topbar">
-<div class="logo">📺 BTECH CHURCH TV NETWORK</div>
-<div>🌍 Global Church Broadcasting Platform</div>
+📺 SYNAGOGUE TV NETWORK
 </div>
 
-<div class="container">
-
-<div class="sidebar">
-
-<h3>⛪ Churches</h3>
-
-<div class="church-card active">
-📖 Synagogue TV
-</div>
-
-<div class="church-card">
-🔥 RCCG TV
-</div>
-
-<div class="church-card">
-🕊 Winners Chapel TV
-</div>
-
-<div class="church-card">
-🎤 Dunamis TV
-</div>
-
-<div class="church-card">
-📡 Christ Embassy TV
-</div>
-
-<div class="church-card">
-🙏 MFM TV
-</div>
-
-<div class="church-card">
-📚 Deeper Life TV
-</div>
-
-<div class="church-card">
-✝ Catholic TV
-</div>
-
-<div class="church-card">
-⛪ Anglican TV
-</div>
-
-<button class="btn" style="width:100%;margin-top:10px;">
-➕ Add Church
-</button>
-
-</div>
-
-<div class="main">
-
-<div class="stats">
-
-<div class="stat">
-<h2>250</h2>
-<p>Churches</p>
-</div>
-
-<div class="stat">
-<h2>1200</h2>
-<p>Live Cameras</p>
-</div>
-
-<div class="stat">
-<h2>1.5M</h2>
-<p>Viewers</p>
-</div>
-
-<div class="stat">
-<h2>350</h2>
-<p>Admins</p>
-</div>
-
+<div class="ticker">
+<marquee>
+🔴 LIVE WORSHIP • SUNDAY SERVICE • PRAYER LINE OPEN • WORLDWIDE BROADCAST • GOD BLESS YOU
+</marquee>
 </div>
 
 <div class="player">
 
 <div class="live">🔴 LIVE</div>
 
-<div class="viewer">
-👥 12,540 Watching
+<div class="viewer-counter">
+👥 <span id="viewers">1248</span> Watching
 </div>
 
-<video controls autoplay></video>
-
-</div>
-
-<div class="modules">
-
-<div class="module">
-
-<h3>📹 Camera Control</h3>
-
-<div class="cameras">
-
-<div class="cam">Main Altar</div>
-<div class="cam">Pulpit</div>
-<div class="cam">Choir</div>
-<div class="cam">Entrance</div>
+<video id="video" controls autoplay playsinline></video>
 
 </div>
 
+<div class="camera-grid">
+
+<div class="cam" onclick="switchCam(1)">
+📹 Main Altar
 </div>
 
-<div class="module">
-
-<h3>📅 Broadcast Schedule</h3>
-
-<div class="schedule-item">
-06:00 AM Morning Prayer
+<div class="cam" onclick="switchCam(2)">
+🎤 Pulpit
 </div>
 
-<div class="schedule-item">
-09:00 AM Bible Study
+<div class="cam" onclick="switchCam(3)">
+🎶 Choir
 </div>
 
-<div class="schedule-item">
-12:00 PM Worship Service
-</div>
-
-<div class="schedule-item">
-06:00 PM Revival
+<div class="cam" onclick="switchCam(4)">
+🚪 Entrance
 </div>
 
 </div>
 
-<div class="module">
+<div class="section">
 
-<h3>💳 Donations</h3>
+<h2>📅 Today's Broadcast Schedule</h2>
 
-<p>Total Donations</p>
-<h2>$52,000</h2>
+<div class="schedule">
 
-<button class="btn">
-Manage Donations
-</button>
+<div class="program">
+06:00 AM - Morning Prayer
+</div>
+
+<div class="program">
+09:00 AM - Bible Study
+</div>
+
+<div class="program">
+12:00 PM - Worship Service
+</div>
+
+<div class="program">
+06:00 PM - Evening Revival
+</div>
+
+<div class="program">
+09:00 PM - Night Prayer
+</div>
 
 </div>
 
-<div class="module">
+</div>
 
-<h3>👥 Members</h3>
+<div class="section">
 
-<p>Registered Members</p>
-<h2>25,000</h2>
+<h2>📖 Verse Of The Day</h2>
 
-<button class="btn">
-View Members
-</button>
+<div class="card verse">
+"The Lord is my shepherd; I shall not want." — Psalm 23:1
+</div>
 
 </div>
 
-<div class="module">
+<div class="section">
 
-<h3>🎶 Church Radio</h3>
+<h2>🎶 Synagogue Radio</h2>
 
-<audio controls style="width:100%;">
-<source src="">
+<div class="card">
+
+<audio controls autoplay>
+<source src="YOUR_RADIO_STREAM.mp3" type="audio/mpeg">
 </audio>
 
 </div>
 
-<div class="module">
+</div>
 
-<h3>📊 Analytics</h3>
+<div class="section">
 
-<p>Live Viewers: 12,540</p>
-<p>Countries: 95</p>
-<p>Streams Online: 100%</p>
+<h2>🙏 Ministry Services</h2>
+
+<div class="cards">
+
+<div class="card">
+📖 Bible Teaching TV
+</div>
+
+<div class="card">
+🙏 Prayer TV
+</div>
+
+<div class="card">
+🎤 Sermon TV
+</div>
+
+<div class="card">
+🌍 International Broadcast
+</div>
 
 </div>
 
-<div class="module">
+</div>
 
-<h3>⚙ Church Settings</h3>
+<div class="section">
 
-<button class="btn">
-Open Dashboard
+<h2>💳 Support The Ministry</h2>
+
+<button class="donate-btn">
+Donate Now
 </button>
 
 </div>
 
-<div class="module">
-
-<h3>🔐 Church Admins</h3>
-
-<p>Pastors</p>
-<p>Media Team</p>
-<p>Camera Operators</p>
-
-</div>
-
-</div>
-
 <div class="footer">
-BTECH CHURCH TV NETWORK • SUPER ADMIN • MULTI-CHURCH STREAMING PLATFORM
+Synagogue TV Network • 24/7 Live Broadcast • Powered by BTECH-TV
 </div>
 
-</div>
+<script>
 
-</div>
+const cameras = {
+1:"YOUR_ALTAR_STREAM.m3u8",
+2:"YOUR_PULPIT_STREAM.m3u8",
+3:"YOUR_CHOIR_STREAM.m3u8",
+4:"YOUR_ENTRANCE_STREAM.m3u8"
+};
+
+const video = document.getElementById("video");
+
+function playStream(url){
+
+if(Hls.isSupported()){
+
+const hls = new Hls({
+lowLatencyMode:true
+});
+
+hls.loadSource(url);
+hls.attachMedia(video);
+
+}else{
+video.src=url;
+}
+
+}
+
+function switchCam(id){
+playStream(cameras[id]);
+}
+
+playStream(cameras[1]);
+
+setInterval(()=>{
+
+document.getElementById("viewers").innerHTML =
+1000 + Math.floor(Math.random()*2000);
+
+},5000);
+
+</script>
 
 </body>
 </html>
