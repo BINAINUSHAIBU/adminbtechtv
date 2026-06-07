@@ -1,9 +1,10 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Synagogue TV (576p) Live</title>
+<title>Synagogue TV Network</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -11,9 +12,11 @@
 
 :root{
 --bg:#050816;
---card:#111827;
+--panel:#111827;
+--card:#172033;
 --accent:#ff0000;
 --text:#ffffff;
+--gold:#facc15;
 }
 
 *{
@@ -30,15 +33,22 @@ color:var(--text);
 
 .topbar{
 background:#111827;
-padding:15px;
+padding:20px;
 text-align:center;
-font-size:28px;
+font-size:30px;
+font-weight:bold;
+border-bottom:2px solid red;
+}
+
+.ticker{
+background:red;
+padding:10px;
 font-weight:bold;
 }
 
 .player{
+height:60vh;
 position:relative;
-height:65vh;
 background:black;
 }
 
@@ -53,8 +63,8 @@ position:absolute;
 top:15px;
 left:15px;
 background:red;
-padding:8px 14px;
-border-radius:30px;
+padding:8px 15px;
+border-radius:25px;
 font-weight:bold;
 animation:pulse 1s infinite;
 }
@@ -63,55 +73,97 @@ animation:pulse 1s infinite;
 50%{opacity:.5;}
 }
 
-.info{
+.viewer-counter{
+position:absolute;
+top:15px;
+right:15px;
+background:#000;
+padding:8px 15px;
+border-radius:25px;
+}
+
+.camera-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:10px;
 padding:20px;
+}
+
+.cam{
+background:var(--card);
+padding:15px;
 text-align:center;
-background:#111827;
+border-radius:10px;
+cursor:pointer;
 }
 
-.info h2{
-margin-bottom:10px;
+.cam:hover{
+background:#22304d;
 }
 
-.grid{
+.section{
+padding:20px;
+}
+
+.section h2{
+margin-bottom:15px;
+color:#00d4ff;
+}
+
+.schedule{
+display:grid;
+gap:10px;
+}
+
+.program{
+background:var(--card);
+padding:15px;
+border-radius:10px;
+}
+
+.cards{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:15px;
-padding:20px;
 }
 
 .card{
 background:var(--card);
 padding:20px;
 border-radius:12px;
-text-align:center;
 }
 
-.card h3{
-margin-bottom:10px;
-color:#00d4ff;
+.verse{
+font-size:18px;
+line-height:1.8;
+}
+
+.donate-btn{
+padding:15px 25px;
+border:none;
+background:var(--gold);
+color:#000;
+font-weight:bold;
+border-radius:10px;
+cursor:pointer;
 }
 
 .footer{
-background:#020617;
-padding:15px;
+padding:20px;
 text-align:center;
-font-size:13px;
+background:#020617;
+margin-top:20px;
 }
 
-button{
-padding:12px 20px;
-border:none;
-background:#00d4ff;
-color:black;
-font-weight:bold;
-border-radius:8px;
-cursor:pointer;
+audio{
+width:100%;
 margin-top:10px;
 }
 
-button:hover{
-opacity:.9;
+@media(max-width:768px){
+.player{
+height:300px;
+}
 }
 
 </style>
@@ -120,71 +172,153 @@ opacity:.9;
 <body>
 
 <div class="topbar">
-📖 SYNAGOGUE TV (576p)
+📺 SYNAGOGUE TV NETWORK
+</div>
+
+<div class="ticker">
+<marquee>
+🔴 LIVE WORSHIP • SUNDAY SERVICE • PRAYER LINE OPEN • WORLDWIDE BROADCAST • GOD BLESS YOU
+</marquee>
 </div>
 
 <div class="player">
 
-<div class="live">
-🔴 LIVE CAMERA
+<div class="live">🔴 LIVE</div>
+
+<div class="viewer-counter">
+👥 <span id="viewers">1248</span> Watching
 </div>
 
-<video
-id="video"
-controls
-autoplay
-playsinline
-muted>
-</video>
+<video id="video" controls autoplay playsinline></video>
 
 </div>
 
-<div class="info">
-<h2>Live Worship Broadcast</h2>
-<p>24/7 Sanctuary Camera Transmission</p>
+<div class="camera-grid">
 
-<button onclick="playLive()">
-▶ Start Live Stream
+<div class="cam" onclick="switchCam(1)">
+📹 Main Altar
+</div>
+
+<div class="cam" onclick="switchCam(2)">
+🎤 Pulpit
+</div>
+
+<div class="cam" onclick="switchCam(3)">
+🎶 Choir
+</div>
+
+<div class="cam" onclick="switchCam(4)">
+🚪 Entrance
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>📅 Today's Broadcast Schedule</h2>
+
+<div class="schedule">
+
+<div class="program">
+06:00 AM - Morning Prayer
+</div>
+
+<div class="program">
+09:00 AM - Bible Study
+</div>
+
+<div class="program">
+12:00 PM - Worship Service
+</div>
+
+<div class="program">
+06:00 PM - Evening Revival
+</div>
+
+<div class="program">
+09:00 PM - Night Prayer
+</div>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>📖 Verse Of The Day</h2>
+
+<div class="card verse">
+"The Lord is my shepherd; I shall not want." — Psalm 23:1
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>🎶 Synagogue Radio</h2>
+
+<div class="card">
+
+<audio controls autoplay>
+<source src="YOUR_RADIO_STREAM.mp3" type="audio/mpeg">
+</audio>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>🙏 Ministry Services</h2>
+
+<div class="cards">
+
+<div class="card">
+📖 Bible Teaching TV
+</div>
+
+<div class="card">
+🙏 Prayer TV
+</div>
+
+<div class="card">
+🎤 Sermon TV
+</div>
+
+<div class="card">
+🌍 International Broadcast
+</div>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2>💳 Support The Ministry</h2>
+
+<button class="donate-btn">
+Donate Now
 </button>
-</div>
-
-<div class="grid">
-
-<div class="card">
-<h3>🙏 Prayer Session</h3>
-<p>Live prayer broadcasts from the sanctuary.</p>
-</div>
-
-<div class="card">
-<h3>🎤 Sermons</h3>
-<p>Watch live teachings and messages.</p>
-</div>
-
-<div class="card">
-<h3>🎶 Worship</h3>
-<p>Live praise and worship services.</p>
-</div>
-
-<div class="card">
-<h3>📹 Camera Feed</h3>
-<p>Real-time church camera transmission.</p>
-</div>
 
 </div>
 
 <div class="footer">
-Synagogue TV • 576p Live Transmission • Powered by BTECH-TV
+Synagogue TV Network • 24/7 Live Broadcast • Powered by BTECH-TV
 </div>
 
 <script>
 
-const STREAM_URL =
-"https://your-live-stream.m3u8";
+const cameras = {
+1:"YOUR_ALTAR_STREAM.m3u8",
+2:"YOUR_PULPIT_STREAM.m3u8",
+3:"YOUR_CHOIR_STREAM.m3u8",
+4:"YOUR_ENTRANCE_STREAM.m3u8"
+};
 
-const video =
-document.getElementById("video");
+const video = document.getElementById("video");
 
-function playLive(){
+function playStream(url){
 
 if(Hls.isSupported()){
 
@@ -192,25 +326,30 @@ const hls = new Hls({
 lowLatencyMode:true
 });
 
-hls.loadSource(STREAM_URL);
+hls.loadSource(url);
 hls.attachMedia(video);
 
-hls.on(Hls.Events.MANIFEST_PARSED,function(){
-video.play();
-});
-
 }else{
-
-video.src = STREAM_URL;
-video.play();
-
+video.src=url;
 }
 
 }
 
-window.onload=playLive;
+function switchCam(id){
+playStream(cameras[id]);
+}
+
+playStream(cameras[1]);
+
+setInterval(()=>{
+
+document.getElementById("viewers").innerHTML =
+1000 + Math.floor(Math.random()*2000);
+
+},5000);
 
 </script>
 
 </body>
 </html>
+```
