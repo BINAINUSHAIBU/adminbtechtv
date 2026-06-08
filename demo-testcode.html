@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Church Security Center - Enable 2FA</title>
+<title>Church Security Center - Lock Church</title>
 
 <style>
 
@@ -17,7 +17,7 @@ font-family:Arial,sans-serif;
 
 body{
 background:#0b1220;
-color:white;
+color:#fff;
 min-height:100vh;
 }
 
@@ -27,7 +27,7 @@ padding:20px;
 text-align:center;
 font-size:30px;
 font-weight:bold;
-color:#06b6d4;
+color:#ef4444;
 }
 
 .container{
@@ -44,12 +44,13 @@ box-shadow:0 0 20px rgba(0,0,0,.3);
 }
 
 .card h2{
-color:#06b6d4;
+color:#ef4444;
 margin-bottom:20px;
 }
 
 input,
-select{
+select,
+textarea{
 width:100%;
 padding:12px;
 margin-bottom:12px;
@@ -64,7 +65,7 @@ width:100%;
 padding:14px;
 border:none;
 border-radius:8px;
-background:#06b6d4;
+background:#ef4444;
 color:white;
 font-weight:bold;
 cursor:pointer;
@@ -78,7 +79,7 @@ opacity:.9;
 .status{
 margin-top:15px;
 padding:15px;
-background:#14532d;
+background:#7f1d1d;
 border-radius:8px;
 display:none;
 }
@@ -96,17 +97,18 @@ font-family:monospace;
 .badge{
 display:inline-block;
 padding:8px 15px;
-background:#14532d;
+background:#7f1d1d;
 border-radius:20px;
 margin-bottom:15px;
 }
 
 </style>
 </head>
+
 <body>
 
 <div class="header">
-🔐 ENABLE TWO-FACTOR AUTHENTICATION
+🔒 LOCK CHURCH SECURITY CENTER
 </div>
 
 <div class="container">
@@ -114,29 +116,30 @@ margin-bottom:15px;
 <div class="card">
 
 <div class="badge">
-Security Center
+Security Protection
 </div>
 
-<h2>Enable 2FA Protection</h2>
+<h2>Lock Church Account</h2>
 
-<input
-type="email"
-id="adminEmail"
-placeholder="Administrator Email">
-
-<select id="method">
-<option>Email Verification</option>
-<option>SMS Verification</option>
-<option>Google Authenticator</option>
-<option>Microsoft Authenticator</option>
+<select id="churchName">
+<option>RCCG Victory Centre</option>
+<option>Dunamis International</option>
+<option>Winners Chapel</option>
+<option>Christ Embassy</option>
+<option>Living Faith Church</option>
 </select>
 
-<button onclick="enable2FA()">
-Enable 2FA
+<textarea
+id="reason"
+placeholder="Reason for locking this church account">
+</textarea>
+
+<button onclick="lockChurch()">
+🔒 Lock Church
 </button>
 
 <div id="status" class="status">
-✅ Two-Factor Authentication Enabled Successfully
+🚫 Church Account Locked Successfully
 </div>
 
 </div>
@@ -164,34 +167,27 @@ logs.scrollHeight;
 
 }
 
-function enable2FA(){
+function lockChurch(){
 
-const email =
-document.getElementById("adminEmail").value;
+const church =
+document.getElementById("churchName").value;
 
-const method =
-document.getElementById("method").value;
-
-if(email === ""){
-
-alert("Please enter administrator email");
-
-return;
-
-}
+const reason =
+document.getElementById("reason").value;
 
 document.getElementById("status")
 .style.display = "block";
 
 log(
-"2FA Enabled for " +
-email +
-" using " +
-method
+"Church Locked: " +
+church +
+" | Reason: " +
+(reason || "No reason provided")
 );
 
 alert(
-"Two-Factor Authentication Enabled Successfully"
+church +
+" has been locked successfully"
 );
 
 }
