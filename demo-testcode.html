@@ -2,259 +2,72 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Edit Church</title>
-
+<title>Church Manager</title>
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+body {
+    font-family: Arial;
+    background: #0b0f1a;
+    color: white;
+    padding: 20px;
 }
 
-body{
-background:#0b1220;
-color:white;
-padding:20px;
+.card {
+    background: #111827;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.container{
-max-width:900px;
-margin:auto;
-background:#111a2e;
-padding:25px;
-border-radius:15px;
-box-shadow:0 0 20px rgba(0,0,0,.3);
+button {
+    background: red;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-h1{
-margin-bottom:20px;
-color:#4da3ff;
-}
-
-.section{
-background:#1a2742;
-padding:15px;
-border-radius:10px;
-margin-bottom:15px;
-}
-
-label{
-display:block;
-margin-top:10px;
-margin-bottom:5px;
-font-weight:bold;
-}
-
-input,
-select,
-textarea{
-width:100%;
-padding:12px;
-border:none;
-border-radius:8px;
-background:#24385e;
-color:white;
-}
-
-textarea{
-height:120px;
-resize:none;
-}
-
-.row{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
-}
-
-button{
-margin-top:20px;
-padding:12px 20px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-}
-
-.save{
-background:#28a745;
-color:white;
-}
-
-.reset{
-background:#dc3545;
-color:white;
-margin-left:10px;
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:10px;
-margin-top:15px;
-}
-
-.card{
-background:#24385e;
-padding:15px;
-border-radius:10px;
-text-align:center;
-}
-
-.card h2{
-color:#4da3ff;
-}
-
-@media(max-width:768px){
-.row,
-.stats{
-grid-template-columns:1fr;
-}
+button:hover {
+    background: darkred;
 }
 </style>
 </head>
+
 <body>
 
-<div class="container">
+<h2>⛪ Church Control Panel</h2>
 
-<h1>⛪ Edit Church Dashboard</h1>
+<div id="churchList">
 
-<div class="section">
-<h2>Church Information</h2>
+    <div class="card" data-id="1">
+        RCCG Abuja Central
+        <button onclick="deleteChurch(this)">Delete Church</button>
+    </div>
 
-<label>Church Name</label>
-<input type="text" value="RCCG Victory Centre">
+    <div class="card" data-id="2">
+        Winners Chapel Abuja
+        <button onclick="deleteChurch(this)">Delete Church</button>
+    </div>
 
-<div class="row">
-<div>
-<label>Founder / Pastor</label>
-<input type="text" value="Pastor John Doe">
-</div>
-
-<div>
-<label>Church Type</label>
-<select>
-<option>Pentecostal</option>
-<option>Catholic</option>
-<option>Anglican</option>
-<option>Baptist</option>
-<option>Methodist</option>
-</select>
-</div>
-</div>
-
-<div class="row">
-<div>
-<label>Email</label>
-<input type="email" value="church@email.com">
-</div>
-
-<div>
-<label>Phone</label>
-<input type="text" value="+2348000000000">
-</div>
-</div>
-
-<div class="row">
-<div>
-<label>Country</label>
-<input type="text" value="Nigeria">
-</div>
-
-<div>
-<label>City</label>
-<input type="text" value="Abuja">
-</div>
-</div>
-
-<label>Description</label>
-<textarea>
-Welcome to our church. We are committed to spreading the Gospel and serving our community.
-</textarea>
-
-<button class="save" onclick="saveChurch()">
-💾 Save Changes
-</button>
-
-<button class="reset" onclick="resetChurch()">
-🗑 Reset
-</button>
-
-</div>
-
-<div class="section">
-<h2>📊 Church Statistics</h2>
-
-<div class="stats">
-<div class="card">
-<h2>12,500</h2>
-<p>Members</p>
-</div>
-
-<div class="card">
-<h2>250</h2>
-<p>Workers</p>
-</div>
-
-<div class="card">
-<h2>15</h2>
-<p>Branches</p>
-</div>
-
-<div class="card">
-<h2>$150,000</h2>
-<p>Donations</p>
-</div>
-</div>
-</div>
-
-<div class="section">
-<h2>📺 IPTV Controls</h2>
-
-<button onclick="alert('Stream Started')">
-▶ Start Stream
-</button>
-
-<button onclick="alert('Stream Stopped')">
-⏹ Stop Stream
-</button>
-
-<button onclick="alert('Monitoring Stream')">
-📡 Monitor Stream
-</button>
-
-</div>
-
-<div class="section">
-<h2>🔒 Security Controls</h2>
-
-<button onclick="alert('2FA Enabled')">
-🔐 Enable 2FA
-</button>
-
-<button onclick="alert('Church Locked')">
-🔒 Lock Church
-</button>
-
-<button onclick="alert('Password Reset')">
-🔑 Reset Password
-</button>
-
-</div>
+    <div class="card" data-id="3">
+        Dunamis Church HQ
+        <button onclick="deleteChurch(this)">Delete Church</button>
+    </div>
 
 </div>
 
 <script>
-function saveChurch(){
-alert("Church information updated successfully!");
-}
+function deleteChurch(btn) {
+    let card = btn.parentElement;
+    let churchName = card.firstChild.textContent.trim();
 
-function resetChurch(){
-if(confirm("Reset all church information?")){
-location.reload();
-}
+    if (confirm("Are you sure you want to delete: " + churchName + "?")) {
+        card.remove();
+        alert("Church deleted successfully!");
+    }
 }
 </script>
 
