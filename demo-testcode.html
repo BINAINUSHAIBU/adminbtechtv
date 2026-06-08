@@ -1,4 +1,4 @@
-```html id="j6mk2v"
+```html id="o4m7wp"
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,7 +8,7 @@
 
 <meta
 name="viewport"
-content="width=device-width, initial-scale=1.0"
+content="width=device-width,initial-scale=1.0"
 />
 
 <title>BTECH CHURCH TV NETWORK</title>
@@ -23,6 +23,9 @@ content="width=device-width, initial-scale=1.0"
 --card:#172033;
 --hover:#22304d;
 --accent:#00d4ff;
+--success:#16a34a;
+--danger:#ef4444;
+--gold:#facc15;
 --text:#ffffff;
 --muted:#94a3b8;
 }
@@ -40,16 +43,19 @@ color:var(--text);
 overflow-x:hidden;
 }
 
+/* HEADER */
+
 .header{
 height:70px;
 background:#0f172a;
 display:flex;
+justify-content:space-between;
 align-items:center;
 padding:0 20px;
 border-bottom:1px solid rgba(255,255,255,.05);
 position:sticky;
 top:0;
-z-index:1000;
+z-index:999;
 }
 
 .logo{
@@ -57,6 +63,30 @@ font-size:24px;
 font-weight:bold;
 color:var(--accent);
 }
+
+.top-buttons{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.top-buttons button{
+padding:10px 15px;
+border:none;
+border-radius:8px;
+background:var(--card);
+color:white;
+cursor:pointer;
+font-weight:bold;
+transition:.3s;
+}
+
+.top-buttons button:hover{
+background:var(--accent);
+color:black;
+}
+
+/* LAYOUT */
 
 .container{
 display:flex;
@@ -66,15 +96,15 @@ min-height:calc(100vh - 70px);
 /* SIDEBAR */
 
 .sidebar{
-width:300px;
+width:320px;
 background:#0b1220;
 padding:15px;
 overflow-y:auto;
 border-right:1px solid rgba(255,255,255,.05);
 }
 
-.sidebar h2{
-margin-bottom:20px;
+.sidebar h3{
+margin-bottom:15px;
 color:var(--accent);
 }
 
@@ -97,7 +127,7 @@ transform:translateY(-2px);
 .main{
 flex:1;
 padding:20px;
-overflow-y:auto;
+overflow:auto;
 }
 
 /* CARDS */
@@ -111,8 +141,35 @@ margin-bottom:20px;
 
 .card h3{
 margin-bottom:15px;
-text-align:center;
 color:var(--accent);
+}
+
+/* MINI MONITOR */
+
+.mini-monitor{
+position:sticky;
+top:80px;
+z-index:100;
+background:black;
+padding:10px;
+border-radius:12px;
+margin-bottom:20px;
+}
+
+.mini-monitor video{
+width:100%;
+height:180px;
+border-radius:10px;
+background:black;
+}
+
+/* MAIN VIDEO */
+
+.main-player video{
+width:100%;
+height:500px;
+border-radius:12px;
+background:black;
 }
 
 /* INPUTS */
@@ -125,17 +182,7 @@ border:none;
 border-radius:10px;
 margin-bottom:12px;
 background:#0f172a;
-color:#fff;
-font-size:15px;
-}
-
-/* VIDEO */
-
-video{
-width:100%;
-height:500px;
-background:#000;
-border-radius:12px;
+color:white;
 }
 
 /* CHANNELS */
@@ -146,33 +193,76 @@ max-height:300px;
 overflow-y:auto;
 }
 
-/* CONTROLS */
+/* GRID */
 
-.controls{
+.grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
 gap:15px;
 }
 
+/* BUTTONS */
+
 .btn{
-background:#0f172a;
-padding:15px;
-border-radius:12px;
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
 cursor:pointer;
-transition:.3s;
-text-align:center;
 font-weight:bold;
+margin-top:10px;
+transition:.3s;
+}
+
+.primary{
+background:var(--accent);
+color:black;
+}
+
+.success{
+background:var(--success);
+color:white;
+}
+
+.warning{
+background:#f59e0b;
+color:white;
+}
+
+.danger{
+background:var(--danger);
+color:white;
 }
 
 .btn:hover{
-background:var(--hover);
+opacity:.85;
+}
+
+/* STREAM STATUS */
+
+.stream{
+padding:12px;
+border-radius:10px;
+margin-bottom:10px;
+font-weight:bold;
+}
+
+.online{
+background:#16a34a22;
+}
+
+.offline{
+background:#ef444422;
 }
 
 /* FOOTER */
 
 .footer{
-text-align:center;
+margin-top:20px;
 padding:20px;
+text-align:center;
+background:#020617;
+border-radius:12px;
 color:var(--muted);
 }
 
@@ -190,7 +280,7 @@ border-right:none;
 border-bottom:1px solid rgba(255,255,255,.05);
 }
 
-video{
+.main-player video{
 height:260px;
 }
 
@@ -210,6 +300,26 @@ height:260px;
 📺 BTECH CHURCH TV NETWORK
 </div>
 
+<div class="top-buttons">
+
+<button onclick="createChurch()">
+➕ Create Church
+</button>
+
+<button onclick="showAnalytics()">
+📊 Analytics
+</button>
+
+<button onclick="showDonations()">
+💰 Donations
+</button>
+
+<button onclick="securityPanel()">
+🔒 Security
+</button>
+
+</div>
+
 </div>
 
 <div class="container">
@@ -218,38 +328,34 @@ height:260px;
 
 <div class="sidebar">
 
-<h2>⛪ Churches</h2>
+<h3>⛪ Churches</h3>
 
-<div class="church" onclick="loadChurchTV('ng')">
+<div class="church" onclick="loadCountry('ng')">
 🔥 RCCG TV
 </div>
 
-<div class="church" onclick="loadChurchTV('ng')">
-🕊 Winners Chapel TV
-</div>
-
-<div class="church" onclick="loadChurchTV('ng')">
+<div class="church" onclick="loadCountry('ng')">
 🎤 Dunamis TV
 </div>
 
-<div class="church" onclick="loadChurchTV('ng')">
+<div class="church" onclick="loadCountry('ng')">
+🕊 Winners Chapel TV
+</div>
+
+<div class="church" onclick="loadCountry('ng')">
 📡 Christ Embassy TV
 </div>
 
-<div class="church" onclick="loadChurchTV('ng')">
-🙏 MFM TV
-</div>
-
-<div class="church" onclick="loadChurchTV('ng')">
-📚 Deeper Life TV
-</div>
-
-<div class="church" onclick="loadChurchTV('us')">
+<div class="church" onclick="loadCountry('us')">
 🇺🇸 Daystar TV
 </div>
 
-<div class="church" onclick="loadChurchTV('gb')">
+<div class="church" onclick="loadCountry('gb')">
 🇬🇧 Loveworld UK
+</div>
+
+<div class="church" onclick="loadCountry('za')">
+🇿🇦 Faith TV
 </div>
 
 </div>
@@ -258,37 +364,82 @@ height:260px;
 
 <div class="main">
 
+<!-- MINI IPTV -->
+
+<div class="mini-monitor">
+
+<h3>📺 MINI LIVE MONITOR</h3>
+
+<video
+id="miniPlayer"
+controls
+autoplay
+muted
+></video>
+
+<div class="grid" style="margin-top:10px;">
+
+<button
+class="btn primary"
+onclick="toggleMute()">
+🔊 Mute
+</button>
+
+<button
+class="btn success"
+onclick="reloadStream()">
+♻ Reload
+</button>
+
+<button
+class="btn warning"
+onclick="fullscreenMini()">
+🖥 Fullscreen
+</button>
+
+</div>
+
+</div>
+
 <!-- SUPER ADMIN -->
 
 <div class="card">
 
 <h3>🛡 SUPER ADMIN CONTROL PANEL</h3>
 
-<div class="controls">
+<div class="grid">
 
-<div class="btn">✅ Church Management</div>
+<button class="btn success" onclick="createChurch()">
+⛪ Create Church
+</button>
 
-<div class="btn">📡 Stream Monitoring</div>
+<button class="btn warning" onclick="editChurch()">
+✏ Edit Church
+</button>
 
-<div class="btn">💰 Donation Reports</div>
+<button class="btn danger" onclick="deleteChurch()">
+🗑 Delete Church
+</button>
 
-<div class="btn">🛡 Security Controls</div>
+<button class="btn primary" onclick="monitorStreams()">
+📡 Monitor Streams
+</button>
 
-<div class="btn">📊 Analytics Dashboard</div>
+<button class="btn primary" onclick="backupSystem()">
+💾 Backup System
+</button>
 
-<div class="btn">🌍 Multi-Country IPTV</div>
+<button class="btn primary" onclick="speedBoost()">
+⚡ Speed Boost
+</button>
 
-<div class="btn">⚡ Speed Boost</div>
+<button class="btn danger" onclick="shutdownStreams()">
+⛔ Shutdown Streams
+</button>
 
-<div class="btn">♻ Restart Player</div>
-
-<div class="btn">🚀 Global Feeds</div>
-
-<div class="btn">💾 Backup System</div>
-
-<div class="btn">⛔ Shutdown Streams</div>
-
-<div class="btn">🔴 Record Mode</div>
+<button class="btn success" onclick="recordMode()">
+🔴 Record Mode
+</button>
 
 </div>
 
@@ -296,20 +447,16 @@ height:260px;
 
 <!-- IPTV PLAYER -->
 
-<div class="card">
+<div class="card main-player">
 
 <h3>📺 LIVE IPTV PLAYER</h3>
 
 <select id="countrySelect" onchange="loadChannels()">
 
 <option value="ng">Nigeria</option>
-
 <option value="us">USA</option>
-
 <option value="gb">United Kingdom</option>
-
 <option value="za">South Africa</option>
-
 <option value="in">India</option>
 
 </select>
@@ -321,24 +468,62 @@ placeholder="Search Channels..."
 onkeyup="filterChannels()"
 />
 
-<!-- VIDEO -->
-
 <video
 id="video"
 controls
 autoplay
 ></video>
 
-<!-- CHANNELS BELOW PLAYER -->
-
 <div id="channels"></div>
+
+</div>
+
+<!-- STREAM STATUS -->
+
+<div class="card">
+
+<h3>🔴 STREAM STATUS</h3>
+
+<div class="stream online">
+🟢 RCCG TV ONLINE
+</div>
+
+<div class="stream online">
+🟢 DUNAMIS TV ONLINE
+</div>
+
+<div class="stream offline">
+🔴 WINNERS TV OFFLINE
+</div>
+
+</div>
+
+<!-- DONATIONS -->
+
+<div class="card">
+
+<h3>💰 DONATION REPORTS</h3>
+
+<div class="stream online">
+💵 RCCG TV • $120,000
+</div>
+
+<div class="stream online">
+💵 DUNAMIS TV • $65,000
+</div>
+
+<div class="stream online">
+💵 SYNAGOGUE TV • $45,000
+</div>
 
 </div>
 
 <!-- FOOTER -->
 
 <div class="footer">
-© 2026 BTECH CHURCH TV NETWORK
+
+BTECH CHURCH TV NETWORK • SUPER ADMIN IPTV SYSTEM
+
 </div>
 
 </div>
@@ -348,10 +533,11 @@ autoplay
 <script>
 
 let allChannels = [];
+let currentStream = "";
 
-/* LOAD CHURCH */
+/* LOAD COUNTRY */
 
-function loadChurchTV(country){
+function loadCountry(country){
 
 document.getElementById("countrySelect").value =
 country;
@@ -360,7 +546,7 @@ loadChannels();
 
 }
 
-/* LOAD IPTV */
+/* LOAD CHANNELS */
 
 async function loadChannels(){
 
@@ -378,15 +564,17 @@ let text = await response.text();
 
 parseM3U(text);
 
+notify("Channels Loaded");
+
 }catch(error){
 
-console.error(error);
+notify("Failed Loading Channels");
 
 }
 
 }
 
-/* PARSE M3U */
+/* PARSE */
 
 function parseM3U(data){
 
@@ -400,7 +588,8 @@ for(let i=0;i<lines.length;i++){
 
 if(lines[i].startsWith('#EXTINF')){
 
-name = lines[i].split(',')[1];
+name =
+lines[i].split(',')[1];
 
 }
 
@@ -421,26 +610,30 @@ renderChannels(allChannels);
 
 }
 
-/* RENDER CHANNELS */
+/* RENDER */
 
 function renderChannels(list){
 
 let container =
-document.getElementById('channels');
+document.getElementById("channels");
 
-container.innerHTML = '';
+container.innerHTML = "";
 
 list.forEach(channel=>{
 
-let div = document.createElement('div');
+let div =
+document.createElement("div");
 
-div.className = 'church';
+div.className = "church";
 
 div.innerHTML =
-'📺 ' + channel.name;
+"📺 " + channel.name;
 
-div.onclick = () =>
+div.onclick = ()=>{
+
 playChannel(channel.url);
+
+};
 
 container.appendChild(div);
 
@@ -448,12 +641,17 @@ container.appendChild(div);
 
 }
 
-/* PLAY CHANNEL */
+/* PLAY */
 
 function playChannel(url){
 
+currentStream = url;
+
 let video =
-document.getElementById('video');
+document.getElementById("video");
+
+let mini =
+document.getElementById("miniPlayer");
 
 if(Hls.isSupported()){
 
@@ -463,13 +661,23 @@ hls.loadSource(url);
 
 hls.attachMedia(video);
 
+let hls2 = new Hls();
+
+hls2.loadSource(url);
+
+hls2.attachMedia(mini);
+
 }else{
 
 video.src = url;
+mini.src = url;
 
 }
 
 video.play();
+mini.play();
+
+notify("Streaming Live");
 
 }
 
@@ -478,7 +686,7 @@ video.play();
 function filterChannels(){
 
 let val =
-document.getElementById('search')
+document.getElementById("search")
 .value.toLowerCase();
 
 let filtered =
@@ -489,6 +697,173 @@ c.name.toLowerCase().includes(val)
 renderChannels(filtered);
 
 }
+
+/* MINI CONTROLS */
+
+function toggleMute(){
+
+let mini =
+document.getElementById("miniPlayer");
+
+mini.muted = !mini.muted;
+
+}
+
+function reloadStream(){
+
+if(currentStream){
+
+playChannel(currentStream);
+
+}
+
+}
+
+function fullscreenMini(){
+
+document.getElementById("miniPlayer")
+.requestFullscreen();
+
+}
+
+/* ADMIN FEATURES */
+
+function createChurch(){
+
+let name =
+prompt("Enter Church Name");
+
+if(name){
+
+let div =
+document.createElement("div");
+
+div.className = "church";
+
+div.innerHTML =
+"⛪ " + name;
+
+document.querySelector(".sidebar")
+.appendChild(div);
+
+notify("Church Created");
+
+}
+
+}
+
+function editChurch(){
+
+notify("Edit Mode Activated");
+
+}
+
+function deleteChurch(){
+
+let churches =
+document.querySelectorAll(".sidebar .church");
+
+if(churches.length > 0){
+
+churches[churches.length - 1]
+.remove();
+
+notify("Church Deleted");
+
+}
+
+}
+
+function monitorStreams(){
+
+notify("Monitoring Streams");
+
+}
+
+function backupSystem(){
+
+notify("System Backup Complete");
+
+}
+
+function speedBoost(){
+
+notify("Speed Boost Enabled");
+
+}
+
+function shutdownStreams(){
+
+document.getElementById("video").pause();
+
+document.getElementById("miniPlayer").pause();
+
+notify("All Streams Stopped");
+
+}
+
+function recordMode(){
+
+notify("Recording Started");
+
+}
+
+function showAnalytics(){
+
+notify("Analytics Opened");
+
+}
+
+function showDonations(){
+
+notify("Donation Dashboard Opened");
+
+}
+
+function securityPanel(){
+
+notify("Security Panel Opened");
+
+}
+
+/* NOTIFICATION */
+
+function notify(msg){
+
+let note =
+document.createElement("div");
+
+note.innerHTML = msg;
+
+note.style.position = "fixed";
+note.style.top = "20px";
+note.style.right = "20px";
+note.style.background = "#00d4ff";
+note.style.color = "#000";
+note.style.padding = "15px";
+note.style.borderRadius = "10px";
+note.style.zIndex = "999999";
+note.style.fontWeight = "bold";
+
+document.body.appendChild(note);
+
+setTimeout(()=>{
+
+note.remove();
+
+},3000);
+
+}
+
+/* CLOCK */
+
+setInterval(()=>{
+
+document.title =
+"📺 IPTV LIVE • " +
+new Date().toLocaleTimeString();
+
+},1000);
 
 /* AUTO LOAD */
 
