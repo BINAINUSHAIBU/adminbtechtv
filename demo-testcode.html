@@ -4,28 +4,28 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>WORLDTV STANDARD DASHBOARD</title>
+<title>WORLDTV LIVE PLATFORM</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
---bg:#070b14;
---panel:#111827;
---card:#182235;
---card2:#1f2d45;
---line:#2d3c57;
---text:#f5f7fb;
---muted:#9ba8c7;
---primary:#00c2ff;
+--bg:#050816;
+--panel:#0f1729;
+--card:#162033;
+--line:#25324c;
+--text:#ffffff;
+--muted:#93a4c3;
+--primary:#00d4ff;
 --primary2:#4f46e5;
---green:#16c784;
---red:#ff5c75;
---orange:#ffb547;
---radius:18px;
---shadow:0 10px 30px rgba(0,0,0,.35);
+--success:#00d084;
+--danger:#ff4d6d;
+--warning:#ffb020;
+--radius:20px;
+--shadow:0 10px 30px rgba(0,0,0,.4);
 }
 
 *{
@@ -41,11 +41,6 @@ color:var(--text);
 overflow-x:hidden;
 }
 
-a{
-text-decoration:none;
-color:inherit;
-}
-
 .app{
 display:flex;
 min-height:100vh;
@@ -54,51 +49,51 @@ min-height:100vh;
 /* SIDEBAR */
 
 .sidebar{
-width:270px;
-background:#0d1524;
+width:280px;
+background:#0b1220;
 border-right:1px solid rgba(255,255,255,.05);
-padding:24px 18px;
+padding:25px;
 position:fixed;
 height:100vh;
 overflow:auto;
+z-index:100;
 }
 
 .logo{
 display:flex;
 align-items:center;
-gap:14px;
+gap:15px;
 margin-bottom:35px;
 }
 
 .logo-icon{
-width:52px;
-height:52px;
-border-radius:14px;
+width:58px;
+height:58px;
+border-radius:18px;
 background:linear-gradient(135deg,var(--primary),var(--primary2));
 display:flex;
 align-items:center;
 justify-content:center;
+font-size:28px;
+font-weight:800;
+}
+
+.logo h1{
 font-size:24px;
 font-weight:800;
 }
 
-.logo h2{
-font-size:22px;
-font-weight:800;
-}
-
 .logo p{
-font-size:12px;
+font-size:13px;
 color:var(--muted);
-margin-top:2px;
 }
 
 .menu-title{
 font-size:11px;
-color:#6f83a7;
-margin:25px 0 10px;
 text-transform:uppercase;
 letter-spacing:1px;
+color:#6e84a8;
+margin:25px 0 12px;
 }
 
 .menu{
@@ -107,57 +102,86 @@ flex-direction:column;
 gap:10px;
 }
 
-.menu a{
+.menu button{
+width:100%;
+background:none;
+border:none;
 padding:14px 16px;
-border-radius:14px;
+border-radius:16px;
 display:flex;
 align-items:center;
-gap:12px;
+gap:14px;
+color:#d8e2ff;
+font-size:15px;
 font-weight:600;
-color:#cbd5e1;
+cursor:pointer;
 transition:.3s;
 }
 
-.menu a:hover,
-.menu a.active{
-background:linear-gradient(90deg,rgba(0,194,255,.15),rgba(79,70,229,.15));
-color:white;
+.menu button:hover,
+.menu button.active{
+background:linear-gradient(90deg,rgba(0,212,255,.18),rgba(79,70,229,.18));
 border:1px solid rgba(255,255,255,.06);
 }
 
-.menu span{
-font-size:18px;
+.live-status{
+margin-top:30px;
+background:linear-gradient(135deg,#00d08422,#00d4ff22);
+padding:18px;
+border-radius:18px;
+border:1px solid rgba(255,255,255,.05);
+}
+
+.live-status h4{
+margin-bottom:10px;
+}
+
+.status-line{
+display:flex;
+align-items:center;
+gap:10px;
+margin-top:10px;
+font-size:14px;
+color:#c9d6f1;
+}
+
+.dot{
+width:10px;
+height:10px;
+border-radius:50%;
+background:var(--success);
+box-shadow:0 0 12px var(--success);
 }
 
 /* MAIN */
 
 .main{
-margin-left:270px;
-width:calc(100% - 270px);
+margin-left:280px;
+width:calc(100% - 280px);
 padding:25px;
 }
 
-/* TOPBAR */
+/* TOP */
 
 .topbar{
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:28px;
 gap:20px;
 flex-wrap:wrap;
+margin-bottom:25px;
 }
 
 .search{
 flex:1;
 min-width:250px;
 background:var(--panel);
-border:1px solid rgba(255,255,255,.05);
-padding:14px 18px;
+padding:15px 18px;
 border-radius:16px;
 display:flex;
 align-items:center;
 gap:12px;
+border:1px solid rgba(255,255,255,.05);
 }
 
 .search input{
@@ -179,9 +203,9 @@ border-radius:16px;
 border:1px solid rgba(255,255,255,.05);
 }
 
-.user-avatar{
-width:45px;
-height:45px;
+.avatar{
+width:48px;
+height:48px;
 border-radius:50%;
 background:linear-gradient(135deg,var(--primary),var(--primary2));
 display:flex;
@@ -190,48 +214,65 @@ justify-content:center;
 font-weight:800;
 }
 
-/* HERO */
+/* PLAYER */
 
-.hero{
-background:
-linear-gradient(135deg,rgba(0,194,255,.2),rgba(79,70,229,.2)),
-url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1600&auto=format&fit=crop');
-background-size:cover;
-background-position:center;
-border-radius:28px;
-padding:40px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-flex-wrap:wrap;
-gap:30px;
-margin-bottom:28px;
+.player-wrapper{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:25px;
+margin-bottom:30px;
+}
+
+.player-card{
+background:var(--panel);
+border-radius:24px;
+padding:20px;
+border:1px solid rgba(255,255,255,.05);
 box-shadow:var(--shadow);
 }
 
-.hero h1{
-font-size:42px;
-line-height:1.1;
-margin-bottom:14px;
-max-width:600px;
+.player-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:18px;
+flex-wrap:wrap;
+gap:15px;
 }
 
-.hero p{
-color:#dce7ff;
-font-size:16px;
-line-height:1.7;
-max-width:700px;
+.player-header h2{
+font-size:24px;
 }
 
-.hero-buttons{
+.live-badge{
+background:rgba(0,208,132,.15);
+color:var(--success);
+padding:10px 14px;
+border-radius:999px;
+font-size:13px;
+font-weight:700;
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+video{
+width:100%;
+height:540px;
+background:black;
+border-radius:18px;
+object-fit:cover;
+}
+
+.controls{
 display:flex;
 gap:15px;
-margin-top:22px;
 flex-wrap:wrap;
+margin-top:20px;
 }
 
 .btn{
-padding:14px 24px;
+padding:14px 22px;
 border:none;
 border-radius:14px;
 font-weight:700;
@@ -239,20 +280,94 @@ cursor:pointer;
 transition:.3s;
 }
 
-.btn-primary{
+.primary{
 background:linear-gradient(135deg,var(--primary),var(--primary2));
 color:white;
 }
 
-.btn-secondary{
-background:rgba(255,255,255,.1);
-backdrop-filter:blur(10px);
+.secondary{
+background:#202d44;
 color:white;
-border:1px solid rgba(255,255,255,.1);
+}
+
+.danger{
+background:linear-gradient(135deg,#ff4d6d,#ff6b81);
+color:white;
 }
 
 .btn:hover{
 transform:translateY(-2px);
+}
+
+/* CHANNEL LIST */
+
+.channel-list{
+background:var(--panel);
+border-radius:24px;
+padding:20px;
+border:1px solid rgba(255,255,255,.05);
+height:100%;
+overflow:auto;
+}
+
+.channel-list h3{
+margin-bottom:20px;
+}
+
+.channel{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+padding:14px;
+background:var(--card);
+border-radius:16px;
+margin-bottom:14px;
+cursor:pointer;
+transition:.3s;
+border:1px solid transparent;
+}
+
+.channel:hover{
+border-color:rgba(0,212,255,.4);
+transform:translateX(4px);
+}
+
+.channel-left{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+.channel-logo{
+width:55px;
+height:55px;
+border-radius:14px;
+background:linear-gradient(135deg,var(--primary),var(--primary2));
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:20px;
+font-weight:800;
+}
+
+.channel h4{
+font-size:15px;
+margin-bottom:5px;
+}
+
+.channel p{
+font-size:12px;
+color:var(--muted);
+}
+
+.tag{
+padding:6px 12px;
+border-radius:999px;
+font-size:11px;
+font-weight:700;
+background:rgba(0,212,255,.12);
+color:#88e8ff;
 }
 
 /* STATS */
@@ -264,10 +379,10 @@ gap:20px;
 margin-bottom:30px;
 }
 
-.card{
+.stat{
 background:var(--panel);
 padding:24px;
-border-radius:var(--radius);
+border-radius:22px;
 border:1px solid rgba(255,255,255,.05);
 box-shadow:var(--shadow);
 }
@@ -280,173 +395,43 @@ margin-bottom:16px;
 }
 
 .stat-icon{
-width:55px;
-height:55px;
-border-radius:16px;
+width:60px;
+height:60px;
+border-radius:18px;
 display:flex;
 align-items:center;
 justify-content:center;
 font-size:24px;
-background:linear-gradient(135deg,rgba(0,194,255,.18),rgba(79,70,229,.18));
+background:linear-gradient(135deg,#00d4ff22,#4f46e522);
 }
 
-.stat-title{
-font-size:14px;
-color:var(--muted);
-}
-
-.stat-value{
+.stat h2{
 font-size:34px;
-font-weight:800;
-margin:12px 0;
+margin-bottom:8px;
 }
 
-.stat-change{
-font-size:14px;
-font-weight:700;
-}
-
-.green{
-color:var(--green);
-}
-
-.red{
-color:var(--red);
-}
-
-/* GRID */
-
-.grid{
-display:grid;
-grid-template-columns:2fr 1fr;
-gap:25px;
-margin-bottom:30px;
-}
-
-.panel-title{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
-}
-
-.panel-title h3{
-font-size:20px;
-}
-
-.channels{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-}
-
-.channel{
-background:var(--card);
-border-radius:20px;
-overflow:hidden;
-border:1px solid rgba(255,255,255,.05);
-transition:.3s;
-}
-
-.channel:hover{
-transform:translateY(-5px);
-}
-
-.channel img{
-width:100%;
-height:140px;
-object-fit:cover;
-}
-
-.channel-body{
-padding:18px;
-}
-
-.channel h4{
-margin-bottom:10px;
-font-size:18px;
-}
-
-.channel p{
-font-size:14px;
-line-height:1.6;
+.stat p{
 color:var(--muted);
-margin-bottom:15px;
-}
-
-.tags{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-bottom:16px;
-}
-
-.tag{
-padding:7px 12px;
-background:rgba(0,194,255,.12);
-border-radius:999px;
-font-size:12px;
-font-weight:700;
-color:#8ce6ff;
-}
-
-.watch-btn{
-width:100%;
-padding:12px;
-border:none;
-border-radius:12px;
-background:linear-gradient(135deg,var(--primary),var(--primary2));
-color:white;
-font-weight:700;
-cursor:pointer;
-}
-
-/* ACTIVITY */
-
-.activity{
-display:flex;
-flex-direction:column;
-gap:18px;
-}
-
-.activity-item{
-display:flex;
-gap:15px;
-padding:16px;
-background:var(--card);
-border-radius:16px;
-}
-
-.activity-icon{
-width:50px;
-height:50px;
-border-radius:14px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:22px;
-background:rgba(255,255,255,.06);
-}
-
-.activity h5{
-margin-bottom:6px;
-font-size:15px;
-}
-
-.activity p{
-font-size:13px;
-color:var(--muted);
-line-height:1.5;
+font-size:14px;
 }
 
 /* TABLE */
 
 .table-card{
 background:var(--panel);
-border-radius:24px;
 padding:24px;
+border-radius:24px;
 border:1px solid rgba(255,255,255,.05);
 overflow:auto;
+}
+
+.table-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+flex-wrap:wrap;
+gap:15px;
 }
 
 table{
@@ -459,8 +444,8 @@ th{
 text-align:left;
 padding:16px;
 font-size:13px;
-color:#94a3b8;
-border-bottom:1px solid rgba(255,255,255,.05);
+color:#8da1c5;
+border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 td{
@@ -472,33 +457,24 @@ font-size:14px;
 .status{
 padding:7px 12px;
 border-radius:999px;
-font-size:12px;
+font-size:11px;
 font-weight:700;
-display:inline-block;
 }
 
-.live{
-background:rgba(22,199,132,.15);
-color:var(--green);
+.online{
+background:#00d08422;
+color:var(--success);
 }
 
 .offline{
-background:rgba(255,92,117,.12);
-color:var(--red);
+background:#ff4d6d22;
+color:var(--danger);
 }
-
-.maintenance{
-background:rgba(255,181,71,.15);
-color:var(--orange);
-}
-
-/* FOOTER */
 
 .footer{
 margin-top:30px;
 text-align:center;
-color:#8190b1;
-font-size:14px;
+color:#8496b6;
 padding-bottom:30px;
 }
 
@@ -506,13 +482,21 @@ padding-bottom:30px;
 
 @media(max-width:1100px){
 
-.grid{
+.player-wrapper{
 grid-template-columns:1fr;
+}
+
+video{
+height:400px;
 }
 
 }
 
 @media(max-width:900px){
+
+.app{
+flex-direction:column;
+}
 
 .sidebar{
 position:relative;
@@ -523,14 +507,6 @@ height:auto;
 .main{
 margin-left:0;
 width:100%;
-}
-
-.app{
-flex-direction:column;
-}
-
-.hero h1{
-font-size:32px;
 }
 
 }
@@ -548,33 +524,52 @@ font-size:32px;
 <div class="logo">
 <div class="logo-icon">📺</div>
 <div>
-<h2>WORLDTV</h2>
-<p>Global Streaming Network</p>
+<h1>WORLDTV</h1>
+<p>Live Streaming Network</p>
 </div>
 </div>
 
-<div class="menu-title">Main Menu</div>
+<div class="menu-title">Navigation</div>
 
 <div class="menu">
-<a href="#" class="active"><span>🏠</span> Dashboard</a>
-<a href="#"><span>📡</span> Live Channels</a>
-<a href="#"><span>🎬</span> Movies</a>
-<a href="#"><span>📺</span> TV Shows</a>
-<a href="#"><span>⚽</span> Sports</a>
-<a href="#"><span>🎵</span> Music</a>
-<a href="#"><span>📰</span> News</a>
-<a href="#"><span>🌍</span> Countries</a>
+<button class="active">🏠 Dashboard</button>
+<button>📡 Live TV</button>
+<button>⚽ Sports</button>
+<button>🎬 Movies</button>
+<button>📰 News</button>
+<button>🎵 Music</button>
+<button>⛪ Gospel</button>
+<button>🌍 International</button>
 </div>
 
 <div class="menu-title">User</div>
 
 <div class="menu">
-<a href="#"><span>❤️</span> Favorites</a>
-<a href="#"><span>🕘</span> Watch History</a>
-<a href="#"><span>⬇️</span> Downloads</a>
-<a href="#"><span>💳</span> Subscription</a>
-<a href="#"><span>⚙️</span> Settings</a>
-<a href="#"><span>🚪</span> Logout</a>
+<button>❤️ Favorites</button>
+<button>🕘 Watch History</button>
+<button>⬇ Downloads</button>
+<button>⚙ Settings</button>
+<button>🚪 Logout</button>
+</div>
+
+<div class="live-status">
+<h4>Streaming Server</h4>
+
+<div class="status-line">
+<div class="dot"></div>
+<span>All Systems Online</span>
+</div>
+
+<div class="status-line">
+<div class="dot"></div>
+<span>CDN Active</span>
+</div>
+
+<div class="status-line">
+<div class="dot"></div>
+<span>4K Streaming Enabled</span>
+</div>
+
 </div>
 
 </div>
@@ -588,36 +583,108 @@ font-size:32px;
 <div class="topbar">
 
 <div class="search">
-<div>🔍</div>
-<input type="text" placeholder="Search channels, movies, sports, news...">
+🔍
+<input type="text" id="searchInput" placeholder="Search channels...">
 </div>
 
 <div class="user-box">
 <div>
-<h4>Welcome Back</h4>
-<p style="color:var(--muted);font-size:13px;">Premium User</p>
+<h4>BTECH USER</h4>
+<p style="font-size:13px;color:var(--muted);">Premium Subscription</p>
 </div>
-<div class="user-avatar">BT</div>
-</div>
-
+<div class="avatar">BT</div>
 </div>
 
-<!-- HERO -->
+</div>
 
-<div class="hero">
+<!-- PLAYER -->
 
+<div class="player-wrapper">
+
+<div class="player-card">
+
+<div class="player-header">
+<h2 id="channelTitle">WORLD SPORTS HD</h2>
+
+<div class="live-badge">
+🔴 LIVE STREAMING
+</div>
+</div>
+
+<video id="video" controls autoplay muted></video>
+
+<div class="controls">
+<button class="btn primary" onclick="playChannel(currentChannel)">
+▶ Play Live
+</button>
+
+<button class="btn secondary" onclick="toggleFullscreen()">
+⛶ Fullscreen
+</button>
+
+<button class="btn secondary" onclick="volumeUp()">
+🔊 Volume
+</button>
+
+<button class="btn danger" onclick="stopPlayer()">
+⛔ Stop
+</button>
+</div>
+
+</div>
+
+<!-- CHANNEL LIST -->
+
+<div class="channel-list">
+
+<h3>Live Channels</h3>
+
+<div id="channelContainer">
+
+<div class="channel" onclick="playChannel(channels[0])">
+<div class="channel-left">
+<div class="channel-logo">⚽</div>
 <div>
-<h1>WORLDTV Ultra Streaming Experience</h1>
+<h4>WORLD SPORTS HD</h4>
+<p>Live Sports Streaming</p>
+</div>
+</div>
+<div class="tag">LIVE</div>
+</div>
 
-<p>
-Watch global live TV channels, sports, movies, entertainment, music,
-church programs and international news in one professional platform
-with HD streaming and modern user experience.
-</p>
+<div class="channel" onclick="playChannel(channels[1])">
+<div class="channel-left">
+<div class="channel-logo">📰</div>
+<div>
+<h4>GLOBAL NEWS</h4>
+<p>24/7 World News</p>
+</div>
+</div>
+<div class="tag">HD</div>
+</div>
 
-<div class="hero-buttons">
-<button class="btn btn-primary">▶ Start Watching</button>
-<button class="btn btn-secondary">📡 Browse Channels</button>
+<div class="channel" onclick="playChannel(channels[2])">
+<div class="channel-left">
+<div class="channel-logo">🎵</div>
+<div>
+<h4>MUSIC TV</h4>
+<p>Top Music Videos</p>
+</div>
+</div>
+<div class="tag">4K</div>
+</div>
+
+<div class="channel" onclick="playChannel(channels[3])">
+<div class="channel-left">
+<div class="channel-logo">⛪</div>
+<div>
+<h4>GOSPEL TV</h4>
+<p>Church Live Programs</p>
+</div>
+</div>
+<div class="tag">LIVE</div>
+</div>
+
 </div>
 
 </div>
@@ -628,154 +695,44 @@ with HD streaming and modern user experience.
 
 <div class="stats">
 
-<div class="card">
+<div class="stat">
 <div class="stat-top">
 <div>
-<div class="stat-title">Live Channels</div>
-<div class="stat-value">2,500+</div>
-<div class="stat-change green">+120 New Channels</div>
+<h2>2,500+</h2>
+<p>Global Channels</p>
 </div>
 <div class="stat-icon">📺</div>
 </div>
 </div>
 
-<div class="card">
+<div class="stat">
 <div class="stat-top">
 <div>
-<div class="stat-title">Active Users</div>
-<div class="stat-value">85K</div>
-<div class="stat-change green">+18% Growth</div>
+<h2>120K</h2>
+<p>Active Viewers</p>
 </div>
 <div class="stat-icon">👥</div>
 </div>
 </div>
 
-<div class="card">
+<div class="stat">
 <div class="stat-top">
 <div>
-<div class="stat-title">Streaming Quality</div>
-<div class="stat-value">4K</div>
-<div class="stat-change green">Ultra HD Enabled</div>
+<h2>4K UHD</h2>
+<p>Streaming Quality</p>
 </div>
 <div class="stat-icon">⚡</div>
 </div>
 </div>
 
-<div class="card">
+<div class="stat">
 <div class="stat-top">
 <div>
-<div class="stat-title">Server Status</div>
-<div class="stat-value">99.9%</div>
-<div class="stat-change green">All Systems Online</div>
+<h2>99.9%</h2>
+<p>Server Uptime</p>
 </div>
 <div class="stat-icon">🟢</div>
 </div>
-</div>
-
-</div>
-
-<!-- GRID -->
-
-<div class="grid">
-
-<!-- CHANNELS -->
-
-<div class="card">
-
-<div class="panel-title">
-<h3>Trending Channels</h3>
-<button class="btn btn-secondary">View All</button>
-</div>
-
-<div class="channels">
-
-<div class="channel">
-<img src="https://images.unsplash.com/photo-1492619375914-88005aa9e8fb?q=80&w=1200&auto=format&fit=crop">
-<div class="channel-body">
-<h4>WORLD SPORTS HD</h4>
-<p>Live football, basketball, UFC, Formula 1 and global sports coverage.</p>
-<div class="tags">
-<div class="tag">LIVE</div>
-<div class="tag">HD</div>
-</div>
-<button class="watch-btn">▶ Watch Now</button>
-</div>
-</div>
-
-<div class="channel">
-<img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?q=80&w=1200&auto=format&fit=crop">
-<div class="channel-body">
-<h4>MOVIE MAX</h4>
-<p>Premium blockbuster movies, series and entertainment channels.</p>
-<div class="tags">
-<div class="tag">4K</div>
-<div class="tag">Movies</div>
-</div>
-<button class="watch-btn">▶ Watch Now</button>
-</div>
-</div>
-
-<div class="channel">
-<img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=1200&auto=format&fit=crop">
-<div class="channel-body">
-<h4>GOSPEL TV</h4>
-<p>Church programs, worship services, sermons and Christian events.</p>
-<div class="tags">
-<div class="tag">Faith</div>
-<div class="tag">Live</div>
-</div>
-<button class="watch-btn">▶ Watch Now</button>
-</div>
-</div>
-
-</div>
-
-</div>
-
-<!-- ACTIVITY -->
-
-<div class="card">
-
-<div class="panel-title">
-<h3>Recent Activity</h3>
-</div>
-
-<div class="activity">
-
-<div class="activity-item">
-<div class="activity-icon">📺</div>
-<div>
-<h5>Sports Channel Watched</h5>
-<p>You watched WORLD SPORTS HD for 2 hours.</p>
-</div>
-</div>
-
-<div class="activity-item">
-<div class="activity-icon">❤️</div>
-<div>
-<h5>Added to Favorites</h5>
-<p>Movie Max channel saved to your favorites.</p>
-</div>
-</div>
-
-<div class="activity-item">
-<div class="activity-icon">⬇️</div>
-<div>
-<h5>New Download</h5>
-<p>Downloaded latest entertainment playlist.</p>
-</div>
-</div>
-
-<div class="activity-item">
-<div class="activity-icon">⚡</div>
-<div>
-<h5>Server Boost Active</h5>
-<p>Your premium streaming optimization is enabled.</p>
-</div>
-</div>
-
-</div>
-
 </div>
 
 </div>
@@ -784,18 +741,21 @@ with HD streaming and modern user experience.
 
 <div class="table-card">
 
-<div class="panel-title">
-<h3>Channel Monitoring</h3>
-<button class="btn btn-primary">+ Add Channel</button>
+<div class="table-head">
+<h2>Streaming Server Dashboard</h2>
+
+<button class="btn primary">
++ Add Stream
+</button>
 </div>
 
 <table>
 
 <thead>
 <tr>
-<th>Channel</th>
-<th>Category</th>
-<th>Quality</th>
+<th>Server</th>
+<th>Region</th>
+<th>Bandwidth</th>
 <th>Users</th>
 <th>Status</th>
 </tr>
@@ -804,42 +764,34 @@ with HD streaming and modern user experience.
 <tbody>
 
 <tr>
-<td>WORLD SPORTS HD</td>
-<td>Sports</td>
-<td>4K</td>
-<td>18,400</td>
-<td><span class="status live">LIVE</span></td>
+<td>WORLDTV CDN-01</td>
+<td>Europe</td>
+<td>10Gbps</td>
+<td>12,430</td>
+<td><span class="status online">ONLINE</span></td>
 </tr>
 
 <tr>
-<td>GLOBAL NEWS TV</td>
-<td>News</td>
-<td>HD</td>
-<td>9,120</td>
-<td><span class="status live">ONLINE</span></td>
+<td>WORLDTV CDN-02</td>
+<td>USA</td>
+<td>8Gbps</td>
+<td>9,890</td>
+<td><span class="status online">ONLINE</span></td>
 </tr>
 
 <tr>
-<td>GOSPEL TV AFRICA</td>
-<td>Faith</td>
-<td>Full HD</td>
-<td>5,430</td>
-<td><span class="status live">LIVE</span></td>
+<td>WORLDTV CDN-03</td>
+<td>Africa</td>
+<td>6Gbps</td>
+<td>7,210</td>
+<td><span class="status online">ONLINE</span></td>
 </tr>
 
 <tr>
-<td>MOVIE MAX</td>
-<td>Entertainment</td>
-<td>4K</td>
-<td>14,890</td>
-<td><span class="status maintenance">MAINTENANCE</span></td>
-</tr>
-
-<tr>
-<td>MUSIC WORLD</td>
-<td>Music</td>
-<td>HD</td>
-<td>4,540</td>
+<td>WORLDTV CDN-04</td>
+<td>Asia</td>
+<td>5Gbps</td>
+<td>5,320</td>
 <td><span class="status offline">OFFLINE</span></td>
 </tr>
 
@@ -850,7 +802,7 @@ with HD streaming and modern user experience.
 </div>
 
 <div class="footer">
-© 2026 WORLDTV STANDARD DASHBOARD • Premium IPTV Streaming Platform
+© 2026 WORLDTV LIVE PLATFORM • Professional IPTV Dashboard
 </div>
 
 </div>
@@ -859,12 +811,116 @@ with HD streaming and modern user experience.
 
 <script>
 
-const watchButtons = document.querySelectorAll('.watch-btn');
+/* CHANNEL STREAMS */
 
-watchButtons.forEach(btn=>{
-btn.addEventListener('click',()=>{
-alert('WORLDTV Player Loading...');
+const channels = [
+
+{
+name:"WORLD SPORTS HD",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+},
+
+{
+name:"GLOBAL NEWS",
+url:"https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8"
+},
+
+{
+name:"MUSIC TV",
+url:"https://moiptvhls-i.akamaihd.net/hls/live/652316/Live_1/master.m3u8"
+},
+
+{
+name:"GOSPEL TV",
+url:"https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+}
+
+];
+
+let currentChannel = channels[0];
+
+const video = document.getElementById('video');
+const channelTitle = document.getElementById('channelTitle');
+
+/* PLAY CHANNEL */
+
+function playChannel(channel){
+
+currentChannel = channel;
+
+channelTitle.innerText = channel.name;
+
+if(Hls.isSupported()){
+
+const hls = new Hls();
+
+hls.loadSource(channel.url);
+
+hls.attachMedia(video);
+
+hls.on(Hls.Events.MANIFEST_PARSED,function(){
+video.play();
 });
+
+}else if(video.canPlayType('application/vnd.apple.mpegurl')){
+
+video.src = channel.url;
+video.play();
+
+}
+
+}
+
+/* START DEFAULT CHANNEL */
+
+playChannel(currentChannel);
+
+/* FULLSCREEN */
+
+function toggleFullscreen(){
+
+if(video.requestFullscreen){
+video.requestFullscreen();
+}
+
+}
+
+/* STOP PLAYER */
+
+function stopPlayer(){
+
+video.pause();
+
+}
+
+/* VOLUME */
+
+function volumeUp(){
+
+if(video.volume < 1){
+video.volume += 0.1;
+}
+
+}
+
+/* SEARCH */
+
+const searchInput = document.getElementById('searchInput');
+
+searchInput.addEventListener('keyup',function(){
+
+let value = this.value.toLowerCase();
+
+document.querySelectorAll('.channel').forEach(channel=>{
+
+let text = channel.innerText.toLowerCase();
+
+channel.style.display = text.includes(value)
+? 'flex'
+: 'none';
+
+});
+
 });
 
 </script>
