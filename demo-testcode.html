@@ -1,76 +1,215 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Church Manager</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Church Super Admin</title>
+
 <style>
-body {
-    font-family: Arial;
-    background: #0b0f1a;
-    color: white;
-    padding: 20px;
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#0b1220;
+color:white;
 }
 
-.card {
-    background: #111827;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.header{
+background:#111a2e;
+padding:20px;
+text-align:center;
+font-size:28px;
+font-weight:bold;
+color:#4da3ff;
 }
 
-button {
-    background: red;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
 }
 
-button:hover {
-    background: darkred;
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:20px;
 }
+
+.card{
+background:#111a2e;
+padding:20px;
+border-radius:15px;
+}
+
+.card h2{
+margin-bottom:15px;
+color:#4da3ff;
+}
+
+input,
+select{
+width:100%;
+padding:12px;
+margin-bottom:10px;
+border:none;
+border-radius:8px;
+background:#1a2742;
+color:white;
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.create{
+background:#16a34a;
+color:white;
+}
+
+.admin{
+background:#f59e0b;
+color:white;
+}
+
+.logs{
+margin-top:20px;
+background:black;
+padding:15px;
+height:250px;
+overflow:auto;
+border-radius:10px;
+font-family:monospace;
+}
+
 </style>
 </head>
 
 <body>
 
-<h2>⛪ Church Control Panel</h2>
+<div class="header">
+⛪ CHURCH SUPER ADMIN DASHBOARD
+</div>
 
-<div id="churchList">
+<div class="container">
 
-    <div class="card" data-id="1">
-        RCCG Abuja Central
-        <button onclick="deleteChurch(this)">Delete Church</button>
-    </div>
+<div class="grid">
 
-    <div class="card" data-id="2">
-        Winners Chapel Abuja
-        <button onclick="deleteChurch(this)">Delete Church</button>
-    </div>
+<!-- CREATE CHURCH -->
 
-    <div class="card" data-id="3">
-        Dunamis Church HQ
-        <button onclick="deleteChurch(this)">Delete Church</button>
-    </div>
+<div class="card">
+
+<h2>⛪ Create Church</h2>
+
+<input id="churchName" placeholder="Church Name">
+
+<input id="pastorName" placeholder="Pastor Name">
+
+<input id="churchEmail" placeholder="Church Email">
+
+<input id="churchPhone" placeholder="Phone Number">
+
+<input id="country" placeholder="Country">
+
+<input id="city" placeholder="City">
+
+<button class="create" onclick="createChurch()">
+Create Church
+</button>
+
+</div>
+
+<!-- ADD ADMIN -->
+
+<div class="card">
+
+<h2>👥 Add Admin</h2>
+
+<input id="adminName" placeholder="Admin Name">
+
+<input id="adminEmail" placeholder="Admin Email">
+
+<input id="adminPhone" placeholder="Admin Phone">
+
+<select id="adminRole">
+<option>Super Admin</option>
+<option>Church Admin</option>
+<option>Moderator</option>
+<option>Editor</option>
+<option>Viewer</option>
+</select>
+
+<button class="admin" onclick="addAdmin()">
+Add Admin
+</button>
+
+</div>
+
+</div>
+
+<div id="logs" class="logs">
+SYSTEM READY...
+</div>
 
 </div>
 
 <script>
-function deleteChurch(btn) {
-    let card = btn.parentElement;
-    let churchName = card.firstChild.textContent.trim();
 
-    if (confirm("Are you sure you want to delete: " + churchName + "?")) {
-        card.remove();
-        alert("Church deleted successfully!");
-    }
+let churches = [];
+let admins = [];
+
+function log(message){
+const logs = document.getElementById("logs");
+logs.innerHTML += "<br>[" +
+new Date().toLocaleTimeString() +
+"] " + message;
+logs.scrollTop = logs.scrollHeight;
 }
+
+function createChurch(){
+
+const church = {
+name: document.getElementById("churchName").value,
+pastor: document.getElementById("pastorName").value,
+email: document.getElementById("churchEmail").value,
+phone: document.getElementById("churchPhone").value,
+country: document.getElementById("country").value,
+city: document.getElementById("city").value
+};
+
+churches.push(church);
+
+log("Church Created: " + church.name);
+
+alert("Church Created Successfully");
+
+}
+
+function addAdmin(){
+
+const admin = {
+name: document.getElementById("adminName").value,
+email: document.getElementById("adminEmail").value,
+phone: document.getElementById("adminPhone").value,
+role: document.getElementById("adminRole").value
+};
+
+admins.push(admin);
+
+log("Admin Added: " + admin.name +
+" (" + admin.role + ")");
+
+alert("Admin Added Successfully");
+
+}
+
 </script>
 
 </body>
 </html>
+```
