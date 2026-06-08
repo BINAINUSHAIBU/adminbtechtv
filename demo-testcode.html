@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>WORLDTV LIVE PLATFORM</title>
+<title>WORLDTV ULTRA LIVE PLATFORM</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -13,19 +13,19 @@
 <style>
 
 :root{
---bg:#050816;
---panel:#0f1729;
---card:#162033;
---line:#25324c;
+--bg:#040816;
+--panel:#0f172a;
+--card:#17233a;
+--line:#253554;
 --text:#ffffff;
---muted:#93a4c3;
+--muted:#8ea0c3;
 --primary:#00d4ff;
 --primary2:#4f46e5;
---success:#00d084;
---danger:#ff4d6d;
---warning:#ffb020;
---radius:20px;
---shadow:0 10px 30px rgba(0,0,0,.4);
+--green:#00d084;
+--red:#ff4d6d;
+--orange:#ffb020;
+--shadow:0 10px 35px rgba(0,0,0,.45);
+--radius:22px;
 }
 
 *{
@@ -41,32 +41,30 @@ color:var(--text);
 overflow-x:hidden;
 }
 
-.app{
+/* HEADER */
+
+header{
+position:sticky;
+top:0;
+z-index:999;
+background:rgba(4,8,22,.96);
+backdrop-filter:blur(14px);
+border-bottom:1px solid rgba(255,255,255,.05);
+padding:18px 30px;
 display:flex;
-min-height:100vh;
-}
-
-/* SIDEBAR */
-
-.sidebar{
-width:280px;
-background:#0b1220;
-border-right:1px solid rgba(255,255,255,.05);
-padding:25px;
-position:fixed;
-height:100vh;
-overflow:auto;
-z-index:100;
+align-items:center;
+justify-content:space-between;
+flex-wrap:wrap;
+gap:20px;
 }
 
 .logo{
 display:flex;
 align-items:center;
-gap:15px;
-margin-bottom:35px;
+gap:14px;
 }
 
-.logo-icon{
+.logo-box{
 width:58px;
 height:58px;
 border-radius:18px;
@@ -79,7 +77,7 @@ font-weight:800;
 }
 
 .logo h1{
-font-size:24px;
+font-size:26px;
 font-weight:800;
 }
 
@@ -88,145 +86,175 @@ font-size:13px;
 color:var(--muted);
 }
 
-.menu-title{
-font-size:11px;
-text-transform:uppercase;
-letter-spacing:1px;
-color:#6e84a8;
-margin:25px 0 12px;
-}
-
-.menu{
+.top-menu{
 display:flex;
-flex-direction:column;
-gap:10px;
+gap:12px;
+flex-wrap:wrap;
 }
 
-.menu button{
-width:100%;
-background:none;
+.top-menu button{
+background:#162237;
 border:none;
-padding:14px 16px;
-border-radius:16px;
-display:flex;
-align-items:center;
-gap:14px;
-color:#d8e2ff;
-font-size:15px;
-font-weight:600;
+color:white;
+padding:12px 18px;
+border-radius:14px;
+font-weight:700;
 cursor:pointer;
 transition:.3s;
 }
 
-.menu button:hover,
-.menu button.active{
-background:linear-gradient(90deg,rgba(0,212,255,.18),rgba(79,70,229,.18));
-border:1px solid rgba(255,255,255,.06);
+.top-menu button:hover{
+background:linear-gradient(135deg,var(--primary),var(--primary2));
+transform:translateY(-2px);
 }
 
-.live-status{
-margin-top:30px;
-background:linear-gradient(135deg,#00d08422,#00d4ff22);
-padding:18px;
-border-radius:18px;
-border:1px solid rgba(255,255,255,.05);
-}
-
-.live-status h4{
-margin-bottom:10px;
-}
-
-.status-line{
-display:flex;
-align-items:center;
-gap:10px;
-margin-top:10px;
-font-size:14px;
-color:#c9d6f1;
-}
-
-.dot{
-width:10px;
-height:10px;
-border-radius:50%;
-background:var(--success);
-box-shadow:0 0 12px var(--success);
-}
-
-/* MAIN */
-
-.main{
-margin-left:280px;
-width:calc(100% - 280px);
-padding:25px;
-}
-
-/* TOP */
-
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:20px;
-flex-wrap:wrap;
-margin-bottom:25px;
-}
-
-.search{
-flex:1;
-min-width:250px;
-background:var(--panel);
-padding:15px 18px;
-border-radius:16px;
+.search-box{
 display:flex;
 align-items:center;
 gap:12px;
-border:1px solid rgba(255,255,255,.05);
+background:#111b2e;
+padding:14px 18px;
+border-radius:16px;
+min-width:300px;
 }
 
-.search input{
+.search-box input{
 background:none;
 border:none;
 outline:none;
-width:100%;
 color:white;
-font-size:15px;
+width:100%;
+font-size:14px;
 }
 
-.user-box{
-display:flex;
+/* HERO */
+
+.hero{
+padding:40px 30px;
+display:grid;
+grid-template-columns:1.5fr 1fr;
+gap:30px;
 align-items:center;
+}
+
+.hero-left{
+background:
+linear-gradient(135deg,rgba(0,212,255,.18),rgba(79,70,229,.18)),
+url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1600&auto=format&fit=crop');
+background-size:cover;
+background-position:center;
+padding:50px;
+border-radius:32px;
+box-shadow:var(--shadow);
+}
+
+.hero-left h1{
+font-size:52px;
+line-height:1.1;
+margin-bottom:20px;
+max-width:700px;
+}
+
+.hero-left p{
+font-size:16px;
+line-height:1.8;
+max-width:650px;
+color:#d9e7ff;
+margin-bottom:25px;
+}
+
+.hero-buttons{
+display:flex;
 gap:15px;
-background:var(--panel);
-padding:12px 18px;
-border-radius:16px;
-border:1px solid rgba(255,255,255,.05);
+flex-wrap:wrap;
 }
 
-.avatar{
-width:48px;
-height:48px;
-border-radius:50%;
+.btn{
+padding:15px 24px;
+border:none;
+border-radius:15px;
+font-weight:700;
+cursor:pointer;
+transition:.3s;
+}
+
+.btn-primary{
 background:linear-gradient(135deg,var(--primary),var(--primary2));
+color:white;
+}
+
+.btn-dark{
+background:#1b2942;
+color:white;
+}
+
+.btn-red{
+background:linear-gradient(135deg,#ff4d6d,#ff6d84);
+color:white;
+}
+
+.btn:hover{
+transform:translateY(-3px);
+}
+
+.hero-right{
+display:grid;
+gap:20px;
+}
+
+.quick-card{
+background:var(--panel);
+padding:24px;
+border-radius:24px;
+border:1px solid rgba(255,255,255,.05);
+box-shadow:var(--shadow);
+}
+
+.quick-card h3{
+margin-bottom:14px;
+font-size:20px;
+}
+
+.quick-card p{
+font-size:14px;
+line-height:1.7;
+color:var(--muted);
+}
+
+.server-status{
 display:flex;
+flex-direction:column;
+gap:12px;
+margin-top:18px;
+}
+
+.server-item{
+display:flex;
+justify-content:space-between;
 align-items:center;
-justify-content:center;
-font-weight:800;
+background:#17233a;
+padding:12px 15px;
+border-radius:14px;
+}
+
+.live{
+color:var(--green);
+font-weight:700;
 }
 
 /* PLAYER */
 
-.player-wrapper{
+.player-section{
+padding:0 30px 30px;
 display:grid;
 grid-template-columns:2fr 1fr;
 gap:25px;
-margin-bottom:30px;
 }
 
 .player-card{
 background:var(--panel);
-border-radius:24px;
-padding:20px;
+padding:22px;
+border-radius:28px;
 border:1px solid rgba(255,255,255,.05);
 box-shadow:var(--shadow);
 }
@@ -235,154 +263,125 @@ box-shadow:var(--shadow);
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:18px;
+margin-bottom:20px;
 flex-wrap:wrap;
 gap:15px;
 }
 
 .player-header h2{
-font-size:24px;
+font-size:28px;
 }
 
-.live-badge{
-background:rgba(0,208,132,.15);
-color:var(--success);
-padding:10px 14px;
+.badge{
+background:#00d08422;
+color:var(--green);
+padding:10px 15px;
 border-radius:999px;
-font-size:13px;
-font-weight:700;
-display:flex;
-align-items:center;
-gap:8px;
+font-size:12px;
+font-weight:800;
 }
 
 video{
 width:100%;
-height:540px;
+height:560px;
+border-radius:20px;
 background:black;
-border-radius:18px;
 object-fit:cover;
 }
 
-.controls{
+.player-controls{
 display:flex;
 gap:15px;
-flex-wrap:wrap;
 margin-top:20px;
+flex-wrap:wrap;
 }
 
-.btn{
-padding:14px 22px;
-border:none;
-border-radius:14px;
-font-weight:700;
-cursor:pointer;
-transition:.3s;
-}
+/* CHANNELS */
 
-.primary{
-background:linear-gradient(135deg,var(--primary),var(--primary2));
-color:white;
-}
-
-.secondary{
-background:#202d44;
-color:white;
-}
-
-.danger{
-background:linear-gradient(135deg,#ff4d6d,#ff6b81);
-color:white;
-}
-
-.btn:hover{
-transform:translateY(-2px);
-}
-
-/* CHANNEL LIST */
-
-.channel-list{
+.channels-card{
 background:var(--panel);
-border-radius:24px;
-padding:20px;
+padding:22px;
+border-radius:28px;
 border:1px solid rgba(255,255,255,.05);
-height:100%;
+box-shadow:var(--shadow);
 overflow:auto;
+max-height:760px;
 }
 
-.channel-list h3{
+.channels-card h3{
 margin-bottom:20px;
+font-size:24px;
 }
 
 .channel{
 display:flex;
-align-items:center;
 justify-content:space-between;
-gap:12px;
-padding:14px;
+align-items:center;
+gap:15px;
+padding:16px;
 background:var(--card);
-border-radius:16px;
-margin-bottom:14px;
+border-radius:18px;
+margin-bottom:16px;
 cursor:pointer;
 transition:.3s;
 border:1px solid transparent;
 }
 
 .channel:hover{
-border-color:rgba(0,212,255,.4);
-transform:translateX(4px);
+border-color:rgba(0,212,255,.45);
+transform:translateX(5px);
 }
 
 .channel-left{
 display:flex;
 align-items:center;
-gap:14px;
+gap:15px;
 }
 
 .channel-logo{
-width:55px;
-height:55px;
-border-radius:14px;
-background:linear-gradient(135deg,var(--primary),var(--primary2));
+width:60px;
+height:60px;
+border-radius:18px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:20px;
+background:linear-gradient(135deg,var(--primary),var(--primary2));
+font-size:24px;
 font-weight:800;
 }
 
 .channel h4{
-font-size:15px;
 margin-bottom:5px;
+font-size:16px;
 }
 
 .channel p{
-font-size:12px;
+font-size:13px;
 color:var(--muted);
 }
 
 .tag{
-padding:6px 12px;
-border-radius:999px;
+padding:7px 12px;
+background:#00d4ff22;
+color:#7de7ff;
 font-size:11px;
 font-weight:700;
-background:rgba(0,212,255,.12);
-color:#88e8ff;
+border-radius:999px;
 }
 
 /* STATS */
 
 .stats{
+padding:0 30px 30px;
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:20px;
-margin-bottom:30px;
 }
 
 .stat{
 background:var(--panel);
-padding:24px;
-border-radius:22px;
+padding:25px;
+border-radius:24px;
 border:1px solid rgba(255,255,255,.05);
 box-shadow:var(--shadow);
 }
@@ -391,38 +390,42 @@ box-shadow:var(--shadow);
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:16px;
+margin-bottom:18px;
 }
 
-.stat-icon{
-width:60px;
-height:60px;
+.icon{
+width:62px;
+height:62px;
 border-radius:18px;
+background:linear-gradient(135deg,#00d4ff22,#4f46e522);
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:24px;
-background:linear-gradient(135deg,#00d4ff22,#4f46e522);
+font-size:28px;
 }
 
 .stat h2{
-font-size:34px;
+font-size:38px;
 margin-bottom:8px;
 }
 
 .stat p{
 color:var(--muted);
-font-size:14px;
 }
 
 /* TABLE */
 
+.table-section{
+padding:0 30px 40px;
+}
+
 .table-card{
 background:var(--panel);
-padding:24px;
-border-radius:24px;
+padding:25px;
+border-radius:28px;
 border:1px solid rgba(255,255,255,.05);
 overflow:auto;
+box-shadow:var(--shadow);
 }
 
 .table-head{
@@ -437,15 +440,15 @@ gap:15px;
 table{
 width:100%;
 border-collapse:collapse;
-min-width:700px;
+min-width:800px;
 }
 
 th{
 text-align:left;
 padding:16px;
 font-size:13px;
-color:#8da1c5;
-border-bottom:1px solid rgba(255,255,255,.06);
+color:#91a5cb;
+border-bottom:1px solid rgba(255,255,255,.05);
 }
 
 td{
@@ -455,58 +458,83 @@ font-size:14px;
 }
 
 .status{
-padding:7px 12px;
+padding:8px 14px;
 border-radius:999px;
 font-size:11px;
-font-weight:700;
+font-weight:800;
 }
 
 .online{
 background:#00d08422;
-color:var(--success);
+color:var(--green);
 }
 
 .offline{
 background:#ff4d6d22;
-color:var(--danger);
+color:var(--red);
 }
 
-.footer{
-margin-top:30px;
+.warning{
+background:#ffb02022;
+color:var(--orange);
+}
+
+/* FOOTER */
+
+footer{
+padding:30px;
 text-align:center;
-color:#8496b6;
-padding-bottom:30px;
+color:#7e93b8;
 }
 
 /* MOBILE */
 
 @media(max-width:1100px){
 
-.player-wrapper{
+.hero{
+grid-template-columns:1fr;
+}
+
+.player-section{
 grid-template-columns:1fr;
 }
 
 video{
-height:400px;
+height:420px;
 }
 
 }
 
-@media(max-width:900px){
+@media(max-width:700px){
 
-.app{
-flex-direction:column;
+header{
+padding:20px;
 }
 
-.sidebar{
-position:relative;
-width:100%;
-height:auto;
+.hero{
+padding:20px;
 }
 
-.main{
-margin-left:0;
-width:100%;
+.hero-left{
+padding:35px;
+}
+
+.hero-left h1{
+font-size:38px;
+}
+
+.player-section,
+.stats,
+.table-section{
+padding:20px;
+}
+
+.search-box{
+min-width:100%;
+}
+
+video{
+height:300px;
 }
 
 }
@@ -515,185 +543,196 @@ width:100%;
 </head>
 <body>
 
-<div class="app">
+<!-- HEADER -->
 
-<!-- SIDEBAR -->
-
-<div class="sidebar">
+<header>
 
 <div class="logo">
-<div class="logo-icon">📺</div>
+<div class="logo-box">📺</div>
+
 <div>
-<h1>WORLDTV</h1>
-<p>Live Streaming Network</p>
+<h1>WORLDTV ULTRA</h1>
+<p>Global IPTV Streaming Platform</p>
 </div>
 </div>
 
-<div class="menu-title">Navigation</div>
-
-<div class="menu">
-<button class="active">🏠 Dashboard</button>
+<div class="top-menu">
+<button>🏠 Dashboard</button>
 <button>📡 Live TV</button>
 <button>⚽ Sports</button>
 <button>🎬 Movies</button>
 <button>📰 News</button>
-<button>🎵 Music</button>
 <button>⛪ Gospel</button>
-<button>🌍 International</button>
-</div>
-
-<div class="menu-title">User</div>
-
-<div class="menu">
-<button>❤️ Favorites</button>
-<button>🕘 Watch History</button>
-<button>⬇ Downloads</button>
 <button>⚙ Settings</button>
-<button>🚪 Logout</button>
 </div>
 
-<div class="live-status">
-<h4>Streaming Server</h4>
-
-<div class="status-line">
-<div class="dot"></div>
-<span>All Systems Online</span>
-</div>
-
-<div class="status-line">
-<div class="dot"></div>
-<span>CDN Active</span>
-</div>
-
-<div class="status-line">
-<div class="dot"></div>
-<span>4K Streaming Enabled</span>
-</div>
-
-</div>
-
-</div>
-
-<!-- MAIN -->
-
-<div class="main">
-
-<!-- TOPBAR -->
-
-<div class="topbar">
-
-<div class="search">
+<div class="search-box">
 🔍
 <input type="text" id="searchInput" placeholder="Search channels...">
 </div>
 
-<div class="user-box">
-<div>
-<h4>BTECH USER</h4>
-<p style="font-size:13px;color:var(--muted);">Premium Subscription</p>
-</div>
-<div class="avatar">BT</div>
+</header>
+
+<!-- HERO -->
+
+<section class="hero">
+
+<div class="hero-left">
+
+<h1>WORLDTV LIVE STREAMING EXPERIENCE</h1>
+
+<p>
+Professional global IPTV platform with live channels, sports,
+movies, church streaming, entertainment, 4K playback,
+ultra-fast CDN delivery and modern user dashboard.
+</p>
+
+<div class="hero-buttons">
+<button class="btn btn-primary" onclick="playChannel(channels[0])">
+▶ Start Watching
+</button>
+
+<button class="btn btn-dark">
+📡 Browse Channels
+</button>
+
+<button class="btn btn-red" onclick="stopPlayer()">
+⛔ Stop Player
+</button>
 </div>
 
 </div>
+
+<div class="hero-right">
+
+<div class="quick-card">
+
+<h3>📊 Server Status</h3>
+
+<p>
+All streaming servers are connected and optimized for
+ultra-fast global playback.
+</p>
+
+<div class="server-status">
+
+<div class="server-item">
+<span>Europe CDN</span>
+<span class="live">ONLINE</span>
+</div>
+
+<div class="server-item">
+<span>Africa CDN</span>
+<span class="live">ONLINE</span>
+</div>
+
+<div class="server-item">
+<span>Asia CDN</span>
+<span class="live">ONLINE</span>
+</div>
+
+<div class="server-item">
+<span>USA CDN</span>
+<span class="live">ONLINE</span>
+</div>
+
+</div>
+
+</div>
+
+<div class="quick-card">
+
+<h3>🔥 Live Statistics</h3>
+
+<div class="server-status">
+
+<div class="server-item">
+<span>Live Channels</span>
+<strong>2,500+</strong>
+</div>
+
+<div class="server-item">
+<span>Active Users</span>
+<strong>125K</strong>
+</div>
+
+<div class="server-item">
+<span>Streaming Quality</span>
+<strong>4K UHD</strong>
+</div>
+
+<div class="server-item">
+<span>Server Uptime</span>
+<strong>99.9%</strong>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
 
 <!-- PLAYER -->
 
-<div class="player-wrapper">
+<section class="player-section">
 
 <div class="player-card">
 
 <div class="player-header">
+
 <h2 id="channelTitle">WORLD SPORTS HD</h2>
 
-<div class="live-badge">
+<div class="badge">
 🔴 LIVE STREAMING
 </div>
+
 </div>
 
 <video id="video" controls autoplay muted></video>
 
-<div class="controls">
-<button class="btn primary" onclick="playChannel(currentChannel)">
-▶ Play Live
+<div class="player-controls">
+
+<button class="btn btn-primary" onclick="playChannel(currentChannel)">
+▶ Play
 </button>
 
-<button class="btn secondary" onclick="toggleFullscreen()">
+<button class="btn btn-dark" onclick="toggleFullscreen()">
 ⛶ Fullscreen
 </button>
 
-<button class="btn secondary" onclick="volumeUp()">
+<button class="btn btn-dark" onclick="volumeUp()">
 🔊 Volume
 </button>
 
-<button class="btn danger" onclick="stopPlayer()">
+<button class="btn btn-dark" onclick="refreshPlayer()">
+🔄 Refresh
+</button>
+
+<button class="btn btn-red" onclick="stopPlayer()">
 ⛔ Stop
 </button>
-</div>
-
-</div>
-
-<!-- CHANNEL LIST -->
-
-<div class="channel-list">
-
-<h3>Live Channels</h3>
-
-<div id="channelContainer">
-
-<div class="channel" onclick="playChannel(channels[0])">
-<div class="channel-left">
-<div class="channel-logo">⚽</div>
-<div>
-<h4>WORLD SPORTS HD</h4>
-<p>Live Sports Streaming</p>
-</div>
-</div>
-<div class="tag">LIVE</div>
-</div>
-
-<div class="channel" onclick="playChannel(channels[1])">
-<div class="channel-left">
-<div class="channel-logo">📰</div>
-<div>
-<h4>GLOBAL NEWS</h4>
-<p>24/7 World News</p>
-</div>
-</div>
-<div class="tag">HD</div>
-</div>
-
-<div class="channel" onclick="playChannel(channels[2])">
-<div class="channel-left">
-<div class="channel-logo">🎵</div>
-<div>
-<h4>MUSIC TV</h4>
-<p>Top Music Videos</p>
-</div>
-</div>
-<div class="tag">4K</div>
-</div>
-
-<div class="channel" onclick="playChannel(channels[3])">
-<div class="channel-left">
-<div class="channel-logo">⛪</div>
-<div>
-<h4>GOSPEL TV</h4>
-<p>Church Live Programs</p>
-</div>
-</div>
-<div class="tag">LIVE</div>
-</div>
 
 </div>
 
 </div>
 
+<!-- CHANNELS -->
+
+<div class="channels-card">
+
+<h3>📡 Live Channels</h3>
+
+<div id="channelContainer"></div>
+
 </div>
+
+</section>
 
 <!-- STATS -->
 
-<div class="stats">
+<section class="stats">
 
 <div class="stat">
 <div class="stat-top">
@@ -701,27 +740,27 @@ width:100%;
 <h2>2,500+</h2>
 <p>Global Channels</p>
 </div>
-<div class="stat-icon">📺</div>
+<div class="icon">📺</div>
 </div>
 </div>
 
 <div class="stat">
 <div class="stat-top">
 <div>
-<h2>120K</h2>
+<h2>125K</h2>
 <p>Active Viewers</p>
 </div>
-<div class="stat-icon">👥</div>
+<div class="icon">👥</div>
 </div>
 </div>
 
 <div class="stat">
 <div class="stat-top">
 <div>
-<h2>4K UHD</h2>
-<p>Streaming Quality</p>
+<h2>4K</h2>
+<p>Ultra HD Streaming</p>
 </div>
-<div class="stat-icon">⚡</div>
+<div class="icon">⚡</div>
 </div>
 </div>
 
@@ -731,22 +770,26 @@ width:100%;
 <h2>99.9%</h2>
 <p>Server Uptime</p>
 </div>
-<div class="stat-icon">🟢</div>
+<div class="icon">🟢</div>
 </div>
 </div>
 
-</div>
+</section>
 
 <!-- TABLE -->
+
+<section class="table-section">
 
 <div class="table-card">
 
 <div class="table-head">
-<h2>Streaming Server Dashboard</h2>
 
-<button class="btn primary">
+<h2>🌍 Streaming Infrastructure</h2>
+
+<button class="btn btn-primary">
 + Add Stream
 </button>
+
 </div>
 
 <table>
@@ -767,7 +810,7 @@ width:100%;
 <td>WORLDTV CDN-01</td>
 <td>Europe</td>
 <td>10Gbps</td>
-<td>12,430</td>
+<td>14,250</td>
 <td><span class="status online">ONLINE</span></td>
 </tr>
 
@@ -775,7 +818,7 @@ width:100%;
 <td>WORLDTV CDN-02</td>
 <td>USA</td>
 <td>8Gbps</td>
-<td>9,890</td>
+<td>11,420</td>
 <td><span class="status online">ONLINE</span></td>
 </tr>
 
@@ -783,7 +826,7 @@ width:100%;
 <td>WORLDTV CDN-03</td>
 <td>Africa</td>
 <td>6Gbps</td>
-<td>7,210</td>
+<td>8,340</td>
 <td><span class="status online">ONLINE</span></td>
 </tr>
 
@@ -791,7 +834,15 @@ width:100%;
 <td>WORLDTV CDN-04</td>
 <td>Asia</td>
 <td>5Gbps</td>
-<td>5,320</td>
+<td>5,210</td>
+<td><span class="status warning">OPTIMIZING</span></td>
+</tr>
+
+<tr>
+<td>WORLDTV CDN-05</td>
+<td>Middle East</td>
+<td>4Gbps</td>
+<td>4,110</td>
 <td><span class="status offline">OFFLINE</span></td>
 </tr>
 
@@ -801,48 +852,118 @@ width:100%;
 
 </div>
 
-<div class="footer">
-© 2026 WORLDTV LIVE PLATFORM • Professional IPTV Dashboard
-</div>
+</section>
 
-</div>
-
-</div>
+<footer>
+© 2026 WORLDTV ULTRA LIVE PLATFORM • One Page IPTV Streaming Dashboard
+</footer>
 
 <script>
 
-/* CHANNEL STREAMS */
+/* CHANNEL DATABASE */
 
 const channels = [
 
 {
 name:"WORLD SPORTS HD",
+category:"Sports",
+logo:"⚽",
+tag:"LIVE",
 url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
 },
 
 {
 name:"GLOBAL NEWS",
+category:"News",
+logo:"📰",
+tag:"HD",
 url:"https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8"
 },
 
 {
+name:"MOVIE MAX",
+category:"Movies",
+logo:"🎬",
+tag:"4K",
+url:"https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+},
+
+{
 name:"MUSIC TV",
+category:"Music",
+logo:"🎵",
+tag:"LIVE",
 url:"https://moiptvhls-i.akamaihd.net/hls/live/652316/Live_1/master.m3u8"
 },
 
 {
 name:"GOSPEL TV",
+category:"Church",
+logo:"⛪",
+tag:"HD",
 url:"https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+},
+
+{
+name:"KIDS WORLD",
+category:"Kids",
+logo:"🧸",
+tag:"HD",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
 }
 
 ];
 
+/* PLAYER */
+
 let currentChannel = channels[0];
 
 const video = document.getElementById('video');
+
 const channelTitle = document.getElementById('channelTitle');
 
-/* PLAY CHANNEL */
+let hls;
+
+/* RENDER CHANNELS */
+
+function renderChannels(){
+
+const container = document.getElementById('channelContainer');
+
+container.innerHTML = '';
+
+channels.forEach(channel=>{
+
+container.innerHTML += `
+
+<div class="channel" onclick='playChannel(${JSON.stringify(channel)})'>
+
+<div class="channel-left">
+
+<div class="channel-logo">
+${channel.logo}
+</div>
+
+<div>
+<h4>${channel.name}</h4>
+<p>${channel.category} Streaming</p>
+</div>
+
+</div>
+
+<div class="tag">
+${channel.tag}
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+/* PLAY STREAM */
 
 function playChannel(channel){
 
@@ -850,32 +971,41 @@ currentChannel = channel;
 
 channelTitle.innerText = channel.name;
 
+if(hls){
+hls.destroy();
+}
+
 if(Hls.isSupported()){
 
-const hls = new Hls();
+hls = new Hls();
 
 hls.loadSource(channel.url);
 
 hls.attachMedia(video);
 
 hls.on(Hls.Events.MANIFEST_PARSED,function(){
+
 video.play();
+
 });
 
 }else if(video.canPlayType('application/vnd.apple.mpegurl')){
 
 video.src = channel.url;
+
 video.play();
 
 }
 
 }
 
-/* START DEFAULT CHANNEL */
+/* PLAYER CONTROLS */
 
-playChannel(currentChannel);
+function stopPlayer(){
 
-/* FULLSCREEN */
+video.pause();
+
+}
 
 function toggleFullscreen(){
 
@@ -885,16 +1015,6 @@ video.requestFullscreen();
 
 }
 
-/* STOP PLAYER */
-
-function stopPlayer(){
-
-video.pause();
-
-}
-
-/* VOLUME */
-
 function volumeUp(){
 
 if(video.volume < 1){
@@ -903,11 +1023,17 @@ video.volume += 0.1;
 
 }
 
+function refreshPlayer(){
+
+playChannel(currentChannel);
+
+}
+
 /* SEARCH */
 
-const searchInput = document.getElementById('searchInput');
+document.getElementById('searchInput')
 
-searchInput.addEventListener('keyup',function(){
+.addEventListener('keyup',function(){
 
 let value = this.value.toLowerCase();
 
@@ -922,6 +1048,12 @@ channel.style.display = text.includes(value)
 });
 
 });
+
+/* INIT */
+
+renderChannels();
+
+playChannel(currentChannel);
 
 </script>
 
