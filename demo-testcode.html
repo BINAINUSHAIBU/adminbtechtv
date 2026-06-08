@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Church Super Admin</title>
+<title>Create Church & Manage Roles</title>
 
 <style>
 
@@ -32,7 +32,7 @@ padding:20px;
 
 .grid{
 display:grid;
-grid-template-columns:1fr 1fr;
+grid-template-columns:repeat(auto-fit,minmax(450px,1fr));
 gap:20px;
 }
 
@@ -65,6 +65,7 @@ border:none;
 border-radius:8px;
 cursor:pointer;
 font-weight:bold;
+margin-top:5px;
 }
 
 .create{
@@ -72,14 +73,14 @@ background:#16a34a;
 color:white;
 }
 
-.admin{
-background:#f59e0b;
+.role{
+background:#7c3aed;
 color:white;
 }
 
 .logs{
 margin-top:20px;
-background:black;
+background:#000;
 padding:15px;
 height:250px;
 overflow:auto;
@@ -93,7 +94,7 @@ font-family:monospace;
 <body>
 
 <div class="header">
-⛪ CHURCH SUPER ADMIN DASHBOARD
+⛪ CHURCH SUPER ADMIN
 </div>
 
 <div class="container">
@@ -118,25 +119,29 @@ font-family:monospace;
 
 <input id="city" placeholder="City">
 
+<select id="churchType">
+<option>Pentecostal</option>
+<option>Catholic</option>
+<option>Anglican</option>
+<option>Baptist</option>
+<option>Methodist</option>
+</select>
+
 <button class="create" onclick="createChurch()">
 Create Church
 </button>
 
 </div>
 
-<!-- ADD ADMIN -->
+<!-- MANAGE ROLES -->
 
 <div class="card">
 
-<h2>👥 Add Admin</h2>
+<h2>🛡 Manage Roles</h2>
 
-<input id="adminName" placeholder="Admin Name">
+<input id="userName" placeholder="User Name">
 
-<input id="adminEmail" placeholder="Admin Email">
-
-<input id="adminPhone" placeholder="Admin Phone">
-
-<select id="adminRole">
+<select id="roleSelect">
 <option>Super Admin</option>
 <option>Church Admin</option>
 <option>Moderator</option>
@@ -144,8 +149,12 @@ Create Church
 <option>Viewer</option>
 </select>
 
-<button class="admin" onclick="addAdmin()">
-Add Admin
+<button class="role" onclick="assignRole()">
+Assign Role
+</button>
+
+<button class="role" onclick="viewRoles()">
+View Assigned Roles
 </button>
 
 </div>
@@ -161,11 +170,12 @@ SYSTEM READY...
 <script>
 
 let churches = [];
-let admins = [];
+let roles = [];
 
 function log(message){
-const logs = document.getElementById("logs");
-logs.innerHTML += "<br>[" +
+const logs = document.getElementById('logs');
+logs.innerHTML +=
+"<br>[" +
 new Date().toLocaleTimeString() +
 "] " + message;
 logs.scrollTop = logs.scrollHeight;
@@ -174,12 +184,13 @@ logs.scrollTop = logs.scrollHeight;
 function createChurch(){
 
 const church = {
-name: document.getElementById("churchName").value,
-pastor: document.getElementById("pastorName").value,
-email: document.getElementById("churchEmail").value,
-phone: document.getElementById("churchPhone").value,
-country: document.getElementById("country").value,
-city: document.getElementById("city").value
+name: churchName.value,
+pastor: pastorName.value,
+email: churchEmail.value,
+phone: churchPhone.value,
+country: country.value,
+city: city.value,
+type: churchType.value
 };
 
 churches.push(church);
@@ -187,25 +198,34 @@ churches.push(church);
 log("Church Created: " + church.name);
 
 alert("Church Created Successfully");
-
 }
 
-function addAdmin(){
+function assignRole(){
 
-const admin = {
-name: document.getElementById("adminName").value,
-email: document.getElementById("adminEmail").value,
-phone: document.getElementById("adminPhone").value,
-role: document.getElementById("adminRole").value
+const role = {
+user: userName.value,
+role: roleSelect.value
 };
 
-admins.push(admin);
+roles.push(role);
 
-log("Admin Added: " + admin.name +
-" (" + admin.role + ")");
+log("Role Assigned: " + role.user + " → " + role.role);
 
-alert("Admin Added Successfully");
+alert("Role Assigned Successfully");
+}
 
+function viewRoles(){
+
+if(roles.length === 0){
+alert("No roles assigned");
+return;
+}
+
+let output = roles
+.map(r => r.user + " → " + r.role)
+.join("\\n");
+
+alert(output);
 }
 
 </script>
