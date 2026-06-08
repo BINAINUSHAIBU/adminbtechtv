@@ -1,9 +1,15 @@
-```html
+```html id="r1v9zk"
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+/>
 
 <title>BTECH CHURCH TV NETWORK</title>
 
@@ -17,6 +23,9 @@
 --card:#172033;
 --hover:#22304d;
 --accent:#00d4ff;
+--success:#16a34a;
+--danger:#ef4444;
+--gold:#facc15;
 --text:#ffffff;
 --muted:#94a3b8;
 }
@@ -31,7 +40,7 @@ font-family:Arial,sans-serif;
 body{
 background:var(--bg);
 color:var(--text);
-overflow:hidden;
+overflow-x:hidden;
 }
 
 .header{
@@ -42,6 +51,9 @@ align-items:center;
 justify-content:space-between;
 padding:0 20px;
 border-bottom:1px solid rgba(255,255,255,.05);
+position:sticky;
+top:0;
+z-index:1000;
 }
 
 .logo{
@@ -52,21 +64,22 @@ color:var(--accent);
 
 .container{
 display:flex;
-height:calc(100vh - 70px);
+min-height:calc(100vh - 70px);
 }
 
+/* SIDEBAR */
+
 .sidebar{
-width:320px;
+width:300px;
 background:#0b1220;
-overflow-y:auto;
 padding:15px;
+overflow-y:auto;
 border-right:1px solid rgba(255,255,255,.05);
 }
 
-.main{
-flex:1;
-overflow-y:auto;
-padding:20px;
+.sidebar h2{
+margin-bottom:20px;
+color:var(--accent);
 }
 
 .church{
@@ -83,24 +96,21 @@ background:var(--hover);
 transform:translateY(-2px);
 }
 
-.card{
-background:var(--card);
+/* MAIN */
+
+.main{
+flex:1;
 padding:20px;
-border-radius:15px;
-margin-bottom:20px;
+overflow-y:auto;
 }
 
-.card h3{
-margin-bottom:15px;
-color:var(--accent);
-text-align:center;
-}
+/* STATS */
 
 .stats{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:15px;
-margin-top:20px;
+margin-bottom:20px;
 }
 
 .stat{
@@ -111,11 +121,30 @@ text-align:center;
 }
 
 .stat h1{
+font-size:35px;
 color:var(--accent);
 margin-bottom:10px;
 }
 
-select,input{
+/* CARDS */
+
+.card{
+background:var(--card);
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+}
+
+.card h3{
+margin-bottom:15px;
+text-align:center;
+color:var(--accent);
+}
+
+/* INPUTS */
+
+select,
+input{
 width:100%;
 padding:12px;
 border:none;
@@ -123,7 +152,10 @@ border-radius:10px;
 margin-bottom:12px;
 background:#0f172a;
 color:#fff;
+font-size:15px;
 }
+
+/* VIDEO */
 
 video{
 width:100%;
@@ -132,18 +164,45 @@ background:#000;
 border-radius:12px;
 }
 
+/* CHANNEL LIST */
+
 #channels{
 margin-top:15px;
-max-height:260px;
+max-height:300px;
 overflow-y:auto;
 }
 
-.footer{
-margin-top:20px;
-text-align:center;
-color:var(--muted);
-padding:15px;
+/* CONTROL BUTTONS */
+
+.controls{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
 }
+
+.btn{
+background:#0f172a;
+padding:15px;
+border-radius:12px;
+cursor:pointer;
+transition:.3s;
+text-align:center;
+font-weight:bold;
+}
+
+.btn:hover{
+background:var(--hover);
+}
+
+/* FOOTER */
+
+.footer{
+text-align:center;
+padding:20px;
+color:var(--muted);
+}
+
+/* MOBILE */
 
 @media(max-width:900px){
 
@@ -153,7 +212,7 @@ flex-direction:column;
 
 .sidebar{
 width:100%;
-height:250px;
+height:auto;
 border-right:none;
 border-bottom:1px solid rgba(255,255,255,.05);
 }
@@ -165,12 +224,19 @@ height:260px;
 }
 
 </style>
+
 </head>
 
 <body>
 
+<!-- HEADER -->
+
 <div class="header">
-<div class="logo">📺 BTECH CHURCH TV NETWORK</div>
+
+<div class="logo">
+📺 BTECH CHURCH TV NETWORK
+</div>
+
 </div>
 
 <div class="container">
@@ -179,62 +245,53 @@ height:260px;
 
 <div class="sidebar">
 
-<h3 style="margin-bottom:15px;">⛪ Churches & Channels</h3>
+<h2>⛪ Churches</h2>
 
-<div class="church" onclick="loadChurchTV('ng')">📖 Synagogue TV</div>
+<div class="church" onclick="loadChurchTV('ng')">
+🔥 RCCG TV
+</div>
 
-<div class="church" onclick="loadChurchTV('ng')">🔥 RCCG TV</div>
+<div class="church" onclick="loadChurchTV('ng')">
+🕊 Winners Chapel TV
+</div>
 
-<div class="church" onclick="loadChurchTV('ng')">🕊 Winners Chapel TV</div>
+<div class="church" onclick="loadChurchTV('ng')">
+🎤 Dunamis TV
+</div>
 
-<div class="church" onclick="loadChurchTV('ng')">🎤 Dunamis TV</div>
+<div class="church" onclick="loadChurchTV('ng')">
+📡 Christ Embassy TV
+</div>
 
-<div class="church" onclick="loadChurchTV('ng')">📡 Christ Embassy TV</div>
+<div class="church" onclick="loadChurchTV('ng')">
+🙏 MFM TV
+</div>
 
-<div class="church" onclick="loadChurchTV('ng')">🙏 MFM TV</div>
+<div class="church" onclick="loadChurchTV('ng')">
+📚 Deeper Life TV
+</div>
 
-<div class="church" onclick="loadChurchTV('ng')">📚 Deeper Life TV</div>
+<div class="church" onclick="loadChurchTV('ng')">
+✝ Catholic TV
+</div>
 
-<div class="church" onclick="loadChurchTV('ng')">✝ Catholic TV</div>
+<div class="church" onclick="loadChurchTV('ng')">
+📖 Synagogue TV
+</div>
 
-<div class="church" onclick="loadChurchTV('ng')">⛪ Anglican TV</div>
+<div class="church" onclick="loadChurchTV('us')">
+🇺🇸 Daystar TV
+</div>
+
+<div class="church" onclick="loadChurchTV('gb')">
+🇬🇧 Loveworld UK
+</div>
 
 </div>
 
 <!-- MAIN -->
 
 <div class="main">
-
-<!-- IPTV PLAYER -->
-
-<div class="card">
-
-<h3>📺 LIVE IPTV PLAYER</h3>
-
-<select id="countrySelect" onchange="loadChannels()">
-<option value="ng">Nigeria</option>
-<option value="us">USA</option>
-<option value="gb">United Kingdom</option>
-<option value="za">South Africa</option>
-<option value="in">India</option>
-</select>
-
-<input
-type="text"
-id="search"
-placeholder="Search Channels..."
-onkeyup="filterChannels()"
-/>
-
-<!-- VIDEO PLAYER -->
-
-<video id="video" controls autoplay></video>
-
-<!-- CHANNELS BELOW VIDEO -->
-
-<div id="channels"></div>
-
-</div>
 
 <!-- STATS -->
 
@@ -262,22 +319,87 @@ onkeyup="filterChannels()"
 
 </div>
 
-<!-- EXTRA DASHBOARD -->
+<!-- SUPER ADMIN -->
 
 <div class="card">
-<h3>🛡 Super Admin Controls</h3>
 
-<p style="margin-bottom:10px;">✅ Church Management</p>
-<p style="margin-bottom:10px;">✅ Stream Monitoring</p>
-<p style="margin-bottom:10px;">✅ Donation Reports</p>
-<p style="margin-bottom:10px;">✅ Security Controls</p>
-<p style="margin-bottom:10px;">✅ Analytics Dashboard</p>
-<p style="margin-bottom:10px;">✅ Multi-Country IPTV</p>
+<h3>🛡 SUPER ADMIN CONTROL PANEL</h3>
+
+<div class="controls">
+
+<div class="btn">✅ Church Management</div>
+
+<div class="btn">📡 Stream Monitoring</div>
+
+<div class="btn">💰 Donation Reports</div>
+
+<div class="btn">🛡 Security Controls</div>
+
+<div class="btn">📊 Analytics Dashboard</div>
+
+<div class="btn">🌍 Multi-Country IPTV</div>
+
+<div class="btn">⚡ Speed Boost</div>
+
+<div class="btn">♻ Restart Player</div>
+
+<div class="btn">🚀 Global Feeds</div>
+
+<div class="btn">💾 Backup System</div>
+
+<div class="btn">⛔ Shutdown Streams</div>
+
+<div class="btn">🔴 Record Mode</div>
 
 </div>
 
+</div>
+
+<!-- IPTV PLAYER -->
+
+<div class="card">
+
+<h3>📺 LIVE IPTV PLAYER</h3>
+
+<select id="countrySelect" onchange="loadChannels()">
+
+<option value="ng">Nigeria</option>
+
+<option value="us">USA</option>
+
+<option value="gb">United Kingdom</option>
+
+<option value="za">South Africa</option>
+
+<option value="in">India</option>
+
+</select>
+
+<input
+type="text"
+id="search"
+placeholder="Search Channels..."
+onkeyup="filterChannels()"
+/>
+
+<!-- VIDEO -->
+
+<video
+id="video"
+controls
+autoplay
+></video>
+
+<!-- CHANNELS BELOW -->
+
+<div id="channels"></div>
+
+</div>
+
+<!-- FOOTER -->
+
 <div class="footer">
-© 2026 BTECH Church TV Network — All Rights Reserved
+© 2026 BTECH CHURCH TV NETWORK — ALL RIGHTS RESERVED
 </div>
 
 </div>
@@ -288,13 +410,18 @@ onkeyup="filterChannels()"
 
 let allChannels = [];
 
+/* LOAD CHURCH */
+
 function loadChurchTV(country){
 
-document.getElementById("countrySelect").value = country;
+document.getElementById("countrySelect").value =
+country;
 
 loadChannels();
 
 }
+
+/* LOAD CHANNELS */
 
 async function loadChannels(){
 
@@ -319,6 +446,8 @@ console.error(error);
 }
 
 }
+
+/* PARSE M3U */
 
 function parseM3U(data){
 
@@ -353,6 +482,8 @@ renderChannels(allChannels);
 
 }
 
+/* RENDER CHANNELS */
+
 function renderChannels(list){
 
 let container =
@@ -366,15 +497,19 @@ let div = document.createElement('div');
 
 div.className = 'church';
 
-div.innerHTML = '📺 ' + channel.name;
+div.innerHTML =
+'📺 ' + channel.name;
 
-div.onclick = ()=> playChannel(channel.url);
+div.onclick = () =>
+playChannel(channel.url);
 
 container.appendChild(div);
 
 });
 
 }
+
+/* PLAY CHANNEL */
 
 function playChannel(url){
 
@@ -399,6 +534,8 @@ video.play();
 
 }
 
+/* SEARCH */
+
 function filterChannels(){
 
 let val =
@@ -413,6 +550,8 @@ c.name.toLowerCase().includes(val)
 renderChannels(filtered);
 
 }
+
+/* AUTO LOAD */
 
 loadChannels();
 
