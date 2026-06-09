@@ -402,7 +402,75 @@ https://your-stream-url-2.m3u8
 #EXTINF:-1 tvg-logo="" group-title="News",Al Jazeera
 https://your-stream-url-3.m3u8
 `;
+let hls;
 
+function playChannel(channel){
+
+document.getElementById("channelTitle").textContent =
+channel.name;
+
+document.getElementById("channelInfo").textContent =
+channel.group;
+
+if(hls){
+hls.destroy();
+}
+
+if(Hls.isSupported()){
+
+hls = new Hls({
+enableWorker:true,
+lowLatencyMode:true
+});
+
+hls.loadSource(channel.url);
+hls.attachMedia(video);
+
+hls.on(Hls.Events.MANIFEST_PARSED,()=>{
+video.play();
+});
+
+hls.on(Hls.Events.ERROR,(event,data)=>{
+console.log(data);
+});
+
+}else{
+
+video.src = channel.url;
+video.play();
+
+}
+}
+  renderChannels(channels);
+
+if(channels.length){
+playChannel(channels[0]);
+}
+  function renderChannels(list){
+
+channelList.innerHTML = "";
+
+list.forEach((channel,index)=>{
+
+const card = document.createElement("div");
+
+card.className = "channel";
+
+card.innerHTML = `
+<div>
+<strong>${channel.name}</strong>
+<br>
+<small>${channel.group}</small>
+</div>
+`;
+
+card.onclick = () => playChannel(channel);
+
+channelList.appendChild(card);
+
+});
+
+}
 </body>
 </html>
 
