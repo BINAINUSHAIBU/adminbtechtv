@@ -1,128 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 <title>WORLDTV LIVE PLATFORM</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
+
 :root{
 --bg:#050816;
 --panel:#0f1729;
 --card:#162033;
---line:#25324c;
 --text:#fff;
 --muted:#93a4c3;
 --primary:#00d4ff;
 --primary2:#4f46e5;
+--success:#00d084;
+--danger:#ff4d6d;
+--shadow:0 10px 30px rgba(0,0,0,.4);
 }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Inter,Arial,sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
 
 body{
 background:var(--bg);
 color:var(--text);
-height:100vh;
-overflow:hidden;
+overflow-x:hidden;
 }
 
 .app{
 display:flex;
-height:100vh;
+min-height:100vh;
 }
 
+/* SIDEBAR */
 .sidebar{
-width:320px;
+width:270px;
 background:#0b1220;
-border-right:1px solid rgba(255,255,255,.05);
-display:flex;
-flex-direction:column;
+padding:25px;
+position:fixed;
+height:100vh;
+overflow:auto;
 }
 
 .logo{
+display:flex;
+gap:15px;
+align-items:center;
+margin-bottom:30px;
+}
+
+.logo-icon{
+width:55px;height:55px;border-radius:16px;
+background:linear-gradient(135deg,var(--primary),var(--primary2));
+display:flex;align-items:center;justify-content:center;
+font-size:26px;font-weight:800;
+}
+
+.menu button{
+width:100%;
+padding:12px;
+margin-bottom:10px;
+border:none;
+border-radius:12px;
+background:#162033;
+color:#fff;
+cursor:pointer;
+}
+
+/* MAIN */
+.main{
+margin-left:270px;
+width:calc(100% - 270px);
 padding:20px;
-font-size:24px;
-font-weight:800;
-background:#111827;
+}
+
+/* TOP */
+.topbar{
+display:flex;
+justify-content:space-between;
+gap:15px;
+margin-bottom:20px;
 }
 
 .search{
-padding:15px;
+flex:1;
+background:var(--panel);
+padding:12px;
+border-radius:12px;
+display:flex;
+align-items:center;
+gap:10px;
 }
 
 .search input{
 width:100%;
-padding:12px;
+background:none;
 border:none;
 outline:none;
-border-radius:12px;
-background:#162033;
 color:#fff;
 }
 
-.channel-list{
-flex:1;
-overflow:auto;
-padding:10px;
+/* PLAYER */
+.player-wrapper{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:20px;
 }
 
-.channel{
-padding:12px;
-margin-bottom:10px;
-background:var(--card);
-border-radius:12px;
-cursor:pointer;
-transition:.2s;
-}
-
-.channel:hover{
-border:1px solid var(--primary);
-}
-
-.channel small{
-color:var(--muted);
-}
-
-.main{
-flex:1;
-padding:20px;
-overflow:auto;
-}
-
-.player-card{
+.player{
 background:var(--panel);
-padding:20px;
-border-radius:20px;
+padding:15px;
+border-radius:18px;
+box-shadow:var(--shadow);
 }
 
 video{
 width:100%;
-height:65vh;
-background:black;
-border-radius:15px;
+height:520px;
+border-radius:14px;
+background:#000;
 }
 
-.title{
-margin-bottom:15px;
-font-size:22px;
-font-weight:700;
+/* CHANNELS */
+.channels{
+background:var(--panel);
+padding:15px;
+border-radius:18px;
+height:100%;
+overflow:auto;
 }
 
-.meta{
-margin-top:10px;
-color:var(--muted);
+.channel{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px;
+background:var(--card);
+margin-bottom:10px;
+border-radius:12px;
+cursor:pointer;
 }
 
+.tag{
+font-size:11px;
+background:#00d4ff22;
+padding:5px 10px;
+border-radius:999px;
+color:#8ee7ff;
+}
+
+/* STATS */
 .stats{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+grid-template-columns:repeat(4,1fr);
 gap:15px;
 margin-top:20px;
 }
@@ -130,363 +166,200 @@ margin-top:20px;
 .stat{
 background:var(--panel);
 padding:18px;
-border-radius:15px;
+border-radius:14px;
 }
 
-@media(max-width:900px){
-.app{
-flex-direction:column;
+@media(max-width:1000px){
+.player-wrapper{grid-template-columns:1fr;}
+.main{margin-left:0;width:100%;}
+.sidebar{position:relative;width:100%;}
+video{height:350px;}
 }
-.sidebar{
-width:100%;
-height:40vh;
-}
-}
+
 </style>
 </head>
+
 <body>
 
 <div class="app">
 
+<!-- SIDEBAR -->
 <div class="sidebar">
 
 <div class="logo">
-📺 WORLDTV LIVE
+<div class="logo-icon">📺</div>
+<div>
+<h2>WORLDTV</h2>
+<p>IPTV Platform</p>
+</div>
 </div>
 
-<div class="search">
-<input type="text" id="searchInput" placeholder="Search channels">
+<div class="menu">
+<button>Dashboard</button>
+<button>Live TV</button>
+<button>Sports</button>
+<button>Movies</button>
+<button>News</button>
+<button>Settings</button>
 </div>
 
-<div class="channel-list" id="channelList"></div>
-
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
-<div class="player-card">
-
-<div class="title" id="channelTitle">
-Select a Channel
+<div class="topbar">
+<div class="search">
+🔍
+<input id="searchInput" placeholder="Search channels...">
+</div>
 </div>
 
-<video id="videoPlayer" controls autoplay></video>
+<!-- PLAYER -->
+<div class="player-wrapper">
 
-<div class="meta" id="channelInfo">
-Ready
+<div class="player">
+
+<h3 id="channelTitle">Loading...</h3>
+<br>
+
+<video id="video" controls autoplay muted></video>
+
+</div>
+
+<!-- CHANNEL LIST -->
+<div class="channels">
+<h3>Channels</h3>
+<div id="channelContainer"></div>
 </div>
 
 </div>
 
+<!-- STATS -->
 <div class="stats">
-
-<div class="stat">
-<h2 id="totalChannels">0</h2>
-<p>Total Channels</p>
-</div>
-
-<div class="stat">
-<h2 id="sportsCount">0</h2>
-<p>Sports</p>
-</div>
-
-<div class="stat">
-<h2 id="newsCount">0</h2>
-<p>News</p>
-</div>
-
-<div class="stat">
-<h2 id="movieCount">0</h2>
-<p>Movies</p>
+<div class="stat">📺 2500+ Channels</div>
+<div class="stat">👥 120K Users</div>
+<div class="stat">⚡ 4K Quality</div>
+<div class="stat">🟢 99.9% Uptime</div>
 </div>
 
 </div>
-
-</div>
-
 </div>
 
 <script>
 
-/***************************************************
-PASTE FULL M3U PLAYLIST BELOW
-****************************************************/
+/* =========================
+   IPTV SOURCE SYSTEM
+========================= */
 
-const PLAYLIST_DATA = `
-#EXTM3U
-
-#EXTINF:-1 group-title="Sports",BEIN Sports News
-http://example.com/stream1.m3u8
-
-#EXTINF:-1 group-title="Sports",BEIN NBA HD
-http://example.com/stream2.m3u8
-
-#EXTINF:-1 group-title="News",Global News
-http://example.com/stream3.m3u8
-
-#EXTINF:-1 group-title="Movies",Movie Channel
-http://example.com/stream4.m3u8
-`;
-
-/***************************************************
-M3U PARSER
-****************************************************/
-
-function parseM3U(m3u){
-
-const lines = m3u.split(/\r?\n/);
-
-const channels = [];
-
-for(let i=0;i<lines.length;i++){
-
-const line = lines[i].trim();
-
-if(line.startsWith('#EXTINF')){
-
-const url = lines[i+1] ? lines[i+1].trim() : '';
-
-const nameMatch = line.split(',');
-
-const name =
-nameMatch.length > 1
-? nameMatch[nameMatch.length-1]
-: 'Unknown Channel';
-
-const groupMatch =
-line.match(/group-title="([^"]+)"/i);
-
-const group =
-groupMatch
-? groupMatch[1]
-: 'General';
-
-channels.push({
-name,
-group,
-url
-});
-
-}
-
-}
-
-return channels;
-
-}
-
-const channels = parseM3U(PLAYLIST_DATA);
-
-document.getElementById('totalChannels').textContent =
-channels.length;
-
-document.getElementById('sportsCount').textContent =
-channels.filter(c =>
-c.group.toLowerCase().includes('sport')
-).length;
-
-document.getElementById('newsCount').textContent =
-channels.filter(c =>
-c.group.toLowerCase().includes('news')
-).length;
-
-document.getElementById('movieCount').textContent =
-channels.filter(c =>
-c.group.toLowerCase().includes('movie')
-).length;
-
-const channelList =
-document.getElementById('channelList');
-
-function renderChannels(list){
-
-channelList.innerHTML='';
-
-list.forEach(ch=>{
-
-const item=document.createElement('div');
-
-item.className='channel';
-
-item.innerHTML=`
-<div><strong>${ch.name}</strong></div>
-<small>${ch.group}</small>
-`;
-
-item.onclick=()=>{
-playChannel(ch);
+const API_SOURCE = {
+enabled: false,
+server: "http://your-server.com:8080",
+username: "USER",
+password: "PASS"
 };
 
-channelList.appendChild(item);
+/* fallback channels */
+let channels = [
+{name:"BEIN SPORTS",category:"Sports",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",tag:"LIVE"},
+{name:"GLOBAL NEWS",category:"News",url:"https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8",tag:"LIVE"},
+{name:"MUSIC TV",category:"Music",url:"https://moiptvhls-i.akamaihd.net/hls/live/652316/Live_1/master.m3u8",tag:"LIVE"},
+{name:"GOSPEL TV",category:"Church",url:"https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8",tag:"LIVE"}
+];
 
+let currentChannel = channels[0];
+
+const video = document.getElementById("video");
+const channelTitle = document.getElementById("channelTitle");
+
+/* LOAD API */
+async function loadFromAPI(){
+
+if(!API_SOURCE.enabled){
+render();
+play(channels[0]);
+return;
+}
+
+try{
+
+const url =
+`${API_SOURCE.server}/player_api.php?username=${API_SOURCE.username}&password=${API_SOURCE.password}&action=get_live_streams`;
+
+const res = await fetch(url);
+const data = await res.json();
+
+channels = data.map(c=>({
+name:c.name,
+category:c.category_id || "Live",
+url:`${API_SOURCE.server}/live/${API_SOURCE.username}/${API_SOURCE.password}/${c.stream_id}.m3u8`,
+tag:"LIVE"
+}));
+
+render();
+play(channels[0]);
+
+}catch(e){
+console.log("API failed");
+render();
+play(channels[0]);
+}
+
+}
+
+/* RENDER */
+function render(){
+
+const box = document.getElementById("channelContainer");
+box.innerHTML = "";
+
+channels.forEach(c=>{
+box.innerHTML += `
+<div class="channel" onclick='play(${JSON.stringify(c)})'>
+<div>
+<b>${c.name}</b><br>
+<small>${c.category}</small>
+</div>
+<div class="tag">${c.tag}</div>
+</div>`;
 });
 
 }
 
-renderChannels(channels);
-
-/***************************************************
-PLAYER
-****************************************************/
-
-const video =
-document.getElementById('videoPlayer');
-
-function playChannel(channel){
-
-document.getElementById(
-'channelTitle'
-).textContent = channel.name;
-
-document.getElementById(
-'channelInfo'
-).textContent =
-channel.group;
-
-if(Hls.isSupported()){
-
-const hls = new Hls();
-
-hls.loadSource(channel.url);
-
-hls.attachMedia(video);
-
-hls.on(
-Hls.Events.MANIFEST_PARSED,
-function(){
-video.play();
-}
-);
-
-}else{
-
-video.src = channel.url;
-video.play();
-
-}
-
-}
-
-/***************************************************
-SEARCH
-****************************************************/
-
-document
-.getElementById('searchInput')
-.addEventListener('keyup',function(){
-
-const value =
-this.value.toLowerCase();
-
-const filtered =
-channels.filter(c=>
-c.name.toLowerCase().includes(value)
-||
-c.group.toLowerCase().includes(value)
-);
-
-renderChannels(filtered);
-
-});
-
-</script>
-  const PLAYLIST_DATA = `
-#EXTM3U
-
-#EXTINF:-1 tvg-logo="" group-title="Sports",BEIN Sports 1
-https://your-stream-url-1.m3u8
-
-#EXTINF:-1 tvg-logo="" group-title="Sports",BEIN Sports 2
-https://your-stream-url-2.m3u8
-
-#EXTINF:-1 tvg-logo="" group-title="News",Al Jazeera
-https://your-stream-url-3.m3u8
-`;
+/* PLAY */
 let hls;
 
-function playChannel(channel){
+function play(channel){
 
-document.getElementById("channelTitle").textContent =
-channel.name;
+currentChannel = channel;
+channelTitle.innerText = channel.name;
 
-document.getElementById("channelInfo").textContent =
-channel.group;
-
-if(hls){
-hls.destroy();
-}
+if(hls) hls.destroy();
 
 if(Hls.isSupported()){
-
-hls = new Hls({
-enableWorker:true,
-lowLatencyMode:true
-});
-
+hls = new Hls();
 hls.loadSource(channel.url);
 hls.attachMedia(video);
-
-hls.on(Hls.Events.MANIFEST_PARSED,()=>{
-video.play();
-});
-
-hls.on(Hls.Events.ERROR,(event,data)=>{
-console.log(data);
-});
-
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
 }else{
-
 video.src = channel.url;
 video.play();
+}
 
 }
-}
-  renderChannels(channels);
 
-if(channels.length){
-playChannel(channels[0]);
-}
-  function renderChannels(list){
-
-channelList.innerHTML = "";
-
-list.forEach((channel,index)=>{
-
-const card = document.createElement("div");
-
-card.className = "channel";
-
-card.innerHTML = `
-<div>
-<strong>${channel.name}</strong>
-<br>
-<small>${channel.group}</small>
-</div>
-`;
-
-card.onclick = () => playChannel(channel);
-
-channelList.appendChild(card);
-
+/* SEARCH */
+document.getElementById("searchInput").addEventListener("keyup",e=>{
+const v = e.target.value.toLowerCase();
+document.querySelectorAll(".channel").forEach(c=>{
+c.style.display = c.innerText.toLowerCase().includes(v)?"flex":"none";
+});
 });
 
-}
-  {
-  name: "ESPN 2 US",
-  group: "Sport",
-  logo: "🏈",
-  url: "https://gma2.blab.email/espn2.m3u8"
-},
-{
-  name: "ESPN U",
-  group: "Sport",
-  logo: "🏈",
-  url: "https://gma2.blab.email/espnu.m3u8"
-}
+/* INIT */
+loadFromAPI();
+
+</script>
+
 </body>
 </html>
-
-
-
-
-
