@@ -1,374 +1,235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>WORLDTV LIVE PLATFORM</title>
+<title>WORLD IPTV PLAYER</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 <style>
-
-/* ALL CSS HERE */
-
-:root{
- --bg:#050816;
- --panel:#0f1729;
- --card:#162033;
- --line:#25324c;
- --text:#fff;
- --muted:#93a4c3;
- --primary:#00d4ff;
- --primary2:#4f46e5;
- --success:#00d084;
- --danger:#ff4d6d;
- --warning:#ffb020;
- --shadow:0 10px 30px rgba(0,0,0,.4);
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
-/* Keep ALL existing CSS from your uploaded file */
+body{
+background:#050816;
+color:white;
+height:100vh;
+display:flex;
+overflow:hidden;
+}
 
+.sidebar{
+width:320px;
+background:#0b1020;
+overflow-y:auto;
+border-right:1px solid #222;
+}
+
+.logo{
+padding:20px;
+font-size:22px;
+font-weight:bold;
+text-align:center;
+background:#111827;
+}
+
+.search{
+padding:10px;
+}
+
+.search input{
+width:100%;
+padding:12px;
+border:none;
+border-radius:8px;
+background:#1f2937;
+color:white;
+}
+
+.channels{
+padding:10px;
+}
+
+.channel{
+padding:12px;
+margin-bottom:6px;
+background:#1f2937;
+border-radius:8px;
+cursor:pointer;
+transition:.3s;
+}
+
+.channel:hover{
+background:#2563eb;
+}
+
+.player-area{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+video{
+width:100%;
+height:70vh;
+background:black;
+}
+
+.info{
+padding:15px;
+background:#111827;
+}
+
+h2{
+margin-bottom:10px;
+}
+
+.stats{
+display:flex;
+gap:20px;
+margin-top:10px;
+}
+
+.badge{
+background:#2563eb;
+padding:6px 12px;
+border-radius:6px;
+}
 </style>
-
 </head>
-
 <body>
 
-<div class="app">
+<div class="sidebar">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
+<div class="logo">
+WORLD IPTV
+</div>
 
-        <div class="logo">
-            <div class="logo-icon">📺</div>
-            <div>
-                <h1>WORLDTV</h1>
-                <p>Live Streaming Network</p>
-            </div>
-        </div>
+<div class="search">
+<input type="text" id="search" placeholder="Search channel...">
+</div>
 
-        <div class="menu-title">Navigation</div>
+<div class="channels" id="channelList"></div>
 
-        <div class="menu">
-            <button class="active">🏠 Dashboard</button>
-            <button>📡 Live TV</button>
-            <button>⚽ Sports</button>
-            <button>🎬 Movies</button>
-            <button>📰 News</button>
-            <button>🎵 Music</button>
-            <button>⛪ Gospel</button>
-            <button>🌍 International</button>
-        </div>
+</div>
 
-    </aside>
+<div class="player-area">
 
-    <!-- MAIN CONTENT -->
-    <main class="main">
+<video id="video" controls autoplay></video>
 
-        <!-- SEARCH -->
-        <div class="topbar">
+<div class="info">
+<h2 id="channelTitle">Select Channel</h2>
 
-            <div class="search">
-                🔍
-                <input
-                    id="searchInput"
-                    type="text"
-                    placeholder="Search channels..."
-                >
-            </div>
+<div class="stats">
+<div class="badge">LIVE</div>
+<div class="badge">HLS.js</div>
+<div class="badge">IPTV</div>
+</div>
 
-            <div class="user-box">
-                <div>
-                    <h4>BTECH USER</h4>
-                    <p>Premium Subscription</p>
-                </div>
-                <div class="avatar">BT</div>
-            </div>
-
-        </div>
-
-        <!-- PLAYER -->
-        <section class="player-wrapper">
-
-            <div class="player-card">
-
-                <div class="player-header">
-                    <h2 id="channelTitle">WORLD SPORTS HD</h2>
-                    <div class="live-badge">🔴 LIVE STREAMING</div>
-                </div>
-
-                <video
-                    id="video"
-                    controls
-                    autoplay
-                    muted
-                ></video>
-
-                <div class="controls">
-
-                    <button
-                        class="btn primary"
-                        onclick="playChannel(currentChannel)"
-                    >
-                        ▶ Play
-                    </button>
-
-                    <button
-                        class="btn secondary"
-                        onclick="toggleFullscreen()"
-                    >
-                        ⛶ Fullscreen
-                    </button>
-
-                    <button
-                        class="btn secondary"
-                        onclick="volumeUp()"
-                    >
-                        🔊 Volume
-                    </button>
-
-                    <button
-                        class="btn danger"
-                        onclick="stopPlayer()"
-                    >
-                        ⛔ Stop
-                    </button>
-
-                </div>
-
-            </div>
-
-            <!-- CHANNEL LIST -->
-            <div class="channel-list">
-
-                <h3>Live Channels</h3>
-
-                <div id="channelContainer"></div>
-
-            </div>
-
-        </section>
-
-        <!-- STATS -->
-        <section class="stats">
-
-            <div class="stat">
-                <h2>2500+</h2>
-                <p>Global Channels</p>
-            </div>
-
-            <div class="stat">
-                <h2>120K</h2>
-                <p>Active Viewers</p>
-            </div>
-
-            <div class="stat">
-                <h2>4K UHD</h2>
-                <p>Streaming Quality</p>
-            </div>
-
-            <div class="stat">
-                <h2>99.9%</h2>
-                <p>Server Uptime</p>
-            </div>
-
-        </section>
-
-        <!-- SERVER TABLE -->
-        <section class="table-card">
-
-            <div class="table-head">
-                <h2>Streaming Server Dashboard</h2>
-            </div>
-
-            <table>
-
-                <thead>
-                    <tr>
-                        <th>Server</th>
-                        <th>Region</th>
-                        <th>Bandwidth</th>
-                        <th>Users</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    <tr>
-                        <td>WORLDTV CDN-01</td>
-                        <td>Europe</td>
-                        <td>10Gbps</td>
-                        <td>12430</td>
-                        <td>ONLINE</td>
-                    </tr>
-
-                    <tr>
-                        <td>WORLDTV CDN-02</td>
-                        <td>USA</td>
-                        <td>8Gbps</td>
-                        <td>9890</td>
-                        <td>ONLINE</td>
-                    </tr>
-
-                    <tr>
-                        <td>WORLDTV CDN-03</td>
-                        <td>Africa</td>
-                        <td>6Gbps</td>
-                        <td>7210</td>
-                        <td>ONLINE</td>
-                    </tr>
-
-                </tbody>
-
-            </table>
-
-        </section>
-
-    </main>
+</div>
 
 </div>
 
 <script>
 
-/* CHANNEL DATABASE */
-
 const channels = [
 
 {
-name:"WORLD SPORTS HD",
-logo:"⚽",
-category:"Sports",
-url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+name:"BEIN Sports News",
+url:"http://server.sibfungold.info:8080/pacha-man1/e0VaVPskUa/2296"
 },
 
 {
-name:"GLOBAL NEWS",
-logo:"📰",
-category:"News",
-url:"https://cph-p2p-msl.akamaized.net/hls/live/2000341/test/master.m3u8"
+name:"BEIN NBA HD",
+url:"http://server.sibfungold.info:8080/pacha-man1/e0VaVPskUa/49691"
 },
 
 {
-name:"MUSIC TV",
-logo:"🎵",
-category:"Music",
-url:"https://moiptvhls-i.akamaihd.net/hls/live/652316/Live_1/master.m3u8"
+name:"ALKASS 1 HD",
+url:"http://server.sibfungold.info:8080/pacha-man1/e0VaVPskUa/1138"
 },
 
 {
-name:"GOSPEL TV",
-logo:"⛪",
-category:"Gospel",
-url:"https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
+name:"ALKASS 2 HD",
+url:"http://server.sibfungold.info:8080/pacha-man1/e0VaVPskUa/1139"
+},
+
+{
+name:"MBC Action",
+url:"http://server.sibfungold.info:8080/pacha-man1/e0VaVPskUa/2168"
+},
+
+{
+name:"MBC Drama",
+url:"http://server.sibfungold.info:8080/pacha-man1/e0VaVPskUa/319"
+},
+
+{
+name:"Abu Dhabi Sports 1",
+url:"http://server.sibfungold.info:8080/pacha-man1/e0VaVPskUa/1119"
+},
+
+{
+name:"ON Time Sports",
+url:"http://server.sibfungold.info:8080/pacha-man1/e0VaVPskUa/53258"
 }
 
 ];
 
-/* PLAYER ENGINE */
+const list = document.getElementById("channelList");
 
-const video = document.getElementById("video");
-const channelTitle = document.getElementById("channelTitle");
-const container = document.getElementById("channelContainer");
+channels.forEach(ch=>{
 
-let currentChannel = channels[0];
+const div=document.createElement("div");
 
-function renderChannels(){
+div.className="channel";
 
-container.innerHTML="";
+div.innerText=ch.name;
 
-channels.forEach((c,i)=>{
+div.onclick=()=>playChannel(ch);
 
-container.innerHTML += `
-<div class="channel" onclick="playChannel(channels[${i}])">
-
-<div class="channel-left">
-
-<div class="channel-logo">
-${c.logo}
-</div>
-
-<div>
-<h4>${c.name}</h4>
-<p>${c.category}</p>
-</div>
-
-</div>
-
-<div class="tag">LIVE</div>
-
-</div>
-`;
+list.appendChild(div);
 
 });
 
-}
-
 function playChannel(channel){
 
-currentChannel = channel;
+document.getElementById("channelTitle").innerText=channel.name;
 
-channelTitle.innerText = channel.name;
+const video=document.getElementById("video");
 
 if(Hls.isSupported()){
 
-const hls = new Hls();
+const hls=new Hls();
 
 hls.loadSource(channel.url);
 
 hls.attachMedia(video);
 
-hls.on(Hls.Events.MANIFEST_PARSED,()=>{
-video.play();
-});
+}
 
-}else{
+else{
 
-video.src = channel.url;
-video.play();
+video.src=channel.url;
 
 }
 
 }
 
-function toggleFullscreen(){
-video.requestFullscreen();
-}
+document.getElementById("search").addEventListener("keyup",function(){
 
-function stopPlayer(){
-video.pause();
-}
+const term=this.value.toLowerCase();
 
-function volumeUp(){
+document.querySelectorAll(".channel").forEach(c=>{
 
-if(video.volume < 1){
-video.volume += 0.1;
-}
-
-}
-
-renderChannels();
-playChannel(channels[0]);
-
-document
-.getElementById("searchInput")
-.addEventListener("keyup",function(){
-
-let value = this.value.toLowerCase();
-
-document
-.querySelectorAll(".channel")
-.forEach(channel=>{
-
-channel.style.display =
-channel.innerText
-.toLowerCase()
-.includes(value)
-? "flex"
+c.style.display=
+c.innerText.toLowerCase().includes(term)
+? "block"
 : "none";
 
 });
