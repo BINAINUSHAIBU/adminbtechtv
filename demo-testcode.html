@@ -4,102 +4,133 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WORLDTV LIVE PLATFORM</title>
+<title>All Channels - WORLDTV LIVE PLATFORM</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body{
+*{
 margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
 background:#050816;
 color:white;
-font-family:Arial,sans-serif;
 }
 
 header{
 background:#0d1226;
-padding:15px;
+padding:20px;
 text-align:center;
-font-size:24px;
+font-size:28px;
 font-weight:bold;
 }
 
-.live-monitor{
-position:sticky;
-top:0;
+.search-bar{
+padding:15px;
 background:#111827;
-padding:10px;
-z-index:9999;
-display:flex;
-align-items:center;
-gap:10px;
 }
 
-.dot{
-width:12px;
-height:12px;
-background:red;
-border-radius:50%;
-animation:pulse 1s infinite;
-}
-
-@keyframes pulse{
-50%{opacity:.4}
-}
-
-#search{
+.search-bar input{
 width:100%;
 padding:12px;
 border:none;
-background:#111827;
+border-radius:8px;
+background:#1f2937;
 color:white;
+font-size:16px;
+}
+
+.player{
+padding:15px;
+background:black;
 }
 
 video{
 width:100%;
 height:500px;
+border-radius:10px;
 background:black;
 }
 
-.channels{
+.stats{
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
 gap:10px;
 padding:15px;
 }
 
-.card{
+.stat{
 background:#111827;
 padding:15px;
 border-radius:10px;
-cursor:pointer;
+text-align:center;
 }
 
-.card:hover{
+.channels{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+gap:15px;
+padding:15px;
+}
+
+.channel{
+background:#111827;
+padding:15px;
+border-radius:12px;
+cursor:pointer;
+transition:.3s;
+}
+
+.channel:hover{
+transform:translateY(-5px);
 background:#1f2937;
+}
+
+.name{
+font-size:16px;
+font-weight:bold;
 }
 </style>
 </head>
 <body>
 
-<header>WORLDTV LIVE PLATFORM</header>
+<header>
+ALL CHANNELS
+</header>
 
-<div class="live-monitor">
-<div class="dot"></div>
-LIVE STREAMING MONITOR ACTIVE
+<div class="search-bar">
+<input type="text" id="search" placeholder="Search channels...">
 </div>
 
-<video id="player" controls autoplay></video>
+<div class="stats">
+<div class="stat">
+<h2 id="channelCount">0</h2>
+<p>Total Channels</p>
+</div>
 
-<input type="text" id="search" placeholder="Search channels">
+<div class="stat">
+<h2 id="playing">0</h2>
+<p>Now Playing</p>
+</div>
+</div>
 
-<div class="channels" id="channels"></div>
+<div class="player">
+<video id="video" controls autoplay></video>
+</div>
+
+<div class="channels" id="channelList"></div>
 
 <script>
 
 const m3uPlaylist = `
 
 #EXTM3U
+
+# Paste the FULL playlist from tvnewdoc.docx here
 
 #EXTINF:-1,ESPN 2
 https://example.com/espn2.m3u8
@@ -109,6 +140,9 @@ https://example.com/nbatv.m3u8
 
 #EXTINF:-1,CNN
 https://example.com/cnn.m3u8
+
+#EXTINF:-1,FOX SPORTS
+https://example.com/foxsports.m3u8
 
 `;
 
@@ -123,47 +157,57 @@ for(let i=0;i<lines.length;i++){
 if(lines[i].startsWith('#EXTINF')){
 
 channels.push({
-name:lines[i].split(',').pop(),
-url:lines[i+1]
+name:lines[i].split(',').pop().trim(),
+url:(lines[i+1]||'').trim()
 });
 
 }
 
 }
 
-render(channels);
+document.getElementById("channelCount").innerText =
+channels.length;
+
+renderChannels(channels);
 
 }
 
-function render(data){
+function renderChannels(list){
 
-const box=document.getElementById('channels');
+const box =
+document.getElementById("channelList");
 
 box.innerHTML='';
 
-data.forEach(ch=>{
+list.forEach(channel=>{
 
-const card=document.createElement('div');
+const div=document.createElement("div");
 
-card.className='card';
+div.className="channel";
 
-card.innerHTML=`<b>${ch.name}</b>`;
+div.innerHTML=
+`<div class="name">${channel.name}</div>`;
 
-card.onclick=()=>play(ch.url);
+div.onclick=()=>{
+playChannel(channel.url);
+};
 
-box.appendChild(card);
+box.appendChild(div);
 
 });
 
 }
 
-function play(url){
+function playChannel(url){
 
-const video=document.getElementById('player');
+const video =
+document.getElementById("video");
+
+document.getElementById("playing").innerText = "1";
 
 if(Hls.isSupported()){
 
-const hls=new Hls();
+const hls = new Hls();
 
 hls.loadSource(url);
 
@@ -171,21 +215,24 @@ hls.attachMedia(video);
 
 }else{
 
-video.src=url;
+video.src = url;
 
 }
 
 }
 
-document.getElementById('search')
-.addEventListener('input',e=>{
+document.getElementById("search")
+.addEventListener("input",function(){
 
-const q=e.target.value.toLowerCase();
+const q =
+this.value.toLowerCase();
 
-render(
+renderChannels(
+
 channels.filter(c=>
 c.name.toLowerCase().includes(q)
 )
+
 );
 
 });
