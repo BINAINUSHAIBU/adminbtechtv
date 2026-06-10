@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WORLDTV Live Streaming Network</title>
+<title>WORLDTV LIVE STREAMING NETWORK</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -14,20 +15,21 @@ font-family:Arial,sans-serif;
 }
 
 body{
+height:100vh;
+display:flex;
+overflow:hidden;
 background:#0b1220;
 color:#fff;
-height:100vh;
-overflow:hidden;
-display:flex;
 }
 
-/* SIDEBAR */
+/* LEFT SIDEBAR */
 
 .sidebar{
 width:260px;
 background:#111827;
 padding:20px;
 overflow-y:auto;
+border-right:1px solid #1f2937;
 }
 
 .logo{
@@ -36,35 +38,35 @@ font-weight:bold;
 margin-bottom:20px;
 }
 
-.menu{
+.nav{
 display:flex;
 flex-direction:column;
 gap:10px;
 }
 
-.menu a{
-color:#fff;
+.nav a{
 text-decoration:none;
+color:white;
 padding:12px;
-border-radius:8px;
 background:#1f2937;
+border-radius:8px;
+transition:.3s;
 }
 
-.menu a:hover{
+.nav a:hover{
 background:#2563eb;
 }
 
-/* MAIN AREA */
+/* CENTER SECTION */
 
 .main{
 flex:1;
 display:flex;
 flex-direction:column;
-height:100vh;
 overflow:hidden;
 }
 
-/* FIXED LIVE STREAMING MONITOR */
+/* FIXED LIVE STREAMING */
 
 .live-monitor{
 position:sticky;
@@ -72,84 +74,104 @@ top:0;
 z-index:999;
 background:#111827;
 padding:15px 20px;
-border-bottom:2px solid #ef4444;
+border-bottom:2px solid red;
 }
 
 .live-monitor h2{
-color:#ef4444;
+color:#ff4444;
+margin-bottom:5px;
 }
 
-/* SCROLLABLE CHANNEL AREA */
+/* PLAYER AREA */
 
-.channels-wrapper{
+.player-area{
 flex:1;
-overflow-y:auto;
 padding:20px;
+overflow:hidden;
 }
-
-.channel-grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-gap:15px;
-}
-
-.channel{
-background:#1f2937;
-padding:15px;
-border-radius:10px;
-cursor:pointer;
-transition:.3s;
-}
-
-.channel:hover{
-transform:translateY(-3px);
-background:#374151;
-}
-
-.channel img{
-width:100%;
-height:120px;
-object-fit:cover;
-border-radius:8px;
-margin-bottom:10px;
-}
-
-/* PLAYER */
 
 .player{
-margin-bottom:20px;
+width:100%;
+height:100%;
 background:#000;
-border-radius:12px;
+border-radius:15px;
 overflow:hidden;
 }
 
 .player video{
 width:100%;
-height:450px;
-background:#000;
+height:100%;
+object-fit:cover;
+}
+
+/* RIGHT CHANNEL SIDEBAR */
+
+.channels-sidebar{
+width:320px;
+background:#111827;
+border-left:1px solid #1f2937;
+display:flex;
+flex-direction:column;
+}
+
+/* CHANNEL HEADER */
+
+.channels-header{
+padding:15px;
+background:#1f2937;
+font-size:18px;
+font-weight:bold;
+position:sticky;
+top:0;
+z-index:10;
+}
+
+/* CHANNEL LIST */
+
+.channels-list{
+flex:1;
+overflow-y:auto;
+padding:10px;
+}
+
+.channel{
+background:#1f2937;
+padding:12px;
+margin-bottom:10px;
+border-radius:8px;
+cursor:pointer;
+transition:.3s;
+}
+
+.channel:hover{
+background:#2563eb;
+transform:translateY(-2px);
 }
 
 /* SCROLLBAR */
 
-.channels-wrapper::-webkit-scrollbar{
+.channels-list::-webkit-scrollbar{
 width:8px;
 }
 
-.channels-wrapper::-webkit-scrollbar-thumb{
+.channels-list::-webkit-scrollbar-thumb{
 background:#2563eb;
 border-radius:20px;
 }
+
 </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
+<!-- LEFT SIDEBAR -->
 
 <div class="sidebar">
 
-<div class="logo">📺 WORLDTV</div>
+<div class="logo">
+📺 WORLDTV
+</div>
 
-<div class="menu">
+<div class="nav">
 <a href="#">🏠 Dashboard</a>
 <a href="#">📡 Live TV</a>
 <a href="#">⚽ Sports</a>
@@ -167,88 +189,67 @@ border-radius:20px;
 
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN CENTER -->
 
 <div class="main">
-
-<!-- FIXED SECTION -->
 
 <div class="live-monitor">
 <h2>🔴 LIVE STREAMING</h2>
 <p>Streaming Server: All Systems Online | CDN Active</p>
 </div>
 
-<!-- ONLY THIS PART SCROLLS -->
-
-<div class="channels-wrapper">
+<div class="player-area">
 
 <div class="player">
-<video controls autoplay muted></video>
-</div>
-
-<div class="channel-grid">
-
-<div class="channel">
-<img src="https://via.placeholder.com/300x150">
-<h3>CNN</h3>
-</div>
-
-<div class="channel">
-<img src="https://via.placeholder.com/300x150">
-<h3>BBC World</h3>
-</div>
-
-<div class="channel">
-<img src="https://via.placeholder.com/300x150">
-<h3>Al Jazeera</h3>
-</div>
-
-<div class="channel">
-<img src="https://via.placeholder.com/300x150">
-<h3>ESPN</h3>
-</div>
-
-<div class="channel">
-<img src="https://via.placeholder.com/300x150">
-<h3>Sky Sports</h3>
-</div>
-
-<div class="channel">
-<img src="https://via.placeholder.com/300x150">
-<h3>TBN</h3>
-</div>
-
-<div class="channel">
-<img src="https://via.placeholder.com/300x150">
-<h3>Gospel TV</h3>
-</div>
-
-<div class="channel">
-<img src="https://via.placeholder.com/300x150">
-<h3>Discovery</h3>
-</div>
-
-<div class="channel">
-<img src="https://via.placeholder.com/300x150">
-<h3>National Geographic</h3>
-</div>
-
-<div class="channel">
-<img src="https://via.placeholder.com/300x150">
-<h3>FOX News</h3>
-</div>
-
-<div class="channel">
-<img src="https://via.placeholder.com/300x150">
-<h3>CNBC</h3>
-</div>
-
-<div class="channel">
-<img src="https://via.placeholder.com/300x150">
-<h3>Bloomberg</h3>
+<video controls autoplay muted>
+<source src="" type="application/x-mpegURL">
+</video>
 </div>
 
 </div>
+
+</div>
+
+<!-- RIGHT SIDEBAR CHANNELS -->
+
+<div class="channels-sidebar">
+
+<div class="channels-header">
+📡 Live Channels
+</div>
+
+<div class="channels-list">
+
+<div class="channel">CNN International</div>
+<div class="channel">BBC World News</div>
+<div class="channel">Al Jazeera</div>
+<div class="channel">Sky News</div>
+<div class="channel">FOX News</div>
+<div class="channel">Bloomberg TV</div>
+<div class="channel">CNBC</div>
+<div class="channel">ESPN</div>
+<div class="channel">Sky Sports</div>
+<div class="channel">SuperSport</div>
+<div class="channel">TBN</div>
+<div class="channel">Daystar</div>
+<div class="channel">Dove TV</div>
+<div class="channel">Gospel Channel</div>
+<div class="channel">Discovery</div>
+<div class="channel">National Geographic</div>
+<div class="channel">Animal Planet</div>
+<div class="channel">History Channel</div>
+<div class="channel">MTV</div>
+<div class="channel">Trace Gospel</div>
+<div class="channel">Africa Magic</div>
+<div class="channel">Movie Central</div>
+<div class="channel">Disney Channel</div>
+<div class="channel">Cartoon Network</div>
+<div class="channel">Nickelodeon</div>
+<div class="channel">TV5 Monde</div>
+<div class="channel">France 24</div>
+<div class="channel">DW TV</div>
+<div class="channel">CGTN</div>
+<div class="channel">Arirang TV</div>
 
 </div>
 
