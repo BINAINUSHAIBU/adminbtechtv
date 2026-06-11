@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>WORLDTV ENTERPRISE V5</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -11,23 +10,26 @@
 <style>
 
 :root{
---bg:#0b0f14;
---card:#111827;
+--bg:#070b10;
+--panel:#101722;
+--card:#151e2d;
 --accent:#00ff88;
 --text:#ffffff;
---sidebar:300px;
+--muted:#8fa3b8;
+--danger:#ff4d4d;
+--sidebar:320px;
 }
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Segoe UI,Arial,sans-serif;
 }
 
 body{
 background:var(--bg);
-color:white;
+color:var(--text);
 overflow:hidden;
 }
 
@@ -40,44 +42,47 @@ height:100vh;
 
 .sidebar{
 width:var(--sidebar);
-background:#111;
-overflow-y:auto;
-padding:10px;
-border-right:1px solid #222;
+background:#0c1118;
+border-right:1px solid #1d2937;
+display:flex;
+flex-direction:column;
 }
 
 .logo{
+padding:20px;
 font-size:24px;
 font-weight:bold;
 text-align:center;
-padding:15px;
 color:var(--accent);
+border-bottom:1px solid #1d2937;
 }
 
 .search{
-width:100%;
-padding:10px;
+padding:12px;
+margin:12px;
+background:#151e2d;
 border:none;
-border-radius:8px;
-margin-bottom:10px;
+border-radius:10px;
+color:white;
 }
 
 .channel-list{
-height:calc(100vh - 150px);
+flex:1;
 overflow-y:auto;
+padding:10px;
 }
 
 .channel{
+background:#151e2d;
 padding:12px;
-background:#181818;
-margin-bottom:6px;
-border-radius:8px;
+margin-bottom:8px;
+border-radius:10px;
 cursor:pointer;
-transition:.3s;
+transition:.2s;
 }
 
 .channel:hover{
-background:#222;
+background:#1f2a3d;
 }
 
 /* MAIN */
@@ -88,17 +93,14 @@ display:flex;
 flex-direction:column;
 }
 
-/* PLAYER FIXED */
+/* PLAYER */
 
-.player-area{
-height:420px;
+.player-section{
+height:380px;
 background:black;
-display:flex;
-justify-content:center;
-align-items:center;
 position:sticky;
 top:0;
-z-index:999;
+z-index:100;
 }
 
 video{
@@ -108,15 +110,40 @@ object-fit:contain;
 background:black;
 }
 
-/* DASHBOARD */
+/* NAV */
 
-.dashboard{
+.nav{
+display:flex;
+gap:10px;
+padding:10px;
+background:#0c1118;
+border-bottom:1px solid #1d2937;
+overflow-x:auto;
+}
+
+.nav button{
+background:#151e2d;
+border:none;
+padding:10px 16px;
+color:white;
+border-radius:8px;
+cursor:pointer;
+}
+
+.nav button:hover{
+background:var(--accent);
+color:black;
+}
+
+/* CONTENT */
+
+.content{
 flex:1;
 overflow:auto;
 padding:20px;
 }
 
-.cards{
+.grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:15px;
@@ -130,27 +157,35 @@ border-radius:12px;
 }
 
 .panel{
-background:var(--card);
+background:var(--panel);
 padding:20px;
 border-radius:12px;
 margin-bottom:20px;
 }
 
-button{
-padding:10px 20px;
-background:var(--accent);
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
+.section-title{
+font-size:22px;
+margin-bottom:15px;
+color:var(--accent);
+}
+
+.table{
+width:100%;
+border-collapse:collapse;
+}
+
+.table td,
+.table th{
+padding:10px;
+border-bottom:1px solid #263244;
 }
 
 /* LOGIN */
 
-.login-modal{
+.login{
 position:fixed;
 inset:0;
-background:rgba(0,0,0,.9);
+background:rgba(0,0,0,.95);
 display:flex;
 justify-content:center;
 align-items:center;
@@ -158,23 +193,43 @@ z-index:99999;
 }
 
 .login-box{
-width:400px;
-background:#111;
+width:420px;
+background:#111827;
 padding:30px;
-border-radius:12px;
+border-radius:15px;
 }
 
 .login-box input{
 width:100%;
 padding:12px;
-margin:10px 0;
-background:#222;
+margin-top:10px;
+background:#1f2937;
 border:none;
 color:white;
+border-radius:8px;
+}
+
+.login-box button{
+width:100%;
+padding:12px;
+margin-top:15px;
+background:var(--accent);
+border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
 }
 
 .hidden{
 display:none;
+}
+
+.status-online{
+color:#00ff88;
+}
+
+.status-offline{
+color:#ff4d4d;
 }
 
 </style>
@@ -182,18 +237,16 @@ display:none;
 
 <body>
 
-<div id="login" class="login-modal">
+<!-- LOGIN -->
+
+<div class="login" id="loginScreen">
 
 <div class="login-box">
 
 <h2>WORLDTV LOGIN</h2>
 
-<input id="email"
-placeholder="Email">
-
-<input id="pass"
-type="password"
-placeholder="Password">
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
 
 <button onclick="login()">
 LOGIN
@@ -201,28 +254,18 @@ LOGIN
 
 <br><br>
 
-Demo Accounts:
-
-<br><br>
-
 Admin:
-admin@worldtv.com
-/
-admin123
+admin@worldtv.com / admin123
 
 <br><br>
 
 User:
-user@worldtv.com
-/
-user123
+user@worldtv.com / user123
 
 <br><br>
 
 Reseller:
-reseller@worldtv.com
-/
-reseller123
+reseller@worldtv.com / reseller123
 
 </div>
 
@@ -244,8 +287,7 @@ placeholder="Search Channel..."
 onkeyup="filterChannels(this.value)"
 >
 
-<div id="channels"
-class="channel-list">
+<div class="channel-list" id="channelList">
 </div>
 
 </div>
@@ -254,9 +296,9 @@ class="channel-list">
 
 <div class="main">
 
-<!-- FIXED PLAYER -->
+<!-- PLAYER -->
 
-<div class="player-area">
+<div class="player-section">
 
 <video
 id="video"
@@ -266,94 +308,176 @@ autoplay>
 
 </div>
 
-<!-- DASHBOARD -->
+<!-- NAVIGATION -->
 
-<div class="dashboard">
+<div class="nav">
 
-<div class="cards">
+<button>Live TV</button>
+<button>Movies</button>
+<button>Series</button>
+<button>Sports</button>
+<button>Favorites</button>
+<button>History</button>
+<button>User</button>
+<button>Reseller</button>
+<button>Admin</button>
+
+</div>
+
+<!-- CONTENT -->
+
+<div class="content">
+
+<!-- ANALYTICS -->
+
+<div class="grid">
 
 <div class="card">
-<h2>Users</h2>
-<h1>15,220</h1>
+<h3>Users</h3>
+<h1>15,250</h1>
 </div>
 
 <div class="card">
-<h2>Channels</h2>
+<h3>Channels</h3>
 <h1>10,000+</h1>
 </div>
 
 <div class="card">
-<h2>Revenue</h2>
-<h1>$95,000</h1>
+<h3>Revenue</h3>
+<h1>$125,000</h1>
 </div>
 
 <div class="card">
-<h2>Streams</h2>
-<h1>2,530</h1>
+<h3>Streams</h3>
+<h1>4,120</h1>
 </div>
 
 </div>
+
+<!-- USER PANEL -->
 
 <div class="panel">
 
-<h2>SUPER ADMIN</h2>
+<div class="section-title">
+👤 USER PANEL
+</div>
 
-<br>
-
-<button>Add Channel</button>
-<button>Add Movie</button>
-<button>Add User</button>
-<button>Add Reseller</button>
-<button>Analytics</button>
-<button>EPG</button>
-<button>Ads</button>
-<button>Coupons</button>
-<button>Payments</button>
+<ul>
+<li>Profile</li>
+<li>Favorites</li>
+<li>Watch History</li>
+<li>Subscription</li>
+<li>Notifications</li>
+</ul>
 
 </div>
 
+<!-- RESELLER -->
+
 <div class="panel">
 
-<h2>COUNTRIES</h2>
+<div class="section-title">
+💼 RESELLER PANEL
+</div>
 
-<br>
-
-🌍 USA
-🌍 UK
-🌍 Canada
-🌍 Nigeria
-🌍 India
-🌍 UAE
-🌍 Germany
-🌍 France
-🌍 Brazil
-🌍 Australia
+<ul>
+<li>Create User</li>
+<li>Assign Package</li>
+<li>Credits</li>
+<li>Sales Report</li>
+<li>Commission</li>
+</ul>
 
 </div>
 
+<!-- ADMIN -->
+
 <div class="panel">
 
-<h2>Subscription Plans</h2>
+<div class="section-title">
+🛠 SUPER ADMIN
+</div>
 
-<br>
+<div class="grid">
 
-Free
+<div class="card">Add Channel</div>
+<div class="card">Edit Channel</div>
+<div class="card">Delete Channel</div>
+<div class="card">Movies Manager</div>
+<div class="card">Series Manager</div>
+<div class="card">EPG Manager</div>
+<div class="card">Analytics</div>
+<div class="card">Ads Manager</div>
+<div class="card">Coupons</div>
+<div class="card">Wallet</div>
+<div class="card">Notifications</div>
+<div class="card">Settings</div>
 
-<br>
+</div>
 
-Monthly
+</div>
 
-<br>
+<!-- STREAM MONITOR -->
 
-Quarterly
+<div class="panel">
 
-<br>
+<div class="section-title">
+🔴 STREAM MONITOR
+</div>
 
-Yearly
+<table class="table">
 
-<br>
+<tr>
+<th>Channel</th>
+<th>Status</th>
+</tr>
 
-Lifetime
+<tr>
+<td>AfroSport</td>
+<td class="status-online">ONLINE</td>
+</tr>
+
+<tr>
+<td>CBS Sports</td>
+<td class="status-online">ONLINE</td>
+</tr>
+
+<tr>
+<td>Test Channel</td>
+<td class="status-offline">OFFLINE</td>
+</tr>
+
+</table>
+
+</div>
+
+<!-- SUBSCRIPTIONS -->
+
+<div class="panel">
+
+<div class="section-title">
+💳 SUBSCRIPTIONS
+</div>
+
+<ul>
+<li>Free Plan</li>
+<li>Monthly Plan</li>
+<li>Quarterly Plan</li>
+<li>Yearly Plan</li>
+<li>Lifetime Plan</li>
+</ul>
+
+</div>
+
+<!-- COUNTRIES -->
+
+<div class="panel">
+
+<div class="section-title">
+🌍 COUNTRIES
+</div>
+
+USA • UK • Canada • Nigeria • India • UAE • France • Germany • Italy • Spain • Brazil • Australia • China • Japan
 
 </div>
 
@@ -365,34 +489,7 @@ Lifetime
 
 <script>
 
-/* LOGIN */
-
-function login(){
-
-let e=
-document.getElementById('email').value;
-
-let p=
-document.getElementById('pass').value;
-
-if(
-(e==="admin@worldtv.com"&&p==="admin123")||
-(e==="user@worldtv.com"&&p==="user123")||
-(e==="reseller@worldtv.com"&&p==="reseller123")
-){
-document
-.getElementById('login')
-.classList.add('hidden');
-}
-else{
-alert("Invalid Login");
-}
-
-}
-
-/* SAMPLE CHANNELS */
-
-const channels=[
+const channels = [
 
 {
 name:"AfroSport",
@@ -405,33 +502,32 @@ url:"https://vo-live.cdb.cdn.orange.com/Content/Channel/AbuDhabiSportsChannel1/H
 },
 
 {
-name:"CBS Sports",
+name:"CBS Sports Golazo",
 url:"https://dai.google.com/linear/hls/event/GxrCGmwST0ixsrc_QgB6qw/master.m3u8"
 }
 
 ];
 
-const container=
-document.getElementById("channels");
+const channelList =
+document.getElementById("channelList");
 
 function renderChannels(list){
 
-container.innerHTML="";
+channelList.innerHTML="";
 
 list.forEach(ch=>{
 
-let div=
+const div =
 document.createElement("div");
 
 div.className="channel";
-
-div.innerHTML=ch.name;
+div.innerText=ch.name;
 
 div.onclick=()=>{
-play(ch.url);
+playChannel(ch.url);
 };
 
-container.appendChild(div);
+channelList.appendChild(div);
 
 });
 
@@ -439,43 +535,61 @@ container.appendChild(div);
 
 renderChannels(channels);
 
-/* FILTER */
-
 function filterChannels(q){
 
 q=q.toLowerCase();
 
 renderChannels(
-
 channels.filter(
-c=>c.name
-.toLowerCase()
-.includes(q)
+c=>c.name.toLowerCase().includes(q)
 )
-
 );
 
 }
 
-/* PLAYER */
+function playChannel(url){
 
-function play(url){
-
-let video=
+const video =
 document.getElementById("video");
 
 if(Hls.isSupported()){
 
-let hls=
-new Hls();
+const hls = new Hls();
 
 hls.loadSource(url);
 
 hls.attachMedia(video);
 
-}
-else{
+}else{
+
 video.src=url;
+
+}
+
+}
+
+function login(){
+
+const email =
+document.getElementById("email").value;
+
+const password =
+document.getElementById("password").value;
+
+if(
+(email==="admin@worldtv.com" && password==="admin123") ||
+(email==="user@worldtv.com" && password==="user123") ||
+(email==="reseller@worldtv.com" && password==="reseller123")
+){
+
+document
+.getElementById("loginScreen")
+.classList.add("hidden");
+
+}else{
+
+alert("Invalid Login");
+
 }
 
 }
