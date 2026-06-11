@@ -1,0 +1,601 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WORLDTV ENTERPRISE V5</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+
+:root{
+--bg:#070b10;
+--panel:#101722;
+--card:#151e2d;
+--accent:#00ff88;
+--text:#ffffff;
+--muted:#8fa3b8;
+--danger:#ff4d4d;
+--sidebar:320px;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,Arial,sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
+
+.app{
+display:flex;
+height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:var(--sidebar);
+background:#0c1118;
+border-right:1px solid #1d2937;
+display:flex;
+flex-direction:column;
+}
+
+.logo{
+padding:20px;
+font-size:24px;
+font-weight:bold;
+text-align:center;
+color:var(--accent);
+border-bottom:1px solid #1d2937;
+}
+
+.search{
+padding:12px;
+margin:12px;
+background:#151e2d;
+border:none;
+border-radius:10px;
+color:white;
+}
+
+.channel-list{
+flex:1;
+overflow-y:auto;
+padding:10px;
+}
+
+.channel{
+background:#151e2d;
+padding:12px;
+margin-bottom:8px;
+border-radius:10px;
+cursor:pointer;
+transition:.2s;
+}
+
+.channel:hover{
+background:#1f2a3d;
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+/* PLAYER */
+
+.player-section{
+height:380px;
+background:black;
+position:sticky;
+top:0;
+z-index:100;
+}
+
+video{
+width:100%;
+height:100%;
+object-fit:contain;
+background:black;
+}
+
+/* NAV */
+
+.nav{
+display:flex;
+gap:10px;
+padding:10px;
+background:#0c1118;
+border-bottom:1px solid #1d2937;
+overflow-x:auto;
+}
+
+.nav button{
+background:#151e2d;
+border:none;
+padding:10px 16px;
+color:white;
+border-radius:8px;
+cursor:pointer;
+}
+
+.nav button:hover{
+background:var(--accent);
+color:black;
+}
+
+/* CONTENT */
+
+.content{
+flex:1;
+overflow:auto;
+padding:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-bottom:20px;
+}
+
+.card{
+background:var(--card);
+padding:20px;
+border-radius:12px;
+}
+
+.panel{
+background:var(--panel);
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+}
+
+.section-title{
+font-size:22px;
+margin-bottom:15px;
+color:var(--accent);
+}
+
+.table{
+width:100%;
+border-collapse:collapse;
+}
+
+.table td,
+.table th{
+padding:10px;
+border-bottom:1px solid #263244;
+}
+
+/* LOGIN */
+
+.login{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.95);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:99999;
+}
+
+.login-box{
+width:420px;
+background:#111827;
+padding:30px;
+border-radius:15px;
+}
+
+.login-box input{
+width:100%;
+padding:12px;
+margin-top:10px;
+background:#1f2937;
+border:none;
+color:white;
+border-radius:8px;
+}
+
+.login-box button{
+width:100%;
+padding:12px;
+margin-top:15px;
+background:var(--accent);
+border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.hidden{
+display:none;
+}
+
+.status-online{
+color:#00ff88;
+}
+
+.status-offline{
+color:#ff4d4d;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+
+<div class="login" id="loginScreen">
+
+<div class="login-box">
+
+<h2>WORLDTV LOGIN</h2>
+
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="login()">
+LOGIN
+</button>
+
+<br><br>
+
+Admin:
+admin@worldtv.com / admin123
+
+<br><br>
+
+User:
+user@worldtv.com / user123
+
+<br><br>
+
+Reseller:
+reseller@worldtv.com / reseller123
+
+</div>
+
+</div>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+📺 WORLDTV
+</div>
+
+<input
+class="search"
+placeholder="Search Channel..."
+onkeyup="filterChannels(this.value)"
+>
+
+<div class="channel-list" id="channelList">
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<!-- PLAYER -->
+
+<div class="player-section">
+
+<video
+id="video"
+controls
+autoplay>
+</video>
+
+</div>
+
+<!-- NAVIGATION -->
+
+<div class="nav">
+
+<button>Live TV</button>
+<button>Movies</button>
+<button>Series</button>
+<button>Sports</button>
+<button>Favorites</button>
+<button>History</button>
+<button>User</button>
+<button>Reseller</button>
+<button>Admin</button>
+
+</div>
+
+<!-- CONTENT -->
+
+<div class="content">
+
+<!-- ANALYTICS -->
+
+<div class="grid">
+
+<div class="card">
+<h3>Users</h3>
+<h1>15,250</h1>
+</div>
+
+<div class="card">
+<h3>Channels</h3>
+<h1>10,000+</h1>
+</div>
+
+<div class="card">
+<h3>Revenue</h3>
+<h1>$125,000</h1>
+</div>
+
+<div class="card">
+<h3>Streams</h3>
+<h1>4,120</h1>
+</div>
+
+</div>
+
+<!-- USER PANEL -->
+
+<div class="panel">
+
+<div class="section-title">
+👤 USER PANEL
+</div>
+
+<ul>
+<li>Profile</li>
+<li>Favorites</li>
+<li>Watch History</li>
+<li>Subscription</li>
+<li>Notifications</li>
+</ul>
+
+</div>
+
+<!-- RESELLER -->
+
+<div class="panel">
+
+<div class="section-title">
+💼 RESELLER PANEL
+</div>
+
+<ul>
+<li>Create User</li>
+<li>Assign Package</li>
+<li>Credits</li>
+<li>Sales Report</li>
+<li>Commission</li>
+</ul>
+
+</div>
+
+<!-- ADMIN -->
+
+<div class="panel">
+
+<div class="section-title">
+🛠 SUPER ADMIN
+</div>
+
+<div class="grid">
+
+<div class="card">Add Channel</div>
+<div class="card">Edit Channel</div>
+<div class="card">Delete Channel</div>
+<div class="card">Movies Manager</div>
+<div class="card">Series Manager</div>
+<div class="card">EPG Manager</div>
+<div class="card">Analytics</div>
+<div class="card">Ads Manager</div>
+<div class="card">Coupons</div>
+<div class="card">Wallet</div>
+<div class="card">Notifications</div>
+<div class="card">Settings</div>
+
+</div>
+
+</div>
+
+<!-- STREAM MONITOR -->
+
+<div class="panel">
+
+<div class="section-title">
+🔴 STREAM MONITOR
+</div>
+
+<table class="table">
+
+<tr>
+<th>Channel</th>
+<th>Status</th>
+</tr>
+
+<tr>
+<td>AfroSport</td>
+<td class="status-online">ONLINE</td>
+</tr>
+
+<tr>
+<td>CBS Sports</td>
+<td class="status-online">ONLINE</td>
+</tr>
+
+<tr>
+<td>Test Channel</td>
+<td class="status-offline">OFFLINE</td>
+</tr>
+
+</table>
+
+</div>
+
+<!-- SUBSCRIPTIONS -->
+
+<div class="panel">
+
+<div class="section-title">
+💳 SUBSCRIPTIONS
+</div>
+
+<ul>
+<li>Free Plan</li>
+<li>Monthly Plan</li>
+<li>Quarterly Plan</li>
+<li>Yearly Plan</li>
+<li>Lifetime Plan</li>
+</ul>
+
+</div>
+
+<!-- COUNTRIES -->
+
+<div class="panel">
+
+<div class="section-title">
+🌍 COUNTRIES
+</div>
+
+USA • UK • Canada • Nigeria • India • UAE • France • Germany • Italy • Spain • Brazil • Australia • China • Japan
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const channels = [
+
+{
+name:"AfroSport",
+url:"https://newproxy3.vidivu.tv/vidivu_afrosport/index.m3u8"
+},
+
+{
+name:"Abu Dhabi Sports",
+url:"https://vo-live.cdb.cdn.orange.com/Content/Channel/AbuDhabiSportsChannel1/HLS/index.m3u8"
+},
+
+{
+name:"CBS Sports Golazo",
+url:"https://dai.google.com/linear/hls/event/GxrCGmwST0ixsrc_QgB6qw/master.m3u8"
+}
+
+];
+
+const channelList =
+document.getElementById("channelList");
+
+function renderChannels(list){
+
+channelList.innerHTML="";
+
+list.forEach(ch=>{
+
+const div =
+document.createElement("div");
+
+div.className="channel";
+div.innerText=ch.name;
+
+div.onclick=()=>{
+playChannel(ch.url);
+};
+
+channelList.appendChild(div);
+
+});
+
+}
+
+renderChannels(channels);
+
+function filterChannels(q){
+
+q=q.toLowerCase();
+
+renderChannels(
+channels.filter(
+c=>c.name.toLowerCase().includes(q)
+)
+);
+
+}
+
+function playChannel(url){
+
+const video =
+document.getElementById("video");
+
+if(Hls.isSupported()){
+
+const hls = new Hls();
+
+hls.loadSource(url);
+
+hls.attachMedia(video);
+
+}else{
+
+video.src=url;
+
+}
+
+}
+
+function login(){
+
+const email =
+document.getElementById("email").value;
+
+const password =
+document.getElementById("password").value;
+
+if(
+(email==="admin@worldtv.com" && password==="admin123") ||
+(email==="user@worldtv.com" && password==="user123") ||
+(email==="reseller@worldtv.com" && password==="reseller123")
+){
+
+document
+.getElementById("loginScreen")
+.classList.add("hidden");
+
+}else{
+
+alert("Invalid Login");
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
