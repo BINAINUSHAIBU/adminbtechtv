@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WORLDTV Live Streaming Network</title>
+<title>WORLDTV IPTV PLAYER</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 *{
@@ -15,350 +16,192 @@ font-family:Arial,sans-serif;
 }
 
 body{
-background:#0b1220;
-color:#fff;
+background:#050816;
+color:white;
+}
+
+header{
+background:#111827;
+padding:15px;
+text-align:center;
+font-size:24px;
+font-weight:bold;
+}
+
+.container{
 display:flex;
-height:100vh;
-overflow:hidden;
+height:calc(100vh - 60px);
 }
 
 .sidebar{
-width:260px;
-background:#111827;
-padding:20px;
+width:350px;
+background:#0f172a;
 overflow-y:auto;
-}
-
-.logo{
-font-size:26px;
-font-weight:bold;
-margin-bottom:20px;
-color:#00d4ff;
-}
-
-.menu{
-list-style:none;
-}
-
-.menu li{
-padding:12px;
-margin-bottom:6px;
-background:#1f2937;
-border-radius:8px;
-cursor:pointer;
-}
-
-.menu li:hover{
-background:#374151;
-}
-
-.main{
-flex:1;
-padding:20px;
-overflow-y:auto;
-}
-
-.status-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:15px;
-margin-bottom:20px;
-}
-
-.status-card{
-background:#111827;
-padding:15px;
-border-radius:10px;
-}
-
-.player{
-background:#000;
-height:450px;
-border-radius:12px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:24px;
-margin-bottom:15px;
-}
-
-.controls{
-display:flex;
-gap:10px;
-margin-bottom:20px;
-}
-
-.controls button{
-padding:10px 15px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-}
-
-.channel-grid{
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
-gap:15px;
+border-right:1px solid #222;
 }
 
 .channel{
-background:#111827;
+padding:12px;
+cursor:pointer;
+border-bottom:1px solid #1e293b;
+}
+
+.channel:hover{
+background:#1e293b;
+}
+
+.player-area{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+#video{
+width:100%;
+height:70vh;
+background:black;
+}
+
+.info{
 padding:15px;
-border-radius:10px;
-border-left:4px solid red;
+background:#111827;
+}
+
+.search{
+width:100%;
+padding:10px;
+background:#111827;
+color:white;
+border:none;
+outline:none;
 }
 
 .live{
 color:red;
 font-weight:bold;
+animation:blink 1s infinite;
 }
 
-.server-table{
-width:100%;
-margin-top:30px;
-border-collapse:collapse;
-}
-
-.server-table th,
-.server-table td{
-border:1px solid #333;
-padding:10px;
-text-align:left;
-}
-
-.server-table th{
-background:#111827;
-}
-
-.footer{
-margin-top:30px;
-text-align:center;
-opacity:.7;
+@keyframes blink{
+50%{opacity:0;}
 }
 </style>
-
 </head>
-
 <body>
+
+<header>
+📺 WORLDTV IPTV NETWORK
+<span class="live">🔴 LIVE STREAMING</span>
+</header>
+
+<div class="container">
 
 <div class="sidebar">
 
-<div class="logo">
-📺 WORLDTV
-</div>
+<input type="text" class="search" id="search" placeholder="Search Channel...">
 
-<h3>Live Streaming Network</h3>
-
-<br>
-
-<h4>Navigation</h4>
-
-<ul class="menu">
-<li>🏠 Dashboard</li>
-<li>📡 Live TV</li>
-<li>⚽ Sports</li>
-<li>🎬 Movies</li>
-<li>📰 News</li>
-<li>🎵 Music</li>
-<li>⛪ Gospel</li>
-<li>🌍 International</li>
-
-<br>
-
-<li>❤️ Favorites</li>
-<li>🕘 Watch History</li>
-<li>⬇ Downloads</li>
-<li>⚙ Settings</li>
-<li>🚪 Logout</li>
-</ul>
+<div id="channelList"></div>
 
 </div>
 
-<div class="main">
+<div class="player-area">
 
-<div class="status-grid">
+<video id="video" controls autoplay></video>
 
-<div class="status-card">
-<h3>Streaming Server</h3>
-<p>All Systems Online</p>
-</div>
-
-<div class="status-card">
-<h3>CDN</h3>
-<p>Active</p>
-</div>
-
-<div class="status-card">
-<h3>4K Streaming</h3>
-<p>Enabled</p>
+<div class="info">
+<h2 id="channelName">Select Channel</h2>
+<p>Live IPTV Streaming</p>
 </div>
 
 </div>
 
-<div class="player">
-▶ LIVE CHANNEL PLAYER
 </div>
 
-<div class="controls">
-<button>▶ Play Live</button>
-<button>⛶ Fullscreen</button>
-<button>🔊 Volume</button>
-<button>⛔ Stop</button>
-</div>
+<script>
 
-<h2>Featured Channels</h2>
+const channels = [
 
-<div class="channel-grid">
+{
+name:"AfroSport Nigeria",
+url:"https://newproxy3.vidivu.tv/vidivu_afrosport/index.m3u8"
+},
 
-<div class="channel">
-<div class="live">LIVE</div>
-<h3>⚽ WORLD SPORTS HD</h3>
-<p>Live Sports Streaming</p>
-</div>
+{
+name:"Abu Dhabi Sports 1",
+url:"https://vo-live.cdb.cdn.orange.com/Content/Channel/AbuDhabiSportsChannel1/HLS/index.m3u8"
+},
 
-<div class="channel">
-<div class="live">LIVE</div>
-<h3>📰 GLOBAL NEWS</h3>
-<p>24/7 World News</p>
-</div>
+{
+name:"Abu Dhabi Sports 2",
+url:"https://vo-live.cdb.cdn.orange.com/Content/Channel/AbuDhabiSportsChannel2/HLS/index.m3u8"
+},
 
-<div class="channel">
-<div class="live">LIVE</div>
-<h3>🎵 MUSIC TV</h3>
-<p>Top Music Videos</p>
-</div>
+{
+name:"CBS Sports HQ",
+url:"http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5e9f2c05172a0f0007db4786/master.m3u8"
+},
 
-<div class="channel">
-<div class="live">LIVE</div>
-<h3>⛪ GOSPEL TV</h3>
-<p>Church Live Programs</p>
-</div>
+{
+name:"beIN SPORTS XTRA",
+url:"http://cfd-v4-service-channel-stitcher-use1-1.prd.pluto.tv/stitch/hls/channel/5df975e2b27cf5000921c102/master.m3u8"
+},
 
-</div>
+{
+name:"Adventure Sports TV",
+url:"https://d3rl6ns7c3ilda.cloudfront.net/v1/master/9d062541f2ff39b5c0f48b743c6411d25f62fc25/STIRR-MuxIP-AdventureSportsTV/438.m3u8"
+}
 
-<br><br>
+];
 
-<h2>Live Channels</h2>
+const list=document.getElementById('channelList');
 
-<div class="channel-grid">
+function renderChannels(data){
+list.innerHTML='';
+data.forEach(ch=>{
+const div=document.createElement('div');
+div.className='channel';
+div.innerHTML='📡 '+ch.name;
+div.onclick=()=>playChannel(ch);
+list.appendChild(div);
+});
+}
 
-<div class="channel">
-<div class="live">LIVE</div>
-<h3>📺 BBC World News</h3>
-<p>Live IPTV Channel</p>
-</div>
+function playChannel(ch){
 
-<div class="channel">
-<div class="live">LIVE</div>
-<h3>📺 CNN International</h3>
-<p>Live IPTV Channel</p>
-</div>
+document.getElementById('channelName').innerText=ch.name;
 
-<div class="channel">
-<div class="live">LIVE</div>
-<h3>📺 Sky News UK</h3>
-<p>Live IPTV Channel</p>
-</div>
+const video=document.getElementById('video');
 
-<div class="channel">
-<div class="live">LIVE</div>
-<h3>📺 Channels TV Nigeria</h3>
-<p>Live IPTV Channel</p>
-</div>
+if(Hls.isSupported()){
 
-<div class="channel">
-<div class="live">LIVE</div>
-<h3>📺 NTA International</h3>
-<p>Live IPTV Channel</p>
-</div>
+const hls=new Hls();
 
-<div class="channel">
-<div class="live">LIVE</div>
-<h3>📺 Al Jazeera English</h3>
-<p>Live IPTV Channel</p>
-</div>
+hls.loadSource(ch.url);
 
-<div class="channel">
-<div class="live">LIVE</div>
-<h3>📺 NHK World Japan</h3>
-<p>Live IPTV Channel</p>
-</div>
+hls.attachMedia(video);
 
-<div class="channel">
-<div class="live">LIVE</div>
-<h3>📺 France 24</h3>
-<p>Live IPTV Channel</p>
-</div>
+}
+else{
+video.src=ch.url;
+}
 
-<!-- ADD ALL OTHER CHANNELS HERE -->
+}
 
-</div>
+document.getElementById('search').addEventListener('keyup',e=>{
 
-<h2 style="margin-top:30px;">
-🟢 Streaming Server Dashboard
-</h2>
+const val=e.target.value.toLowerCase();
 
-<button style="
-padding:10px 20px;
-margin:15px 0;
-background:#00d4ff;
-border:none;
-border-radius:8px;
-cursor:pointer;">
+renderChannels(
+channels.filter(c=>
+c.name.toLowerCase().includes(val)
+)
+);
 
-* Add Stream
+});
 
-  </button>
+renderChannels(channels);
 
-<table class="server-table">
-
-<tr>
-<th>Server</th>
-<th>Region</th>
-<th>Bandwidth</th>
-<th>Users</th>
-<th>Status</th>
-</tr>
-
-<tr>
-<td>WORLDTV CDN-01</td>
-<td>Europe</td>
-<td>10Gbps</td>
-<td>12,430</td>
-<td>ONLINE</td>
-</tr>
-
-<tr>
-<td>WORLDTV CDN-02</td>
-<td>USA</td>
-<td>8Gbps</td>
-<td>9,890</td>
-<td>ONLINE</td>
-</tr>
-
-<tr>
-<td>WORLDTV CDN-03</td>
-<td>Africa</td>
-<td>6Gbps</td>
-<td>7,210</td>
-<td>ONLINE</td>
-</tr>
-
-<tr>
-<td>WORLDTV CDN-04</td>
-<td>Asia</td>
-<td>5Gbps</td>
-<td>5,320</td>
-<td>OFFLINE</td>
-</tr>
-
-</table>
-
-<div class="footer">
-© 2026 WORLDTV LIVE PLATFORM • Professional IPTV Dashboard
-</div>
-
-</div>
+</script>
 
 </body>
 </html>
