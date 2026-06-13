@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>WORLDTV PRO MAX IPTV SAAS</title>
+<title>WORLDTV PRO MAX IPTV MERGED 2026</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -151,7 +152,7 @@ overflow:auto;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
 gap:10px;
-padding-bottom:60px;
+padding-bottom:50px;
 }
 
 .card{
@@ -172,43 +173,6 @@ font-size:10px;
 float:right;
 }
 
-/* =========================
-BOTTOM TICKER
-========================= */
-
-.bottom-ticker{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-height:45px;
-background:#0b1220;
-border-top:1px solid #1f2a44;
-overflow:hidden;
-display:flex;
-align-items:center;
-z-index:9999;
-}
-
-.ticker-track{
-display:flex;
-gap:40px;
-white-space:nowrap;
-animation:scroll 18s linear infinite;
-padding-left:100%;
-}
-
-.ticker-item{
-color:#00d4ff;
-font-weight:600;
-font-size:14px;
-}
-
-@keyframes scroll{
-0%{transform:translateX(0);}
-100%{transform:translateX(-100%);}
-}
-
 /* ========================= */
 
 @media(max-width:900px){
@@ -224,8 +188,8 @@ body{flex-direction:column;}
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="logo">📺 BTECH IPTV SAAS</div>
-<div class="sub">Full IPTV Cloud System</div>
+<div class="logo">📺 BTECH-TV PRO MAX</div>
+<div class="sub">Ultra IPTV Merged Engine</div>
 
 <div class="menu-title">🌍 Countries</div>
 
@@ -234,13 +198,23 @@ body{flex-direction:column;}
 <button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
 <button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
 <button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
+<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
+<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
+<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
 
-<div class="menu-title">⚙ Tools</div>
+<div class="menu-title">🎬 Categories</div>
 
+<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
+<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
+<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
+<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
+
+<div class="menu-title">🔥 Premium</div>
+
+<button class="nav-btn" onclick="togglePiP()">📺 PiP</button>
+<button class="nav-btn" onclick="shuffle()">🎲 Shuffle</button>
 <button class="nav-btn" onclick="next()">⏭ Next</button>
 <button class="nav-btn" onclick="prev()">⏮ Prev</button>
-<button class="nav-btn" onclick="toggleMute()">🔊 Mute</button>
-<button class="nav-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
 
 </div>
 
@@ -250,7 +224,7 @@ body{flex-direction:column;}
 <div class="topbar">
 
 <div class="search-box">
-<input oninput="search(this.value)" placeholder="Search IPTV channels...">
+<input oninput="search(this.value)" placeholder="Search Ultra IPTV...">
 </div>
 
 <div class="live">🔴 LIVE</div>
@@ -258,13 +232,13 @@ body{flex-direction:column;}
 </div>
 
 <div class="hero">
-<h2>WORLDTV SAAS IPTV SYSTEM</h2>
+<h2>WORLDTV PRO MAX IPTV SYSTEM</h2>
 
 <div class="stats">
 <div class="stat">📺 <div id="total">0</div></div>
-<div class="stat">🌍 Live <div id="live">0</div></div>
-<div class="stat">⚫ Dead <div id="dead">0</div></div>
 <div class="stat">⭐ Fav <div id="fav">0</div></div>
+<div class="stat">⚫ Dead <div id="dead">0</div></div>
+<div class="stat">🌍 Live <div id="live">0</div></div>
 </div>
 </div>
 
@@ -273,26 +247,24 @@ body{flex-direction:column;}
 </div>
 
 <div class="controls">
+
 <button onclick="next()">▶ Next</button>
 <button onclick="prev()">◀ Prev</button>
 <button onclick="toggleMute()">🔊 Mute</button>
 <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
 <button onclick="loadGlobal()">🌍 Global</button>
+
 </div>
 
 <div class="channels" id="grid"></div>
 
 </div>
 
-<!-- 🔥 BOTTOM SCROLLING CHANNEL BAR -->
-<div class="bottom-ticker">
-  <div class="ticker-track" id="ticker"></div>
-</div>
-
 <script>
 
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
+
 let hls;
 
 /* LOAD COUNTRY */
@@ -300,14 +272,18 @@ async function load(code){
 await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
 
+/* LOAD CATEGORY */
+async function loadCat(c){
+await loadM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`);
+}
+
 /* GLOBAL */
 async function loadGlobal(){
 await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
 }
 
-/* M3U */
+/* M3U PARSER */
 async function loadM3U(url){
-
 const res=await fetch(url);
 const text=await res.text();
 
@@ -329,16 +305,12 @@ all.push({name,url});
 }
 
 filtered=[...all];
-
 render();
 stats();
-updateTicker();
-
 }
 
 /* RENDER */
 function render(){
-
 let grid=document.getElementById("grid");
 grid.innerHTML="";
 
@@ -352,8 +324,6 @@ div.onclick=()=>play(idx);
 
 grid.appendChild(div);
 });
-
-updateTicker();
 }
 
 /* PLAY */
@@ -374,7 +344,6 @@ hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
 video.src=c.url;
 video.play();
 }
-
 }
 
 /* SEARCH */
@@ -397,7 +366,14 @@ play(i);
 /* UI */
 function toggleMute(){video.muted=!video.muted;}
 
-function toggleFullscreen(){video.requestFullscreen();}
+function toggleFullscreen(){
+video.requestFullscreen();
+}
+
+function shuffle(){
+filtered.sort(()=>Math.random()-0.5);
+render();
+}
 
 /* STATS */
 function stats(){
@@ -405,19 +381,6 @@ document.getElementById("total").innerText=all.length;
 document.getElementById("live").innerText=all.length;
 document.getElementById("dead").innerText=0;
 document.getElementById("fav").innerText=0;
-}
-
-/* 🔥 TICKER */
-function updateTicker(){
-let t=document.getElementById("ticker");
-t.innerHTML="";
-
-filtered.slice(0,60).forEach(c=>{
-let span=document.createElement("div");
-span.className="ticker-item";
-span.innerText="📺 "+c.name;
-t.appendChild(span);
-});
 }
 
 /* AUTO LOAD */
