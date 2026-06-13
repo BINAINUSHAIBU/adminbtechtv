@@ -69,7 +69,7 @@ background:black;
 border-radius:10px;
 }
 
-/* CHANNELS (SCROLL ONLY) */
+/* CHANNELS SCROLL ONLY */
 .channels-scroll{
 max-height:55vh;
 overflow-y:auto;
@@ -169,14 +169,13 @@ video{height:250px;}
 
 <script>
 
-let all=[],filtered=[],index=0,currentHls;
-
+let currentHls;
 const video=document.getElementById("video");
 const grid=document.getElementById("grid");
 
-/* STREAM */
 const sampleStream="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 
+/* PLAY */
 function play(url){
 
 if(currentHls) currentHls.destroy();
@@ -195,13 +194,13 @@ video.play();
 
 /* SEARCH */
 function search(q){
-const items=document.querySelectorAll(".channel-card");
-items.forEach(c=>{
-c.style.display=c.innerText.toLowerCase().includes(q.toLowerCase())?"block":"none";
+document.querySelectorAll(".channel-card").forEach(c=>{
+c.style.display=c.innerText.toLowerCase().includes(q.toLowerCase())
+?"block":"none";
 });
 }
 
-/* CHANNEL LIST */
+/* CHANNELS */
 const channels=[
 "Kanali 7","A2 CNN","ABC News","Top News","BBC World",
 "Al Jazeera","France 24","Sky News","CNN","DW News",
