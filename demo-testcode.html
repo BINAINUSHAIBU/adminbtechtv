@@ -9,8 +9,8 @@
 
 <style>
 
-/* ================= AUTH SCREEN ================= */
-#authScreen{
+/* ================= AUTH ================= */
+#auth{
 position:fixed;
 inset:0;
 background:#050816;
@@ -21,7 +21,7 @@ z-index:9999;
 }
 
 .authBox{
-width:320px;
+width:340px;
 background:#0d1324;
 padding:20px;
 border-radius:10px;
@@ -29,6 +29,7 @@ border:1px solid #1d2b4f;
 }
 
 .authBox h2{color:#00d4ff;margin-bottom:10px;}
+
 .authBox input{
 width:100%;
 padding:10px;
@@ -42,7 +43,7 @@ color:#fff;
 .authBox button{
 width:100%;
 padding:10px;
-margin-top:10px;
+margin-top:8px;
 background:#00d4ff;
 border:none;
 color:#000;
@@ -51,24 +52,250 @@ cursor:pointer;
 border-radius:6px;
 }
 
-/* BASE (YOUR ORIGINAL) */
+.small{font-size:12px;color:#8ea2d9;margin-top:5px}
+
+/* ================= BASE IPTV ================= */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
 
-/* SIDEBAR */
 .sidebar{width:280px;background:#0d1324;padding:15px;overflow-y:auto;border-right:1px solid #1d2b4f;}
 .logo{font-size:22px;font-weight:900;color:#00d4ff;}
 .sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
+
 .menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
 
 .nav-btn{width:100%;padding:10px;margin:5px 0;background:#121c33;border:none;border-radius:8px;color:#fff;cursor:pointer;}
 .nav-btn:hover{background:#1e2f57}
 
-/* MAIN */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px;}
+
 .topbar{display:flex;justify-content:space-between;margin-bottom:10px;}
-.search-box input{padding:10px;border-radius:8px;border:none;background:#101a31;color:#fff;width:260px;}
+
+.search-box input{
+padding:10px;border-radius:8px;border:none;background:#101a31;color:#fff;width:260px;
+}
+
 .live{background:red;padding:6px 12px;border-radius:20px}
 
-.hero{background:linear-gradient(135deg,#07132f,#0f1d45);padding:10px;border-radius:10px;margin-bottom:10px;}
-.stats{
+.hero{
+background:linear-gradient(135deg,#07132f,#0f1d45);
+padding:10px;border-radius:10px;margin-bottom:10px;
+}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
+
+.stat{
+background:#101d39;padding:8px;border-radius:8px;text-align:center;
+}
+
+.player-container{background:#000;border-radius:10px;overflow:hidden;height:320px;flex-shrink:0;}
+video{width:100%;height:100%;}
+
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+.controls button{padding:8px 10px;border:none;border-radius:6px;background:#152445;color:#fff;cursor:pointer;}
+.controls button:hover{background:#00d4ff;color:#000}
+
+.channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+
+.channels{
+overflow-y:auto;flex:1;display:grid;
+grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+gap:10px;
+}
+
+.card{
+background:#111a31;padding:10px;border-radius:10px;
+cursor:pointer;border:1px solid #1f355d;
+}
+
+.card:hover{transform:scale(1.03);border-color:#00d4ff;}
+
+.badge{background:red;padding:3px 6px;border-radius:10px;font-size:10px;float:right;}
+
+</style>
+</head>
+
+<body>
+
+<!-- ================= AUTH SCREEN ================= -->
+<div id="auth">
+<div class="authBox">
+<h2>Login / Register</h2>
+
+<input id="user" placeholder="Username">
+<input id="pass" type="password" placeholder="Password">
+
+<button onclick="register()">Register (3-Day Trial)</button>
+<button onclick="login()">Login</button>
+
+<div class="small" id="msg"></div>
+</div>
+</div>
+
+<!-- ================= IPTV APP ================= -->
+<div id="app" style="display:none; width:100%;">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<div class="logo">📺 BTECH-TV PRO MAX</div>
+<div class="sub">Ultra IPTV Engine X</div>
+
+<div class="menu-title">Countries</div>
+<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
+<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
+<button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
+<button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
+
+<div class="menu-title">Tools</div>
+<button class="nav-btn" onclick="loadUltra()">🚀 Global</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="topbar">
+<input class="search-box" oninput="search(this.value)" placeholder="Search IPTV...">
+<div class="live">🔴 LIVE</div>
+</div>
+
+<div class="hero">
+<h3>WORLDTV PRO MAX SYSTEM</h3>
+</div>
+
+<div class="player-container">
+<video id="video" controls autoplay muted></video>
+</div>
+
+<div class="controls">
+<button onclick="next()">Next</button>
+<button onclick="prev()">Prev</button>
+<button onclick="toggleMute()">Mute</button>
+</div>
+
+<div class="channel-wrapper">
+<div class="channels" id="grid"></div>
+</div>
+
+</div>
+</div>
+
+<script>
+
+/* ================= AUTH LOGIC ================= */
+function register(){
+let u=user.value, p=pass.value;
+if(!u||!p) return msg("Fill all fields");
+
+let data = {
+password:p,
+start:Date.now(),
+trialEnd: Date.now() + (3*24*60*60*1000) // 3 days
+};
+
+localStorage.setItem("user_"+u, JSON.stringify(data));
+msg("Registered! You now have 3-day trial");
+}
+
+function login(){
+let u=user.value, p=pass.value;
+let d = localStorage.getItem("user_"+u);
+
+if(!d) return msg("User not found");
+
+d = JSON.parse(d);
+
+if(d.password !== p) return msg("Wrong password");
+
+/* trial check */
+if(Date.now() > d.trialEnd){
+return msg("Trial expired. Please upgrade.");
+}
+
+localStorage.setItem("activeUser", u);
+
+document.getElementById("auth").style.display="none";
+document.getElementById("app").style.display="flex";
+}
+
+function msg(t){
+document.getElementById("msg").innerText=t;
+}
+
+/* ================= IPTV LOGIC ================= */
+let all=[],filtered=[],i=0;
+let video=document.getElementById("video");
+let hls;
+
+async function load(code){
+await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
+}
+
+async function loadUltra(){
+await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
+}
+
+async function loadM3U(url){
+const res=await fetch(url);
+const text=await res.text();
+
+all=[];filtered=[];i=0;
+
+let lines=text.split("\n");
+
+for(let x=0;x<lines.length;x++){
+if(lines[x].startsWith("#EXTINF")){
+let name=lines[x].split(",").pop();
+let url=lines[x+1];
+if(url && url.startsWith("http")) all.push({name,url});
+}
+}
+
+filtered=[...all];
+render();
+}
+
+function render(){
+let grid=document.getElementById("grid");
+grid.innerHTML="";
+
+filtered.forEach((c,idx)=>{
+let div=document.createElement("div");
+div.className="card";
+div.innerHTML=`<div class="badge">LIVE</div>${c.name}`;
+div.onclick=()=>play(idx);
+grid.appendChild(div);
+});
+}
+
+function play(idx){
+i=idx;
+let c=filtered[i];
+
+if(hls) hls.destroy();
+
+if(Hls.isSupported()){
+hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(video);
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+}else{
+video.src=c.url;
+video.play();
+}
+}
+
+function search(q){
+filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
+render();
+}
+
+function next(){i=(i+1)%filtered.length;play(i);}
+function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
+function toggleMute(){video.muted=!video.muted;}
+
+loadUltra();
+
+</script>
+
+</body>
+</html>
