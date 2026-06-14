@@ -3,74 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>ENTERPRISE OTT SAAS PLATFORM</title>
+<title>GLOBAL OTT PLATFORM SAAS</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
+:root{
+--bg:#050816;
+--panel:#111827;
+--card:#162033;
+--accent:#00d4ff;
+--text:#fff;
+--muted:#94a3b8;
+--good:#22c55e;
+--bad:#ef4444;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+
 body{
-margin:0;
-font-family:Arial;
-background:#0b0f1a;
-color:#fff;
+background:var(--bg);
+color:var(--text);
 display:flex;
 height:100vh;
 overflow:hidden;
 }
 
-/* LOGIN */
-#loginBox{
+/* ================= LOGIN ================= */
+#auth{
 position:fixed;
 inset:0;
-background:#050816;
+background:#020617;
 display:flex;
-justify-content:center;
 align-items:center;
+justify-content:center;
 flex-direction:column;
 gap:10px;
 z-index:999;
 }
 
-input{
+#auth input{
 padding:10px;
+width:240px;
 border:none;
 border-radius:8px;
-width:220px;
 }
 
-button{
+#auth button{
 padding:10px;
 border:none;
 border-radius:8px;
-cursor:pointer;
 background:#1f2a44;
 color:#fff;
+cursor:pointer;
 }
 
-button:hover{background:#00d4ff;color:#000}
+#auth button:hover{background:var(--accent);color:#000}
 
-/* SIDEBAR */
+/* ================= SIDEBAR ================= */
 .sidebar{
-width:240px;
-background:#111827;
+width:260px;
+background:#0f172a;
 padding:10px;
 overflow:auto;
+border-right:1px solid #1f2937;
 }
 
-.sidebar h3{color:#00d4ff;font-size:14px}
+.brand{
+font-size:18px;
+font-weight:900;
+color:var(--accent);
+margin-bottom:10px;
+}
 
 .menu{
-padding:8px;
+padding:10px;
 margin:5px 0;
-background:#1b2436;
+background:#111827;
 border-radius:8px;
 cursor:pointer;
 }
 
-.menu:hover{background:#22304d}
+.menu:hover{background:#1e293b}
 
-/* MAIN */
+/* ================= MAIN ================= */
 .main{
 flex:1;
 display:flex;
@@ -83,12 +100,13 @@ overflow:hidden;
 display:flex;
 justify-content:space-between;
 padding:10px;
-background:#0f172a;
+background:#0b1220;
+border-bottom:1px solid #1f2937;
 }
 
 /* PLAYER */
 .player{
-height:300px;
+height:320px;
 background:black;
 }
 
@@ -97,25 +115,38 @@ width:100%;
 height:100%;
 }
 
-/* CONTENT */
+/* CONTENT GRID */
 .grid{
 flex:1;
 overflow:auto;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
 gap:10px;
 padding:10px;
 }
 
 .card{
-background:#111a31;
+background:var(--card);
 padding:10px;
 border-radius:10px;
 cursor:pointer;
-border:1px solid #1f355d;
+border:1px solid #1f2937;
+transition:.2s;
 }
 
-.card:hover{border-color:#00d4ff}
+.card:hover{
+border-color:var(--accent);
+transform:scale(1.02);
+}
+
+/* STATUS BAR */
+.status{
+padding:8px;
+font-size:12px;
+color:var(--muted);
+background:#020617;
+border-top:1px solid #1f2937;
+}
 
 /* ADMIN PANEL */
 .admin{
@@ -123,52 +154,70 @@ position:fixed;
 right:10px;
 bottom:10px;
 width:260px;
-background:#111827;
-padding:10px;
+background:#0f172a;
+border:1px solid var(--accent);
 border-radius:10px;
-border:1px solid #00d4ff;
+padding:10px;
 display:none;
 }
 
-.small{font-size:12px;color:#aaa}
+.admin button{
+width:100%;
+margin:5px 0;
+padding:8px;
+border:none;
+border-radius:8px;
+background:#1f2937;
+color:#fff;
+cursor:pointer;
+}
+
+.admin button:hover{background:var(--accent);color:#000}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+.sidebar{width:100px;font-size:12px}
+.player{height:220px}
+}
 
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN SCREEN -->
-<div id="loginBox">
-<h2>🔐 ENTERPRISE SAAS LOGIN</h2>
+<!-- ================= AUTH ================= -->
+<div id="auth">
+<h2>🌍 GLOBAL OTT PLATFORM</h2>
 <input id="email" placeholder="Email">
 <input id="pass" placeholder="Password">
 <button onclick="login()">Login</button>
 <button onclick="register()">Register</button>
 </div>
 
-<!-- SIDEBAR -->
+<!-- ================= SIDEBAR ================= -->
 <div class="sidebar">
 
-<h3>📺 ENTERPRISE OTT</h3>
+<div class="brand">📺 GLOBAL OTT</div>
 
-<div class="menu" onclick="loadSample()">📡 Load Content</div>
+<div class="menu" onclick="loadDemo()">🎬 Load Global Content</div>
 <div class="menu" onclick="toggleAdmin()">🛠 Admin Panel</div>
-<div class="menu" onclick="addSample()">➕ Add Content</div>
+<div class="menu" onclick="addContent()">➕ Add Content</div>
 <div class="menu" onclick="logout()">🚪 Logout</div>
 
 <hr>
 
-<h3>📊 Stats</h3>
-<div id="stats">0 Users • 0 Videos</div>
+<div class="menu" onclick="filterAll()">🌍 All</div>
+<div class="menu" onclick="filterMovies()">🎬 Movies</div>
+<div class="menu" onclick="filterLive()">📡 Live TV</div>
 
 </div>
 
-<!-- MAIN -->
+<!-- ================= MAIN ================= -->
 <div class="main">
 
 <div class="topbar">
-<div>🚀 ENTERPRISE OTT SAAS PLATFORM</div>
-<div>🔴 LIVE SYSTEM</div>
+<div>🚀 GLOBAL OTT STREAMING SAAS</div>
+<div>🔴 LIVE NETWORK</div>
 </div>
 
 <div class="player">
@@ -177,15 +226,21 @@ display:none;
 
 <div class="grid" id="grid"></div>
 
+<div class="status" id="status">
+0 Channels • SaaS Ready System
 </div>
 
-<!-- ADMIN -->
+</div>
+
+<!-- ================= ADMIN ================= -->
 <div class="admin" id="admin">
-<b>🛠 ADMIN PANEL</b>
-<p class="small">System Control Center</p>
-<button onclick="clearContent()">Clear Content</button>
-<button onclick="seedData()">Seed Demo Data</button>
-<button onclick="showStats()">Refresh Stats</button>
+<b>🛠 GLOBAL ADMIN</b>
+
+<button onclick="clearAll()">Clear Content</button>
+<button onclick="seed()">Seed Demo</button>
+<button onclick="exportData()">Export JSON</button>
+<button onclick="showStats()">Stats</button>
+
 </div>
 
 <script>
@@ -193,66 +248,62 @@ display:none;
 /* ================= STATE ================= */
 let user=null;
 let content=[];
+let filtered=[];
 let hls;
 let video=document.getElementById("video");
 
-/* ================= AUTH (SIMULATED SAAS) ================= */
+/* ================= AUTH ================= */
 function register(){
-alert("User registered (demo mode)");
+alert("Registered (demo SaaS mode)");
 }
 
 function login(){
-user={
-email:email.value,
-role: email.value==="admin@saas.com" ? "admin":"user"
-};
+user={email:email.value};
 
-document.getElementById("loginBox").style.display="none";
+document.getElementById("auth").style.display="none";
 
-if(user.role==="admin"){
-document.getElementById("admin").style.display="block";
-}
-
-loadSample();
+loadDemo();
 }
 
 /* ================= CONTENT ================= */
-function loadSample(){
+function loadDemo(){
+
 content=[
-{name:"Movie Stream 1",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"Movie Stream 2",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
-{name:"Live Channel Demo",url:"https://test-streams.mux.dev/dai-discontinuity-dash.m3u8"}
+{name:"Global Movie 1",type:"movie",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Global Movie 2",type:"movie",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
+{name:"Live Sports Channel",type:"live",url:"https://test-streams.mux.dev/dai-discontinuity-dash.m3u8"},
+{name:"News World Live",type:"live",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
 ];
 
-render();
-updateStats();
-}
-
-function addSample(){
-content.push({
-name:"New Upload "+Date.now(),
-url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-});
+filtered=[...content];
 
 render();
+
 updateStats();
+
 }
 
 /* ================= RENDER ================= */
 function render(){
+
 let grid=document.getElementById("grid");
 grid.innerHTML="";
 
-content.forEach((c,i)=>{
+filtered.forEach((c,i)=>{
+
 let div=document.createElement("div");
 div.className="card";
-div.innerHTML="📺 "+c.name;
+div.innerHTML=`📺 ${c.name} <br><small>${c.type}</small>`;
+
 div.onclick=()=>play(c.url);
+
 grid.appendChild(div);
+
 });
+
 }
 
-/* ================= PLAYER ================= */
+/* ================= PLAY ================= */
 function play(url){
 
 if(hls) hls.destroy();
@@ -269,33 +320,56 @@ video.play();
 
 }
 
+/* ================= FILTER ================= */
+function filterAll(){filtered=[...content];render();}
+function filterMovies(){filtered=content.filter(c=>c.type==="movie");render();}
+function filterLive(){filtered=content.filter(c=>c.type==="live");render();}
+
 /* ================= ADMIN ================= */
 function toggleAdmin(){
 let a=document.getElementById("admin");
-a.style.display=a.style.display==="none"?"block":"none";
+a.style.display=a.style.display==="block"?"none":"block";
 }
 
-function clearContent(){
+function clearAll(){
 content=[];
+filtered=[];
 render();
 updateStats();
 }
 
-function seedData(){
-loadSample();
+function seed(){
+loadDemo();
 }
 
-/* ================= STATS ================= */
-function updateStats(){
-document.getElementById("stats").innerText=
-"1 User • "+content.length+" Videos";
+function exportData(){
+const blob=new Blob([JSON.stringify(content,null,2)],{type:"application/json"});
+const a=document.createElement("a");
+a.href=URL.createObjectURL(blob);
+a.download="ott-data.json";
+a.click();
 }
 
 function showStats(){
-alert("Users: 1\nVideos: "+content.length);
+alert("Users: 1\nContent: "+content.length);
 }
 
-/* ================= LOGOUT ================= */
+/* ================= UTILS ================= */
+function addContent(){
+content.push({
+name:"New Global Content "+Date.now(),
+type:"movie",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+});
+render();
+updateStats();
+}
+
+function updateStats(){
+document.getElementById("status").innerText=
+content.length+" Channels • Global OTT SaaS Active";
+}
+
 function logout(){
 location.reload();
 }
