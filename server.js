@@ -121,3 +121,27 @@ app.get("/trial/status", verifyTrial, (req, res) => {
 app.listen(3000, () => {
     console.log("🚀 Trial Backend running on http://localhost:3000");
 });
+const express = require("express");
+const fs = require("fs");
+const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const axios = require("axios");
+const Stripe = require("stripe");
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const SECRET = "IPTV_SECRET_2026";
+
+/* =======================
+   PAYMENT KEYS
+======================= */
+
+// STRIPE
+const stripe = Stripe("YOUR_STRIPE_SECRET_KEY");
+
+// PAYSTACK
+const PAYSTACK_SECRET = "YOUR_PAYSTACK_SECRET_KEY";
+
+const DB_FILE = "./users.json";
