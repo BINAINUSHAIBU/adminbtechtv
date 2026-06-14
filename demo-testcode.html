@@ -8,111 +8,59 @@
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#050816;
-color:#fff;
-display:flex;
-height:100vh;
-overflow:hidden;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden}
 
 /* LOGIN */
-#loginBox{
-position:fixed;
-inset:0;
-background:#020617;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-gap:10px;
+#login{
+position:fixed;inset:0;background:#020617;
+display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;
 z-index:999;
 }
 
 input{
-padding:10px;
-width:220px;
-border:none;
-border-radius:8px;
+padding:10px;width:220px;border:none;border-radius:8px;
 }
 
 button{
-padding:10px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-background:#1f2a44;
-color:#fff;
+padding:10px;border:none;border-radius:8px;
+background:#1f2a44;color:#fff;cursor:pointer;
 }
 
 button:hover{background:#00d4ff;color:#000}
 
 /* SIDEBAR */
 .sidebar{
-width:240px;
-background:#0f172a;
-padding:10px;
-overflow:auto;
+width:240px;background:#0f172a;padding:10px;overflow:auto;
 }
 
-.menu{
-padding:10px;
-margin:5px 0;
-background:#111827;
-border-radius:8px;
-cursor:pointer;
-}
-
+.menu{padding:10px;margin:5px 0;background:#111827;border-radius:8px;cursor:pointer}
 .menu:hover{background:#1e293b}
 
 /* MAIN */
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-}
+.main{flex:1;display:flex;flex-direction:column}
 
 /* PLAYER */
-.player{
-height:300px;
-background:black;
-}
-
-video{
-width:100%;
-height:100%;
-}
+.player{height:300px;background:black}
+video{width:100%;height:100%}
 
 /* GRID */
 .grid{
-flex:1;
-overflow:auto;
+flex:1;overflow:auto;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-gap:10px;
-padding:10px;
+gap:10px;padding:10px;
 }
 
 .card{
-background:#111a31;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-border:1px solid #1f355d;
+background:#111a31;padding:10px;border-radius:10px;
+cursor:pointer;border:1px solid #1f355d;
 }
 
 .card:hover{border-color:#00d4ff}
 
-/* TOP */
-.topbar{
-display:flex;
-justify-content:space-between;
-padding:10px;
-background:#0b1220;
-}
+/* TOPBAR */
+.top{display:flex;justify-content:space-between;padding:10px;background:#0b1220}
 
 </style>
 </head>
@@ -120,11 +68,12 @@ background:#0b1220;
 <body>
 
 <!-- LOGIN -->
-<div id="loginBox">
+<div id="login">
 <h2>🔐 OTT SAAS LOGIN</h2>
 <input id="email" placeholder="email">
 <input id="pass" type="password" placeholder="password">
 <button onclick="login()">Login</button>
+
 <p style="font-size:12px;color:#aaa">
 Demo: admin@demo.com / admin123
 </p>
@@ -132,16 +81,16 @@ Demo: admin@demo.com / admin123
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<div class="menu" onclick="loadDemo()">📺 Load Channels</div>
-<div class="menu" onclick="showAdmin()">🛠 Admin Panel</div>
+<div class="menu" onclick="loadChannels()">📺 Load Channels</div>
+<div class="menu" onclick="loadBackend()">🌍 API Load (Backend)</div>
 <div class="menu" onclick="logout()">🚪 Logout</div>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-<div class="topbar">
-<div>🌍 GLOBAL OTT SAAS (DEMO MODE)</div>
+<div class="top">
+<div>🌍 GLOBAL OTT SAAS</div>
 <div id="status">OFFLINE</div>
 </div>
 
@@ -155,62 +104,63 @@ Demo: admin@demo.com / admin123
 
 <script>
 
-let user=null;
-let role="guest";
+let token=null;
+let role="user";
 let video=document.getElementById("video");
 let hls;
 
 /* =========================
-FAKE USERS (SIMULATED JWT)
+DEMO LOGIN (REPLACE WITH JWT BACKEND)
 ========================= */
-const users=[
-{email:"admin@demo.com",pass:"admin123",role:"admin"},
-{email:"user@demo.com",pass:"user123",role:"user"}
-];
-
-/* LOGIN */
 function login(){
 
-let email=document.getElementById("email").value;
-let pass=document.getElementById("pass").value;
+const email=document.getElementById("email").value;
+const pass=document.getElementById("pass").value;
 
-let found=users.find(u=>u.email===email && u.pass===pass);
+/* DEMO ONLY (REMOVE IN PRODUCTION) */
+if(email==="admin@demo.com" && pass==="admin123"){
+token="demo-token";
+role="admin";
 
-if(!found){
+document.getElementById("login").style.display="none";
+document.getElementById("status").innerText="ONLINE (ADMIN)";
+
+loadChannels();
+
+}else if(email==="user@demo.com" && pass==="user123"){
+token="demo-token";
+role="user";
+
+document.getElementById("login").style.display="none";
+document.getElementById("status").innerText="ONLINE (USER)";
+
+loadChannels();
+
+}else{
 alert("Invalid login");
-return;
 }
-
-user=found.email;
-role=found.role;
-
-document.getElementById("loginBox").style.display="none";
-document.getElementById("status").innerText="ONLINE ("+role+")";
-
-loadDemo();
 
 }
 
-/* LOGOUT */
-function logout(){
-location.reload();
-}
-
-/* DEMO CHANNELS */
+/* =========================
+DEMO CHANNELS (FALLBACK)
+========================= */
 const channels=[
 {name:"BBC News",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
 {name:"NASA TV",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
-{name:"Sports Live",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
-{name:"Movie Channel",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
+{name:"Sports Live",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Movie Channel",url:"https://test-streams.mux.dev/test_001/stream.m3u8"}
 ];
 
-/* LOAD */
-function loadDemo(){
+/* =========================
+LOAD LOCAL CHANNELS
+========================= */
+function loadChannels(){
 
 let grid=document.getElementById("grid");
 grid.innerHTML="";
 
-channels.forEach((c,i)=>{
+channels.forEach(c=>{
 
 let div=document.createElement("div");
 div.className="card";
@@ -224,7 +174,50 @@ grid.appendChild(div);
 
 }
 
-/* PLAY */
+/* =========================
+LOAD FROM REAL BACKEND API
+========================= */
+async function loadBackend(){
+
+if(!token){
+alert("Login required");
+return;
+}
+
+try{
+
+const res=await fetch("http://localhost:5000/api/channels",{
+headers:{
+Authorization:"Bearer "+token
+}
+});
+
+const data=await res.json();
+
+let grid=document.getElementById("grid");
+grid.innerHTML="";
+
+data.forEach(c=>{
+
+let div=document.createElement("div");
+div.className="card";
+div.innerHTML=c.title;
+
+div.onclick=()=>play(c.url);
+
+grid.appendChild(div);
+
+});
+
+}catch(err){
+alert("Backend not connected");
+}
+
+}
+
+/* =========================
+PLAYER
+========================= */
 function play(url){
 
 if(hls) hls.destroy();
@@ -241,16 +234,11 @@ video.play();
 
 }
 
-/* ADMIN */
-function showAdmin(){
-
-if(role!=="admin"){
-alert("Admin only panel");
-return;
-}
-
-alert("ADMIN DASHBOARD:\nUsers: 2\nStreams: "+channels.length);
-
+/* =========================
+LOGOUT
+========================= */
+function logout(){
+location.reload();
 }
 
 </script>
