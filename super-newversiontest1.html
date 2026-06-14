@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BTECH-TV PRO MAX | SUPER ADMIN PANEL</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#0b0f1a;
+    color:#fff;
+}
+
+header{
+    background:#111a2e;
+    padding:20px;
+    text-align:center;
+    font-size:22px;
+    font-weight:bold;
+    color:#00ffcc;
+}
+
+.container{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:15px;
+    padding:15px;
+}
+
+.panel{
+    background:#141c33;
+    padding:15px;
+    border-radius:10px;
+}
+
+h2{
+    font-size:16px;
+    margin-bottom:10px;
+    color:#00ffcc;
+}
+
+.item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px;
+    margin:5px 0;
+    background:#0e1528;
+    border-radius:6px;
+}
+
+button{
+    padding:5px 10px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.locked{
+    background:red;
+    color:#fff;
+}
+
+.unlocked{
+    background:green;
+    color:#fff;
+}
+
+.master{
+    background:#ff9800;
+    color:#000;
+    width:100%;
+    padding:10px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+📺 BTECH-TV PRO MAX — SUPER ADMIN CONTROL CENTER
+</header>
+
+<div class="container">
+
+<!-- MASTER CONTROL -->
+<div class="panel">
+<h2>🔥 MASTER CONTROL</h2>
+<button class="master" onclick="toggleAll()">LOCK / UNLOCK ALL SYSTEM</button>
+<div class="item">
+<span>Trial Mode Access</span>
+<button id="trialBtn" class="unlocked" onclick="toggle(this)">ACTIVE</button>
+</div>
+<div class="item">
+<span>Premium Upgrade Gate</span>
+<button class="locked" onclick="toggle(this)">LOCKED</button>
+</div>
+</div>
+
+<!-- COUNTRIES -->
+<div class="panel">
+<h2>🌍 COUNTRIES</h2>
+
+<div id="countries"></div>
+
+</div>
+
+<!-- CATEGORIES -->
+<div class="panel">
+<h2>🎬 CATEGORIES</h2>
+<div id="categories"></div>
+</div>
+
+<!-- LANGUAGES -->
+<div class="panel">
+<h2>🗣 LANGUAGES</h2>
+<div id="languages"></div>
+</div>
+
+<!-- TOOLS -->
+<div class="panel">
+<h2>🔥 TOOLS</h2>
+<div id="tools"></div>
+</div>
+
+</div>
+
+<script>
+
+const countries = ["Nigeria","USA","UK","India","France","Germany","Brazil","South Africa","Canada","Australia","Japan","Korea","China","Spain","Italy","Turkey","Mexico","UAE","Saudi Arabia","Egypt","Argentina","Pakistan","Indonesia","Philippines","Albania"];
+
+const categories = ["News","Sports","Movies","Music","Kids","Comedy","Documentary","Business","Science","Travel"];
+
+const languages = ["English","Spanish","Arabic","French","Hindi","Chinese","Portuguese"];
+
+const tools = ["Scan","Boost","PiP","Recents","Record","Ultra Feeds","Repair","Optimize"];
+
+function createList(id, items){
+    const box = document.getElementById(id);
+    items.forEach(name=>{
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `
+            <span>${name}</span>
+            <button class="unlocked" onclick="toggle(this)">UNLOCKED</button>
+        `;
+        box.appendChild(div);
+    });
+}
+
+createList("countries", countries);
+createList("categories", categories);
+createList("languages", languages);
+createList("tools", tools);
+
+function toggle(btn){
+    if(btn.classList.contains("unlocked")){
+        btn.classList.remove("unlocked");
+        btn.classList.add("locked");
+        btn.innerText = "LOCKED";
+    } else {
+        btn.classList.remove("locked");
+        btn.classList.add("unlocked");
+        btn.innerText = "UNLOCKED";
+    }
+}
+
+function toggleAll(){
+    const buttons = document.querySelectorAll("button");
+    let lock = false;
+
+    buttons.forEach(b=>{
+        if(b.classList.contains("unlocked")){
+            lock = true;
+        }
+    });
+
+    buttons.forEach(b=>{
+        if(lock){
+            b.classList.remove("unlocked");
+            b.classList.add("locked");
+            b.innerText = "LOCKED";
+        } else {
+            b.classList.remove("locked");
+            b.classList.add("unlocked");
+            b.innerText = "UNLOCKED";
+        }
+    });
+}
+
+</script>
+
+</body>
+</html>
