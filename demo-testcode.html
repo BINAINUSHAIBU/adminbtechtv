@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>WORLDTV PRO MAX IPTV SAAS 2026 - SUPER ADMIN</title>
+<title>WORLDTV PRO MAX IPTV SAAS 2026</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -35,38 +36,17 @@ background:#00d4ff;border:none;border-radius:8px;
 cursor:pointer;font-weight:bold;
 }
 
-/* ===== ADMIN PANEL ===== */
-#adminPanel{
-position:fixed;inset:0;
-background:#0b1020;
-display:none;
-z-index:999999;
-padding:20px;
-overflow:auto;
-}
-
-.adminBox{
-background:#111a31;
-padding:15px;
-border-radius:10px;
-margin-bottom:10px;
-border:1px solid #1f355d;
-}
-
-.adminBox button{
-padding:8px 10px;
-margin:5px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-background:#00d4ff;
-}
-
 /* ===== EXPIRED ===== */
 #expired{
 position:fixed;inset:0;background:#000;
 display:none;align-items:center;justify-content:center;
 flex-direction:column;z-index:99999;
+}
+
+#expired button{
+margin-top:15px;padding:12px 20px;
+background:red;border:none;color:#fff;border-radius:8px;
+cursor:pointer;
 }
 
 /* ===== SIDEBAR ===== */
@@ -97,6 +77,7 @@ background:#101a31;color:#fff;width:260px;
 
 .live{background:red;padding:6px 12px;border-radius:20px}
 
+/* ===== HERO ===== */
 .hero{
 background:linear-gradient(135deg,#07132f,#0f1d45);
 padding:10px;border-radius:10px;margin:10px 0;
@@ -105,6 +86,7 @@ padding:10px;border-radius:10px;margin:10px 0;
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
 .stat{background:#101d39;padding:8px;border-radius:8px;text-align:center;}
 
+/* ===== PLAYER ===== */
 .player-container{background:#000;height:320px;border-radius:10px;}
 video{width:100%;height:100%;}
 
@@ -119,39 +101,26 @@ gap:10px;margin-top:10px;
 .card{
 background:#111a31;padding:10px;border-radius:10px;
 cursor:pointer;border:1px solid #1f355d;
-transition:.2s;
 }
-
-.card.locked{
-opacity:0.3;
-filter:blur(2px);
-pointer-events:none;
-}
-
 .card:hover{border-color:#00d4ff;transform:scale(1.03);}
 
 .badge{float:right;background:red;padding:3px 6px;font-size:10px;border-radius:10px;}
+
+/* ===== LOCK ===== */
+.locked{filter:blur(6px);pointer-events:none;opacity:0.5;}
 
 .upgradeBox{
 position:absolute;top:50%;left:50%;
 transform:translate(-50%,-50%);
 background:#111a31;padding:20px;
 border-radius:12px;text-align:center;
-display:none;
+display:none;z-index:9999;
 }
 
-/* ===== ADMIN BUTTON ===== */
-.adminBtn{
-position:fixed;
-bottom:20px;
-right:20px;
-background:#00d4ff;
-color:#000;
-padding:10px;
-border:none;
-border-radius:10px;
-cursor:pointer;
-z-index:9999;
+.upgradeBox button{
+margin-top:10px;padding:10px 15px;
+background:#00d4ff;border:none;color:#000;
+border-radius:8px;cursor:pointer;
 }
 
 </style>
@@ -166,43 +135,16 @@ z-index:9999;
 <input id="email" placeholder="Email">
 <input id="pass" type="password" placeholder="Password">
 
-<button onclick="register()">Register</button>
+<button onclick="register()">Register (3-Day Trial)</button>
 <button onclick="login()">Login</button>
-
-<button onclick="adminLogin()" style="background:#ffcc00">Admin Login</button>
 </div>
-</div>
-
-<!-- ADMIN PANEL -->
-<div id="adminPanel">
-
-<h2>🛠 SUPER ADMIN DASHBOARD</h2>
-
-<div class="adminBox">
-<h3>🎬 CHANNEL CONTROL</h3>
-<button onclick="lockAll()">Lock All Channels</button>
-<button onclick="unlockAll()">Unlock All Channels</button>
-<button onclick="toggleSearch()">Toggle Search</button>
-<button onclick="closeAdmin()">Close</button>
-</div>
-
-<div class="adminBox">
-<h3>⚙ SYSTEM CONTROL</h3>
-<button onclick="forceExpire()">Force Trial Expire</button>
-<button onclick="resetTrial()">Reset Trials</button>
-</div>
-
-<div class="adminBox">
-<h3>📊 LIVE STATS</h3>
-<p id="adminStats">Loading...</p>
-</div>
-
 </div>
 
 <!-- EXPIRED -->
 <div id="expired">
 <h1>⛔ TRIAL EXPIRED</h1>
-<button onclick="upgrade()">Upgrade</button>
+<p>Upgrade to continue watching IPTV</p>
+<button onclick="upgrade()">💳 Paystack Upgrade</button>
 </div>
 
 <!-- SIDEBAR -->
@@ -216,6 +158,8 @@ z-index:9999;
 <button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
 <button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
 
+<div class="nav-btn" onclick="adminView()">👨‍💼 Admin Panel</div>
+
 </div>
 
 <!-- MAIN -->
@@ -223,7 +167,7 @@ z-index:9999;
 
 <div class="topbar">
 <div class="search-box">
-<input id="searchBox" oninput="search(this.value)" placeholder="Search IPTV...">
+<input oninput="search(this.value)" placeholder="Search channels...">
 </div>
 <div class="live">🔴 LIVE</div>
 </div>
@@ -244,7 +188,10 @@ z-index:9999;
 
 <div class="channels" id="grid"></div>
 
-<button class="adminBtn" onclick="openAdmin()">ADMIN</button>
+<div class="upgradeBox" id="upgradeBox">
+<h3>Upgrade Required</h3>
+<button onclick="upgrade()">Paystack Checkout</button>
+</div>
 
 </div>
 
@@ -258,12 +205,15 @@ let hls;
 function now(){return Date.now();}
 
 function register(){
+let email=document.getElementById("email").value;
+let pass=document.getElementById("pass").value;
+
+if(!email||!pass){alert("Fill fields");return;}
+
 localStorage.setItem("user",JSON.stringify({
-email:email.value,
-pass:pass.value,
-start:now(),
-trialDays:3
+email,pass,start:now(),trialDays:3
 }));
+
 login();
 }
 
@@ -274,56 +224,23 @@ if(!u){alert("Register first");return;}
 let diff=(now()-u.start)/(1000*60*60*24);
 
 if(diff>3){
-expired.style.display="flex";
-ui.classList.add("card");
-uiMain.classList.add("card");
+document.getElementById("authBox").style.display="none";
+document.getElementById("expired").style.display="flex";
+document.getElementById("ui").classList.add("locked");
+document.getElementById("uiMain").classList.add("locked");
+document.getElementById("upgradeBox").style.display="block";
 return;
 }
 
-authBox.style.display="none";
+document.getElementById("authBox").style.display="none";
 loadUltra();
 }
 
-function upgrade(){alert("Paystack integration here");}
+function logout(){localStorage.removeItem("user");location.reload();}
 
-/* ===== ADMIN LOGIN ===== */
-function adminLogin(){
-let p=prompt("Enter Admin Password:");
-if(p==="admin123"){
-openAdmin();
-}else alert("Wrong admin password");
-}
-
-function openAdmin(){adminPanel.style.display="block";}
-function closeAdmin(){adminPanel.style.display="none";}
-
-/* ===== ADMIN CONTROL ===== */
-function lockAll(){
-document.querySelectorAll(".card").forEach(c=>c.classList.add("locked"));
-}
-
-function unlockAll(){
-document.querySelectorAll(".card").forEach(c=>c.classList.remove("locked"));
-}
-
-function toggleSearch(){
-searchBox.style.display = searchBox.style.display==="none"?"block":"none";
-}
-
-function forceExpire(){
-localStorage.removeItem("user");
-location.reload();
-}
-
-function resetTrial(){
-let u=JSON.parse(localStorage.getItem("user"));
-if(u){u.start=now();localStorage.setItem("user",JSON.stringify(u));alert("Trial reset");}
-}
-
-function updateStats(){
-adminStats.innerText =
-"Channels: "+all.length+
-"\nFiltered: "+filtered.length;
+/* ===== UPGRADE (PAYSTACK MOCK) ===== */
+function upgrade(){
+alert("Redirecting to Paystack payment gateway...");
 }
 
 /* ===== IPTV ===== */
@@ -336,8 +253,8 @@ await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
 }
 
 async function loadM3U(url){
-let res=await fetch(url);
-let text=await res.text();
+const res=await fetch(url);
+const text=await res.text();
 
 all=[];filtered=[];i=0;
 
@@ -345,23 +262,23 @@ text.split("\n").forEach((l,idx,arr)=>{
 if(l.startsWith("#EXTINF")){
 let name=l.split(",")[1];
 let url=arr[idx+1];
-if(url&&url.startsWith("http")) all.push({name,url});
+if(url && url.startsWith("http")) all.push({name,url});
 }
 });
 
 filtered=[...all];
-render();stats();updateStats();
+render();stats();
 }
 
-/* ===== UI ===== */
 function render(){
-grid.innerHTML="";
+let g=document.getElementById("grid");
+g.innerHTML="";
 filtered.forEach((c,idx)=>{
 let d=document.createElement("div");
 d.className="card";
 d.innerHTML=`<div class="badge">LIVE</div>${c.name}`;
 d.onclick=()=>play(idx);
-grid.appendChild(d);
+g.appendChild(d);
 });
 }
 
@@ -386,10 +303,15 @@ filtered=all.filter(x=>x.name.toLowerCase().includes(q.toLowerCase()));
 render();
 }
 
-/* ===== STATS ===== */
 function stats(){
-total.innerText=all.length;
-live.innerText=all.length;
+document.getElementById("total").innerText=all.length;
+document.getElementById("live").innerText=all.length;
+}
+
+/* ADMIN SIM */
+function adminView(){
+alert("Admin Panel (demo): users stored in localStorage");
+console.log(localStorage);
 }
 
 </script>
