@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>WORLDTV PRO MAX IPTV MERGED 2026</title>
+<title>WORLDTV PRO MAX IPTV MERGED 2026 - TRIAL SYSTEM</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -14,6 +12,70 @@
 /* BASE */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
+
+/* LOGIN OVERLAY */
+#authBox{
+position:fixed;
+inset:0;
+background:#050816;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:99999;
+}
+
+.auth{
+background:#0d1324;
+padding:20px;
+border-radius:12px;
+width:320px;
+border:1px solid #1d2b4f;
+}
+
+.auth input{
+width:100%;
+padding:10px;
+margin:8px 0;
+background:#111a31;
+border:none;
+color:#fff;
+border-radius:8px;
+}
+
+.auth button{
+width:100%;
+padding:10px;
+margin-top:8px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+background:#00d4ff;
+color:#000;
+font-weight:bold;
+}
+
+/* TRIAL EXPIRED SCREEN */
+#expired{
+position:fixed;
+inset:0;
+background:#000;
+display:none;
+align-items:center;
+justify-content:center;
+z-index:99999;
+flex-direction:column;
+text-align:center;
+}
+
+#expired button{
+padding:12px 20px;
+margin-top:15px;
+background:red;
+border:none;
+color:#fff;
+border-radius:8px;
+cursor:pointer;
+}
 
 /* SIDEBAR */
 .sidebar{
@@ -42,85 +104,40 @@ cursor:pointer;
 .nav-btn:hover{background:#1e2f57}
 
 /* MAIN */
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-padding:10px;
-}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px;}
 
-/* TOP */
-.topbar{
-display:flex;
-justify-content:space-between;
-margin-bottom:10px;
-}
+.topbar{display:flex;justify-content:space-between;margin-bottom:10px;}
 
 .search-box input{
-padding:10px;
-border-radius:8px;
-border:none;
-background:#101a31;
-color:#fff;
-width:260px;
+padding:10px;border-radius:8px;border:none;background:#101a31;color:#fff;width:260px;
 }
 
 .live{background:red;padding:6px 12px;border-radius:20px}
 
-/* HERO */
 .hero{
 background:linear-gradient(135deg,#07132f,#0f1d45);
-padding:10px;
-border-radius:10px;
-margin-bottom:10px;
+padding:10px;border-radius:10px;margin-bottom:10px;
 }
 
 .stats{
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:8px;
-margin-top:8px;
+gap:8px;margin-top:8px;
 }
 
-.stat{
-background:#101d39;
-padding:8px;
-border-radius:8px;
-text-align:center;
-}
+.stat{background:#101d39;padding:8px;border-radius:8px;text-align:center;}
 
-/* PLAYER */
-.player-container{
-background:#000;
-border-radius:10px;
-overflow:hidden;
-height:320px;
-flex-shrink:0;
-}
+.player-container{background:#000;border-radius:10px;overflow:hidden;height:320px;}
 
 video{width:100%;height:100%;}
 
-/* CONTROLS */
-.controls{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-margin:10px 0;
-flex-shrink:0;
-}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
 
 .controls button{
-padding:8px 10px;
-border:none;
-border-radius:6px;
-background:#152445;
-color:#fff;
-cursor:pointer;
+padding:8px 10px;border:none;border-radius:6px;background:#152445;color:#fff;cursor:pointer;
 }
 .controls button:hover{background:#00d4ff;color:#000}
 
-/* CHANNELS */
 .channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
 
 .channels{
@@ -129,36 +146,43 @@ flex:1;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
 gap:10px;
-padding-right:5px;
 }
 
 .card{
-background:#111a31;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
+background:#111a31;padding:10px;border-radius:10px;cursor:pointer;
 border:1px solid #1f355d;
-transition:.3s;
 }
 .card:hover{transform:scale(1.03);border-color:#00d4ff;}
 
-.badge{
-background:red;
-padding:3px 6px;
-border-radius:10px;
-font-size:10px;
-float:right;
-}
-
-@media(max-width:900px){
-body{flex-direction:column;}
-.sidebar{width:100%;}
-}
+.badge{background:red;padding:3px 6px;border-radius:10px;font-size:10px;float:right;}
 
 </style>
 </head>
 
 <body>
+
+<!-- LOGIN -->
+<div id="authBox">
+<div class="auth">
+<h3>📺 IPTV TRIAL LOGIN</h3>
+<input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Password">
+
+<button onclick="register()">Register (Start Trial)</button>
+<button onclick="login()">Login</button>
+
+<p style="font-size:12px;margin-top:10px;color:#aaa;">
+3-Day Free Trial Active System
+</p>
+</div>
+</div>
+
+<!-- EXPIRED -->
+<div id="expired">
+<h1>⛔ TRIAL EXPIRED</h1>
+<p>Your 3-day trial has ended.</p>
+<button onclick="upgrade()">💳 Upgrade to Continue Watching</button>
+</div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
@@ -168,66 +192,21 @@ body{flex-direction:column;}
 
 <div class="menu-title">🌍 Countries</div>
 
-<!-- ALL COUNTRIES -->
 <button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
 <button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
 <button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
 <button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
 <button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
-<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
-<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
-<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
-<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
-<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
-<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
-<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
-<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
-<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
-<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
-<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
-<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
-<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
-<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
-<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
-<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
-<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
-<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
-<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
-<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
 
 <div class="menu-title">🎬 Categories</div>
 
 <button class="nav-btn" onclick="loadCat('news')">📰 News</button>
 <button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
 <button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
-<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
-<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
-<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
-<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
-<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
-<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
-<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
-
-<div class="menu-title">🗣 Languages</div>
-
-<button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
-<button class="nav-btn" onclick="load('spa')">🇪🇸 Spanish</button>
-<button class="nav-btn" onclick="load('ara')">🇸🇦 Arabic</button>
-<button class="nav-btn" onclick="load('fra')">🇫🇷 French</button>
-<button class="nav-btn" onclick="load('hin')">🇮🇳 Hindi</button>
-<button class="nav-btn" onclick="load('zho')">🇨🇳 Chinese</button>
-<button class="nav-btn" onclick="load('por')">🇵🇹 Portuguese</button>
 
 <div class="menu-title">🔥 Tools</div>
 
-<button class="nav-btn" onclick="scanStreams()">📡 Scan</button>
-<button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
-<button class="nav-btn" onclick="togglePiP()">📺 PiP</button>
-<button class="nav-btn" onclick="clearRecents()">🗑 Recents</button>
-<button class="nav-btn" onclick="recordMode()">⏺ Record</button>
-<button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
-<button class="nav-btn" onclick="repairStreams()">🛠 Repair</button>
-<button class="nav-btn" onclick="optimizeMemory()">🧠 Optimize</button>
+<button class="nav-btn" onclick="logout()">🚪 Logout</button>
 
 </div>
 
@@ -259,8 +238,6 @@ body{flex-direction:column;}
 <button onclick="next()">▶ Next</button>
 <button onclick="prev()">◀ Prev</button>
 <button onclick="toggleMute()">🔊 Mute</button>
-<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
-<button onclick="loadUltra()">🚀 Global</button>
 </div>
 
 <div class="channel-wrapper">
@@ -275,7 +252,57 @@ let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
 
-/* LOAD */
+/* =======================
+   TRIAL SYSTEM
+======================= */
+
+function now(){return new Date().getTime();}
+
+function register(){
+let email=document.getElementById("email").value;
+let pass=document.getElementById("pass").value;
+
+if(!email||!pass){alert("Fill all fields");return;}
+
+let user={
+email,pass,
+start:now(),
+trialDays:3
+};
+
+localStorage.setItem("user",JSON.stringify(user));
+login();
+}
+
+function login(){
+let user=JSON.parse(localStorage.getItem("user"));
+if(!user){alert("No account found. Register first.");return;}
+
+let diff=(now()-user.start)/(1000*60*60*24);
+
+if(diff>user.trialDays){
+document.getElementById("authBox").style.display="none";
+document.getElementById("expired").style.display="flex";
+return;
+}
+
+document.getElementById("authBox").style.display="none";
+loadUltra();
+}
+
+function logout(){
+localStorage.removeItem("user");
+location.reload();
+}
+
+function upgrade(){
+alert("Redirecting to payment gateway...");
+}
+
+/* =======================
+   IPTV CORE (UNCHANGED)
+======================= */
+
 async function load(code){
 await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
@@ -288,7 +315,6 @@ async function loadUltra(){
 await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
 }
 
-/* M3U */
 async function loadM3U(url){
 const res=await fetch(url);
 const text=await res.text();
@@ -310,7 +336,6 @@ render();
 stats();
 }
 
-/* RENDER */
 function render(){
 let grid=document.getElementById("grid");
 grid.innerHTML="";
@@ -323,7 +348,6 @@ grid.appendChild(div);
 });
 }
 
-/* PLAY */
 function play(idx){
 i=idx;
 let c=filtered[i];
@@ -340,7 +364,6 @@ video.play();
 }
 }
 
-/* BASIC */
 function search(q){
 filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
 render();
@@ -348,28 +371,14 @@ render();
 
 function next(){i=(i+1)%filtered.length;play(i);}
 function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
-
 function toggleMute(){video.muted=!video.muted;}
-function toggleFullscreen(){video.requestFullscreen();}
 
-/* EXTRA FEATURES (PLACEHOLDER SAFE) */
-function scanStreams(){alert("Scanning streams...");}
-function speedBoost(){video.playbackRate=1.15;}
-function repairStreams(){alert("Repair mode active");}
-function optimizeMemory(){alert("Optimizing memory");}
-function recordMode(){alert("Record mode enabled");}
-function clearRecents(){alert("Recents cleared");}
-
-/* STATS */
 function stats(){
 document.getElementById("total").innerText=all.length;
 document.getElementById("live").innerText=all.length;
 document.getElementById("dead").innerText=0;
 document.getElementById("fav").innerText=0;
 }
-
-/* AUTO START */
-loadUltra();
 
 </script>
 
