@@ -1,7 +1,3 @@
-
-
-
-
 <!DOCTYPE html> 
 <html lang="en">
 <head>
@@ -12,6 +8,47 @@
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+
+/* ================= LOGIN ================= */
+#loginPage{
+position:fixed;
+top:0;left:0;
+width:100%;height:100%;
+background:#050816;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.loginBox{
+background:#0d1324;
+padding:25px;
+border-radius:10px;
+width:320px;
+border:1px solid #1d2b4f;
+}
+
+.loginBox h2{color:#00d4ff;margin-bottom:10px}
+.loginBox input{
+width:100%;
+padding:10px;
+margin:8px 0;
+border:none;
+border-radius:6px;
+background:#101a31;
+color:#fff;
+}
+.loginBox button{
+width:100%;
+padding:10px;
+border:none;
+border-radius:6px;
+background:#00d4ff;
+color:#000;
+font-weight:bold;
+cursor:pointer;
+}
 
 /* BASE */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
@@ -44,90 +81,40 @@ cursor:pointer;
 .nav-btn:hover{background:#1e2f57}
 
 /* MAIN */
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-padding:10px;
-}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px;}
 
-/* TOP */
-.topbar{
-display:flex;
-justify-content:space-between;
-margin-bottom:10px;
-}
+.topbar{display:flex;justify-content:space-between;margin-bottom:10px;}
 
 .search-box input{
-padding:10px;
-border-radius:8px;
-border:none;
-background:#101a31;
-color:#fff;
-width:260px;
+padding:10px;border-radius:8px;border:none;
+background:#101a31;color:#fff;width:260px;
 }
 
 .live{background:red;padding:6px 12px;border-radius:20px}
 
-/* HERO */
-.hero{
-background:linear-gradient(135deg,#07132f,#0f1d45);
-padding:10px;
-border-radius:10px;
-margin-bottom:10px;
-}
+.hero{background:linear-gradient(135deg,#07132f,#0f1d45);
+padding:10px;border-radius:10px;margin-bottom:10px;}
 
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:8px;
-margin-top:8px;
-}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
 
-.stat{
-background:#101d39;
-padding:8px;
-border-radius:8px;
-text-align:center;
-}
+.stat{background:#101d39;padding:8px;border-radius:8px;text-align:center;}
 
-/* PLAYER */
-.player-container{
-background:#000;
-border-radius:10px;
-overflow:hidden;
-height:320px;
-flex-shrink:0;
-}
+.player-container{background:#000;border-radius:10px;overflow:hidden;height:320px;flex-shrink:0;}
 
 video{width:100%;height:100%;}
 
-/* CONTROLS */
-.controls{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-margin:10px 0;
-flex-shrink:0;
-}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
 
 .controls button{
-padding:8px 10px;
-border:none;
-border-radius:6px;
-background:#152445;
-color:#fff;
-cursor:pointer;
+padding:8px 10px;border:none;border-radius:6px;
+background:#152445;color:#fff;cursor:pointer;
 }
 .controls button:hover{background:#00d4ff;color:#000}
 
-/* CHANNELS */
 .channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
 
 .channels{
-overflow-y:auto;
-flex:1;
+overflow-y:auto;flex:1;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
 gap:10px;
@@ -136,21 +123,13 @@ padding-right:5px;
 
 .card{
 background:#111a31;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-border:1px solid #1f355d;
+padding:10px;border-radius:10px;
+cursor:pointer;border:1px solid #1f355d;
 transition:.3s;
 }
 .card:hover{transform:scale(1.03);border-color:#00d4ff;}
 
-.badge{
-background:red;
-padding:3px 6px;
-border-radius:10px;
-font-size:10px;
-float:right;
-}
+.badge{background:red;padding:3px 6px;border-radius:10px;font-size:10px;float:right;}
 
 @media(max-width:900px){
 body{flex-direction:column;}
@@ -162,6 +141,17 @@ body{flex-direction:column;}
 
 <body>
 
+<!-- ================= LOGIN PAGE ================= -->
+<div id="loginPage">
+  <div class="loginBox">
+    <h2>📺 IPTV LOGIN</h2>
+    <input id="email" placeholder="Email">
+    <input id="pass" type="password" placeholder="Password">
+    <button onclick="login()">Start 3-Day Trial</button>
+    <p id="msg" style="color:red;font-size:12px;margin-top:10px;"></p>
+  </div>
+</div>
+
 <!-- SIDEBAR -->
 <div class="sidebar">
 
@@ -170,7 +160,6 @@ body{flex-direction:column;}
 
 <div class="menu-title">🌍 Countries</div>
 
-<!-- ALL COUNTRIES -->
 <button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
 <button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
 <button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
@@ -220,17 +209,6 @@ body{flex-direction:column;}
 <button class="nav-btn" onclick="load('zho')">🇨🇳 Chinese</button>
 <button class="nav-btn" onclick="load('por')">🇵🇹 Portuguese</button>
 
-<div class="menu-title">🔥 Tools</div>
-
-<button class="nav-btn" onclick="scanStreams()">📡 Scan</button>
-<button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
-<button class="nav-btn" onclick="togglePiP()">📺 PiP</button>
-<button class="nav-btn" onclick="clearRecents()">🗑 Recents</button>
-<button class="nav-btn" onclick="recordMode()">⏺ Record</button>
-<button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
-<button class="nav-btn" onclick="repairStreams()">🛠 Repair</button>
-<button class="nav-btn" onclick="optimizeMemory()">🧠 Optimize</button>
-
 </div>
 
 <!-- MAIN -->
@@ -262,7 +240,6 @@ body{flex-direction:column;}
 <button onclick="prev()">◀ Prev</button>
 <button onclick="toggleMute()">🔊 Mute</button>
 <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
-<button onclick="loadUltra()">🚀 Global</button>
 </div>
 
 <div class="channel-wrapper">
@@ -273,11 +250,54 @@ body{flex-direction:column;}
 
 <script>
 
+/* ========== TRIAL SYSTEM ========== */
+const TRIAL_DAYS = 3;
+
+function login(){
+let email=document.getElementById("email").value;
+let pass=document.getElementById("pass").value;
+
+if(!email || !pass){
+document.getElementById("msg").innerText="Fill all fields";
+return;
+}
+
+let user={
+email,
+start:Date.now()
+};
+
+localStorage.setItem("iptv_user",JSON.stringify(user));
+checkTrial();
+}
+
+function checkTrial(){
+let u=JSON.parse(localStorage.getItem("iptv_user"));
+
+if(!u){
+return;
+}
+
+let diff=(Date.now()-u.start)/(1000*60*60*24);
+
+if(diff>TRIAL_DAYS){
+document.getElementById("msg").innerText="Trial expired. Subscribe to continue.";
+document.getElementById("loginPage").style.display="flex";
+return;
+}
+
+document.getElementById("loginPage").style.display="none";
+}
+
+/* AUTO CHECK */
+checkTrial();
+
+/* ========== IPTV ENGINE (UNCHANGED CORE) ========== */
+
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
 
-/* LOAD */
 async function load(code){
 await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
@@ -290,7 +310,6 @@ async function loadUltra(){
 await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
 }
 
-/* M3U */
 async function loadM3U(url){
 const res=await fetch(url);
 const text=await res.text();
@@ -312,7 +331,6 @@ render();
 stats();
 }
 
-/* RENDER */
 function render(){
 let grid=document.getElementById("grid");
 grid.innerHTML="";
@@ -325,7 +343,6 @@ grid.appendChild(div);
 });
 }
 
-/* PLAY */
 function play(idx){
 i=idx;
 let c=filtered[i];
@@ -342,7 +359,6 @@ video.play();
 }
 }
 
-/* BASIC */
 function search(q){
 filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
 render();
@@ -350,19 +366,9 @@ render();
 
 function next(){i=(i+1)%filtered.length;play(i);}
 function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
-
 function toggleMute(){video.muted=!video.muted;}
 function toggleFullscreen(){video.requestFullscreen();}
 
-/* EXTRA FEATURES (PLACEHOLDER SAFE) */
-function scanStreams(){alert("Scanning streams...");}
-function speedBoost(){video.playbackRate=1.15;}
-function repairStreams(){alert("Repair mode active");}
-function optimizeMemory(){alert("Optimizing memory");}
-function recordMode(){alert("Record mode enabled");}
-function clearRecents(){alert("Recents cleared");}
-
-/* STATS */
 function stats(){
 document.getElementById("total").innerText=all.length;
 document.getElementById("live").innerText=all.length;
@@ -370,7 +376,6 @@ document.getElementById("dead").innerText=0;
 document.getElementById("fav").innerText=0;
 }
 
-/* AUTO START */
 loadUltra();
 
 </script>
