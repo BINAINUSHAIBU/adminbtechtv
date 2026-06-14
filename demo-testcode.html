@@ -1,14 +1,9 @@
-
-
-
-
-
 <!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>WORLDTV PRO MAX IPTV MERGED 2026</title>
+<title>WORLDTV PRO MAX IPTV MERGED 2026 - TRIAL</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -18,140 +13,102 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
 
-/* SIDEBAR */
-.sidebar{
-width:280px;
-background:#0d1324;
-padding:15px;
-overflow-y:auto;
-border-right:1px solid #1d2b4f;
+/* LOGIN OVERLAY */
+#authBox{
+position:fixed;
+inset:0;
+background:#050816;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+z-index:99999;
 }
 
-.logo{font-size:22px;font-weight:900;color:#00d4ff;}
-.sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
+.auth-card{
+background:#0d1324;
+padding:20px;
+border-radius:10px;
+width:320px;
+border:1px solid #1d2b4f;
+}
 
-.menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
-
-.nav-btn{
+.auth-card input{
 width:100%;
 padding:10px;
-margin:5px 0;
-background:#121c33;
+margin:8px 0;
 border:none;
-border-radius:8px;
+border-radius:6px;
+background:#111a31;
 color:#fff;
+}
+
+.auth-card button{
+width:100%;
+padding:10px;
+margin-top:10px;
+background:#00d4ff;
+border:none;
+color:#000;
+font-weight:bold;
 cursor:pointer;
-}
-.nav-btn:hover{background:#1e2f57}
-
-/* MAIN */
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-padding:10px;
+border-radius:6px;
 }
 
-/* TOP */
-.topbar{
-display:flex;
-justify-content:space-between;
-margin-bottom:10px;
-}
-
-.search-box input{
-padding:10px;
-border-radius:8px;
-border:none;
-background:#101a31;
-color:#fff;
-width:260px;
-}
-
-.live{background:red;padding:6px 12px;border-radius:20px}
-
-/* HERO */
-.hero{
-background:linear-gradient(135deg,#07132f,#0f1d45);
-padding:10px;
-border-radius:10px;
-margin-bottom:10px;
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:8px;
-margin-top:8px;
-}
-
-.stat{
-background:#101d39;
-padding:8px;
-border-radius:8px;
+.trial-info{
+font-size:12px;
+color:#8ea2d9;
+margin-top:10px;
 text-align:center;
 }
 
-/* PLAYER */
-.player-container{
+/* EXPIRY */
+#expired{
+position:fixed;
+inset:0;
 background:#000;
-border-radius:10px;
-overflow:hidden;
-height:320px;
-flex-shrink:0;
+display:none;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+z-index:999999;
+color:#fff;
 }
 
+/* SIDEBAR */
+.sidebar{width:280px;background:#0d1324;padding:15px;overflow-y:auto;border-right:1px solid #1d2b4f;}
+.logo{font-size:22px;font-weight:900;color:#00d4ff;}
+.sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
+.menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
+.nav-btn{width:100%;padding:10px;margin:5px 0;background:#121c33;border:none;border-radius:8px;color:#fff;cursor:pointer;}
+.nav-btn:hover{background:#1e2f57}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px;}
+.topbar{display:flex;justify-content:space-between;margin-bottom:10px;}
+.search-box input{padding:10px;border-radius:8px;border:none;background:#101a31;color:#fff;width:260px;}
+.live{background:red;padding:6px 12px;border-radius:20px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#07132f,#0f1d45);padding:10px;border-radius:10px;margin-bottom:10px;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
+.stat{background:#101d39;padding:8px;border-radius:8px;text-align:center;}
+
+/* PLAYER */
+.player-container{background:#000;border-radius:10px;overflow:hidden;height:320px;flex-shrink:0;}
 video{width:100%;height:100%;}
 
 /* CONTROLS */
-.controls{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-margin:10px 0;
-flex-shrink:0;
-}
-
-.controls button{
-padding:8px 10px;
-border:none;
-border-radius:6px;
-background:#152445;
-color:#fff;
-cursor:pointer;
-}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;flex-shrink:0;}
+.controls button{padding:8px 10px;border:none;border-radius:6px;background:#152445;color:#fff;cursor:pointer;}
 .controls button:hover{background:#00d4ff;color:#000}
 
 /* CHANNELS */
 .channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
-
-.channels{
-overflow-y:auto;
-flex:1;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-gap:10px;
-padding-right:5px;
-}
-
-.card{
-background:#111a31;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-border:1px solid #1f355d;
-transition:.3s;
-}
+.channels{overflow-y:auto;flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;padding-right:5px;}
+.card{background:#111a31;padding:10px;border-radius:10px;cursor:pointer;border:1px solid #1f355d;}
 .card:hover{transform:scale(1.03);border-color:#00d4ff;}
-
-.badge{
-background:red;
-padding:3px 6px;
-border-radius:10px;
-font-size:10px;
-float:right;
-}
+.badge{background:red;padding:3px 6px;border-radius:10px;font-size:10px;float:right;}
 
 @media(max-width:900px){
 body{flex-direction:column;}
@@ -163,6 +120,24 @@ body{flex-direction:column;}
 
 <body>
 
+<!-- LOGIN -->
+<div id="authBox">
+  <div class="auth-card">
+    <h3>📺 IPTV TRIAL LOGIN</h3>
+    <input id="email" placeholder="Email">
+    <input id="pass" type="password" placeholder="Password">
+    <button onclick="startTrial()">Start 3-Day Trial</button>
+    <div class="trial-info">Trial lasts 72 hours after activation</div>
+  </div>
+</div>
+
+<!-- EXPIRED -->
+<div id="expired">
+  <h1>⛔ TRIAL EXPIRED</h1>
+  <p>Your 3-day trial has ended</p>
+  <button onclick="alert('Redirect to payment system here')">Upgrade Now</button>
+</div>
+
 <!-- SIDEBAR -->
 <div class="sidebar">
 
@@ -171,7 +146,6 @@ body{flex-direction:column;}
 
 <div class="menu-title">🌍 Countries</div>
 
-<!-- ALL COUNTRIES -->
 <button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
 <button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
 <button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
@@ -278,21 +252,64 @@ let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
 
+/* ---------------- TRIAL SYSTEM ---------------- */
+const TRIAL_HOURS = 72;
+
+function startTrial(){
+  const now = Date.now();
+  localStorage.setItem("trial_start", now);
+  document.getElementById("authBox").style.display="none";
+  checkTrial();
+}
+
+function checkTrial(){
+  const start = localStorage.getItem("trial_start");
+  if(!start){
+    document.getElementById("authBox").style.display="flex";
+    return;
+  }
+
+  const diff = (Date.now() - parseInt(start)) / (1000 * 60 * 60);
+
+  if(diff > TRIAL_HOURS){
+    document.getElementById("expired").style.display="flex";
+    document.querySelector(".sidebar").style.display="none";
+    document.querySelector(".main").style.display="none";
+    return false;
+  }
+
+  document.getElementById("authBox").style.display="none";
+  return true;
+}
+
+/* BLOCK ACCESS IF EXPIRED */
+function guard(){
+  if(!checkTrial()){
+    return false;
+  }
+  return true;
+}
+
 /* LOAD */
 async function load(code){
+if(!guard()) return;
 await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
 
 async function loadCat(c){
+if(!guard()) return;
 await loadM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`);
 }
 
 async function loadUltra(){
+if(!guard()) return;
 await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
 }
 
 /* M3U */
 async function loadM3U(url){
+if(!guard()) return;
+
 const res=await fetch(url);
 const text=await res.text();
 
@@ -328,6 +345,8 @@ grid.appendChild(div);
 
 /* PLAY */
 function play(idx){
+if(!guard()) return;
+
 i=idx;
 let c=filtered[i];
 if(hls) hls.destroy();
@@ -355,7 +374,7 @@ function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
 function toggleMute(){video.muted=!video.muted;}
 function toggleFullscreen(){video.requestFullscreen();}
 
-/* EXTRA FEATURES (PLACEHOLDER SAFE) */
+/* EXTRA */
 function scanStreams(){alert("Scanning streams...");}
 function speedBoost(){video.playbackRate=1.15;}
 function repairStreams(){alert("Repair mode active");}
@@ -363,7 +382,6 @@ function optimizeMemory(){alert("Optimizing memory");}
 function recordMode(){alert("Record mode enabled");}
 function clearRecents(){alert("Recents cleared");}
 
-/* STATS */
 function stats(){
 document.getElementById("total").innerText=all.length;
 document.getElementById("live").innerText=all.length;
@@ -371,7 +389,8 @@ document.getElementById("dead").innerText=0;
 document.getElementById("fav").innerText=0;
 }
 
-/* AUTO START */
+/* INIT */
+checkTrial();
 loadUltra();
 
 </script>
