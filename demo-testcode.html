@@ -8,218 +8,118 @@
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-
-/* ================= BASE ================= */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
 
-/* ================= SIDEBAR ================= */
-.sidebar{
-width:300px;
-background:#0d1324;
-padding:15px;
-overflow-y:auto;
-border-right:1px solid #1d2b4f;
+/* TRIAL */
+#trialLock{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.95);
+display:none;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:999999;
+text-align:center;
+padding:20px;
 }
 
+/* SIDEBAR */
+.sidebar{width:300px;background:#0d1324;padding:15px;overflow-y:auto;}
 .logo{font-size:22px;font-weight:900;color:#00d4ff;}
 .sub{font-size:12px;color:#8ea2d9;margin-bottom:10px;}
-
 .menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
 
 .nav-btn{
-width:100%;
-padding:10px;
-margin:5px 0;
-background:#121c33;
-border:none;
-border-radius:8px;
-color:#fff;
-cursor:pointer;
+width:100%;padding:10px;margin:5px 0;
+background:#121c33;border:none;border-radius:8px;
+color:#fff;cursor:pointer;
 }
 .nav-btn:hover{background:#1e2f57}
 
-/* ================= MAIN ================= */
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-padding:10px;
-}
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px;}
 
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:10px;
-}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
 
 .search-box input{
-padding:10px;
-border-radius:8px;
-border:none;
-background:#101a31;
-color:#fff;
-width:260px;
+padding:10px;border-radius:8px;border:none;
+background:#101a31;color:#fff;width:260px;
 }
 
 .live{background:red;padding:6px 12px;border-radius:20px}
 
-/* HERO */
 .hero{
 background:linear-gradient(135deg,#07132f,#0f1d45);
-padding:10px;
-border-radius:10px;
-margin-bottom:10px;
+padding:10px;border-radius:10px;margin-bottom:10px;
 }
 
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:8px;
-margin-top:8px;
-}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
+.stat{background:#101d39;padding:8px;border-radius:8px;text-align:center;}
 
-.stat{
-background:#101d39;
-padding:8px;
-border-radius:8px;
-text-align:center;
-}
-
-/* PLAYER */
-.player{
-background:#000;
-border-radius:10px;
-overflow:hidden;
-height:320px;
-position:relative;
-}
-
+.player{background:#000;border-radius:10px;overflow:hidden;height:320px;position:relative;}
 video{width:100%;height:100%;}
 
-/* OVERLAY */
 .overlay{
-position:absolute;
-inset:0;
+position:absolute;inset:0;
 background:rgba(0,0,0,.85);
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
+display:flex;justify-content:center;align-items:center;
 }
 
-/* CONTROLS */
-.controls{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-margin:10px 0;
-}
-
+.controls{display:flex;gap:8px;margin:10px 0;flex-wrap:wrap;}
 .controls button{
-padding:8px 10px;
-border:none;
-border-radius:6px;
-background:#152445;
-color:#fff;
-cursor:pointer;
+padding:8px 10px;border:none;border-radius:6px;
+background:#152445;color:#fff;cursor:pointer;
 }
 .controls button:hover{background:#00d4ff;color:#000}
 
-/* CHANNEL GRID */
 .channels{
-flex:1;
-overflow-y:auto;
+flex:1;overflow-y:auto;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
 gap:10px;
-padding-right:5px;
 }
 
 .card{
-background:#111a31;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-border:1px solid #1f355d;
-transition:.3s;
+background:#111a31;padding:10px;border-radius:10px;
+cursor:pointer;border:1px solid #1f355d;
 }
 .card:hover{transform:scale(1.03);border-color:#00d4ff;}
 
 .badge{
-background:red;
-padding:3px 6px;
-border-radius:10px;
-font-size:10px;
-float:right;
+background:red;padding:3px 6px;border-radius:10px;
+font-size:10px;float:right;
 }
-
-/* ================= RESPONSIVE ================= */
-@media(max-width:900px){
-body{flex-direction:column;}
-.sidebar{width:100%;}
-}
-
 </style>
 </head>
 
 <body>
 
-<!-- ================= SIDEBAR ================= -->
-<div class="sidebar">
+<!-- TRIAL LOCK -->
+<div id="trialLock">
+<h1 style="color:#ff3b3b;">⛔ TRIAL EXPIRED</h1>
+<p>Your 3-day trial has ended. Please upgrade to continue.</p>
+</div>
 
+<!-- SIDEBAR -->
+<div class="sidebar">
 <div class="logo">📺 BTECH-TV WORLD ULTRA MAX X</div>
 <div class="sub">PRO MAX MERGED SYSTEM</div>
 
-<div class="menu-title">⚡ MAIN</div>
-<button class="nav-btn" onclick="setTab('all')">All</button>
-<button class="nav-btn" onclick="setTab('fav')">⭐ Favorites</button>
-<button class="nav-btn" onclick="setTab('recent')">🕘 Recent</button>
-<button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
-<button class="nav-btn" onclick="toggleTheme()">🌙 Theme</button>
-<button class="nav-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
-<button class="nav-btn" onclick="shuffle()">🎲 Shuffle</button>
-<button class="nav-btn" onclick="miniPlayer()">📺 Mini Player</button>
-<button class="nav-btn" onclick="sleepTimer()">⏰ Sleep Timer</button>
-<button class="nav-btn" onclick="scanStreams()">📡 Scan</button>
-<button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
-<button class="nav-btn" onclick="exportFav()">⬇ Export</button>
-<button class="nav-btn" onclick="openAdmin()">⚙ Admin</button>
-<button class="nav-btn" onclick="openSuper()">🛡 Super Admin</button>
+<div class="menu-title">MAIN</div>
+<button class="nav-btn" onclick="loadUltra()">Ultra Feeds</button>
+<button class="nav-btn" onclick="shuffle()">Shuffle</button>
+<button class="nav-btn" onclick="speedBoost()">Boost</button>
 
-<div class="menu-title">🌍 COUNTRIES</div>
-<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
-<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
-<button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
-<button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
-<button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
-<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
-<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
-<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
-<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
-<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
-<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
-<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
-<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
-<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
-<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
-
-<div class="menu-title">🎬 CATEGORIES</div>
-<button class="nav-btn" onclick="cat('news')">📰 News</button>
-<button class="nav-btn" onclick="cat('sports')">⚽ Sports</button>
-<button class="nav-btn" onclick="cat('movies')">🎬 Movies</button>
-<button class="nav-btn" onclick="cat('music')">🎵 Music</button>
-
-<div class="menu-title">🗣 LANGUAGES</div>
-<button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
-<button class="nav-btn" onclick="load('spa')">🇪🇸 Spanish</button>
-<button class="nav-btn" onclick="load('ara')">🇸🇦 Arabic</button>
-
+<div class="menu-title">COUNTRIES</div>
+<button class="nav-btn" onclick="load('ng')">Nigeria</button>
+<button class="nav-btn" onclick="load('us')">USA</button>
+<button class="nav-btn" onclick="load('uk')">UK</button>
+<button class="nav-btn" onclick="load('in')">India</button>
 </div>
 
-<!-- ================= MAIN ================= -->
+<!-- MAIN -->
 <div class="main">
 
 <div class="topbar">
@@ -257,26 +157,44 @@ body{flex-direction:column;}
 
 <script>
 
-let all=[],filtered=[],i=0;
-let video=document.getElementById("video");
-let favs=JSON.parse(localStorage.getItem("favs")||"{}");
-let recent=JSON.parse(localStorage.getItem("recent")||"[]");
-let hls;
+/* ================= TRIAL SYSTEM ================= */
+const TRIAL_DAYS = 3;
+const KEY = "btech_trial_start";
 
-/* LOAD */
-async function load(code){
-await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
+function checkTrial(){
+let start = localStorage.getItem(KEY);
+
+if(!start){
+start = Date.now();
+localStorage.setItem(KEY,start);
 }
 
-async function cat(c){
-await loadM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`);
+let diffDays = (Date.now() - parseInt(start)) / (1000*60*60*24);
+
+if(diffDays > TRIAL_DAYS){
+document.getElementById("trialLock").style.display="flex";
+document.body.style.pointerEvents="none";
+let v=document.getElementById("video");
+if(v) v.pause();
+return false;
+}
+}
+checkTrial();
+
+/* ================= IPTV APP ================= */
+
+let all=[],filtered=[],i=0;
+let video=document.getElementById("video");
+let hls;
+
+async function load(code){
+await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
 
 async function loadUltra(){
 await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
 }
 
-/* M3U */
 async function loadM3U(url){
 document.getElementById("overlay").style.display="flex";
 const res=await fetch(url);
@@ -298,7 +216,6 @@ stats();
 document.getElementById("overlay").style.display="none";
 }
 
-/* RENDER */
 function render(){
 let g=document.getElementById("grid");
 g.innerHTML="";
@@ -311,7 +228,6 @@ g.appendChild(d);
 });
 }
 
-/* PLAY */
 function play(idx){
 i=idx;
 let c=filtered[i];
@@ -323,60 +239,28 @@ hls.loadSource(c.url);
 hls.attachMedia(video);
 hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
 }else video.src=c.url;
-
-addRecent(c);
 }
 
-/* SEARCH */
 function search(q){
 filtered=all.filter(x=>x.name.toLowerCase().includes(q.toLowerCase()));
 render();
 }
 
-/* NEXT PREV */
 function next(){i=(i+1)%filtered.length;play(i);}
 function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
 
-/* FEATURES */
 function toggleMute(){video.muted=!video.muted;}
 function toggleFullscreen(){video.requestFullscreen();}
 function shuffle(){filtered.sort(()=>Math.random()-0.5);render();}
 function speedBoost(){video.playbackRate=1.2;}
 
-function sleepTimer(){
-setTimeout(()=>video.pause(),1800000);
-alert("Sleep Timer 30min");
-}
-
-function miniPlayer(){window.open(video.currentSrc);}
-function scanStreams(){alert("Scanning...");}
-function openAdmin(){alert("Admin Panel");}
-function openSuper(){alert("Super Admin Open");}
-
-/* FAVORITES */
-function toggleFav(id){
-favs[id]=!favs[id];
-localStorage.setItem("favs",JSON.stringify(favs));
-}
-
-/* RECENT */
-function addRecent(c){
-recent.unshift(c.name);
-localStorage.setItem("recent",JSON.stringify(recent));
-}
-
-/* STATS */
 function stats(){
 document.getElementById("total").innerText=all.length;
 document.getElementById("live").innerText=all.length;
-document.getElementById("fav").innerText=Object.keys(favs).length;
-document.getElementById("rec").innerText=recent.length;
 }
 
-/* INIT */
 loadUltra();
 
 </script>
-
 </body>
 </html>
