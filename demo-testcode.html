@@ -1,10 +1,9 @@
-
 <!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>WORLDTV PRO MAX IPTV MERGED 2026</title>
+<title>WORLDTV PRO MAX IPTV MERGED 2026 - TRIAL SYSTEM</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -13,6 +12,61 @@
 /* BASE */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
+
+/* AUTH */
+#authBox{
+position:fixed;
+inset:0;
+background:#050816;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.auth-card{
+background:#0d1324;
+padding:20px;
+border-radius:10px;
+width:320px;
+border:1px solid #1d2b4f;
+}
+
+.auth-card input{
+width:100%;
+padding:10px;
+margin:5px 0;
+border:none;
+border-radius:6px;
+background:#101a31;
+color:#fff;
+}
+
+.auth-card button{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:6px;
+background:#00d4ff;
+cursor:pointer;
+font-weight:bold;
+}
+
+.small{font-size:12px;color:#8ea2d9;margin-top:8px}
+
+/* EXPIRED SCREEN */
+#expired{
+position:fixed;
+inset:0;
+background:#050816;
+display:none;
+align-items:center;
+justify-content:center;
+z-index:99999;
+text-align:center;
+padding:20px;
+}
 
 /* SIDEBAR */
 .sidebar{
@@ -141,13 +195,7 @@ transition:.3s;
 }
 .card:hover{transform:scale(1.03);border-color:#00d4ff;}
 
-.badge{
-background:red;
-padding:3px 6px;
-border-radius:10px;
-font-size:10px;
-float:right;
-}
+.badge{background:red;padding:3px 6px;border-radius:10px;font-size:10px;float:right;}
 
 @media(max-width:900px){
 body{flex-direction:column;}
@@ -159,15 +207,38 @@ body{flex-direction:column;}
 
 <body>
 
+<!-- AUTH -->
+<div id="authBox">
+<div class="auth-card">
+<h3>📺 IPTV TRIAL LOGIN</h3>
+
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
+
+<div class="small">3-Day Trial System Active</div>
+</div>
+</div>
+
+<!-- EXPIRED -->
+<div id="expired">
+<div>
+<h1>⛔ TRIAL EXPIRED</h1>
+<p>Your 3-day trial has ended.</p>
+<button onclick="resetTrial()" style="padding:10px;margin-top:10px">Upgrade / Reset Demo</button>
+</div>
+</div>
+
 <!-- SIDEBAR -->
 <div class="sidebar">
 
 <div class="logo">📺 BTECH-TV PRO MAX</div>
-<div class="sub">Ultra IPTV Engine X</div>
+<div class="sub">Ultra IPTV Engine X - TRIAL</div>
 
 <div class="menu-title">🌍 Countries</div>
 
-<!-- ALL COUNTRIES -->
 <button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
 <button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
 <button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
@@ -201,32 +272,11 @@ body{flex-direction:column;}
 <button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
 <button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
 <button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
-<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
-<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
-<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
-<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
-<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
-
-<div class="menu-title">🗣 Languages</div>
-
-<button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
-<button class="nav-btn" onclick="load('spa')">🇪🇸 Spanish</button>
-<button class="nav-btn" onclick="load('ara')">🇸🇦 Arabic</button>
-<button class="nav-btn" onclick="load('fra')">🇫🇷 French</button>
-<button class="nav-btn" onclick="load('hin')">🇮🇳 Hindi</button>
-<button class="nav-btn" onclick="load('zho')">🇨🇳 Chinese</button>
-<button class="nav-btn" onclick="load('por')">🇵🇹 Portuguese</button>
 
 <div class="menu-title">🔥 Tools</div>
 
-<button class="nav-btn" onclick="scanStreams()">📡 Scan</button>
 <button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
-<button class="nav-btn" onclick="togglePiP()">📺 PiP</button>
-<button class="nav-btn" onclick="clearRecents()">🗑 Recents</button>
-<button class="nav-btn" onclick="recordMode()">⏺ Record</button>
-<button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
-<button class="nav-btn" onclick="repairStreams()">🛠 Repair</button>
-<button class="nav-btn" onclick="optimizeMemory()">🧠 Optimize</button>
+<button class="nav-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
 
 </div>
 
@@ -241,7 +291,7 @@ body{flex-direction:column;}
 </div>
 
 <div class="hero">
-<h3>WORLDTV PRO MAX IPTV SYSTEM</h3>
+<h3>WORLDTV PRO MAX IPTV SYSTEM (TRIAL)</h3>
 <div class="stats">
 <div class="stat">📺 <div id="total">0</div></div>
 <div class="stat">⭐ Fav <div id="fav">0</div></div>
@@ -258,8 +308,6 @@ body{flex-direction:column;}
 <button onclick="next()">▶ Next</button>
 <button onclick="prev()">◀ Prev</button>
 <button onclick="toggleMute()">🔊 Mute</button>
-<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
-<button onclick="loadUltra()">🚀 Global</button>
 </div>
 
 <div class="channel-wrapper">
@@ -270,11 +318,65 @@ body{flex-direction:column;}
 
 <script>
 
+/* ========== TRIAL SYSTEM ========== */
+
+const TRIAL_DAYS = 3;
+
+function register(){
+let email=document.getElementById("email").value;
+let pass=document.getElementById("password").value;
+
+if(!email||!pass)return alert("Fill all fields");
+
+localStorage.setItem("user",JSON.stringify({email,pass}));
+
+startTrial();
+login();
+}
+
+function login(){
+let user=JSON.parse(localStorage.getItem("user"));
+if(!user)return alert("Register first");
+
+let start=localStorage.getItem("trialStart");
+if(!start){
+startTrial();
+start=Date.now();
+}
+
+checkExpiry();
+
+document.getElementById("authBox").style.display="none";
+}
+
+function startTrial(){
+localStorage.setItem("trialStart",Date.now());
+}
+
+function checkExpiry(){
+let start=parseInt(localStorage.getItem("trialStart"));
+let now=Date.now();
+
+let diff=(now-start)/(1000*60*60*24);
+
+if(diff>TRIAL_DAYS){
+document.getElementById("expired").style.display="flex";
+document.querySelector(".main").style.display="none";
+document.querySelector(".sidebar").style.display="none";
+}
+}
+
+function resetTrial(){
+localStorage.clear();
+location.reload();
+}
+
+/* ========== IPTV CORE (UNCHANGED) ========== */
+
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
 
-/* LOAD */
 async function load(code){
 await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
@@ -283,11 +385,6 @@ async function loadCat(c){
 await loadM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`);
 }
 
-async function loadUltra(){
-await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
-}
-
-/* M3U */
 async function loadM3U(url){
 const res=await fetch(url);
 const text=await res.text();
@@ -309,7 +406,6 @@ render();
 stats();
 }
 
-/* RENDER */
 function render(){
 let grid=document.getElementById("grid");
 grid.innerHTML="";
@@ -322,7 +418,6 @@ grid.appendChild(div);
 });
 }
 
-/* PLAY */
 function play(idx){
 i=idx;
 let c=filtered[i];
@@ -339,7 +434,6 @@ video.play();
 }
 }
 
-/* BASIC */
 function search(q){
 filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
 render();
@@ -351,15 +445,8 @@ function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
 function toggleMute(){video.muted=!video.muted;}
 function toggleFullscreen(){video.requestFullscreen();}
 
-/* EXTRA FEATURES (PLACEHOLDER SAFE) */
-function scanStreams(){alert("Scanning streams...");}
 function speedBoost(){video.playbackRate=1.15;}
-function repairStreams(){alert("Repair mode active");}
-function optimizeMemory(){alert("Optimizing memory");}
-function recordMode(){alert("Record mode enabled");}
-function clearRecents(){alert("Recents cleared");}
 
-/* STATS */
 function stats(){
 document.getElementById("total").innerText=all.length;
 document.getElementById("live").innerText=all.length;
@@ -367,8 +454,8 @@ document.getElementById("dead").innerText=0;
 document.getElementById("fav").innerText=0;
 }
 
-/* AUTO START */
-loadUltra();
+/* AUTO CHECK */
+setInterval(checkExpiry, 5000);
 
 </script>
 
