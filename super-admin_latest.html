@@ -1,0 +1,407 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BTECH-TV PRO MAX | IPTV SAAS SYSTEM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+    background:#070b18;
+    color:#fff;
+    display:flex;
+    height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width:280px;
+    background:#0d1429;
+    padding:15px;
+    overflow-y:auto;
+    border-right:1px solid #1f2b4d;
+}
+
+.logo{
+    font-size:20px;
+    font-weight:bold;
+    color:#00e5ff;
+}
+
+.sub{
+    font-size:12px;
+    color:#7fa0ff;
+    margin-bottom:10px;
+}
+
+.section-title{
+    margin:12px 0 6px;
+    font-size:12px;
+    color:#00e5ff;
+}
+
+/* BUTTONS */
+.btn{
+    width:100%;
+    padding:9px;
+    margin:5px 0;
+    background:#121c36;
+    border:none;
+    color:#fff;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.btn:hover{background:#1b2a55}
+
+/* MAIN */
+.main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    padding:10px;
+}
+
+/* TOP BAR */
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+input{
+    padding:10px;
+    width:250px;
+    border:none;
+    border-radius:6px;
+    background:#0f1a33;
+    color:#fff;
+}
+
+/* HERO */
+.hero{
+    background:#0f1a33;
+    padding:10px;
+    border-radius:10px;
+    margin:10px 0;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-top:8px;
+}
+
+.stat{
+    background:#111d38;
+    padding:8px;
+    text-align:center;
+    border-radius:6px;
+}
+
+/* PLAYER */
+.player{
+    background:#000;
+    height:300px;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+video{
+    width:100%;
+    height:100%;
+}
+
+/* CONTROLS */
+.controls{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin:10px 0;
+}
+
+.controls button{
+    padding:8px;
+    border:none;
+    border-radius:6px;
+    background:#132247;
+    color:#fff;
+    cursor:pointer;
+}
+
+.controls button:hover{
+    background:#00e5ff;
+    color:#000;
+}
+
+/* CHANNEL GRID */
+.grid{
+    flex:1;
+    overflow-y:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:10px;
+}
+
+.card{
+    background:#0f1a33;
+    padding:10px;
+    border-radius:8px;
+    cursor:pointer;
+    border:1px solid #1d2a4d;
+}
+
+.card:hover{
+    border-color:#00e5ff;
+}
+
+/* ADMIN PANEL */
+.panel{
+    background:#0f1a33;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:10px;
+}
+
+.item{
+    display:flex;
+    justify-content:space-between;
+    padding:6px;
+    margin:5px 0;
+    background:#0b1328;
+    border-radius:6px;
+}
+
+.locked{background:red;color:#fff;padding:4px 8px;border-radius:5px;}
+.unlocked{background:green;color:#fff;padding:4px 8px;border-radius:5px;}
+
+/* MONITOR */
+.bar{
+    height:10px;
+    background:#222;
+    border-radius:6px;
+    overflow:hidden;
+}
+
+.fill{
+    height:100%;
+    width:0%;
+    background:lime;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+<div class="logo">📺 BTECH-TV PRO MAX</div>
+<div class="sub">Ultra IPTV Engine X</div>
+
+<div class="section-title">🔐 ADMIN CONTROL</div>
+<div class="panel">
+<button class="btn" onclick="toggleAll()">LOCK / UNLOCK ALL</button>
+</div>
+
+<div class="section-title">🌍 COUNTRIES</div>
+<div id="countries"></div>
+
+<div class="section-title">🎬 CATEGORIES</div>
+<div id="categories"></div>
+
+<div class="section-title">🗣 LANGUAGES</div>
+<div id="languages"></div>
+
+<div class="section-title">🔥 TOOLS</div>
+<div id="tools"></div>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="topbar">
+<input oninput="search(this.value)" placeholder="Search IPTV...">
+<div>🔴 LIVE</div>
+</div>
+
+<div class="hero">
+WORLDTV PRO MAX IPTV SYSTEM
+
+<div class="stats">
+<div class="stat">📺 <div id="total">0</div></div>
+<div class="stat">⭐ Fav <div id="fav">0</div></div>
+<div class="stat">⚫ Dead <div id="dead">0</div></div>
+<div class="stat">🌍 Live <div id="live">0</div></div>
+</div>
+</div>
+
+<div class="player">
+<video id="video" controls autoplay muted></video>
+</div>
+
+<div class="controls">
+<button onclick="next()">Next</button>
+<button onclick="prev()">Prev</button>
+<button onclick="toggleMute()">Mute</button>
+<button onclick="fullscreen()">Fullscreen</button>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<!-- IPTV MONITOR -->
+<div class="panel">
+<h3>📡 IPTV MONITOR</h3>
+<div>👥 Users: <span id="users">0</span></div>
+<div>📺 Status: <span id="status">ONLINE</span></div>
+<div>⚡ Health</div>
+<div class="bar"><div class="fill" id="bar"></div></div>
+</div>
+
+</div>
+
+<script>
+
+const countries=["Nigeria","USA","UK","India","France","Germany","Brazil","South Africa","Canada","Australia","Japan","Korea","China","Spain","Italy","Turkey","Mexico","UAE","Saudi Arabia","Egypt","Argentina","Pakistan","Indonesia","Philippines","Albania"];
+const categories=["News","Sports","Movies","Music","Kids","Comedy","Documentary","Business","Science","Travel"];
+const languages=["English","Spanish","Arabic","French","Hindi","Chinese","Portuguese"];
+const tools=["Scan","Boost","PiP","Recents","Record","Ultra Feeds","Repair","Optimize"];
+
+function create(id,list){
+let box=document.getElementById(id);
+list.forEach(n=>{
+let d=document.createElement("div");
+d.className="item";
+d.innerHTML=`<span>${n}</span><button class="unlocked" onclick="toggle(this)">ON</button>`;
+box.appendChild(d);
+});
+}
+
+create("countries",countries);
+create("categories",categories);
+create("languages",languages);
+create("tools",tools);
+
+function toggle(btn){
+if(btn.classList.contains("unlocked")){
+btn.className="locked";
+btn.innerText="OFF";
+}else{
+btn.className="unlocked";
+btn.innerText="ON";
+}
+}
+
+function toggleAll(){
+document.querySelectorAll("button").forEach(b=>{
+if(b.classList.contains("unlocked")){
+b.className="locked";
+b.innerText="OFF";
+}else{
+b.className="unlocked";
+b.innerText="ON";
+}
+});
+}
+
+/* IPTV */
+let all=[],filtered=[],i=0;
+let video=document.getElementById("video");
+let hls;
+
+async function loadM3U(url){
+let res=await fetch(url);
+let text=await res.text();
+
+all=[];filtered=[];
+
+let lines=text.split("\n");
+
+for(let x=0;x<lines.length;x++){
+if(lines[x].startsWith("#EXTINF")){
+let name=lines[x].split(",").pop();
+let url=lines[x+1];
+if(url && url.startsWith("http")) all.push({name,url});
+}
+}
+
+filtered=[...all];
+render();
+stats();
+}
+
+function render(){
+let grid=document.getElementById("grid");
+grid.innerHTML="";
+filtered.forEach((c,idx)=>{
+let d=document.createElement("div");
+d.className="card";
+d.innerHTML=c.name;
+d.onclick=()=>play(idx);
+grid.appendChild(d);
+});
+}
+
+function play(idx){
+i=idx;
+let c=filtered[i];
+if(hls) hls.destroy();
+
+if(Hls.isSupported()){
+hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(video);
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+}else{
+video.src=c.url;
+}
+video.play();
+}
+
+function search(q){
+filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
+render();
+}
+
+function next(){i=(i+1)%filtered.length;play(i);}
+function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
+function toggleMute(){video.muted=!video.muted;}
+function fullscreen(){video.requestFullscreen();}
+
+/* MONITOR */
+function monitor(){
+document.getElementById("users").innerText=Math.floor(Math.random()*5000);
+let h=Math.floor(Math.random()*100);
+document.getElementById("bar").style.width=h+"%";
+document.getElementById("status").innerText=h>80?"DEGRADED":"ONLINE";
+}
+
+setInterval(monitor,2000);
+monitor();
+
+/* LOAD DEFAULT */
+loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
+
+function stats(){
+document.getElementById("total").innerText=all.length;
+document.getElementById("live").innerText=all.length;
+document.getElementById("dead").innerText=0;
+document.getElementById("fav").innerText=0;
+}
+
+</script>
+
+</body>
+</html>
