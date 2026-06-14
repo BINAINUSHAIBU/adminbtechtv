@@ -14,7 +14,7 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
 
-/* LOGIN OVERLAY */
+/* AUTH */
 #authBox{
 position:fixed;
 inset:0;
@@ -22,60 +22,51 @@ background:#050816;
 display:flex;
 align-items:center;
 justify-content:center;
-z-index:99999;
+z-index:9999;
 }
 
-.auth{
+.auth-card{
 background:#0d1324;
 padding:20px;
-border-radius:12px;
+border-radius:10px;
 width:320px;
 border:1px solid #1d2b4f;
 }
 
-.auth input{
+.auth-card input{
 width:100%;
 padding:10px;
-margin:8px 0;
-background:#111a31;
+margin:5px 0;
 border:none;
+border-radius:6px;
+background:#101a31;
 color:#fff;
-border-radius:8px;
 }
 
-.auth button{
+.auth-card button{
 width:100%;
 padding:10px;
-margin-top:8px;
+margin-top:10px;
 border:none;
-border-radius:8px;
-cursor:pointer;
+border-radius:6px;
 background:#00d4ff;
-color:#000;
+cursor:pointer;
 font-weight:bold;
 }
 
-/* TRIAL EXPIRED SCREEN */
+.small{font-size:12px;color:#8ea2d9;margin-top:8px}
+
+/* EXPIRED SCREEN */
 #expired{
 position:fixed;
 inset:0;
-background:#000;
+background:#050816;
 display:none;
 align-items:center;
 justify-content:center;
 z-index:99999;
-flex-direction:column;
 text-align:center;
-}
-
-#expired button{
-padding:12px 20px;
-margin-top:15px;
-background:red;
-border:none;
-color:#fff;
-border-radius:8px;
-cursor:pointer;
+padding:20px;
 }
 
 /* SIDEBAR */
@@ -105,40 +96,85 @@ cursor:pointer;
 .nav-btn:hover{background:#1e2f57}
 
 /* MAIN */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px;}
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+padding:10px;
+}
 
-.topbar{display:flex;justify-content:space-between;margin-bottom:10px;}
+/* TOP */
+.topbar{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+}
 
 .search-box input{
-padding:10px;border-radius:8px;border:none;background:#101a31;color:#fff;width:260px;
+padding:10px;
+border-radius:8px;
+border:none;
+background:#101a31;
+color:#fff;
+width:260px;
 }
 
 .live{background:red;padding:6px 12px;border-radius:20px}
 
+/* HERO */
 .hero{
 background:linear-gradient(135deg,#07132f,#0f1d45);
-padding:10px;border-radius:10px;margin-bottom:10px;
+padding:10px;
+border-radius:10px;
+margin-bottom:10px;
 }
 
 .stats{
 display:grid;
 grid-template-columns:repeat(4,1fr);
-gap:8px;margin-top:8px;
+gap:8px;
+margin-top:8px;
 }
 
-.stat{background:#101d39;padding:8px;border-radius:8px;text-align:center;}
+.stat{
+background:#101d39;
+padding:8px;
+border-radius:8px;
+text-align:center;
+}
 
-.player-container{background:#000;border-radius:10px;overflow:hidden;height:320px;}
+/* PLAYER */
+.player-container{
+background:#000;
+border-radius:10px;
+overflow:hidden;
+height:320px;
+flex-shrink:0;
+}
 
 video{width:100%;height:100%;}
 
-.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
+/* CONTROLS */
+.controls{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin:10px 0;
+flex-shrink:0;
+}
 
 .controls button{
-padding:8px 10px;border:none;border-radius:6px;background:#152445;color:#fff;cursor:pointer;
+padding:8px 10px;
+border:none;
+border-radius:6px;
+background:#152445;
+color:#fff;
+cursor:pointer;
 }
 .controls button:hover{background:#00d4ff;color:#000}
 
+/* CHANNELS */
 .channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
 
 .channels{
@@ -147,49 +183,60 @@ flex:1;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
 gap:10px;
+padding-right:5px;
 }
 
 .card{
-background:#111a31;padding:10px;border-radius:10px;cursor:pointer;
+background:#111a31;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
 border:1px solid #1f355d;
+transition:.3s;
 }
 .card:hover{transform:scale(1.03);border-color:#00d4ff;}
 
 .badge{background:red;padding:3px 6px;border-radius:10px;font-size:10px;float:right;}
+
+@media(max-width:900px){
+body{flex-direction:column;}
+.sidebar{width:100%;}
+}
 
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<!-- AUTH -->
 <div id="authBox">
-<div class="auth">
+<div class="auth-card">
 <h3>📺 IPTV TRIAL LOGIN</h3>
-<input id="email" placeholder="Email">
-<input id="pass" type="password" placeholder="Password">
 
-<button onclick="register()">Register (Start Trial)</button>
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="register()">Register</button>
 <button onclick="login()">Login</button>
 
-<p style="font-size:12px;margin-top:10px;color:#aaa;">
-3-Day Free Trial Active System
-</p>
+<div class="small">3-Day Trial System Active</div>
 </div>
 </div>
 
 <!-- EXPIRED -->
 <div id="expired">
+<div>
 <h1>⛔ TRIAL EXPIRED</h1>
 <p>Your 3-day trial has ended.</p>
-<button onclick="upgrade()">💳 Upgrade to Continue Watching</button>
+<button onclick="resetTrial()" style="padding:10px;margin-top:10px">Upgrade / Reset Demo</button>
+</div>
 </div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
 
 <div class="logo">📺 BTECH-TV PRO MAX</div>
-<div class="sub">Ultra IPTV Engine X</div>
+<div class="sub">Ultra IPTV Engine X - TRIAL</div>
 
 <div class="menu-title">🌍 Countries</div>
 
@@ -198,16 +245,39 @@ border:1px solid #1f355d;
 <button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
 <button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
 <button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
+<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
+<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
+<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
+<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
+<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
+<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
+<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
+<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
+<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
+<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
+<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
+<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
+<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
+<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
+<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
+<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
+<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
+<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
+<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
+<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
 
 <div class="menu-title">🎬 Categories</div>
 
 <button class="nav-btn" onclick="loadCat('news')">📰 News</button>
 <button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
 <button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
+<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
+<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
 
 <div class="menu-title">🔥 Tools</div>
 
-<button class="nav-btn" onclick="logout()">🚪 Logout</button>
+<button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
+<button class="nav-btn" onclick="toggleFullscreen()">⛶ Fullscreen</button>
 
 </div>
 
@@ -222,7 +292,7 @@ border:1px solid #1f355d;
 </div>
 
 <div class="hero">
-<h3>WORLDTV PRO MAX IPTV SYSTEM</h3>
+<h3>WORLDTV PRO MAX IPTV SYSTEM (TRIAL)</h3>
 <div class="stats">
 <div class="stat">📺 <div id="total">0</div></div>
 <div class="stat">⭐ Fav <div id="fav">0</div></div>
@@ -249,60 +319,64 @@ border:1px solid #1f355d;
 
 <script>
 
-let all=[],filtered=[],i=0;
-let video=document.getElementById("video");
-let hls;
+/* ========== TRIAL SYSTEM ========== */
 
-/* =======================
-   TRIAL SYSTEM
-======================= */
-
-function now(){return new Date().getTime();}
+const TRIAL_DAYS = 3;
 
 function register(){
 let email=document.getElementById("email").value;
-let pass=document.getElementById("pass").value;
+let pass=document.getElementById("password").value;
 
-if(!email||!pass){alert("Fill all fields");return;}
+if(!email||!pass)return alert("Fill all fields");
 
-let user={
-email,pass,
-start:now(),
-trialDays:3
-};
+localStorage.setItem("user",JSON.stringify({email,pass}));
 
-localStorage.setItem("user",JSON.stringify(user));
+startTrial();
 login();
 }
 
 function login(){
 let user=JSON.parse(localStorage.getItem("user"));
-if(!user){alert("No account found. Register first.");return;}
+if(!user)return alert("Register first");
 
-let diff=(now()-user.start)/(1000*60*60*24);
+let start=localStorage.getItem("trialStart");
+if(!start){
+startTrial();
+start=Date.now();
+}
 
-if(diff>user.trialDays){
+checkExpiry();
+
 document.getElementById("authBox").style.display="none";
+}
+
+function startTrial(){
+localStorage.setItem("trialStart",Date.now());
+}
+
+function checkExpiry(){
+let start=parseInt(localStorage.getItem("trialStart"));
+let now=Date.now();
+
+let diff=(now-start)/(1000*60*60*24);
+
+if(diff>TRIAL_DAYS){
 document.getElementById("expired").style.display="flex";
-return;
+document.querySelector(".main").style.display="none";
+document.querySelector(".sidebar").style.display="none";
+}
 }
 
-document.getElementById("authBox").style.display="none";
-loadUltra();
-}
-
-function logout(){
-localStorage.removeItem("user");
+function resetTrial(){
+localStorage.clear();
 location.reload();
 }
 
-function upgrade(){
-alert("Redirecting to payment gateway...");
-}
+/* ========== IPTV CORE (UNCHANGED) ========== */
 
-/* =======================
-   IPTV CORE (UNCHANGED)
-======================= */
+let all=[],filtered=[],i=0;
+let video=document.getElementById("video");
+let hls;
 
 async function load(code){
 await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
@@ -310,10 +384,6 @@ await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 
 async function loadCat(c){
 await loadM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`);
-}
-
-async function loadUltra(){
-await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
 }
 
 async function loadM3U(url){
@@ -372,7 +442,11 @@ render();
 
 function next(){i=(i+1)%filtered.length;play(i);}
 function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
+
 function toggleMute(){video.muted=!video.muted;}
+function toggleFullscreen(){video.requestFullscreen();}
+
+function speedBoost(){video.playbackRate=1.15;}
 
 function stats(){
 document.getElementById("total").innerText=all.length;
@@ -380,6 +454,9 @@ document.getElementById("live").innerText=all.length;
 document.getElementById("dead").innerText=0;
 document.getElementById("fav").innerText=0;
 }
+
+/* AUTO CHECK */
+setInterval(checkExpiry, 5000);
 
 </script>
 
