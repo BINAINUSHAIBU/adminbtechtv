@@ -1,5 +1,5 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -371,120 +371,6 @@ document.getElementById("fav").innerText=0;
 loadUltra();
 
 </script>
-  /* ==========================================
-   3-DAY TRIAL SYSTEM
-   ========================================== */
-
-const TRIAL_KEY = "btech_trial_start";
-const SUBSCRIBED_KEY = "btech_subscribed";
-
-/* First Visit */
-if (!localStorage.getItem(TRIAL_KEY)) {
-    localStorage.setItem(TRIAL_KEY, Date.now());
-}
-
-/* Check Trial */
-function checkTrial() {
-
-    // Allow subscribed users
-    if (localStorage.getItem(SUBSCRIBED_KEY) === "true") {
-        return true;
-    }
-
-    const start = parseInt(localStorage.getItem(TRIAL_KEY));
-    const now = Date.now();
-
-    const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
-
-    if ((now - start) > THREE_DAYS) {
-
-        document.body.innerHTML = `
-        <div style="
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            align-items:center;
-            height:100vh;
-            background:#050816;
-            color:white;
-            text-align:center;
-            padding:20px;
-        ">
-            <h1 style="color:#00d4ff">
-                📺 BTECH-TV PRO MAX
-            </h1>
-
-            <h2 style="margin-top:20px">
-                Your 3-Day Free Trial Has Expired
-            </h2>
-
-            <p style="margin:20px 0">
-                Subscribe now to continue enjoying:
-            </p>
-
-            <div style="
-                max-width:600px;
-                line-height:2;
-            ">
-                ✅ All Countries<br>
-                ✅ All Channels<br>
-                ✅ News, Sports, Movies, Music<br>
-                ✅ Ultra Feeds<br>
-                ✅ Scan & Repair Tools<br>
-                ✅ Record Mode<br>
-                ✅ Future Updates
-            </div>
-
-            <button onclick="subscribeNow()" style="
-                margin-top:25px;
-                padding:15px 30px;
-                border:none;
-                border-radius:10px;
-                background:#00d4ff;
-                font-size:18px;
-                font-weight:bold;
-                cursor:pointer;
-            ">
-                Subscribe Now
-            </button>
-        </div>
-        `;
-
-        return false;
-    }
-
-    return true;
-}
-
-/* Demo Subscription */
-function subscribeNow() {
-
-    let code = prompt(
-        "Enter Subscription Code"
-    );
-
-    if(code === "BTECH2026"){
-        localStorage.setItem(
-            SUBSCRIBED_KEY,
-            "true"
-        );
-
-        alert(
-            "Subscription Activated!"
-        );
-
-        location.reload();
-
-    } else {
-        alert(
-            "Invalid Subscription Code"
-        );
-    }
-}
-
-/* Run Check */
-checkTrial();
 
 </body>
 </html>
-
