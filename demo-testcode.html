@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>GLOBAL OTT SAAS PRO</title>
+<title>GLOBAL OTT SAAS PRO SECURE</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -19,27 +19,35 @@ height:100vh;
 overflow:hidden;
 }
 
-/* AUTH */
+/* LOGIN */
 #auth{
 position:fixed;
 inset:0;
 background:#020617;
 display:flex;
-align-items:center;
-justify-content:center;
 flex-direction:column;
+justify-content:center;
+align-items:center;
 gap:10px;
 z-index:999;
 }
 
-input,button{
+input{
+padding:10px;
+width:220px;
+border:none;
+border-radius:8px;
+}
+
+button{
 padding:10px;
 border:none;
 border-radius:8px;
-width:220px;
+cursor:pointer;
+background:#1f2a44;
+color:#fff;
 }
 
-button{cursor:pointer;background:#1f2a44;color:#fff}
 button:hover{background:#00d4ff;color:#000}
 
 /* SIDEBAR */
@@ -68,7 +76,7 @@ flex-direction:column;
 overflow:hidden;
 }
 
-/* TOP */
+/* TOPBAR */
 .topbar{
 display:flex;
 justify-content:space-between;
@@ -112,7 +120,7 @@ border:1px solid #1f355d;
 position:fixed;
 right:10px;
 bottom:10px;
-width:220px;
+width:240px;
 background:#0f172a;
 border:1px solid #00d4ff;
 border-radius:10px;
@@ -127,7 +135,7 @@ display:none;
 
 <!-- AUTH -->
 <div id="auth">
-<h2>GLOBAL OTT SAAS LOGIN</h2>
+<h2>🔐 OTT SAAS LOGIN</h2>
 <input id="email" placeholder="Email">
 <input id="pass" placeholder="Password">
 <button onclick="login()">Login</button>
@@ -137,7 +145,7 @@ display:none;
 <div class="sidebar">
 
 <div class="menu" onclick="loadContent()">📺 Load Content</div>
-<div class="menu" onclick="toggleAdmin()">🛠 Admin</div>
+<div class="menu" onclick="openAdmin()">🛠 Admin Panel</div>
 <div class="menu" onclick="logout()">🚪 Logout</div>
 
 </div>
@@ -147,7 +155,7 @@ display:none;
 
 <div class="topbar">
 <div>🌍 GLOBAL OTT SAAS PRO</div>
-<div id="status">Offline</div>
+<div id="status">OFFLINE</div>
 </div>
 
 <div class="player">
@@ -160,19 +168,19 @@ display:none;
 
 <!-- ADMIN -->
 <div class="admin" id="admin">
-<button onclick="addFake()">Add Content</button>
-<button onclick="clearAll()">Clear</button>
-<button onclick="exportData()">Export</button>
+<button onclick="alert('Admin API protected')">Check Stats</button>
+<button onclick="clearCache()">Clear Cache</button>
 </div>
 
 <script>
 
 let token=null;
+let role="user";
 let content=[];
 let video=document.getElementById("video");
 let hls;
 
-/* LOGIN (REAL API READY) */
+/* ================= LOGIN (JWT BACKEND) ================= */
 async function login(){
 
 const res = await fetch("http://localhost:5000/api/auth/login",{
@@ -184,30 +192,42 @@ password:pass.value
 })
 });
 
-const data=await res.json();
+const data = await res.json();
 
 if(data.token){
+
 token=data.token;
+role=data.user.role;
+
+localStorage.setItem("token",token);
+
 document.getElementById("auth").style.display="none";
-document.getElementById("status").innerText="Online";
+document.getElementById("status").innerText="ONLINE";
+
 loadContent();
+
 }else{
 alert("Login failed");
 }
 
 }
 
-/* LOAD CONTENT FROM BACKEND */
+/* ================= LOAD PROTECTED CONTENT ================= */
 async function loadContent(){
 
-const res=await fetch("http://localhost:5000/api/content");
-content=await res.json();
+const res = await fetch("http://localhost:5000/api/content",{
+headers:{
+Authorization:"Bearer "+localStorage.getItem("token")
+}
+});
+
+content = await res.json();
 
 render();
 
 }
 
-/* RENDER */
+/* ================= RENDER ================= */
 function render(){
 
 let grid=document.getElementById("grid");
@@ -217,7 +237,7 @@ content.forEach(c=>{
 
 let div=document.createElement("div");
 div.className="card";
-div.innerHTML=`📺 ${c.title || c.name}`;
+div.innerHTML="📺 "+(c.title || c.name);
 
 div.onclick=()=>play(c.url);
 
@@ -227,7 +247,7 @@ grid.appendChild(div);
 
 }
 
-/* PLAYER */
+/* ================= PLAYER ================= */
 function play(url){
 
 if(hls) hls.destroy();
@@ -239,40 +259,43 @@ hls.attachMedia(video);
 hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
 }else{
 video.src=url;
+video.play();
 }
 
 }
 
-/* ADMIN */
-function toggleAdmin(){
-let a=document.getElementById("admin");
-a.style.display=a.style.display==="block"?"none":"block";
+/* ================= ADMIN PROTECTION ================= */
+async function openAdmin(){
+
+if(role!=="admin"){
+alert("❌ Admin only access");
+return;
 }
 
-function addFake(){
-content.push({
-title:"New Stream "+Date.now(),
-url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+const res = await fetch("http://localhost:5000/api/admin/dashboard",{
+headers:{
+Authorization:"Bearer "+localStorage.getItem("token")
+}
 });
-render();
+
+const data = await res.json();
+
+alert(`Users: ${data.users}\nContent: ${data.content}`);
+
+document.getElementById("admin").style.display="block";
+
 }
 
-function clearAll(){
-content=[];
-render();
-}
-
-function exportData(){
-let blob=new Blob([JSON.stringify(content)],{type:"application/json"});
-let a=document.createElement("a");
-a.href=URL.createObjectURL(blob);
-a.download="ott.json";
-a.click();
-}
-
-/* LOGOUT */
+/* ================= LOGOUT ================= */
 function logout(){
+localStorage.removeItem("token");
 location.reload();
+}
+
+/* ================= UTILS ================= */
+function clearCache(){
+localStorage.clear();
+alert("Cache cleared");
 }
 
 </script>
