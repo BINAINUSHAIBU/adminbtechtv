@@ -3,12 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>GLOBAL OTT SAAS PRO SECURE</title>
+<title>GLOBAL OTT SAAS PRO MAX</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-
 body{
 margin:0;
 font-family:Arial;
@@ -20,7 +19,7 @@ overflow:hidden;
 }
 
 /* LOGIN */
-#auth{
+#loginBox{
 position:fixed;
 inset:0;
 background:#020617;
@@ -76,14 +75,6 @@ flex-direction:column;
 overflow:hidden;
 }
 
-/* TOPBAR */
-.topbar{
-display:flex;
-justify-content:space-between;
-padding:10px;
-background:#0b1220;
-}
-
 /* PLAYER */
 .player{
 height:300px;
@@ -115,17 +106,12 @@ border:1px solid #1f355d;
 
 .card:hover{border-color:#00d4ff}
 
-/* ADMIN */
-.admin{
-position:fixed;
-right:10px;
-bottom:10px;
-width:240px;
-background:#0f172a;
-border:1px solid #00d4ff;
-border-radius:10px;
+/* TOP */
+.topbar{
+display:flex;
+justify-content:space-between;
 padding:10px;
-display:none;
+background:#0b1220;
 }
 
 </style>
@@ -133,28 +119,29 @@ display:none;
 
 <body>
 
-<!-- AUTH -->
-<div id="auth">
+<!-- LOGIN -->
+<div id="loginBox">
 <h2>🔐 OTT SAAS LOGIN</h2>
-<input id="email" placeholder="Email">
-<input id="pass" placeholder="Password">
+<input id="email" placeholder="email">
+<input id="pass" type="password" placeholder="password">
 <button onclick="login()">Login</button>
+<p style="font-size:12px;color:#aaa">
+Demo: admin@demo.com / admin123
+</p>
 </div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-
-<div class="menu" onclick="loadContent()">📺 Load Content</div>
-<div class="menu" onclick="openAdmin()">🛠 Admin Panel</div>
+<div class="menu" onclick="loadDemo()">📺 Load Channels</div>
+<div class="menu" onclick="showAdmin()">🛠 Admin Panel</div>
 <div class="menu" onclick="logout()">🚪 Logout</div>
-
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
 <div class="topbar">
-<div>🌍 GLOBAL OTT SAAS PRO</div>
+<div>🌍 GLOBAL OTT SAAS (DEMO MODE)</div>
 <div id="status">OFFLINE</div>
 </div>
 
@@ -166,78 +153,68 @@ display:none;
 
 </div>
 
-<!-- ADMIN -->
-<div class="admin" id="admin">
-<button onclick="alert('Admin API protected')">Check Stats</button>
-<button onclick="clearCache()">Clear Cache</button>
-</div>
-
 <script>
 
-let token=null;
-let role="user";
-let content=[];
+let user=null;
+let role="guest";
 let video=document.getElementById("video");
 let hls;
 
-/* ================= LOGIN (JWT BACKEND) ================= */
-async function login(){
+/* =========================
+FAKE USERS (SIMULATED JWT)
+========================= */
+const users=[
+{email:"admin@demo.com",pass:"admin123",role:"admin"},
+{email:"user@demo.com",pass:"user123",role:"user"}
+];
 
-const res = await fetch("http://localhost:5000/api/auth/login",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-email:email.value,
-password:pass.value
-})
-});
+/* LOGIN */
+function login(){
 
-const data = await res.json();
+let email=document.getElementById("email").value;
+let pass=document.getElementById("pass").value;
 
-if(data.token){
+let found=users.find(u=>u.email===email && u.pass===pass);
 
-token=data.token;
-role=data.user.role;
-
-localStorage.setItem("token",token);
-
-document.getElementById("auth").style.display="none";
-document.getElementById("status").innerText="ONLINE";
-
-loadContent();
-
-}else{
-alert("Login failed");
+if(!found){
+alert("Invalid login");
+return;
 }
 
-}
+user=found.email;
+role=found.role;
 
-/* ================= LOAD PROTECTED CONTENT ================= */
-async function loadContent(){
+document.getElementById("loginBox").style.display="none";
+document.getElementById("status").innerText="ONLINE ("+role+")";
 
-const res = await fetch("http://localhost:5000/api/content",{
-headers:{
-Authorization:"Bearer "+localStorage.getItem("token")
-}
-});
-
-content = await res.json();
-
-render();
+loadDemo();
 
 }
 
-/* ================= RENDER ================= */
-function render(){
+/* LOGOUT */
+function logout(){
+location.reload();
+}
+
+/* DEMO CHANNELS */
+const channels=[
+{name:"BBC News",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"NASA TV",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
+{name:"Sports Live",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
+{name:"Movie Channel",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
+];
+
+/* LOAD */
+function loadDemo(){
 
 let grid=document.getElementById("grid");
 grid.innerHTML="";
 
-content.forEach(c=>{
+channels.forEach((c,i)=>{
 
 let div=document.createElement("div");
 div.className="card";
-div.innerHTML="📺 "+(c.title || c.name);
+div.innerHTML="📺 "+c.name;
 
 div.onclick=()=>play(c.url);
 
@@ -247,7 +224,7 @@ grid.appendChild(div);
 
 }
 
-/* ================= PLAYER ================= */
+/* PLAY */
 function play(url){
 
 if(hls) hls.destroy();
@@ -264,38 +241,16 @@ video.play();
 
 }
 
-/* ================= ADMIN PROTECTION ================= */
-async function openAdmin(){
+/* ADMIN */
+function showAdmin(){
 
 if(role!=="admin"){
-alert("❌ Admin only access");
+alert("Admin only panel");
 return;
 }
 
-const res = await fetch("http://localhost:5000/api/admin/dashboard",{
-headers:{
-Authorization:"Bearer "+localStorage.getItem("token")
-}
-});
+alert("ADMIN DASHBOARD:\nUsers: 2\nStreams: "+channels.length);
 
-const data = await res.json();
-
-alert(`Users: ${data.users}\nContent: ${data.content}`);
-
-document.getElementById("admin").style.display="block";
-
-}
-
-/* ================= LOGOUT ================= */
-function logout(){
-localStorage.removeItem("token");
-location.reload();
-}
-
-/* ================= UTILS ================= */
-function clearCache(){
-localStorage.clear();
-alert("Cache cleared");
 }
 
 </script>
