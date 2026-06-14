@@ -1,161 +1,203 @@
-
-
-
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>WORLDTV PRO MAX IPTV MERGED 2026</title>
+<title>BTECH-TV PRO MAX | IPTV SAAS SYSTEM</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
 
-/* BASE */
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
+body{
+    background:#070b18;
+    color:#fff;
+    display:flex;
+    height:100vh;
+}
 
 /* SIDEBAR */
 .sidebar{
-width:280px;
-background:#0d1324;
-padding:15px;
-overflow-y:auto;
-border-right:1px solid #1d2b4f;
+    width:280px;
+    background:#0d1429;
+    padding:15px;
+    overflow-y:auto;
+    border-right:1px solid #1f2b4d;
 }
 
-.logo{font-size:22px;font-weight:900;color:#00d4ff;}
-.sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
-
-.menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
-
-.nav-btn{
-width:100%;
-padding:10px;
-margin:5px 0;
-background:#121c33;
-border:none;
-border-radius:8px;
-color:#fff;
-cursor:pointer;
+.logo{
+    font-size:20px;
+    font-weight:bold;
+    color:#00e5ff;
 }
-.nav-btn:hover{background:#1e2f57}
+
+.sub{
+    font-size:12px;
+    color:#7fa0ff;
+    margin-bottom:10px;
+}
+
+.section-title{
+    margin:12px 0 6px;
+    font-size:12px;
+    color:#00e5ff;
+}
+
+/* BUTTONS */
+.btn{
+    width:100%;
+    padding:9px;
+    margin:5px 0;
+    background:#121c36;
+    border:none;
+    color:#fff;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.btn:hover{background:#1b2a55}
 
 /* MAIN */
 .main{
-flex:1;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-padding:10px;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    padding:10px;
 }
 
-/* TOP */
+/* TOP BAR */
 .topbar{
-display:flex;
-justify-content:space-between;
-margin-bottom:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-.search-box input{
-padding:10px;
-border-radius:8px;
-border:none;
-background:#101a31;
-color:#fff;
-width:260px;
+input{
+    padding:10px;
+    width:250px;
+    border:none;
+    border-radius:6px;
+    background:#0f1a33;
+    color:#fff;
 }
-
-.live{background:red;padding:6px 12px;border-radius:20px}
 
 /* HERO */
 .hero{
-background:linear-gradient(135deg,#07132f,#0f1d45);
-padding:10px;
-border-radius:10px;
-margin-bottom:10px;
+    background:#0f1a33;
+    padding:10px;
+    border-radius:10px;
+    margin:10px 0;
 }
 
 .stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:8px;
-margin-top:8px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+    margin-top:8px;
 }
 
 .stat{
-background:#101d39;
-padding:8px;
-border-radius:8px;
-text-align:center;
+    background:#111d38;
+    padding:8px;
+    text-align:center;
+    border-radius:6px;
 }
 
 /* PLAYER */
-.player-container{
-background:#000;
-border-radius:10px;
-overflow:hidden;
-height:320px;
-flex-shrink:0;
+.player{
+    background:#000;
+    height:300px;
+    border-radius:10px;
+    overflow:hidden;
 }
 
-video{width:100%;height:100%;}
+video{
+    width:100%;
+    height:100%;
+}
 
 /* CONTROLS */
 .controls{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-margin:10px 0;
-flex-shrink:0;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin:10px 0;
 }
 
 .controls button{
-padding:8px 10px;
-border:none;
-border-radius:6px;
-background:#152445;
-color:#fff;
-cursor:pointer;
+    padding:8px;
+    border:none;
+    border-radius:6px;
+    background:#132247;
+    color:#fff;
+    cursor:pointer;
 }
-.controls button:hover{background:#00d4ff;color:#000}
 
-/* CHANNELS */
-.channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+.controls button:hover{
+    background:#00e5ff;
+    color:#000;
+}
 
-.channels{
-overflow-y:auto;
-flex:1;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-gap:10px;
-padding-right:5px;
+/* CHANNEL GRID */
+.grid{
+    flex:1;
+    overflow-y:auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:10px;
 }
 
 .card{
-background:#111a31;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-border:1px solid #1f355d;
-transition:.3s;
-}
-.card:hover{transform:scale(1.03);border-color:#00d4ff;}
-
-.badge{
-background:red;
-padding:3px 6px;
-border-radius:10px;
-font-size:10px;
-float:right;
+    background:#0f1a33;
+    padding:10px;
+    border-radius:8px;
+    cursor:pointer;
+    border:1px solid #1d2a4d;
 }
 
-@media(max-width:900px){
-body{flex-direction:column;}
-.sidebar{width:100%;}
+.card:hover{
+    border-color:#00e5ff;
 }
 
+/* ADMIN PANEL */
+.panel{
+    background:#0f1a33;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:10px;
+}
+
+.item{
+    display:flex;
+    justify-content:space-between;
+    padding:6px;
+    margin:5px 0;
+    background:#0b1328;
+    border-radius:6px;
+}
+
+.locked{background:red;color:#fff;padding:4px 8px;border-radius:5px;}
+.unlocked{background:green;color:#fff;padding:4px 8px;border-radius:5px;}
+
+/* MONITOR */
+.bar{
+    height:10px;
+    background:#222;
+    border-radius:6px;
+    overflow:hidden;
+}
+
+.fill{
+    height:100%;
+    width:0%;
+    background:lime;
+}
 </style>
 </head>
 
@@ -167,68 +209,22 @@ body{flex-direction:column;}
 <div class="logo">📺 BTECH-TV PRO MAX</div>
 <div class="sub">Ultra IPTV Engine X</div>
 
-<div class="menu-title">🌍 Countries</div>
+<div class="section-title">🔐 ADMIN CONTROL</div>
+<div class="panel">
+<button class="btn" onclick="toggleAll()">LOCK / UNLOCK ALL</button>
+</div>
 
-<!-- ALL COUNTRIES -->
-<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
-<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
-<button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
-<button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
-<button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
-<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
-<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
-<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
-<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
-<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
-<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
-<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
-<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
-<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
-<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
-<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
-<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
-<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
-<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
-<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
-<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
-<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
-<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
-<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
-<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
+<div class="section-title">🌍 COUNTRIES</div>
+<div id="countries"></div>
 
-<div class="menu-title">🎬 Categories</div>
+<div class="section-title">🎬 CATEGORIES</div>
+<div id="categories"></div>
 
-<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
-<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
-<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
-<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
-<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
-<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
-<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
-<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
-<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
-<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
+<div class="section-title">🗣 LANGUAGES</div>
+<div id="languages"></div>
 
-<div class="menu-title">🗣 Languages</div>
-
-<button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
-<button class="nav-btn" onclick="load('spa')">🇪🇸 Spanish</button>
-<button class="nav-btn" onclick="load('ara')">🇸🇦 Arabic</button>
-<button class="nav-btn" onclick="load('fra')">🇫🇷 French</button>
-<button class="nav-btn" onclick="load('hin')">🇮🇳 Hindi</button>
-<button class="nav-btn" onclick="load('zho')">🇨🇳 Chinese</button>
-<button class="nav-btn" onclick="load('por')">🇵🇹 Portuguese</button>
-
-<div class="menu-title">🔥 Tools</div>
-
-<button class="nav-btn" onclick="scanStreams()">📡 Scan</button>
-<button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
-<button class="nav-btn" onclick="togglePiP()">📺 PiP</button>
-<button class="nav-btn" onclick="clearRecents()">🗑 Recents</button>
-<button class="nav-btn" onclick="recordMode()">⏺ Record</button>
-<button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
-<button class="nav-btn" onclick="repairStreams()">🛠 Repair</button>
-<button class="nav-btn" onclick="optimizeMemory()">🧠 Optimize</button>
+<div class="section-title">🔥 TOOLS</div>
+<div id="tools"></div>
 
 </div>
 
@@ -236,14 +232,13 @@ body{flex-direction:column;}
 <div class="main">
 
 <div class="topbar">
-<div class="search-box">
 <input oninput="search(this.value)" placeholder="Search IPTV...">
-</div>
-<div class="live">🔴 LIVE</div>
+<div>🔴 LIVE</div>
 </div>
 
 <div class="hero">
-<h3>WORLDTV PRO MAX IPTV SYSTEM</h3>
+WORLDTV PRO MAX IPTV SYSTEM
+
 <div class="stats">
 <div class="stat">📺 <div id="total">0</div></div>
 <div class="stat">⭐ Fav <div id="fav">0</div></div>
@@ -252,49 +247,84 @@ body{flex-direction:column;}
 </div>
 </div>
 
-<div class="player-container">
+<div class="player">
 <video id="video" controls autoplay muted></video>
 </div>
 
 <div class="controls">
-<button onclick="next()">▶ Next</button>
-<button onclick="prev()">◀ Prev</button>
-<button onclick="toggleMute()">🔊 Mute</button>
-<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
-<button onclick="loadUltra()">🚀 Global</button>
+<button onclick="next()">Next</button>
+<button onclick="prev()">Prev</button>
+<button onclick="toggleMute()">Mute</button>
+<button onclick="fullscreen()">Fullscreen</button>
 </div>
 
-<div class="channel-wrapper">
-<div class="channels" id="grid"></div>
+<div class="grid" id="grid"></div>
+
+<!-- IPTV MONITOR -->
+<div class="panel">
+<h3>📡 IPTV MONITOR</h3>
+<div>👥 Users: <span id="users">0</span></div>
+<div>📺 Status: <span id="status">ONLINE</span></div>
+<div>⚡ Health</div>
+<div class="bar"><div class="fill" id="bar"></div></div>
 </div>
 
 </div>
 
 <script>
 
+const countries=["Nigeria","USA","UK","India","France","Germany","Brazil","South Africa","Canada","Australia","Japan","Korea","China","Spain","Italy","Turkey","Mexico","UAE","Saudi Arabia","Egypt","Argentina","Pakistan","Indonesia","Philippines","Albania"];
+const categories=["News","Sports","Movies","Music","Kids","Comedy","Documentary","Business","Science","Travel"];
+const languages=["English","Spanish","Arabic","French","Hindi","Chinese","Portuguese"];
+const tools=["Scan","Boost","PiP","Recents","Record","Ultra Feeds","Repair","Optimize"];
+
+function create(id,list){
+let box=document.getElementById(id);
+list.forEach(n=>{
+let d=document.createElement("div");
+d.className="item";
+d.innerHTML=`<span>${n}</span><button class="unlocked" onclick="toggle(this)">ON</button>`;
+box.appendChild(d);
+});
+}
+
+create("countries",countries);
+create("categories",categories);
+create("languages",languages);
+create("tools",tools);
+
+function toggle(btn){
+if(btn.classList.contains("unlocked")){
+btn.className="locked";
+btn.innerText="OFF";
+}else{
+btn.className="unlocked";
+btn.innerText="ON";
+}
+}
+
+function toggleAll(){
+document.querySelectorAll("button").forEach(b=>{
+if(b.classList.contains("unlocked")){
+b.className="locked";
+b.innerText="OFF";
+}else{
+b.className="unlocked";
+b.innerText="ON";
+}
+});
+}
+
+/* IPTV */
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
 
-/* LOAD */
-async function load(code){
-await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
-}
-
-async function loadCat(c){
-await loadM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`);
-}
-
-async function loadUltra(){
-await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
-}
-
-/* M3U */
 async function loadM3U(url){
-const res=await fetch(url);
-const text=await res.text();
+let res=await fetch(url);
+let text=await res.text();
 
-all=[];filtered=[];i=0;
+all=[];filtered=[];
 
 let lines=text.split("\n");
 
@@ -311,20 +341,18 @@ render();
 stats();
 }
 
-/* RENDER */
 function render(){
 let grid=document.getElementById("grid");
 grid.innerHTML="";
 filtered.forEach((c,idx)=>{
-let div=document.createElement("div");
-div.className="card";
-div.innerHTML=`<div class="badge">LIVE</div>${c.name}`;
-div.onclick=()=>play(idx);
-grid.appendChild(div);
+let d=document.createElement("div");
+d.className="card";
+d.innerHTML=c.name;
+d.onclick=()=>play(idx);
+grid.appendChild(d);
 });
 }
 
-/* PLAY */
 function play(idx){
 i=idx;
 let c=filtered[i];
@@ -337,11 +365,10 @@ hls.attachMedia(video);
 hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
 }else{
 video.src=c.url;
+}
 video.play();
 }
-}
 
-/* BASIC */
 function search(q){
 filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
 render();
@@ -349,28 +376,29 @@ render();
 
 function next(){i=(i+1)%filtered.length;play(i);}
 function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
-
 function toggleMute(){video.muted=!video.muted;}
-function toggleFullscreen(){video.requestFullscreen();}
+function fullscreen(){video.requestFullscreen();}
 
-/* EXTRA FEATURES (PLACEHOLDER SAFE) */
-function scanStreams(){alert("Scanning streams...");}
-function speedBoost(){video.playbackRate=1.15;}
-function repairStreams(){alert("Repair mode active");}
-function optimizeMemory(){alert("Optimizing memory");}
-function recordMode(){alert("Record mode enabled");}
-function clearRecents(){alert("Recents cleared");}
+/* MONITOR */
+function monitor(){
+document.getElementById("users").innerText=Math.floor(Math.random()*5000);
+let h=Math.floor(Math.random()*100);
+document.getElementById("bar").style.width=h+"%";
+document.getElementById("status").innerText=h>80?"DEGRADED":"ONLINE";
+}
 
-/* STATS */
+setInterval(monitor,2000);
+monitor();
+
+/* LOAD DEFAULT */
+loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
+
 function stats(){
 document.getElementById("total").innerText=all.length;
 document.getElementById("live").innerText=all.length;
 document.getElementById("dead").innerText=0;
 document.getElementById("fav").innerText=0;
 }
-
-/* AUTO START */
-loadUltra();
 
 </script>
 
