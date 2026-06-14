@@ -1,4 +1,9 @@
-<!DOCTYPE html>
+
+
+
+
+
+<!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -9,65 +14,7 @@
 
 <style>
 
-/* ================= LOGIN OVERLAY ================= */
-#authBox{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,0.95);
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:99999;
-}
-
-.auth-card{
-width:320px;
-background:#0d1324;
-padding:20px;
-border-radius:12px;
-border:1px solid #1d2b4f;
-color:#fff;
-}
-
-.auth-card h2{
-text-align:center;
-margin-bottom:10px;
-color:#00d4ff;
-}
-
-.auth-card input{
-width:100%;
-padding:10px;
-margin:8px 0;
-border:none;
-border-radius:6px;
-background:#101a31;
-color:#fff;
-}
-
-.auth-card button{
-width:100%;
-padding:10px;
-margin-top:8px;
-border:none;
-border-radius:6px;
-background:#00d4ff;
-color:#000;
-font-weight:bold;
-cursor:pointer;
-}
-
-.auth-card button:hover{opacity:0.8}
-
-.small{
-font-size:12px;
-text-align:center;
-margin-top:10px;
-color:#aaa;
-cursor:pointer;
-}
-
-/* ================= ORIGINAL APP ================= */
+/* BASE */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
 
@@ -106,6 +53,7 @@ overflow:hidden;
 padding:10px;
 }
 
+/* TOP */
 .topbar{
 display:flex;
 justify-content:space-between;
@@ -123,6 +71,7 @@ width:260px;
 
 .live{background:red;padding:6px 12px;border-radius:20px}
 
+/* HERO */
 .hero{
 background:linear-gradient(135deg,#07132f,#0f1d45);
 padding:10px;
@@ -144,6 +93,7 @@ border-radius:8px;
 text-align:center;
 }
 
+/* PLAYER */
 .player-container{
 background:#000;
 border-radius:10px;
@@ -154,6 +104,7 @@ flex-shrink:0;
 
 video{width:100%;height:100%;}
 
+/* CONTROLS */
 .controls{
 display:flex;
 flex-wrap:wrap;
@@ -172,6 +123,7 @@ cursor:pointer;
 }
 .controls button:hover{background:#00d4ff;color:#000}
 
+/* CHANNELS */
 .channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
 
 .channels{
@@ -189,7 +141,9 @@ padding:10px;
 border-radius:10px;
 cursor:pointer;
 border:1px solid #1f355d;
+transition:.3s;
 }
+.card:hover{transform:scale(1.03);border-color:#00d4ff;}
 
 .badge{
 background:red;
@@ -209,26 +163,7 @@ body{flex-direction:column;}
 
 <body>
 
-<!-- ================= AUTH ================= -->
-<div id="authBox">
-  <div class="auth-card">
-    <h2>FREE 3-DAY TRIAL</h2>
-
-    <input id="email" placeholder="Email">
-    <input id="password" type="password" placeholder="Password">
-
-    <button onclick="register()">Create Trial Account</button>
-    <button onclick="login()">Login</button>
-
-    <div class="small" onclick="demoLogin()">
-      Demo Login (Admin bypass)
-    </div>
-
-    <div id="msg" class="small"></div>
-  </div>
-</div>
-
-<!-- ================= APP ================= -->
+<!-- SIDEBAR -->
 <div class="sidebar">
 
 <div class="logo">📺 BTECH-TV PRO MAX</div>
@@ -236,15 +171,70 @@ body{flex-direction:column;}
 
 <div class="menu-title">🌍 Countries</div>
 
+<!-- ALL COUNTRIES -->
 <button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
 <button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
 <button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
+<button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
+<button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
+<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
+<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
+<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
+<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
+<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
+<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
+<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
+<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
+<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
+<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
+<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
+<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
+<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
+<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
+<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
+<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
+<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
+<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
+<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
+<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
+
+<div class="menu-title">🎬 Categories</div>
+
+<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
+<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
+<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
+<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
+<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
+<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
+<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
+<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
+<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
+<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
+
+<div class="menu-title">🗣 Languages</div>
+
+<button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
+<button class="nav-btn" onclick="load('spa')">🇪🇸 Spanish</button>
+<button class="nav-btn" onclick="load('ara')">🇸🇦 Arabic</button>
+<button class="nav-btn" onclick="load('fra')">🇫🇷 French</button>
+<button class="nav-btn" onclick="load('hin')">🇮🇳 Hindi</button>
+<button class="nav-btn" onclick="load('zho')">🇨🇳 Chinese</button>
+<button class="nav-btn" onclick="load('por')">🇵🇹 Portuguese</button>
 
 <div class="menu-title">🔥 Tools</div>
-<button class="nav-btn" onclick="alert('Scan')">📡 Scan</button>
+
+<button class="nav-btn" onclick="scanStreams()">📡 Scan</button>
+<button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
+<button class="nav-btn" onclick="togglePiP()">📺 PiP</button>
+<button class="nav-btn" onclick="clearRecents()">🗑 Recents</button>
+<button class="nav-btn" onclick="recordMode()">⏺ Record</button>
+<button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
+<button class="nav-btn" onclick="repairStreams()">🛠 Repair</button>
+<button class="nav-btn" onclick="optimizeMemory()">🧠 Optimize</button>
 
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
 <div class="topbar">
@@ -272,6 +262,8 @@ body{flex-direction:column;}
 <button onclick="next()">▶ Next</button>
 <button onclick="prev()">◀ Prev</button>
 <button onclick="toggleMute()">🔊 Mute</button>
+<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+<button onclick="loadUltra()">🚀 Global</button>
 </div>
 
 <div class="channel-wrapper">
@@ -282,71 +274,24 @@ body{flex-direction:column;}
 
 <script>
 
-/* ================= TRIAL SYSTEM ================= */
-
-function now(){return new Date().getTime();}
-
-function register(){
-let email=document.getElementById("email").value;
-let pass=document.getElementById("password").value;
-
-if(!email||!pass)return msg("Fill all fields");
-
-let users=JSON.parse(localStorage.getItem("users")||"{}");
-
-users[email]={
-pass:pass,
-start:now(),
-trial:3*24*60*60*1000
-};
-
-localStorage.setItem("users",JSON.stringify(users));
-msg("Trial created! Please login.");
-}
-
-function login(){
-let email=document.getElementById("email").value;
-let pass=document.getElementById("password").value;
-
-let users=JSON.parse(localStorage.getItem("users")||"{}");
-let u=users[email];
-
-if(!u)return msg("No account found");
-if(u.pass!==pass)return msg("Wrong password");
-
-if(now()-u.start>u.trial){
-return msg("Trial expired. Please subscribe.");
-}
-
-sessionStorage.setItem("auth",email);
-document.getElementById("authBox").style.display="none";
-}
-
-function demoLogin(){
-sessionStorage.setItem("auth","admin");
-document.getElementById("authBox").style.display="none";
-}
-
-function msg(t){
-document.getElementById("msg").innerText=t;
-}
-
-/* BLOCK IF NOT LOGGED */
-window.onload=()=>{
-let a=sessionStorage.getItem("auth");
-if(a)document.getElementById("authBox").style.display="none";
-};
-
-/* ================= IPTV CORE ================= */
-
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
 
+/* LOAD */
 async function load(code){
 await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
 
+async function loadCat(c){
+await loadM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`);
+}
+
+async function loadUltra(){
+await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
+}
+
+/* M3U */
 async function loadM3U(url){
 const res=await fetch(url);
 const text=await res.text();
@@ -359,7 +304,7 @@ for(let x=0;x<lines.length;x++){
 if(lines[x].startsWith("#EXTINF")){
 let name=lines[x].split(",").pop();
 let url=lines[x+1];
-if(url&&url.startsWith("http")) all.push({name,url});
+if(url && url.startsWith("http")) all.push({name,url});
 }
 }
 
@@ -368,6 +313,7 @@ render();
 stats();
 }
 
+/* RENDER */
 function render(){
 let grid=document.getElementById("grid");
 grid.innerHTML="";
@@ -380,10 +326,11 @@ grid.appendChild(div);
 });
 }
 
+/* PLAY */
 function play(idx){
 i=idx;
 let c=filtered[i];
-if(hls)hls.destroy();
+if(hls) hls.destroy();
 
 if(Hls.isSupported()){
 hls=new Hls();
@@ -396,6 +343,7 @@ video.play();
 }
 }
 
+/* BASIC */
 function search(q){
 filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
 render();
@@ -405,13 +353,26 @@ function next(){i=(i+1)%filtered.length;play(i);}
 function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
 
 function toggleMute(){video.muted=!video.muted;}
+function toggleFullscreen(){video.requestFullscreen();}
 
+/* EXTRA FEATURES (PLACEHOLDER SAFE) */
+function scanStreams(){alert("Scanning streams...");}
+function speedBoost(){video.playbackRate=1.15;}
+function repairStreams(){alert("Repair mode active");}
+function optimizeMemory(){alert("Optimizing memory");}
+function recordMode(){alert("Record mode enabled");}
+function clearRecents(){alert("Recents cleared");}
+
+/* STATS */
 function stats(){
 document.getElementById("total").innerText=all.length;
 document.getElementById("live").innerText=all.length;
+document.getElementById("dead").innerText=0;
+document.getElementById("fav").innerText=0;
 }
 
-load('ng');
+/* AUTO START */
+loadUltra();
 
 </script>
 
