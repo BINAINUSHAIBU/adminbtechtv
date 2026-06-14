@@ -78,7 +78,6 @@ color:#fff;width:260px;
 
 .live{background:red;padding:6px 12px;border-radius:20px}
 
-/* HERO */
 .hero{
 background:linear-gradient(135deg,#07132f,#0f1d45);
 padding:10px;border-radius:10px;margin-bottom:10px;
@@ -123,7 +122,7 @@ border:1px solid #1f355d;
 
 .badge{background:red;padding:3px 6px;border-radius:10px;font-size:10px;float:right;}
 
-/* LOCK OVERLAY WHEN EXPIRED */
+/* LOCK */
 .locked{
 filter:blur(6px);
 pointer-events:none;
@@ -202,18 +201,6 @@ cursor:pointer;
 <button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
 <button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
 <button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
-<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
-<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
-<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
-<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
-<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
-<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
-<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
-<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
-<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
-<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
-<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
-<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
 
 <div class="menu-title">🎬 Categories</div>
 <button class="nav-btn" onclick="loadCat('news')">📰 News</button>
@@ -221,20 +208,12 @@ cursor:pointer;
 <button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
 <button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
 <button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
-<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
-<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
-<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
-<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
-<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
 
 <div class="menu-title">🗣 Languages</div>
 <button class="nav-btn">🇬🇧 English</button>
 <button class="nav-btn">🇪🇸 Spanish</button>
 <button class="nav-btn">🇸🇦 Arabic</button>
 <button class="nav-btn">🇫🇷 French</button>
-<button class="nav-btn">🇮🇳 Hindi</button>
-<button class="nav-btn">🇨🇳 Chinese</button>
-<button class="nav-btn">🇵🇹 Portuguese</button>
 
 <div class="menu-title">🔥 Tools</div>
 <button class="nav-btn" onclick="logout()">🚪 Logout</button>
@@ -289,28 +268,43 @@ let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
 
-function now(){return new Date().getTime();}
+function now(){return Date.now();}
 
-/* TRIAL */
+/* REGISTER FIXED */
 function register(){
-let email=email=document.getElementById("email").value;
+let email=document.getElementById("email").value;
 let pass=document.getElementById("pass").value;
-if(!email||!pass){alert("Fill fields");return;}
+
+if(!email||!pass){
+alert("Fill fields");
+return;
+}
 
 localStorage.setItem("user",JSON.stringify({
-email,pass,start:now(),trialDays:3
+email:email,
+pass:pass,
+start:now(),
+trialDays:3
 }));
 
+alert("Registered successfully");
 login();
 }
 
+/* LOGIN FIXED */
 function login(){
-let user=JSON.parse(localStorage.getItem("user"));
-if(!user){alert("Register first");return;}
+let user=localStorage.getItem("user");
+
+if(!user){
+alert("Register first");
+return;
+}
+
+user=JSON.parse(user);
 
 let diff=(now()-user.start)/(1000*60*60*24);
 
-if(diff>3){
+if(diff>user.trialDays){
 document.getElementById("authBox").style.display="none";
 document.getElementById("expired").style.display="flex";
 document.getElementById("ui").classList.add("locked");
@@ -362,7 +356,8 @@ if(url&&url.startsWith("http")) all.push({name,url});
 }
 
 filtered=[...all];
-render();stats();
+render();
+stats();
 }
 
 function render(){
