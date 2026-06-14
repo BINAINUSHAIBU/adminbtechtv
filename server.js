@@ -1,147 +1,204 @@
 const express = require("express");
-const fs = require("fs");
-const cors = require("cors");
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const SECRET = "TRIAL_IPTV_SECRET_2026";
-const DB_FILE = "./trialUsers.json";
+/* =========================
+   DATABASE
+========================= */
+mongoose.connect(process.env.MONGO_URL)
+  .then(() => console.log("MongoDB connected"));
 
-/* ---------------- LOAD USERS ---------------- */
-function getUsers() {
-    if (!fs.existsSync(DB_FILE)) return {};
-    return JSON.parse(fs.readFileSync(DB_FILE));
+/* =========================
+   USER MODEL
+========================= */
+const User = mongoose.model("User", new mongoose.Schema({
+  username: String,
+  password: String,
+  role: { type: String, default: "user" },
+
+  plan: { type: String, default: "trial" },
+  trialStart: Date,
+  trialEnd: Date,
+  subscriptionEnd: Date,
+
+  isBanned: { type: Boolean, default: false }
+}));
+
+/* =========================
+   AUTH MIDDLEWARE
+========================= */
+function auth(req, res, next) {
+  const token = req.headers.authorization;
+  if (!token) return res.send("No token");
+
+  try {
+    req.user = jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
+    next();
+  } catch {
+    res.send("Invalid token");
+  }
 }
 
-/* ---------------- SAVE USERS ---------------- */
-function saveUsers(data) {
-    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
+function adminOnly(req, res, next) {
+  if (req.user.role !== "admin") return res.send("Admins only");
+  next();
 }
 
-/* ---------------- CREATE TRIAL USER ---------------- */
-app.post("/trial/start", (req, res) => {
-    const { deviceId } = req.body;
+/* =========================
+   ACCESS CONTROL (TRIAL + SUB)
+========================= */
+async function accessControl(req, res, next) {
+  const user = await User.findById(req.user.id);
+  const now = new Date();
 
-    if (!deviceId) {
-        return res.status(400).json({ error: "Device ID required" });
-    }
+  if (!user || user.isBanned) {
+    return res.send("Account blocked");
+  }
 
-    let users = getUsers();
+  if (user.plan === "trial" && now > user.trialEnd) {
+    user.plan = "expired";
+    await user.save();
+    return res.send("Trial expired");
+  }
 
-    // if already exists
-    if (users[deviceId]) {
-        return res.json({
-            message: "Trial already exists",
-            trialStart: users[deviceId].trialStart,
-            expiresAt: users[deviceId].expiresAt
-        });
-    }
+  if (user.plan === "active" && user.subscriptionEnd && now > user.subscriptionEnd) {
+    user.plan = "expired";
+    await user.save();
+    return res.send("Subscription expired");
+  }
 
-    const now = Date.now();
-    const expiresAt = now + (3 * 24 * 60 * 60 * 1000); // 3 days
-
-    users[deviceId] = {
-        trialStart: now,
-        expiresAt
-    };
-
-    saveUsers(users);
-
-    const token = jwt.sign({ deviceId }, SECRET, { expiresIn: "3d" });
-
-    res.json({
-        message: "Trial activated",
-        token,
-        trialStart: now,
-        expiresAt
-    });
-});
-
-/* ---------------- MIDDLEWARE (CHECK TRIAL) ---------------- */
-function verifyTrial(req, res, next) {
-    const auth = req.headers.authorization;
-
-    if (!auth) {
-        return res.status(401).json({ error: "No token provided" });
-    }
-
-    try {
-        const token = auth.split(" ")[1];
-        const decoded = jwt.verify(token, SECRET);
-
-        const users = getUsers();
-        const user = users[decoded.deviceId];
-
-        if (!user) {
-            return res.status(403).json({ error: "No trial found" });
-        }
-
-        if (Date.now() > user.expiresAt) {
-            return res.status(403).json({ error: "Trial expired" });
-        }
-
-        req.user = decoded;
-        next();
-
-    } catch (err) {
-        return res.status(403).json({ error: "Invalid token" });
-    }
+  req.u = user;
+  next();
 }
 
-/* ---------------- PROTECTED ROUTE ---------------- */
-app.get("/trial/channels", verifyTrial, (req, res) => {
-    res.json({
-        status: "active",
-        message: "Trial valid",
-        channels: [
-            {
-                name: "Sample News",
-                url: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-            },
-            {
-                name: "Sample Sports",
-                url: "https://test-streams.mux.dev/test_001/stream.m3u8"
-            }
-        ]
+/* =========================
+   REGISTER (AUTO 3 DAY TRIAL)
+========================= */
+app.post("/register", async (req, res) => {
+  const { username, password } = req.body;
+
+  const hashed = await bcrypt.hash(password, 10);
+
+  const now = new Date();
+  const trialEnd = new Date();
+  trialEnd.setDate(now.getDate() + 3);
+
+  await User.create({
+    username,
+    password: hashed,
+    trialStart: now,
+    trialEnd,
+    plan: "trial"
+  });
+
+  res.send("User created with 3-day trial");
+});
+
+/* =========================
+   LOGIN
+========================= */
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  const user = await User.findOne({ username });
+  if (!user) return res.send("User not found");
+
+  const ok = await bcrypt.compare(password, user.password);
+  if (!ok) return res.send("Wrong password");
+
+  const token = jwt.sign(
+    { id: user._id, role: user.role },
+    process.env.JWT_SECRET
+  );
+
+  res.json({ token });
+});
+
+/* =========================
+   IPTV ACCESS ROUTE
+========================= */
+app.get("/stream", auth, accessControl, (req, res) => {
+  res.send(`
+    <h2>Welcome ${req.u.username}</h2>
+    <p>Plan: ${req.u.plan}</p>
+    <a href="/user">Go to User Panel</a>
+  `);
+});
+
+/* =========================
+   USER PANEL (ONE PAGE UI)
+========================= */
+app.get("/user", (req, res) => {
+  res.send(`
+  <h1>User Dashboard</h1>
+
+  <button onclick="check()">Check Status</button>
+
+  <pre id="out"></pre>
+
+  <script>
+  async function check(){
+    const token = localStorage.getItem("token");
+
+    const res = await fetch("/me", {
+      headers: { Authorization: "Bearer " + token }
     });
+
+    document.getElementById("out").innerText = await res.text();
+  }
+  </script>
+  `);
 });
 
-/* ---------------- CHECK STATUS ---------------- */
-app.get("/trial/status", verifyTrial, (req, res) => {
-    res.json({
-        status: "active",
-        message: "Trial is still valid"
+/* =========================
+   ADMIN PANEL (ONE PAGE)
+========================= */
+app.get("/admin", (req, res) => {
+  res.send(`
+  <h1>Admin Panel</h1>
+
+  <button onclick="load()">Load Users</button>
+
+  <pre id="out"></pre>
+
+  <script>
+  async function load(){
+    const token = localStorage.getItem("token");
+
+    const res = await fetch("/admin/users", {
+      headers: { Authorization: "Bearer " + token }
     });
+
+    document.getElementById("out").innerText = await res.text();
+  }
+  </script>
+  `);
 });
 
-/* ---------------- START SERVER ---------------- */
-app.listen(3000, () => {
-    console.log("🚀 Trial Backend running on http://localhost:3000");
+/* =========================
+   ADMIN API
+========================= */
+app.get("/admin/users", auth, adminOnly, async (req, res) => {
+  const users = await User.find();
+  res.json(users);
 });
-const express = require("express");
-const fs = require("fs");
-const cors = require("cors");
-const jwt = require("jsonwebtoken");
-const axios = require("axios");
-const Stripe = require("stripe");
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+/* =========================
+   USER PROFILE
+========================= */
+app.get("/me", auth, async (req, res) => {
+  const user = await User.findById(req.user.id);
+  res.json(user);
+});
 
-const SECRET = "IPTV_SECRET_2026";
-
-/* =======================
-   PAYMENT KEYS
-======================= */
-
-// STRIPE
-const stripe = Stripe("YOUR_STRIPE_SECRET_KEY");
-
-// PAYSTACK
-const PAYSTACK_SECRET = "YOUR_PAYSTACK_SECRET_KEY";
-
-const DB_FILE = "./users.json";
+/* =========================
+   START SERVER
+========================= */
+app.listen(5000, () => console.log("Server running on 5000"));
