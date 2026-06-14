@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>BTECH-TV PRO MAX | SUPER ADMIN + IPTV MONITOR</title>
+<title>BTECH-TV PRO MAX | SUPER ADMIN PANEL</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -17,7 +18,7 @@ header{
     background:#111a2e;
     padding:20px;
     text-align:center;
-    font-size:20px;
+    font-size:22px;
     font-weight:bold;
     color:#00ffcc;
 }
@@ -36,7 +37,7 @@ header{
 }
 
 h2{
-    font-size:15px;
+    font-size:16px;
     margin-bottom:10px;
     color:#00ffcc;
 }
@@ -58,8 +59,15 @@ button{
     cursor:pointer;
 }
 
-.locked{ background:red; color:#fff; }
-.unlocked{ background:green; color:#fff; }
+.locked{
+    background:red;
+    color:#fff;
+}
+
+.unlocked{
+    background:green;
+    color:#fff;
+}
 
 .master{
     background:#ff9800;
@@ -69,42 +77,13 @@ button{
     font-weight:bold;
     margin-bottom:10px;
 }
-
-/* IPTV MONITOR */
-.monitor-box{
-    background:#0e1528;
-    padding:10px;
-    border-radius:8px;
-    margin:6px 0;
-}
-
-.bar{
-    height:10px;
-    background:#222;
-    border-radius:5px;
-    overflow:hidden;
-}
-
-.fill{
-    height:100%;
-    width:0%;
-    background:lime;
-}
-
-.status-online{ color:lime; }
-.status-offline{ color:red; }
-
-.big{
-    font-size:18px;
-    font-weight:bold;
-}
 </style>
 </head>
 
 <body>
 
 <header>
-📺 BTECH-TV PRO MAX — SUPER ADMIN + IPTV MONITOR
+📺 BTECH-TV PRO MAX — SUPER ADMIN CONTROL CENTER
 </header>
 
 <div class="container">
@@ -113,39 +92,22 @@ button{
 <div class="panel">
 <h2>🔥 MASTER CONTROL</h2>
 <button class="master" onclick="toggleAll()">LOCK / UNLOCK ALL SYSTEM</button>
-
-<div class="item"><span>Trial Mode</span><button class="unlocked" onclick="toggle(this)">ACTIVE</button></div>
-<div class="item"><span>Premium Gate</span><button class="locked" onclick="toggle(this)">LOCKED</button></div>
-
+<div class="item">
+<span>Trial Mode Access</span>
+<button id="trialBtn" class="unlocked" onclick="toggle(this)">ACTIVE</button>
 </div>
-
-<!-- IPTV MONITOR -->
-<div class="panel">
-<h2>📡 IPTV LIVE MONITOR</h2>
-
-<div class="monitor-box">
-<div class="big">👥 Active Users: <span id="users">0</span></div>
+<div class="item">
+<span>Premium Upgrade Gate</span>
+<button class="locked" onclick="toggle(this)">LOCKED</button>
 </div>
-
-<div class="monitor-box">
-<div>📺 Stream Status: <span id="streamStatus" class="status-online">ONLINE</span></div>
-</div>
-
-<div class="monitor-box">
-<div>📶 Bandwidth Usage</div>
-<div class="bar"><div class="fill" id="band"></div></div>
-</div>
-
-<div class="monitor-box">
-<div>⚡ Server Health: <span id="health">GOOD</span></div>
-</div>
-
 </div>
 
 <!-- COUNTRIES -->
 <div class="panel">
 <h2>🌍 COUNTRIES</h2>
+
 <div id="countries"></div>
+
 </div>
 
 <!-- CATEGORIES -->
@@ -213,7 +175,9 @@ function toggleAll(){
     let lock = false;
 
     buttons.forEach(b=>{
-        if(b.classList.contains("unlocked")) lock = true;
+        if(b.classList.contains("unlocked")){
+            lock = true;
+        }
     });
 
     buttons.forEach(b=>{
@@ -228,29 +192,6 @@ function toggleAll(){
         }
     });
 }
-
-/* IPTV LIVE SIMULATION */
-function updateMonitor(){
-    let users = Math.floor(Math.random()*5000);
-    let band = Math.floor(Math.random()*100);
-    let health = band > 80 ? "CRITICAL" : band > 50 ? "AVERAGE" : "GOOD";
-
-    document.getElementById("users").innerText = users;
-    document.getElementById("band").style.width = band + "%";
-    document.getElementById("health").innerText = health;
-
-    let status = document.getElementById("streamStatus");
-    if(band > 85){
-        status.innerText = "DEGRADED";
-        status.className = "status-offline";
-    } else {
-        status.innerText = "ONLINE";
-        status.className = "status-online";
-    }
-}
-
-setInterval(updateMonitor, 2000);
-updateMonitor();
 
 </script>
 
