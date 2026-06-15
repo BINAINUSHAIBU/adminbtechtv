@@ -1,102 +1,93 @@
-
-<!-- ========================================================= -->
-<!-- SUPER ADMIN IPTV ULTRA MAX WORLD (ONE PAGE MERGED BUILD) -->
-<!-- BTECH-TV PRO MAX + ULTRA IPTV ENGINE -->
-<!-- ========================================================= -->
-
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>📺 SUPER ADMIN IPTV ULTRA MAX WORLD</title>
+<title>WORLDTV PRO MAX IPTV MERGED 2026</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
-:root{
---bg:#050816;
---panel:#111827;
---card:#172033;
---accent:#00d4ff;
---text:#ffffff;
---danger:#ef4444;
---success:#16a34a;
-}
-
+/* BASE */
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Arial;
 }
 
 body{
-background:var(--bg);
-color:var(--text);
-height:100vh;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-}
-
-/* TOPBAR */
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:10px;
-background:#0f172a;
-border-bottom:1px solid #1f2b4d;
-flex-wrap:wrap;
-}
-
-.logo{
-font-weight:bold;
-color:var(--accent);
-font-size:18px;
-}
-
-.topbar button{
-background:var(--card);
+background:#050816;
 color:#fff;
-border:none;
-padding:8px;
-border-radius:6px;
-cursor:pointer;
-}
-
-/* LAYOUT */
-.container{
-flex:1;
 display:flex;
+height:100vh;
 overflow:hidden;
 }
 
 /* SIDEBAR */
 .sidebar{
 width:300px;
-background:#0b1220;
-overflow:auto;
+background:#0d1324;
+padding:15px;
+overflow-y:auto;
+border-right:1px solid #1d2b4f;
+}
+
+.logo{
+font-size:22px;
+font-weight:900;
+color:#00d4ff;
+}
+
+.sub{
+font-size:12px;
+color:#8ea2d9;
+margin-bottom:15px;
+}
+
+.menu-title{
+color:#00d4ff;
+margin:15px 0 10px;
+font-size:12px;
+}
+
+/* NAV BUTTONS */
+.nav-btn{
+width:100%;
 padding:10px;
+margin:5px 0;
+background:#121c33;
+border:none;
+border-radius:8px;
+color:#fff;
+cursor:pointer;
 }
 
-.section-title{
-color:var(--accent);
-margin:10px 0;
-font-size:13px;
+.nav-btn:hover{
+background:#1e2f57;
 }
 
+/* STATUS LIST (ON/OFF PANEL) */
 .item{
 display:flex;
 justify-content:space-between;
+align-items:center;
 padding:8px;
 margin:5px 0;
-background:var(--card);
+background:#172033;
 border-radius:6px;
+font-size:13px;
+}
+
+.item button{
+background:#111827;
+border:none;
+color:#fff;
+padding:5px 8px;
+border-radius:6px;
+cursor:pointer;
 }
 
 /* MAIN */
@@ -104,13 +95,61 @@ border-radius:6px;
 flex:1;
 display:flex;
 flex-direction:column;
+overflow:hidden;
+padding:10px;
+}
+
+/* TOPBAR */
+.topbar{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+}
+
+.search-box input{
+padding:10px;
+border-radius:8px;
+border:none;
+background:#101a31;
+color:#fff;
+width:260px;
+}
+
+.live{
+background:red;
+padding:6px 12px;
+border-radius:20px;
+}
+
+/* HERO */
+.hero{
+background:linear-gradient(135deg,#07132f,#0f1d45);
+padding:10px;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin-top:8px;
+}
+
+.stat{
+background:#101d39;
+padding:8px;
+border-radius:8px;
+text-align:center;
 }
 
 /* PLAYER */
-.player{
+.player-container{
+background:#000;
+border-radius:10px;
+overflow:hidden;
 height:320px;
-background:black;
-position:relative;
+flex-shrink:0;
 }
 
 video{
@@ -118,48 +157,56 @@ width:100%;
 height:100%;
 }
 
-.overlay{
-position:absolute;
-inset:0;
-background:rgba(0,0,0,.75);
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
 /* CONTROLS */
 .controls{
 display:flex;
-gap:8px;
-padding:10px;
 flex-wrap:wrap;
+gap:8px;
+margin:10px 0;
 }
 
 .controls button{
-background:var(--card);
+padding:8px 10px;
 border:none;
-padding:8px;
 border-radius:6px;
+background:#152445;
 color:#fff;
 cursor:pointer;
 }
 
-/* GRID */
-.grid{
+.controls button:hover{
+background:#00d4ff;
+color:#000;
+}
+
+/* CHANNELS */
+.channel-wrapper{
 flex:1;
-overflow:auto;
+overflow:hidden;
+display:flex;
+flex-direction:column;
+}
+
+.channels{
+overflow-y:auto;
+flex:1;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
 gap:10px;
-padding:10px;
+padding-right:5px;
 }
 
 .card{
-background:var(--card);
+background:#111a31;
 padding:10px;
-border-radius:8px;
+border-radius:10px;
 cursor:pointer;
-border:1px solid #1f2b4d;
+border:1px solid #1f355d;
+}
+
+.card:hover{
+transform:scale(1.03);
+border-color:#00d4ff;
 }
 
 /* ADMIN */
@@ -189,7 +236,7 @@ gap:10px;
 padding:12px;
 border:none;
 border-radius:8px;
-background:var(--card);
+background:#172033;
 color:#fff;
 cursor:pointer;
 }
@@ -199,52 +246,105 @@ cursor:pointer;
 
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-<div class="logo">📺 BTECH-TV ULTRA IPTV</div>
-
-<div>
-<button onclick="toggleAll()">LOCK/UNLOCK</button>
-<button onclick="openAdmin()">ADMIN</button>
-</div>
-</div>
-
-<div class="container">
-
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="section-title">🌍 COUNTRIES</div>
-<div id="countries"></div>
+<div class="logo">📺 BTECH-TV PRO MAX</div>
+<div class="sub">Ultra IPTV Engine X</div>
 
-<div class="section-title">🎬 CATEGORIES</div>
-<div id="categories"></div>
+<div class="menu-title">🌍 Countries</div>
+<button class="nav-btn" onclick="load('ng')">Nigeria</button>
+<button class="nav-btn" onclick="load('us')">USA</button>
+<button class="nav-btn" onclick="load('uk')">UK</button>
+<button class="nav-btn" onclick="load('in')">India</button>
+<button class="nav-btn" onclick="load('fr')">France</button>
+<button class="nav-btn" onclick="load('de')">Germany</button>
+<button class="nav-btn" onclick="load('br')">Brazil</button>
+<button class="nav-btn" onclick="load('za')">South Africa</button>
+<button class="nav-btn" onclick="load('ca')">Canada</button>
+<button class="nav-btn" onclick="load('au')">Australia</button>
+<button class="nav-btn" onclick="load('jp')">Japan</button>
+<button class="nav-btn" onclick="load('kr')">South Korea</button>
+<button class="nav-btn" onclick="load('cn')">China</button>
+<button class="nav-btn" onclick="load('es')">Spain</button>
+<button class="nav-btn" onclick="load('it')">Italy</button>
+<button class="nav-btn" onclick="load('tr')">Turkey</button>
+<button class="nav-btn" onclick="load('mx')">Mexico</button>
+<button class="nav-btn" onclick="load('ae')">UAE</button>
+<button class="nav-btn" onclick="load('sa')">Saudi Arabia</button>
+<button class="nav-btn" onclick="load('eg')">Egypt</button>
+<button class="nav-btn" onclick="load('ar')">Argentina</button>
+<button class="nav-btn" onclick="load('pk')">Pakistan</button>
+<button class="nav-btn" onclick="load('id')">Indonesia</button>
+<button class="nav-btn" onclick="load('ph')">Philippines</button>
+<button class="nav-btn" onclick="load('al')">Albania</button>
 
-<div class="section-title">🗣 LANGUAGES</div>
-<div id="languages"></div>
+<div class="menu-title">🎬 Categories</div>
+<button class="nav-btn" onclick="loadCat('news')">News</button>
+<button class="nav-btn" onclick="loadCat('sports')">Sports</button>
+<button class="nav-btn" onclick="loadCat('movies')">Movies</button>
+<button class="nav-btn" onclick="loadCat('music')">Music</button>
+<button class="nav-btn" onclick="loadCat('kids')">Kids</button>
+<button class="nav-btn" onclick="loadCat('comedy')">Comedy</button>
+<button class="nav-btn" onclick="loadCat('documentary')">Documentary</button>
+<button class="nav-btn" onclick="loadCat('business')">Business</button>
+<button class="nav-btn" onclick="loadCat('science')">Science</button>
+<button class="nav-btn" onclick="loadCat('travel')">Travel</button>
 
-<div class="section-title">🔥 TOOLS</div>
-<div id="tools"></div>
+<div class="menu-title">🗣 Languages</div>
+<button class="nav-btn" onclick="load('eng')">English</button>
+<button class="nav-btn" onclick="load('spa')">Spanish</button>
+<button class="nav-btn" onclick="load('ara')">Arabic</button>
+<button class="nav-btn" onclick="load('fra')">French</button>
+<button class="nav-btn" onclick="load('hin')">Hindi</button>
+<button class="nav-btn" onclick="load('zho')">Chinese</button>
+<button class="nav-btn" onclick="load('por')">Portuguese</button>
+
+<div class="menu-title">🔥 Tools</div>
+<button class="nav-btn" onclick="scan()">Scan</button>
+<button class="nav-btn" onclick="boost()">Boost</button>
+<button class="nav-btn" onclick="repair()">Repair</button>
+<button class="nav-btn" onclick="optimize()">Optimize</button>
+<button class="nav-btn" onclick="openAdmin()">Admin</button>
+
+<div class="menu-title">⚙ Status Panel</div>
+<div id="status"></div>
 
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-<div class="player">
-<video id="video" controls autoplay></video>
-<div class="overlay" id="overlay">Loading IPTV...</div>
+<div class="topbar">
+<div class="search-box">
+<input oninput="search(this.value)" placeholder="Search IPTV...">
+</div>
+<div class="live">🔴 LIVE</div>
+</div>
+
+<div class="hero">
+<h3>WORLDTV PRO MAX IPTV SYSTEM</h3>
+<div class="stats">
+<div class="stat">Total <div id="total">0</div></div>
+<div class="stat">Live <div id="live">0</div></div>
+<div class="stat">Dead <div id="dead">0</div></div>
+<div class="stat">Fav <div id="fav">0</div></div>
+</div>
+</div>
+
+<div class="player-container">
+<video id="video" controls autoplay muted></video>
 </div>
 
 <div class="controls">
 <button onclick="prev()">Prev</button>
 <button onclick="next()">Next</button>
-<button onclick="mute()">Mute</button>
-<button onclick="fs()">Fullscreen</button>
+<button onclick="toggleMute()">Mute</button>
+<button onclick="toggleFS()">Fullscreen</button>
 </div>
 
-<div class="grid" id="grid"></div>
-
+<div class="channel-wrapper">
+<div class="channels" id="grid"></div>
 </div>
 
 </div>
@@ -253,13 +353,14 @@ cursor:pointer;
 <div class="admin" id="admin">
 <div class="admin-box">
 
-<h2>SUPER ADMIN</h2>
+<h2>SUPER ADMIN PANEL</h2>
 
 <div class="admin-grid">
 <button onclick="scan()">Scan</button>
 <button onclick="boost()">Boost</button>
 <button onclick="repair()">Repair</button>
 <button onclick="optimize()">Optimize</button>
+<button onclick="toggleLock()">LOCK/UNLOCK</button>
 <button onclick="closeAdmin()">Close</button>
 </div>
 
@@ -268,70 +369,44 @@ cursor:pointer;
 
 <script>
 
-/* DATA */
-const countries=[
-"Nigeria","USA","UK","India","France","Germany","Brazil","South Africa",
-"Canada","Australia","Japan","South Korea","China","Spain","Italy","Turkey",
-"Mexico","UAE","Saudi Arabia","Egypt","Argentina","Pakistan","Indonesia","Philippines","Albania"
-];
-
-const categories=["News","Sports","Movies","Music","Kids","Comedy","Documentary","Business","Science","Travel"];
-
-const languages=["English","Spanish","Arabic","French","Hindi","Chinese","Portuguese"];
-
-const tools=["Scan","Boost","PiP","Recents","Record","Repair","Optimize"];
-
-/* RENDER LISTS */
-function render(id,list){
-let box=document.getElementById(id);
-list.forEach(n=>{
-let d=document.createElement("div");
-d.className="item";
-d.innerHTML=`
-<span>${n}</span>
-<button onclick="toggle(this)">ON</button>
-`;
-box.appendChild(d);
-});
-}
-
-render("countries",countries);
-render("categories",categories);
-render("languages",languages);
-render("tools",tools);
-
-/* TOGGLE */
-function toggle(btn){
-btn.innerText=btn.innerText==="ON"?"OFF":"ON";
-}
-
-/* IPTV ENGINE */
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
+let locked=false;
 
-async function load(){
-let res=await fetch("https://iptv-org.github.io/iptv/index.country.m3u");
-let text=await res.text();
+/* LOAD */
+async function load(code){
+await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
+}
 
-let lines=text.split("\n");
+async function loadCat(cat){
+await loadM3U(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`);
+}
 
-for(let x=0;x<lines.length;x++){
-if(lines[x].startsWith("#EXTINF")){
-let name=lines[x].split(",").pop();
-let url=lines[x+1];
+async function loadM3U(url){
+const res=await fetch(url);
+const text=await res.text();
+
+all=[];filtered=[];i=0;
+
+text.split("\n").forEach((line,idx,arr)=>{
+if(line.startsWith("#EXTINF")){
+let name=line.split(",").pop();
+let url=arr[idx+1];
 if(url && url.startsWith("http")){
 all.push({name,url});
 }
 }
-}
+});
 
 filtered=[...all];
-renderGrid();
+render();
+stats();
+renderStatus();
 }
 
 /* GRID */
-function renderGrid(){
+function render(){
 let g=document.getElementById("grid");
 g.innerHTML="";
 filtered.forEach((c,idx)=>{
@@ -359,33 +434,60 @@ hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
 video.src=c.url;
 video.play();
 }
+}
 
-document.getElementById("overlay").style.display="none";
+/* SEARCH */
+function search(q){
+filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
+render();
 }
 
 /* CONTROLS */
 function next(){i=(i+1)%filtered.length;play(i);}
 function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
-function mute(){video.muted=!video.muted;}
-function fs(){document.documentElement.requestFullscreen();}
+function toggleMute(){video.muted=!video.muted;}
+function toggleFS(){video.requestFullscreen();}
 
 /* ADMIN */
 function openAdmin(){document.getElementById("admin").style.display="flex";}
 function closeAdmin(){document.getElementById("admin").style.display="none";}
-function scan(){alert("Scanning...");}
+function scan(){alert("Scanning streams...");}
 function boost(){video.playbackRate=1.2;}
-function repair(){alert("Repair mode");}
-function optimize(){alert("Optimized");}
+function repair(){alert("Repair mode active");}
+function optimize(){alert("Optimizing system");}
 
-/* LOCK ALL */
-function toggleAll(){
-document.querySelectorAll(".item button").forEach(b=>{
-b.innerText=b.innerText==="ON"?"OFF":"ON";
+function toggleLock(){
+locked=!locked;
+alert(locked?"SYSTEM LOCKED":"SYSTEM UNLOCKED");
+}
+
+/* STATUS PANEL */
+function renderStatus(){
+let box=document.getElementById("status");
+box.innerHTML="";
+
+["Countries","Categories","Languages","Tools"].forEach(name=>{
+let div=document.createElement("div");
+div.className="item";
+div.innerHTML=`<span>${name}</span><button onclick="toggle(this)">ON</button>`;
+box.appendChild(div);
 });
 }
 
+function toggle(btn){
+btn.innerText=btn.innerText==="ON"?"OFF":"ON";
+}
+
+/* STATS */
+function stats(){
+document.getElementById("total").innerText=all.length;
+document.getElementById("live").innerText=all.length;
+document.getElementById("dead").innerText=0;
+document.getElementById("fav").innerText=0;
+}
+
 /* INIT */
-load();
+load("ng");
 
 </script>
 
