@@ -4,7 +4,398 @@
 <!-- ========================================================= -->
 
 <!DOCTYPE html>
+<html lang="en"><!-- ========================================================= -->
+<!-- SUPER ADMIN IPTV ULTRA MAX WORLD (ONE PAGE MERGED BUILD) -->
+<!-- BTECH-TV PRO MAX + ULTRA IPTV ENGINE -->
+<!-- ========================================================= -->
+
+<!DOCTYPE html>
 <html lang="en">
+<head>
+
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>📺 SUPER ADMIN IPTV ULTRA MAX WORLD</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+
+:root{
+--bg:#050816;
+--panel:#111827;
+--card:#172033;
+--accent:#00d4ff;
+--text:#ffffff;
+--danger:#ef4444;
+--success:#16a34a;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+height:100vh;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+/* TOPBAR */
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px;
+background:#0f172a;
+border-bottom:1px solid #1f2b4d;
+flex-wrap:wrap;
+}
+
+.logo{
+font-weight:bold;
+color:var(--accent);
+font-size:18px;
+}
+
+.topbar button{
+background:var(--card);
+color:#fff;
+border:none;
+padding:8px;
+border-radius:6px;
+cursor:pointer;
+}
+
+/* LAYOUT */
+.container{
+flex:1;
+display:flex;
+overflow:hidden;
+}
+
+/* SIDEBAR */
+.sidebar{
+width:300px;
+background:#0b1220;
+overflow:auto;
+padding:10px;
+}
+
+.section-title{
+color:var(--accent);
+margin:10px 0;
+font-size:13px;
+}
+
+.item{
+display:flex;
+justify-content:space-between;
+padding:8px;
+margin:5px 0;
+background:var(--card);
+border-radius:6px;
+}
+
+/* MAIN */
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+/* PLAYER */
+.player{
+height:320px;
+background:black;
+position:relative;
+}
+
+video{
+width:100%;
+height:100%;
+}
+
+.overlay{
+position:absolute;
+inset:0;
+background:rgba(0,0,0,.75);
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+/* CONTROLS */
+.controls{
+display:flex;
+gap:8px;
+padding:10px;
+flex-wrap:wrap;
+}
+
+.controls button{
+background:var(--card);
+border:none;
+padding:8px;
+border-radius:6px;
+color:#fff;
+cursor:pointer;
+}
+
+/* GRID */
+.grid{
+flex:1;
+overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+gap:10px;
+padding:10px;
+}
+
+.card{
+background:var(--card);
+padding:10px;
+border-radius:8px;
+cursor:pointer;
+border:1px solid #1f2b4d;
+}
+
+/* ADMIN */
+.admin{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.9);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.admin-box{
+background:#111827;
+padding:20px;
+border-radius:10px;
+width:90%;
+}
+
+.admin-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:10px;
+}
+
+.admin-grid button{
+padding:12px;
+border:none;
+border-radius:8px;
+background:var(--card);
+color:#fff;
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+<div class="logo">📺 BTECH-TV ULTRA IPTV</div>
+
+<div>
+<button onclick="toggleAll()">LOCK/UNLOCK</button>
+<button onclick="openAdmin()">ADMIN</button>
+</div>
+</div>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+<div class="section-title">🌍 COUNTRIES</div>
+<div id="countries"></div>
+
+<div class="section-title">🎬 CATEGORIES</div>
+<div id="categories"></div>
+
+<div class="section-title">🗣 LANGUAGES</div>
+<div id="languages"></div>
+
+<div class="section-title">🔥 TOOLS</div>
+<div id="tools"></div>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="player">
+<video id="video" controls autoplay></video>
+<div class="overlay" id="overlay">Loading IPTV...</div>
+</div>
+
+<div class="controls">
+<button onclick="prev()">Prev</button>
+<button onclick="next()">Next</button>
+<button onclick="mute()">Mute</button>
+<button onclick="fs()">Fullscreen</button>
+</div>
+
+<div class="grid" id="grid"></div>
+
+</div>
+
+</div>
+
+<!-- ADMIN -->
+<div class="admin" id="admin">
+<div class="admin-box">
+
+<h2>SUPER ADMIN</h2>
+
+<div class="admin-grid">
+<button onclick="scan()">Scan</button>
+<button onclick="boost()">Boost</button>
+<button onclick="repair()">Repair</button>
+<button onclick="optimize()">Optimize</button>
+<button onclick="closeAdmin()">Close</button>
+</div>
+
+</div>
+</div>
+
+<script>
+
+/* DATA */
+const countries=[
+"Nigeria","USA","UK","India","France","Germany","Brazil","South Africa",
+"Canada","Australia","Japan","South Korea","China","Spain","Italy","Turkey",
+"Mexico","UAE","Saudi Arabia","Egypt","Argentina","Pakistan","Indonesia","Philippines","Albania"
+];
+
+const categories=["News","Sports","Movies","Music","Kids","Comedy","Documentary","Business","Science","Travel"];
+
+const languages=["English","Spanish","Arabic","French","Hindi","Chinese","Portuguese"];
+
+const tools=["Scan","Boost","PiP","Recents","Record","Repair","Optimize"];
+
+/* RENDER LISTS */
+function render(id,list){
+let box=document.getElementById(id);
+list.forEach(n=>{
+let d=document.createElement("div");
+d.className="item";
+d.innerHTML=`
+<span>${n}</span>
+<button onclick="toggle(this)">ON</button>
+`;
+box.appendChild(d);
+});
+}
+
+render("countries",countries);
+render("categories",categories);
+render("languages",languages);
+render("tools",tools);
+
+/* TOGGLE */
+function toggle(btn){
+btn.innerText=btn.innerText==="ON"?"OFF":"ON";
+}
+
+/* IPTV ENGINE */
+let all=[],filtered=[],i=0;
+let video=document.getElementById("video");
+let hls;
+
+async function load(){
+let res=await fetch("https://iptv-org.github.io/iptv/index.country.m3u");
+let text=await res.text();
+
+let lines=text.split("\n");
+
+for(let x=0;x<lines.length;x++){
+if(lines[x].startsWith("#EXTINF")){
+let name=lines[x].split(",").pop();
+let url=lines[x+1];
+if(url && url.startsWith("http")){
+all.push({name,url});
+}
+}
+}
+
+filtered=[...all];
+renderGrid();
+}
+
+/* GRID */
+function renderGrid(){
+let g=document.getElementById("grid");
+g.innerHTML="";
+filtered.forEach((c,idx)=>{
+let d=document.createElement("div");
+d.className="card";
+d.innerText=c.name;
+d.onclick=()=>play(idx);
+g.appendChild(d);
+});
+}
+
+/* PLAY */
+function play(idx){
+i=idx;
+let c=filtered[i];
+
+if(hls) hls.destroy();
+
+if(Hls.isSupported()){
+hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(video);
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+}else{
+video.src=c.url;
+video.play();
+}
+
+document.getElementById("overlay").style.display="none";
+}
+
+/* CONTROLS */
+function next(){i=(i+1)%filtered.length;play(i);}
+function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
+function mute(){video.muted=!video.muted;}
+function fs(){document.documentElement.requestFullscreen();}
+
+/* ADMIN */
+function openAdmin(){document.getElementById("admin").style.display="flex";}
+function closeAdmin(){document.getElementById("admin").style.display="none";}
+function scan(){alert("Scanning...");}
+function boost(){video.playbackRate=1.2;}
+function repair(){alert("Repair mode");}
+function optimize(){alert("Optimized");}
+
+/* LOCK ALL */
+function toggleAll(){
+document.querySelectorAll(".item button").forEach(b=>{
+b.innerText=b.innerText==="ON"?"OFF":"ON";
+});
+}
+
+/* INIT */
+load();
+
+</script>
+
+</body>
+</html>
 <head>
 
 <meta charset="UTF-8"/>
