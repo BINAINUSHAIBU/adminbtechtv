@@ -1,281 +1,497 @@
-<!DOCTYPE html>
 
+
+<!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BTECH-TV WORLD SMART TV PLATFORM</title>
+
+<title>WORLDTV PRO MAX IPTV MERGED 2026</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+
+/* BASE */
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Arial;
 }
 
 body{
 background:#050816;
 color:#fff;
-line-height:1.6;
+display:flex;
+height:100vh;
+overflow:hidden;
 }
 
-header{
-background:linear-gradient(135deg,#001b3a,#0a2454);
-padding:40px;
-text-align:center;
+/* SIDEBAR */
+.sidebar{
+width:300px;
+background:#0d1324;
+padding:15px;
+overflow-y:auto;
+border-right:1px solid #1d2b4f;
 }
 
-header h1{
-font-size:42px;
+.logo{
+font-size:22px;
+font-weight:900;
 color:#00d4ff;
 }
 
-header p{
-color:#cdd8ff;
-margin-top:10px;
-}
-
-.hero{
-padding:40px;
-text-align:center;
-}
-
-.hero h2{
-font-size:32px;
+.sub{
+font-size:12px;
+color:#8ea2d9;
 margin-bottom:15px;
 }
 
-.hero p{
-max-width:900px;
-margin:auto;
-color:#b9c7ff;
+.menu-title{
+color:#00d4ff;
+margin:15px 0 10px;
+font-size:12px;
 }
 
-.features{
+/* NAV BUTTONS */
+.nav-btn{
+width:100%;
+padding:10px;
+margin:5px 0;
+background:#121c33;
+border:none;
+border-radius:8px;
+color:#fff;
+cursor:pointer;
+}
+
+.nav-btn:hover{
+background:#1e2f57;
+}
+
+/* STATUS LIST (ON/OFF PANEL) */
+.item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:8px;
+margin:5px 0;
+background:#172033;
+border-radius:6px;
+font-size:13px;
+}
+
+.item button{
+background:#111827;
+border:none;
+color:#fff;
+padding:5px 8px;
+border-radius:6px;
+cursor:pointer;
+}
+
+/* MAIN */
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+padding:10px;
+}
+
+/* TOPBAR */
+.topbar{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+}
+
+.search-box input{
+padding:10px;
+border-radius:8px;
+border:none;
+background:#101a31;
+color:#fff;
+width:260px;
+}
+
+.live{
+background:red;
+padding:6px 12px;
+border-radius:20px;
+}
+
+/* HERO */
+.hero{
+background:linear-gradient(135deg,#07132f,#0f1d45);
+padding:10px;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+.stats{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-padding:30px;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin-top:8px;
+}
+
+.stat{
+background:#101d39;
+padding:8px;
+border-radius:8px;
+text-align:center;
+}
+
+/* PLAYER */
+.player-container{
+background:#000;
+border-radius:10px;
+overflow:hidden;
+height:320px;
+flex-shrink:0;
+}
+
+video{
+width:100%;
+height:100%;
+}
+
+/* CONTROLS */
+.controls{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin:10px 0;
+}
+
+.controls button{
+padding:8px 10px;
+border:none;
+border-radius:6px;
+background:#152445;
+color:#fff;
+cursor:pointer;
+}
+
+.controls button:hover{
+background:#00d4ff;
+color:#000;
+}
+
+/* CHANNELS */
+.channel-wrapper{
+flex:1;
+overflow:hidden;
+display:flex;
+flex-direction:column;
+}
+
+.channels{
+overflow-y:auto;
+flex:1;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+gap:10px;
+padding-right:5px;
 }
 
 .card{
-background:#101d39;
-padding:20px;
-border-radius:12px;
-border:1px solid #1d3b70;
-}
-
-.card h3{
-color:#00d4ff;
-margin-bottom:10px;
-}
-
-.platforms{
-padding:40px;
-}
-
-.platform-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-}
-
-.platform{
 background:#111a31;
-padding:20px;
-border-radius:12px;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+border:1px solid #1f355d;
 }
 
-.platform h3{
-color:#00d4ff;
-margin-bottom:10px;
+.card:hover{
+transform:scale(1.03);
+border-color:#00d4ff;
 }
 
-.architecture{
-padding:40px;
-background:#08152d;
+/* ADMIN */
+.admin{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.9);
+display:none;
+justify-content:center;
+align-items:center;
 }
 
-.architecture pre{
+.admin-box{
 background:#111827;
 padding:20px;
 border-radius:10px;
-overflow:auto;
+width:90%;
 }
 
-.publish{
-padding:40px;
+.admin-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+gap:10px;
 }
 
-.publish ul{
-margin-left:20px;
-}
-
-.footer{
-background:#000;
-padding:20px;
-text-align:center;
-color:#7c90d3;
-}
-
-.btn{
-display:inline-block;
-margin-top:20px;
-padding:12px 25px;
-background:#00d4ff;
-color:#000;
-font-weight:bold;
+.admin-grid button{
+padding:12px;
+border:none;
 border-radius:8px;
-text-decoration:none;
+background:#172033;
+color:#fff;
+cursor:pointer;
 }
-</style>
 
+</style>
 </head>
 
 <body>
 
-<header>
-<h1>📺 BTECH-TV WORLD</h1>
-<p>SMART TV • IPTV • STREAMING PLATFORM 2026</p>
-</header>
+<!-- SIDEBAR -->
+<div class="sidebar">
 
-<section class="hero">
-<h2>Convert Your IPTV Website Into A Smart TV App</h2>
-<p>
-BTECH-TV WORLD can run on Android TV, Google TV, Samsung Smart TV,
-LG webOS TV, Amazon Fire TV and mobile devices from one IPTV platform.
-</p>
-<a href="#" class="btn">Get Started</a>
-</section>
+<div class="logo">📺 BTECH-TV PRO MAX</div>
+<div class="sub">Ultra IPTV Engine X</div>
 
-<section class="features">
+<div class="menu-title">🌍 Countries</div>
+<button class="nav-btn" onclick="load('ng')">Nigeria</button>
+<button class="nav-btn" onclick="load('us')">USA</button>
+<button class="nav-btn" onclick="load('uk')">UK</button>
+<button class="nav-btn" onclick="load('in')">India</button>
+<button class="nav-btn" onclick="load('fr')">France</button>
+<button class="nav-btn" onclick="load('de')">Germany</button>
+<button class="nav-btn" onclick="load('br')">Brazil</button>
+<button class="nav-btn" onclick="load('za')">South Africa</button>
+<button class="nav-btn" onclick="load('ca')">Canada</button>
+<button class="nav-btn" onclick="load('au')">Australia</button>
+<button class="nav-btn" onclick="load('jp')">Japan</button>
+<button class="nav-btn" onclick="load('kr')">South Korea</button>
+<button class="nav-btn" onclick="load('cn')">China</button>
+<button class="nav-btn" onclick="load('es')">Spain</button>
+<button class="nav-btn" onclick="load('it')">Italy</button>
+<button class="nav-btn" onclick="load('tr')">Turkey</button>
+<button class="nav-btn" onclick="load('mx')">Mexico</button>
+<button class="nav-btn" onclick="load('ae')">UAE</button>
+<button class="nav-btn" onclick="load('sa')">Saudi Arabia</button>
+<button class="nav-btn" onclick="load('eg')">Egypt</button>
+<button class="nav-btn" onclick="load('ar')">Argentina</button>
+<button class="nav-btn" onclick="load('pk')">Pakistan</button>
+<button class="nav-btn" onclick="load('id')">Indonesia</button>
+<button class="nav-btn" onclick="load('ph')">Philippines</button>
+<button class="nav-btn" onclick="load('al')">Albania</button>
 
-<div class="card">
-<h3>📡 Live IPTV</h3>
-<p>Stream live channels worldwide using HLS and M3U playlists.</p>
-</div>
+<div class="menu-title">🎬 Categories</div>
+<button class="nav-btn" onclick="loadCat('news')">News</button>
+<button class="nav-btn" onclick="loadCat('sports')">Sports</button>
+<button class="nav-btn" onclick="loadCat('movies')">Movies</button>
+<button class="nav-btn" onclick="loadCat('music')">Music</button>
+<button class="nav-btn" onclick="loadCat('kids')">Kids</button>
+<button class="nav-btn" onclick="loadCat('comedy')">Comedy</button>
+<button class="nav-btn" onclick="loadCat('documentary')">Documentary</button>
+<button class="nav-btn" onclick="loadCat('business')">Business</button>
+<button class="nav-btn" onclick="loadCat('science')">Science</button>
+<button class="nav-btn" onclick="loadCat('travel')">Travel</button>
 
-<div class="card">
-<h3>🌍 Global Channels</h3>
-<p>Access channels from Nigeria, USA, UK, Canada, India and more.</p>
-</div>
+<div class="menu-title">🗣 Languages</div>
+<button class="nav-btn" onclick="load('eng')">English</button>
+<button class="nav-btn" onclick="load('spa')">Spanish</button>
+<button class="nav-btn" onclick="load('ara')">Arabic</button>
+<button class="nav-btn" onclick="load('fra')">French</button>
+<button class="nav-btn" onclick="load('hin')">Hindi</button>
+<button class="nav-btn" onclick="load('zho')">Chinese</button>
+<button class="nav-btn" onclick="load('por')">Portuguese</button>
 
-<div class="card">
-<h3>🎬 Categories</h3>
-<p>Sports, Movies, News, Kids, Documentary, Music and Business.</p>
-</div>
+<div class="menu-title">🔥 Tools</div>
+<button class="nav-btn" onclick="scan()">Scan</button>
+<button class="nav-btn" onclick="boost()">Boost</button>
+<button class="nav-btn" onclick="repair()">Repair</button>
+<button class="nav-btn" onclick="optimize()">Optimize</button>
+<button class="nav-btn" onclick="openAdmin()">Admin</button>
 
-<div class="card">
-<h3>👥 User Accounts</h3>
-<p>Signup, Login, Subscription and Trial Management.</p>
-</div>
-
-<div class="card">
-<h3>⚙ Admin Dashboard</h3>
-<p>Manage channels, users, subscriptions and platform settings.</p>
-</div>
-
-<div class="card">
-<h3>🛡 Super Admin</h3>
-<p>Full control over IPTV engine, locking, monitoring and analytics.</p>
-</div>
-
-</section>
-
-<section class="platforms">
-
-<h2 style="text-align:center;margin-bottom:30px;">
-SUPPORTED SMART TV PLATFORMS
-</h2>
-
-<div class="platform-grid">
-
-<div class="platform">
-<h3>📺 Android TV</h3>
-<p>APK, AAB, Play Store Publishing and Google TV support.</p>
-</div>
-
-<div class="platform">
-<h3>🔥 Amazon Fire TV</h3>
-<p>Native Android IPTV application with remote navigation.</p>
-</div>
-
-<div class="platform">
-<h3>📱 Google TV</h3>
-<p>Integrated Smart TV experience and recommendations.</p>
-</div>
-
-<div class="platform">
-<h3>🖥 Samsung Tizen TV</h3>
-<p>Deploy as a Samsung Smart TV application.</p>
-</div>
-
-<div class="platform">
-<h3>📺 LG webOS TV</h3>
-<p>Deploy IPTV services directly to LG televisions.</p>
-</div>
-
-<div class="platform">
-<h3>💻 Web Browser</h3>
-<p>Responsive IPTV website for desktop and mobile users.</p>
-</div>
+<div class="menu-title">⚙ Status Panel</div>
+<div id="status"></div>
 
 </div>
 
-</section>
+<!-- MAIN -->
+<div class="main">
 
-<section class="architecture">
-
-<h2 style="margin-bottom:20px;">
-SYSTEM ARCHITECTURE
-</h2>
-
-<pre>
-BTECH-TV WORLD
-
-├── IPTV Website
-├── Android TV App
-├── Google TV App
-├── Fire TV App
-├── Samsung TV App
-├── LG TV App
-├── User Accounts
-├── Trial System
-├── Subscription Billing
-├── Admin Dashboard
-├── Super Admin Dashboard
-├── IPTV Engine
-├── M3U Manager
-├── EPG Guide
-├── Analytics
-└── Monitoring Tools
-</pre>
-
-</section>
-
-<section class="publish">
-
-<h2 style="margin-bottom:20px;">
-PUBLISHING OPTIONS
-</h2>
-
-<ul>
-<li>Google Play Store</li>
-<li>Amazon App Store</li>
-<li>Samsung TV Store</li>
-<li>LG Content Store</li>
-<li>Private Enterprise Distribution</li>
-<li>Custom Smart TV Deployment</li>
-</ul>
-
-</section>
-
-<div class="footer">
-© 2026 BTECH-TV WORLD BY BINAINU SHAIBU
-<br>
-Ultra IPTV Engine • Smart TV Platform • SaaS Streaming Solution
+<div class="topbar">
+<div class="search-box">
+<input oninput="search(this.value)" placeholder="Search IPTV...">
 </div>
+<div class="live">🔴 LIVE</div>
+</div>
+
+<div class="hero">
+<h3>WORLDTV PRO MAX IPTV SYSTEM</h3>
+<div class="stats">
+<div class="stat">Total <div id="total">0</div></div>
+<div class="stat">Live <div id="live">0</div></div>
+<div class="stat">Dead <div id="dead">0</div></div>
+<div class="stat">Fav <div id="fav">0</div></div>
+</div>
+</div>
+
+<div class="player-container">
+<video id="video" controls autoplay muted></video>
+</div>
+
+<div class="controls">
+<button onclick="prev()">Prev</button>
+<button onclick="next()">Next</button>
+<button onclick="toggleMute()">Mute</button>
+<button onclick="toggleFS()">Fullscreen</button>
+</div>
+
+<div class="channel-wrapper">
+<div class="channels" id="grid"></div>
+</div>
+
+</div>
+
+<!-- ADMIN -->
+<div class="admin" id="admin">
+<div class="admin-box">
+
+<h2>SUPER ADMIN PANEL</h2>
+
+<div class="admin-grid">
+<button onclick="scan()">Scan</button>
+<button onclick="boost()">Boost</button>
+<button onclick="repair()">Repair</button>
+<button onclick="optimize()">Optimize</button>
+<button onclick="toggleLock()">LOCK/UNLOCK</button>
+<button onclick="closeAdmin()">Close</button>
+</div>
+
+</div>
+</div>
+
+<script>
+
+let all=[],filtered=[],i=0;
+let video=document.getElementById("video");
+let hls;
+let locked=false;
+
+/* LOAD */
+async function load(code){
+await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
+}
+
+async function loadCat(cat){
+await loadM3U(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`);
+}
+
+async function loadM3U(url){
+const res=await fetch(url);
+const text=await res.text();
+
+all=[];filtered=[];i=0;
+
+text.split("\n").forEach((line,idx,arr)=>{
+if(line.startsWith("#EXTINF")){
+let name=line.split(",").pop();
+let url=arr[idx+1];
+if(url && url.startsWith("http")){
+all.push({name,url});
+}
+}
+});
+
+filtered=[...all];
+render();
+stats();
+renderStatus();
+}
+
+/* GRID */
+function render(){
+let g=document.getElementById("grid");
+g.innerHTML="";
+filtered.forEach((c,idx)=>{
+let d=document.createElement("div");
+d.className="card";
+d.innerText=c.name;
+d.onclick=()=>play(idx);
+g.appendChild(d);
+});
+}
+
+/* PLAY */
+function play(idx){
+i=idx;
+let c=filtered[i];
+
+if(hls) hls.destroy();
+
+if(Hls.isSupported()){
+hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(video);
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+}else{
+video.src=c.url;
+video.play();
+}
+}
+
+/* SEARCH */
+function search(q){
+filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
+render();
+}
+
+/* CONTROLS */
+function next(){i=(i+1)%filtered.length;play(i);}
+function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
+function toggleMute(){video.muted=!video.muted;}
+function toggleFS(){video.requestFullscreen();}
+
+/* ADMIN */
+function openAdmin(){document.getElementById("admin").style.display="flex";}
+function closeAdmin(){document.getElementById("admin").style.display="none";}
+function scan(){alert("Scanning streams...");}
+function boost(){video.playbackRate=1.2;}
+function repair(){alert("Repair mode active");}
+function optimize(){alert("Optimizing system");}
+
+function toggleLock(){
+locked=!locked;
+alert(locked?"SYSTEM LOCKED":"SYSTEM UNLOCKED");
+}
+
+/* STATUS PANEL */
+function renderStatus(){
+let box=document.getElementById("status");
+box.innerHTML="";
+
+["Countries","Categories","Languages","Tools"].forEach(name=>{
+let div=document.createElement("div");
+div.className="item";
+div.innerHTML=`<span>${name}</span><button onclick="toggle(this)">ON</button>`;
+box.appendChild(div);
+});
+}
+
+function toggle(btn){
+btn.innerText=btn.innerText==="ON"?"OFF":"ON";
+}
+
+/* STATS */
+function stats(){
+document.getElementById("total").innerText=all.length;
+document.getElementById("live").innerText=all.length;
+document.getElementById("dead").innerText=0;
+document.getElementById("fav").innerText=0;
+}
+
+/* INIT */
+load("ng");
+
+</script>
 
 </body>
 </html>
