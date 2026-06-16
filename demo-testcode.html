@@ -1,36 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
 <title>BTECH-TV WORLD PRO MAX</title>
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#050816;
-color:white;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#050816;color:#fff}
 
-#authBox,#upgradeBox{
+.screen{
 position:fixed;
 inset:0;
 display:flex;
 justify-content:center;
 align-items:center;
 background:#050816;
-z-index:9999;
 }
 
 .card{
-background:#101a31;
+width:350px;
+background:#0f1830;
 padding:25px;
 border-radius:12px;
-width:350px;
-text-align:center;
+border:1px solid #233b72;
 }
+
+h2{text-align:center;margin-bottom:15px}
 
 input,select{
 width:100%;
@@ -38,7 +34,7 @@ padding:12px;
 margin:8px 0;
 border:none;
 border-radius:8px;
-background:#18264a;
+background:#152445;
 color:white;
 }
 
@@ -49,8 +45,8 @@ margin-top:8px;
 border:none;
 border-radius:8px;
 cursor:pointer;
-background:#00d4ff;
 font-weight:bold;
+background:#00d4ff;
 }
 
 #timerBar{
@@ -58,10 +54,11 @@ position:fixed;
 top:10px;
 right:10px;
 background:#00d4ff;
-color:black;
+color:#000;
 padding:10px 15px;
 border-radius:8px;
 font-weight:bold;
+display:none;
 }
 
 #app{
@@ -69,22 +66,36 @@ display:none;
 padding:20px;
 }
 
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
 .channel{
 background:#101a31;
-padding:12px;
+padding:15px;
 margin:10px 0;
-border-radius:8px;
+border-radius:10px;
 cursor:pointer;
+}
+
+.admin{
+background:#1a0d2b;
+padding:20px;
+border-radius:10px;
+margin-top:20px;
 }
 </style>
 </head>
-
 <body>
 
 <div id="timerBar">Loading...</div>
 
 <!-- LOGIN -->
-<div id="authBox">
+<div class="screen" id="loginScreen">
+
 <div class="card">
 
 <h2>📺 BTECH-TV WORLD PRO MAX</h2>
@@ -104,21 +115,35 @@ cursor:pointer;
 </select>
 
 <button onclick="registerUser()">Register</button>
-
 <button onclick="loginUser()">Login</button>
 
+<br><br>
+
+<div style="font-size:12px">
+Demo User:<br>
+demo@btechtv.com / 123456
+<br><br>
+Demo Admin:<br>
+admin@btechtv.com / admin123
+</div>
+
 </div>
 </div>
 
-<!-- EXPIRED -->
-<div id="upgradeBox" style="display:none;">
+<!-- UPGRADE -->
+<div class="screen" id="upgradeScreen" style="display:none">
+
 <div class="card">
 
-<h2>⛔ Subscription Expired</h2>
+<h2>⛔ ACCESS EXPIRED</h2>
 
-<p>Your viewing period has ended.</p>
+<p style="margin-bottom:20px">
+Please upgrade your subscription.
+</p>
 
-<button onclick="upgrade()">Upgrade Now</button>
+<button onclick="upgrade()">
+Upgrade Now
+</button>
 
 </div>
 </div>
@@ -126,23 +151,54 @@ cursor:pointer;
 <!-- APP -->
 <div id="app">
 
+<div class="header">
+
 <h1>📺 BTECH-TV WORLD PRO MAX</h1>
 
-<button onclick="logoutUser()">Logout</button>
+<button style="width:150px"
+onclick="logoutUser()">
+Logout
+</button>
 
-<hr>
+</div>
 
-<div class="channel">CNN</div>
+<h2>Live Channels</h2>
+
+<div class="channel">CNN HD</div>
 <div class="channel">BBC News</div>
 <div class="channel">Al Jazeera</div>
-<div class="channel">ESPN</div>
 <div class="channel">Sky Sports</div>
-<div class="channel">Movie Channel</div>
-<div class="channel">Kids Channel</div>
+<div class="channel">ESPN</div>
+<div class="channel">Fox Movies</div>
+<div class="channel">Discovery</div>
+<div class="channel">National Geographic</div>
+
+<div id="adminPanel"
+class="admin"
+style="display:none">
+
+<h2>🛠 ADMIN PANEL</h2>
+
+<p>Total Users: <span id="usersCount">0</span></p>
+
+<button onclick="resetTrials()">
+Reset All Trials
+</button>
+
+</div>
 
 </div>
 
 <script>
+
+/* DEMO ACCOUNTS */
+if(!localStorage.getItem("demoUser")){
+localStorage.setItem("demoUser",
+JSON.stringify({
+email:"demo@btechtv.com",
+password:"123456"
+}));
+}
 
 /* REGISTER */
 function registerUser(){
@@ -152,7 +208,10 @@ email:email.value,
 password:password.value
 };
 
-localStorage.setItem("iptvUser",JSON.stringify(user));
+localStorage.setItem(
+"user",
+JSON.stringify(user)
+);
 
 alert("Registration Successful");
 
@@ -161,19 +220,47 @@ alert("Registration Successful");
 /* LOGIN */
 function loginUser(){
 
-const saved=JSON.parse(
-localStorage.getItem("iptvUser")
-);
-
-if(!saved){
-alert("Register First");
+/* ADMIN */
+if(
+email.value==="admin@btechtv.com" &&
+password.value==="admin123"
+){
+loginScreen.style.display="none";
+app.style.display="block";
+adminPanel.style.display="block";
+timerBar.style.display="none";
+loadAdmin();
 return;
 }
 
+/* DEMO */
+let demo=JSON.parse(
+localStorage.getItem("demoUser")
+);
+
+let user=JSON.parse(
+localStorage.getItem("user")
+);
+
+let valid=false;
+
 if(
-saved.email!==email.value ||
-saved.password!==password.value
+demo &&
+demo.email===email.value &&
+demo.password===password.value
 ){
+valid=true;
+}
+
+if(
+user &&
+user.email===email.value &&
+user.password===password.value
+){
+valid=true;
+}
+
+if(!valid){
 alert("Invalid Login");
 return;
 }
@@ -192,9 +279,9 @@ Number(plan.value)*3600000
 
 }
 
-authBox.style.display="none";
-
+loginScreen.style.display="none";
 app.style.display="block";
+timerBar.style.display="block";
 
 startTimer();
 
@@ -218,21 +305,20 @@ if(left<=0){
 
 app.style.display="none";
 
-upgradeBox.style.display="flex";
+upgradeScreen.style.display="flex";
 
 localStorage.removeItem("startTime");
 
 return;
-
 }
 
-let days=Math.floor(left/86400000);
-let hrs=Math.floor((left%86400000)/3600000);
-let mins=Math.floor((left%3600000)/60000);
-let secs=Math.floor((left%60000)/1000);
+let d=Math.floor(left/86400000);
+let h=Math.floor((left%86400000)/3600000);
+let m=Math.floor((left%3600000)/60000);
+let s=Math.floor((left%60000)/1000);
 
 timerBar.innerHTML=
-`⏳ ${days}d ${hrs}h ${mins}m ${secs}s`;
+`⏳ ${d}d ${h}h ${m}m ${s}s`;
 
 },1000);
 
@@ -248,11 +334,29 @@ location.reload();
 /* UPGRADE */
 function upgrade(){
 
-alert(
-"Redirect to payment page"
-);
-localStorage.setItem("iptvUser",
-JSON.stringify({
-email:"demo@btechtv.com",
-password:"123456"
-}));
+alert("Connect Flutterwave, Paystack or Stripe here.");
+
+}
+
+/* ADMIN */
+function loadAdmin(){
+
+let total=
+localStorage.getItem("user") ? 1 : 0;
+
+usersCount.innerHTML=total;
+
+}
+
+function resetTrials(){
+
+localStorage.removeItem("startTime");
+
+alert("Trials Reset");
+
+}
+
+</script>
+
+</body>
+</html>
