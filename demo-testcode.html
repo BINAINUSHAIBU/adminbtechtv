@@ -3,14 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV ULTRA PRO MAX V2</title>
+<title>BTECH-TV WORLD PRO MAX V2 ULTRA</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 body{margin:0;font-family:Arial;background:#0b0f1a;color:#fff}
 
-header{padding:12px;background:#111827;display:flex;justify-content:space-between;align-items:center}
+header{
+padding:12px;
+background:#111827;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
 
 .container{display:flex;height:calc(100vh - 50px)}
 
@@ -20,15 +26,43 @@ header{padding:12px;background:#111827;display:flex;justify-content:space-betwee
 
 .video{height:360px;background:black}
 
-.list{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;padding:10px}
+.list{
+flex:1;
+overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+gap:10px;
+padding:10px;
+}
 
-.card{background:#1f2937;padding:10px;border-radius:10px;cursor:pointer;position:relative}
+.card{
+background:#1f2937;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+position:relative;
+}
 
-.lock{position:absolute;top:8px;right:8px;background:red;font-size:11px;padding:3px 6px;border-radius:5px}
+.lock{
+position:absolute;
+top:8px;
+right:8px;
+background:red;
+font-size:11px;
+padding:3px 6px;
+border-radius:5px;
+}
 
 button,input{padding:10px;margin:5px;border:none;border-radius:6px}
 
-.panel{position:fixed;inset:0;background:#000000ee;display:none;padding:20px;overflow:auto}
+.panel{
+position:fixed;
+inset:0;
+background:#000000ee;
+display:none;
+padding:20px;
+overflow:auto;
+}
 small{color:#aaa}
 </style>
 </head>
@@ -36,7 +70,7 @@ small{color:#aaa}
 <body>
 
 <header>
-<div>📺 BTECH-TV WORLD PRO MAX V2</div>
+<div>📺 BTECH-TV WORLD PRO MAX V2 ULTRA</div>
 <div>
 <button onclick="openAdmin()">Admin</button>
 <button onclick="logout()">Logout</button>
@@ -66,18 +100,24 @@ small{color:#aaa}
 <h3>💳 PLAN</h3>
 <p id="planInfo"></p>
 
-<button onclick="upgrade()">💎 Upgrade (Paystack Mock)</button>
+<button onclick="upgrade()">💎 Upgrade</button>
 
 <hr>
 
 <h3>🌍 Countries</h3>
-<small>Nigeria USA UK India France Germany Brazil South Africa Canada Australia Japan South Korea China Spain Italy Turkey Mexico UAE Saudi Arabia Egypt Argentina Pakistan Indonesia Philippines Albania</small>
+<small>
+Nigeria USA UK India France Germany Brazil South Africa Canada Australia Japan South Korea China Spain Italy Turkey Mexico UAE Saudi Arabia Egypt Argentina Pakistan Indonesia Philippines Albania
+</small>
 
 <h3>🎬 Categories</h3>
-<small>News Sports Movies Music Kids Comedy Documentary Business Science Travel</small>
+<small>
+News Sports Movies Music Kids Comedy Documentary Business Science Travel
+</small>
 
 <h3>🗣 Languages</h3>
-<small>English Spanish Arabic French Hindi Chinese Portuguese</small>
+<small>
+English Spanish Arabic French Hindi Chinese Portuguese
+</small>
 
 <hr>
 
@@ -89,6 +129,7 @@ small{color:#aaa}
 <button onclick="record()">⏺ Record</button>
 <button onclick="repair()">🛠 Repair</button>
 <button onclick="optimize()">🧠 Optimize</button>
+<button onclick="toggleFavMode()">⭐ Favorites</button>
 
 <hr>
 
@@ -109,7 +150,6 @@ small{color:#aaa}
 </div>
 
 </div>
-
 </div>
 
 <!-- ADMIN -->
@@ -135,6 +175,11 @@ let expiry=0;
 let unlocked=JSON.parse(localStorage.getItem("unlock")||"{}");
 let users=JSON.parse(localStorage.getItem("users")||"{}");
 let stats=JSON.parse(localStorage.getItem("stats")||"{}");
+let favs=JSON.parse(localStorage.getItem("favs")||"{}");
+
+let showingFavs=false;
+
+/* ================= CHANNELS ================= */
 
 let channels=[
 {name:"BBC News",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
@@ -147,9 +192,11 @@ function save(){
 localStorage.setItem("users",JSON.stringify(users));
 localStorage.setItem("unlock",JSON.stringify(unlocked));
 localStorage.setItem("stats",JSON.stringify(stats));
+localStorage.setItem("favs",JSON.stringify(favs));
 }
 
-/* LOGIN */
+/* ================= LOGIN ================= */
+
 function register(){
 users[email.value]={pass:pass.value,role:"free",expiry:Date.now()+86400000};
 save();
@@ -163,26 +210,25 @@ alert("Wrong login");return;
 user=email.value;
 role=users[user].role;
 expiry=users[user].expiry;
+
 loginBox.style.display="none";
 app.style.display="block";
 render();
 }
 
-/* UPGRADE */
+/* ================= UPGRADE ================= */
+
 function upgrade(){
 role="premium";
 users[user].role="premium";
 users[user].expiry=Date.now()+7*86400000;
 save();
 render();
-alert("Upgraded to PREMIUM");
+alert("Upgraded");
 }
 
-/* CHANNEL LOCK */
-function lockAll(){unlocked={};save();render();}
-function unlockAll(){channels.forEach((c,i)=>unlocked[i]=true);save();render();}
+/* ================= CHANNEL ================= */
 
-/* PLAY */
 function play(url){
 let v=document.getElementById("video");
 
@@ -196,15 +242,38 @@ stats.plays=(stats.plays||0)+1;
 save();
 }
 
-/* RENDER */
+/* ================= FAVORITES ================= */
+
+function toggleFavMode(){
+showingFavs=!showingFavs;
+render();
+}
+
+function toggleFav(i){
+if(favs[i]) delete favs[i];
+else favs[i]=true;
+save();
+render();
+}
+
+/* ================= LOCK ================= */
+
+function lockAll(){unlocked={};save();render();}
+function unlockAll(){channels.forEach((c,i)=>unlocked[i]=true);save();render();}
+
+/* ================= RENDER ================= */
+
 function render(){
 
 userInfo.innerText=user;
 planInfo.innerText=role.toUpperCase()+" EXP:"+new Date(expiry).toLocaleDateString();
 
+let list=document.getElementById("list");
 list.innerHTML="";
 
-channels.forEach((c,i)=>{
+let show=showingFavs?channels.filter((c,i)=>favs[i]):channels;
+
+show.forEach((c,i)=>{
 
 let locked=role==="free"&&!unlocked[i];
 
@@ -214,11 +283,17 @@ div.className="card";
 div.innerHTML=`
 ${locked?'<div class="lock">LOCK</div>':''}
 <b>${c.name}</b>
+<br>
+<small>${favs[i]?"⭐ Favorite":""}</small>
 `;
 
 div.onclick=()=>{
 if(locked){alert("Upgrade Required");return;}
 play(c.url);
+};
+
+div.ondblclick=()=>{
+toggleFav(i);
 };
 
 list.appendChild(div);
@@ -228,12 +303,15 @@ list.appendChild(div);
 updateAdmin();
 }
 
-/* ADMIN */
+/* ================= ADMIN ================= */
+
 function openAdmin(){admin.style.display="block";updateAdmin();}
 function closeAdmin(){admin.style.display="none";}
 
 function updateAdmin(){
-analytics.innerText="Users: "+Object.keys(users).length+" | Plays: "+(stats.plays||0);
+analytics.innerText=
+"Users: "+Object.keys(users).length+
+" | Plays: "+(stats.plays||0);
 
 adminList.innerHTML="";
 
@@ -260,7 +338,8 @@ else unlocked[i]=true;
 save();render();updateAdmin();
 }
 
-/* TOOLS */
+/* ================= TOOLS ================= */
+
 function loadUltra(){alert("Ultra Scan Running...");}
 function boost(){video.playbackRate=1.15;}
 function pip(){video.requestPictureInPicture();}
@@ -269,7 +348,8 @@ function record(){alert("Recording Ready");}
 function repair(){alert("Repairing Streams");}
 function optimize(){alert("Memory Optimized");}
 
-/* LOGOUT */
+/* ================= LOGOUT ================= */
+
 function logout(){location.reload();}
 
 </script>
