@@ -2,282 +2,238 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SaaS Dashboard</title>
+<title>BTECH-TV FULL SaaS SIM</title>
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#0b1220;
-color:white;
-}
+body{margin:0;font-family:Arial;background:#0b1220;color:#fff}
+header{padding:15px;background:#111827;display:flex;justify-content:space-between}
+button{padding:8px 12px;margin:3px;border:none;border-radius:6px;cursor:pointer;background:#22304d;color:white}
 
-#saasDashboard{
-padding:20px;
-height:100vh;
-overflow:auto;
-}
+.layout{display:flex;height:100vh}
+.sidebar{width:220px;background:#0a0f1d;padding:10px;overflow:auto}
+.main{flex:1;padding:10px;overflow:auto}
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:15px;
-margin-top:20px;
-}
+.card{background:#172033;padding:10px;margin:10px;border-radius:10px}
+.hidden{display:none}
 
-.card{
-background:#172033;
-padding:15px;
-border-radius:12px;
-}
-
-button{
-padding:10px 15px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-margin:5px;
-background:#22304d;
-color:white;
-}
-
-table{
-width:100%;
-background:#172033;
-color:white;
-border-collapse:collapse;
-}
-
-th,td{
-padding:10px;
-border:1px solid #22304d;
-}
+table{width:100%;background:#172033;border-collapse:collapse}
+td,th{border:1px solid #333;padding:6px}
+input,select{padding:8px;width:100%;margin:5px 0}
 </style>
 </head>
 
 <body>
 
-<div id="saasDashboard">
+<header>
+<div>📺 BTECH-TV SaaS SIM</div>
+<div>
+<button onclick="show('dashboard')">Dashboard</button>
+<button onclick="show('users')">Users</button>
+<button onclick="show('channels')">Channels</button>
+<button onclick="show('packages')">Packages</button>
+<button onclick="toggleAdmin()">Admin</button>
+</div>
+</header>
 
-<h1>📺 BTECH-TV WORLD PRO MAX SaaS</h1>
+<div class="layout">
 
-<!-- ================= STATS ================= -->
-<div class="grid">
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h3>Trial System</h3>
+<div class="card">
+<button onclick="resetTrial()">Reset Trial</button>
+<button onclick="checkTrial()">Check Trial</button>
+</div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- DASHBOARD -->
+<div id="dashboard">
 
 <div class="card">
-<h3>👥 Total Users</h3>
-<h1 id="totalUsers">0</h1>
+<h2>📊 Stats</h2>
+<p>Total Users: <span id="tusers">0</span></p>
+<p>Active Users: <span id="ausers">0</span></p>
+<p>Trial Users: <span id="trusers">0</span></p>
 </div>
 
+</div>
+
+<!-- USERS -->
+<div id="users" class="hidden">
 <div class="card">
-<h3>🟢 Active Users</h3>
-<h1 id="activeUsers">0</h1>
-</div>
+<h2>User Manager</h2>
 
-<div class="card">
-<h3>⏳ Trial Users</h3>
-<h1 id="trialUsers">0</h1>
-</div>
-
-<div class="card">
-<h3>💰 Revenue</h3>
-<h1 id="revenue">₦0</h1>
-</div>
-
-</div>
-
-<hr>
-
-<!-- ================= USERS ================= -->
-<h2>👥 User Manager</h2>
-<button onclick="createUser()">➕ Create User</button>
+<input id="uname" placeholder="Name">
+<input id="uemail" placeholder="Email">
+<button onclick="addUser()">Add User</button>
 
 <table>
 <thead>
-<tr>
-<th>Name</th>
-<th>Email</th>
-<th>Package</th>
-<th>Status</th>
-<th>Action</th>
-</tr>
+<tr><th>Name</th><th>Email</th><th>Package</th><th>Action</th></tr>
 </thead>
 <tbody id="userTable"></tbody>
 </table>
-
-<hr>
-
-<!-- ================= PACKAGES ================= -->
-<h2>📦 Package Manager</h2>
-<button onclick="createPackage()">➕ New Package</button>
-<div id="packageList"></div>
-
-<hr>
-
-<!-- ================= CHANNELS ================= -->
-<h2>📺 Channel Manager</h2>
-<button onclick="addChannel()">➕ Add Channel</button>
-<div id="channelManager"></div>
-
-<hr>
-
-<!-- ================= COUPONS ================= -->
-<h2>🎟 Coupon Manager</h2>
-<button onclick="createCoupon()">➕ Create Coupon</button>
-<div id="couponList"></div>
-
-<hr>
-
-<!-- ================= PAYMENTS ================= -->
-<h2>💳 Payment Manager</h2>
-<div class="card">
-Paystack Connected
-<br><br>
-<button>Configure Payments</button>
+</div>
 </div>
 
-<hr>
+<!-- CHANNELS -->
+<div id="channels" class="hidden">
+<div class="card">
+<h2>Channels</h2>
 
-<!-- ================= SETTINGS ================= -->
-<h2>⚙️ System Settings</h2>
+<input id="cname" placeholder="Channel Name">
+<input id="curl" placeholder="Stream URL">
+<select id="cpack">
+<option>Free</option>
+<option>Premium</option>
+<option>Gold</option>
+</select>
+<button onclick="addChannel()">Add Channel</button>
 
-<label><input type="checkbox" checked> Enable Registration</label><br><br>
-<label><input type="checkbox" checked> Enable Trial</label><br><br>
-<label><input type="checkbox"> Maintenance Mode</label><br><br>
+<div id="channelList"></div>
+</div>
+</div>
 
-<button onclick="saveSettings()">💾 Save Settings</button>
+<!-- PACKAGES -->
+<div id="packages" class="hidden">
+<div class="card">
+<h2>Packages</h2>
 
+<input id="pname" placeholder="Package Name">
+<button onclick="addPackage()">Add Package</button>
+
+<div id="packageList"></div>
+</div>
+</div>
+
+</div>
 </div>
 
 <script>
 
-/* ================= DEMO DATA ================= */
+/* ================= FAKE DB ================= */
+let users = JSON.parse(localStorage.getItem("users")||"[]");
+let channels = JSON.parse(localStorage.getItem("channels")||"[]");
+let packages = JSON.parse(localStorage.getItem("packages")||'["Free","Premium","Gold"]');
 
-let users = [
-{
-name:"Admin",
-email:"admin@btechtv.com",
-package:"Gold",
-status:"Active"
+/* ================= SAVE ================= */
+function save(){
+localStorage.setItem("users",JSON.stringify(users));
+localStorage.setItem("channels",JSON.stringify(channels));
+localStorage.setItem("packages",JSON.stringify(packages));
 }
-];
 
-let packages = ["Trial","Basic","Premium","Gold"];
-
-/* ================= LOAD DASHBOARD ================= */
-
-function loadDashboard(){
-
-document.getElementById("totalUsers").innerText = users.length;
-
-document.getElementById("activeUsers").innerText =
-users.filter(u => u.status === "Active").length;
-
-document.getElementById("trialUsers").innerText =
-users.filter(u => u.package === "Trial").length;
-
-renderUsers();
-renderPackages();
-renderChannels();
+/* ================= NAV ================= */
+function show(id){
+document.querySelectorAll(".main > div").forEach(d=>d.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+render();
 }
 
 /* ================= USERS ================= */
-
-function renderUsers(){
-
-let html = "";
-
-users.forEach((u,i)=>{
-html += `
-<tr>
-<td>${u.name}</td>
-<td>${u.email}</td>
-<td>${u.package}</td>
-<td>${u.status}</td>
-<td><button onclick="deleteUser(${i})">Delete</button></td>
-</tr>`;
-});
-
-document.getElementById("userTable").innerHTML = html;
-}
-
-function createUser(){
-
-let name = prompt("Enter user name");
-if(!name) return;
-
+function addUser(){
 users.push({
-name,
-email: name.toLowerCase()+"@mail.com",
+name:uname.value,
+email:uemail.value,
 package:"Trial",
 status:"Active"
 });
-
-loadDashboard();
+save();render();
 }
 
-function deleteUser(i){
+function delUser(i){
 users.splice(i,1);
-loadDashboard();
-}
-
-/* ================= PACKAGES ================= */
-
-function renderPackages(){
-document.getElementById("packageList").innerHTML =
-packages.map(p => `<div class="card">${p}</div>`).join("");
-}
-
-function createPackage(){
-let p = prompt("Package name");
-if(!p) return;
-packages.push(p);
-renderPackages();
+save();render();
 }
 
 /* ================= CHANNELS ================= */
-
-function renderChannels(){
-
-let html = "";
-
-if(typeof all !== "undefined"){
-all.forEach(ch=>{
-html += `
-<div class="card">
-${ch.name}
-<select>
-<option>Trial</option>
-<option>Basic</option>
-<option>Premium</option>
-<option>Gold</option>
-</select>
-</div>`;
-});
-}
-
-document.getElementById("channelManager").innerHTML = html;
-}
-
 function addChannel(){
-alert("Connect backend API for real channel management");
+channels.push({
+name:cname.value,
+url:curl.value,
+pack:cpack.value
+});
+save();render();
 }
 
-/* ================= COUPONS ================= */
-
-function createCoupon(){
-alert("Coupon created (demo)");
+function delChannel(i){
+channels.splice(i,1);
+save();render();
 }
 
-/* ================= SETTINGS ================= */
-
-function saveSettings(){
-alert("Settings saved (demo)");
+/* ================= PACKAGES ================= */
+function addPackage(){
+packages.push(pname.value);
+save();render();
 }
 
-/* ================= INIT ================= */
+/* ================= RENDER ================= */
+function render(){
 
-setTimeout(loadDashboard,500);
+// USERS
+let ut="";
+users.forEach((u,i)=>{
+ut+=`<tr>
+<td>${u.name}</td>
+<td>${u.email}</td>
+<td>${u.package}</td>
+<td><button onclick="delUser(${i})">X</button></td>
+</tr>`;
+});
+userTable.innerHTML=ut;
+
+// CHANNELS
+channelList.innerHTML=channels.map((c,i)=>
+`<div class="card">${c.name} (${c.pack})
+<button onclick="delChannel(${i})">Delete</button></div>`
+).join("");
+
+// PACKAGES
+packageList.innerHTML=packages.map(p=>
+`<div class="card">${p}</div>`
+).join("");
+
+// STATS
+tusers.innerText=users.length;
+ausers.innerText=users.filter(u=>u.status=="Active").length;
+trusers.innerText=users.filter(u=>u.package=="Trial").length;
+
+save();
+}
+
+/* ================= TRIAL ================= */
+function resetTrial(){
+localStorage.setItem("trialStart",Date.now());
+alert("Trial Reset");
+}
+
+function checkTrial(){
+let start=localStorage.getItem("trialStart");
+if(!start){
+alert("No trial started");
+return;
+}
+
+let diff=Date.now()-start;
+let hours=diff/1000/60/60;
+
+if(hours>4){
+alert("TRIAL EXPIRED - Upgrade Required");
+}else{
+alert("Trial Active: "+(4-hours).toFixed(2)+" hours left");
+}
+}
+
+/* ================= ADMIN ================= */
+function toggleAdmin(){
+alert("Admin Mode Enabled (Demo)");
+}
+
+/* INIT */
+render();
 
 </script>
 
