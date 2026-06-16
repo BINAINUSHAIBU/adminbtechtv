@@ -1,12 +1,10 @@
-
-
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>WORLDTV PRO MAX IPTV MERGED 2026</title>
+<title>WORLDTV PRO MAX IPTV MERGED 2026 (TRIAL)</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -26,6 +24,31 @@ color:#fff;
 display:flex;
 height:100vh;
 overflow:hidden;
+}
+
+/* WATERMARK */
+.watermark{
+position:fixed;
+top:10px;
+right:15px;
+z-index:9999;
+color:#00d4ff;
+font-weight:bold;
+opacity:0.7;
+}
+
+/* TRIAL BANNER */
+.trial{
+position:fixed;
+top:0;
+left:0;
+right:0;
+background:#ff2d2d;
+color:#fff;
+text-align:center;
+padding:5px;
+z-index:9999;
+font-weight:bold;
 }
 
 /* SIDEBAR */
@@ -55,7 +78,6 @@ margin:15px 0 10px;
 font-size:12px;
 }
 
-/* NAV BUTTONS */
 .nav-btn{
 width:100%;
 padding:10px;
@@ -64,31 +86,6 @@ background:#121c33;
 border:none;
 border-radius:8px;
 color:#fff;
-cursor:pointer;
-}
-
-.nav-btn:hover{
-background:#1e2f57;
-}
-
-/* STATUS LIST (ON/OFF PANEL) */
-.item{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:8px;
-margin:5px 0;
-background:#172033;
-border-radius:6px;
-font-size:13px;
-}
-
-.item button{
-background:#111827;
-border:none;
-color:#fff;
-padding:5px 8px;
-border-radius:6px;
 cursor:pointer;
 }
 
@@ -101,7 +98,6 @@ overflow:hidden;
 padding:10px;
 }
 
-/* TOPBAR */
 .topbar{
 display:flex;
 justify-content:space-between;
@@ -123,7 +119,6 @@ padding:6px 12px;
 border-radius:20px;
 }
 
-/* HERO */
 .hero{
 background:linear-gradient(135deg,#07132f,#0f1d45);
 padding:10px;
@@ -176,11 +171,6 @@ color:#fff;
 cursor:pointer;
 }
 
-.controls button:hover{
-background:#00d4ff;
-color:#000;
-}
-
 /* CHANNELS */
 .channel-wrapper{
 flex:1;
@@ -206,16 +196,11 @@ cursor:pointer;
 border:1px solid #1f355d;
 }
 
-.card:hover{
-transform:scale(1.03);
-border-color:#00d4ff;
-}
-
-/* ADMIN */
+/* ADMIN LOCKED */
 .admin{
 position:fixed;
 inset:0;
-background:rgba(0,0,0,.9);
+background:rgba(0,0,0,.95);
 display:none;
 justify-content:center;
 align-items:center;
@@ -226,12 +211,18 @@ background:#111827;
 padding:20px;
 border-radius:10px;
 width:90%;
+text-align:center;
+}
+
+.admin-box h2{
+color:#ff2d2d;
 }
 
 .admin-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
 gap:10px;
+margin-top:15px;
 }
 
 .admin-grid button{
@@ -243,16 +234,25 @@ color:#fff;
 cursor:pointer;
 }
 
+/* LOCK MESSAGE */
+.lock-msg{
+color:#ff2d2d;
+margin-top:10px;
+}
+
 </style>
 </head>
 
 <body>
 
+<div class="trial">⏳ TRIAL VERSION - LIMITED ACCESS</div>
+<div class="watermark">WORLDTV PRO MAX • TRIAL</div>
+
 <!-- SIDEBAR -->
 <div class="sidebar">
 
 <div class="logo">📺 BTECH-TV PRO MAX</div>
-<div class="sub">Ultra IPTV Engine X</div>
+<div class="sub">Ultra IPTV Engine X (TRIAL MODE)</div>
 
 <div class="menu-title">🌍 Countries</div>
 <button class="nav-btn" onclick="load('ng')">Nigeria</button>
@@ -265,21 +265,6 @@ cursor:pointer;
 <button class="nav-btn" onclick="load('za')">South Africa</button>
 <button class="nav-btn" onclick="load('ca')">Canada</button>
 <button class="nav-btn" onclick="load('au')">Australia</button>
-<button class="nav-btn" onclick="load('jp')">Japan</button>
-<button class="nav-btn" onclick="load('kr')">South Korea</button>
-<button class="nav-btn" onclick="load('cn')">China</button>
-<button class="nav-btn" onclick="load('es')">Spain</button>
-<button class="nav-btn" onclick="load('it')">Italy</button>
-<button class="nav-btn" onclick="load('tr')">Turkey</button>
-<button class="nav-btn" onclick="load('mx')">Mexico</button>
-<button class="nav-btn" onclick="load('ae')">UAE</button>
-<button class="nav-btn" onclick="load('sa')">Saudi Arabia</button>
-<button class="nav-btn" onclick="load('eg')">Egypt</button>
-<button class="nav-btn" onclick="load('ar')">Argentina</button>
-<button class="nav-btn" onclick="load('pk')">Pakistan</button>
-<button class="nav-btn" onclick="load('id')">Indonesia</button>
-<button class="nav-btn" onclick="load('ph')">Philippines</button>
-<button class="nav-btn" onclick="load('al')">Albania</button>
 
 <div class="menu-title">🎬 Categories</div>
 <button class="nav-btn" onclick="loadCat('news')">News</button>
@@ -287,20 +272,11 @@ cursor:pointer;
 <button class="nav-btn" onclick="loadCat('movies')">Movies</button>
 <button class="nav-btn" onclick="loadCat('music')">Music</button>
 <button class="nav-btn" onclick="loadCat('kids')">Kids</button>
-<button class="nav-btn" onclick="loadCat('comedy')">Comedy</button>
-<button class="nav-btn" onclick="loadCat('documentary')">Documentary</button>
-<button class="nav-btn" onclick="loadCat('business')">Business</button>
-<button class="nav-btn" onclick="loadCat('science')">Science</button>
-<button class="nav-btn" onclick="loadCat('travel')">Travel</button>
 
 <div class="menu-title">🗣 Languages</div>
 <button class="nav-btn" onclick="load('eng')">English</button>
 <button class="nav-btn" onclick="load('spa')">Spanish</button>
 <button class="nav-btn" onclick="load('ara')">Arabic</button>
-<button class="nav-btn" onclick="load('fra')">French</button>
-<button class="nav-btn" onclick="load('hin')">Hindi</button>
-<button class="nav-btn" onclick="load('zho')">Chinese</button>
-<button class="nav-btn" onclick="load('por')">Portuguese</button>
 
 <div class="menu-title">🔥 Tools</div>
 <button class="nav-btn" onclick="scan()">Scan</button>
@@ -308,9 +284,6 @@ cursor:pointer;
 <button class="nav-btn" onclick="repair()">Repair</button>
 <button class="nav-btn" onclick="optimize()">Optimize</button>
 <button class="nav-btn" onclick="openAdmin()">Admin</button>
-
-<div class="menu-title">⚙ Status Panel</div>
-<div id="status"></div>
 
 </div>
 
@@ -351,18 +324,17 @@ cursor:pointer;
 
 </div>
 
-<!-- ADMIN -->
+<!-- ADMIN LOCK -->
 <div class="admin" id="admin">
 <div class="admin-box">
-
-<h2>SUPER ADMIN PANEL</h2>
+<h2>🔒 ADMIN LOCKED (TRIAL)</h2>
+<p class="lock-msg">Upgrade required to unlock full admin controls.</p>
 
 <div class="admin-grid">
-<button onclick="scan()">Scan</button>
-<button onclick="boost()">Boost</button>
-<button onclick="repair()">Repair</button>
-<button onclick="optimize()">Optimize</button>
-<button onclick="toggleLock()">LOCK/UNLOCK</button>
+<button disabled>Scan</button>
+<button disabled>Boost</button>
+<button disabled>Repair</button>
+<button disabled>Optimize</button>
 <button onclick="closeAdmin()">Close</button>
 </div>
 
@@ -374,7 +346,16 @@ cursor:pointer;
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
-let locked=false;
+
+/* ⏳ TRIAL TIMER (5 MIN LIMIT) */
+let trialTime = 300;
+setInterval(()=>{
+trialTime--;
+if(trialTime<=0){
+alert("Trial expired. Restart page or upgrade.");
+video.pause();
+}
+},1000);
 
 /* LOAD */
 async function load(code){
@@ -401,10 +382,12 @@ all.push({name,url});
 }
 });
 
+/* 🔒 TRIAL LIMIT (FIRST 50 CHANNELS ONLY) */
+all = all.slice(0,50);
 filtered=[...all];
+
 render();
 stats();
-renderStatus();
 }
 
 /* GRID */
@@ -451,33 +434,11 @@ function toggleMute(){video.muted=!video.muted;}
 function toggleFS(){video.requestFullscreen();}
 
 /* ADMIN */
-function openAdmin(){document.getElementById("admin").style.display="flex";}
-function closeAdmin(){document.getElementById("admin").style.display="none";}
-function scan(){alert("Scanning streams...");}
-function boost(){video.playbackRate=1.2;}
-function repair(){alert("Repair mode active");}
-function optimize(){alert("Optimizing system");}
-
-function toggleLock(){
-locked=!locked;
-alert(locked?"SYSTEM LOCKED":"SYSTEM UNLOCKED");
+function openAdmin(){
+document.getElementById("admin").style.display="flex";
 }
-
-/* STATUS PANEL */
-function renderStatus(){
-let box=document.getElementById("status");
-box.innerHTML="";
-
-["Countries","Categories","Languages","Tools"].forEach(name=>{
-let div=document.createElement("div");
-div.className="item";
-div.innerHTML=`<span>${name}</span><button onclick="toggle(this)">ON</button>`;
-box.appendChild(div);
-});
-}
-
-function toggle(btn){
-btn.innerText=btn.innerText==="ON"?"OFF":"ON";
+function closeAdmin(){
+document.getElementById("admin").style.display="none";
 }
 
 /* STATS */
