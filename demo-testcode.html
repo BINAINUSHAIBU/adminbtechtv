@@ -1,478 +1,294 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>BTECH-TV IPTV SAAS PRO MAX (NO LOGIN)</title><!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>BTECH-TV ULTRA CONTROL SYSTEM X</title>
+<!-- ===========================
+MULTI-USER SAAS DASHBOARD
+=========================== -->
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<div id="saasDashboard" style="display:none;padding:20px;background:#0b1220;height:100%;overflow:auto;">
+
+<h1>📺 BTECH-TV WORLD PRO MAX SaaS</h1>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin-top:20px;">
+
+<div class="card">
+<h3>👥 Total Users</h3>
+<h1 id="totalUsers">0</h1>
+</div>
+
+<div class="card">
+<h3>🟢 Active Users</h3>
+<h1 id="activeUsers">0</h1>
+</div>
+
+<div class="card">
+<h3>⏳ Trial Users</h3>
+<h1 id="trialUsers">0</h1>
+</div>
+
+<div class="card">
+<h3>💰 Revenue</h3>
+<h1 id="revenue">₦0</h1>
+</div>
+
+</div>
+
+<hr style="margin:20px 0;">
+
+<h2>👥 User Manager</h2>
+
+<button onclick="createUser()">➕ Create User</button>
+
+<table width="100%" border="1" cellspacing="0" cellpadding="8">
+<thead>
+<tr>
+<th>Name</th>
+<th>Email</th>
+<th>Package</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="userTable"></tbody>
+</table>
+
+<hr style="margin:20px 0;">
+
+<h2>📦 Package Manager</h2>
+
+<button onclick="createPackage()">➕ New Package</button>
+
+<div id="packageList"></div>
+
+<hr style="margin:20px 0;">
+
+<h2>📺 Channel Manager</h2>
+
+<button onclick="addChannel()">➕ Add Channel</button>
+
+<div id="channelManager"></div>
+
+<hr style="margin:20px 0;">
+
+<h2>🎟 Coupon Manager</h2>
+
+<button onclick="createCoupon()">➕ Create Coupon</button>
+
+<div id="couponList"></div>
+
+<hr style="margin:20px 0;">
+
+<h2>💳 Payment Manager</h2>
+
+<div class="card">
+Paystack Connected
+<br><br>
+<button>Configure Payments</button>
+</div>
+
+<hr style="margin:20px 0;">
+
+<h2>⚙️ System Settings</h2>
+
+<label>
+<input type="checkbox" checked>
+Enable Registration
+</label>
+
+<br><br>
+
+<label>
+<input type="checkbox" checked>
+Enable Trial
+</label>
+
+<br><br>
+
+<label>
+<input type="checkbox">
+Maintenance Mode
+</label>
+
+<br><br>
+
+<button onclick="saveSettings()">
+💾 Save Settings
+</button>
+
+</div>
 
 <style>
-:root{
---bg:#050816;--panel:#111827;--card:#172033;
---accent:#00d4ff;--text:#fff;--muted:#94a3b8;
---danger:#ef4444;--gold:#facc15;
+.card{
+background:#172033;
+padding:15px;
+border-radius:12px;
 }
-
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial;overflow:hidden}
-
-/* TOPBAR */
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:10px;background:#0f172a}
-.logo{color:var(--accent);font-weight:bold}
-.btns button{margin:2px;padding:8px;border:0;border-radius:8px;cursor:pointer;background:var(--card);color:#fff}
-
-/* LAYOUT */
-.container{display:flex;height:100vh}
-.sidebar{width:300px;overflow:auto;background:#0b1220;padding:10px}
-.main{flex:1;display:flex;flex-direction:column}
-
-/* PLAYER */
-.player{height:300px;background:#000;position:relative}
-video{width:100%;height:100%}
-.overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.7);color:#fff}
-
-/* CHANNELS */
-.channels{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;padding:10px}
-.ch{background:var(--card);padding:10px;border-radius:10px;cursor:pointer}
-
-/* ADMIN PANEL */
-#admin{display:none;position:fixed;inset:0;background:#000c;z-index:9999;padding:20px;overflow:auto}
-.box{background:#111;padding:10px;margin:10px 0}
-
-/* LOCK SCREEN */
-#lock{display:none;position:fixed;inset:0;background:#000;z-index:99999;color:#fff;align-items:center;justify-content:center;flex-direction:column}
-</style>
-</head>
-
-<body>
-
-<!-- LOCK SCREEN -->
-<div id="lock">
-<h1>⛔ TRIAL EXPIRED</h1>
-<button onclick="alert('Upgrade required')">Upgrade</button>
-</div>
-
-<!-- ADMIN PANEL -->
-<div id="admin">
-<h2>⚙️ CONTROL PANEL</h2>
-
-<div class="box">
-<h3>Package</h3>
-<select onchange="setPackage(this.value)">
-<option value="free">Free</option>
-<option value="premium">Premium</option>
-<option value="gold">Gold</option>
-</select>
-</div>
-
-<div class="box">
-<h3>Trial</h3>
-<button onclick="resetTrial()">Reset Trial</button>
-</div>
-
-<div class="box">
-<h3>Channels</h3>
-<div id="adminList"></div>
-</div>
-
-<button onclick="toggleAdmin()">Close</button>
-</div>
-
-<!-- TOPBAR -->
-<div class="topbar">
-<div class="logo">📺 BTECH-TV ULTRA X</div>
-<div class="btns">
-<button onclick="toggleAdmin()">Admin</button>
-<button onclick="next()">Next</button>
-<button onclick="prev()">Prev</button>
-<button onclick="toggleFS()">Fullscreen</button>
-<button onclick="togglePiP()">PiP</button>
-</div>
-</div>
-
-<!-- MAIN -->
-<div class="container">
-
-<div class="sidebar">
-<h3>Countries</h3>
-<div onclick="load('https://iptv-org.github.io/iptv/countries/ng.m3u')">Nigeria</div>
-<div onclick="load('https://iptv-org.github.io/iptv/countries/us.m3u')">USA</div>
-<div onclick="load('https://iptv-org.github.io/iptv/countries/uk.m3u')">UK</div>
-</div>
-
-<div class="main">
-
-<div class="player">
-<video id="v" controls autoplay></video>
-<div class="overlay" id="ov">Loading...</div>
-</div>
-
-<div class="channels" id="list"></div>
-
-</div>
-</div>
-
-<script>
-/* ================= USER SYSTEM ================= */
-let user = JSON.parse(localStorage.getItem("user")||"null");
-
-if(!user){
-user={
-role:"user",
-package:"free",
-start:Date.now(),
-limit:4*60*60*1000
-};
-localStorage.setItem("user",JSON.stringify(user));
+table{
+background:#172033;
+color:white;
 }
-
-function check(){
-if(Date.now()-user.start>user.limit && user.role!="admin"){
-document.getElementById("lock").style.display="flex";
-}
-}
-setInterval(check,5000);
-
-/* ================= PACKAGES ================= */
-const pkg={
-free:["News","Music"],
-premium:["News","Sports","Movies"],
-gold:"all"
-};
-
-/* ================= DATA ================= */
-let all=[];
-let filtered=[];
-let current=0;
-let hls;
-
-/* ================= LOAD ================= */
-async function load(url){
-document.getElementById("ov").style.display="flex";
-all=[];
-
-const res=await fetch(url);
-const text=await res.text();
-
-parse(text);
-filtered=[...all];
-render();
-document.getElementById("ov").style.display="none";
-}
-
-/* ================= PARSE ================= */
-function parse(data){
-let lines=data.split("\n");
-
-for(let i=0;i<lines.length;i++){
-if(lines[i].includes("#EXTINF")){
-let name=lines[i].split(",")[1]||"Channel";
-let url=lines[i+1];
-
-if(!url)continue;
-
-let group="General";
-
-all.push({
-id:all.length+1,
-name,
-url,
-group
-});
-}
-}
-}
-
-/* ================= FILTER ================= */
-function filter(list){
-if(user.role=="admin")return list;
-if(user.package=="gold")return list;
-
-return list.filter(c=>
-pkg[user.package].some(p=>c.group.includes(p))
-);
-}
-
-/* ================= RENDER ================= */
-function render(){
-let box=document.getElementById("list");
-box.innerHTML="";
-
-filtered=filter(all);
-
-filtered.forEach((c,i)=>{
-box.innerHTML+=`
-<div class="ch" onclick="play(${i})">
-${c.name}
-</div>`;
-});
-}
-
-/* ================= PLAY ================= */
-function play(i){
-current=i;
-let c=filtered[i];
-
-if(!c)return;
-
-document.getElementById("ov").style.display="flex";
-
-if(hls)hls.destroy();
-
-if(Hls.isSupported()){
-hls=new Hls();
-hls.loadSource(c.url);
-hls.attachMedia(document.getElementById("v"));
-hls.on(Hls.Events.MANIFEST_PARSED,()=>{
-document.getElementById("v").play();
-document.getElementById("ov").style.display="none";
-});
-}else{
-document.getElementById("v").src=c.url;
-}
-}
-
-/* ================= CONTROL ================= */
-function next(){
-current++;
-if(current>=filtered.length)current=0;
-play(current);
-}
-
-function prev(){
-current--;
-if(current<0)current=filtered.length-1;
-play(current);
-}
-
-/* ================= ADMIN ================= */
-function toggleAdmin(){
-let a=document.getElementById("admin");
-a.style.display=a.style.display=="block"?"none":"block";
-renderAdmin();
-}
-
-function setPackage(p){
-user.package=p;
-localStorage.setItem("user",JSON.stringify(user));
-alert("Package set "+p);
-render();
-}
-
-function resetTrial(){
-user.start=Date.now();
-localStorage.setItem("user",JSON.stringify(user));
-alert("Trial reset");
-}
-
-function renderAdmin(){
-let box=document.getElementById("adminList");
-box.innerHTML="";
-all.forEach(c=>{
-box.innerHTML+=`
-<div>${c.name}</div>`;
-});
-}
-
-/* ================= UTILS ================= */
-function toggleFS(){
-if(!document.fullscreenElement){
-document.documentElement.requestFullscreen();
-}else document.exitFullscreen();
-}
-
-function togglePiP(){
-let v=document.getElementById("v");
-if(document.pictureInPictureElement){
-document.exitPictureInPicture();
-}else v.requestPictureInPicture();
-}
-
-/* AUTO LOAD */
-load("https://iptv-org.github.io/iptv/countries/ng.m3u");
-</script>
-
-</body>
-</html>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script src="https://js.paystack.co/v1/inline.js"></script>
-
-<style>
-body{margin:0;font-family:Arial;background:#050816;color:#fff}
-
-/* TOPBAR */
-.topbar{
-display:flex;
-justify-content:space-between;
-padding:10px;
-background:#111827;
-}
-
-/* LAYOUT */
-.container{display:flex;height:100vh}
-
-.sidebar{
-width:250px;
-background:#0b1220;
-padding:10px;
-overflow:auto;
-}
-
-.channel{
-padding:10px;
-margin:5px 0;
-background:#111827;
+button{
+padding:10px 15px;
+border:none;
 border-radius:8px;
 cursor:pointer;
-}
-
-.main{flex:1;display:flex;flex-direction:column}
-
-video{
-width:100%;
-height:360px;
-background:black;
-}
-
-/* PAYWALL */
-#paywall{
-position:fixed;
-inset:0;
-display:none;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-background:rgba(0,0,0,.9);
-z-index:9999;
-}
-
-button{
-padding:10px;
 margin:5px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-background:#1f2937;
-color:#fff;
 }
 </style>
-</head>
-
-<body>
-
-<!-- ================= TOPBAR ================= -->
-<div class="topbar">
-<div>📺 BTECH-TV IPTV SAAS PRO MAX</div>
-<button onclick="resetTrial()">Reset Trial</button>
-</div>
-
-<!-- ================= PAYWALL ================= -->
-<div id="paywall">
-<h2>⚠ Trial Expired</h2>
-<p>Upgrade to continue watching</p>
-<button onclick="payWithPaystack()">Upgrade ₦2000</button>
-</div>
-
-<!-- ================= APP ================= -->
-<div class="container">
-
-<div class="sidebar">
-<div class="channel" onclick="playStream()">News Live</div>
-<div class="channel" onclick="playStream()">Sports HD</div>
-<div class="channel" onclick="playStream()">Movies Zone</div>
-</div>
-
-<div class="main">
-<video id="video" controls></video>
-</div>
-
-</div>
 
 <script>
 
-/* ================= TRIAL SYSTEM (4 HOURS PER DEVICE) ================= */
-const trialKey = "btechtv_trial_start";
+/* ==========================
+DEMO SAAS DATA
+========================== */
 
-function initTrial(){
-if(!localStorage.getItem(trialKey)){
-localStorage.setItem(trialKey,Date.now());
+let users=[
+{
+name:"Admin",
+email:"admin@btechtv.com",
+package:"Gold",
+status:"Active"
 }
+];
+
+let packages=[
+"Trial",
+"Basic",
+"Premium",
+"Gold"
+];
+
+function loadDashboard(){
+
+document.getElementById("totalUsers").innerText=
+users.length;
+
+document.getElementById("activeUsers").innerText=
+users.filter(x=>x.status==="Active").length;
+
+document.getElementById("trialUsers").innerText=
+users.filter(x=>x.package==="Trial").length;
+
+renderUsers();
+renderPackages();
+renderChannels();
+
 }
 
-function checkTrial(){
-let start = parseInt(localStorage.getItem(trialKey));
-let limit = 4 * 60 * 60 * 1000;
+function renderUsers(){
 
-if(Date.now() - start > limit){
-document.getElementById("paywall").style.display="flex";
-return false;
-}
+let html="";
 
-return true;
-}
+users.forEach((u,i)=>{
 
-setInterval(checkTrial,5000);
-initTrial();
+html+=`
+<tr>
+<td>${u.name}</td>
+<td>${u.email}</td>
+<td>${u.package}</td>
+<td>${u.status}</td>
+<td>
+<button onclick="deleteUser(${i})">
+Delete
+</button>
+</td>
+</tr>
+`;
 
-/* ================= RESET TRIAL ================= */
-function resetTrial(){
-localStorage.removeItem(trialKey);
-location.reload();
-}
-
-/* ================= PAYSTACK ================= */
-function payWithPaystack(){
-
-let handler = PaystackPop.setup({
-key:"YOUR_PAYSTACK_PUBLIC_KEY",
-email:"guest@btechtv.com",
-amount:2000*100,
-currency:"NGN",
-
-callback:function(){
-alert("Payment Successful - Premium Unlocked");
-localStorage.setItem("premium","true");
-document.getElementById("paywall").style.display="none";
-},
-
-onClose:function(){
-alert("Payment cancelled");
-}
 });
 
-handler.openIframe();
+document.getElementById("userTable").innerHTML=
+html;
+
 }
 
-/* ================= IPTV PLAYER ================= */
-function playStream(){
+function createUser(){
 
-if(!checkTrial() && !localStorage.getItem("premium")){
-document.getElementById("paywall").style.display="flex";
-return;
+let name=prompt("Name");
+
+if(!name) return;
+
+users.push({
+name:name,
+email:name.toLowerCase()+"@mail.com",
+package:"Trial",
+status:"Active"
+});
+
+loadDashboard();
+
 }
 
-const video = document.getElementById("video");
+function deleteUser(i){
 
-let url = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+users.splice(i,1);
 
-if(Hls.isSupported()){
-let hls = new Hls();
-hls.loadSource(url);
-hls.attachMedia(video);
-hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
-}else{
-video.src=url;
-video.play();
+loadDashboard();
+
 }
+
+function renderPackages(){
+
+document.getElementById("packageList").innerHTML=
+packages.map(x=>`
+<div class="card">${x}</div>
+`).join("");
+
 }
+
+function createPackage(){
+
+let p=prompt("Package Name");
+
+if(!p) return;
+
+packages.push(p);
+
+renderPackages();
+
+}
+
+function renderChannels(){
+
+let html="";
+
+all.forEach(ch=>{
+
+html+=`
+<div class="card" style="margin-bottom:10px;">
+${ch.name}
+<select>
+<option>Trial</option>
+<option>Basic</option>
+<option>Premium</option>
+<option>Gold</option>
+</select>
+</div>
+`;
+
+});
+
+document.getElementById("channelManager").innerHTML=
+html;
+
+}
+
+function addChannel(){
+
+alert("Connect to backend API");
+
+}
+
+function createCoupon(){
+
+alert("Coupon created");
+
+}
+
+function saveSettings(){
+
+alert("Settings saved");
+
+}
+
+/* LOAD */
+setTimeout(loadDashboard,1000);
 
 </script>
-
-</body>
-</html>
