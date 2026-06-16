@@ -3,26 +3,46 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>BTECH-TV SAAS IPTV WORLD ULTRA MAX X</title>
+<title>BTECH-TV WORLD PRO MAX ULTRA MERGED X</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body{margin:0;font-family:Arial;background:#050816;color:#fff;overflow:hidden}
+:root{
+--bg:#050816;
+--panel:#111827;
+--card:#172033;
+--hover:#22304d;
+--accent:#00d4ff;
+--text:#fff;
+}
+
+body{
+margin:0;
+font-family:Arial;
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
 
 /* TOPBAR */
 .topbar{
 display:flex;
 justify-content:space-between;
-align-items:center;
+flex-wrap:wrap;
 padding:10px;
 background:#111827;
-flex-wrap:wrap;
 }
 
+.logo{
+color:var(--accent);
+font-weight:bold;
+}
+
+/* BUTTONS */
 button{
-margin:3px;
 padding:8px 10px;
+margin:3px;
 border:none;
 border-radius:6px;
 cursor:pointer;
@@ -32,14 +52,12 @@ font-size:12px;
 }
 button:hover{background:#374151}
 
-.logo{color:#00d4ff;font-weight:bold}
-
 /* LAYOUT */
 .container{display:flex;height:100vh}
 
 /* SIDEBAR */
 .sidebar{
-width:270px;
+width:320px;
 background:#0b1220;
 overflow:auto;
 padding:10px;
@@ -47,7 +65,7 @@ padding:10px;
 
 .cat{
 padding:10px;
-margin:5px 0;
+margin:6px 0;
 background:#111827;
 border-radius:8px;
 cursor:pointer;
@@ -59,7 +77,7 @@ cursor:pointer;
 
 /* PLAYER */
 .player{
-height:320px;
+height:360px;
 background:black;
 position:relative;
 }
@@ -68,12 +86,11 @@ video{width:100%;height:100%;object-fit:contain}
 
 .overlay{
 position:absolute;inset:0;
+background:rgba(0,0,0,.85);
 display:flex;
 align-items:center;
 justify-content:center;
-background:rgba(0,0,0,.85);
 flex-direction:column;
-z-index:5;
 }
 
 /* CHANNELS */
@@ -93,14 +110,9 @@ border-radius:10px;
 cursor:pointer;
 border:1px solid transparent;
 }
-
 .channel.locked{opacity:.5;border:1px solid red}
 
-.badge{
-font-size:10px;
-padding:3px 6px;
-border-radius:6px;
-}
+.badge{padding:3px 6px;font-size:10px;border-radius:6px}
 .free{background:green}
 .lock{background:red}
 
@@ -117,46 +129,40 @@ display:none;
 z-index:999;
 }
 
+/* EXPIRED */
 .expired{
 position:fixed;
 inset:0;
-background:black;
 display:none;
+background:black;
 align-items:center;
 justify-content:center;
 flex-direction:column;
 z-index:9999;
 }
-
 .expired h1{color:red}
 </style>
 </head>
 
 <body>
 
-<!-- ================= TOPBAR ================= -->
+<!-- TOPBAR -->
 <div class="topbar">
-<div class="logo">📺 BTECH-TV WORLD PRO MAX SAAS ULTRA ENGINE</div>
+<div class="logo">📺 BTECH-TV WORLD PRO MAX ULTRA MERGED X</div>
 
 <div>
 <button onclick="toggleAdmin()">🧑‍💼 Admin</button>
-<button onclick="unlockAll()">🔓 Unlock All</button>
-<button onclick="lockAll()">🔒 Lock All</button>
 <button onclick="checkTrial()">⏳ Trial</button>
-
-<button onclick="scanStreams()">📡 Scan</button>
+<button onclick="unlockAll()">🔓 Unlock</button>
+<button onclick="lockAll()">🔒 Lock</button>
+<button onclick="loadUltraFeeds()">🚀 Feeds</button>
 <button onclick="speedBoost()">⚡ Boost</button>
 <button onclick="togglePiP()">📺 PiP</button>
-<button onclick="clearRecents()">🗑 Recents</button>
-<button onclick="recordMode()">⏺ Record</button>
-<button onclick="loadUltraFeeds()">🚀 Ultra Feeds</button>
-<button onclick="repairStreams()">🛠 Repair</button>
-<button onclick="optimizeMemory()">🧠 Optimize</button>
 <button onclick="logout()">🚪 Logout</button>
 </div>
 </div>
 
-<!-- ================= ADMIN ================= -->
+<!-- ADMIN -->
 <div class="admin" id="adminBox">
 <h4>ADMIN LOGIN</h4>
 <input id="pass" placeholder="password" style="width:100%;padding:6px"/>
@@ -164,17 +170,21 @@ z-index:9999;
 <button onclick="resetTrial()">Reset Trial</button>
 </div>
 
-<!-- ================= TRIAL EXPIRED ================= -->
+<!-- EXPIRED -->
 <div class="expired" id="expired">
 <h1>TRIAL EXPIRED</h1>
-<p>Upgrade to Premium Access</p>
+<p>Upgrade Required</p>
 </div>
 
-<!-- ================= LAYOUT ================= -->
 <div class="container">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
+
+<h3>📺 BTECH-TV WORLD PRO MAX</h3>
+<p style="font-size:12px;color:#aaa">
+Ultra BTECH-TV WORLD PRO MAX Engine X
+</p>
 
 <h3>🌍 Countries</h3>
 <div class="cat" onclick="loadMock('Nigeria')">🇳🇬 Nigeria</div>
@@ -185,44 +195,28 @@ z-index:9999;
 <div class="cat" onclick="loadMock('Germany')">🇩🇪 Germany</div>
 <div class="cat" onclick="loadMock('Brazil')">🇧🇷 Brazil</div>
 <div class="cat" onclick="loadMock('South Africa')">🇿🇦 South Africa</div>
-<div class="cat" onclick="loadMock('Canada')">🇨🇦 Canada</div>
-<div class="cat" onclick="loadMock('Australia')">🇦🇺 Australia</div>
 <div class="cat" onclick="loadMock('Japan')">🇯🇵 Japan</div>
-<div class="cat" onclick="loadMock('South Korea')">🇰🇷 South Korea</div>
 <div class="cat" onclick="loadMock('China')">🇨🇳 China</div>
-<div class="cat" onclick="loadMock('Spain')">🇪🇸 Spain</div>
-<div class="cat" onclick="loadMock('Italy')">🇮🇹 Italy</div>
-<div class="cat" onclick="loadMock('Turkey')">🇹🇷 Turkey</div>
-<div class="cat" onclick="loadMock('Mexico')">🇲🇽 Mexico</div>
 <div class="cat" onclick="loadMock('UAE')">🇦🇪 UAE</div>
-<div class="cat" onclick="loadMock('Saudi Arabia')">🇸🇦 Saudi Arabia</div>
-<div class="cat" onclick="loadMock('Egypt')">🇪🇬 Egypt</div>
-<div class="cat" onclick="loadMock('Argentina')">🇦🇷 Argentina</div>
-<div class="cat" onclick="loadMock('Pakistan')">🇵🇰 Pakistan</div>
-<div class="cat" onclick="loadMock('Indonesia')">🇮🇩 Indonesia</div>
-<div class="cat" onclick="loadMock('Philippines')">🇵🇭 Philippines</div>
-<div class="cat" onclick="loadMock('Albania')">🇦🇱 Albania</div>
 
 <h3>🎬 Categories</h3>
 <div class="cat">📰 News</div>
 <div class="cat">⚽ Sports</div>
 <div class="cat">🎬 Movies</div>
 <div class="cat">🎵 Music</div>
-<div class="cat">👶 Kids</div>
-<div class="cat">😂 Comedy</div>
-<div class="cat">📚 Documentary</div>
-<div class="cat">💼 Business</div>
-<div class="cat">🔬 Science</div>
-<div class="cat">✈ Travel</div>
 
 <h3>🗣 Languages</h3>
 <div class="cat">🇬🇧 English</div>
 <div class="cat">🇪🇸 Spanish</div>
 <div class="cat">🇸🇦 Arabic</div>
-<div class="cat">🇫🇷 French</div>
-<div class="cat">🇮🇳 Hindi</div>
-<div class="cat">🇨🇳 Chinese</div>
-<div class="cat">🇵🇹 Portuguese</div>
+
+<h3>🔥 Tools</h3>
+<div class="cat" onclick="scanStreams()">📡 Scan</div>
+<div class="cat" onclick="speedBoost()">⚡ Boost</div>
+<div class="cat" onclick="togglePiP()">📺 PiP</div>
+<div class="cat" onclick="repairStreams()">🛠 Repair</div>
+<div class="cat" onclick="optimizeMemory()">🧠 Optimize</div>
+<div class="cat" onclick="loadUltraFeeds()">🚀 Ultra Feeds</div>
 
 </div>
 
@@ -237,20 +231,23 @@ z-index:9999;
 <div class="channels" id="list"></div>
 
 </div>
+</div>
 
+<!-- EXPIRED -->
+<div class="expired" id="expired">
+<h1>TRIAL EXPIRED</h1>
+<p>Upgrade to Premium Access</p>
 </div>
 
 <script>
 
 /* ================= TRIAL SYSTEM ================= */
-const key="trial_start_v1";
-
+const key="trial_v1";
 function initTrial(){
 if(!localStorage.getItem(key)){
 localStorage.setItem(key,Date.now());
 }
 }
-
 function checkTrial(){
 let start=+localStorage.getItem(key);
 let limit=4*60*60*1000;
@@ -273,8 +270,8 @@ document.getElementById("adminBox").style.display="block";
 function login(){
 if(document.getElementById("pass").value==="1234"){
 admin=true;
-alert("Admin Logged In");
-}else alert("Wrong Password");
+alert("Admin OK");
+}else alert("Wrong password");
 }
 
 function resetTrial(){
@@ -282,17 +279,20 @@ localStorage.removeItem(key);
 location.reload();
 }
 
+function logout(){
+admin=false;
+alert("Logged out");
+}
+
 function lockAll(){channels.forEach(c=>c.locked=true);render();}
 function unlockAll(){channels.forEach(c=>c.locked=false);render();}
-function logout(){admin=false;alert("Logged out");}
 
-/* ================= FULL CHANNEL SYSTEM ================= */
+/* ================= CHANNELS ================= */
 let channels=[
 {name:"News Live",group:"News",locked:false},
 {name:"Sports Max",group:"Sports",locked:false},
 {name:"Movie Zone",group:"Movies",locked:true},
-{name:"Kids TV",group:"Kids",locked:false},
-{name:"Music Live",group:"Music",locked:true}
+{name:"Kids TV",group:"Kids",locked:false}
 ];
 
 function render(){
@@ -323,22 +323,22 @@ alert("Premium Locked");
 return;
 }
 document.getElementById("overlay").style.display="none";
-document.getElementById("video").src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+document.getElementById("video").src=
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 }
 
 /* ================= FEATURES ================= */
 function loadMock(x){alert("Loading "+x)}
-function scanStreams(){alert("Scanning...")}
-function speedBoost(){alert("Boosted")}
+function scanStreams(){alert("Scanning streams")}
+function speedBoost(){video.playbackRate=1.2}
 function togglePiP(){video.requestPictureInPicture()}
-function clearRecents(){alert("Recents cleared")}
-function recordMode(){alert("Record mode")}
-function loadUltraFeeds(){alert("Ultra feeds loading")}
-function repairStreams(){alert("Repairing streams")}
+function repairStreams(){alert("Repairing")}
 function optimizeMemory(){alert("Optimized")}
+function loadUltraFeeds(){alert("Ultra Feeds Loaded")}
 
 /* INIT */
 render();
+
 </script>
 
 </body>
