@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>BTECH-TV REAL LOGIN IPTV</title>
+<title>BTECH-TV IPTV SAAS PRO MAX</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -11,24 +11,20 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
-<style>
-body{
-margin:0;
-font-family:Arial;
-background:#050816;
-color:#fff;
-overflow:hidden;
-}
+<!-- PAYSTACK -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
 
-/* LOGIN SCREEN */
-#authBox{
-position:fixed;
-inset:0;
-background:#0b1220;
+<style>
+body{margin:0;font-family:Arial;background:#050816;color:#fff}
+
+/* AUTH */
+#auth{
+position:fixed;inset:0;
 display:flex;
+flex-direction:column;
 align-items:center;
 justify-content:center;
-flex-direction:column;
+background:#0b1220;
 z-index:9999;
 }
 
@@ -36,8 +32,8 @@ input{
 padding:10px;
 margin:5px;
 width:220px;
-border:none;
 border-radius:6px;
+border:none;
 }
 
 button{
@@ -47,27 +43,20 @@ border:none;
 border-radius:6px;
 cursor:pointer;
 background:#1f2937;
-color:white;
+color:#fff;
 }
 
 /* APP */
-#app{
-display:none;
-height:100vh;
-flex-direction:column;
-}
+#app{display:none;height:100vh;flex-direction:column}
 
 .topbar{
-padding:10px;
-background:#111827;
 display:flex;
 justify-content:space-between;
+padding:10px;
+background:#111827;
 }
 
-.container{
-display:flex;
-flex:1;
-}
+.container{display:flex;flex:1}
 
 .sidebar{
 width:250px;
@@ -76,39 +65,32 @@ padding:10px;
 overflow:auto;
 }
 
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-}
-
-video{
-width:100%;
-height:350px;
-background:black;
-}
-
-.channels{
-flex:1;
-overflow:auto;
-padding:10px;
-}
-
 .channel{
-background:#111827;
 padding:10px;
 margin:5px 0;
+background:#111827;
 border-radius:8px;
 cursor:pointer;
 }
 
-.overlay{
-position:absolute;
+.main{flex:1;display:flex;flex-direction:column}
+
+video{
+width:100%;
+height:360px;
+background:black;
+}
+
+/* PAYWALL */
+#paywall{
+position:fixed;
 inset:0;
-display:flex;
+display:none;
 align-items:center;
 justify-content:center;
-background:rgba(0,0,0,.7);
+flex-direction:column;
+background:rgba(0,0,0,.9);
+z-index:9998;
 }
 </style>
 </head>
@@ -116,8 +98,8 @@ background:rgba(0,0,0,.7);
 <body>
 
 <!-- ================= AUTH ================= -->
-<div id="authBox">
-<h2>📺 BTECH-TV LOGIN</h2>
+<div id="auth">
+<h2>📺 BTECH-TV SAAS LOGIN</h2>
 
 <input id="email" placeholder="Email"/>
 <input id="password" type="password" placeholder="Password"/>
@@ -126,27 +108,31 @@ background:rgba(0,0,0,.7);
 <button onclick="login()">Login</button>
 </div>
 
+<!-- ================= PAYWALL ================= -->
+<div id="paywall">
+<h2>⚠ Premium Required</h2>
+<p>Upgrade to continue watching IPTV</p>
+<button onclick="payWithPaystack()">Upgrade ₦2000</button>
+</div>
+
 <!-- ================= APP ================= -->
 <div id="app">
 
 <div class="topbar">
-<div>📺 BTECH-TV IPTV</div>
+<div>📺 BTECH-TV SAAS IPTV</div>
 <button onclick="logout()">Logout</button>
 </div>
 
 <div class="container">
 
 <div class="sidebar">
-<h3>Channels</h3>
 <div class="channel" onclick="playStream()">News Live</div>
-<div class="channel" onclick="playStream()">Sports</div>
-<div class="channel" onclick="playStream()">Movies</div>
+<div class="channel" onclick="playStream()">Sports HD</div>
+<div class="channel" onclick="playStream()">Movies Zone</div>
 </div>
 
 <div class="main">
-
 <video id="video" controls></video>
-
 </div>
 
 </div>
@@ -155,69 +141,131 @@ background:rgba(0,0,0,.7);
 <script>
 
 /* ================= FIREBASE CONFIG ================= */
-const firebaseConfig = {
-apiKey: "YOUR_API_KEY",
-authDomain: "YOUR_PROJECT.firebaseapp.com",
-projectId: "YOUR_PROJECT_ID",
-appId: "YOUR_APP_ID"
-};
+firebase.initializeApp({
+apiKey:"YOUR_API_KEY",
+authDomain:"YOUR_PROJECT.firebaseapp.com"
+});
 
-firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-/* ================= AUTH FUNCTIONS ================= */
+let currentUserEmail = "";
+let hasAccess = false;
 
+/* ================= AUTH ================= */
 function register(){
-let email = document.getElementById("email").value;
-let password = document.getElementById("password").value;
-
-auth.createUserWithEmailAndPassword(email,password)
-.then(user=>{
-alert("Registered: " + user.user.email);
-})
-.catch(err=>alert(err.message));
+auth.createUserWithEmailAndPassword(email.value,password.value)
+.then(u=>{
+alert("Registered");
+});
 }
 
 function login(){
-let email = document.getElementById("email").value;
-let password = document.getElementById("password").value;
-
-auth.signInWithEmailAndPassword(email,password)
-.then(user=>{
-alert("Welcome " + user.user.email);
-})
-.catch(err=>alert(err.message));
+auth.signInWithEmailAndPassword(email.value,password.value)
+.then(u=>{
+currentUserEmail = u.user.email;
+checkAccess();
+});
 }
 
 function logout(){
 auth.signOut();
+location.reload();
 }
 
-/* ================= SESSION CONTROL ================= */
-auth.onAuthStateChanged(user=>{
-if(user){
-document.getElementById("authBox").style.display="none";
+/* ================= ACCESS CHECK (BACKEND READY) ================= */
+async function checkAccess(){
+
+// SIMULATED BACKEND CHECK (replace with Node.js API)
+let trialStart = localStorage.getItem("trial_"+currentUserEmail);
+
+if(!trialStart){
+localStorage.setItem("trial_"+currentUserEmail,Date.now());
+trialStart = Date.now();
+}
+
+let limit = 4 * 60 * 60 * 1000;
+let diff = Date.now() - parseInt(trialStart);
+
+// DEMO LOGIC
+if(diff < limit){
+hasAccess = true;
+}else{
+hasAccess = false;
+}
+
+if(hasAccess){
+document.getElementById("auth").style.display="none";
 document.getElementById("app").style.display="flex";
 }else{
-document.getElementById("authBox").style.display="flex";
-document.getElementById("app").style.display="none";
+document.getElementById("paywall").style.display="flex";
+}
+}
+
+/* ================= PAYSTACK ================= */
+function payWithPaystack(){
+
+let handler = PaystackPop.setup({
+key:"YOUR_PAYSTACK_PUBLIC_KEY",
+email:currentUserEmail,
+amount:2000*100,
+currency:"NGN",
+
+callback:function(){
+alert("Payment successful");
+
+// unlock premium
+localStorage.setItem("paid_"+currentUserEmail,"true");
+
+document.getElementById("paywall").style.display="none";
+document.getElementById("app").style.display="flex";
+},
+
+onClose:function(){
+alert("Payment cancelled");
 }
 });
 
+handler.openIframe();
+}
+
 /* ================= IPTV PLAYER ================= */
 function playStream(){
+
+if(!currentUserEmail){
+alert("Login required");
+return;
+}
+
+// CHECK ACCESS
+let paid = localStorage.getItem("paid_"+currentUserEmail);
+
+if(!paid && !hasAccess){
+document.getElementById("paywall").style.display="flex";
+return;
+}
+
 const video = document.getElementById("video");
 
+let url = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+
 if(Hls.isSupported()){
-const hls = new Hls();
-hls.loadSource("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8");
+let hls = new Hls();
+hls.loadSource(url);
 hls.attachMedia(video);
 hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
 }else{
-video.src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+video.src = url;
 video.play();
 }
 }
+
+/* ================= AUTO AUTH ================= */
+auth.onAuthStateChanged(user=>{
+if(user){
+currentUserEmail = user.email;
+checkAccess();
+}
+});
 
 </script>
 
