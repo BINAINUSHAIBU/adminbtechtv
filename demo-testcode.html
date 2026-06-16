@@ -1,284 +1,430 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>SaaS Dashboard</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BTECH-TV WORLD PRO MAX SAAS IPTV X</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#0b1220;
-color:white;
+
+/* ================= BASE ================= */
+
+:root{
+--bg:#050816;
+--panel:#111827;
+--card:#172033;
+--hover:#22304d;
+--accent:#00d4ff;
+--text:#fff;
 }
 
-#saasDashboard{
-padding:20px;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
+
+/* ================= TOP BAR ================= */
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px;
+background:#0f172a;
+flex-wrap:wrap;
+}
+
+.logo{
+font-size:20px;
+color:var(--accent);
+font-weight:bold;
+}
+
+.topbar button{
+margin:5px;
+padding:8px 12px;
+border:none;
+border-radius:8px;
+background:#22304d;
+color:white;
+cursor:pointer;
+}
+
+/* ================= LAYOUT ================= */
+
+.container{
+display:flex;
 height:100vh;
+}
+
+/* ================= SIDEBAR ================= */
+
+.sidebar{
+width:300px;
+background:#0b1220;
 overflow:auto;
+padding:10px;
+}
+
+.cat{
+padding:10px;
+background:var(--card);
+margin:5px 0;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* ================= MAIN ================= */
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+/* ================= PLAYER ================= */
+
+.player{
+height:300px;
+background:black;
+position:relative;
+}
+
+video{
+width:100%;
+height:100%;
+object-fit:contain;
+}
+
+.overlay{
+position:absolute;
+inset:0;
+display:flex;
+justify-content:center;
+align-items:center;
+background:rgba(0,0,0,0.8);
+}
+
+/* ================= CHANNELS ================= */
+
+.channels{
+flex:1;
+overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+gap:10px;
+padding:10px;
+}
+
+.channel{
+background:var(--card);
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+}
+
+/* ================= SAAS DASHBOARD ================= */
+
+#saasDashboard{
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:#0b1220;
+overflow:auto;
+display:none;
+padding:20px;
+z-index:9999;
 }
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:15px;
-margin-top:20px;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:10px;
 }
 
 .card{
 background:#172033;
 padding:15px;
-border-radius:12px;
-}
-
-button{
-padding:10px 15px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-margin:5px;
-background:#22304d;
-color:white;
+border-radius:10px;
 }
 
 table{
 width:100%;
 background:#172033;
-color:white;
 border-collapse:collapse;
+margin-top:10px;
 }
 
-th,td{
-padding:10px;
+td,th{
 border:1px solid #22304d;
+padding:8px;
 }
+
+button{
+padding:8px 10px;
+border:none;
+border-radius:6px;
+background:#22304d;
+color:white;
+cursor:pointer;
+}
+
 </style>
 </head>
 
 <body>
 
+<!-- ================= TOPBAR ================= -->
+<div class="topbar">
+<div class="logo">📺 BTECH-TV WORLD PRO MAX X</div>
+
+<div>
+<button onclick="toggleSaaS()">👥 SaaS Dashboard</button>
+<button onclick="loadUltra()">🚀 Ultra Feeds</button>
+<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+</div>
+</div>
+
+<!-- ================= MAIN IPTV ================= -->
+<div class="container">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+<h3>🌍 Countries</h3>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ng.m3u','Nigeria')">🇳🇬 Nigeria</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/us.m3u','USA')">🇺🇸 USA</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/uk.m3u','UK')">🇬🇧 UK</div>
+
+<h3>🎬 Categories</h3>
+<div class="cat">📰 News</div>
+<div class="cat">⚽ Sports</div>
+<div class="cat">🎬 Movies</div>
+
+<h3>🗣 Languages</h3>
+<div class="cat">🇬🇧 English</div>
+<div class="cat">🇪🇸 Spanish</div>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="player">
+<video id="video" controls autoplay></video>
+<div class="overlay" id="overlay">Loading IPTV...</div>
+</div>
+
+<div class="channels" id="channelList"></div>
+
+</div>
+</div>
+
+<!-- ================= SAAS DASHBOARD ================= -->
 <div id="saasDashboard">
 
-<h1>📺 BTECH-TV WORLD PRO MAX SaaS</h1>
+<h1>📺 SaaS Admin Dashboard</h1>
 
-<!-- ================= STATS ================= -->
 <div class="grid">
 
-<div class="card">
-<h3>👥 Total Users</h3>
-<h1 id="totalUsers">0</h1>
-</div>
-
-<div class="card">
-<h3>🟢 Active Users</h3>
-<h1 id="activeUsers">0</h1>
-</div>
-
-<div class="card">
-<h3>⏳ Trial Users</h3>
-<h1 id="trialUsers">0</h1>
-</div>
-
-<div class="card">
-<h3>💰 Revenue</h3>
-<h1 id="revenue">₦0</h1>
-</div>
+<div class="card">👥 Total Users <h2 id="totalUsers">1</h2></div>
+<div class="card">🟢 Active Users <h2 id="activeUsers">1</h2></div>
+<div class="card">⏳ Trial Users <h2 id="trialUsers">0</h2></div>
+<div class="card">💰 Revenue <h2>₦0</h2></div>
 
 </div>
 
-<hr>
-
-<!-- ================= USERS ================= -->
-<h2>👥 User Manager</h2>
-<button onclick="createUser()">➕ Create User</button>
+<h2>👥 Users</h2>
+<button onclick="createUser()">Create User</button>
 
 <table>
-<thead>
 <tr>
-<th>Name</th>
-<th>Email</th>
-<th>Package</th>
-<th>Status</th>
-<th>Action</th>
+<th>Name</th><th>Email</th><th>Status</th><th>Action</th>
 </tr>
-</thead>
 <tbody id="userTable"></tbody>
 </table>
 
-<hr>
-
-<!-- ================= PACKAGES ================= -->
-<h2>📦 Package Manager</h2>
-<button onclick="createPackage()">➕ New Package</button>
+<h2>📦 Packages</h2>
+<button onclick="addPackage()">Add Package</button>
 <div id="packageList"></div>
 
-<hr>
-
-<!-- ================= CHANNELS ================= -->
 <h2>📺 Channel Manager</h2>
-<button onclick="addChannel()">➕ Add Channel</button>
 <div id="channelManager"></div>
 
-<hr>
+<h2>⚙️ Settings</h2>
+<label><input type="checkbox"> Enable Trial</label><br>
+<label><input type="checkbox"> Maintenance Mode</label><br>
 
-<!-- ================= COUPONS ================= -->
-<h2>🎟 Coupon Manager</h2>
-<button onclick="createCoupon()">➕ Create Coupon</button>
-<div id="couponList"></div>
-
-<hr>
-
-<!-- ================= PAYMENTS ================= -->
-<h2>💳 Payment Manager</h2>
-<div class="card">
-Paystack Connected
-<br><br>
-<button>Configure Payments</button>
-</div>
-
-<hr>
-
-<!-- ================= SETTINGS ================= -->
-<h2>⚙️ System Settings</h2>
-
-<label><input type="checkbox" checked> Enable Registration</label><br><br>
-<label><input type="checkbox" checked> Enable Trial</label><br><br>
-<label><input type="checkbox"> Maintenance Mode</label><br><br>
-
-<button onclick="saveSettings()">💾 Save Settings</button>
+<button>Save Settings</button>
 
 </div>
 
 <script>
 
-/* ================= DEMO DATA ================= */
+/* ================= IPTV DATA ================= */
 
-let users = [
-{
-name:"Admin",
-email:"admin@btechtv.com",
-package:"Gold",
-status:"Active"
-}
-];
+let all=[];
+let currentHls;
 
-let packages = ["Trial","Basic","Premium","Gold"];
+const video=document.getElementById("video");
 
-/* ================= LOAD DASHBOARD ================= */
+/* ================= LOAD PLAYLIST ================= */
 
-function loadDashboard(){
+async function loadPlaylist(url){
+document.getElementById("overlay").style.display="flex";
 
-document.getElementById("totalUsers").innerText = users.length;
+const res=await fetch(url);
+const text=await res.text();
 
-document.getElementById("activeUsers").innerText =
-users.filter(u => u.status === "Active").length;
-
-document.getElementById("trialUsers").innerText =
-users.filter(u => u.package === "Trial").length;
-
-renderUsers();
-renderPackages();
+all=parseM3U(text);
 renderChannels();
+
+document.getElementById("overlay").style.display="none";
 }
 
-/* ================= USERS ================= */
+function parseM3U(data){
+let lines=data.split("\n");
+let arr=[];
 
-function renderUsers(){
-
-let html = "";
-
-users.forEach((u,i)=>{
-html += `
-<tr>
-<td>${u.name}</td>
-<td>${u.email}</td>
-<td>${u.package}</td>
-<td>${u.status}</td>
-<td><button onclick="deleteUser(${i})">Delete</button></td>
-</tr>`;
-});
-
-document.getElementById("userTable").innerHTML = html;
+for(let i=0;i<lines.length;i++){
+if(lines[i].includes("#EXTINF")){
+let url=lines[i+1];
+let name=lines[i].split(",")[1];
+if(url){
+arr.push({name,url});
+}
+}
+}
+return arr;
 }
 
-function createUser(){
+/* ================= CHANNEL PLAY ================= */
 
-let name = prompt("Enter user name");
-if(!name) return;
+function playChannel(i){
+let ch=all[i];
 
-users.push({
-name,
-email: name.toLowerCase()+"@mail.com",
-package:"Trial",
-status:"Active"
-});
+if(currentHls) currentHls.destroy();
 
-loadDashboard();
+if(Hls.isSupported()){
+currentHls=new Hls();
+currentHls.loadSource(ch.url);
+currentHls.attachMedia(video);
+}else{
+video.src=ch.url;
 }
 
-function deleteUser(i){
-users.splice(i,1);
-loadDashboard();
+video.play();
 }
 
-/* ================= PACKAGES ================= */
-
-function renderPackages(){
-document.getElementById("packageList").innerHTML =
-packages.map(p => `<div class="card">${p}</div>`).join("");
-}
-
-function createPackage(){
-let p = prompt("Package name");
-if(!p) return;
-packages.push(p);
-renderPackages();
-}
-
-/* ================= CHANNELS ================= */
+/* ================= RENDER CHANNELS ================= */
 
 function renderChannels(){
+let box=document.getElementById("channelList");
+box.innerHTML="";
 
-let html = "";
-
-if(typeof all !== "undefined"){
-all.forEach(ch=>{
-html += `
-<div class="card">
-${ch.name}
-<select>
-<option>Trial</option>
-<option>Basic</option>
-<option>Premium</option>
-<option>Gold</option>
-</select>
+all.forEach((c,i)=>{
+box.innerHTML+=`
+<div class="channel" onclick="playChannel(${i})">
+${c.name}
 </div>`;
 });
 }
 
-document.getElementById("channelManager").innerHTML = html;
+/* ================= ULTRA ================= */
+
+function loadUltra(){
+alert("Ultra Feeds Loading...");
 }
 
-function addChannel(){
-alert("Connect backend API for real channel management");
+/* ================= FULLSCREEN ================= */
+
+function toggleFullscreen(){
+if(!document.fullscreenElement){
+document.documentElement.requestFullscreen();
+}else{
+document.exitFullscreen();
+}
 }
 
-/* ================= COUPONS ================= */
+/* ================= SAAS ================= */
 
-function createCoupon(){
-alert("Coupon created (demo)");
+let users=[
+{name:"Admin",email:"admin@btechtv.com",status:"Active"}
+];
+
+let packages=["Trial","Basic","Premium"];
+
+function toggleSaaS(){
+let dash=document.getElementById("saasDashboard");
+dash.style.display = dash.style.display==="block"?"none":"block";
+renderUsers();
+renderPackages();
+renderChannelsAdmin();
 }
 
-/* ================= SETTINGS ================= */
+/* USERS */
 
-function saveSettings(){
-alert("Settings saved (demo)");
+function renderUsers(){
+let html="";
+users.forEach((u,i)=>{
+html+=`
+<tr>
+<td>${u.name}</td>
+<td>${u.email}</td>
+<td>${u.status}</td>
+<td><button onclick="deleteUser(${i})">Delete</button></td>
+</tr>`;
+});
+document.getElementById("userTable").innerHTML=html;
 }
 
-/* ================= INIT ================= */
+function createUser(){
+let n=prompt("Name");
+users.push({name:n,email:n+"@mail.com",status:"Active"});
+renderUsers();
+}
 
-setTimeout(loadDashboard,500);
+function deleteUser(i){
+users.splice(i,1);
+renderUsers();
+}
+
+/* PACKAGES */
+
+function renderPackages(){
+document.getElementById("packageList").innerHTML=
+packages.map(p=>`<div class="card">${p}</div>`).join("");
+}
+
+function addPackage(){
+let p=prompt("Package");
+packages.push(p);
+renderPackages();
+}
+
+/* CHANNEL ADMIN */
+
+function renderChannelsAdmin(){
+document.getElementById("channelManager").innerHTML=
+all.slice(0,10).map(c=>`<div class="card">${c.name}</div>`).join("");
+}
+
+/* INIT */
+
+loadPlaylist("https://iptv-org.github.io/iptv/countries/ng.m3u");
 
 </script>
 
