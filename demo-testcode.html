@@ -1,306 +1,354 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV SUPER ADMIN IPTV</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#0b0f1a"/>
+<title>BTECH-TV WORLD ULTRA MAX X - CONTROL DASHBOARD</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#0b0f1a;
-color:white;
+:root{
+--bg:#050816;
+--panel:#111827;
+--card:#172033;
+--hover:#22304d;
+--accent:#00d4ff;
+--text:#fff;
+--danger:#ef4444;
+--gold:#facc15;
 }
 
-header{
-padding:15px;
-background:#111827;
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:var(--bg);color:var(--text);overflow:hidden}
+
+/* TOPBAR */
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px;
+background:#0f172a;
+flex-wrap:wrap;
+border-bottom:1px solid #1f2937;
+}
+
+.logo{color:var(--accent);font-weight:bold;font-size:18px}
+
+.topbar button{
+margin:3px;
+padding:8px 10px;
+border:none;
+border-radius:8px;
+background:var(--card);
+color:white;
+cursor:pointer;
+font-size:12px;
+}
+
+.topbar button:hover{background:var(--hover)}
+
+.container{display:flex;height:100vh}
+
+/* SIDEBAR */
+.sidebar{
+width:280px;
+background:#0b1220;
+overflow:auto;
+padding:10px;
+border-right:1px solid #1f2937;
+}
+
+.cat{
+padding:10px;
+background:var(--card);
+margin:5px 0;
+border-radius:8px;
+cursor:pointer;
+font-size:13px;
+}
+
+.cat:hover{background:var(--hover)}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column}
+
+.player{height:360px;background:black;position:relative}
+video{width:100%;height:100%;object-fit:contain}
+
+.overlay{
+position:absolute;inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,.8);
+flex-direction:column;
+z-index:5;
+}
+
+.live{position:absolute;top:10px;left:10px;background:red;padding:5px 10px;border-radius:20px;font-size:12px}
+
+/* CHANNELS */
+.channels{
+flex:1;
+overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+gap:10px;
+padding:10px;
+}
+
+.channel{
+background:var(--card);
+padding:10px;
+border-radius:10px;
+cursor:pointer;
 display:flex;
 justify-content:space-between;
 align-items:center;
 }
 
-button{
-padding:10px;
-margin:3px;
-border:none;
-cursor:pointer;
-border-radius:6px;
+.channel.locked{
+opacity:.5;
+border:1px solid var(--danger);
 }
 
-.container{
-display:flex;
-height:calc(100vh - 60px);
-}
-
-.sidebar{
-width:280px;
-background:#0f172a;
-padding:10px;
-overflow:auto;
-}
-
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-}
-
-.video{
-height:360px;
-background:black;
-}
-
-.channel-list{
-flex:1;
-overflow:auto;
-padding:10px;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-gap:10px;
-}
-
-.card{
-background:#1f2937;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-position:relative;
-}
-
-.lock{
-position:absolute;
-top:10px;
-right:10px;
-background:red;
+.badge{
+font-size:10px;
 padding:3px 6px;
-font-size:11px;
-border-radius:5px;
+border-radius:10px;
 }
 
+.lock{background:var(--danger)}
+.free{background:green}
+.premium{background:purple}
+
+/* ADMIN PANEL */
 .adminPanel{
 position:fixed;
-inset:0;
-background:#000000ee;
+top:60px;
+right:10px;
+width:260px;
+background:#111827;
+padding:10px;
+border-radius:10px;
 display:none;
-padding:20px;
-overflow:auto;
+z-index:999;
+}
+
+.adminPanel h3{color:var(--gold);margin-bottom:10px}
+
+.adminPanel button{
+width:100%;
+margin:5px 0;
+padding:8px;
+border:none;
+border-radius:8px;
+background:var(--card);
+color:white;
+cursor:pointer;
+}
+
+/* TRIAL EXPIRED */
+.expired{
+position:fixed;
+inset:0;
+background:black;
+display:none;
+align-items:center;
+justify-content:center;
+flex-direction:column;
 z-index:9999;
 }
 
-input,select{
-padding:10px;
-margin:5px;
-}
+.expired h1{color:red;font-size:40px;margin-bottom:10px}
+
 </style>
 </head>
 
 <body>
 
-<header>
-<div>📺 BTECH-TV IPTV SUPER ADMIN</div>
+<!-- TOPBAR -->
+<div class="topbar">
+<div class="logo">📺 BTECH-TV CONTROL DASHBOARD</div>
+
 <div>
-<button onclick="openAdmin()">Admin</button>
-<button onclick="toggleRole()">Switch Plan</button>
+<button onclick="toggleAdmin()">🧑‍💼 Admin</button>
+<button onclick="unlockAll()">🔓 Unlock All</button>
+<button onclick="lockAll()">🔒 Lock All</button>
+<button onclick="checkTrial()">⏳ Trial Status</button>
 </div>
-</header>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="adminPanel" id="adminPanel">
+<h3>CONTROL PANEL</h3>
+<input id="adminPass" placeholder="Enter Password" style="width:100%;padding:8px;margin-bottom:5px"/>
+<button onclick="loginAdmin()">Login</button>
+<button onclick="unlockAll()">Unlock All Channels</button>
+<button onclick="lockAll()">Lock All Channels</button>
+<button onclick="resetTrial()">Reset Trial</button>
+</div>
+
+<!-- TRIAL EXPIRED SCREEN -->
+<div class="expired" id="expired">
+<h1>TRIAL EXPIRED</h1>
+<p>Upgrade to continue watching</p>
+</div>
 
 <div class="container">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<h3>Plans</h3>
-<p id="roleText">Role: FREE</p>
+<h3>🌍 Countries</h3>
+<div class="cat" onclick="loadMock('Nigeria')">🇳🇬 Nigeria</div>
+<div class="cat" onclick="loadMock('USA')">🇺🇸 USA</div>
+<div class="cat" onclick="loadMock('UK')">🇬🇧 UK</div>
 
-<select id="plan">
-<option value="free">Free</option>
-<option value="premium">Premium</option>
-<option value="ultra">Ultra</option>
-</select>
-
-<button onclick="upgrade()">Upgrade</button>
-
-<hr>
-
-<h3>Controls</h3>
-<button onclick="lockAll()">Lock All</button>
-<button onclick="unlockAll()">Unlock All</button>
+<h3>🔥 Tools</h3>
+<div class="cat" onclick="scan()">📡 Scan</div>
+<div class="cat" onclick="boost()">⚡ Boost</div>
+<div class="cat" onclick="pip()">📺 PiP</div>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-<div class="video">
-<video id="video" controls autoplay style="width:100%;height:100%;"></video>
+<div class="player">
+<div class="live">LIVE</div>
+<div class="overlay" id="overlay">Loading...</div>
+<video id="video" controls autoplay></video>
 </div>
 
-<div class="channel-list" id="list"></div>
+<div class="channels" id="channels"></div>
 
 </div>
 
-</div>
-
-<!-- ADMIN PANEL -->
-<div class="adminPanel" id="admin">
-<h2>🧑‍💼 SUPER ADMIN</h2>
-
-<button onclick="closeAdmin()">Close</button>
-
-<h3>Channel Control</h3>
-<div id="adminList"></div>
 </div>
 
 <script>
 
-let role = localStorage.getItem("role") || "free";
-let unlocked = JSON.parse(localStorage.getItem("unlocked") || "{}");
+/* ================= TRIAL SYSTEM ================= */
 
-let channels = [
-{name:"BBC News", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"Sky Sports", url:"https://test-streams.mux.dev/test.m3u8"},
-{name:"Al Jazeera", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"CNN Live", url:"https://test-streams.mux.dev/test.m3u8"},
-];
+let trialKey="btech_trial_start";
 
-document.getElementById("roleText").innerText = "Role: " + role;
-
-function render(){
-
-let box = document.getElementById("list");
-box.innerHTML = "";
-
-channels.forEach((c,i)=>{
-
-let locked = role==="free" && !unlocked[i];
-
-let div = document.createElement("div");
-div.className="card";
-
-div.innerHTML = `
-${locked ? '<div class="lock">LOCKED</div>' : ''}
-<b>${c.name}</b>
-`;
-
-div.onclick=()=>{
-
-if(locked){
-alert("Upgrade Required 🔒");
-return;
+function initTrial(){
+if(!localStorage.getItem(trialKey)){
+localStorage.setItem(trialKey,Date.now());
+}
 }
 
-play(c.url);
-};
+function checkTrial(){
+let start=parseInt(localStorage.getItem(trialKey));
+let now=Date.now();
+let diff=now-start;
+let limit=4*60*60*1000; // 4 hours
 
-box.appendChild(div);
-
-});
-
+if(diff>limit){
+document.getElementById("expired").style.display="flex";
+return false;
+}
+return true;
 }
 
-function play(url){
+setInterval(checkTrial,5000);
+initTrial();
 
-let video=document.getElementById("video");
+/* ================= ADMIN ================= */
 
-if(Hls.isSupported()){
+let admin=false;
+let pass="1234";
 
-let hls=new Hls();
-hls.loadSource(url);
-hls.attachMedia(video);
+function toggleAdmin(){
+document.getElementById("adminPanel").style.display="block";
+}
 
+function loginAdmin(){
+let p=document.getElementById("adminPass").value;
+if(p===pass){
+admin=true;
+alert("Admin unlocked");
 }else{
-video.src=url;
+alert("Wrong password");
 }
-
-}
-
-function upgrade(){
-
-role=document.getElementById("plan").value;
-localStorage.setItem("role",role);
-
-alert("Upgraded to "+role.toUpperCase());
-
-document.getElementById("roleText").innerText="Role: "+role;
-
-render();
-
 }
 
 function lockAll(){
-
-unlocked={};
-localStorage.setItem("unlocked",JSON.stringify(unlocked));
+channels.forEach(c=>c.locked=true);
 render();
 }
 
 function unlockAll(){
-
-channels.forEach((c,i)=>unlocked[i]=true);
-
-localStorage.setItem("unlocked",JSON.stringify(unlocked));
+channels.forEach(c=>c.locked=false);
 render();
 }
 
-function openAdmin(){
-document.getElementById("admin").style.display="block";
-loadAdmin();
+function resetTrial(){
+localStorage.removeItem(trialKey);
+location.reload();
 }
 
-function closeAdmin(){
-document.getElementById("admin").style.display="none";
-}
+/* ================= CHANNEL DATA ================= */
 
-function loadAdmin(){
+let channels=[
+{name:"News One",group:"News",locked:false},
+{name:"Sports Max",group:"Sports",locked:false},
+{name:"Movie Hub",group:"Movies",locked:true},
+{name:"Kids World",group:"Kids",locked:false},
+{name:"Music Live",group:"Music",locked:true}
+];
 
-let box=document.getElementById("adminList");
+function render(){
+let box=document.getElementById("channels");
 box.innerHTML="";
 
 channels.forEach((c,i)=>{
 
 let div=document.createElement("div");
-div.style="padding:10px;background:#111;margin:5px;";
+div.className="channel"+(c.locked?" locked":"");
 
 div.innerHTML=`
-${c.name}
-<button onclick="toggle(${i})">
-${unlocked[i] ? "Unlock" : "Lock"}
-</button>
+<div>
+<b>${c.name}</b><br>
+<small>${c.group}</small>
+</div>
+<span class="badge ${c.locked?'lock':'free'}">
+${c.locked?'LOCKED':'FREE'}
+</span>
 `;
 
+div.onclick=()=>play(i);
 box.appendChild(div);
 
 });
+}
+
+function play(i){
+
+if(!checkTrial()) return;
+
+if(channels[i].locked && !admin){
+alert("Channel Locked - Upgrade Required");
+return;
+}
+
+document.getElementById("overlay").style.display="none";
+document.getElementById("video").src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 
 }
 
-function toggle(i){
-
-if(unlocked[i]) delete unlocked[i];
-else unlocked[i]=true;
-
-localStorage.setItem("unlocked",JSON.stringify(unlocked));
-
-loadAdmin();
-render();
-
+function loadMock(name){
+alert("Loading "+name+" channels...");
 }
 
-function toggleRole(){
+function scan(){alert("Scanning streams...")}
+function boost(){alert("Boost enabled")}
+function pip(){alert("PiP mode")}
 
-role = role==="free" ? "premium" : role==="premium" ? "ultra" : "free";
-
-localStorage.setItem("role",role);
-
-document.getElementById("roleText").innerText="Role: "+role;
-
+/* INIT */
 render();
-}
-
-render();
+checkTrial();
 
 </script>
 
