@@ -1,12 +1,68 @@
-<!-- ===========================
-MULTI-USER SAAS DASHBOARD
-=========================== -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SaaS Dashboard</title>
 
-<div id="saasDashboard" style="display:none;padding:20px;background:#0b1220;height:100%;overflow:auto;">
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0b1220;
+color:white;
+}
+
+#saasDashboard{
+padding:20px;
+height:100vh;
+overflow:auto;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-top:20px;
+}
+
+.card{
+background:#172033;
+padding:15px;
+border-radius:12px;
+}
+
+button{
+padding:10px 15px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin:5px;
+background:#22304d;
+color:white;
+}
+
+table{
+width:100%;
+background:#172033;
+color:white;
+border-collapse:collapse;
+}
+
+th,td{
+padding:10px;
+border:1px solid #22304d;
+}
+</style>
+</head>
+
+<body>
+
+<div id="saasDashboard">
 
 <h1>📺 BTECH-TV WORLD PRO MAX SaaS</h1>
 
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin-top:20px;">
+<!-- ================= STATS ================= -->
+<div class="grid">
 
 <div class="card">
 <h3>👥 Total Users</h3>
@@ -30,13 +86,13 @@ MULTI-USER SAAS DASHBOARD
 
 </div>
 
-<hr style="margin:20px 0;">
+<hr>
 
+<!-- ================= USERS ================= -->
 <h2>👥 User Manager</h2>
-
 <button onclick="createUser()">➕ Create User</button>
 
-<table width="100%" border="1" cellspacing="0" cellpadding="8">
+<table>
 <thead>
 <tr>
 <th>Name</th>
@@ -49,97 +105,55 @@ MULTI-USER SAAS DASHBOARD
 <tbody id="userTable"></tbody>
 </table>
 
-<hr style="margin:20px 0;">
+<hr>
 
+<!-- ================= PACKAGES ================= -->
 <h2>📦 Package Manager</h2>
-
 <button onclick="createPackage()">➕ New Package</button>
-
 <div id="packageList"></div>
 
-<hr style="margin:20px 0;">
+<hr>
 
+<!-- ================= CHANNELS ================= -->
 <h2>📺 Channel Manager</h2>
-
 <button onclick="addChannel()">➕ Add Channel</button>
-
 <div id="channelManager"></div>
 
-<hr style="margin:20px 0;">
+<hr>
 
+<!-- ================= COUPONS ================= -->
 <h2>🎟 Coupon Manager</h2>
-
 <button onclick="createCoupon()">➕ Create Coupon</button>
-
 <div id="couponList"></div>
 
-<hr style="margin:20px 0;">
+<hr>
 
+<!-- ================= PAYMENTS ================= -->
 <h2>💳 Payment Manager</h2>
-
 <div class="card">
 Paystack Connected
 <br><br>
 <button>Configure Payments</button>
 </div>
 
-<hr style="margin:20px 0;">
+<hr>
 
+<!-- ================= SETTINGS ================= -->
 <h2>⚙️ System Settings</h2>
 
-<label>
-<input type="checkbox" checked>
-Enable Registration
-</label>
+<label><input type="checkbox" checked> Enable Registration</label><br><br>
+<label><input type="checkbox" checked> Enable Trial</label><br><br>
+<label><input type="checkbox"> Maintenance Mode</label><br><br>
 
-<br><br>
-
-<label>
-<input type="checkbox" checked>
-Enable Trial
-</label>
-
-<br><br>
-
-<label>
-<input type="checkbox">
-Maintenance Mode
-</label>
-
-<br><br>
-
-<button onclick="saveSettings()">
-💾 Save Settings
-</button>
+<button onclick="saveSettings()">💾 Save Settings</button>
 
 </div>
 
-<style>
-.card{
-background:#172033;
-padding:15px;
-border-radius:12px;
-}
-table{
-background:#172033;
-color:white;
-}
-button{
-padding:10px 15px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-margin:5px;
-}
-</style>
-
 <script>
 
-/* ==========================
-DEMO SAAS DATA
-========================== */
+/* ================= DEMO DATA ================= */
 
-let users=[
+let users = [
 {
 name:"Admin",
 email:"admin@btechtv.com",
@@ -148,111 +162,89 @@ status:"Active"
 }
 ];
 
-let packages=[
-"Trial",
-"Basic",
-"Premium",
-"Gold"
-];
+let packages = ["Trial","Basic","Premium","Gold"];
+
+/* ================= LOAD DASHBOARD ================= */
 
 function loadDashboard(){
 
-document.getElementById("totalUsers").innerText=
-users.length;
+document.getElementById("totalUsers").innerText = users.length;
 
-document.getElementById("activeUsers").innerText=
-users.filter(x=>x.status==="Active").length;
+document.getElementById("activeUsers").innerText =
+users.filter(u => u.status === "Active").length;
 
-document.getElementById("trialUsers").innerText=
-users.filter(x=>x.package==="Trial").length;
+document.getElementById("trialUsers").innerText =
+users.filter(u => u.package === "Trial").length;
 
 renderUsers();
 renderPackages();
 renderChannels();
-
 }
+
+/* ================= USERS ================= */
 
 function renderUsers(){
 
-let html="";
+let html = "";
 
 users.forEach((u,i)=>{
-
-html+=`
+html += `
 <tr>
 <td>${u.name}</td>
 <td>${u.email}</td>
 <td>${u.package}</td>
 <td>${u.status}</td>
-<td>
-<button onclick="deleteUser(${i})">
-Delete
-</button>
-</td>
-</tr>
-`;
-
+<td><button onclick="deleteUser(${i})">Delete</button></td>
+</tr>`;
 });
 
-document.getElementById("userTable").innerHTML=
-html;
-
+document.getElementById("userTable").innerHTML = html;
 }
 
 function createUser(){
 
-let name=prompt("Name");
-
+let name = prompt("Enter user name");
 if(!name) return;
 
 users.push({
-name:name,
-email:name.toLowerCase()+"@mail.com",
+name,
+email: name.toLowerCase()+"@mail.com",
 package:"Trial",
 status:"Active"
 });
 
 loadDashboard();
-
 }
 
 function deleteUser(i){
-
 users.splice(i,1);
-
 loadDashboard();
-
 }
 
+/* ================= PACKAGES ================= */
+
 function renderPackages(){
-
-document.getElementById("packageList").innerHTML=
-packages.map(x=>`
-<div class="card">${x}</div>
-`).join("");
-
+document.getElementById("packageList").innerHTML =
+packages.map(p => `<div class="card">${p}</div>`).join("");
 }
 
 function createPackage(){
-
-let p=prompt("Package Name");
-
+let p = prompt("Package name");
 if(!p) return;
-
 packages.push(p);
-
 renderPackages();
-
 }
+
+/* ================= CHANNELS ================= */
 
 function renderChannels(){
 
-let html="";
+let html = "";
 
+if(typeof all !== "undefined"){
 all.forEach(ch=>{
-
-html+=`
-<div class="card" style="margin-bottom:10px;">
+html += `
+<div class="card">
 ${ch.name}
 <select>
 <option>Trial</option>
@@ -260,35 +252,34 @@ ${ch.name}
 <option>Premium</option>
 <option>Gold</option>
 </select>
-</div>
-`;
-
+</div>`;
 });
+}
 
-document.getElementById("channelManager").innerHTML=
-html;
-
+document.getElementById("channelManager").innerHTML = html;
 }
 
 function addChannel(){
-
-alert("Connect to backend API");
-
+alert("Connect backend API for real channel management");
 }
+
+/* ================= COUPONS ================= */
 
 function createCoupon(){
-
-alert("Coupon created");
-
+alert("Coupon created (demo)");
 }
+
+/* ================= SETTINGS ================= */
 
 function saveSettings(){
-
-alert("Settings saved");
-
+alert("Settings saved (demo)");
 }
 
-/* LOAD */
-setTimeout(loadDashboard,1000);
+/* ================= INIT ================= */
+
+setTimeout(loadDashboard,500);
 
 </script>
+
+</body>
+</html>
