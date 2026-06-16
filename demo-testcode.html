@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>BTECH-TV SAAS IPTV ONE PAGE</title>
+<title>BTECH-TV SAAS IPTV WORLD ULTRA MAX X</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 body{margin:0;font-family:Arial;background:#050816;color:#fff;overflow:hidden}
 
-/* TOP BAR */
+/* TOPBAR */
 .topbar{
 display:flex;
 justify-content:space-between;
@@ -37,8 +37,9 @@ button:hover{background:#374151}
 /* LAYOUT */
 .container{display:flex;height:100vh}
 
+/* SIDEBAR */
 .sidebar{
-width:260px;
+width:270px;
 background:#0b1220;
 overflow:auto;
 padding:10px;
@@ -53,6 +54,7 @@ cursor:pointer;
 }
 .cat:hover{background:#1f2937}
 
+/* MAIN */
 .main{flex:1;display:flex;flex-direction:column}
 
 /* PLAYER */
@@ -71,6 +73,7 @@ align-items:center;
 justify-content:center;
 background:rgba(0,0,0,.85);
 flex-direction:column;
+z-index:5;
 }
 
 /* CHANNELS */
@@ -111,6 +114,7 @@ background:#111827;
 padding:10px;
 border-radius:10px;
 display:none;
+z-index:999;
 }
 
 .expired{
@@ -121,7 +125,7 @@ display:none;
 align-items:center;
 justify-content:center;
 flex-direction:column;
-z-index:999;
+z-index:9999;
 }
 
 .expired h1{color:red}
@@ -130,19 +134,29 @@ z-index:999;
 
 <body>
 
-<!-- TOPBAR -->
+<!-- ================= TOPBAR ================= -->
 <div class="topbar">
-<div class="logo">📺 BTECH SAAS IPTV</div>
+<div class="logo">📺 BTECH-TV WORLD PRO MAX SAAS ULTRA ENGINE</div>
 
 <div>
 <button onclick="toggleAdmin()">🧑‍💼 Admin</button>
-<button onclick="unlockAll()">🔓 Unlock</button>
-<button onclick="lockAll()">🔒 Lock</button>
+<button onclick="unlockAll()">🔓 Unlock All</button>
+<button onclick="lockAll()">🔒 Lock All</button>
 <button onclick="checkTrial()">⏳ Trial</button>
+
+<button onclick="scanStreams()">📡 Scan</button>
+<button onclick="speedBoost()">⚡ Boost</button>
+<button onclick="togglePiP()">📺 PiP</button>
+<button onclick="clearRecents()">🗑 Recents</button>
+<button onclick="recordMode()">⏺ Record</button>
+<button onclick="loadUltraFeeds()">🚀 Ultra Feeds</button>
+<button onclick="repairStreams()">🛠 Repair</button>
+<button onclick="optimizeMemory()">🧠 Optimize</button>
+<button onclick="logout()">🚪 Logout</button>
 </div>
 </div>
 
-<!-- ADMIN PANEL -->
+<!-- ================= ADMIN ================= -->
 <div class="admin" id="adminBox">
 <h4>ADMIN LOGIN</h4>
 <input id="pass" placeholder="password" style="width:100%;padding:6px"/>
@@ -150,31 +164,73 @@ z-index:999;
 <button onclick="resetTrial()">Reset Trial</button>
 </div>
 
-<!-- EXPIRED -->
+<!-- ================= TRIAL EXPIRED ================= -->
 <div class="expired" id="expired">
 <h1>TRIAL EXPIRED</h1>
 <p>Upgrade to Premium Access</p>
 </div>
 
+<!-- ================= LAYOUT ================= -->
 <div class="container">
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<h3>🌍 Countries</h3>
-<div class="cat" onclick="loadMock('Nigeria')">Nigeria</div>
-<div class="cat" onclick="loadMock('USA')">USA</div>
-<div class="cat" onclick="loadMock('UK')">UK</div>
 
-<h3>⚡ Tools</h3>
-<div class="cat" onclick="scan()">Scan Streams</div>
-<div class="cat" onclick="boost()">Speed Boost</div>
+<h3>🌍 Countries</h3>
+<div class="cat" onclick="loadMock('Nigeria')">🇳🇬 Nigeria</div>
+<div class="cat" onclick="loadMock('USA')">🇺🇸 USA</div>
+<div class="cat" onclick="loadMock('UK')">🇬🇧 UK</div>
+<div class="cat" onclick="loadMock('India')">🇮🇳 India</div>
+<div class="cat" onclick="loadMock('France')">🇫🇷 France</div>
+<div class="cat" onclick="loadMock('Germany')">🇩🇪 Germany</div>
+<div class="cat" onclick="loadMock('Brazil')">🇧🇷 Brazil</div>
+<div class="cat" onclick="loadMock('South Africa')">🇿🇦 South Africa</div>
+<div class="cat" onclick="loadMock('Canada')">🇨🇦 Canada</div>
+<div class="cat" onclick="loadMock('Australia')">🇦🇺 Australia</div>
+<div class="cat" onclick="loadMock('Japan')">🇯🇵 Japan</div>
+<div class="cat" onclick="loadMock('South Korea')">🇰🇷 South Korea</div>
+<div class="cat" onclick="loadMock('China')">🇨🇳 China</div>
+<div class="cat" onclick="loadMock('Spain')">🇪🇸 Spain</div>
+<div class="cat" onclick="loadMock('Italy')">🇮🇹 Italy</div>
+<div class="cat" onclick="loadMock('Turkey')">🇹🇷 Turkey</div>
+<div class="cat" onclick="loadMock('Mexico')">🇲🇽 Mexico</div>
+<div class="cat" onclick="loadMock('UAE')">🇦🇪 UAE</div>
+<div class="cat" onclick="loadMock('Saudi Arabia')">🇸🇦 Saudi Arabia</div>
+<div class="cat" onclick="loadMock('Egypt')">🇪🇬 Egypt</div>
+<div class="cat" onclick="loadMock('Argentina')">🇦🇷 Argentina</div>
+<div class="cat" onclick="loadMock('Pakistan')">🇵🇰 Pakistan</div>
+<div class="cat" onclick="loadMock('Indonesia')">🇮🇩 Indonesia</div>
+<div class="cat" onclick="loadMock('Philippines')">🇵🇭 Philippines</div>
+<div class="cat" onclick="loadMock('Albania')">🇦🇱 Albania</div>
+
+<h3>🎬 Categories</h3>
+<div class="cat">📰 News</div>
+<div class="cat">⚽ Sports</div>
+<div class="cat">🎬 Movies</div>
+<div class="cat">🎵 Music</div>
+<div class="cat">👶 Kids</div>
+<div class="cat">😂 Comedy</div>
+<div class="cat">📚 Documentary</div>
+<div class="cat">💼 Business</div>
+<div class="cat">🔬 Science</div>
+<div class="cat">✈ Travel</div>
+
+<h3>🗣 Languages</h3>
+<div class="cat">🇬🇧 English</div>
+<div class="cat">🇪🇸 Spanish</div>
+<div class="cat">🇸🇦 Arabic</div>
+<div class="cat">🇫🇷 French</div>
+<div class="cat">🇮🇳 Hindi</div>
+<div class="cat">🇨🇳 Chinese</div>
+<div class="cat">🇵🇹 Portuguese</div>
+
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
 <div class="player">
-<div class="overlay" id="overlay">Loading IPTV...</div>
+<div class="overlay" id="overlay">Loading IPTV Engine...</div>
 <video id="video" controls></video>
 </div>
 
@@ -197,16 +253,13 @@ localStorage.setItem(key,Date.now());
 
 function checkTrial(){
 let start=+localStorage.getItem(key);
-let now=Date.now();
 let limit=4*60*60*1000;
-
-if(now-start>limit){
+if(Date.now()-start>limit){
 document.getElementById("expired").style.display="flex";
 return false;
 }
 return true;
 }
-
 setInterval(checkTrial,5000);
 initTrial();
 
@@ -221,9 +274,7 @@ function login(){
 if(document.getElementById("pass").value==="1234"){
 admin=true;
 alert("Admin Logged In");
-}else{
-alert("Wrong Password");
-}
+}else alert("Wrong Password");
 }
 
 function resetTrial(){
@@ -231,18 +282,11 @@ localStorage.removeItem(key);
 location.reload();
 }
 
-function lockAll(){
-channels.forEach(c=>c.locked=true);
-render();
-}
+function lockAll(){channels.forEach(c=>c.locked=true);render();}
+function unlockAll(){channels.forEach(c=>c.locked=false);render();}
+function logout(){admin=false;alert("Logged out");}
 
-function unlockAll(){
-channels.forEach(c=>c.locked=false);
-render();
-}
-
-/* ================= CHANNELS ================= */
-
+/* ================= FULL CHANNEL SYSTEM ================= */
 let channels=[
 {name:"News Live",group:"News",locked:false},
 {name:"Sports Max",group:"Sports",locked:false},
@@ -254,7 +298,6 @@ let channels=[
 function render(){
 let box=document.getElementById("list");
 box.innerHTML="";
-
 channels.forEach((c,i)=>{
 let div=document.createElement("div");
 div.className="channel"+(c.locked?" locked":"");
@@ -274,33 +317,28 @@ box.appendChild(div);
 
 /* ================= PLAYER ================= */
 function play(i){
-
 if(!checkTrial()) return;
-
 if(channels[i].locked && !admin){
-alert("Premium Channel Locked");
+alert("Premium Locked");
 return;
 }
-
 document.getElementById("overlay").style.display="none";
-
-/* demo stream */
-document.getElementById("video").src=
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+document.getElementById("video").src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 }
 
-/* ================= MOCK ================= */
-function loadMock(x){
-alert("Loading "+x+" IPTV...");
-}
-
-function scan(){alert("Scanning streams...")}
-function boost(){alert("Boost enabled")}
+/* ================= FEATURES ================= */
+function loadMock(x){alert("Loading "+x)}
+function scanStreams(){alert("Scanning...")}
+function speedBoost(){alert("Boosted")}
+function togglePiP(){video.requestPictureInPicture()}
+function clearRecents(){alert("Recents cleared")}
+function recordMode(){alert("Record mode")}
+function loadUltraFeeds(){alert("Ultra feeds loading")}
+function repairStreams(){alert("Repairing streams")}
+function optimizeMemory(){alert("Optimized")}
 
 /* INIT */
 render();
-checkTrial();
-
 </script>
 
 </body>
