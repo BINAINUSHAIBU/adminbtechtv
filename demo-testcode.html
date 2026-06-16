@@ -3,341 +3,221 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>BTECH-TV WORLD PRO MAX ULTRA MERGED X</title>
+<title>BTECH-TV REAL LOGIN IPTV</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-<style>
-:root{
---bg:#050816;
---panel:#111827;
---card:#172033;
---hover:#22304d;
---accent:#00d4ff;
---text:#fff;
-}
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
+<style>
 body{
 margin:0;
 font-family:Arial;
-background:var(--bg);
-color:var(--text);
+background:#050816;
+color:#fff;
 overflow:hidden;
 }
 
-/* TOPBAR */
-.topbar{
-display:flex;
-justify-content:space-between;
-flex-wrap:wrap;
-padding:10px;
-background:#111827;
-}
-
-.logo{
-color:var(--accent);
-font-weight:bold;
-}
-
-/* BUTTONS */
-button{
-padding:8px 10px;
-margin:3px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-background:#1f2937;
-color:#fff;
-font-size:12px;
-}
-button:hover{background:#374151}
-
-/* LAYOUT */
-.container{display:flex;height:100vh}
-
-/* SIDEBAR */
-.sidebar{
-width:320px;
+/* LOGIN SCREEN */
+#authBox{
+position:fixed;
+inset:0;
 background:#0b1220;
-overflow:auto;
-padding:10px;
-}
-
-.cat{
-padding:10px;
-margin:6px 0;
-background:#111827;
-border-radius:8px;
-cursor:pointer;
-}
-.cat:hover{background:#1f2937}
-
-/* MAIN */
-.main{flex:1;display:flex;flex-direction:column}
-
-/* PLAYER */
-.player{
-height:360px;
-background:black;
-position:relative;
-}
-
-video{width:100%;height:100%;object-fit:contain}
-
-.overlay{
-position:absolute;inset:0;
-background:rgba(0,0,0,.85);
 display:flex;
 align-items:center;
 justify-content:center;
 flex-direction:column;
+z-index:9999;
 }
 
-/* CHANNELS */
+input{
+padding:10px;
+margin:5px;
+width:220px;
+border:none;
+border-radius:6px;
+}
+
+button{
+padding:10px;
+margin:5px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+background:#1f2937;
+color:white;
+}
+
+/* APP */
+#app{
+display:none;
+height:100vh;
+flex-direction:column;
+}
+
+.topbar{
+padding:10px;
+background:#111827;
+display:flex;
+justify-content:space-between;
+}
+
+.container{
+display:flex;
+flex:1;
+}
+
+.sidebar{
+width:250px;
+background:#0b1220;
+padding:10px;
+overflow:auto;
+}
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+video{
+width:100%;
+height:350px;
+background:black;
+}
+
 .channels{
 flex:1;
 overflow:auto;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-gap:10px;
 padding:10px;
 }
 
 .channel{
 background:#111827;
 padding:10px;
-border-radius:10px;
+margin:5px 0;
+border-radius:8px;
 cursor:pointer;
-border:1px solid transparent;
-}
-.channel.locked{opacity:.5;border:1px solid red}
-
-.badge{padding:3px 6px;font-size:10px;border-radius:6px}
-.free{background:green}
-.lock{background:red}
-
-/* ADMIN */
-.admin{
-position:fixed;
-right:10px;
-top:60px;
-width:250px;
-background:#111827;
-padding:10px;
-border-radius:10px;
-display:none;
-z-index:999;
 }
 
-/* EXPIRED */
-.expired{
-position:fixed;
+.overlay{
+position:absolute;
 inset:0;
-display:none;
-background:black;
+display:flex;
 align-items:center;
 justify-content:center;
-flex-direction:column;
-z-index:9999;
+background:rgba(0,0,0,.7);
 }
-.expired h1{color:red}
 </style>
 </head>
 
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-<div class="logo">📺 BTECH-TV WORLD PRO MAX ULTRA MERGED X</div>
+<!-- ================= AUTH ================= -->
+<div id="authBox">
+<h2>📺 BTECH-TV LOGIN</h2>
 
-<div>
-<button onclick="toggleAdmin()">🧑‍💼 Admin</button>
-<button onclick="checkTrial()">⏳ Trial</button>
-<button onclick="unlockAll()">🔓 Unlock</button>
-<button onclick="lockAll()">🔒 Lock</button>
-<button onclick="loadUltraFeeds()">🚀 Feeds</button>
-<button onclick="speedBoost()">⚡ Boost</button>
-<button onclick="togglePiP()">📺 PiP</button>
-<button onclick="logout()">🚪 Logout</button>
-</div>
-</div>
+<input id="email" placeholder="Email"/>
+<input id="password" type="password" placeholder="Password"/>
 
-<!-- ADMIN -->
-<div class="admin" id="adminBox">
-<h4>ADMIN LOGIN</h4>
-<input id="pass" placeholder="password" style="width:100%;padding:6px"/>
+<button onclick="register()">Register</button>
 <button onclick="login()">Login</button>
-<button onclick="resetTrial()">Reset Trial</button>
 </div>
 
-<!-- EXPIRED -->
-<div class="expired" id="expired">
-<h1>TRIAL EXPIRED</h1>
-<p>Upgrade Required</p>
+<!-- ================= APP ================= -->
+<div id="app">
+
+<div class="topbar">
+<div>📺 BTECH-TV IPTV</div>
+<button onclick="logout()">Logout</button>
 </div>
 
 <div class="container">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-
-<h3>📺 BTECH-TV WORLD PRO MAX</h3>
-<p style="font-size:12px;color:#aaa">
-Ultra BTECH-TV WORLD PRO MAX Engine X
-</p>
-
-<h3>🌍 Countries</h3>
-<div class="cat" onclick="loadMock('Nigeria')">🇳🇬 Nigeria</div>
-<div class="cat" onclick="loadMock('USA')">🇺🇸 USA</div>
-<div class="cat" onclick="loadMock('UK')">🇬🇧 UK</div>
-<div class="cat" onclick="loadMock('India')">🇮🇳 India</div>
-<div class="cat" onclick="loadMock('France')">🇫🇷 France</div>
-<div class="cat" onclick="loadMock('Germany')">🇩🇪 Germany</div>
-<div class="cat" onclick="loadMock('Brazil')">🇧🇷 Brazil</div>
-<div class="cat" onclick="loadMock('South Africa')">🇿🇦 South Africa</div>
-<div class="cat" onclick="loadMock('Japan')">🇯🇵 Japan</div>
-<div class="cat" onclick="loadMock('China')">🇨🇳 China</div>
-<div class="cat" onclick="loadMock('UAE')">🇦🇪 UAE</div>
-
-<h3>🎬 Categories</h3>
-<div class="cat">📰 News</div>
-<div class="cat">⚽ Sports</div>
-<div class="cat">🎬 Movies</div>
-<div class="cat">🎵 Music</div>
-
-<h3>🗣 Languages</h3>
-<div class="cat">🇬🇧 English</div>
-<div class="cat">🇪🇸 Spanish</div>
-<div class="cat">🇸🇦 Arabic</div>
-
-<h3>🔥 Tools</h3>
-<div class="cat" onclick="scanStreams()">📡 Scan</div>
-<div class="cat" onclick="speedBoost()">⚡ Boost</div>
-<div class="cat" onclick="togglePiP()">📺 PiP</div>
-<div class="cat" onclick="repairStreams()">🛠 Repair</div>
-<div class="cat" onclick="optimizeMemory()">🧠 Optimize</div>
-<div class="cat" onclick="loadUltraFeeds()">🚀 Ultra Feeds</div>
-
+<h3>Channels</h3>
+<div class="channel" onclick="playStream()">News Live</div>
+<div class="channel" onclick="playStream()">Sports</div>
+<div class="channel" onclick="playStream()">Movies</div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
-<div class="player">
-<div class="overlay" id="overlay">Loading IPTV Engine...</div>
 <video id="video" controls></video>
-</div>
-
-<div class="channels" id="list"></div>
 
 </div>
-</div>
 
-<!-- EXPIRED -->
-<div class="expired" id="expired">
-<h1>TRIAL EXPIRED</h1>
-<p>Upgrade to Premium Access</p>
+</div>
 </div>
 
 <script>
 
-/* ================= TRIAL SYSTEM ================= */
-const key="trial_v1";
-function initTrial(){
-if(!localStorage.getItem(key)){
-localStorage.setItem(key,Date.now());
-}
-}
-function checkTrial(){
-let start=+localStorage.getItem(key);
-let limit=4*60*60*1000;
-if(Date.now()-start>limit){
-document.getElementById("expired").style.display="flex";
-return false;
-}
-return true;
-}
-setInterval(checkTrial,5000);
-initTrial();
+/* ================= FIREBASE CONFIG ================= */
+const firebaseConfig = {
+apiKey: "YOUR_API_KEY",
+authDomain: "YOUR_PROJECT.firebaseapp.com",
+projectId: "YOUR_PROJECT_ID",
+appId: "YOUR_APP_ID"
+};
 
-/* ================= ADMIN ================= */
-let admin=false;
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-function toggleAdmin(){
-document.getElementById("adminBox").style.display="block";
+/* ================= AUTH FUNCTIONS ================= */
+
+function register(){
+let email = document.getElementById("email").value;
+let password = document.getElementById("password").value;
+
+auth.createUserWithEmailAndPassword(email,password)
+.then(user=>{
+alert("Registered: " + user.user.email);
+})
+.catch(err=>alert(err.message));
 }
 
 function login(){
-if(document.getElementById("pass").value==="1234"){
-admin=true;
-alert("Admin OK");
-}else alert("Wrong password");
-}
+let email = document.getElementById("email").value;
+let password = document.getElementById("password").value;
 
-function resetTrial(){
-localStorage.removeItem(key);
-location.reload();
+auth.signInWithEmailAndPassword(email,password)
+.then(user=>{
+alert("Welcome " + user.user.email);
+})
+.catch(err=>alert(err.message));
 }
 
 function logout(){
-admin=false;
-alert("Logged out");
+auth.signOut();
 }
 
-function lockAll(){channels.forEach(c=>c.locked=true);render();}
-function unlockAll(){channels.forEach(c=>c.locked=false);render();}
-
-/* ================= CHANNELS ================= */
-let channels=[
-{name:"News Live",group:"News",locked:false},
-{name:"Sports Max",group:"Sports",locked:false},
-{name:"Movie Zone",group:"Movies",locked:true},
-{name:"Kids TV",group:"Kids",locked:false}
-];
-
-function render(){
-let box=document.getElementById("list");
-box.innerHTML="";
-channels.forEach((c,i)=>{
-let div=document.createElement("div");
-div.className="channel"+(c.locked?" locked":"");
-
-div.innerHTML=`
-<b>${c.name}</b><br>
-<small>${c.group}</small><br>
-<span class="badge ${c.locked?'lock':'free'}">
-${c.locked?'LOCKED':'FREE'}
-</span>
-`;
-
-div.onclick=()=>play(i);
-box.appendChild(div);
+/* ================= SESSION CONTROL ================= */
+auth.onAuthStateChanged(user=>{
+if(user){
+document.getElementById("authBox").style.display="none";
+document.getElementById("app").style.display="flex";
+}else{
+document.getElementById("authBox").style.display="flex";
+document.getElementById("app").style.display="none";
+}
 });
-}
 
-/* ================= PLAYER ================= */
-function play(i){
-if(!checkTrial()) return;
-if(channels[i].locked && !admin){
-alert("Premium Locked");
-return;
-}
-document.getElementById("overlay").style.display="none";
-document.getElementById("video").src=
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
-}
+/* ================= IPTV PLAYER ================= */
+function playStream(){
+const video = document.getElementById("video");
 
-/* ================= FEATURES ================= */
-function loadMock(x){alert("Loading "+x)}
-function scanStreams(){alert("Scanning streams")}
-function speedBoost(){video.playbackRate=1.2}
-function togglePiP(){video.requestPictureInPicture()}
-function repairStreams(){alert("Repairing")}
-function optimizeMemory(){alert("Optimized")}
-function loadUltraFeeds(){alert("Ultra Feeds Loaded")}
-
-/* INIT */
-render();
+if(Hls.isSupported()){
+const hls = new Hls();
+hls.loadSource("https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8");
+hls.attachMedia(video);
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+}else{
+video.src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+video.play();
+}
+}
 
 </script>
 
