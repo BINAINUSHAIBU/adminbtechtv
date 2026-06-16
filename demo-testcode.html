@@ -1,51 +1,307 @@
-<!-- =========================================================
-SUPER ADMIN DASHBOARD PANEL (HIDDEN BY DEFAULT)
-========================================================= -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTECH-TV SUPER ADMIN IPTV</title>
 
-<div id="adminPanel" style="
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0b0f1a;
+color:white;
+}
+
+header{
+padding:15px;
+background:#111827;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+button{
+padding:10px;
+margin:3px;
+border:none;
+cursor:pointer;
+border-radius:6px;
+}
+
+.container{
+display:flex;
+height:calc(100vh - 60px);
+}
+
+.sidebar{
+width:280px;
+background:#0f172a;
+padding:10px;
+overflow:auto;
+}
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+.video{
+height:360px;
+background:black;
+}
+
+.channel-list{
+flex:1;
+overflow:auto;
+padding:10px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+gap:10px;
+}
+
+.card{
+background:#1f2937;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+position:relative;
+}
+
+.lock{
+position:absolute;
+top:10px;
+right:10px;
+background:red;
+padding:3px 6px;
+font-size:11px;
+border-radius:5px;
+}
+
+.adminPanel{
 position:fixed;
 inset:0;
-background:#0b0f1a;
-z-index:99999;
+background:#000000ee;
 display:none;
-overflow:auto;
 padding:20px;
-">
+overflow:auto;
+z-index:9999;
+}
 
-<h2 style="color:#00d4ff;">🧑‍💼 SUPER ADMIN DASHBOARD</h2>
+input,select{
+padding:10px;
+margin:5px;
+}
+</style>
+</head>
 
-<div style="margin:10px 0;">
-<button onclick="closeAdmin()" style="padding:10px">Close</button>
-<button onclick="lockAllChannels()" style="padding:10px">Lock All</button>
-<button onclick="unlockAllChannels()" style="padding:10px">Unlock All</button>
+<body>
+
+<header>
+<div>📺 BTECH-TV IPTV SUPER ADMIN</div>
+<div>
+<button onclick="openAdmin()">Admin</button>
+<button onclick="toggleRole()">Switch Plan</button>
 </div>
+</header>
 
-<h3 style="color:#fff;">📊 Users</h3>
-<div id="userStats" style="color:#aaa;"></div>
+<div class="container">
 
-<h3 style="color:#fff;">📺 Channel Control</h3>
-<div id="adminChannelList"></div>
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h3>Plans</h3>
+<p id="roleText">Role: FREE</p>
 
-<hr style="margin:20px 0;">
-
-<h3 style="color:#fff;">💳 Upgrade System</h3>
-
-<div style="color:#aaa;">
-Select plan:
-</div>
-
-<select id="planSelect">
+<select id="plan">
 <option value="free">Free</option>
 <option value="premium">Premium</option>
 <option value="ultra">Ultra</option>
 </select>
 
-<button onclick="simulatePayment()" style="padding:10px;margin-left:10px;">
-Activate Upgrade
-</button>
+<button onclick="upgrade()">Upgrade</button>
 
-<p style="color:#666;margin-top:10px;">
-(Payment gateway hook ready: Paystack / Stripe integration point)
-</p>
+<hr>
+
+<h3>Controls</h3>
+<button onclick="lockAll()">Lock All</button>
+<button onclick="unlockAll()">Unlock All</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="video">
+<video id="video" controls autoplay style="width:100%;height:100%;"></video>
+</div>
+
+<div class="channel-list" id="list"></div>
 
 </div>
+
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="adminPanel" id="admin">
+<h2>🧑‍💼 SUPER ADMIN</h2>
+
+<button onclick="closeAdmin()">Close</button>
+
+<h3>Channel Control</h3>
+<div id="adminList"></div>
+</div>
+
+<script>
+
+let role = localStorage.getItem("role") || "free";
+let unlocked = JSON.parse(localStorage.getItem("unlocked") || "{}");
+
+let channels = [
+{name:"BBC News", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Sky Sports", url:"https://test-streams.mux.dev/test.m3u8"},
+{name:"Al Jazeera", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"CNN Live", url:"https://test-streams.mux.dev/test.m3u8"},
+];
+
+document.getElementById("roleText").innerText = "Role: " + role;
+
+function render(){
+
+let box = document.getElementById("list");
+box.innerHTML = "";
+
+channels.forEach((c,i)=>{
+
+let locked = role==="free" && !unlocked[i];
+
+let div = document.createElement("div");
+div.className="card";
+
+div.innerHTML = `
+${locked ? '<div class="lock">LOCKED</div>' : ''}
+<b>${c.name}</b>
+`;
+
+div.onclick=()=>{
+
+if(locked){
+alert("Upgrade Required 🔒");
+return;
+}
+
+play(c.url);
+};
+
+box.appendChild(div);
+
+});
+
+}
+
+function play(url){
+
+let video=document.getElementById("video");
+
+if(Hls.isSupported()){
+
+let hls=new Hls();
+hls.loadSource(url);
+hls.attachMedia(video);
+
+}else{
+video.src=url;
+}
+
+}
+
+function upgrade(){
+
+role=document.getElementById("plan").value;
+localStorage.setItem("role",role);
+
+alert("Upgraded to "+role.toUpperCase());
+
+document.getElementById("roleText").innerText="Role: "+role;
+
+render();
+
+}
+
+function lockAll(){
+
+unlocked={};
+localStorage.setItem("unlocked",JSON.stringify(unlocked));
+render();
+}
+
+function unlockAll(){
+
+channels.forEach((c,i)=>unlocked[i]=true);
+
+localStorage.setItem("unlocked",JSON.stringify(unlocked));
+render();
+}
+
+function openAdmin(){
+document.getElementById("admin").style.display="block";
+loadAdmin();
+}
+
+function closeAdmin(){
+document.getElementById("admin").style.display="none";
+}
+
+function loadAdmin(){
+
+let box=document.getElementById("adminList");
+box.innerHTML="";
+
+channels.forEach((c,i)=>{
+
+let div=document.createElement("div");
+div.style="padding:10px;background:#111;margin:5px;";
+
+div.innerHTML=`
+${c.name}
+<button onclick="toggle(${i})">
+${unlocked[i] ? "Unlock" : "Lock"}
+</button>
+`;
+
+box.appendChild(div);
+
+});
+
+}
+
+function toggle(i){
+
+if(unlocked[i]) delete unlocked[i];
+else unlocked[i]=true;
+
+localStorage.setItem("unlocked",JSON.stringify(unlocked));
+
+loadAdmin();
+render();
+
+}
+
+function toggleRole(){
+
+role = role==="free" ? "premium" : role==="premium" ? "ultra" : "free";
+
+localStorage.setItem("role",role);
+
+document.getElementById("roleText").innerText="Role: "+role;
+
+render();
+}
+
+render();
+
+</script>
+
+</body>
+</html>
