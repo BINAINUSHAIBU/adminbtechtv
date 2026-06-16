@@ -9,7 +9,7 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:#050816;color:#fff;display:flex;height:100vh}
+body{background:#050816;color:#fff}
 
 /* LOGIN */
 #login{
@@ -33,7 +33,7 @@ input{background:#152445;color:#fff}
 button{background:#00d4ff;font-weight:bold;cursor:pointer}
 
 /* APP */
-#app{display:none;width:100%}
+#app{display:none;height:100vh;display:flex}
 
 /* SIDEBAR */
 .sidebar{
@@ -50,15 +50,20 @@ cursor:pointer;
 }
 
 /* MAIN */
-.main{flex:1;padding:10px;display:flex;flex-direction:column}
+.main{flex:1;display:flex;flex-direction:column;padding:10px}
 
-.top{
+.topbar{
 display:flex;justify-content:space-between;margin-bottom:10px;
 }
 
-.player{height:300px;background:#000;border-radius:10px;overflow:hidden}
+.player{
+height:320px;background:#000;
+border-radius:10px;overflow:hidden;
+}
+
 video{width:100%;height:100%}
 
+/* GRID */
 .grid{
 flex:1;overflow:auto;
 display:grid;
@@ -66,17 +71,26 @@ grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
 gap:10px;margin-top:10px;
 }
 
-.channel{
-background:#111a31;padding:10px;
-border-radius:8px;cursor:pointer;
+.card{
+background:#111a31;
+padding:10px;
+border-radius:8px;
+cursor:pointer;
+border:1px solid #1f355d;
 }
 
-.admin{
-margin-top:10px;background:#1a0d2b;
-padding:10px;border-radius:10px;
-}
+.card:hover{border-color:#00d4ff}
 
 .badge{background:red;font-size:10px;padding:3px 6px;border-radius:8px;float:right}
+
+/* ADMIN */
+.admin{
+margin-top:10px;
+background:#1a0d2b;
+padding:10px;
+border-radius:10px;
+display:none;
+}
 </style>
 </head>
 
@@ -99,15 +113,16 @@ padding:10px;border-radius:10px;
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<h3>🌍 IPTV CONTROL</h3>
+<h3>🌍 IPTV</h3>
 
 <button class="nav-btn" onclick="load('ng')">Nigeria</button>
 <button class="nav-btn" onclick="load('us')">USA</button>
 <button class="nav-btn" onclick="load('uk')">UK</button>
 
-<h3>🛠 ADMIN</h3>
+<h3>👑 ADMIN</h3>
 <button class="nav-btn" onclick="loadUsers()">Users</button>
 <button class="nav-btn" onclick="loadStats()">Analytics</button>
+<button class="nav-btn" onclick="upgrade()">Upgrade</button>
 <button class="nav-btn" onclick="logout()">Logout</button>
 
 <div class="admin" id="adminBox"></div>
@@ -116,7 +131,7 @@ padding:10px;border-radius:10px;
 <!-- MAIN -->
 <div class="main">
 
-<div class="top">
+<div class="topbar">
 <h3>LIVE IPTV PLAYER</h3>
 <div>🔴 LIVE</div>
 </div>
@@ -133,11 +148,10 @@ padding:10px;border-radius:10px;
 <script>
 
 let token="";
-let all=[],i=0;
+let all=[],hls;
 let video=document.getElementById("video");
-let hls;
 
-/* LOGIN */
+/* LOGIN (API READY) */
 async function login(){
 
 const res = await fetch("http://localhost:5000/api/auth/login",{
@@ -150,17 +164,21 @@ password:pass.value
 });
 
 const data = await res.json();
-if(data.token){
-token=data.token;
-login.style.display="none";
-app.style.display="flex";
-load("ng");
-}else{
-alert(data.msg || "Login failed");
-}
+
+if(!data.token){
+alert("Login failed");
+return;
 }
 
-/* IPTV LOAD */
+token=data.token;
+
+login.style.display="none";
+app.style.display="flex";
+
+load("ng");
+}
+
+/* LOAD IPTV */
 async function load(code){
 
 const res = await fetch(`http://localhost:5000/api/streams/countries/${code}`);
@@ -168,10 +186,10 @@ const text = await res.text();
 
 all=[];
 
-text.split("\n").forEach((l,idx,arr)=>{
+text.split("\n").forEach((l,i,a)=>{
 if(l.startsWith("#EXTINF")){
 let name=l.split(",").pop();
-let url=arr[idx+1];
+let url=a[i+1];
 if(url?.startsWith("http")) all.push({name,url});
 }
 });
@@ -182,18 +200,18 @@ render();
 /* RENDER */
 function render(){
 grid.innerHTML="";
-all.forEach((c,idx)=>{
+all.forEach((c,i)=>{
 let div=document.createElement("div");
-div.className="channel";
+div.className="card";
 div.innerHTML=`<div class="badge">LIVE</div>${c.name}`;
-div.onclick=()=>play(idx);
+div.onclick=()=>play(i);
 grid.appendChild(div);
 });
 }
 
-/* PLAY */
-function play(idx){
-let c=all[idx];
+/* PLAY STREAM */
+function play(i){
+let c=all[i];
 
 if(hls)hls.destroy();
 
@@ -210,16 +228,17 @@ video.play();
 
 /* ADMIN: USERS */
 async function loadUsers(){
-const res = await fetch("http://localhost:5000/api/admin/users",{
+const res=await fetch("http://localhost:5000/api/admin/users",{
 headers:{Authorization:token}
 });
 
-const users = await res.json();
+const users=await res.json();
 
-adminBox.innerHTML = "<h4>Users</h4>";
+adminBox.style.display="block";
+adminBox.innerHTML="<h4>Users</h4>";
 
 users.forEach(u=>{
-adminBox.innerHTML += `
+adminBox.innerHTML+=`
 <div style="margin:5px;padding:5px;background:#111">
 ${u.email} ${u.banned?"🚫":"✔"}
 <button onclick="banUser('${u._id}')">Ban</button>
@@ -227,7 +246,7 @@ ${u.email} ${u.banned?"🚫":"✔"}
 });
 }
 
-/* BAN */
+/* BAN USER */
 async function banUser(id){
 await fetch(`http://localhost:5000/api/admin/ban/${id}`,{
 method:"POST",
@@ -238,17 +257,23 @@ loadUsers();
 
 /* ANALYTICS */
 async function loadStats(){
-const res = await fetch("http://localhost:5000/api/admin/stats",{
+const res=await fetch("http://localhost:5000/api/admin/stats",{
 headers:{Authorization:token}
 });
 
-const s = await res.json();
+const s=await res.json();
 
+adminBox.style.display="block";
 adminBox.innerHTML=`
 <h4>📊 Analytics</h4>
 <p>Users: ${s.users}</p>
 <p>Banned: ${s.banned}</p>
 `;
+}
+
+/* UPGRADE */
+function upgrade(){
+alert("Connect Paystack / Flutterwave here");
 }
 
 /* LOGOUT */
