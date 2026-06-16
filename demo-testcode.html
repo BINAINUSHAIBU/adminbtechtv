@@ -63,6 +63,7 @@ display:none;
 padding:20px;
 overflow:auto;
 }
+
 small{color:#aaa}
 </style>
 </head>
@@ -94,6 +95,12 @@ small{color:#aaa}
 <!-- SIDEBAR -->
 <div class="sidebar">
 
+<h3>🌍 GLOBAL IPTV</h3>
+
+<button onclick="loadAllChannels()">🌍 Load ALL Channels</button>
+
+<hr>
+
 <h3>👤 USER</h3>
 <p id="userInfo"></p>
 
@@ -104,32 +111,13 @@ small{color:#aaa}
 
 <hr>
 
-<h3>🌍 Countries</h3>
-<small>
-Nigeria USA UK India France Germany Brazil South Africa Canada Australia Japan South Korea China Spain Italy Turkey Mexico UAE Saudi Arabia Egypt Argentina Pakistan Indonesia Philippines Albania
-</small>
-
-<h3>🎬 Categories</h3>
-<small>
-News Sports Movies Music Kids Comedy Documentary Business Science Travel
-</small>
-
-<h3>🗣 Languages</h3>
-<small>
-English Spanish Arabic French Hindi Chinese Portuguese
-</small>
-
-<hr>
-
-<h3>🔥 Tools</h3>
-<button onclick="loadUltra()">📡 Scan</button>
+<h3>🔥 TOOLS</h3>
 <button onclick="boost()">⚡ Boost</button>
 <button onclick="pip()">📺 PiP</button>
 <button onclick="clearRecents()">🗑 Recents</button>
 <button onclick="record()">⏺ Record</button>
 <button onclick="repair()">🛠 Repair</button>
 <button onclick="optimize()">🧠 Optimize</button>
-<button onclick="toggleFavMode()">⭐ Favorites</button>
 
 <hr>
 
@@ -150,6 +138,7 @@ English Spanish Arabic French Hindi Chinese Portuguese
 </div>
 
 </div>
+
 </div>
 
 <!-- ADMIN -->
@@ -168,68 +157,98 @@ English Spanish Arabic French Hindi Chinese Portuguese
 
 <script>
 
+/* ================= USERS ================= */
 let user=null;
 let role="free";
 let expiry=0;
 
-let unlocked=JSON.parse(localStorage.getItem("unlock")||"{}");
 let users=JSON.parse(localStorage.getItem("users")||"{}");
+let unlocked=JSON.parse(localStorage.getItem("unlock")||"{}");
 let stats=JSON.parse(localStorage.getItem("stats")||"{}");
-let favs=JSON.parse(localStorage.getItem("favs")||"{}");
 
-let showingFavs=false;
+/* ================= CHANNEL ENGINE ================= */
+let channels=[];
 
-/* ================= CHANNELS ================= */
-
-let channels=[
-{name:"BBC News",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"CNN Live",url:"https://test-streams.mux.dev/test.m3u8"},
-{name:"Sky Sports",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"Al Jazeera",url:"https://test-streams.mux.dev/test.m3u8"}
+let sources=[
+"https://iptv-org.github.io/iptv/index.m3u",
+"https://iptv-org.github.io/iptv/index.country.m3u",
+"https://iptv-org.github.io/iptv/index.category.m3u",
+"https://iptv-org.github.io/iptv/index.language.m3u"
 ];
 
 function save(){
 localStorage.setItem("users",JSON.stringify(users));
 localStorage.setItem("unlock",JSON.stringify(unlocked));
 localStorage.setItem("stats",JSON.stringify(stats));
-localStorage.setItem("favs",JSON.stringify(favs));
 }
 
-/* ================= LOGIN ================= */
+/* ================= GLOBAL LOADER ================= */
+async function loadAllChannels(){
 
-function register(){
-users[email.value]={pass:pass.value,role:"free",expiry:Date.now()+86400000};
-save();
-alert("Registered");
+alert("🌍 Loading ALL GLOBAL CHANNELS...");
+
+channels=[];
+
+for(let url of sources){
+
+try{
+let res=await fetch(url);
+let text=await res.text();
+parseM3U(text);
+}catch(e){
+console.log("Failed:",url);
 }
 
-function login(){
-if(!users[email.value]||users[email.value].pass!==pass.value){
-alert("Wrong login");return;
 }
-user=email.value;
-role=users[user].role;
-expiry=users[user].expiry;
 
-loginBox.style.display="none";
-app.style.display="block";
+removeDup();
 render();
+alert("✅ ALL CHANNELS LOADED");
 }
 
-/* ================= UPGRADE ================= */
+/* ================= M3U PARSER ================= */
+function parseM3U(data){
 
-function upgrade(){
-role="premium";
-users[user].role="premium";
-users[user].expiry=Date.now()+7*86400000;
-save();
-render();
-alert("Upgraded");
+let lines=data.split("\n");
+
+for(let i=0;i<lines.length;i++){
+
+if(lines[i].includes("#EXTINF")){
+
+let url=lines[i+1];
+if(!url || !url.startsWith("http")) continue;
+
+let name=lines[i].split(",").pop();
+
+channels.push({
+id:channels.length+1,
+name,
+url
+});
+
 }
 
-/* ================= CHANNEL ================= */
+}
 
+}
+
+/* ================= REMOVE DUP ================= */
+function removeDup(){
+
+let seen=new Set();
+
+channels=channels.filter(c=>{
+let key=c.name+c.url;
+if(seen.has(key)) return false;
+seen.add(key);
+return true;
+});
+
+}
+
+/* ================= PLAY ================= */
 function play(url){
+
 let v=document.getElementById("video");
 
 if(Hls.isSupported()){
@@ -242,38 +261,13 @@ stats.plays=(stats.plays||0)+1;
 save();
 }
 
-/* ================= FAVORITES ================= */
-
-function toggleFavMode(){
-showingFavs=!showingFavs;
-render();
-}
-
-function toggleFav(i){
-if(favs[i]) delete favs[i];
-else favs[i]=true;
-save();
-render();
-}
-
-/* ================= LOCK ================= */
-
-function lockAll(){unlocked={};save();render();}
-function unlockAll(){channels.forEach((c,i)=>unlocked[i]=true);save();render();}
-
 /* ================= RENDER ================= */
-
 function render(){
-
-userInfo.innerText=user;
-planInfo.innerText=role.toUpperCase()+" EXP:"+new Date(expiry).toLocaleDateString();
 
 let list=document.getElementById("list");
 list.innerHTML="";
 
-let show=showingFavs?channels.filter((c,i)=>favs[i]):channels;
-
-show.forEach((c,i)=>{
+channels.forEach((c,i)=>{
 
 let locked=role==="free"&&!unlocked[i];
 
@@ -283,17 +277,11 @@ div.className="card";
 div.innerHTML=`
 ${locked?'<div class="lock">LOCK</div>':''}
 <b>${c.name}</b>
-<br>
-<small>${favs[i]?"⭐ Favorite":""}</small>
 `;
 
 div.onclick=()=>{
 if(locked){alert("Upgrade Required");return;}
 play(c.url);
-};
-
-div.ondblclick=()=>{
-toggleFav(i);
 };
 
 list.appendChild(div);
@@ -303,53 +291,74 @@ list.appendChild(div);
 updateAdmin();
 }
 
-/* ================= ADMIN ================= */
+/* ================= LOGIN ================= */
+function register(){
+users[email.value]={pass:pass.value,role:"free",expiry:Date.now()+86400000};
+save();
+alert("Registered");
+}
 
+function login(){
+if(!users[email.value]||users[email.value].pass!==pass.value){
+alert("Wrong login");return;
+}
+
+user=email.value;
+role=users[user].role;
+expiry=users[user].expiry;
+
+loginBox.style.display="none";
+app.style.display="block";
+render();
+}
+
+/* ================= UPGRADE ================= */
+function upgrade(){
+role="premium";
+users[user].role="premium";
+save();
+render();
+alert("Upgraded");
+}
+
+/* ================= ADMIN ================= */
 function openAdmin(){admin.style.display="block";updateAdmin();}
 function closeAdmin(){admin.style.display="none";}
 
 function updateAdmin(){
 analytics.innerText=
 "Users: "+Object.keys(users).length+
+" | Channels: "+channels.length+
 " | Plays: "+(stats.plays||0);
 
 adminList.innerHTML="";
 
-channels.forEach((c,i)=>{
+channels.slice(0,20).forEach((c,i)=>{
 
 let div=document.createElement("div");
 div.style="padding:10px;background:#111;margin:5px";
 
-div.innerHTML=`
-${c.name}
-<button onclick="toggle(${i})">
-${unlocked[i]?"UNLOCK":"LOCK"}
-</button>
-`;
+div.innerHTML=c.name;
 
 adminList.appendChild(div);
 
 });
-}
 
-function toggle(i){
-if(unlocked[i]) delete unlocked[i];
-else unlocked[i]=true;
-save();render();updateAdmin();
 }
 
 /* ================= TOOLS ================= */
-
-function loadUltra(){alert("Ultra Scan Running...");}
 function boost(){video.playbackRate=1.15;}
 function pip(){video.requestPictureInPicture();}
-function clearRecents(){alert("Recents Cleared");}
+function clearRecents(){alert("Cleared");}
 function record(){alert("Recording Ready");}
-function repair(){alert("Repairing Streams");}
-function optimize(){alert("Memory Optimized");}
+function repair(){alert("Repair Mode");}
+function optimize(){alert("Optimized");}
+
+/* ================= LOCK ================= */
+function lockAll(){unlocked={};save();render();}
+function unlockAll(){channels.forEach((c,i)=>unlocked[i]=true);save();render();}
 
 /* ================= LOGOUT ================= */
-
 function logout(){location.reload();}
 
 </script>
