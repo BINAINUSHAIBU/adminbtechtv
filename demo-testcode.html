@@ -8,9 +8,6 @@
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-
-/* ================= BASE ================= */
-
 :root{
 --bg:#050816;
 --panel:#111827;
@@ -20,12 +17,7 @@
 --text:#fff;
 }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
 body{
 background:var(--bg);
@@ -33,8 +25,7 @@ color:var(--text);
 overflow:hidden;
 }
 
-/* ================= TOP BAR ================= */
-
+/* TOPBAR */
 .topbar{
 display:flex;
 justify-content:space-between;
@@ -44,31 +35,22 @@ background:#0f172a;
 flex-wrap:wrap;
 }
 
-.logo{
-font-size:20px;
-color:var(--accent);
-font-weight:bold;
-}
+.logo{color:var(--accent);font-weight:bold;font-size:18px;}
 
 .topbar button{
-margin:5px;
-padding:8px 12px;
+margin:4px;
+padding:8px 10px;
 border:none;
 border-radius:8px;
 background:#22304d;
-color:white;
+color:#fff;
 cursor:pointer;
 }
 
-/* ================= LAYOUT ================= */
+/* LAYOUT */
+.container{display:flex;height:100vh;}
 
-.container{
-display:flex;
-height:100vh;
-}
-
-/* ================= SIDEBAR ================= */
-
+/* SIDEBAR */
 .sidebar{
 width:300px;
 background:#0b1220;
@@ -78,51 +60,35 @@ padding:10px;
 
 .cat{
 padding:10px;
-background:var(--card);
 margin:5px 0;
+background:var(--card);
 border-radius:8px;
 cursor:pointer;
 }
 
-/* ================= MAIN ================= */
+.cat:hover{background:var(--hover);}
 
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-}
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 
-/* ================= PLAYER ================= */
+.player{height:300px;background:black;position:relative;}
 
-.player{
-height:300px;
-background:black;
-position:relative;
-}
-
-video{
-width:100%;
-height:100%;
-object-fit:contain;
-}
+video{width:100%;height:100%;object-fit:contain;}
 
 .overlay{
-position:absolute;
-inset:0;
+position:absolute;inset:0;
 display:flex;
-justify-content:center;
 align-items:center;
-background:rgba(0,0,0,0.8);
+justify-content:center;
+background:rgba(0,0,0,.8);
 }
 
-/* ================= CHANNELS ================= */
-
+/* CHANNELS */
 .channels{
 flex:1;
 overflow:auto;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
 gap:10px;
 padding:10px;
 }
@@ -134,17 +100,13 @@ border-radius:10px;
 cursor:pointer;
 }
 
-/* ================= SAAS DASHBOARD ================= */
-
+/* SAAS DASHBOARD */
 #saasDashboard{
 position:fixed;
-top:0;
-left:0;
-right:0;
-bottom:0;
+inset:0;
 background:#0b1220;
-overflow:auto;
 display:none;
+overflow:auto;
 padding:20px;
 z-index:9999;
 }
@@ -159,12 +121,13 @@ gap:10px;
 background:#172033;
 padding:15px;
 border-radius:10px;
+margin:5px 0;
 }
 
 table{
 width:100%;
-background:#172033;
 border-collapse:collapse;
+background:#172033;
 margin-top:10px;
 }
 
@@ -178,49 +141,51 @@ padding:8px 10px;
 border:none;
 border-radius:6px;
 background:#22304d;
-color:white;
+color:#fff;
 cursor:pointer;
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- ================= TOPBAR ================= -->
+<!-- TOPBAR -->
 <div class="topbar">
 <div class="logo">📺 BTECH-TV WORLD PRO MAX X</div>
 
 <div>
 <button onclick="toggleSaaS()">👥 SaaS Dashboard</button>
-<button onclick="loadUltra()">🚀 Ultra Feeds</button>
+<button onclick="loadUltra()">🚀 Ultra</button>
 <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
 </div>
 </div>
 
-<!-- ================= MAIN IPTV ================= -->
+<!-- IPTV + SIDEBAR -->
 <div class="container">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
 
 <h3>🌍 Countries</h3>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ng.m3u','Nigeria')">🇳🇬 Nigeria</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/us.m3u','USA')">🇺🇸 USA</div>
-<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/uk.m3u','UK')">🇬🇧 UK</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/ng.m3u')">🇳🇬 Nigeria</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/us.m3u')">🇺🇸 USA</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/uk.m3u')">🇬🇧 UK</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/in.m3u')">🇮🇳 India</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/fr.m3u')">🇫🇷 France</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/countries/de.m3u')">🇩🇪 Germany</div>
 
 <h3>🎬 Categories</h3>
-<div class="cat">📰 News</div>
-<div class="cat">⚽ Sports</div>
-<div class="cat">🎬 Movies</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/news.m3u')">📰 News</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/sport.m3u')">⚽ Sports</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/categories/movies.m3u')">🎬 Movies</div>
 
 <h3>🗣 Languages</h3>
-<div class="cat">🇬🇧 English</div>
-<div class="cat">🇪🇸 Spanish</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/eng.m3u')">🇬🇧 English</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/spa.m3u')">🇪🇸 Spanish</div>
+<div class="cat" onclick="loadPlaylist('https://iptv-org.github.io/iptv/languages/ara.m3u')">🇸🇦 Arabic</div>
 
 </div>
 
-<!-- MAIN -->
+<!-- MAIN PLAYER -->
 <div class="main">
 
 <div class="player">
@@ -233,27 +198,23 @@ cursor:pointer;
 </div>
 </div>
 
-<!-- ================= SAAS DASHBOARD ================= -->
+<!-- SAAS DASHBOARD -->
 <div id="saasDashboard">
 
 <h1>📺 SaaS Admin Dashboard</h1>
 
 <div class="grid">
-
-<div class="card">👥 Total Users <h2 id="totalUsers">1</h2></div>
-<div class="card">🟢 Active Users <h2 id="activeUsers">1</h2></div>
-<div class="card">⏳ Trial Users <h2 id="trialUsers">0</h2></div>
+<div class="card">👥 Users <h2 id="totalUsers">1</h2></div>
+<div class="card">🟢 Active <h2 id="activeUsers">1</h2></div>
+<div class="card">⏳ Trial <h2 id="trialUsers">0</h2></div>
 <div class="card">💰 Revenue <h2>₦0</h2></div>
-
 </div>
 
 <h2>👥 Users</h2>
 <button onclick="createUser()">Create User</button>
 
 <table>
-<tr>
-<th>Name</th><th>Email</th><th>Status</th><th>Action</th>
-</tr>
+<tr><th>Name</th><th>Email</th><th>Status</th><th>Action</th></tr>
 <tbody id="userTable"></tbody>
 </table>
 
@@ -266,7 +227,7 @@ cursor:pointer;
 
 <h2>⚙️ Settings</h2>
 <label><input type="checkbox"> Enable Trial</label><br>
-<label><input type="checkbox"> Maintenance Mode</label><br>
+<label><input type="checkbox"> Maintenance Mode</label><br><br>
 
 <button>Save Settings</button>
 
@@ -274,15 +235,12 @@ cursor:pointer;
 
 <script>
 
-/* ================= IPTV DATA ================= */
-
+/* IPTV DATA */
 let all=[];
 let currentHls;
-
 const video=document.getElementById("video");
 
-/* ================= LOAD PLAYLIST ================= */
-
+/* LOAD IPTV */
 async function loadPlaylist(url){
 document.getElementById("overlay").style.display="flex";
 
@@ -295,6 +253,7 @@ renderChannels();
 document.getElementById("overlay").style.display="none";
 }
 
+/* PARSE M3U */
 function parseM3U(data){
 let lines=data.split("\n");
 let arr=[];
@@ -302,19 +261,17 @@ let arr=[];
 for(let i=0;i<lines.length;i++){
 if(lines[i].includes("#EXTINF")){
 let url=lines[i+1];
-let name=lines[i].split(",")[1];
-if(url){
-arr.push({name,url});
-}
+let name=lines[i].split(",")[1] || "Channel";
+if(url) arr.push({name,url});
 }
 }
 return arr;
 }
 
-/* ================= CHANNEL PLAY ================= */
-
+/* PLAY CHANNEL */
 function playChannel(i){
 let ch=all[i];
+if(!ch) return;
 
 if(currentHls) currentHls.destroy();
 
@@ -329,8 +286,7 @@ video.src=ch.url;
 video.play();
 }
 
-/* ================= RENDER CHANNELS ================= */
-
+/* RENDER CHANNELS */
 function renderChannels(){
 let box=document.getElementById("channelList");
 box.innerHTML="";
@@ -343,20 +299,18 @@ ${c.name}
 });
 }
 
-/* ================= ULTRA ================= */
-
-function loadUltra(){
-alert("Ultra Feeds Loading...");
-}
-
-/* ================= FULLSCREEN ================= */
-
+/* FULLSCREEN */
 function toggleFullscreen(){
 if(!document.fullscreenElement){
 document.documentElement.requestFullscreen();
 }else{
 document.exitFullscreen();
 }
+}
+
+/* ULTRA */
+function loadUltra(){
+alert("Ultra Feeds Activated");
 }
 
 /* ================= SAAS ================= */
@@ -368,31 +322,28 @@ let users=[
 let packages=["Trial","Basic","Premium"];
 
 function toggleSaaS(){
-let dash=document.getElementById("saasDashboard");
-dash.style.display = dash.style.display==="block"?"none":"block";
+let d=document.getElementById("saasDashboard");
+d.style.display = d.style.display==="block"?"none":"block";
 renderUsers();
 renderPackages();
 renderChannelsAdmin();
 }
 
 /* USERS */
-
 function renderUsers(){
-let html="";
-users.forEach((u,i)=>{
-html+=`
+document.getElementById("userTable").innerHTML=
+users.map((u,i)=>`
 <tr>
 <td>${u.name}</td>
 <td>${u.email}</td>
 <td>${u.status}</td>
 <td><button onclick="deleteUser(${i})">Delete</button></td>
-</tr>`;
-});
-document.getElementById("userTable").innerHTML=html;
+</tr>`).join("");
 }
 
 function createUser(){
 let n=prompt("Name");
+if(!n) return;
 users.push({name:n,email:n+"@mail.com",status:"Active"});
 renderUsers();
 }
@@ -403,7 +354,6 @@ renderUsers();
 }
 
 /* PACKAGES */
-
 function renderPackages(){
 document.getElementById("packageList").innerHTML=
 packages.map(p=>`<div class="card">${p}</div>`).join("");
@@ -411,19 +361,18 @@ packages.map(p=>`<div class="card">${p}</div>`).join("");
 
 function addPackage(){
 let p=prompt("Package");
+if(!p) return;
 packages.push(p);
 renderPackages();
 }
 
 /* CHANNEL ADMIN */
-
 function renderChannelsAdmin(){
 document.getElementById("channelManager").innerHTML=
 all.slice(0,10).map(c=>`<div class="card">${c.name}</div>`).join("");
 }
 
 /* INIT */
-
 loadPlaylist("https://iptv-org.github.io/iptv/countries/ng.m3u");
 
 </script>
