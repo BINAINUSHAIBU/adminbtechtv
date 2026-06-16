@@ -1,252 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>WORLDTV PRO MAX IPTV MERGED 2026</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="theme-color" content="#0b0f1a"/>
+<title>BTECH-TV WORLD ULTRA MAX X</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+:root{
+--bg:#050816;
+--panel:#111827;
+--card:#172033;
+--hover:#22304d;
+--accent:#00d4ff;
+--text:#ffffff;
+--muted:#94a3b8;
+--premium:#8b5cf6;
+--gold:#facc15;
+}
 
-/* BASE */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
+body{background:var(--bg);color:var(--text);overflow:hidden;}
 
-/* AUTH */
-#authBox{
-position:fixed;inset:0;background:#050816;
-display:flex;justify-content:center;align-items:center;z-index:9999;
-}
-.auth{
-background:#0d1324;padding:20px;border-radius:10px;width:320px;
-}
-.auth input{
-width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;
-background:#101a31;color:#fff;
-}
-.auth button{
-width:100%;padding:10px;margin-top:8px;border:none;border-radius:6px;
-background:#00d4ff;color:#000;cursor:pointer;
+/* TOPBAR */
+.topbar{
+display:flex;align-items:center;justify-content:space-between;
+padding:12px;background:#0f172a;border-bottom:1px solid #222;
 }
 
-/* UPGRADE */
-#upgradeBox{
-position:fixed;inset:0;background:#000;
-display:none;justify-content:center;align-items:center;flex-direction:column;
-z-index:99999;color:#fff;text-align:center;
+.logo{color:var(--accent);font-weight:bold;font-size:18px;}
+
+#trialBox{
+margin-left:10px;
+font-size:12px;
+color:var(--gold);
+background:#111827;
+padding:6px 10px;
+border-radius:8px;
 }
 
-/* TIMER */
-#timer{
-position:fixed;top:10px;right:10px;
-background:#00d4ff;color:#000;padding:8px;border-radius:8px;
-font-weight:bold;z-index:9999;
+/* LAYOUT */
+.container{display:flex;height:calc(100vh - 60px);}
+
+.sidebar{
+width:260px;background:#0b1220;overflow:auto;padding:10px;
 }
 
-/* SIDEBAR */
-.sidebar{width:280px;background:#0d1324;padding:15px;overflow-y:auto;}
-.nav-btn{width:100%;padding:10px;margin:5px 0;border:none;border-radius:8px;background:#121c33;color:#fff;cursor:pointer;}
-.nav-btn:hover{background:#1e2f57}
-
-/* MAIN */
-.main{flex:1;display:flex;flex-direction:column;padding:10px;overflow:hidden;}
-.topbar{display:flex;justify-content:space-between;margin-bottom:10px;}
-.search-box input{padding:10px;border-radius:8px;border:none;background:#101a31;color:#fff;width:260px;}
-.live{background:red;padding:6px 12px;border-radius:20px;}
+.main{flex:1;display:flex;flex-direction:column;}
 
 /* PLAYER */
-.player-container{background:#000;border-radius:10px;height:320px;position:relative;}
+.player{height:320px;background:black;position:relative;}
 video{width:100%;height:100%;}
 
-/* WATERMARK */
-.watermark{
-position:absolute;
-bottom:10px;
-right:10px;
-font-size:12px;
-background:rgba(0,0,0,0.5);
-padding:5px 8px;
-border-radius:6px;
-}
-
 /* CHANNELS */
-.channels{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
-.card{background:#111a31;padding:10px;border-radius:10px;cursor:pointer;}
+.channels{flex:1;overflow:auto;padding:10px;}
+.channel{padding:10px;background:#172033;margin-bottom:8px;cursor:pointer;border-radius:8px;}
+
+/* OVERLAY */
+.overlay{
+position:absolute;inset:0;background:rgba(0,0,0,0.9);
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+z-index:10;
+}
 
 </style>
 </head>
 
 <body>
 
-<!-- TIMER -->
-<div id="timer">Trial: 00:00:00</div>
-
-<!-- AUTH -->
-<div id="authBox">
-  <div class="auth">
-    <h3>IPTV LOGIN</h3>
-    <input id="email" placeholder="Email">
-    <input id="pass" type="password" placeholder="Password">
-    <button onclick="register()">Register</button>
-    <button onclick="login()">Login</button>
-  </div>
+<!-- ================= TOPBAR ================= -->
+<div class="topbar">
+<div class="logo">📺 BTECH-TV ULTRA MAX</div>
+<div id="trialBox">Loading trial...</div>
 </div>
 
-<!-- UPGRADE -->
-<div id="upgradeBox">
-  <h1>⛔ TRIAL EXPIRED</h1>
-  <p>Upgrade to continue watching all channels</p>
-  <button onclick="location.reload()" style="padding:10px;margin-top:10px;">Upgrade Now</button>
-</div>
+<!-- ================= MAIN ================= -->
+<div class="container">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-
-<button class="nav-btn" onclick="load('ng')">Nigeria</button>
-<button class="nav-btn" onclick="load('us')">USA</button>
-<button class="nav-btn" onclick="load('uk')">UK</button>
-<button class="nav-btn" onclick="load('in')">India</button>
-
-<button class="nav-btn" onclick="loadCat('news')">News</button>
-<button class="nav-btn" onclick="loadCat('sports')">Sports</button>
-
-<button class="nav-btn" onclick="loadUltra()">Ultra Feeds</button>
-<button class="nav-btn" onclick="logout()">Logout</button>
-
+<h3>Channels</h3>
+<div onclick="loadUltraFeeds()" style="padding:8px;background:#172033;margin:5px;border-radius:6px;cursor:pointer;">Load IPTV</div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
-<div class="topbar">
-<input oninput="search(this.value)" placeholder="Search IPTV...">
-<div class="live">LIVE</div>
+<div class="player">
+<div class="overlay" id="overlay">
+<h2>Loading...</h2>
+</div>
+<video id="video" controls autoplay></video>
 </div>
 
-<div class="player-container">
-<video id="video" controls autoplay muted></video>
-<div class="watermark">Design by BINAINU SHAIBU BTECH-TV WORLD PRO MAX</div>
-</div>
-
-<div class="channels" id="grid"></div>
+<div class="channels" id="list"></div>
 
 </div>
+</div>
 
+<!-- ================= SCRIPT ================= -->
 <script>
 
-/* =========================
-AUTH + TRIAL (5 HOURS)
-========================= */
+let channels=[];
+let currentIndex=0;
+let hls;
 
-const LIMIT = 5 * 3600 * 1000;
+const TRIAL_HOURS = 4;
+const TRIAL_MS = TRIAL_HOURS * 60 * 60 * 1000;
 
-function register(){
-localStorage.setItem("user",JSON.stringify({
-email:email.value,
-pass:pass.value
-}));
-alert("Registered");
+let trialStart = localStorage.getItem("btech_trial_start");
+let expired = false;
+
+/* ================= TRIAL SYSTEM ================= */
+
+function initTrial(){
+if(!trialStart){
+trialStart = Date.now();
+localStorage.setItem("btech_trial_start", trialStart);
+}
+checkTrial();
+setInterval(checkTrial, 10000);
 }
 
-function login(){
-let u=JSON.parse(localStorage.getItem("user")||"null");
-if(!u || u.email!=email.value || u.pass!=pass.value){
-return alert("Invalid login");
-}
+function checkTrial(){
+const elapsed = Date.now() - parseInt(trialStart);
 
-if(!localStorage.getItem("start")){
-localStorage.setItem("start",Date.now());
-}
-
-authBox.style.display="none";
-startTimer();
-loadUltra();
-}
-
-function logout(){
-localStorage.removeItem("start");
-location.reload();
-}
-
-function startTimer(){
-setInterval(()=>{
-let start=localStorage.getItem("start");
-if(!start)return;
-
-let diff=LIMIT-(Date.now()-start);
-
-if(diff<=0){
-upgradeBox.style.display="flex";
-document.body.innerHTML="";
+if(elapsed >= TRIAL_MS){
+expire();
 return;
 }
 
-let h=Math.floor(diff/3600000);
-let m=Math.floor(diff%3600000/60000);
-let s=Math.floor(diff%60000/1000);
+let remaining = TRIAL_MS - elapsed;
+let h = Math.floor(remaining / 3600000);
+let m = Math.floor((remaining % 3600000) / 60000);
 
-timer.innerText=`Trial: ${h}h ${m}m ${s}s`;
-
-},1000);
+document.getElementById("trialBox").innerText =
+`⏳ Trial: ${h}h ${m}m left`;
 }
 
-/* =========================
-IPTV ENGINE
-========================= */
-
-let all=[],filtered=[],i=0;
-let video=document.getElementById("video");
-let hls;
-
-async function load(code){
-await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
+function expire(){
+expired = true;
+document.body.innerHTML = upgradeUI();
 }
 
-async function loadCat(c){
-await loadM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`);
+function block(){
+if(expired){
+alert("Trial expired");
+return true;
+}
+return false;
 }
 
-async function loadUltra(){
-await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
+/* ================= UPGRADE SCREEN ================= */
+
+function upgradeUI(){
+return `
+<div style="height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;background:#050816;color:white;text-align:center;padding:20px;">
+<h1 style="color:#00d4ff;font-size:40px;">Upgrade Required</h1>
+
+<p style="max-width:400px;color:#94a3b8;margin-top:10px;">
+Your 4-hour trial has ended. Upgrade to continue watching IPTV channels.
+</p>
+
+<div style="background:#111827;padding:20px;border-radius:12px;margin-top:20px;width:300px;">
+<h3>Premium Plan</h3>
+<p>✔ Unlimited Channels</p>
+<p>✔ HD Streams</p>
+<p>✔ No Limit</p>
+<h2 style="color:#facc15;">₦1,999 / Month</h2>
+
+<button onclick="alert('Payment gateway here')"
+style="margin-top:10px;padding:10px 15px;background:#00d4ff;border:none;border-radius:8px;">
+Upgrade Now
+</button>
+
+</div>
+</div>
+`;
 }
 
-async function loadM3U(url){
-let res=await fetch(url);
-let text=await res.text();
+/* ================= IPTV LOADER ================= */
 
-all=[];filtered=[];
+async function loadUltraFeeds(){
 
-let lines=text.split("\n");
+if(block()) return;
+
+document.getElementById("overlay").style.display="flex";
+
+channels=[];
+
+const url="https://iptv-org.github.io/iptv/index.m3u";
+
+const res=await fetch(url);
+const text=await res.text();
+
+parseM3U(text);
+
+render();
+
+document.getElementById("overlay").style.display="none";
+}
+
+function parseM3U(data){
+const lines=data.split("\n");
 
 for(let i=0;i<lines.length;i++){
 if(lines[i].startsWith("#EXTINF")){
-let name=lines[i].split(",").pop();
+let name=lines[i].split(",")[1];
 let url=lines[i+1];
+
 if(url && url.startsWith("http")){
-all.push({name,url});
+channels.push({name,url});
+}
 }
 }
 }
 
-filtered=[...all];
-render();
-}
+/* ================= RENDER ================= */
 
 function render(){
-grid.innerHTML="";
-filtered.forEach((c,idx)=>{
+
+let box=document.getElementById("list");
+box.innerHTML="";
+
+channels.forEach((c,i)=>{
 let div=document.createElement("div");
-div.className="card";
-div.innerText=c.name;
-div.onclick=()=>play(idx);
-grid.appendChild(div);
+div.className="channel";
+div.innerHTML=c.name;
+div.onclick=()=>play(i);
+box.appendChild(div);
 });
 }
 
-function play(idx){
-i=idx;
-let c=filtered[i];
+/* ================= PLAY ================= */
+
+function play(i){
+
+if(block()) return;
+
+currentIndex=i;
+let c=channels[i];
+
+let video=document.getElementById("video");
 
 if(hls) hls.destroy();
 
@@ -254,19 +249,16 @@ if(Hls.isSupported()){
 hls=new Hls();
 hls.loadSource(c.url);
 hls.attachMedia(video);
-hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
 }else{
 video.src=c.url;
+}
+
 video.play();
 }
-}
 
-function search(q){
-filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
-render();
-}
+/* ================= START ================= */
 
-loadUltra();
+initTrial();
 
 </script>
 
