@@ -3,78 +3,65 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<meta name="theme-color" content="#0b0f1a"/>
-<title>BTECH-TV WORLD ULTRA MAX X - CONTROL DASHBOARD</title>
+<title>BTECH-TV SAAS IPTV ONE PAGE</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-:root{
---bg:#050816;
---panel:#111827;
---card:#172033;
---hover:#22304d;
---accent:#00d4ff;
---text:#fff;
---danger:#ef4444;
---gold:#facc15;
-}
+body{margin:0;font-family:Arial;background:#050816;color:#fff;overflow:hidden}
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:var(--bg);color:var(--text);overflow:hidden}
-
-/* TOPBAR */
+/* TOP BAR */
 .topbar{
 display:flex;
 justify-content:space-between;
 align-items:center;
 padding:10px;
-background:#0f172a;
+background:#111827;
 flex-wrap:wrap;
-border-bottom:1px solid #1f2937;
 }
 
-.logo{color:var(--accent);font-weight:bold;font-size:18px}
-
-.topbar button{
+button{
 margin:3px;
 padding:8px 10px;
 border:none;
-border-radius:8px;
-background:var(--card);
-color:white;
+border-radius:6px;
 cursor:pointer;
+background:#1f2937;
+color:#fff;
 font-size:12px;
 }
+button:hover{background:#374151}
 
-.topbar button:hover{background:var(--hover)}
+.logo{color:#00d4ff;font-weight:bold}
 
+/* LAYOUT */
 .container{display:flex;height:100vh}
 
-/* SIDEBAR */
 .sidebar{
-width:280px;
+width:260px;
 background:#0b1220;
 overflow:auto;
 padding:10px;
-border-right:1px solid #1f2937;
 }
 
 .cat{
 padding:10px;
-background:var(--card);
 margin:5px 0;
+background:#111827;
 border-radius:8px;
 cursor:pointer;
-font-size:13px;
 }
+.cat:hover{background:#1f2937}
 
-.cat:hover{background:var(--hover)}
-
-/* MAIN */
 .main{flex:1;display:flex;flex-direction:column}
 
-.player{height:360px;background:black;position:relative}
+/* PLAYER */
+.player{
+height:320px;
+background:black;
+position:relative;
+}
+
 video{width:100%;height:100%;object-fit:contain}
 
 .overlay{
@@ -82,75 +69,50 @@ position:absolute;inset:0;
 display:flex;
 align-items:center;
 justify-content:center;
-background:rgba(0,0,0,.8);
+background:rgba(0,0,0,.85);
 flex-direction:column;
-z-index:5;
 }
-
-.live{position:absolute;top:10px;left:10px;background:red;padding:5px 10px;border-radius:20px;font-size:12px}
 
 /* CHANNELS */
 .channels{
 flex:1;
 overflow:auto;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
 gap:10px;
 padding:10px;
 }
 
 .channel{
-background:var(--card);
+background:#111827;
 padding:10px;
 border-radius:10px;
 cursor:pointer;
-display:flex;
-justify-content:space-between;
-align-items:center;
+border:1px solid transparent;
 }
 
-.channel.locked{
-opacity:.5;
-border:1px solid var(--danger);
-}
+.channel.locked{opacity:.5;border:1px solid red}
 
 .badge{
 font-size:10px;
 padding:3px 6px;
-border-radius:10px;
+border-radius:6px;
 }
-
-.lock{background:var(--danger)}
 .free{background:green}
-.premium{background:purple}
+.lock{background:red}
 
-/* ADMIN PANEL */
-.adminPanel{
+/* ADMIN */
+.admin{
 position:fixed;
-top:60px;
 right:10px;
-width:260px;
+top:60px;
+width:250px;
 background:#111827;
 padding:10px;
 border-radius:10px;
 display:none;
-z-index:999;
 }
 
-.adminPanel h3{color:var(--gold);margin-bottom:10px}
-
-.adminPanel button{
-width:100%;
-margin:5px 0;
-padding:8px;
-border:none;
-border-radius:8px;
-background:var(--card);
-color:white;
-cursor:pointer;
-}
-
-/* TRIAL EXPIRED */
 .expired{
 position:fixed;
 inset:0;
@@ -159,11 +121,10 @@ display:none;
 align-items:center;
 justify-content:center;
 flex-direction:column;
-z-index:9999;
+z-index:999;
 }
 
-.expired h1{color:red;font-size:40px;margin-bottom:10px}
-
+.expired h1{color:red}
 </style>
 </head>
 
@@ -171,30 +132,28 @@ z-index:9999;
 
 <!-- TOPBAR -->
 <div class="topbar">
-<div class="logo">📺 BTECH-TV CONTROL DASHBOARD</div>
+<div class="logo">📺 BTECH SAAS IPTV</div>
 
 <div>
 <button onclick="toggleAdmin()">🧑‍💼 Admin</button>
-<button onclick="unlockAll()">🔓 Unlock All</button>
-<button onclick="lockAll()">🔒 Lock All</button>
-<button onclick="checkTrial()">⏳ Trial Status</button>
+<button onclick="unlockAll()">🔓 Unlock</button>
+<button onclick="lockAll()">🔒 Lock</button>
+<button onclick="checkTrial()">⏳ Trial</button>
 </div>
 </div>
 
 <!-- ADMIN PANEL -->
-<div class="adminPanel" id="adminPanel">
-<h3>CONTROL PANEL</h3>
-<input id="adminPass" placeholder="Enter Password" style="width:100%;padding:8px;margin-bottom:5px"/>
-<button onclick="loginAdmin()">Login</button>
-<button onclick="unlockAll()">Unlock All Channels</button>
-<button onclick="lockAll()">Lock All Channels</button>
+<div class="admin" id="adminBox">
+<h4>ADMIN LOGIN</h4>
+<input id="pass" placeholder="password" style="width:100%;padding:6px"/>
+<button onclick="login()">Login</button>
 <button onclick="resetTrial()">Reset Trial</button>
 </div>
 
-<!-- TRIAL EXPIRED SCREEN -->
+<!-- EXPIRED -->
 <div class="expired" id="expired">
 <h1>TRIAL EXPIRED</h1>
-<p>Upgrade to continue watching</p>
+<p>Upgrade to Premium Access</p>
 </div>
 
 <div class="container">
@@ -202,26 +161,24 @@ z-index:9999;
 <!-- SIDEBAR -->
 <div class="sidebar">
 <h3>🌍 Countries</h3>
-<div class="cat" onclick="loadMock('Nigeria')">🇳🇬 Nigeria</div>
-<div class="cat" onclick="loadMock('USA')">🇺🇸 USA</div>
-<div class="cat" onclick="loadMock('UK')">🇬🇧 UK</div>
+<div class="cat" onclick="loadMock('Nigeria')">Nigeria</div>
+<div class="cat" onclick="loadMock('USA')">USA</div>
+<div class="cat" onclick="loadMock('UK')">UK</div>
 
-<h3>🔥 Tools</h3>
-<div class="cat" onclick="scan()">📡 Scan</div>
-<div class="cat" onclick="boost()">⚡ Boost</div>
-<div class="cat" onclick="pip()">📺 PiP</div>
+<h3>⚡ Tools</h3>
+<div class="cat" onclick="scan()">Scan Streams</div>
+<div class="cat" onclick="boost()">Speed Boost</div>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
 <div class="player">
-<div class="live">LIVE</div>
-<div class="overlay" id="overlay">Loading...</div>
-<video id="video" controls autoplay></video>
+<div class="overlay" id="overlay">Loading IPTV...</div>
+<video id="video" controls></video>
 </div>
 
-<div class="channels" id="channels"></div>
+<div class="channels" id="list"></div>
 
 </div>
 
@@ -230,22 +187,20 @@ z-index:9999;
 <script>
 
 /* ================= TRIAL SYSTEM ================= */
-
-let trialKey="btech_trial_start";
+const key="trial_start_v1";
 
 function initTrial(){
-if(!localStorage.getItem(trialKey)){
-localStorage.setItem(trialKey,Date.now());
+if(!localStorage.getItem(key)){
+localStorage.setItem(key,Date.now());
 }
 }
 
 function checkTrial(){
-let start=parseInt(localStorage.getItem(trialKey));
+let start=+localStorage.getItem(key);
 let now=Date.now();
-let diff=now-start;
-let limit=4*60*60*1000; // 4 hours
+let limit=4*60*60*1000;
 
-if(diff>limit){
+if(now-start>limit){
 document.getElementById("expired").style.display="flex";
 return false;
 }
@@ -256,22 +211,24 @@ setInterval(checkTrial,5000);
 initTrial();
 
 /* ================= ADMIN ================= */
-
 let admin=false;
-let pass="1234";
 
 function toggleAdmin(){
-document.getElementById("adminPanel").style.display="block";
+document.getElementById("adminBox").style.display="block";
 }
 
-function loginAdmin(){
-let p=document.getElementById("adminPass").value;
-if(p===pass){
+function login(){
+if(document.getElementById("pass").value==="1234"){
 admin=true;
-alert("Admin unlocked");
+alert("Admin Logged In");
 }else{
-alert("Wrong password");
+alert("Wrong Password");
 }
+}
+
+function resetTrial(){
+localStorage.removeItem(key);
+location.reload();
 }
 
 function lockAll(){
@@ -284,35 +241,27 @@ channels.forEach(c=>c.locked=false);
 render();
 }
 
-function resetTrial(){
-localStorage.removeItem(trialKey);
-location.reload();
-}
-
-/* ================= CHANNEL DATA ================= */
+/* ================= CHANNELS ================= */
 
 let channels=[
-{name:"News One",group:"News",locked:false},
+{name:"News Live",group:"News",locked:false},
 {name:"Sports Max",group:"Sports",locked:false},
-{name:"Movie Hub",group:"Movies",locked:true},
-{name:"Kids World",group:"Kids",locked:false},
+{name:"Movie Zone",group:"Movies",locked:true},
+{name:"Kids TV",group:"Kids",locked:false},
 {name:"Music Live",group:"Music",locked:true}
 ];
 
 function render(){
-let box=document.getElementById("channels");
+let box=document.getElementById("list");
 box.innerHTML="";
 
 channels.forEach((c,i)=>{
-
 let div=document.createElement("div");
 div.className="channel"+(c.locked?" locked":"");
 
 div.innerHTML=`
-<div>
 <b>${c.name}</b><br>
-<small>${c.group}</small>
-</div>
+<small>${c.group}</small><br>
 <span class="badge ${c.locked?'lock':'free'}">
 ${c.locked?'LOCKED':'FREE'}
 </span>
@@ -320,31 +269,33 @@ ${c.locked?'LOCKED':'FREE'}
 
 div.onclick=()=>play(i);
 box.appendChild(div);
-
 });
 }
 
+/* ================= PLAYER ================= */
 function play(i){
 
 if(!checkTrial()) return;
 
 if(channels[i].locked && !admin){
-alert("Channel Locked - Upgrade Required");
+alert("Premium Channel Locked");
 return;
 }
 
 document.getElementById("overlay").style.display="none";
-document.getElementById("video").src="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 
+/* demo stream */
+document.getElementById("video").src=
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 }
 
-function loadMock(name){
-alert("Loading "+name+" channels...");
+/* ================= MOCK ================= */
+function loadMock(x){
+alert("Loading "+x+" IPTV...");
 }
 
 function scan(){alert("Scanning streams...")}
 function boost(){alert("Boost enabled")}
-function pip(){alert("PiP mode")}
 
 /* INIT */
 render();
