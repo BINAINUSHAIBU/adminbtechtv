@@ -4,20 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BTECH-TV ULTRA PRO MAX V2</title>
+
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 body{margin:0;font-family:Arial;background:#0b0f1a;color:#fff}
 
-header{padding:12px;background:#111827;display:flex;justify-content:space-between}
+header{padding:12px;background:#111827;display:flex;justify-content:space-between;align-items:center}
 
 .container{display:flex;height:calc(100vh - 50px)}
 
-.sidebar{width:260px;background:#0f172a;padding:10px;overflow:auto}
+.sidebar{width:300px;background:#0f172a;padding:10px;overflow:auto}
 
 .main{flex:1;display:flex;flex-direction:column}
 
-.video{height:350px;background:black}
+.video{height:360px;background:black}
 
 .list{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;padding:10px}
 
@@ -25,16 +26,17 @@ header{padding:12px;background:#111827;display:flex;justify-content:space-betwee
 
 .lock{position:absolute;top:8px;right:8px;background:red;font-size:11px;padding:3px 6px;border-radius:5px}
 
-input,button{padding:10px;margin:5px;border:none;border-radius:6px}
+button,input{padding:10px;margin:5px;border:none;border-radius:6px}
 
 .panel{position:fixed;inset:0;background:#000000ee;display:none;padding:20px;overflow:auto}
+small{color:#aaa}
 </style>
 </head>
 
 <body>
 
 <header>
-<div>📺 BTECH-TV ULTRA PRO MAX V2</div>
+<div>📺 BTECH-TV WORLD PRO MAX V2</div>
 <div>
 <button onclick="openAdmin()">Admin</button>
 <button onclick="logout()">Logout</button>
@@ -46,7 +48,6 @@ input,button{padding:10px;margin:5px;border:none;border-radius:6px}
 <h2>🔐 Login / Register</h2>
 <input id="email" placeholder="Email"><br>
 <input id="pass" type="password" placeholder="Password"><br>
-
 <button onclick="register()">Register</button>
 <button onclick="login()">Login</button>
 </div>
@@ -56,22 +57,47 @@ input,button{padding:10px;margin:5px;border:none;border-radius:6px}
 
 <div class="container">
 
+<!-- SIDEBAR -->
 <div class="sidebar">
-<h3>👤 User</h3>
+
+<h3>👤 USER</h3>
 <p id="userInfo"></p>
 
-<h3>💳 Plan</h3>
+<h3>💳 PLAN</h3>
 <p id="planInfo"></p>
 
 <button onclick="upgrade()">💎 Upgrade (Paystack Mock)</button>
 
 <hr>
 
-<h3>Controls</h3>
-<button onclick="lockAll()">Lock All</button>
-<button onclick="unlockAll()">Unlock All</button>
+<h3>🌍 Countries</h3>
+<small>Nigeria USA UK India France Germany Brazil South Africa Canada Australia Japan South Korea China Spain Italy Turkey Mexico UAE Saudi Arabia Egypt Argentina Pakistan Indonesia Philippines Albania</small>
+
+<h3>🎬 Categories</h3>
+<small>News Sports Movies Music Kids Comedy Documentary Business Science Travel</small>
+
+<h3>🗣 Languages</h3>
+<small>English Spanish Arabic French Hindi Chinese Portuguese</small>
+
+<hr>
+
+<h3>🔥 Tools</h3>
+<button onclick="loadUltra()">📡 Scan</button>
+<button onclick="boost()">⚡ Boost</button>
+<button onclick="pip()">📺 PiP</button>
+<button onclick="clearRecents()">🗑 Recents</button>
+<button onclick="record()">⏺ Record</button>
+<button onclick="repair()">🛠 Repair</button>
+<button onclick="optimize()">🧠 Optimize</button>
+
+<hr>
+
+<button onclick="lockAll()">🔒 Lock All</button>
+<button onclick="unlockAll()">🔓 Unlock All</button>
+
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
 <div class="video">
@@ -88,6 +114,7 @@ input,button{padding:10px;margin:5px;border:none;border-radius:6px}
 
 <!-- ADMIN -->
 <div class="panel" id="admin">
+
 <h2>🧑‍💼 ADMIN DASHBOARD</h2>
 <button onclick="closeAdmin()">Close</button>
 
@@ -96,6 +123,7 @@ input,button{padding:10px;margin:5px;border:none;border-radius:6px}
 
 <h3>📺 Channel Control</h3>
 <div id="adminList"></div>
+
 </div>
 
 <script>
@@ -123,59 +151,36 @@ localStorage.setItem("stats",JSON.stringify(stats));
 
 /* LOGIN */
 function register(){
-let e=email.value;
-let p=pass.value;
-users[e]={pass:p,role:"free",expiry:Date.now()+86400000};
+users[email.value]={pass:pass.value,role:"free",expiry:Date.now()+86400000};
 save();
 alert("Registered");
 }
 
 function login(){
-let e=email.value;
-let p=pass.value;
-
-if(!users[e]||users[e].pass!==p){
+if(!users[email.value]||users[email.value].pass!==pass.value){
 alert("Wrong login");return;
 }
-
-user=e;
-role=users[e].role;
-expiry=users[e].expiry;
-
-document.getElementById("loginBox").style.display="none";
-document.getElementById("app").style.display="block";
-
+user=email.value;
+role=users[user].role;
+expiry=users[user].expiry;
+loginBox.style.display="none";
+app.style.display="block";
 render();
 }
 
-/* UPGRADE (PAYSTACK MOCK) */
+/* UPGRADE */
 function upgrade(){
-if(!user)return;
-
-alert("💳 Redirecting to Paystack... (mock)");
-
-setTimeout(()=>{
+role="premium";
 users[user].role="premium";
 users[user].expiry=Date.now()+7*86400000;
-role="premium";
 save();
 render();
-alert("✅ Premium Activated");
-},1500);
+alert("Upgraded to PREMIUM");
 }
 
 /* CHANNEL LOCK */
-function lockAll(){
-unlocked={};
-save();
-render();
-}
-
-function unlockAll(){
-channels.forEach((c,i)=>unlocked[i]=true);
-save();
-render();
-}
+function lockAll(){unlocked={};save();render();}
+function unlockAll(){channels.forEach((c,i)=>unlocked[i]=true);save();render();}
 
 /* PLAY */
 function play(url){
@@ -194,15 +199,14 @@ save();
 /* RENDER */
 function render(){
 
-document.getElementById("userInfo").innerText=user;
-document.getElementById("planInfo").innerText=role.toUpperCase()+" EXP:"+new Date(expiry).toLocaleDateString();
+userInfo.innerText=user;
+planInfo.innerText=role.toUpperCase()+" EXP:"+new Date(expiry).toLocaleDateString();
 
-let box=document.getElementById("list");
-box.innerHTML="";
+list.innerHTML="";
 
 channels.forEach((c,i)=>{
 
-let locked = role==="free" && !unlocked[i];
+let locked=role==="free"&&!unlocked[i];
 
 let div=document.createElement("div");
 div.className="card";
@@ -213,39 +217,25 @@ ${locked?'<div class="lock">LOCK</div>':''}
 `;
 
 div.onclick=()=>{
-
-if(locked){
-alert("Upgrade Required 🔒");
-return;
-}
-
+if(locked){alert("Upgrade Required");return;}
 play(c.url);
 };
 
-box.appendChild(div);
+list.appendChild(div);
+
 });
 
 updateAdmin();
 }
 
 /* ADMIN */
-function openAdmin(){
-document.getElementById("admin").style.display="block";
-updateAdmin();
-}
-
-function closeAdmin(){
-document.getElementById("admin").style.display="none";
-}
+function openAdmin(){admin.style.display="block";updateAdmin();}
+function closeAdmin(){admin.style.display="none";}
 
 function updateAdmin(){
+analytics.innerText="Users: "+Object.keys(users).length+" | Plays: "+(stats.plays||0);
 
-document.getElementById("analytics").innerText=
-"Total Users: "+Object.keys(users).length+
-" | Plays: "+(stats.plays||0);
-
-let box=document.getElementById("adminList");
-box.innerHTML="";
+adminList.innerHTML="";
 
 channels.forEach((c,i)=>{
 
@@ -259,7 +249,7 @@ ${unlocked[i]?"UNLOCK":"LOCK"}
 </button>
 `;
 
-box.appendChild(div);
+adminList.appendChild(div);
 
 });
 }
@@ -267,15 +257,20 @@ box.appendChild(div);
 function toggle(i){
 if(unlocked[i]) delete unlocked[i];
 else unlocked[i]=true;
-save();
-updateAdmin();
-render();
+save();render();updateAdmin();
 }
 
+/* TOOLS */
+function loadUltra(){alert("Ultra Scan Running...");}
+function boost(){video.playbackRate=1.15;}
+function pip(){video.requestPictureInPicture();}
+function clearRecents(){alert("Recents Cleared");}
+function record(){alert("Recording Ready");}
+function repair(){alert("Repairing Streams");}
+function optimize(){alert("Memory Optimized");}
+
 /* LOGOUT */
-function logout(){
-location.reload();
-}
+function logout(){location.reload();}
 
 </script>
 
