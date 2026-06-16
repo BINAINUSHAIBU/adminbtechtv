@@ -26,7 +26,7 @@ height:100vh;
 overflow:hidden;
 }
 
-/* AUTH SCREEN */
+/* AUTH */
 #authScreen{
 position:fixed;
 inset:0;
@@ -45,11 +45,6 @@ width:320px;
 border:1px solid #1d2b4f;
 }
 
-.auth-box h2{
-color:#00d4ff;
-margin-bottom:10px;
-}
-
 .auth-box input{
 width:100%;
 padding:10px;
@@ -66,21 +61,12 @@ padding:10px;
 margin-top:10px;
 background:#00d4ff;
 border:none;
-color:#000;
 font-weight:bold;
 cursor:pointer;
 border-radius:6px;
 }
 
-.auth-toggle{
-color:#8ea2d9;
-font-size:12px;
-margin-top:10px;
-cursor:pointer;
-text-align:center;
-}
-
-/* EXPIRED SCREEN */
+/* EXPIRED */
 #expiredScreen{
 position:fixed;
 inset:0;
@@ -107,12 +93,6 @@ font-weight:900;
 color:#00d4ff;
 }
 
-.sub{
-font-size:12px;
-color:#8ea2d9;
-margin-bottom:15px;
-}
-
 .menu-title{
 color:#00d4ff;
 margin:15px 0 10px;
@@ -130,30 +110,6 @@ color:#fff;
 cursor:pointer;
 }
 
-.nav-btn:hover{
-background:#1e2f57;
-}
-
-.item{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:8px;
-margin:5px 0;
-background:#172033;
-border-radius:6px;
-font-size:13px;
-}
-
-.item button{
-background:#111827;
-border:none;
-color:#fff;
-padding:5px 8px;
-border-radius:6px;
-cursor:pointer;
-}
-
 /* MAIN */
 .main{
 flex:1;
@@ -166,17 +122,23 @@ padding:10px;
 .topbar{
 display:flex;
 justify-content:space-between;
-margin-bottom:10px;
 align-items:center;
+margin-bottom:10px;
 }
 
 .search-box input{
 padding:10px;
+width:260px;
 border-radius:8px;
 border:none;
 background:#101a31;
 color:#fff;
-width:260px;
+}
+
+.timer{
+background:#111827;
+padding:6px 12px;
+border-radius:20px;
 }
 
 .live{
@@ -185,13 +147,7 @@ padding:6px 12px;
 border-radius:20px;
 }
 
-.timer{
-background:#111827;
-padding:6px 12px;
-border-radius:20px;
-margin-left:10px;
-}
-
+/* HERO */
 .hero{
 background:linear-gradient(135deg,#07132f,#0f1d45);
 padding:10px;
@@ -213,12 +169,12 @@ border-radius:8px;
 text-align:center;
 }
 
+/* PLAYER */
 .player-container{
 background:#000;
+height:320px;
 border-radius:10px;
 overflow:hidden;
-height:320px;
-flex-shrink:0;
 }
 
 video{
@@ -226,29 +182,14 @@ width:100%;
 height:100%;
 }
 
-.controls{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-margin:10px 0;
-}
-
-.controls button{
-padding:8px 10px;
-border:none;
-border-radius:6px;
-background:#152445;
-color:#fff;
-cursor:pointer;
-}
-
+/* CHANNELS */
 .channels{
-overflow-y:auto;
 flex:1;
+overflow-y:auto;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
 gap:10px;
-padding-right:5px;
+padding:10px;
 }
 
 .card{
@@ -260,40 +201,8 @@ border:1px solid #1f355d;
 }
 
 .card:hover{
-transform:scale(1.03);
 border-color:#00d4ff;
-}
-
-/* ADMIN */
-.admin{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.9);
-display:none;
-justify-content:center;
-align-items:center;
-}
-
-.admin-box{
-background:#111827;
-padding:20px;
-border-radius:10px;
-width:90%;
-}
-
-.admin-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-gap:10px;
-}
-
-.admin-grid button{
-padding:12px;
-border:none;
-border-radius:8px;
-background:#172033;
-color:#fff;
-cursor:pointer;
+transform:scale(1.03);
 }
 
 </style>
@@ -301,50 +210,42 @@ cursor:pointer;
 
 <body>
 
-<!-- AUTH -->
+<!-- LOGIN -->
 <div id="authScreen">
-  <div class="auth-box">
-    <h2>🔐 IPTV TRIAL LOGIN</h2>
+<div class="auth-box">
+<h3>🔐 IPTV TRIAL LOGIN</h3>
+<input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Password">
 
-    <input id="email" placeholder="Email">
-    <input id="pass" type="password" placeholder="Password">
-
-    <button onclick="register()">Register</button>
-    <button onclick="login()">Login</button>
-
-    <div class="auth-toggle" onclick="resetUsers()">Reset Users</div>
-  </div>
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
+</div>
 </div>
 
 <!-- EXPIRED -->
 <div id="expiredScreen">
-  <div>
-    <h1>⛔ TRIAL EXPIRED</h1>
-    <p>Your 3–5 hour trial has ended.</p>
-    <button onclick="logout()">Logout</button>
-  </div>
+<h1>⛔ TRIAL EXPIRED</h1>
+<p>Your 3–5 hour trial has ended.</p>
+<button onclick="logout()">Logout</button>
 </div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="logo">📺 BTECH-TV PRO MAX</div>
-<div class="sub">Ultra IPTV Engine X</div>
+<div class="logo">📺 WORLDTV PRO MAX</div>
 
-<div class="menu-title">⏳ Trial Active</div>
+<div class="menu-title">⏳ Trial Time</div>
 <div id="trialInfo"></div>
 
 <div class="menu-title">🌍 Countries</div>
-<button class="nav-btn" onclick="load('ng')">Nigeria</button>
-<button class="nav-btn" onclick="load('us')">USA</button>
-<button class="nav-btn" onclick="load('uk')">UK</button>
+<button class="nav-btn" onclick="loadAll()">LOAD ALL CHANNELS</button>
 
 <div class="menu-title">🎬 Categories</div>
-<button class="nav-btn" onclick="loadCat('news')">News</button>
-<button class="nav-btn" onclick="loadCat('sports')">Sports</button>
+<button class="nav-btn" onclick="loadAll()">ALL CONTENT</button>
 
 <div class="menu-title">🔥 Tools</div>
-<button class="nav-btn" onclick="openAdmin()">Admin</button>
+<button class="nav-btn">Scan</button>
+<button class="nav-btn">Boost</button>
 
 </div>
 
@@ -353,13 +254,12 @@ cursor:pointer;
 
 <div class="topbar">
 <div class="search-box">
-<input oninput="search(this.value)" placeholder="Search IPTV...">
+<input oninput="search(this.value)" placeholder="Search channels...">
 </div>
 
-<div style="display:flex;align-items:center;">
+<div style="display:flex;gap:10px;align-items:center;">
 <div class="live">🔴 LIVE</div>
 <div class="timer" id="timer">00:00:00</div>
-<button onclick="logout()" class="nav-btn" style="width:auto;margin-left:10px;">Logout</button>
 </div>
 </div>
 
@@ -377,12 +277,6 @@ cursor:pointer;
 <video id="video" controls autoplay muted></video>
 </div>
 
-<div class="controls">
-<button onclick="next()">Next</button>
-<button onclick="prev()">Prev</button>
-<button onclick="toggleMute()">Mute</button>
-</div>
-
 <div class="channels" id="grid"></div>
 
 </div>
@@ -393,40 +287,32 @@ let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
 
-const TRIAL_HOURS = 5; // change to 3 or 5
+const TRIAL_HOURS = 5;
 
-/* AUTH SYSTEM */
+/* AUTH */
 function register(){
-let email=email=document.getElementById("email").value;
-let pass=document.getElementById("pass").value;
-
-localStorage.setItem("user",JSON.stringify({email,pass}));
-alert("Registered successfully!");
+localStorage.setItem("user",JSON.stringify({
+email:email.value,
+pass:pass.value
+}));
+alert("Registered!");
 }
 
 function login(){
-let email=document.getElementById("email").value;
-let pass=document.getElementById("pass").value;
-
-let user=JSON.parse(localStorage.getItem("user"));
-
-if(!user || user.email!==email || user.pass!==pass){
-alert("Invalid login");
+let u=JSON.parse(localStorage.getItem("user"));
+if(!u || u.email!=email.value || u.pass!=pass.value){
+alert("Wrong login");
 return;
 }
-
-startSession();
+startTrial();
 document.getElementById("authScreen").style.display="none";
 }
 
-/* SESSION */
-function startSession(){
-let now=Date.now();
-let expiry=now + TRIAL_HOURS*60*60*1000;
+/* TRIAL */
+function startTrial(){
+let expiry = Date.now() + TRIAL_HOURS*60*60*1000;
+localStorage.setItem("session",JSON.stringify({expiry}));
 
-localStorage.setItem("session",JSON.stringify({start:now,expiry}));
-
-updateTimer();
 setInterval(updateTimer,1000);
 }
 
@@ -445,60 +331,65 @@ let h=Math.floor(diff/3600000);
 let m=Math.floor(diff%3600000/60000);
 let sec=Math.floor(diff%60000/1000);
 
-document.getElementById("timer").innerText=
-`${h.toString().padStart(2,"0")}:${m.toString().padStart(2,"0")}:${sec.toString().padStart(2,"0")}`;
-
-document.getElementById("trialInfo").innerText=
-"Time left: "+h+"h "+m+"m";
+timer.innerText=`${h}:${m}:${sec}`;
+trialInfo.innerText=`${h}h ${m}m left`;
 }
 
-function logout(){
-localStorage.removeItem("session");
-location.reload();
-}
+/* LOAD ALL CHANNELS */
+const SOURCES = {
+countries:["ng","us","uk","in","fr","de","br","za","ca","au","jp","kr","cn","es","it","tr","mx","ae","sa","eg","ar","pk","id","ph","al"],
+categories:["news","sports","movies","music","kids","comedy","documentary","business","science","travel"],
+languages:["eng","spa","ara","fra","hin","zho","por"]
+};
 
-/* IPTV */
-async function load(code){
-await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
-}
+async function loadAll(){
+all=[];
 
-async function loadCat(cat){
-await loadM3U(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`);
-}
+let urls=[
+...SOURCES.countries.map(c=>`https://iptv-org.github.io/iptv/countries/${c}.m3u`),
+...SOURCES.categories.map(c=>`https://iptv-org.github.io/iptv/categories/${c}.m3u`),
+...SOURCES.languages.map(c=>`https://iptv-org.github.io/iptv/languages/${c}.m3u`)
+];
 
-async function loadM3U(url){
-const res=await fetch(url);
-const text=await res.text();
-
-all=[];filtered=[];i=0;
-
-text.split("\n").forEach((line,idx,arr)=>{
-if(line.startsWith("#EXTINF")){
-let name=line.split(",").pop();
-let url=arr[idx+1];
-if(url && url.startsWith("http")){
-all.push({name,url});
-}
-}
-});
+await Promise.all(urls.map(u=>fetchM3U(u)));
 
 filtered=[...all];
 render();
 stats();
 }
 
+async function fetchM3U(url){
+try{
+let res=await fetch(url);
+let text=await res.text();
+
+text.split("\n").forEach((l,i,a)=>{
+if(l.startsWith("#EXTINF")){
+let name=l.split(",").pop();
+let link=a[i+1];
+if(link && link.startsWith("http")){
+if(!all.find(x=>x.url===link)){
+all.push({name,url:link});
+}
+}
+}
+});
+}catch(e){}
+}
+
+/* RENDER */
 function render(){
-let g=document.getElementById("grid");
-g.innerHTML="";
+grid.innerHTML="";
 filtered.forEach((c,idx)=>{
-let d=document.createElement("div");
-d.className="card";
-d.innerText=c.name;
-d.onclick=()=>play(idx);
-g.appendChild(d);
+let div=document.createElement("div");
+div.className="card";
+div.innerText=c.name;
+div.onclick=()=>play(idx);
+grid.appendChild(div);
 });
 }
 
+/* PLAY */
 function play(idx){
 i=idx;
 let c=filtered[i];
@@ -516,82 +407,28 @@ video.play();
 }
 }
 
+/* SEARCH */
 function search(q){
 filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
 render();
 }
 
-function next(){i=(i+1)%filtered.length;play(i);}
-function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
-function toggleMute(){video.muted=!video.muted;}
+/* STATS */
+function stats(){
+total.innerText=all.length;
+live.innerText=all.length;
+dead.innerText=0;
+fav.innerText=0;
+}
 
 /* INIT */
 if(localStorage.getItem("session")){
 document.getElementById("authScreen").style.display="none";
-updateTimer();
-setInterval(updateTimer,1000);
-load("ng");
+startTrial();
+loadAll();
 }
 
 </script>
-/* =========================
-   ALL CHANNELS SYSTEM FIX
-   ========================= */
 
-const SOURCES = {
-  countries: [
-    "ng","us","uk","in","fr","de","br","za","ca","au",
-    "jp","kr","cn","es","it","tr","mx","ae","sa","eg",
-    "ar","pk","id","ph","al"
-  ],
-  categories: [
-    "news","sports","movies","music","kids",
-    "comedy","documentary","business","science","travel"
-  ],
-  languages: [
-    "eng","spa","ara","fra","hin","zho","por"
-  ]
-};
-
-async function loadAllChannels(){
-  all = [];
-  filtered = [];
-  i = 0;
-
-  await Promise.all([
-    ...SOURCES.countries.map(c => fetchM3U(`https://iptv-org.github.io/iptv/countries/${c}.m3u`)),
-    ...SOURCES.categories.map(c => fetchM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`)),
-    ...SOURCES.languages.map(c => fetchM3U(`https://iptv-org.github.io/iptv/languages/${c}.m3u`))
-  ]);
-
-  filtered = [...all];
-  render();
-  stats();
-}
-
-/* FETCH & MERGE WITHOUT DUPLICATES */
-async function fetchM3U(url){
-  try{
-    const res = await fetch(url);
-    const text = await res.text();
-
-    text.split("\n").forEach((line, idx, arr)=>{
-      if(line.startsWith("#EXTINF")){
-        let name = line.split(",").pop();
-        let url = arr[idx+1];
-
-        if(url && url.startsWith("http")){
-          // avoid duplicates
-          if(!all.some(c => c.url === url)){
-            all.push({name,url});
-          }
-        }
-      }
-    });
-
-  }catch(e){
-    console.log("Failed:",url);
-  }
-}
 </body>
 </html>
