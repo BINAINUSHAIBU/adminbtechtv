@@ -1,127 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV SUPER ADMIN IPTV</title>
-
+<title>BTECH-TV ULTRA PRO MAX V2</title>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#0b0f1a;
-color:white;
-}
+body{margin:0;font-family:Arial;background:#0b0f1a;color:#fff}
 
-header{
-padding:15px;
-background:#111827;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
+header{padding:12px;background:#111827;display:flex;justify-content:space-between}
 
-button{
-padding:10px;
-margin:3px;
-border:none;
-cursor:pointer;
-border-radius:6px;
-}
+.container{display:flex;height:calc(100vh - 50px)}
 
-.container{
-display:flex;
-height:calc(100vh - 60px);
-}
+.sidebar{width:260px;background:#0f172a;padding:10px;overflow:auto}
 
-.sidebar{
-width:280px;
-background:#0f172a;
-padding:10px;
-overflow:auto;
-}
+.main{flex:1;display:flex;flex-direction:column}
 
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-}
+.video{height:350px;background:black}
 
-.video{
-height:360px;
-background:black;
-}
+.list{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;padding:10px}
 
-.channel-list{
-flex:1;
-overflow:auto;
-padding:10px;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-gap:10px;
-}
+.card{background:#1f2937;padding:10px;border-radius:10px;cursor:pointer;position:relative}
 
-.card{
-background:#1f2937;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-position:relative;
-}
+.lock{position:absolute;top:8px;right:8px;background:red;font-size:11px;padding:3px 6px;border-radius:5px}
 
-.lock{
-position:absolute;
-top:10px;
-right:10px;
-background:red;
-padding:3px 6px;
-font-size:11px;
-border-radius:5px;
-}
+input,button{padding:10px;margin:5px;border:none;border-radius:6px}
 
-.adminPanel{
-position:fixed;
-inset:0;
-background:#000000ee;
-display:none;
-padding:20px;
-overflow:auto;
-z-index:9999;
-}
-
-input,select{
-padding:10px;
-margin:5px;
-}
+.panel{position:fixed;inset:0;background:#000000ee;display:none;padding:20px;overflow:auto}
 </style>
 </head>
 
 <body>
 
 <header>
-<div>📺 BTECH-TV IPTV SUPER ADMIN</div>
+<div>📺 BTECH-TV ULTRA PRO MAX V2</div>
 <div>
 <button onclick="openAdmin()">Admin</button>
-<button onclick="toggleRole()">Switch Plan</button>
+<button onclick="logout()">Logout</button>
 </div>
 </header>
 
+<!-- LOGIN -->
+<div id="loginBox" style="padding:20px">
+<h2>🔐 Login / Register</h2>
+<input id="email" placeholder="Email"><br>
+<input id="pass" type="password" placeholder="Password"><br>
+
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+
 <div class="container">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-<h3>Plans</h3>
-<p id="roleText">Role: FREE</p>
+<h3>👤 User</h3>
+<p id="userInfo"></p>
 
-<select id="plan">
-<option value="free">Free</option>
-<option value="premium">Premium</option>
-<option value="ultra">Ultra</option>
-</select>
+<h3>💳 Plan</h3>
+<p id="planInfo"></p>
 
-<button onclick="upgrade()">Upgrade</button>
+<button onclick="upgrade()">💎 Upgrade (Paystack Mock)</button>
 
 <hr>
 
@@ -130,57 +72,143 @@ margin:5px;
 <button onclick="unlockAll()">Unlock All</button>
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
 <div class="video">
-<video id="video" controls autoplay style="width:100%;height:100%;"></video>
+<video id="video" controls autoplay style="width:100%;height:100%"></video>
 </div>
 
-<div class="channel-list" id="list"></div>
+<div class="list" id="list"></div>
 
 </div>
 
 </div>
 
-<!-- ADMIN PANEL -->
-<div class="adminPanel" id="admin">
-<h2>🧑‍💼 SUPER ADMIN</h2>
+</div>
 
+<!-- ADMIN -->
+<div class="panel" id="admin">
+<h2>🧑‍💼 ADMIN DASHBOARD</h2>
 <button onclick="closeAdmin()">Close</button>
 
-<h3>Channel Control</h3>
+<h3>📊 Analytics</h3>
+<p id="analytics"></p>
+
+<h3>📺 Channel Control</h3>
 <div id="adminList"></div>
 </div>
 
 <script>
 
-let role = localStorage.getItem("role") || "free";
-let unlocked = JSON.parse(localStorage.getItem("unlocked") || "{}");
+let user=null;
+let role="free";
+let expiry=0;
 
-let channels = [
-{name:"BBC News", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"Sky Sports", url:"https://test-streams.mux.dev/test.m3u8"},
-{name:"Al Jazeera", url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"CNN Live", url:"https://test-streams.mux.dev/test.m3u8"},
+let unlocked=JSON.parse(localStorage.getItem("unlock")||"{}");
+let users=JSON.parse(localStorage.getItem("users")||"{}");
+let stats=JSON.parse(localStorage.getItem("stats")||"{}");
+
+let channels=[
+{name:"BBC News",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"CNN Live",url:"https://test-streams.mux.dev/test.m3u8"},
+{name:"Sky Sports",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Al Jazeera",url:"https://test-streams.mux.dev/test.m3u8"}
 ];
 
-document.getElementById("roleText").innerText = "Role: " + role;
+function save(){
+localStorage.setItem("users",JSON.stringify(users));
+localStorage.setItem("unlock",JSON.stringify(unlocked));
+localStorage.setItem("stats",JSON.stringify(stats));
+}
 
+/* LOGIN */
+function register(){
+let e=email.value;
+let p=pass.value;
+users[e]={pass:p,role:"free",expiry:Date.now()+86400000};
+save();
+alert("Registered");
+}
+
+function login(){
+let e=email.value;
+let p=pass.value;
+
+if(!users[e]||users[e].pass!==p){
+alert("Wrong login");return;
+}
+
+user=e;
+role=users[e].role;
+expiry=users[e].expiry;
+
+document.getElementById("loginBox").style.display="none";
+document.getElementById("app").style.display="block";
+
+render();
+}
+
+/* UPGRADE (PAYSTACK MOCK) */
+function upgrade(){
+if(!user)return;
+
+alert("💳 Redirecting to Paystack... (mock)");
+
+setTimeout(()=>{
+users[user].role="premium";
+users[user].expiry=Date.now()+7*86400000;
+role="premium";
+save();
+render();
+alert("✅ Premium Activated");
+},1500);
+}
+
+/* CHANNEL LOCK */
+function lockAll(){
+unlocked={};
+save();
+render();
+}
+
+function unlockAll(){
+channels.forEach((c,i)=>unlocked[i]=true);
+save();
+render();
+}
+
+/* PLAY */
+function play(url){
+let v=document.getElementById("video");
+
+if(Hls.isSupported()){
+let h=new Hls();
+h.loadSource(url);
+h.attachMedia(v);
+}else v.src=url;
+
+stats.plays=(stats.plays||0)+1;
+save();
+}
+
+/* RENDER */
 function render(){
 
-let box = document.getElementById("list");
-box.innerHTML = "";
+document.getElementById("userInfo").innerText=user;
+document.getElementById("planInfo").innerText=role.toUpperCase()+" EXP:"+new Date(expiry).toLocaleDateString();
+
+let box=document.getElementById("list");
+box.innerHTML="";
 
 channels.forEach((c,i)=>{
 
 let locked = role==="free" && !unlocked[i];
 
-let div = document.createElement("div");
+let div=document.createElement("div");
 div.className="card";
 
-div.innerHTML = `
-${locked ? '<div class="lock">LOCKED</div>' : ''}
+div.innerHTML=`
+${locked?'<div class="lock">LOCK</div>':''}
 <b>${c.name}</b>
 `;
 
@@ -195,65 +223,26 @@ play(c.url);
 };
 
 box.appendChild(div);
-
 });
 
+updateAdmin();
 }
 
-function play(url){
-
-let video=document.getElementById("video");
-
-if(Hls.isSupported()){
-
-let hls=new Hls();
-hls.loadSource(url);
-hls.attachMedia(video);
-
-}else{
-video.src=url;
-}
-
-}
-
-function upgrade(){
-
-role=document.getElementById("plan").value;
-localStorage.setItem("role",role);
-
-alert("Upgraded to "+role.toUpperCase());
-
-document.getElementById("roleText").innerText="Role: "+role;
-
-render();
-
-}
-
-function lockAll(){
-
-unlocked={};
-localStorage.setItem("unlocked",JSON.stringify(unlocked));
-render();
-}
-
-function unlockAll(){
-
-channels.forEach((c,i)=>unlocked[i]=true);
-
-localStorage.setItem("unlocked",JSON.stringify(unlocked));
-render();
-}
-
+/* ADMIN */
 function openAdmin(){
 document.getElementById("admin").style.display="block";
-loadAdmin();
+updateAdmin();
 }
 
 function closeAdmin(){
 document.getElementById("admin").style.display="none";
 }
 
-function loadAdmin(){
+function updateAdmin(){
+
+document.getElementById("analytics").innerText=
+"Total Users: "+Object.keys(users).length+
+" | Plays: "+(stats.plays||0);
 
 let box=document.getElementById("adminList");
 box.innerHTML="";
@@ -261,45 +250,32 @@ box.innerHTML="";
 channels.forEach((c,i)=>{
 
 let div=document.createElement("div");
-div.style="padding:10px;background:#111;margin:5px;";
+div.style="padding:10px;background:#111;margin:5px";
 
 div.innerHTML=`
 ${c.name}
 <button onclick="toggle(${i})">
-${unlocked[i] ? "Unlock" : "Lock"}
+${unlocked[i]?"UNLOCK":"LOCK"}
 </button>
 `;
 
 box.appendChild(div);
 
 });
-
 }
 
 function toggle(i){
-
 if(unlocked[i]) delete unlocked[i];
 else unlocked[i]=true;
-
-localStorage.setItem("unlocked",JSON.stringify(unlocked));
-
-loadAdmin();
-render();
-
-}
-
-function toggleRole(){
-
-role = role==="free" ? "premium" : role==="premium" ? "ultra" : "free";
-
-localStorage.setItem("role",role);
-
-document.getElementById("roleText").innerText="Role: "+role;
-
+save();
+updateAdmin();
 render();
 }
 
-render();
+/* LOGOUT */
+function logout(){
+location.reload();
+}
 
 </script>
 
