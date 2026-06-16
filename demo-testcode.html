@@ -3,52 +3,15 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>BTECH-TV IPTV SAAS PRO MAX</title>
+<title>BTECH-TV IPTV SAAS PRO MAX (NO LOGIN)</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
-<!-- FIREBASE -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-
-<!-- PAYSTACK -->
 <script src="https://js.paystack.co/v1/inline.js"></script>
 
 <style>
 body{margin:0;font-family:Arial;background:#050816;color:#fff}
 
-/* AUTH */
-#auth{
-position:fixed;inset:0;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-background:#0b1220;
-z-index:9999;
-}
-
-input{
-padding:10px;
-margin:5px;
-width:220px;
-border-radius:6px;
-border:none;
-}
-
-button{
-padding:10px;
-margin:5px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-background:#1f2937;
-color:#fff;
-}
-
-/* APP */
-#app{display:none;height:100vh;flex-direction:column}
-
+/* TOPBAR */
 .topbar{
 display:flex;
 justify-content:space-between;
@@ -56,7 +19,8 @@ padding:10px;
 background:#111827;
 }
 
-.container{display:flex;flex:1}
+/* LAYOUT */
+.container{display:flex;height:100vh}
 
 .sidebar{
 width:250px;
@@ -90,39 +54,37 @@ align-items:center;
 justify-content:center;
 flex-direction:column;
 background:rgba(0,0,0,.9);
-z-index:9998;
+z-index:9999;
+}
+
+button{
+padding:10px;
+margin:5px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+background:#1f2937;
+color:#fff;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ================= AUTH ================= -->
-<div id="auth">
-<h2>📺 BTECH-TV SAAS LOGIN</h2>
-
-<input id="email" placeholder="Email"/>
-<input id="password" type="password" placeholder="Password"/>
-
-<button onclick="register()">Register</button>
-<button onclick="login()">Login</button>
+<!-- ================= TOPBAR ================= -->
+<div class="topbar">
+<div>📺 BTECH-TV IPTV SAAS PRO MAX</div>
+<button onclick="resetTrial()">Reset Trial</button>
 </div>
 
 <!-- ================= PAYWALL ================= -->
 <div id="paywall">
-<h2>⚠ Premium Required</h2>
-<p>Upgrade to continue watching IPTV</p>
+<h2>⚠ Trial Expired</h2>
+<p>Upgrade to continue watching</p>
 <button onclick="payWithPaystack()">Upgrade ₦2000</button>
 </div>
 
 <!-- ================= APP ================= -->
-<div id="app">
-
-<div class="topbar">
-<div>📺 BTECH-TV SAAS IPTV</div>
-<button onclick="logout()">Logout</button>
-</div>
-
 <div class="container">
 
 <div class="sidebar">
@@ -136,69 +98,37 @@ z-index:9998;
 </div>
 
 </div>
-</div>
 
 <script>
 
-/* ================= FIREBASE CONFIG ================= */
-firebase.initializeApp({
-apiKey:"109094502077750831602",
-authDomain:"YOUR_PROJECT.firebaseapp.com"
-});
+/* ================= TRIAL SYSTEM (4 HOURS PER DEVICE) ================= */
+const trialKey = "btechtv_trial_start";
 
-const auth = firebase.auth();
-
-let currentUserEmail = "";
-let hasAccess = false;
-
-/* ================= AUTH ================= */
-function register(){
-auth.createUserWithEmailAndPassword(email.value,password.value)
-.then(u=>{
-alert("Registered");
-});
+function initTrial(){
+if(!localStorage.getItem(trialKey)){
+localStorage.setItem(trialKey,Date.now());
+}
 }
 
-function login(){
-auth.signInWithEmailAndPassword(email.value,password.value)
-.then(u=>{
-currentUserEmail = u.user.email;
-checkAccess();
-});
-}
-
-function logout(){
-auth.signOut();
-location.reload();
-}
-
-/* ================= ACCESS CHECK (BACKEND READY) ================= */
-async function checkAccess(){
-
-// SIMULATED BACKEND CHECK (replace with Node.js API)
-let trialStart = localStorage.getItem("trial_"+currentUserEmail);
-
-if(!trialStart){
-localStorage.setItem("trial_"+currentUserEmail,Date.now());
-trialStart = Date.now();
-}
-
+function checkTrial(){
+let start = parseInt(localStorage.getItem(trialKey));
 let limit = 4 * 60 * 60 * 1000;
-let diff = Date.now() - parseInt(trialStart);
 
-// DEMO LOGIC
-if(diff < limit){
-hasAccess = true;
-}else{
-hasAccess = false;
-}
-
-if(hasAccess){
-document.getElementById("auth").style.display="none";
-document.getElementById("app").style.display="flex";
-}else{
+if(Date.now() - start > limit){
 document.getElementById("paywall").style.display="flex";
+return false;
 }
+
+return true;
+}
+
+setInterval(checkTrial,5000);
+initTrial();
+
+/* ================= RESET TRIAL ================= */
+function resetTrial(){
+localStorage.removeItem(trialKey);
+location.reload();
 }
 
 /* ================= PAYSTACK ================= */
@@ -206,18 +136,14 @@ function payWithPaystack(){
 
 let handler = PaystackPop.setup({
 key:"YOUR_PAYSTACK_PUBLIC_KEY",
-email:currentUserEmail,
+email:"guest@btechtv.com",
 amount:2000*100,
 currency:"NGN",
 
 callback:function(){
-alert("Payment successful");
-
-// unlock premium
-localStorage.setItem("paid_"+currentUserEmail,"true");
-
+alert("Payment Successful - Premium Unlocked");
+localStorage.setItem("premium","true");
 document.getElementById("paywall").style.display="none";
-document.getElementById("app").style.display="flex";
 },
 
 onClose:function(){
@@ -231,15 +157,7 @@ handler.openIframe();
 /* ================= IPTV PLAYER ================= */
 function playStream(){
 
-if(!currentUserEmail){
-alert("Login required");
-return;
-}
-
-// CHECK ACCESS
-let paid = localStorage.getItem("paid_"+currentUserEmail);
-
-if(!paid && !hasAccess){
+if(!checkTrial() && !localStorage.getItem("premium")){
 document.getElementById("paywall").style.display="flex";
 return;
 }
@@ -254,18 +172,10 @@ hls.loadSource(url);
 hls.attachMedia(video);
 hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
 }else{
-video.src = url;
+video.src=url;
 video.play();
 }
 }
-
-/* ================= AUTO AUTH ================= */
-auth.onAuthStateChanged(user=>{
-if(user){
-currentUserEmail = user.email;
-checkAccess();
-}
-});
 
 </script>
 
