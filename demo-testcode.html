@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BTECH-TV SAAS PRO MAX</title>
+<title>BTECH-TV DEMO SAAS</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -15,12 +15,12 @@ body{background:#050816;color:#fff}
 #login{
 position:fixed;inset:0;
 display:flex;justify-content:center;align-items:center;
-background:#050816;z-index:9999;
+background:#050816;
 }
 
 .card{
-width:360px;background:#0f1830;
-padding:25px;border-radius:12px;
+width:340px;background:#0f1830;
+padding:20px;border-radius:12px;
 border:1px solid #233b72;text-align:center;
 }
 
@@ -37,51 +37,44 @@ button{background:#00d4ff;font-weight:bold;cursor:pointer}
 
 /* SIDEBAR */
 .sidebar{
-width:260px;background:#0d1324;
-padding:10px;overflow-y:auto;
-border-right:1px solid #1d2b4f;
+width:240px;background:#0d1324;
+padding:10px;border-right:1px solid #1d2b4f;
 }
 
 .nav-btn{
 width:100%;padding:10px;margin:5px 0;
-background:#121c33;border:none;
-color:#fff;border-radius:8px;
+background:#121c33;color:#fff;border:none;border-radius:8px;
 cursor:pointer;
 }
 
 /* MAIN */
 .main{flex:1;display:flex;flex-direction:column;padding:10px}
 
-.topbar{
-display:flex;justify-content:space-between;margin-bottom:10px;
-}
-
 .player{
-height:320px;background:#000;
-border-radius:10px;overflow:hidden;
+height:300px;background:#000;border-radius:10px;overflow:hidden;
 }
 
 video{width:100%;height:100%}
 
-/* GRID */
 .grid{
 flex:1;overflow:auto;
 display:grid;
-grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
 gap:10px;margin-top:10px;
 }
 
 .card{
-background:#111a31;
-padding:10px;
-border-radius:8px;
-cursor:pointer;
+background:#111a31;padding:10px;
+border-radius:8px;cursor:pointer;
 border:1px solid #1f355d;
 }
 
 .card:hover{border-color:#00d4ff}
 
-.badge{background:red;font-size:10px;padding:3px 6px;border-radius:8px;float:right}
+.badge{
+background:red;font-size:10px;
+padding:3px 6px;border-radius:8px;float:right;
+}
 
 /* ADMIN */
 .admin{
@@ -99,28 +92,27 @@ display:none;
 <!-- LOGIN -->
 <div id="login">
 <div class="card">
-<h2>📺 BTECH-TV SAAS</h2>
+<h2>📺 BTECH-TV DEMO</h2>
 
 <input id="email" placeholder="Email">
 <input id="pass" type="password" placeholder="Password">
 
 <button onclick="login()">Login</button>
+
+<p style="font-size:12px;margin-top:10px">
+DEMO USER: demo@tv.com / 1234<br>
+ADMIN: admin@tv.com / admin
+</p>
 </div>
 </div>
 
 <!-- APP -->
 <div id="app">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-<h3>🌍 IPTV</h3>
+<h3>📡 IPTV</h3>
 
-<button class="nav-btn" onclick="load('ng')">Nigeria</button>
-<button class="nav-btn" onclick="load('us')">USA</button>
-<button class="nav-btn" onclick="load('uk')">UK</button>
-
-<h3>👑 ADMIN</h3>
-<button class="nav-btn" onclick="loadUsers()">Users</button>
+<button class="nav-btn" onclick="loadDemo()">Load Channels</button>
 <button class="nav-btn" onclick="loadStats()">Analytics</button>
 <button class="nav-btn" onclick="upgrade()">Upgrade</button>
 <button class="nav-btn" onclick="logout()">Logout</button>
@@ -128,13 +120,9 @@ display:none;
 <div class="admin" id="adminBox"></div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
-<div class="topbar">
-<h3>LIVE IPTV PLAYER</h3>
-<div>🔴 LIVE</div>
-</div>
+<h3>LIVE PLAYER</h3>
 
 <div class="player">
 <video id="video" controls autoplay></video>
@@ -143,56 +131,50 @@ display:none;
 <div class="grid" id="grid"></div>
 
 </div>
+
 </div>
 
 <script>
 
-let token="";
 let all=[],hls;
 let video=document.getElementById("video");
 
-/* LOGIN (API READY) */
-async function login(){
+/* DEMO USERS */
+const USERS = [
+{email:"demo@tv.com",pass:"1234",role:"user"},
+{email:"admin@tv.com",pass:"admin",role:"admin"}
+];
 
-const res = await fetch("http://localhost:5000/api/auth/login",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({
-email:email.value,
-password:pass.value
-})
-});
+let currentUser=null;
 
-const data = await res.json();
+/* LOGIN */
+function login(){
 
-if(!data.token){
-alert("Login failed");
+let u=USERS.find(x=>
+x.email===email.value && x.pass===pass.value
+);
+
+if(!u){
+alert("Invalid login");
 return;
 }
 
-token=data.token;
+currentUser=u;
 
 login.style.display="none";
 app.style.display="flex";
 
-load("ng");
+loadDemo();
 }
 
-/* LOAD IPTV */
-async function load(code){
+/* DEMO IPTV DATA */
+function loadDemo(){
 
-const res = await fetch(`http://localhost:5000/api/streams/countries/${code}`);
-const text = await res.text();
-
-all=[];
-
-text.split("\n").forEach((l,i,a)=>{
-if(l.startsWith("#EXTINF")){
-let name=l.split(",").pop();
-let url=a[i+1];
-if(url?.startsWith("http")) all.push({name,url});
-}
-});
+all=[
+{name:"CNN",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"BBC News",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
+{name:"Sports HD",url:"https://test-streams.mux.dev/dai-discontinuity-detection/hls.m3u8"}
+];
 
 render();
 }
@@ -209,8 +191,9 @@ grid.appendChild(div);
 });
 }
 
-/* PLAY STREAM */
+/* PLAY */
 function play(i){
+
 let c=all[i];
 
 if(hls)hls.destroy();
@@ -226,48 +209,16 @@ video.play();
 }
 }
 
-/* ADMIN: USERS */
-async function loadUsers(){
-const res=await fetch("http://localhost:5000/api/admin/users",{
-headers:{Authorization:token}
-});
-
-const users=await res.json();
+/* ANALYTICS (DEMO) */
+function loadStats(){
 
 adminBox.style.display="block";
-adminBox.innerHTML="<h4>Users</h4>";
 
-users.forEach(u=>{
-adminBox.innerHTML+=`
-<div style="margin:5px;padding:5px;background:#111">
-${u.email} ${u.banned?"🚫":"✔"}
-<button onclick="banUser('${u._id}')">Ban</button>
-</div>`;
-});
-}
-
-/* BAN USER */
-async function banUser(id){
-await fetch(`http://localhost:5000/api/admin/ban/${id}`,{
-method:"POST",
-headers:{Authorization:token}
-});
-loadUsers();
-}
-
-/* ANALYTICS */
-async function loadStats(){
-const res=await fetch("http://localhost:5000/api/admin/stats",{
-headers:{Authorization:token}
-});
-
-const s=await res.json();
-
-adminBox.style.display="block";
 adminBox.innerHTML=`
-<h4>📊 Analytics</h4>
-<p>Users: ${s.users}</p>
-<p>Banned: ${s.banned}</p>
+<h4>📊 DEMO ANALYTICS</h4>
+<p>Users: 2</p>
+<p>Active: 1</p>
+<p>Streams Played: ${all.length}</p>
 `;
 }
 
