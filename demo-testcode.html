@@ -157,7 +157,7 @@ display:flex;
 justify-content:space-between;
 }
 
-/* MODALS */
+/* MODAL */
 .modal{
 position:fixed;
 inset:0;
@@ -174,8 +174,6 @@ border-radius:10px;
 width:300px;
 }
 
-button{cursor:pointer}
-
 </style>
 </head>
 
@@ -191,7 +189,6 @@ button{cursor:pointer}
 
 <button onclick="register()">Register</button>
 <button onclick="login()">Login</button>
-
 <button onclick="demo('admin')">Demo Admin</button>
 <button onclick="demo('user')">Demo User</button>
 
@@ -211,56 +208,17 @@ button{cursor:pointer}
 
 <div class="container">
 
-<!-- SIDEBAR (ALL CHANNEL MENU YOU REQUESTED) -->
+<!-- SIDEBAR -->
 <div class="sidebar">
 
 <div class="section-title">🌍 COUNTRIES</div>
-<button class="btn" onclick="load('ng')">🇳🇬 Nigeria</button>
-<button class="btn" onclick="load('us')">🇺🇸 USA</button>
-<button class="btn" onclick="load('uk')">🇬🇧 UK</button>
-<button class="btn" onclick="load('in')">🇮🇳 India</button>
-<button class="btn" onclick="load('fr')">🇫🇷 France</button>
-<button class="btn" onclick="load('de')">🇩🇪 Germany</button>
-<button class="btn" onclick="load('br')">🇧🇷 Brazil</button>
-<button class="btn" onclick="load('za')">🇿🇦 South Africa</button>
-<button class="btn" onclick="load('ca')">🇨🇦 Canada</button>
-<button class="btn" onclick="load('au')">🇦🇺 Australia</button>
-<button class="btn" onclick="load('jp')">🇯🇵 Japan</button>
-<button class="btn" onclick="load('kr')">🇰🇷 South Korea</button>
-<button class="btn" onclick="load('cn')">🇨🇳 China</button>
-<button class="btn" onclick="load('es')">🇪🇸 Spain</button>
-<button class="btn" onclick="load('it')">🇮🇹 Italy</button>
-<button class="btn" onclick="load('tr')">🇹🇷 Turkey</button>
-<button class="btn" onclick="load('mx')">🇲🇽 Mexico</button>
-<button class="btn" onclick="load('ae')">🇦🇪 UAE</button>
-<button class="btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
-<button class="btn" onclick="load('eg')">🇪🇬 Egypt</button>
-<button class="btn" onclick="load('ar')">🇦🇷 Argentina</button>
-<button class="btn" onclick="load('pk')">🇵🇰 Pakistan</button>
-<button class="btn" onclick="load('id')">🇮🇩 Indonesia</button>
-<button class="btn" onclick="load('ph')">🇵🇭 Philippines</button>
-<button class="btn" onclick="load('al')">🇦🇱 Albania</button>
+<div id="countryButtons"></div>
 
 <div class="section-title">🎬 CATEGORIES</div>
-<button class="btn" onclick="loadCat('news')">📰 News</button>
-<button class="btn" onclick="loadCat('sports')">⚽ Sports</button>
-<button class="btn" onclick="loadCat('movies')">🎬 Movies</button>
-<button class="btn" onclick="loadCat('music')">🎵 Music</button>
-<button class="btn" onclick="loadCat('kids')">👶 Kids</button>
-<button class="btn" onclick="loadCat('comedy')">😂 Comedy</button>
-<button class="btn" onclick="loadCat('documentary')">📚 Documentary</button>
-<button class="btn" onclick="loadCat('business')">💼 Business</button>
-<button class="btn" onclick="loadCat('science')">🔬 Science</button>
-<button class="btn" onclick="loadCat('travel')">✈ Travel</button>
+<div id="catButtons"></div>
 
 <div class="section-title">🗣 LANGUAGES</div>
-<button class="btn" onclick="load('eng')">🇬🇧 English</button>
-<button class="btn" onclick="load('spa')">🇪🇸 Spanish</button>
-<button class="btn" onclick="load('ara')">🇸🇦 Arabic</button>
-<button class="btn" onclick="load('fra')">🇫🇷 French</button>
-<button class="btn" onclick="load('hin')">🇮🇳 Hindi</button>
-<button class="btn" onclick="load('zho')">🇨🇳 Chinese</button>
-<button class="btn" onclick="load('por')">🇵🇹 Portuguese</button>
+<div id="langButtons"></div>
 
 <div class="section-title">🔥 PREMIUM FEATURES</div>
 <button class="btn">📡 Scan Streams</button>
@@ -270,6 +228,11 @@ button{cursor:pointer}
 <button class="btn">🛠 Repair</button>
 <button class="btn">🔒 Lock System</button>
 <button class="btn" onclick="openAdmin()">⚙ Admin</button>
+
+<div class="section-title">⚡ QUICK CHANNELS</div>
+<button class="btn" onclick="playSample()">BBC News</button>
+<button class="btn" onclick="playSample()">Sky Sports</button>
+<button class="btn" onclick="playSample()">Movie Channel</button>
 
 </div>
 
@@ -287,10 +250,12 @@ button{cursor:pointer}
 
 </div>
 
+</div>
+
 <!-- ADMIN -->
 <div class="modal" id="admin">
 <div class="modal-box">
-<h3>SUPER ADMIN</h3>
+<h3>SUPER ADMIN PANEL</h3>
 <button onclick="alert('Scan')">Scan</button>
 <button onclick="alert('Boost')">Boost</button>
 <button onclick="alert('Repair')">Repair</button>
@@ -300,22 +265,23 @@ button{cursor:pointer}
 
 <script>
 
-/* AUTH */
 let user=null;
+let channels=[];
 
+/* AUTH */
 function register(){
-let u=userBox(),p=passBox();
-localStorage.setItem("u_"+u,JSON.stringify({p,t:Date.now()}));
+localStorage.setItem("u_"+userBox(), JSON.stringify({p:passBox()}));
 alert("Registered");
 }
 
 function login(){
-let u=userBox(),p=passBox();
+let u=userBox(), p=passBox();
 let d=JSON.parse(localStorage.getItem("u_"+u));
-if(d && d.p===p){user=u;start();} else alert("Invalid");
+if(d && d.p===p){user=u; start();}
+else alert("Invalid login");
 }
 
-function demo(t){user=t;start();}
+function demo(t){user=t; start();}
 
 function userBox(){return document.getElementById("user").value}
 function passBox(){return document.getElementById("pass").value}
@@ -324,62 +290,79 @@ function passBox(){return document.getElementById("pass").value}
 function start(){
 document.getElementById("auth").style.display="none";
 document.getElementById("app").style.display="block";
+initUI();
+generate60Channels();
 render();
-setInterval(timer,1000);
+setInterval(()=>document.getElementById("timer").innerText="LIVE",1000);
 }
 
-/* TIMER */
-function timer(){
-document.getElementById("timer").innerText="LIVE";
+/* INIT SIDEBAR BUTTONS */
+function initUI(){
+
+let countries=[
+["ng","Nigeria"],["us","USA"],["uk","UK"],["in","India"],["fr","France"],
+["de","Germany"],["br","Brazil"],["za","South Africa"],["ca","Canada"],
+["au","Australia"],["jp","Japan"],["kr","South Korea"],["cn","China"],
+["es","Spain"],["it","Italy"],["tr","Turkey"],["mx","Mexico"],
+["ae","UAE"],["sa","Saudi Arabia"],["eg","Egypt"],["ar","Argentina"],
+["pk","Pakistan"],["id","Indonesia"],["ph","Philippines"],["al","Albania"]
+];
+
+document.getElementById("countryButtons").innerHTML =
+countries.map(c=>`<button class="btn" onclick="load('${c[0]}')">🇳🇬 ${c[1]}</button>`).join("");
+
+let cats=[
+["news","📰 News"],["sports","⚽ Sports"],["movies","🎬 Movies"],
+["music","🎵 Music"],["kids","👶 Kids"],["comedy","😂 Comedy"],
+["documentary","📚 Documentary"],["business","💼 Business"],
+["science","🔬 Science"],["travel","✈ Travel"]
+];
+
+document.getElementById("catButtons").innerHTML =
+cats.map(c=>`<button class="btn" onclick="loadCat('${c[0]}')">${c[1]}</button>`).join("");
+
+let langs=[
+["eng","English"],["spa","Spanish"],["ara","Arabic"],
+["fra","French"],["hin","Hindi"],["zho","Chinese"],["por","Portuguese"]
+];
+
+document.getElementById("langButtons").innerHTML =
+langs.map(l=>`<button class="btn">🌍 ${l[1]}</button>`).join("");
 }
 
-/* CHANNELS */
-let channels=[
+/* 60 CHANNELS */
+function generate60Channels(){
+channels=[
 {name:"BBC News",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
 {name:"Sky Sports",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
 {name:"Movie Channel",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
 ];
 
+for(let i=1;i<=60;i++){
+channels.push({
+name:"BTECH LIVE "+i,
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+type:Math.random()>0.5?"Free":"Premium",
+status:Math.random()>0.5?"Unlocked":"Locked",
+views:Math.floor(Math.random()*999999)
+});
+}
+}
+
+/* RENDER */
 function render(){
 let box=document.getElementById("channels");
 box.innerHTML="";
+
 channels.forEach(c=>{
-let d=document.createElement("div");
-d.className="channel";
-d.innerHTML=c.name;
-d.onclick=()=>play(c.url);
-box.appendChild(d);
+box.innerHTML+=`
+<div class="channel" onclick="play('${c.url}')">
+<div>
+<b>${c.name}</b><br>
+<small>${c.type||"Free"} | ${c.status||"Unlocked"} | 👁 ${c.views||0}</small>
+</div>
+</div>`;
 });
-}
-
-/* LOAD IPTV */
-async function load(code){
-let url=`https://iptv-org.github.io/iptv/countries/${code}.m3u`;
-fetchM3U(url);
-}
-
-async function loadCat(cat){
-let url=`https://iptv-org.github.io/iptv/categories/${cat}.m3u`;
-fetchM3U(url);
-}
-
-async function fetchM3U(url){
-let res=await fetch(url);
-let text=await res.text();
-
-channels=[];
-
-text.split("\n").forEach((l,i,a)=>{
-if(l.startsWith("#EXTINF")){
-let name=l.split(",")[1];
-let u=a[i+1];
-if(u && u.startsWith("http")){
-channels.push({name,url:u});
-}
-}
-});
-
-render();
 }
 
 /* PLAY */
@@ -398,14 +381,45 @@ document.getElementById("overlay").style.display="none";
 }
 }
 
+/* M3U LOAD */
+async function load(code){
+let url=`https://iptv-org.github.io/iptv/countries/${code}.m3u`;
+let res=await fetch(url);
+let text=await res.text();
+parseM3U(text);
+}
+
+async function loadCat(cat){
+let url=`https://iptv-org.github.io/iptv/categories/${cat}.m3u`;
+let res=await fetch(url);
+let text=await res.text();
+parseM3U(text);
+}
+
+function parseM3U(text){
+channels=[];
+text.split("\n").forEach((l,i,a)=>{
+if(l.startsWith("#EXTINF")){
+let name=l.split(",")[1];
+let u=a[i+1];
+if(u && u.startsWith("http")){
+channels.push({name,url:u});
+}
+}
+});
+render();
+}
+
 /* ADMIN */
 function openAdmin(){document.getElementById("admin").style.display="flex";}
 function closeAdmin(){document.getElementById("admin").style.display="none";}
 
-/* LOGOUT */
-function logout(){location.reload();}
+/* QUICK */
+function playSample(){
+alert("Loading sample channel...");
+}
 
-start();
+function logout(){location.reload();}
 
 </script>
 
