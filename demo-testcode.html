@@ -1,9 +1,8 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BTECH-TV PRO MAX | SUPER ADMIN IPTV SYSTEM</title>
 
 <meta name="theme-color" content="#050816">
@@ -11,12 +10,11 @@
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-
 :root{
 --bg:#050816;
 --sidebar:#0d1324;
---card:#172033;
 --panel:#111827;
+--card:#172033;
 --accent:#00d4ff;
 --text:#ffffff;
 --success:#16a34a;
@@ -47,25 +45,24 @@ height:100vh;
 .sidebar{
 width:320px;
 background:var(--sidebar);
-overflow:auto;
 padding:15px;
+overflow:auto;
 border-right:1px solid rgba(255,255,255,.08);
 }
 
 .logo{
 font-size:24px;
 font-weight:900;
-color:var(--accent);
-margin-bottom:15px;
 text-align:center;
+color:var(--accent);
+margin-bottom:20px;
 }
 
 .section-title{
-margin-top:15px;
-margin-bottom:8px;
+color:var(--accent);
 font-size:13px;
 font-weight:bold;
-color:var(--accent);
+margin:15px 0 8px;
 }
 
 .nav-btn{
@@ -75,7 +72,7 @@ margin:3px 0;
 border:none;
 border-radius:10px;
 background:#121c33;
-color:white;
+color:#fff;
 cursor:pointer;
 text-align:left;
 }
@@ -94,8 +91,6 @@ flex-direction:column;
 overflow:hidden;
 }
 
-/* HEADER */
-
 .topbar{
 display:flex;
 justify-content:space-between;
@@ -113,8 +108,8 @@ font-weight:bold;
 /* PLAYER */
 
 .player{
-height:320px;
-background:black;
+height:300px;
+background:#000;
 }
 
 .player video{
@@ -133,8 +128,8 @@ padding:15px;
 
 .card{
 background:var(--panel);
-border-radius:12px;
 padding:15px;
+border-radius:12px;
 }
 
 .card h3{
@@ -147,14 +142,30 @@ color:var(--accent);
 margin-top:5px;
 }
 
+/* SEARCH */
+
+.search-box{
+padding:0 15px 15px;
+}
+
+.search-box input{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+background:#111827;
+color:white;
+}
+
 /* CHANNEL GRID */
 
 .channel-grid{
+flex:1;
+overflow:auto;
 padding:15px;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
 gap:15px;
-overflow:auto;
 }
 
 .channel{
@@ -182,15 +193,15 @@ margin-right:4px;
 }
 
 .free{
-background:#16a34a;
+background:var(--success);
 }
 
 .premium{
-background:#dc2626;
+background:var(--danger);
 }
 
 .locked{
-background:#f59e0b;
+background:var(--warning);
 }
 
 .actions{
@@ -205,6 +216,7 @@ padding:8px;
 border:none;
 border-radius:8px;
 cursor:pointer;
+font-weight:bold;
 }
 
 .watch{
@@ -213,32 +225,41 @@ background:var(--accent);
 
 .edit{
 background:#2563eb;
-color:white;
+color:#fff;
 }
 
 .delete{
 background:#dc2626;
-color:white;
+color:#fff;
 }
 
-/* MODAL */
+/* PLAYER MODAL */
 
 .modal{
 position:fixed;
 inset:0;
+background:rgba(0,0,0,.9);
 display:none;
 justify-content:center;
 align-items:center;
-background:rgba(0,0,0,.85);
+flex-direction:column;
+z-index:999;
 }
 
-.modal-box{
-background:#111827;
-padding:20px;
-border-radius:12px;
-width:350px;
+.modal video{
+width:90%;
+max-width:1000px;
 }
 
+.close-btn{
+background:red;
+color:white;
+border:none;
+padding:10px 20px;
+margin-bottom:10px;
+border-radius:8px;
+cursor:pointer;
+}
 </style>
 </head>
 <body>
@@ -260,23 +281,6 @@ width:350px;
 <button class="nav-btn">🇩🇪 Germany</button>
 <button class="nav-btn">🇧🇷 Brazil</button>
 <button class="nav-btn">🇿🇦 South Africa</button>
-<button class="nav-btn">🇨🇦 Canada</button>
-<button class="nav-btn">🇦🇺 Australia</button>
-<button class="nav-btn">🇯🇵 Japan</button>
-<button class="nav-btn">🇰🇷 South Korea</button>
-<button class="nav-btn">🇨🇳 China</button>
-<button class="nav-btn">🇪🇸 Spain</button>
-<button class="nav-btn">🇮🇹 Italy</button>
-<button class="nav-btn">🇹🇷 Turkey</button>
-<button class="nav-btn">🇲🇽 Mexico</button>
-<button class="nav-btn">🇦🇪 UAE</button>
-<button class="nav-btn">🇸🇦 Saudi Arabia</button>
-<button class="nav-btn">🇪🇬 Egypt</button>
-<button class="nav-btn">🇦🇷 Argentina</button>
-<button class="nav-btn">🇵🇰 Pakistan</button>
-<button class="nav-btn">🇮🇩 Indonesia</button>
-<button class="nav-btn">🇵🇭 Philippines</button>
-<button class="nav-btn">🇦🇱 Albania</button>
 
 <div class="section-title">🎬 CATEGORIES</div>
 
@@ -286,10 +290,6 @@ width:350px;
 <button class="nav-btn">🎵 Music</button>
 <button class="nav-btn">👶 Kids</button>
 <button class="nav-btn">😂 Comedy</button>
-<button class="nav-btn">📚 Documentary</button>
-<button class="nav-btn">💼 Business</button>
-<button class="nav-btn">🔬 Science</button>
-<button class="nav-btn">✈ Travel</button>
 
 <div class="section-title">🗣 LANGUAGES</div>
 
@@ -297,17 +297,24 @@ width:350px;
 <button class="nav-btn">🇪🇸 Spanish</button>
 <button class="nav-btn">🇸🇦 Arabic</button>
 <button class="nav-btn">🇫🇷 French</button>
-<button class="nav-btn">🇮🇳 Hindi</button>
-<button class="nav-btn">🇨🇳 Chinese</button>
-<button class="nav-btn">🇵🇹 Portuguese</button>
 
 <div class="section-title">🔥 TOOLS</div>
 
-<button class="nav-btn">📡 Scan</button>
-<button class="nav-btn">⚡ Boost</button>
-<button class="nav-btn">🛠 Repair</button>
-<button class="nav-btn">🧠 Optimize</button>
+<button class="nav-btn" onclick="scan()">📡 Scan</button>
+<button class="nav-btn" onclick="boost()">⚡ Boost</button>
+<button class="nav-btn" onclick="repair()">🛠 Repair</button>
+<button class="nav-btn" onclick="optimize()">🧠 Optimize</button>
 <button class="nav-btn">⚙ Admin</button>
+
+<div class="section-title">👑 SUPER ADMIN</div>
+
+<button class="nav-btn">👥 User Manager</button>
+<button class="nav-btn">💳 Subscriptions</button>
+<button class="nav-btn">📊 Analytics</button>
+<button class="nav-btn">🔐 Security</button>
+<button class="nav-btn">🖥 Servers</button>
+<button class="nav-btn">⭐ Favorites</button>
+<button class="nav-btn">📜 History</button>
 
 </div>
 
@@ -320,39 +327,123 @@ width:350px;
 </div>
 
 <div class="player">
-<video id="video" controls autoplay muted></video>
+<video id="preview" controls muted></video>
 </div>
 
 <div class="stats">
-<div class="card"><h3>Total Channels</h3><p>2500+</p></div>
-<div class="card"><h3>Premium</h3><p>850</p></div>
-<div class="card"><h3>Locked</h3><p>220</p></div>
+<div class="card"><h3>Total Channels</h3><p id="total">60</p></div>
+<div class="card"><h3>Premium</h3><p id="premium">20</p></div>
+<div class="card"><h3>Locked</h3><p id="locked">10</p></div>
 <div class="card"><h3>Users</h3><p>120K</p></div>
 </div>
 
-<div class="channel-grid" id="grid">
-
-<!-- Channels Render Here -->
-
+<div class="search-box">
+<input type="text" id="search" placeholder="Search Channels..." onkeyup="renderChannels()">
 </div>
 
+<div class="channel-grid" id="grid"></div>
+
+</div>
 </div>
 
+<!-- PLAYER MODAL -->
+
+<div class="modal" id="modal">
+<button class="close-btn" onclick="closePlayer()">Close</button>
+<video id="video" controls autoplay></video>
 </div>
 
 <script>
 
-let channels=[];
+const channels=[];
 
-function loadCountry(code){}
-function loadCategory(cat){}
-function scan(){}
-function boost(){}
-function repair(){}
-function optimize(){}
+for(let i=1;i<=60;i++){
+channels.push({
+name:"BTECH LIVE "+i,
+type:i%3===0?"Premium":"Free",
+locked:i%5===0,
+img:"https://via.placeholder.com/400x200/111827/00d4ff?text=CHANNEL+"+i,
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+});
+}
+
+function renderChannels(){
+
+const q=document.getElementById("search").value.toLowerCase();
+
+const grid=document.getElementById("grid");
+
+grid.innerHTML="";
+
+channels
+.filter(c=>c.name.toLowerCase().includes(q))
+.forEach(c=>{
+
+grid.innerHTML+=`
+<div class="channel">
+
+<img src="${c.img}">
+
+<div class="channel-body">
+
+<h3>${c.name}</h3>
+
+<span class="badge ${c.type==='Free'?'free':'premium'}">
+${c.type}
+</span>
+
+${c.locked?'<span class="badge locked">Locked</span>':''}
+
+<div class="actions">
+<button class="watch" onclick="playChannel('${c.url}')">Watch</button>
+<button class="edit">Edit</button>
+<button class="delete">Delete</button>
+</div>
+
+</div>
+</div>`;
+});
+}
+
+function playChannel(url){
+
+const video=document.getElementById("video");
+
+document.getElementById("modal").style.display="flex";
+
+if(Hls.isSupported()){
+const hls=new Hls();
+hls.loadSource(url);
+hls.attachMedia(video);
+}else{
+video.src=url;
+}
+}
+
+function closePlayer(){
+document.getElementById("modal").style.display="none";
+document.getElementById("video").pause();
+}
+
+function scan(){
+alert("Scanning IPTV Streams...");
+}
+
+function boost(){
+alert("Boosting Stream Performance...");
+}
+
+function repair(){
+alert("Repairing IPTV Sources...");
+}
+
+function optimize(){
+alert("AI IPTV Optimization Started...");
+}
+
+renderChannels();
 
 </script>
 
 </body>
 </html>
-```
