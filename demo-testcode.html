@@ -247,6 +247,226 @@ location.reload();
 loadUltra();
 
 </script>
+/* =========================
+   SUPER ADMIN CONFIG CORE
+========================= */
 
+let SYSTEM_CONFIG = JSON.parse(localStorage.getItem("SYSTEM_CONFIG")) || {
+  trialEnabled: true,
+  trialDuration: 3600000,
+  allowedCountries: [],
+  allowedCategories: [],
+  lockedChannels: [],
+  streamQuality: "auto",
+  adsEnabled: true,
+
+  deviceLimit: 1,
+  bannedUsers: [],
+
+  afterExpiryMode: "block", 
+  // block | free | radio | upgrade | payment | limited
+
+  gracePeriod: 600000,
+  autoRenew: false
+};
+
+function saveConfig(){
+  localStorage.setItem("SYSTEM_CONFIG", JSON.stringify(SYSTEM_CONFIG));
+}
+
+/* =========================
+   TRIAL CONTROL
+========================= */
+
+function setTrial(enable){
+  SYSTEM_CONFIG.trialEnabled = enable;
+  saveConfig();
+  alert("Trial: " + enable);
+}
+
+function changeTrialDuration(ms){
+  SYSTEM_CONFIG.trialDuration = ms;
+  saveConfig();
+  alert("Trial duration updated");
+}
+
+/* =========================
+   CHANNEL CONTROL
+========================= */
+
+function lockChannel(name){
+  if(!SYSTEM_CONFIG.lockedChannels.includes(name)){
+    SYSTEM_CONFIG.lockedChannels.push(name);
+    saveConfig();
+  }
+}
+
+function unlockChannel(name){
+  SYSTEM_CONFIG.lockedChannels =
+    SYSTEM_CONFIG.lockedChannels.filter(c => c !== name);
+  saveConfig();
+}
+
+/* =========================
+   COUNTRY / CATEGORY CONTROL
+========================= */
+
+function toggleCountry(code){
+  if(SYSTEM_CONFIG.allowedCountries.includes(code)){
+    SYSTEM_CONFIG.allowedCountries =
+      SYSTEM_CONFIG.allowedCountries.filter(c => c !== code);
+  } else {
+    SYSTEM_CONFIG.allowedCountries.push(code);
+  }
+  saveConfig();
+}
+
+function toggleCategory(cat){
+  if(SYSTEM_CONFIG.allowedCategories.includes(cat)){
+    SYSTEM_CONFIG.allowedCategories =
+      SYSTEM_CONFIG.allowedCategories.filter(c => c !== cat);
+  } else {
+    SYSTEM_CONFIG.allowedCategories.push(cat);
+  }
+  saveConfig();
+}
+
+/* =========================
+   STREAM QUALITY CONTROL
+========================= */
+
+function setQuality(q){
+  SYSTEM_CONFIG.streamQuality = q; // low, mid, high, auto
+  saveConfig();
+}
+
+/* =========================
+   ADS CONTROL
+========================= */
+
+function toggleAds(){
+  SYSTEM_CONFIG.adsEnabled = !SYSTEM_CONFIG.adsEnabled;
+  saveConfig();
+}
+
+/* =========================
+   USER CONTROL SYSTEM
+========================= */
+
+let USERS = JSON.parse(localStorage.getItem("USERS")) || [];
+
+function createUser(email, pass){
+  USERS.push({
+    email,
+    pass,
+    banned:false,
+    devices:0,
+    premium:false,
+    exp: Date.now() + SYSTEM_CONFIG.trialDuration
+  });
+  localStorage.setItem("USERS", JSON.stringify(USERS));
+}
+
+function banUser(email){
+  USERS = USERS.map(u=>{
+    if(u.email === email) u.banned = true;
+    return u;
+  });
+  localStorage.setItem("USERS", JSON.stringify(USERS));
+}
+
+function unbanUser(email){
+  USERS = USERS.map(u=>{
+    if(u.email === email) u.banned = false;
+    return u;
+  });
+  localStorage.setItem("USERS", JSON.stringify(USERS));
+}
+
+/* =========================
+   DEVICE LIMIT
+========================= */
+
+function checkDeviceLimit(user){
+  if(user.devices >= SYSTEM_CONFIG.deviceLimit){
+    alert("Device limit reached");
+    return false;
+  }
+  user.devices++;
+  return true;
+}
+
+/* =========================
+   AFTER EXPIRY SYSTEM
+========================= */
+
+function handleExpiryUI(){
+  const mode = SYSTEM_CONFIG.afterExpiryMode;
+
+  if(mode === "block"){
+    document.body.innerHTML = "<h1>⛔ PLATFORM BLOCKED - SUBSCRIBE</h1>";
+  }
+
+  if(mode === "free"){
+    alert("Free channels only enabled");
+  }
+
+  if(mode === "radio"){
+    alert("Radio mode only active");
+  }
+
+  if(mode === "upgrade"){
+    document.body.innerHTML = "<h1>⬆ UPGRADE TO PREMIUM</h1>";
+  }
+
+  if(mode === "payment"){
+    document.body.innerHTML = "<h1>💳 PAYMENT REQUIRED</h1>";
+  }
+
+  if(mode === "limited"){
+    alert("Limited viewing mode active");
+  }
+}
+
+/* =========================
+   GRACE PERIOD
+========================= */
+
+function checkGrace(exp){
+  let now = Date.now();
+  if(now > exp && now < exp + SYSTEM_CONFIG.gracePeriod){
+    return true; // still allowed
+  }
+  return false;
+}
+
+/* =========================
+   AUTO RENEW
+========================= */
+
+function autoRenewUser(user){
+  if(SYSTEM_CONFIG.autoRenew){
+    user.exp = Date.now() + SYSTEM_CONFIG.trialDuration;
+  }
+}
+
+/* =========================
+   ADMIN MASTER PANEL SHORTCUTS
+========================= */
+
+function SUPER_ENABLE_ALL(){
+  SYSTEM_CONFIG.trialEnabled = true;
+  SYSTEM_CONFIG.adsEnabled = false;
+  SYSTEM_CONFIG.deviceLimit = 3;
+  SYSTEM_CONFIG.afterExpiryMode = "limited";
+  saveConfig();
+  alert("SUPER MODE ACTIVATED");
+}
+
+function SUPER_LOCK_PLATFORM(){
+  SYSTEM_CONFIG.afterExpiryMode = "block";
+  saveConfig();
+  handleExpiryUI();
+}
 </body>
 </html>
