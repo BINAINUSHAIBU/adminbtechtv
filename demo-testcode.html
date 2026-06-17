@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>📺 BTECH-TV SUPER ADMIN CONTROL PANEL</title>
+<title>📺 BTECH SUPER ADMIN IPTV SYSTEM</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -14,30 +14,29 @@ body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden}
 /* AUTH */
 #authBox,#adminBox{
 position:fixed;inset:0;background:#050816;
-display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:9999;
+display:flex;justify-content:center;align-items:center;z-index:9999;flex-direction:column;
 }
-.card{background:#0d1324;padding:20px;border-radius:12px;width:320px;text-align:center;border:1px solid #1d2b4f}
-input{width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;background:#101a31;color:#fff}
-button{width:100%;padding:10px;margin-top:10px;background:#00d4ff;border:none;border-radius:6px;cursor:pointer}
+.card{background:#0d1324;padding:20px;border-radius:12px;width:320px;text-align:center}
+input{width:100%;padding:10px;margin:6px 0;border:none;border-radius:6px;background:#101a31;color:#fff}
+button{width:100%;padding:10px;margin-top:8px;background:#00d4ff;border:none;border-radius:6px;cursor:pointer}
 
 /* TIMER */
 #timerBar{position:fixed;top:10px;right:10px;background:#00d4ff;color:#000;padding:8px;border-radius:8px;z-index:999}
 
 /* SIDEBAR */
-.sidebar{width:280px;background:#0d1324;overflow-y:auto;border-right:1px solid #1d2b4f;padding:10px}
-.logo{font-size:20px;font-weight:900;color:#00d4ff}
-.nav-btn{width:100%;padding:8px;margin:4px 0;background:#121c33;border:none;color:#fff;border-radius:6px;cursor:pointer}
-.nav-btn:hover{background:#1e2f57}
+.sidebar{width:260px;background:#0d1324;overflow-y:auto;padding:10px;border-right:1px solid #1d2b4f}
+.logo{font-size:18px;font-weight:900;color:#00d4ff;margin-bottom:10px}
+.nav-btn{width:100%;padding:8px;margin:4px 0;background:#121c33;border:none;color:#fff;border-radius:6px}
 
 /* MAIN */
 .main{flex:1;display:flex;flex-direction:column;padding:10px;overflow:hidden}
-.topbar{display:flex;justify-content:space-between}
-.player{height:320px;background:#000;border-radius:10px;overflow:hidden}
+.topbar{display:flex;gap:10px}
+.player{height:300px;background:#000;border-radius:10px;overflow:hidden}
 video{width:100%;height:100%}
 
 /* GRID */
 .grid{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:10px}
-.card2{background:#111a31;padding:10px;border-radius:10px;cursor:pointer;border:1px solid #1f355d}
+.card2{background:#111a31;padding:10px;border-radius:10px;cursor:pointer}
 
 /* ADMIN PANEL */
 #adminPanel{
@@ -46,94 +45,85 @@ background:#0b1224;border-left:2px solid #00d4ff;
 transition:.3s;overflow:auto;padding:10px;z-index:9998
 }
 #adminPanel.active{right:0}
-.section{margin:10px 0;padding:10px;background:#111a31;border-radius:10px}
-.small{font-size:12px;color:#aaa}
+.section{background:#111a31;padding:10px;margin:10px 0;border-radius:10px}
 
-.locked{
-filter:grayscale(1);
-pointer-events:none;
-opacity:.4;
+/* BLOCK SCREENS */
+.block{
+position:fixed;inset:0;background:#000;display:flex;
+align-items:center;justify-content:center;flex-direction:column;z-index:99999
 }
 </style>
 </head>
 
 <body>
 
-<div id="timerBar">Trial Loading...</div>
+<div id="timerBar">Loading...</div>
 
-<!-- USER AUTH -->
+<!-- AUTH -->
 <div id="authBox">
-  <div class="card">
-    <h3>User Login</h3>
-    <input id="email" placeholder="Email">
-    <input id="pass" type="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <button onclick="register()">Register</button>
-    <button onclick="showAdmin()">🔐 Super Admin</button>
-  </div>
+<div class="card">
+<h3>Login</h3>
+<input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<button onclick="register()">Register</button>
+<button onclick="openAdmin()">Super Admin</button>
+</div>
 </div>
 
 <!-- ADMIN LOGIN -->
 <div id="adminBox" style="display:none">
-  <div class="card">
-    <h3>SUPER ADMIN</h3>
-    <input id="auser" placeholder="Admin User">
-    <input id="apass" type="password" placeholder="Password">
-    <button onclick="adminLogin()">Login</button>
-    <button onclick="hideAdmin()">Back</button>
-  </div>
+<div class="card">
+<h3>ADMIN LOGIN</h3>
+<input id="auser" placeholder="Admin">
+<input id="apass" type="password" placeholder="Password">
+<button onclick="adminLogin()">Login</button>
+</div>
 </div>
 
 <!-- ADMIN PANEL -->
 <div id="adminPanel">
-  <h3>⚙️ SUPER CONTROL PANEL</h3>
 
-  <div class="section">
-    <h4>⏳ Trial Control</h4>
-    <button onclick="resetTrial()">Reset Trial</button>
-    <button onclick="expireNow()">Force Expire</button>
-  </div>
+<h3>⚙ SUPER ADMIN CONTROL</h3>
 
-  <div class="section">
-    <h4>📡 System Features</h4>
-    <button onclick="toggleFeature('scan')">Scan Toggle</button>
-    <button onclick="toggleFeature('boost')">Boost Toggle</button>
-    <button onclick="toggleFeature('pip')">PiP Toggle</button>
-    <button onclick="toggleFeature('record')">Record Toggle</button>
-  </div>
+<div class="section">
+<button onclick="toggleTrial()">Toggle Trial</button>
+<button onclick="resetTrial()">Reset Trial</button>
+<button onclick="expireNow()">Force Expire</button>
+</div>
 
-  <div class="section">
-    <h4>🌍 Channels Mode</h4>
-    <button onclick="setMode('free')">Free Mode</button>
-    <button onclick="setMode('premium')">Premium Mode</button>
-    <button onclick="setMode('locked')">Lock All</button>
-  </div>
+<div class="section">
+<button onclick="CONFIG.ads=!CONFIG.ads;save()">Ads ON/OFF</button>
+<button onclick="CONFIG.mode='block';save()">Block Mode</button>
+<button onclick="CONFIG.mode='limited';save()">Limited Mode</button>
+<button onclick="CONFIG.mode='upgrade';save()">Upgrade Mode</button>
+</div>
 
-  <div class="section">
-    <h4>📊 Stats</h4>
-    <div class="small">All settings saved in localStorage</div>
-  </div>
+<div class="section">
+<button onclick="CONFIG.countries.ng=!CONFIG.countries.ng;save()">Nigeria</button>
+<button onclick="CONFIG.countries.us=!CONFIG.countries.us;save()">USA</button>
+</div>
 
-  <button onclick="closePanel()">Close</button>
+<button onclick="closeAdmin()">Close</button>
+
 </div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<div class="logo">📺 BTECH SUPER ADMIN</div>
+<div class="logo">📺 BTECH IPTV PRO</div>
 
-<button class="nav-btn" onclick="loadUltra()">🌍 Global</button>
 <button class="nav-btn" onclick="load('ng')">Nigeria</button>
 <button class="nav-btn" onclick="load('us')">USA</button>
+<button class="nav-btn" onclick="loadUltra()">Global</button>
 
-<div style="margin-top:10px;color:#00d4ff">⚙ Admin</div>
-<button class="nav-btn" onclick="toggleAdminPanel()">Open Control Panel</button>
+<button class="nav-btn" onclick="toggleAdmin()">Admin Panel</button>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
 <div class="topbar">
-<input oninput="search(this.value)" placeholder="Search channels..." style="flex:1;padding:8px">
+<input oninput="search(this.value)" placeholder="Search">
 </div>
 
 <div class="player"><video id="video" controls autoplay muted></video></div>
@@ -144,11 +134,18 @@ opacity:.4;
 
 <script>
 
-/* SETTINGS */
-let settings = JSON.parse(localStorage.getItem("settings")||"{}");
-let TRIAL = 5*3600*1000;
+/* CONFIG */
+let CONFIG = JSON.parse(localStorage.getItem("CONFIG")) || {
+trial:true,
+trialTime:5*3600*1000,
+mode:"free",
+ads:false,
+countries:{ng:true,us:true}
+};
 
-/* AUTH */
+function save(){localStorage.setItem("CONFIG",JSON.stringify(CONFIG));}
+
+/* USERS */
 function register(){
 localStorage.setItem("user",JSON.stringify({e:email.value,p:pass.value}));
 alert("Registered");
@@ -158,7 +155,7 @@ function login(){
 let u=JSON.parse(localStorage.getItem("user"));
 if(!u||u.e!==email.value||u.p!==pass.value)return alert("Invalid");
 
-if(!localStorage.getItem("start")) localStorage.setItem("start",Date.now());
+if(!localStorage.getItem("start"))localStorage.setItem("start",Date.now());
 
 authBox.style.display="none";
 startTimer();
@@ -166,33 +163,26 @@ loadUltra();
 }
 
 /* ADMIN */
-function showAdmin(){adminBox.style.display="flex"}
-function hideAdmin(){adminBox.style.display="none"}
-
+function openAdmin(){adminBox.style.display="flex"}
 function adminLogin(){
-if(auser.value==="admin" && apass.value==="1234"){
+if(auser.value==="admin"&&apass.value==="1234"){
 adminBox.style.display="none";
-toggleAdminPanel();
-}else alert("Wrong admin");
+adminPanel.classList.add("active");
 }
+}
+function toggleAdmin(){adminPanel.classList.add("active")}
+function closeAdmin(){adminPanel.classList.remove("active")}
 
-function toggleAdminPanel(){
-document.getElementById("adminPanel").classList.add("active");
-}
-function closePanel(){
-document.getElementById("adminPanel").classList.remove("active");
-}
-
-/* TRIAL */
+/* TIMER */
 function startTimer(){
 setInterval(()=>{
 let s=localStorage.getItem("start");
 if(!s)return;
 
-let d=TRIAL-(Date.now()-s);
+let d=CONFIG.trialTime-(Date.now()-s);
 
 if(d<=0){
-document.body.innerHTML="<h1 style='text-align:center;margin-top:20%;color:red'>⛔ EXPIRED VERSION</h1>";
+document.body.innerHTML="<div class='block'><h1>⛔ EXPIRED</h1></div>";
 return;
 }
 
@@ -200,53 +190,24 @@ timerBar.innerText=`Trial: ${Math.floor(d/3600000)}h ${Math.floor(d%3600000/6000
 },1000);
 }
 
-function resetTrial(){
-localStorage.setItem("start",Date.now());
-alert("Trial reset");
-}
-
-function expireNow(){
-localStorage.setItem("start",Date.now()-TRIAL-1000);
-location.reload();
-}
-
-/* FEATURES */
-function toggleFeature(f){
-settings[f]=!settings[f];
-localStorage.setItem("settings",JSON.stringify(settings));
-alert(f+" = "+settings[f]);
-}
-
-function setMode(m){
-settings.mode=m;
-localStorage.setItem("settings",JSON.stringify(settings));
-alert("Mode: "+m);
-}
-
-/* IPTV CORE */
+/* IPTV */
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
 
-async function loadUltra(){
-loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
-}
-
-async function load(code){
-loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
-}
+async function loadUltra(){loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");}
+async function load(c){loadM3U(`https://iptv-org.github.io/iptv/countries/${c}.m3u`);}
 
 async function loadM3U(url){
-let res=await fetch(url);
-let txt=await res.text();
+let r=await fetch(url);
+let t=await r.text();
+all=[];
 
-all=[];filtered=[];
-
-txt.split("\n").forEach((l,i,a)=>{
+t.split("\n").forEach((l,i,a)=>{
 if(l.startsWith("#EXTINF")){
 let name=l.split(",")[1];
 let url=a[i+1];
-if(url?.startsWith("http")) all.push({name,url});
+if(url?.startsWith("http"))all.push({name,url});
 }
 });
 
@@ -256,18 +217,17 @@ render();
 
 function render(){
 grid.innerHTML="";
-filtered.forEach((c,idx)=>{
-let div=document.createElement("div");
-div.className="card2";
-div.innerHTML=c.name;
-div.onclick=()=>play(idx);
-grid.appendChild(div);
+filtered.forEach((c,i)=>{
+let d=document.createElement("div");
+d.className="card2";
+d.innerText=c.name;
+d.onclick=()=>play(i);
+grid.appendChild(d);
 });
 }
 
 function play(idx){
-i=idx;
-let c=filtered[i];
+let c=filtered[idx];
 
 if(hls)hls.destroy();
 
@@ -285,147 +245,6 @@ render();
 }
 
 </script>
-let CONFIG = JSON.parse(localStorage.getItem("CONFIG")) || {
-  trialEnabled: true,
-  trialDuration: 5 * 3600 * 1000,
 
-  allowFreeChannels: true,
-  allowRadio: true,
-
-  countries: { ng:true, us:true, uk:true },
-  categories: { news:true, sports:true, movies:true, music:true },
-
-  streamQuality: "auto", // low, medium, high, auto
-
-  adsEnabled: false,
-
-  premiumUsers: [],
-  bannedUsers: [],
-
-  deviceLimit: 1,
-
-  afterExpiryMode: "limited", // block | limited | upgrade | payment
-
-  gracePeriod: 60 * 60 * 1000, // 1 hour
-
-  autoRenew: false
-};
-
-function saveConfig(){
-  localStorage.setItem("CONFIG", JSON.stringify(CONFIG));
-}
-  function checkAccess(){
-let start = localStorage.getItem("start");
-if(!start) return "new";
-
-let elapsed = Date.now() - start;
-let expired = elapsed > CONFIG.trialDuration;
-
-if(!expired) return "active";
-
-/* GRACE PERIOD */
-let graceEnd = parseInt(start) + CONFIG.trialDuration + CONFIG.gracePeriod;
-if(Date.now() < graceEnd) return "grace";
-
-return "expired";
-}
-  function handleExpiredState(){
-let state = checkAccess();
-
-if(state === "expired"){
-
-if(CONFIG.afterExpiryMode === "block"){
-document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:20%'>⛔ PLATFORM BLOCKED - SUBSCRIPTION REQUIRED</h1>";
-}
-
-if(CONFIG.afterExpiryMode === "upgrade"){
-showUpgradePage();
-}
-
-if(CONFIG.afterExpiryMode === "limited"){
-enableLimitedMode();
-}
-
-if(CONFIG.afterExpiryMode === "payment"){
-showPaymentPage();
-}
-
-}
-}
-  function enableLimitedMode(){
-filtered = all.filter(c =>
-CONFIG.allowFreeChannels && c.name.toLowerCase().includes("news")
-);
-
-render();
-alert("⚠ Limited Mode Active (Free Channels Only)");
-}
-
-  function load(code){
-if(!CONFIG.countries[code]){
-alert("🚫 Country Disabled by Admin");
-return;
-}
-loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
-}
-
-function loadCat(cat){
-if(!CONFIG.categories[cat]){
-alert("🚫 Category Disabled");
-return;
-}
-loadM3U(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`);
-}
-  function createUser(email){
-let users = JSON.parse(localStorage.getItem("users")||"[]");
-users.push({email,deviceId:navigator.userAgent});
-localStorage.setItem("users",JSON.stringify(users));
-}
-
-function banUser(email){
-CONFIG.bannedUsers.push(email);
-saveConfig();
-}
-
-function isBanned(email){
-return CONFIG.bannedUsers.includes(email);
-}
-
-function grantPremium(email){
-CONFIG.premiumUsers.push(email);
-saveConfig();
-}
-  function setQuality(level){
-CONFIG.streamQuality = level;
-saveConfig();
-alert("Quality set: " + level);
-}
-  function showAd(){
-if(!CONFIG.adsEnabled) return;
-
-let ad = document.createElement("div");
-ad.innerHTML = "📢 Sponsored Content";
-ad.style = "position:fixed;bottom:10px;left:10px;background:#00d4ff;color:#000;padding:10px;border-radius:8px";
-document.body.appendChild(ad);
-
-setTimeout(()=>ad.remove(),5000);
-}
-  showAd();
-  function showUpgradePage(){
-document.body.innerHTML = `
-<div style="text-align:center;margin-top:20%;color:white">
-<h1>🚀 Upgrade Required</h1>
-<p>Your trial has expired</p>
-<button onclick="location.reload()">Login Again</button>
-</div>`;
-}
-  function showPaymentPage(){
-document.body.innerHTML = `
-<div style="text-align:center;margin-top:20%;color:white">
-<h1>💳 Payment Required</h1>
-<p>Subscribe to continue watching</p>
-<button onclick="alert('Connect Paystack/Stripe here')">Pay Now</button>
-</div>`;
-}
 </body>
 </html>
