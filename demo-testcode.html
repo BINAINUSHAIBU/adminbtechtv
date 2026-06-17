@@ -1,6 +1,6 @@
 <!-- ========================================================= -->
 <!-- SUPER ADMIN IPTV + BTECH-TV PRO ULTRA MAX WORLD -->
-<!-- FULL MERGED ONE PAGE VERSION 2026 -->
+<!-- FULL MERGED ONE PAGE VERSION 2026 (COMBINED BUILD) -->
 <!-- ========================================================= -->
 
 <!DOCTYPE html>
@@ -10,7 +10,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>📺 SUPER ADMIN IPTV ULTRA MAX WORLD</title>
+<title>📺 SUPER ADMIN IPTV ULTRA MAX WORLD PRO</title>
 
 <meta name="theme-color" content="#050816"/>
 
@@ -83,17 +83,6 @@ border-right:1px solid rgba(255,255,255,0.05);
 overflow-y:auto;
 }
 
-.logo-box{text-align:center;margin-bottom:25px;}
-.logo-box h1{color:#00d4ff;font-size:26px;}
-.logo-box p{color:#94a3b8;font-size:13px;}
-
-.menu-section-title{
-margin:15px 0 8px;
-color:#00d4ff;
-font-size:12px;
-font-weight:bold;
-}
-
 .sidebar button{
 width:100%;
 padding:12px;
@@ -108,6 +97,13 @@ font-weight:bold;
 }
 
 .sidebar button:hover{background:#00d4ff;color:#000;}
+
+.menu-section-title{
+margin:15px 0 8px;
+color:#00d4ff;
+font-size:12px;
+font-weight:bold;
+}
 
 /* ========================= MAIN ========================= */
 
@@ -253,18 +249,7 @@ cursor:pointer;
 <!-- SIDEBAR -->
 <aside class="sidebar">
 
-<div class="logo-box">
-<h1>BTECH TV</h1>
-<p>SUPER ADMIN CONTROL PANEL</p>
-</div>
-
-<button>Dashboard</button>
-<button>All Channels</button>
-<button>Free Channels</button>
-<button>Premium Channels</button>
-<button>Locked Channels</button>
-<button>Users</button>
-<button>Settings</button>
+<h3 style="color:#00d4ff;">📺 BTECH IPTV</h3>
 
 <div class="menu-section-title">🌍 COUNTRIES</div>
 <button onclick="load('ng')">Nigeria</button>
@@ -279,12 +264,10 @@ cursor:pointer;
 <button onclick="loadCat('movies')">Movies</button>
 <button onclick="loadCat('music')">Music</button>
 
-<div class="menu-section-title">🔥 FEATURES</div>
-<button>Scan Streams</button>
-<button>Boost</button>
-<button>PiP Mode</button>
-<button>Repair</button>
-<button>Admin</button>
+<div class="menu-section-title">⚙ ADMIN</div>
+<button>Dashboard</button>
+<button>Users</button>
+<button>Settings</button>
 
 </aside>
 
@@ -293,6 +276,7 @@ cursor:pointer;
 
 <div class="top-header">
 <h2>SUPER ADMIN DASHBOARD</h2>
+
 <div class="admin-box">
 <img src="https://i.pravatar.cc/100">
 <div>
@@ -300,6 +284,7 @@ cursor:pointer;
 <small>System Admin</small>
 </div>
 </div>
+
 </div>
 
 <!-- STATS -->
@@ -321,38 +306,56 @@ cursor:pointer;
 
 let channels=[];
 
+/* ================= LOGIN ================= */
 function login(){
 document.getElementById("auth").style.display="none";
 document.getElementById("app").style.display="block";
-generate();
-render();
+load("ng");
 }
 
 function demo(){login();}
 
-/* GENERATE 60 CHANNELS */
-function generate(){
+/* ================= LOAD IPTV ================= */
+function load(code){
+fetch(`https://iptv-org.github.io/iptv/countries/${code}.m3u`)
+.then(r=>r.text())
+.then(parse);
+}
+
+function loadCat(cat){
+fetch(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`)
+.then(r=>r.text())
+.then(parse);
+}
+
+/* ================= PARSE ================= */
+function parse(t){
 channels=[];
-for(let i=1;i<=60;i++){
+let lines=t.split("\n");
+
+for(let i=0;i<lines.length;i++){
+if(lines[i].startsWith("#EXTINF")){
+let name=lines[i].split(",")[1];
+let url=lines[i+1];
+
+if(url && url.startsWith("http")){
 channels.push({
-name:"BTECH LIVE "+i,
+name,
 type:Math.random()>0.5?"Free":"Premium",
 status:Math.random()>0.4?"Unlocked":"Locked",
-views:Math.floor(Math.random()*999999),
-stream:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-img:"https://via.placeholder.com/400x200/111827/00d4ff?text=LIVE+"+i
+views:Math.floor(Math.random()*99999),
+stream:url,
+img:"https://via.placeholder.com/400x200/111827/00d4ff?text=LIVE"
 });
 }
+}
+}
+
 updateStats();
+render();
 }
 
-function updateStats(){
-document.getElementById("total").innerText=channels.length;
-document.getElementById("free").innerText=channels.filter(c=>c.type=="Free").length;
-document.getElementById("premium").innerText=channels.filter(c=>c.type=="Premium").length;
-document.getElementById("locked").innerText=channels.filter(c=>c.status=="Locked").length;
-}
-
+/* ================= RENDER ================= */
 function render(){
 let g=document.getElementById("grid");
 g.innerHTML="";
@@ -363,23 +366,28 @@ g.innerHTML+=`
 <img src="${c.img}">
 <div class="channel-body">
 <h3>${c.name}</h3>
+
 <span class="badge ${c.type=="Free"?"free":"premium"}">${c.type}</span>
 <span class="badge ${c.status=="Locked"?"locked":"unlocked"}">${c.status}</span>
+
 <p>👁 ${c.views}</p>
+
 <div class="actions">
 <button class="watch" onclick="play('${c.stream}','${c.name}')">Watch</button>
 <button class="edit">Edit</button>
 <button class="del">Del</button>
 </div>
+
 </div>
 </div>`;
 });
 }
 
-/* PLAY */
+/* ================= PLAY ================= */
 function play(url,name){
 document.getElementById("player").style.display="flex";
 document.getElementById("ptitle").innerText=name;
+
 let v=document.getElementById("video");
 
 if(Hls.isSupported()){
@@ -398,35 +406,12 @@ document.getElementById("player").style.display="none";
 document.getElementById("video").pause();
 }
 
-/* IPTV LOAD */
-function load(code){
-fetch(`https://iptv-org.github.io/iptv/countries/${code}.m3u`)
-.then(r=>r.text()).then(parse);
-}
-
-function loadCat(cat){
-fetch(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`)
-.then(r=>r.text()).then(parse);
-}
-
-function parse(t){
-channels=[];
-let lines=t.split("\n");
-for(let i=0;i<lines.length;i++){
-if(lines[i].startsWith("#EXTINF")){
-let name=lines[i].split(",")[1];
-let url=lines[i+1];
-if(url && url.startsWith("http")){
-channels.push({
-name,type:"Free",status:"Unlocked",views:0,
-stream:url,
-img:"https://via.placeholder.com/400x200"
-});
-}
-}
-}
-updateStats();
-render();
+/* ================= STATS ================= */
+function updateStats(){
+document.getElementById("total").innerText=channels.length;
+document.getElementById("free").innerText=channels.filter(c=>c.type=="Free").length;
+document.getElementById("premium").innerText=channels.filter(c=>c.type=="Premium").length;
+document.getElementById("locked").innerText=channels.filter(c=>c.status=="Locked").length;
 }
 
 </script>
