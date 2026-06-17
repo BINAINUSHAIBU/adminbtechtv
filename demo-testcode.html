@@ -1,124 +1,157 @@
+<!-- ========================================================= -->
+<!-- SUPER ADMIN IPTV + BTECH-TV PRO ULTRA MAX WORLD -->
+<!-- FULL MERGED ONE PAGE VERSION 2026 -->
+<!-- ========================================================= -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
-<meta charset="UTF-8">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>📺 SUPER ADMIN IPTV ULTRA MAX WORLD</title>
 
 <meta name="theme-color" content="#050816"/>
-
-<title>BTECH-TV WORLD ULTRA IPTV SAAS PRO MAX</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
-body{margin:0;font-family:Arial;background:#0b0f1a;color:#fff}
-
-.hidden{display:none}
-
-/* AUTH */
-#auth{
-padding:20px;
-max-width:400px;
-margin:60px auto;
-background:#111827;
-border-radius:12px;
+:root{
+--bg:#050816;
+--panel:#111827;
+--card:#172033;
+--hover:#22304d;
+--accent:#00d4ff;
+--text:#ffffff;
+--muted:#94a3b8;
+--success:#16a34a;
+--danger:#ef4444;
+--warning:#f59e0b;
+--premium:#7c3aed;
 }
 
-#auth input{
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+
+body{
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
+
+/* ================= AUTH ================= */
+#auth{
+position:fixed;
+inset:0;
+background:#050816;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:99999;
+}
+
+.auth-box{
+background:var(--panel);
+padding:25px;
+border-radius:15px;
+width:320px;
+}
+
+.auth-box input{
 width:100%;
-padding:12px;
+padding:10px;
 margin:8px 0;
 border:none;
 border-radius:8px;
 background:#0f172a;
-color:#fff;
+color:white;
 }
 
-/* TOP BAR */
-header{
+.auth-box button{
+width:100%;
+padding:10px;
+margin-top:6px;
+background:var(--accent);
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+
+/* ================= TOPBAR ================= */
+
+.topbar{
+height:70px;
+background:#0f172a;
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:10px;
-background:#111827;
+padding:0 15px;
 }
 
-/* LAYOUT */
+.logo{color:var(--accent);font-weight:bold}
+
+/* ================= LAYOUT ================= */
+
 .container{display:flex;height:100vh}
 
+/* SIDEBAR */
 .sidebar{
-width:300px;
+width:320px;
 background:#0b1220;
 overflow:auto;
 padding:10px;
 }
 
+/* MAIN */
 .main{flex:1;display:flex;flex-direction:column}
 
-/* CHANNEL */
-.channel{
-padding:10px;
-margin:5px 0;
-background:#111827;
-cursor:pointer;
-border-radius:6px;
-}
-
 /* PLAYER */
-#player{
-width:100%;
-height:350px;
-background:black;
-}
+.player{height:320px;background:black;position:relative}
 
-/* GRID */
-.grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
-padding:10px;
-}
+.player video{width:100%;height:100%}
 
-/* ADMIN */
-.admin-panel{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.9);
+.overlay{
+position:absolute;inset:0;
+background:rgba(0,0,0,.8);
 display:none;
 justify-content:center;
 align-items:center;
+flex-direction:column;
 }
 
-.admin-box{
-background:#111827;
-padding:20px;
-border-radius:12px;
-width:90%;
-max-width:800px;
+/* CHANNELS */
+.channels{
+flex:1;
+overflow:auto;
+padding:10px;
 }
 
-button{
-padding:8px 12px;
-margin:4px;
-border:none;
-border-radius:6px;
+/* CHANNEL */
+.channel{
+background:var(--card);
+padding:10px;
+margin:6px 0;
+border-radius:10px;
 cursor:pointer;
+display:flex;
+justify-content:space-between;
 }
 
+/* UPGRADE */
 .upgrade{
 position:fixed;
-bottom:20px;
-right:20px;
+bottom:15px;
+right:15px;
 background:red;
 padding:10px;
 border-radius:10px;
 cursor:pointer;
 }
 
-.modal{
+/* ADMIN */
+.admin{
 position:fixed;
 inset:0;
 background:rgba(0,0,0,.8);
@@ -127,23 +160,25 @@ justify-content:center;
 align-items:center;
 }
 
-.modal-content{
-background:#111827;
+.admin-box{
+background:var(--panel);
 padding:20px;
 border-radius:12px;
 width:300px;
 }
 
-</style>
+button{cursor:pointer}
 
+</style>
 </head>
 
 <body>
 
 <!-- ================= AUTH ================= -->
 <div id="auth">
+<div class="auth-box">
 
-<h2>Login / Register</h2>
+<h3>Login / Register</h3>
 
 <input id="user" placeholder="Username">
 <input id="pass" type="password" placeholder="Password">
@@ -151,101 +186,80 @@ width:300px;
 <button onclick="register()">Register</button>
 <button onclick="login()">Login</button>
 
-<br><br>
+<button onclick="demo('admin')">Demo Admin</button>
+<button onclick="demo('user')">Demo User</button>
 
-<button onclick="demoLogin('admin')">Demo Admin</button>
-<button onclick="demoLogin('user')">Demo User</button>
-
+</div>
 </div>
 
 <!-- ================= APP ================= -->
-<div id="app" class="hidden">
+<div id="app" style="display:none">
 
-<header>
-
-<div>📺 BTECH-TV ULTRA IPTV SAAS</div>
-
+<div class="topbar">
+<div class="logo">📺 SUPER ADMIN IPTV</div>
 <div>
 <span id="timer"></span>
 <button onclick="logout()">Logout</button>
 </div>
-
-</header>
+</div>
 
 <div class="container">
 
-<!-- SIDEBAR -->
 <div class="sidebar">
-
 <h3>Channels</h3>
-<input id="search" placeholder="Search..." oninput="render()">
-
 <div id="list"></div>
-
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
-<video id="player" controls></video>
+<div class="player">
+<video id="video" controls></video>
 
-<div class="grid">
-
-<div>
-<h3>Stats</h3>
-<p id="stats"></p>
+<div class="overlay" id="overlay">
+<h2>Loading...</h2>
 </div>
 
-<div>
-<h3>Status</h3>
-<p id="status"></p>
 </div>
+
+<div class="channels" id="channels"></div>
 
 </div>
 
 </div>
 
-</div>
-
-<!-- UPGRADE -->
 <div class="upgrade" onclick="openUpgrade()">🔥 Upgrade</div>
 
 </div>
 
-<!-- ================= UPGRADE ================= -->
-<div class="modal" id="modal">
-
-<div class="modal-content">
-
-<h3>Upgrade Plans</h3>
-
-<button onclick="buy('1-day')">1 Day</button>
-<button onclick="buy('7-day')">7 Days</button>
-<button onclick="buy('30-day')">30 Days</button>
-
-<br><br>
-<button onclick="closeUpgrade()">Close</button>
-
-</div>
-
-</div>
-
 <!-- ================= ADMIN ================= -->
-<div class="admin-panel" id="admin">
-
+<div class="admin" id="admin">
 <div class="admin-box">
 
-<h2>SUPER ADMIN PANEL</h2>
+<h3>SUPER ADMIN PANEL</h3>
 
-<button onclick="scan()">Scan Streams</button>
-<button onclick="repair()">Repair</button>
-<button onclick="boost()">Boost</button>
-<button onclick="premium()">Enable Premium</button>
-<button onclick="backup()">Backup</button>
+<button onclick="alert('Scanning')">Scan Streams</button>
+<button onclick="alert('Repair')">Repair</button>
+<button onclick="alert('Boost')">Boost</button>
+<button onclick="alert('Premium ON')">Premium</button>
+<button onclick="alert('Backup Done')">Backup</button>
 <button onclick="closeAdmin()">Close</button>
 
 </div>
+</div>
 
+<!-- ================= UPGRADE ================= -->
+<div class="admin" id="upgrade">
+<div class="admin-box">
+
+<h3>Upgrade Plans</h3>
+
+<button onclick="buy('1 Day')">1 Day</button>
+<button onclick="buy('7 Days')">7 Days</button>
+<button onclick="buy('30 Days')">30 Days</button>
+
+<button onclick="closeUpgrade()">Close</button>
+
+</div>
 </div>
 
 <script>
@@ -258,105 +272,109 @@ let channels=[
 ];
 
 let user=null;
-let startTime=0;
+let start=0;
 
 /* ================= AUTH ================= */
 function register(){
-let u=userField(),p=passField();
+let u=userBox(),p=passBox();
 localStorage.setItem("u_"+u,JSON.stringify({p,plan:"trial",t:Date.now()}));
 alert("Registered");
 }
 
 function login(){
-let u=userField(),p=passField();
+let u=userBox(),p=passBox();
 let d=JSON.parse(localStorage.getItem("u_"+u));
-if(d&&d.p===p){user=u;start();}else alert("Invalid");
+if(d && d.p===p){
+user=u;
+startApp();
+}else alert("Invalid login");
 }
 
-function demoLogin(t){
-user=t;
-start();
+function demo(type){
+user=type;
+startApp();
 }
 
-function userField(){return document.getElementById("user").value}
-function passField(){return document.getElementById("pass").value}
+function userBox(){return document.getElementById("user").value}
+function passBox(){return document.getElementById("pass").value}
 
 /* ================= START ================= */
-function start(){
-document.getElementById("auth").classList.add("hidden");
-document.getElementById("app").classList.remove("hidden");
-startTime=Date.now();
+function startApp(){
+document.getElementById("auth").style.display="none";
+document.getElementById("app").style.display="block";
+start=Date.now();
 render();
-setInterval(timer,1000);
-setInterval(stats,2000);
+setInterval(trialTimer,1000);
 }
 
-/* ================= TIMER ================= */
-function timer(){
+/* ================= TRIAL TIMER ================= */
+function trialTimer(){
 let d=JSON.parse(localStorage.getItem("u_"+user)||"{}");
 let limit=5*60*60*1000;
-let left=limit-(Date.now()-d.t);
+let left=limit-(Date.now()-d.t||0);
 
 if(left<=0){
 document.getElementById("timer").innerText="EXPIRED";
 return;
 }
 
-document.getElementById("timer").innerText=Math.floor(left/3600000)+"h";
+document.getElementById("timer").innerText=Math.floor(left/3600000)+"h left";
 }
 
 /* ================= CHANNELS ================= */
 function render(){
-let q=document.getElementById("search").value||"";
-let box=document.getElementById("list");
+let box=document.getElementById("channels");
 box.innerHTML="";
 
-channels
-.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()))
-.forEach(c=>{
+channels.forEach((c,i)=>{
 let div=document.createElement("div");
 div.className="channel";
-div.innerText=c.name;
+div.innerHTML=`${c.name}`;
 div.onclick=()=>play(c.url);
 box.appendChild(div);
 });
 }
 
-/* ================= PLAYER ================= */
+/* ================= PLAY ================= */
 function play(url){
-let v=document.getElementById("player");
+let v=document.getElementById("video");
+
+document.getElementById("overlay").style.display="flex";
+
 if(Hls.isSupported()){
 let h=new Hls();
 h.loadSource(url);
 h.attachMedia(v);
-}
+h.on(Hls.Events.MANIFEST_PARSED,()=>{
 v.play();
+document.getElementById("overlay").style.display="none";
+});
 }
-
-/* ================= STATS ================= */
-function stats(){
-document.getElementById("stats").innerText=
-"Channels: "+channels.length;
 }
 
 /* ================= UPGRADE ================= */
-function openUpgrade(){modal.style.display="flex"}
-function closeUpgrade(){modal.style.display="none"}
-
-function buy(p){
-alert("Bought "+p);
+function openUpgrade(){
+document.getElementById("upgrade").style.display="flex";
 }
+function closeUpgrade(){
+document.getElementById("upgrade").style.display="none";
+}
+function buy(p){alert("Bought "+p)}
 
 /* ================= ADMIN ================= */
-function scan(){alert("Scanning...")}
-function repair(){alert("Repairing...")}
-function boost(){alert("Boost ON")}
-function premium(){alert("Premium Enabled")}
-function backup(){alert("Backup created")}
-function closeAdmin(){admin.style.display="none"}
+function openAdmin(){
+document.getElementById("admin").style.display="flex";
+}
+function closeAdmin(){
+document.getElementById("admin").style.display="none";
+}
 
 /* ================= LOGOUT ================= */
-function logout(){location.reload()}
+function logout(){
+location.reload();
+}
+
+render();
 
 </script>
 
