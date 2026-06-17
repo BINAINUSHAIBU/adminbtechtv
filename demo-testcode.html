@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,129 +6,174 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>BTECH TV - SUPER ADMIN SAAS</title>
+<title>BTECH TV - SUPER ADMIN DASHBOARD</title>
+
+<meta name="theme-color" content="#050816">
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
 
-/* ================= BASE ================= */
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-body{background:#020617;color:#fff;overflow-x:hidden}
+/* ========================= GLOBAL ========================= */
 
-/* ================= LAYOUT ================= */
-.container{display:flex;min-height:100vh}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
 
-/* ================= SIDEBAR ================= */
-.sidebar{
-width:260px;
-background:#0f172a;
-padding:15px;
-overflow-y:auto;
-border-right:1px solid #1e293b;
+body{
+background:#020617;
+color:#fff;
+overflow-x:hidden;
 }
 
-.logo{
-text-align:center;
-margin-bottom:20px;
+/* ========================= LAYOUT ========================= */
+
+.dashboard-container{display:flex;min-height:100vh;}
+
+/* ========================= SIDEBAR ========================= */
+
+.sidebar{
+width:280px;
+background:#0f172a;
+padding:20px;
+border-right:1px solid rgba(255,255,255,0.05);
+overflow-y:auto;
+}
+
+.logo-box{text-align:center;margin-bottom:25px;}
+.logo-box h1{color:#00d4ff;font-size:26px;}
+.logo-box p{color:#94a3b8;font-size:13px;}
+
+.menu-section-title{
+margin:15px 0 8px;
 color:#00d4ff;
-font-size:22px;
+font-size:12px;
 font-weight:bold;
 }
 
-.menu button{
+.sidebar button{
 width:100%;
-padding:10px;
+padding:12px;
 margin:5px 0;
-background:#111827;
 border:none;
-color:#fff;
 border-radius:10px;
+background:#111827;
+color:#fff;
 cursor:pointer;
 text-align:left;
+font-weight:bold;
 }
 
-.menu button:hover{background:#00d4ff;color:#000}
+.sidebar button:hover{background:#00d4ff;color:#000;}
 
-/* ================= MAIN ================= */
-.main{flex:1;padding:15px}
+/* ========================= MAIN ========================= */
+
+.dashboard-main{flex:1;padding:20px;}
 
 /* HEADER */
-.header{
+
+.top-header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:15px;
+margin-bottom:20px;
 }
 
-.card{
+.admin-box{
+display:flex;
+align-items:center;
+gap:10px;
 background:#111827;
 padding:10px 15px;
-border-radius:10px;
+border-radius:12px;
 }
 
+.admin-box img{width:40px;height:40px;border-radius:50%;}
+
 /* STATS */
+
 .stats{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-gap:10px;
-margin-bottom:15px;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-bottom:20px;
 }
 
 .stat{
 background:#111827;
-padding:15px;
-border-radius:12px;
+padding:20px;
+border-radius:15px;
 text-align:center;
 }
 
-.stat h3{color:#94a3b8;font-size:12px}
-.stat p{color:#00d4ff;font-size:22px}
+.stat h3{color:#94a3b8;}
+.stat p{font-size:26px;color:#00d4ff;margin-top:5px;}
 
-/* CHANNELS */
-.grid{
+/* SETTINGS */
+
+.settings{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:10px;
+gap:15px;
+margin-bottom:20px;
+}
+
+.card{
+background:#111827;
+padding:15px;
+border-radius:15px;
+}
+
+/* CHANNEL GRID */
+
+.channel-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:15px;
 }
 
 .channel{
 background:#1e293b;
-border-radius:12px;
+border-radius:15px;
 overflow:hidden;
 }
 
-.channel img{width:100%;height:120px;object-fit:cover}
+.channel img{
+width:100%;
+height:140px;
+object-fit:cover;
+}
 
-.body{padding:10px}
+.channel-body{padding:12px;}
 
 .badge{
-font-size:10px;
-padding:4px 8px;
+padding:5px 10px;
 border-radius:20px;
+font-size:11px;
 margin-right:5px;
 }
 
-.free{background:#16a34a}
-.premium{background:#dc2626}
-.locked{background:#f59e0b}
+.free{background:#16a34a;}
+.premium{background:#dc2626;}
+.locked{background:#f59e0b;}
+.unlocked{background:#2563eb;}
 
-.btns button{
+.actions button{
 margin-top:8px;
 width:32%;
-padding:6px;
+padding:8px;
 border:none;
 border-radius:8px;
 cursor:pointer;
 font-weight:bold;
 }
 
-.watch{background:#00d4ff}
-.edit{background:#2563eb;color:#fff}
-.del{background:#dc2626;color:#fff}
+.watch{background:#00d4ff;}
+.edit{background:#2563eb;color:#fff;}
+.del{background:#dc2626;color:#fff;}
 
 /* PLAYER */
+
 .player{
 position:fixed;
 inset:0;
@@ -139,33 +185,35 @@ flex-direction:column;
 z-index:999;
 }
 
-.player video{width:90%;max-width:900px}
+.player video{width:90%;max-width:900px;}
 
 .close{
 background:red;
-padding:10px;
+padding:10px 15px;
 border:none;
+border-radius:8px;
 color:#fff;
 margin-bottom:10px;
-border-radius:8px;
 cursor:pointer;
 }
 
 /* AUTH */
+
 #auth{
 position:fixed;
 inset:0;
+background:#020617;
 display:flex;
 justify-content:center;
 align-items:center;
-background:#020617;
+z-index:1000;
 }
 
 .auth-box{
 background:#111827;
 padding:20px;
-border-radius:12px;
-width:280px;
+border-radius:15px;
+width:300px;
 }
 
 .auth-box input{
@@ -181,12 +229,12 @@ color:#fff;
 .auth-box button{
 width:100%;
 padding:10px;
+margin-top:5px;
 background:#00d4ff;
 border:none;
-margin-top:5px;
 border-radius:8px;
-font-weight:bold;
 cursor:pointer;
+font-weight:bold;
 }
 
 </style>
@@ -195,71 +243,119 @@ cursor:pointer;
 
 <body>
 
-<!-- AUTH -->
+<!-- ================= AUTH ================= -->
 <div id="auth">
 <div class="auth-box">
-<h3>SUPER ADMIN LOGIN</h3>
+<h3>Login</h3>
 <input id="u" placeholder="User">
 <input id="p" type="password" placeholder="Pass">
 <button onclick="login()">Login</button>
 </div>
 </div>
 
-<!-- PLAYER -->
+<!-- ================= PLAYER ================= -->
 <div class="player" id="player">
 <button class="close" onclick="closePlayer()">Close</button>
+<h3 id="ptitle"></h3>
 <video id="video" controls></video>
 </div>
 
-<!-- APP -->
-<div id="app" style="display:none">
+<!-- ================= APP ================= -->
+<div id="app" style="display:none;">
 
-<div class="container">
+<div class="dashboard-container">
 
 <!-- SIDEBAR -->
-<div class="sidebar">
+<aside class="sidebar">
 
-<div class="logo">BTECH TV</div>
-
-<div class="menu">
-<button onclick="load('ng')">🇳🇬 Nigeria</button>
-<button onclick="load('us')">🇺🇸 USA</button>
-<button onclick="loadCat('sports')">⚽ Sports</button>
-<button onclick="loadCat('news')">📰 News</button>
-<button onclick="loadCat('movies')">🎬 Movies</button>
-<button onclick="openAdmin()">⚙ Admin</button>
+<div class="logo-box">
+<h1>BTECH TV</h1>
+<p>SUPER ADMIN CONTROL PANEL</p>
 </div>
 
-</div>
+<button>Dashboard</button>
+<button>All Channels</button>
+<button>Free Channels</button>
+<button>Premium Channels</button>
+<button>Locked Channels</button>
+<button>Users</button>
+<button>Subscriptions</button>
+<button>Servers</button>
+<button>Super Settings</button>
+
+<div class="menu-section-title">🌍 COUNTRIES</div>
+<button onclick="load('ng')">Nigeria</button>
+<button onclick="load('us')">USA</button>
+<button onclick="load('uk')">UK</button>
+<button onclick="load('in')">India</button>
+<button onclick="load('fr')">France</button>
+<button onclick="load('de')">Germany</button>
+
+<div class="menu-section-title">🎬 CATEGORIES</div>
+<button onclick="loadCat('news')">News</button>
+<button onclick="loadCat('sports')">Sports</button>
+<button onclick="loadCat('movies')">Movies</button>
+<button onclick="loadCat('music')">Music</button>
+
+<div class="menu-section-title">🗣 LANGUAGES</div>
+<button>English</button>
+<button>Spanish</button>
+<button>Arabic</button>
+
+<div class="menu-section-title">🔥 FEATURES</div>
+<button>Scan Streams</button>
+<button>Boost</button>
+<button>PiP Mode</button>
+<button>Repair</button>
+<button>Admin</button>
+
+</aside>
 
 <!-- MAIN -->
-<div class="main">
+<main class="dashboard-main">
 
-<div class="header">
+<div class="top-header">
 <h2>SUPER ADMIN DASHBOARD</h2>
-<div class="card">BTECH ADMIN</div>
+<div class="admin-box">
+<img src="https://i.pravatar.cc/100">
+<div>
+<b>BTECH ADMIN</b><br>
+<small>System Admin</small>
+</div>
+</div>
 </div>
 
 <!-- STATS -->
 <div class="stats">
-<div class="stat"><h3>Total</h3><p id="t">0</p></div>
-<div class="stat"><h3>Free</h3><p id="f">0</p></div>
-<div class="stat"><h3>Premium</h3><p id="p">0</p></div>
-<div class="stat"><h3>Locked</h3><p id="l">0</p></div>
+<div class="stat"><h3>Total</h3><p id="total">0</p></div>
+<div class="stat"><h3>Free</h3><p id="free">0</p></div>
+<div class="stat"><h3>Premium</h3><p id="premium">0</p></div>
+<div class="stat"><h3>Locked</h3><p id="locked">0</p></div>
+</div>
+
+<!-- SETTINGS -->
+<div class="settings">
+<div class="card">📡 System ON</div>
+<div class="card">🔴 Live Streaming</div>
+<div class="card">💳 Premium Access</div>
+<div class="card">🛡 Security</div>
 </div>
 
 <!-- CHANNELS -->
-<div class="grid" id="grid"></div>
+<div class="channel-grid" id="grid"></div>
 
-</div>
+</main>
+
 </div>
 </div>
 
 <script>
 
+let user=null;
 let channels=[];
 
 function login(){
+user="admin";
 document.getElementById("auth").style.display="none";
 document.getElementById("app").style.display="block";
 generate();
@@ -274,17 +370,17 @@ type:Math.random()>0.5?"Free":"Premium",
 status:Math.random()>0.3?"Unlocked":"Locked",
 views:Math.floor(Math.random()*900000),
 stream:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-img:"https://via.placeholder.com/400x200"
+img:"https://via.placeholder.com/400x200/111827/00d4ff?text=LIVE+"+i
 });
 }
-stats();
+updateStats();
 }
 
-function stats(){
-document.getElementById("t").innerText=channels.length;
-document.getElementById("f").innerText=channels.filter(c=>c.type=="Free").length;
-document.getElementById("p").innerText=channels.filter(c=>c.type=="Premium").length;
-document.getElementById("l").innerText=channels.filter(c=>c.status=="Locked").length;
+function updateStats(){
+document.getElementById("total").innerText=channels.length;
+document.getElementById("free").innerText=channels.filter(c=>c.type=="Free").length;
+document.getElementById("premium").innerText=channels.filter(c=>c.type=="Premium").length;
+document.getElementById("locked").innerText=channels.filter(c=>c.status=="Locked").length;
 }
 
 function render(){
@@ -294,12 +390,12 @@ channels.forEach(c=>{
 g.innerHTML+=`
 <div class="channel">
 <img src="${c.img}">
-<div class="body">
-<h4>${c.name}</h4>
+<div class="channel-body">
+<h3>${c.name}</h3>
 <span class="badge ${c.type=="Free"?"free":"premium"}">${c.type}</span>
-<span class="badge ${c.status=="Locked"?"locked":""}">${c.status}</span>
+<span class="badge ${c.status=="Locked"?"locked":"unlocked"}">${c.status}</span>
 <p>👁 ${c.views}</p>
-<div class="btns">
+<div class="actions">
 <button class="watch" onclick="play('${c.stream}','${c.name}')">Watch</button>
 <button class="edit">Edit</button>
 <button class="del">Del</button>
@@ -311,6 +407,8 @@ g.innerHTML+=`
 
 function play(url,name){
 document.getElementById("player").style.display="flex";
+document.getElementById("ptitle").innerText=name;
+
 let v=document.getElementById("video");
 
 if(Hls.isSupported()){
@@ -341,24 +439,20 @@ fetch(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`)
 
 function parse(t){
 channels=[];
-let l=t.split("\n");
-for(let i=0;i<l.length;i++){
-if(l[i].startsWith("#EXTINF")){
-let name=l[i].split(",")[1];
-let url=l[i+1];
+let lines=t.split("\n");
+for(let i=0;i<lines.length;i++){
+if(lines[i].startsWith("#EXTINF")){
+let name=lines[i].split(",")[1];
+let url=lines[i+1];
 if(url && url.startsWith("http")){
 channels.push({
-name,
-type:"Free",
-status:"Unlocked",
-views:0,
-stream:url,
+name,type:"Free",status:"Unlocked",views:0,stream:url,
 img:"https://via.placeholder.com/400x200"
 });
 }
 }
 }
-stats();
+updateStats();
 render();
 }
 
