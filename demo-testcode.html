@@ -285,6 +285,147 @@ render();
 }
 
 </script>
+let CONFIG = JSON.parse(localStorage.getItem("CONFIG")) || {
+  trialEnabled: true,
+  trialDuration: 5 * 3600 * 1000,
 
+  allowFreeChannels: true,
+  allowRadio: true,
+
+  countries: { ng:true, us:true, uk:true },
+  categories: { news:true, sports:true, movies:true, music:true },
+
+  streamQuality: "auto", // low, medium, high, auto
+
+  adsEnabled: false,
+
+  premiumUsers: [],
+  bannedUsers: [],
+
+  deviceLimit: 1,
+
+  afterExpiryMode: "limited", // block | limited | upgrade | payment
+
+  gracePeriod: 60 * 60 * 1000, // 1 hour
+
+  autoRenew: false
+};
+
+function saveConfig(){
+  localStorage.setItem("CONFIG", JSON.stringify(CONFIG));
+}
+  function checkAccess(){
+let start = localStorage.getItem("start");
+if(!start) return "new";
+
+let elapsed = Date.now() - start;
+let expired = elapsed > CONFIG.trialDuration;
+
+if(!expired) return "active";
+
+/* GRACE PERIOD */
+let graceEnd = parseInt(start) + CONFIG.trialDuration + CONFIG.gracePeriod;
+if(Date.now() < graceEnd) return "grace";
+
+return "expired";
+}
+  function handleExpiredState(){
+let state = checkAccess();
+
+if(state === "expired"){
+
+if(CONFIG.afterExpiryMode === "block"){
+document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:20%'>⛔ PLATFORM BLOCKED - SUBSCRIPTION REQUIRED</h1>";
+}
+
+if(CONFIG.afterExpiryMode === "upgrade"){
+showUpgradePage();
+}
+
+if(CONFIG.afterExpiryMode === "limited"){
+enableLimitedMode();
+}
+
+if(CONFIG.afterExpiryMode === "payment"){
+showPaymentPage();
+}
+
+}
+}
+  function enableLimitedMode(){
+filtered = all.filter(c =>
+CONFIG.allowFreeChannels && c.name.toLowerCase().includes("news")
+);
+
+render();
+alert("⚠ Limited Mode Active (Free Channels Only)");
+}
+
+  function load(code){
+if(!CONFIG.countries[code]){
+alert("🚫 Country Disabled by Admin");
+return;
+}
+loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
+}
+
+function loadCat(cat){
+if(!CONFIG.categories[cat]){
+alert("🚫 Category Disabled");
+return;
+}
+loadM3U(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`);
+}
+  function createUser(email){
+let users = JSON.parse(localStorage.getItem("users")||"[]");
+users.push({email,deviceId:navigator.userAgent});
+localStorage.setItem("users",JSON.stringify(users));
+}
+
+function banUser(email){
+CONFIG.bannedUsers.push(email);
+saveConfig();
+}
+
+function isBanned(email){
+return CONFIG.bannedUsers.includes(email);
+}
+
+function grantPremium(email){
+CONFIG.premiumUsers.push(email);
+saveConfig();
+}
+  function setQuality(level){
+CONFIG.streamQuality = level;
+saveConfig();
+alert("Quality set: " + level);
+}
+  function showAd(){
+if(!CONFIG.adsEnabled) return;
+
+let ad = document.createElement("div");
+ad.innerHTML = "📢 Sponsored Content";
+ad.style = "position:fixed;bottom:10px;left:10px;background:#00d4ff;color:#000;padding:10px;border-radius:8px";
+document.body.appendChild(ad);
+
+setTimeout(()=>ad.remove(),5000);
+}
+  showAd();
+  function showUpgradePage(){
+document.body.innerHTML = `
+<div style="text-align:center;margin-top:20%;color:white">
+<h1>🚀 Upgrade Required</h1>
+<p>Your trial has expired</p>
+<button onclick="location.reload()">Login Again</button>
+</div>`;
+}
+  function showPaymentPage(){
+document.body.innerHTML = `
+<div style="text-align:center;margin-top:20%;color:white">
+<h1>💳 Payment Required</h1>
+<p>Subscribe to continue watching</p>
+<button onclick="alert('Connect Paystack/Stripe here')">Pay Now</button>
+</div>`;
+}
 </body>
 </html>
