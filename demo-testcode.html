@@ -1,35 +1,290 @@
-function trialExpired(){
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>📺 BTECH-TV SUPER ADMIN CONTROL PANEL</title>
 
-document.body.innerHTML=`
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-<div style="
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-background:#050816;
-color:white;
-">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden}
 
-<h1>⛔ Subscription Expired</h1>
+/* AUTH */
+#authBox,#adminBox{
+position:fixed;inset:0;background:#050816;
+display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:9999;
+}
+.card{background:#0d1324;padding:20px;border-radius:12px;width:320px;text-align:center;border:1px solid #1d2b4f}
+input{width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;background:#101a31;color:#fff}
+button{width:100%;padding:10px;margin-top:10px;background:#00d4ff;border:none;border-radius:6px;cursor:pointer}
 
-<p>Please renew your account.</p>
+/* TIMER */
+#timerBar{position:fixed;top:10px;right:10px;background:#00d4ff;color:#000;padding:8px;border-radius:8px;z-index:999}
 
-<button onclick="renewPlan()">
-💳 Renew Subscription
-</button>
+/* SIDEBAR */
+.sidebar{width:280px;background:#0d1324;overflow-y:auto;border-right:1px solid #1d2b4f;padding:10px}
+.logo{font-size:20px;font-weight:900;color:#00d4ff}
+.nav-btn{width:100%;padding:8px;margin:4px 0;background:#121c33;border:none;color:#fff;border-radius:6px;cursor:pointer}
+.nav-btn:hover{background:#1e2f57}
 
-<button onclick="freeChannels()">
-📺 Watch Free Channels
-</button>
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;padding:10px;overflow:hidden}
+.topbar{display:flex;justify-content:space-between}
+.player{height:320px;background:#000;border-radius:10px;overflow:hidden}
+video{width:100%;height:100%}
 
-<button onclick="contactSupport()">
-☎ Contact Support
-</button>
+/* GRID */
+.grid{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:10px}
+.card2{background:#111a31;padding:10px;border-radius:10px;cursor:pointer;border:1px solid #1f355d}
+
+/* ADMIN PANEL */
+#adminPanel{
+position:fixed;right:-420px;top:0;width:420px;height:100%;
+background:#0b1224;border-left:2px solid #00d4ff;
+transition:.3s;overflow:auto;padding:10px;z-index:9998
+}
+#adminPanel.active{right:0}
+.section{margin:10px 0;padding:10px;background:#111a31;border-radius:10px}
+.small{font-size:12px;color:#aaa}
+
+.locked{
+filter:grayscale(1);
+pointer-events:none;
+opacity:.4;
+}
+</style>
+</head>
+
+<body>
+
+<div id="timerBar">Trial Loading...</div>
+
+<!-- USER AUTH -->
+<div id="authBox">
+  <div class="card">
+    <h3>User Login</h3>
+    <input id="email" placeholder="Email">
+    <input id="pass" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <button onclick="register()">Register</button>
+    <button onclick="showAdmin()">🔐 Super Admin</button>
+  </div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div id="adminBox" style="display:none">
+  <div class="card">
+    <h3>SUPER ADMIN</h3>
+    <input id="auser" placeholder="Admin User">
+    <input id="apass" type="password" placeholder="Password">
+    <button onclick="adminLogin()">Login</button>
+    <button onclick="hideAdmin()">Back</button>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel">
+  <h3>⚙️ SUPER CONTROL PANEL</h3>
+
+  <div class="section">
+    <h4>⏳ Trial Control</h4>
+    <button onclick="resetTrial()">Reset Trial</button>
+    <button onclick="expireNow()">Force Expire</button>
+  </div>
+
+  <div class="section">
+    <h4>📡 System Features</h4>
+    <button onclick="toggleFeature('scan')">Scan Toggle</button>
+    <button onclick="toggleFeature('boost')">Boost Toggle</button>
+    <button onclick="toggleFeature('pip')">PiP Toggle</button>
+    <button onclick="toggleFeature('record')">Record Toggle</button>
+  </div>
+
+  <div class="section">
+    <h4>🌍 Channels Mode</h4>
+    <button onclick="setMode('free')">Free Mode</button>
+    <button onclick="setMode('premium')">Premium Mode</button>
+    <button onclick="setMode('locked')">Lock All</button>
+  </div>
+
+  <div class="section">
+    <h4>📊 Stats</h4>
+    <div class="small">All settings saved in localStorage</div>
+  </div>
+
+  <button onclick="closePanel()">Close</button>
+</div>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<div class="logo">📺 BTECH SUPER ADMIN</div>
+
+<button class="nav-btn" onclick="loadUltra()">🌍 Global</button>
+<button class="nav-btn" onclick="load('ng')">Nigeria</button>
+<button class="nav-btn" onclick="load('us')">USA</button>
+
+<div style="margin-top:10px;color:#00d4ff">⚙ Admin</div>
+<button class="nav-btn" onclick="toggleAdminPanel()">Open Control Panel</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="topbar">
+<input oninput="search(this.value)" placeholder="Search channels..." style="flex:1;padding:8px">
+</div>
+
+<div class="player"><video id="video" controls autoplay muted></video></div>
+
+<div class="grid" id="grid"></div>
 
 </div>
 
-`;
+<script>
 
+/* SETTINGS */
+let settings = JSON.parse(localStorage.getItem("settings")||"{}");
+let TRIAL = 5*3600*1000;
+
+/* AUTH */
+function register(){
+localStorage.setItem("user",JSON.stringify({e:email.value,p:pass.value}));
+alert("Registered");
 }
+
+function login(){
+let u=JSON.parse(localStorage.getItem("user"));
+if(!u||u.e!==email.value||u.p!==pass.value)return alert("Invalid");
+
+if(!localStorage.getItem("start")) localStorage.setItem("start",Date.now());
+
+authBox.style.display="none";
+startTimer();
+loadUltra();
+}
+
+/* ADMIN */
+function showAdmin(){adminBox.style.display="flex"}
+function hideAdmin(){adminBox.style.display="none"}
+
+function adminLogin(){
+if(auser.value==="admin" && apass.value==="1234"){
+adminBox.style.display="none";
+toggleAdminPanel();
+}else alert("Wrong admin");
+}
+
+function toggleAdminPanel(){
+document.getElementById("adminPanel").classList.add("active");
+}
+function closePanel(){
+document.getElementById("adminPanel").classList.remove("active");
+}
+
+/* TRIAL */
+function startTimer(){
+setInterval(()=>{
+let s=localStorage.getItem("start");
+if(!s)return;
+
+let d=TRIAL-(Date.now()-s);
+
+if(d<=0){
+document.body.innerHTML="<h1 style='text-align:center;margin-top:20%;color:red'>⛔ EXPIRED VERSION</h1>";
+return;
+}
+
+timerBar.innerText=`Trial: ${Math.floor(d/3600000)}h ${Math.floor(d%3600000/60000)}m`;
+},1000);
+}
+
+function resetTrial(){
+localStorage.setItem("start",Date.now());
+alert("Trial reset");
+}
+
+function expireNow(){
+localStorage.setItem("start",Date.now()-TRIAL-1000);
+location.reload();
+}
+
+/* FEATURES */
+function toggleFeature(f){
+settings[f]=!settings[f];
+localStorage.setItem("settings",JSON.stringify(settings));
+alert(f+" = "+settings[f]);
+}
+
+function setMode(m){
+settings.mode=m;
+localStorage.setItem("settings",JSON.stringify(settings));
+alert("Mode: "+m);
+}
+
+/* IPTV CORE */
+let all=[],filtered=[],i=0;
+let video=document.getElementById("video");
+let hls;
+
+async function loadUltra(){
+loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
+}
+
+async function load(code){
+loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
+}
+
+async function loadM3U(url){
+let res=await fetch(url);
+let txt=await res.text();
+
+all=[];filtered=[];
+
+txt.split("\n").forEach((l,i,a)=>{
+if(l.startsWith("#EXTINF")){
+let name=l.split(",")[1];
+let url=a[i+1];
+if(url?.startsWith("http")) all.push({name,url});
+}
+});
+
+filtered=[...all];
+render();
+}
+
+function render(){
+grid.innerHTML="";
+filtered.forEach((c,idx)=>{
+let div=document.createElement("div");
+div.className="card2";
+div.innerHTML=c.name;
+div.onclick=()=>play(idx);
+grid.appendChild(div);
+});
+}
+
+function play(idx){
+i=idx;
+let c=filtered[i];
+
+if(hls)hls.destroy();
+
+if(Hls.isSupported()){
+hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(video);
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+}else video.src=c.url;
+}
+
+function search(q){
+filtered=all.filter(x=>x.name.toLowerCase().includes(q.toLowerCase()));
+render();
+}
+
+</script>
+
+</body>
+</html>
