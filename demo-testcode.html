@@ -1,105 +1,56 @@
-<!-- ========================================================= -->
-<!-- SUPER ADMIN IPTV + BTECH-TV PRO ULTRA MAX WORLD -->
-<!-- FULL MERGED ONE PAGE VERSION 2026 -->
-<!-- ========================================================= -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>📺 SUPER ADMIN IPTV ULTRA MAX WORLD</title>
+<title>📺 SUPER ADMIN IPTV DASHBOARD ULTRA MAX</title>
 
-<meta name="theme-color" content="#050816"/>
+<meta name="theme-color" content="#050816">
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
-:root{
---bg:#050816;
---panel:#111827;
---card:#172033;
---accent:#00d4ff;
---text:#ffffff;
-}
-
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 
 body{
-background:var(--bg);
-color:var(--text);
-overflow:hidden;
-}
-
-/* AUTH */
-#auth{
-position:fixed;
-inset:0;
-display:flex;
-justify-content:center;
-align-items:center;
-background:#050816;
-z-index:9999;
-}
-
-.auth-box{
-background:var(--panel);
-padding:25px;
-border-radius:12px;
-width:320px;
-}
-
-.auth-box input{
-width:100%;
-padding:10px;
-margin:6px 0;
-border:none;
-border-radius:8px;
-background:#0f172a;
+background:#020617;
 color:#fff;
+overflow-x:hidden;
 }
 
-.auth-box button{
-width:100%;
-padding:10px;
-margin-top:6px;
-background:var(--accent);
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-}
-
-/* TOPBAR */
+/* ================= TOP BAR ================= */
 .topbar{
-height:60px;
-background:#0f172a;
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:0 15px;
+padding:12px 15px;
+background:#0f172a;
+border-bottom:1px solid #1e293b;
 }
 
-.logo{color:var(--accent);font-weight:bold}
+.logo{color:#00d4ff;font-weight:bold;font-size:18px}
 
-/* LAYOUT */
-.container{display:flex;height:100vh}
+/* ================= MAIN LAYOUT ================= */
+.container{
+display:flex;
+height:100vh;
+}
 
-/* SIDEBAR */
+/* ================= SIDEBAR ================= */
 .sidebar{
-width:320px;
-background:#0d1324;
-overflow:auto;
-padding:10px;
-border-right:1px solid #1d2b4f;
+width:300px;
+background:#0f172a;
+padding:15px;
+overflow-y:auto;
+border-right:1px solid #1e293b;
 }
 
-.section-title{
-margin:10px 0;
-color:var(--accent);
+.section{
+margin-top:10px;
+color:#00d4ff;
 font-size:12px;
 font-weight:bold;
 }
@@ -108,20 +59,26 @@ font-weight:bold;
 width:100%;
 padding:8px;
 margin:4px 0;
+background:#111827;
 border:none;
 border-radius:8px;
-background:#121c33;
 color:#fff;
 cursor:pointer;
 text-align:left;
 }
 
-/* MAIN */
-.main{flex:1;display:flex;flex-direction:column}
+.btn:hover{background:#00d4ff;color:#000}
 
-/* PLAYER */
+/* ================= MAIN ================= */
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+/* ================= PLAYER ================= */
 .player{
-height:320px;
+height:300px;
 background:#000;
 position:relative;
 }
@@ -134,13 +91,13 @@ height:100%;
 .overlay{
 position:absolute;
 inset:0;
-background:rgba(0,0,0,.7);
+background:rgba(0,0,0,.6);
 display:none;
 justify-content:center;
 align-items:center;
 }
 
-/* CHANNEL AREA */
+/* ================= CHANNELS ================= */
 .channels{
 flex:1;
 overflow:auto;
@@ -148,128 +105,100 @@ padding:10px;
 }
 
 .channel{
-background:var(--card);
+background:#1e293b;
 padding:10px;
-margin:5px 0;
-border-radius:8px;
-cursor:pointer;
-display:flex;
-justify-content:space-between;
-}
-
-/* MODALS */
-.modal{
-position:fixed;
-inset:0;
-display:none;
-justify-content:center;
-align-items:center;
-background:rgba(0,0,0,.8);
-}
-
-.modal-box{
-background:var(--panel);
-padding:20px;
+margin:6px 0;
 border-radius:10px;
-width:300px;
 }
 
-button{cursor:pointer}
+/* ================= STRIPS ================= */
+.strip{
+display:flex;
+flex-wrap:wrap;
+gap:6px;
+padding:8px;
+}
+
+.tag{
+background:#111827;
+padding:6px 10px;
+border-radius:20px;
+font-size:12px;
+}
+
+/* ================= COLORS ================= */
+.live{color:#00d4ff}
 
 </style>
+
 </head>
 
 <body>
 
-<!-- AUTH -->
-<div id="auth">
-<div class="auth-box">
-<h3>Login / Register</h3>
-
-<input id="user" placeholder="Username">
-<input id="pass" type="password" placeholder="Password">
-
-<button onclick="register()">Register</button>
-<button onclick="login()">Login</button>
-
-<button onclick="demo('admin')">Demo Admin</button>
-<button onclick="demo('user')">Demo User</button>
-
-</div>
-</div>
-
-<!-- APP -->
-<div id="app" style="display:none">
-
+<!-- TOP BAR -->
 <div class="topbar">
 <div class="logo">📺 SUPER ADMIN IPTV</div>
 <div>
-<span id="timer"></span>
-<button onclick="logout()">Logout</button>
+<span class="live">LIVE</span> | <button onclick="location.reload()">Logout</button>
 </div>
 </div>
 
 <div class="container">
 
-<!-- SIDEBAR (ALL CHANNEL MENU YOU REQUESTED) -->
+<!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="section-title">🌍 COUNTRIES</div>
-<button class="btn" onclick="load('ng')">🇳🇬 Nigeria</button>
-<button class="btn" onclick="load('us')">🇺🇸 USA</button>
-<button class="btn" onclick="load('uk')">🇬🇧 UK</button>
-<button class="btn" onclick="load('in')">🇮🇳 India</button>
-<button class="btn" onclick="load('fr')">🇫🇷 France</button>
-<button class="btn" onclick="load('de')">🇩🇪 Germany</button>
-<button class="btn" onclick="load('br')">🇧🇷 Brazil</button>
-<button class="btn" onclick="load('za')">🇿🇦 South Africa</button>
-<button class="btn" onclick="load('ca')">🇨🇦 Canada</button>
-<button class="btn" onclick="load('au')">🇦🇺 Australia</button>
-<button class="btn" onclick="load('jp')">🇯🇵 Japan</button>
-<button class="btn" onclick="load('kr')">🇰🇷 South Korea</button>
-<button class="btn" onclick="load('cn')">🇨🇳 China</button>
-<button class="btn" onclick="load('es')">🇪🇸 Spain</button>
-<button class="btn" onclick="load('it')">🇮🇹 Italy</button>
-<button class="btn" onclick="load('tr')">🇹🇷 Turkey</button>
-<button class="btn" onclick="load('mx')">🇲🇽 Mexico</button>
-<button class="btn" onclick="load('ae')">🇦🇪 UAE</button>
-<button class="btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
-<button class="btn" onclick="load('eg')">🇪🇬 Egypt</button>
-<button class="btn" onclick="load('ar')">🇦🇷 Argentina</button>
-<button class="btn" onclick="load('pk')">🇵🇰 Pakistan</button>
-<button class="btn" onclick="load('id')">🇮🇩 Indonesia</button>
-<button class="btn" onclick="load('ph')">🇵🇭 Philippines</button>
-<button class="btn" onclick="load('al')">🇦🇱 Albania</button>
+<div class="section">🌍 COUNTRIES</div>
+<div class="strip">
+<span class="tag">🇳🇬 Nigeria</span><span class="tag">🇺🇸 USA</span><span class="tag">🇬🇧 UK</span>
+<span class="tag">🇮🇳 India</span><span class="tag">🇫🇷 France</span><span class="tag">🇩🇪 Germany</span>
+<span class="tag">🇧🇷 Brazil</span><span class="tag">🇿🇦 South Africa</span><span class="tag">🇨🇦 Canada</span>
+<span class="tag">🇦🇺 Australia</span><span class="tag">🇯🇵 Japan</span><span class="tag">🇰🇷 South Korea</span>
+<span class="tag">🇨🇳 China</span><span class="tag">🇪🇸 Spain</span><span class="tag">🇮🇹 Italy</span>
+<span class="tag">🇹🇷 Turkey</span><span class="tag">🇲🇽 Mexico</span><span class="tag">🇦🇪 UAE</span>
+<span class="tag">🇸🇦 Saudi Arabia</span><span class="tag">🇪🇬 Egypt</span><span class="tag">🇦🇷 Argentina</span>
+<span class="tag">🇵🇰 Pakistan</span><span class="tag">🇮🇩 Indonesia</span><span class="tag">🇵🇭 Philippines</span>
+<span class="tag">🇦🇱 Albania</span>
+</div>
 
-<div class="section-title">🎬 CATEGORIES</div>
-<button class="btn" onclick="loadCat('news')">📰 News</button>
-<button class="btn" onclick="loadCat('sports')">⚽ Sports</button>
-<button class="btn" onclick="loadCat('movies')">🎬 Movies</button>
-<button class="btn" onclick="loadCat('music')">🎵 Music</button>
-<button class="btn" onclick="loadCat('kids')">👶 Kids</button>
-<button class="btn" onclick="loadCat('comedy')">😂 Comedy</button>
-<button class="btn" onclick="loadCat('documentary')">📚 Documentary</button>
-<button class="btn" onclick="loadCat('business')">💼 Business</button>
-<button class="btn" onclick="loadCat('science')">🔬 Science</button>
-<button class="btn" onclick="loadCat('travel')">✈ Travel</button>
+<div class="section">🎬 CATEGORIES</div>
+<div class="strip">
+<span class="tag">📰 News</span>
+<span class="tag">⚽ Sports</span>
+<span class="tag">🎬 Movies</span>
+<span class="tag">🎵 Music</span>
+<span class="tag">👶 Kids</span>
+<span class="tag">😂 Comedy</span>
+<span class="tag">📚 Documentary</span>
+<span class="tag">💼 Business</span>
+<span class="tag">🔬 Science</span>
+<span class="tag">✈ Travel</span>
+</div>
 
-<div class="section-title">🗣 LANGUAGES</div>
-<button class="btn" onclick="load('eng')">🇬🇧 English</button>
-<button class="btn" onclick="load('spa')">🇪🇸 Spanish</button>
-<button class="btn" onclick="load('ara')">🇸🇦 Arabic</button>
-<button class="btn" onclick="load('fra')">🇫🇷 French</button>
-<button class="btn" onclick="load('hin')">🇮🇳 Hindi</button>
-<button class="btn" onclick="load('zho')">🇨🇳 Chinese</button>
-<button class="btn" onclick="load('por')">🇵🇹 Portuguese</button>
+<div class="section">🗣 LANGUAGES</div>
+<div class="strip">
+<span class="tag">🇬🇧 English</span>
+<span class="tag">🇪🇸 Spanish</span>
+<span class="tag">🇸🇦 Arabic</span>
+<span class="tag">🇫🇷 French</span>
+<span class="tag">🇮🇳 Hindi</span>
+<span class="tag">🇨🇳 Chinese</span>
+<span class="tag">🇵🇹 Portuguese</span>
+</div>
 
-<div class="section-title">🔥 PREMIUM FEATURES</div>
+<div class="section">🔥 PREMIUM FEATURES</div>
 <button class="btn">📡 Scan Streams</button>
 <button class="btn">⚡ Boost</button>
 <button class="btn">📺 PiP Mode</button>
 <button class="btn">🧠 Optimize</button>
 <button class="btn">🛠 Repair</button>
 <button class="btn">🔒 Lock System</button>
-<button class="btn" onclick="openAdmin()">⚙ Admin</button>
+<button class="btn">⚙ Admin Panel</button>
+
+<div class="section">📺 QUICK CHANNELS</div>
+<button class="btn" onclick="playSample('BBC News')">BBC News</button>
+<button class="btn" onclick="playSample('Sky Sports')">Sky Sports</button>
+<button class="btn" onclick="playSample('Movie Channel')">Movie Channel</button>
 
 </div>
 
@@ -287,105 +216,46 @@ button{cursor:pointer}
 
 </div>
 
-<!-- ADMIN -->
-<div class="modal" id="admin">
-<div class="modal-box">
-<h3>SUPER ADMIN</h3>
-<button onclick="alert('Scan')">Scan</button>
-<button onclick="alert('Boost')">Boost</button>
-<button onclick="alert('Repair')">Repair</button>
-<button onclick="closeAdmin()">Close</button>
-</div>
-</div>
-
 <script>
 
-/* AUTH */
-let user=null;
+let channels=[];
 
-function register(){
-let u=userBox(),p=passBox();
-localStorage.setItem("u_"+u,JSON.stringify({p,t:Date.now()}));
-alert("Registered");
-}
-
-function login(){
-let u=userBox(),p=passBox();
-let d=JSON.parse(localStorage.getItem("u_"+u));
-if(d && d.p===p){user=u;start();} else alert("Invalid");
-}
-
-function demo(t){user=t;start();}
-
-function userBox(){return document.getElementById("user").value}
-function passBox(){return document.getElementById("pass").value}
-
-/* START */
-function start(){
-document.getElementById("auth").style.display="none";
-document.getElementById("app").style.display="block";
-render();
-setInterval(timer,1000);
-}
-
-/* TIMER */
-function timer(){
-document.getElementById("timer").innerText="LIVE";
-}
-
-/* CHANNELS */
-let channels=[
+/* INIT SAMPLE CHANNELS */
+function init(){
+channels=[
 {name:"BBC News",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
 {name:"Sky Sports",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
 {name:"Movie Channel",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
 ];
 
-function render(){
-let box=document.getElementById("channels");
-box.innerHTML="";
-channels.forEach(c=>{
-let d=document.createElement("div");
-d.className="channel";
-d.innerHTML=c.name;
-d.onclick=()=>play(c.url);
-box.appendChild(d);
+for(let i=1;i<=60;i++){
+channels.push({
+name:"BTECH LIVE "+i,
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
 });
 }
-
-/* LOAD IPTV */
-async function load(code){
-let url=`https://iptv-org.github.io/iptv/countries/${code}.m3u`;
-fetchM3U(url);
-}
-
-async function loadCat(cat){
-let url=`https://iptv-org.github.io/iptv/categories/${cat}.m3u`;
-fetchM3U(url);
-}
-
-async function fetchM3U(url){
-let res=await fetch(url);
-let text=await res.text();
-
-channels=[];
-
-text.split("\n").forEach((l,i,a)=>{
-if(l.startsWith("#EXTINF")){
-let name=l.split(",")[1];
-let u=a[i+1];
-if(u && u.startsWith("http")){
-channels.push({name,url:u});
-}
-}
-});
 
 render();
 }
 
+/* RENDER */
+function render(){
+let box=document.getElementById("channels");
+box.innerHTML="";
+channels.forEach(c=>{
+box.innerHTML+=`
+<div class="channel">
+<b>${c.name}</b><br>
+<button onclick="play('${c.url}','${c.name}')">Watch</button>
+</div>`;
+});
+}
+
 /* PLAY */
-function play(url){
-let v=document.getElementById("video");
+function play(url,name){
 document.getElementById("overlay").style.display="flex";
+
+let v=document.getElementById("video");
 
 if(Hls.isSupported()){
 let h=new Hls();
@@ -398,14 +268,13 @@ document.getElementById("overlay").style.display="none";
 }
 }
 
-/* ADMIN */
-function openAdmin(){document.getElementById("admin").style.display="flex";}
-function closeAdmin(){document.getElementById("admin").style.display="none";}
+/* QUICK PLAY */
+function playSample(name){
+alert("Loading "+name+" stream...");
+}
 
-/* LOGOUT */
-function logout(){location.reload();}
-
-start();
+/* START */
+init();
 
 </script>
 
