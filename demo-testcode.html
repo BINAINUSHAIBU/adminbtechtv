@@ -1,17 +1,20 @@
+<!-- ========================================================= -->
+<!-- SUPER ADMIN IPTV + BTECH-TV PRO ULTRA MAX WORLD -->
+<!-- FULL MERGED ONE PAGE VERSION 2026 -->
+<!-- ========================================================= -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-<title>BTECH TV - SUPER ADMIN DASHBOARD</title>
+<title>📺 SUPER ADMIN IPTV ULTRA MAX WORLD</title>
 
-<meta name="theme-color" content="#050816">
+<meta name="theme-color" content="#050816"/>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
@@ -23,7 +26,47 @@
 body{
 background:#020617;
 color:#fff;
-overflow-x:hidden;
+overflow:hidden;
+}
+
+/* ========================= AUTH ========================= */
+
+#auth{
+position:fixed;
+inset:0;
+background:#020617;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
+
+.auth-box{
+background:#111827;
+padding:20px;
+border-radius:15px;
+width:300px;
+}
+
+.auth-box input{
+width:100%;
+padding:10px;
+margin:5px 0;
+border:none;
+border-radius:8px;
+background:#0f172a;
+color:#fff;
+}
+
+.auth-box button{
+width:100%;
+padding:10px;
+margin-top:5px;
+background:#00d4ff;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
 }
 
 /* ========================= LAYOUT ========================= */
@@ -68,9 +111,7 @@ font-weight:bold;
 
 /* ========================= MAIN ========================= */
 
-.dashboard-main{flex:1;padding:20px;}
-
-/* HEADER */
+.dashboard-main{flex:1;padding:20px;overflow:auto;}
 
 .top-header{
 display:flex;
@@ -90,7 +131,7 @@ border-radius:12px;
 
 .admin-box img{width:40px;height:40px;border-radius:50%;}
 
-/* STATS */
+/* ========================= STATS ========================= */
 
 .stats{
 display:grid;
@@ -106,25 +147,9 @@ border-radius:15px;
 text-align:center;
 }
 
-.stat h3{color:#94a3b8;}
 .stat p{font-size:26px;color:#00d4ff;margin-top:5px;}
 
-/* SETTINGS */
-
-.settings{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:15px;
-margin-bottom:20px;
-}
-
-.card{
-background:#111827;
-padding:15px;
-border-radius:15px;
-}
-
-/* CHANNEL GRID */
+/* ========================= CHANNEL GRID ========================= */
 
 .channel-grid{
 display:grid;
@@ -172,7 +197,7 @@ font-weight:bold;
 .edit{background:#2563eb;color:#fff;}
 .del{background:#dc2626;color:#fff;}
 
-/* PLAYER */
+/* ========================= PLAYER ========================= */
 
 .player{
 position:fixed;
@@ -197,70 +222,30 @@ margin-bottom:10px;
 cursor:pointer;
 }
 
-/* AUTH */
-
-#auth{
-position:fixed;
-inset:0;
-background:#020617;
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:1000;
-}
-
-.auth-box{
-background:#111827;
-padding:20px;
-border-radius:15px;
-width:300px;
-}
-
-.auth-box input{
-width:100%;
-padding:10px;
-margin:5px 0;
-border:none;
-border-radius:8px;
-background:#0f172a;
-color:#fff;
-}
-
-.auth-box button{
-width:100%;
-padding:10px;
-margin-top:5px;
-background:#00d4ff;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-}
-
 </style>
-
 </head>
 
 <body>
 
-<!-- ================= AUTH ================= -->
+<!-- AUTH -->
 <div id="auth">
 <div class="auth-box">
 <h3>Login</h3>
 <input id="u" placeholder="User">
 <input id="p" type="password" placeholder="Pass">
 <button onclick="login()">Login</button>
+<button onclick="demo()">Demo Admin</button>
 </div>
 </div>
 
-<!-- ================= PLAYER ================= -->
+<!-- PLAYER -->
 <div class="player" id="player">
 <button class="close" onclick="closePlayer()">Close</button>
 <h3 id="ptitle"></h3>
 <video id="video" controls></video>
 </div>
 
-<!-- ================= APP ================= -->
+<!-- APP -->
 <div id="app" style="display:none;">
 
 <div class="dashboard-container">
@@ -279,9 +264,7 @@ font-weight:bold;
 <button>Premium Channels</button>
 <button>Locked Channels</button>
 <button>Users</button>
-<button>Subscriptions</button>
-<button>Servers</button>
-<button>Super Settings</button>
+<button>Settings</button>
 
 <div class="menu-section-title">🌍 COUNTRIES</div>
 <button onclick="load('ng')">Nigeria</button>
@@ -289,18 +272,12 @@ font-weight:bold;
 <button onclick="load('uk')">UK</button>
 <button onclick="load('in')">India</button>
 <button onclick="load('fr')">France</button>
-<button onclick="load('de')">Germany</button>
 
 <div class="menu-section-title">🎬 CATEGORIES</div>
 <button onclick="loadCat('news')">News</button>
 <button onclick="loadCat('sports')">Sports</button>
 <button onclick="loadCat('movies')">Movies</button>
 <button onclick="loadCat('music')">Music</button>
-
-<div class="menu-section-title">🗣 LANGUAGES</div>
-<button>English</button>
-<button>Spanish</button>
-<button>Arabic</button>
 
 <div class="menu-section-title">🔥 FEATURES</div>
 <button>Scan Streams</button>
@@ -333,42 +310,35 @@ font-weight:bold;
 <div class="stat"><h3>Locked</h3><p id="locked">0</p></div>
 </div>
 
-<!-- SETTINGS -->
-<div class="settings">
-<div class="card">📡 System ON</div>
-<div class="card">🔴 Live Streaming</div>
-<div class="card">💳 Premium Access</div>
-<div class="card">🛡 Security</div>
-</div>
-
-<!-- CHANNELS -->
+<!-- GRID -->
 <div class="channel-grid" id="grid"></div>
 
 </main>
-
 </div>
 </div>
 
 <script>
 
-let user=null;
 let channels=[];
 
 function login(){
-user="admin";
 document.getElementById("auth").style.display="none";
 document.getElementById("app").style.display="block";
 generate();
 render();
 }
 
+function demo(){login();}
+
+/* GENERATE 60 CHANNELS */
 function generate(){
+channels=[];
 for(let i=1;i<=60;i++){
 channels.push({
 name:"BTECH LIVE "+i,
 type:Math.random()>0.5?"Free":"Premium",
-status:Math.random()>0.3?"Unlocked":"Locked",
-views:Math.floor(Math.random()*900000),
+status:Math.random()>0.4?"Unlocked":"Locked",
+views:Math.floor(Math.random()*999999),
 stream:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
 img:"https://via.placeholder.com/400x200/111827/00d4ff?text=LIVE+"+i
 });
@@ -386,6 +356,7 @@ document.getElementById("locked").innerText=channels.filter(c=>c.status=="Locked
 function render(){
 let g=document.getElementById("grid");
 g.innerHTML="";
+
 channels.forEach(c=>{
 g.innerHTML+=`
 <div class="channel">
@@ -405,10 +376,10 @@ g.innerHTML+=`
 });
 }
 
+/* PLAY */
 function play(url,name){
 document.getElementById("player").style.display="flex";
 document.getElementById("ptitle").innerText=name;
-
 let v=document.getElementById("video");
 
 if(Hls.isSupported()){
@@ -427,6 +398,7 @@ document.getElementById("player").style.display="none";
 document.getElementById("video").pause();
 }
 
+/* IPTV LOAD */
 function load(code){
 fetch(`https://iptv-org.github.io/iptv/countries/${code}.m3u`)
 .then(r=>r.text()).then(parse);
@@ -446,7 +418,8 @@ let name=lines[i].split(",")[1];
 let url=lines[i+1];
 if(url && url.startsWith("http")){
 channels.push({
-name,type:"Free",status:"Unlocked",views:0,stream:url,
+name,type:"Free",status:"Unlocked",views:0,
+stream:url,
 img:"https://via.placeholder.com/400x200"
 });
 }
