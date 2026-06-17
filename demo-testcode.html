@@ -1,425 +1,171 @@
-<!-- ========================================================= -->
-<!-- SUPER ADMIN IPTV + BTECH-TV PRO ULTRA MAX WORLD -->
-<!-- FULL MERGED ONE PAGE VERSION 2026 -->
-<!-- ========================================================= -->
+<div class="dashboard-container">
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
 
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <!-- LOGO -->
+        <div class="logo-box">
+            <h1>BTECH TV</h1>
+            <p>SUPER ADMIN CONTROL PANEL</p>
+        </div>
 
-<title>📺 SUPER ADMIN IPTV ULTRA MAX WORLD</title>
+        <!-- DASHBOARD -->
+        <button onclick="showPage('dashboard')">
+            Dashboard
+        </button>
 
-<meta name="theme-color" content="#050816"/>
+        <!-- CHANNELS -->
+        <button onclick="showPage('channels')">
+            All Channels
+        </button>
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+        <button onclick="showPage('free')">
+            Free Channels
+        </button>
 
-<style>
+        <button onclick="showPage('premium')">
+            Premium Channels
+        </button>
 
-:root{
---bg:#050816;
---panel:#111827;
---card:#172033;
---accent:#00d4ff;
---text:#ffffff;
-}
+        <button onclick="showPage('locked')">
+            Locked Channels
+        </button>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial;
-}
+        <!-- USERS -->
+        <button onclick="showPage('users')">
+            User Manager
+        </button>
 
-body{
-background:var(--bg);
-color:var(--text);
-overflow:hidden;
-}
+        <!-- SUBSCRIPTIONS -->
+        <button onclick="showPage('subscriptions')">
+            Subscription Manager
+        </button>
 
-/* ================= AUTH ================= */
-#auth{
-position:fixed;
-inset:0;
-display:flex;
-justify-content:center;
-align-items:center;
-background:#050816;
-z-index:9999;
-}
+        <!-- SERVER -->
+        <button onclick="showPage('servers')">
+            Streaming Servers
+        </button>
 
-.auth-box{
-background:var(--panel);
-padding:25px;
-border-radius:12px;
-width:320px;
-}
+        <!-- SECURITY -->
+        <button onclick="showPage('security')">
+            Security Center
+        </button>
 
-.auth-box input{
-width:100%;
-padding:10px;
-margin:6px 0;
-border:none;
-border-radius:8px;
-background:#0f172a;
-color:#fff;
-}
+        <!-- SETTINGS -->
+        <button onclick="showPage('settings')">
+            Super Settings
+        </button>
 
-.auth-box button{
-width:100%;
-padding:10px;
-margin-top:6px;
-background:var(--accent);
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-}
+        <!-- CHURCH -->
+        <button onclick="showPage('church')">
+            Church Manager
+        </button>
 
-/* ================= TOPBAR ================= */
-.topbar{
-height:60px;
-background:#0f172a;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:0 15px;
-}
+        <!-- ADMIN -->
+        <button onclick="showPage('admins')">
+            Admin Manager
+        </button>
 
-.logo{
-color:var(--accent);
-font-weight:bold;
-}
+        <!-- ANALYTICS -->
+        <button onclick="showPage('analytics')">
+            Analytics
+        </button>
 
-/* ================= LAYOUT ================= */
-.container{
-display:flex;
-height:100vh;
-}
+    </aside>
 
-/* ================= SIDEBAR ================= */
-.sidebar{
-width:320px;
-background:#0d1324;
-overflow:auto;
-padding:10px;
-border-right:1px solid #1d2b4f;
-}
+    <!-- MAIN -->
+    <main class="dashboard-main">
 
-.section-title{
-margin:10px 0;
-color:var(--accent);
-font-size:12px;
-font-weight:bold;
-}
+        <!-- DASHBOARD PAGE -->
+        <section id="dashboardPage">
 
-.btn{
-width:100%;
-padding:8px;
-margin:4px 0;
-border:none;
-border-radius:8px;
-background:#121c33;
-color:#fff;
-cursor:pointer;
-text-align:left;
-}
+            <!-- STATS -->
+            <div class="stats">
 
-/* ================= MAIN ================= */
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-}
+                <div class="stat">
+                    <h3>Total Channels</h3>
+                    <p id="totalChannels">0</p>
+                </div>
 
-/* ================= PLAYER ================= */
-.player{
-height:320px;
-background:#000;
-position:relative;
-}
+                <div class="stat">
+                    <h3>Premium</h3>
+                    <p id="premiumChannels">0</p>
+                </div>
 
-.player video{
-width:100%;
-height:100%;
-}
+                <div class="stat">
+                    <h3>Locked</h3>
+                    <p id="lockedChannels">0</p>
+                </div>
 
-.overlay{
-position:absolute;
-inset:0;
-background:rgba(0,0,0,.7);
-display:none;
-justify-content:center;
-align-items:center;
-}
+                <div class="stat">
+                    <h3>Users</h3>
+                    <p id="totalUsers">0</p>
+                </div>
 
-/* ================= CHANNELS ================= */
-.channels{
-flex:1;
-overflow:auto;
-padding:10px;
-}
+            </div>
 
-.channel{
-background:var(--card);
-padding:10px;
-margin:5px 0;
-border-radius:8px;
-cursor:pointer;
-display:flex;
-justify-content:space-between;
-}
+        </section>
 
-/* ================= MODAL ================= */
-.modal{
-position:fixed;
-inset:0;
-display:none;
-justify-content:center;
-align-items:center;
-background:rgba(0,0,0,.8);
-z-index:999;
-}
+        <!-- CHANNEL GRID -->
+        <section id="channelsPage">
 
-.modal-box{
-background:var(--panel);
-padding:20px;
-border-radius:10px;
-width:300px;
-}
+            <div class="channel-grid" id="channelGrid">
 
-button{cursor:pointer}
+            </div>
 
-</style>
-</head>
+        </section>
 
-<body>
+        <!-- USER MANAGER -->
+        <section id="usersPage">
 
-<!-- ================= AUTH ================= -->
-<div id="auth">
-<div class="auth-box">
-<h3>Login / Register</h3>
+            <div class="card">
 
-<input id="user" placeholder="Username">
-<input id="pass" type="password" placeholder="Password">
+                <h3>User Manager</h3>
 
-<button onclick="register()">Register</button>
-<button onclick="login()">Login</button>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Plan</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
 
-<button onclick="demo('admin')">Demo Admin</button>
-<button onclick="demo('user')">Demo User</button>
+                    <tbody id="userTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+        <!-- SERVER DASHBOARD -->
+        <section id="serversPage">
+
+            <div class="card">
+
+                <h3>Streaming Servers</h3>
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Server</th>
+                            <th>Region</th>
+                            <th>Status</th>
+                            <th>Bandwidth</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="serverTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
 
 </div>
-</div>
-
-<!-- ================= APP ================= -->
-<div id="app" style="display:none">
-
-<div class="topbar">
-<div class="logo">📺 SUPER ADMIN IPTV</div>
-<div>
-<span id="timer"></span>
-<button onclick="logout()">Logout</button>
-</div>
-</div>
-
-<div class="container">
-
-<!-- ================= SIDEBAR ================= -->
-<div class="sidebar">
-
-<div class="section-title">🌍 COUNTRIES</div>
-<button class="btn" onclick="load('ng')">🇳🇬 Nigeria</button>
-<button class="btn" onclick="load('us')">🇺🇸 USA</button>
-<button class="btn" onclick="load('uk')">🇬🇧 UK</button>
-<button class="btn" onclick="load('in')">🇮🇳 India</button>
-<button class="btn" onclick="load('fr')">🇫🇷 France</button>
-<button class="btn" onclick="load('de')">🇩🇪 Germany</button>
-<button class="btn" onclick="load('br')">🇧🇷 Brazil</button>
-<button class="btn" onclick="load('za')">🇿🇦 South Africa</button>
-<button class="btn" onclick="load('ca')">🇨🇦 Canada</button>
-<button class="btn" onclick="load('au')">🇦🇺 Australia</button>
-<button class="btn" onclick="load('jp')">🇯🇵 Japan</button>
-<button class="btn" onclick="load('kr')">🇰🇷 South Korea</button>
-<button class="btn" onclick="load('cn')">🇨🇳 China</button>
-<button class="btn" onclick="load('es')">🇪🇸 Spain</button>
-<button class="btn" onclick="load('it')">🇮🇹 Italy</button>
-<button class="btn" onclick="load('tr')">🇹🇷 Turkey</button>
-<button class="btn" onclick="load('mx')">🇲🇽 Mexico</button>
-<button class="btn" onclick="load('ae')">🇦🇪 UAE</button>
-<button class="btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
-<button class="btn" onclick="load('eg')">🇪🇬 Egypt</button>
-<button class="btn" onclick="load('ar')">🇦🇷 Argentina</button>
-<button class="btn" onclick="load('pk')">🇵🇰 Pakistan</button>
-<button class="btn" onclick="load('id')">🇮🇩 Indonesia</button>
-<button class="btn" onclick="load('ph')">🇵🇭 Philippines</button>
-<button class="btn" onclick="load('al')">🇦🇱 Albania</button>
-
-<div class="section-title">🎬 CATEGORIES</div>
-<button class="btn" onclick="loadCat('news')">📰 News</button>
-<button class="btn" onclick="loadCat('sports')">⚽ Sports</button>
-<button class="btn" onclick="loadCat('movies')">🎬 Movies</button>
-<button class="btn" onclick="loadCat('music')">🎵 Music</button>
-<button class="btn" onclick="loadCat('kids')">👶 Kids</button>
-<button class="btn" onclick="loadCat('comedy')">😂 Comedy</button>
-<button class="btn" onclick="loadCat('documentary')">📚 Documentary</button>
-<button class="btn" onclick="loadCat('business')">💼 Business</button>
-<button class="btn" onclick="loadCat('science')">🔬 Science</button>
-<button class="btn" onclick="loadCat('travel')">✈ Travel</button>
-
-<div class="section-title">🗣 LANGUAGES</div>
-<button class="btn" onclick="load('eng')">🇬🇧 English</button>
-<button class="btn" onclick="load('spa')">🇪🇸 Spanish</button>
-<button class="btn" onclick="load('ara')">🇸🇦 Arabic</button>
-<button class="btn" onclick="load('fra')">🇫🇷 French</button>
-<button class="btn" onclick="load('hin')">🇮🇳 Hindi</button>
-<button class="btn" onclick="load('zho')">🇨🇳 Chinese</button>
-<button class="btn" onclick="load('por')">🇵🇹 Portuguese</button>
-
-<div class="section-title">🔥 PREMIUM FEATURES</div>
-<button class="btn">📡 Scan Streams</button>
-<button class="btn">⚡ Boost</button>
-<button class="btn">📺 PiP Mode</button>
-<button class="btn">🧠 Optimize</button>
-<button class="btn">🛠 Repair</button>
-<button class="btn">🔒 Lock System</button>
-<button class="btn" onclick="openAdmin()">⚙ Admin Panel</button>
-
-</div>
-
-<!-- ================= MAIN ================= -->
-<div class="main">
-
-<div class="player">
-<video id="video" controls></video>
-<div class="overlay" id="overlay">Loading...</div>
-</div>
-
-<div class="channels" id="channels"></div>
-
-</div>
-
-</div>
-</div>
-
-<!-- ================= ADMIN MODAL ================= -->
-<div class="modal" id="admin">
-<div class="modal-box">
-<h3>SUPER ADMIN CONTROL</h3>
-<button onclick="alert('Scan Complete')">Scan</button>
-<button onclick="alert('Boost Activated')">Boost</button>
-<button onclick="alert('System Repair')">Repair</button>
-<button onclick="alert('Lock Enabled')">Lock System</button>
-<button onclick="closeAdmin()">Close</button>
-</div>
-</div>
-
-<script>
-
-/* ================= AUTH ================= */
-let user=null;
-
-function register(){
-let u=userBox(),p=passBox();
-if(!u||!p)return alert("Fill fields");
-localStorage.setItem("u_"+u,JSON.stringify({p,t:Date.now()}));
-alert("Registered");
-}
-
-function login(){
-let u=userBox(),p=passBox();
-let d=JSON.parse(localStorage.getItem("u_"+u));
-if(d && d.p===p){user=u;start();}
-else alert("Invalid login");
-}
-
-function demo(t){user=t;start();}
-
-function userBox(){return document.getElementById("user").value}
-function passBox(){return document.getElementById("pass").value}
-
-/* ================= START ================= */
-function start(){
-document.getElementById("auth").style.display="none";
-document.getElementById("app").style.display="block";
-render();
-setInterval(()=>document.getElementById("timer").innerText="LIVE",1000);
-}
-
-/* ================= CHANNEL DATA ================= */
-let channels=[
-{name:"BBC News",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"Sky Sports",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
-{name:"Movie Channel",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
-];
-
-function render(){
-let box=document.getElementById("channels");
-box.innerHTML="";
-channels.forEach(c=>{
-let d=document.createElement("div");
-d.className="channel";
-d.innerHTML=c.name;
-d.onclick=()=>play(c.url);
-box.appendChild(d);
-});
-}
-
-/* ================= IPTV LOADER ================= */
-async function load(code){
-fetchM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
-}
-
-async function loadCat(cat){
-fetchM3U(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`);
-}
-
-async function fetchM3U(url){
-let res=await fetch(url);
-let text=await res.text();
-channels=[];
-
-text.split("\n").forEach((l,i,a)=>{
-if(l.startsWith("#EXTINF")){
-let name=l.split(",")[1];
-let u=a[i+1];
-if(u && u.startsWith("http")){
-channels.push({name,url:u});
-}
-}
-});
-
-render();
-}
-
-/* ================= PLAYER ================= */
-function play(url){
-let v=document.getElementById("video");
-document.getElementById("overlay").style.display="flex";
-
-if(Hls.isSupported()){
-let h=new Hls();
-h.loadSource(url);
-h.attachMedia(v);
-h.on(Hls.Events.MANIFEST_PARSED,()=>{
-v.play();
-document.getElementById("overlay").style.display="none";
-});
-}
-}
-
-/* ================= ADMIN ================= */
-function openAdmin(){document.getElementById("admin").style.display="flex";}
-function closeAdmin(){document.getElementById("admin").style.display="none";}
-
-/* ================= LOGOUT ================= */
-function logout(){location.reload();}
-
-start();
-
-</script>
-
-</body>
-</html>
