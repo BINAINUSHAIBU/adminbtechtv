@@ -1,298 +1,362 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>IPTV SaaS PRO MAX</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+<meta name="theme-color" content="#050816"/>
+
+<title>BTECH-TV WORLD ULTRA IPTV SAAS PRO MAX</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+
 body{margin:0;font-family:Arial;background:#0b0f1a;color:#fff}
+
 .hidden{display:none}
 
+/* AUTH */
+#auth{
+padding:20px;
+max-width:400px;
+margin:60px auto;
+background:#111827;
+border-radius:12px;
+}
+
+#auth input{
+width:100%;
+padding:12px;
+margin:8px 0;
+border:none;
+border-radius:8px;
+background:#0f172a;
+color:#fff;
+}
+
+/* TOP BAR */
 header{
-display:flex;justify-content:space-between;align-items:center;
-padding:10px;background:#111827
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px;
+background:#111827;
+}
+
+/* LAYOUT */
+.container{display:flex;height:100vh}
+
+.sidebar{
+width:300px;
+background:#0b1220;
+overflow:auto;
+padding:10px;
+}
+
+.main{flex:1;display:flex;flex-direction:column}
+
+/* CHANNEL */
+.channel{
+padding:10px;
+margin:5px 0;
+background:#111827;
+cursor:pointer;
+border-radius:6px;
+}
+
+/* PLAYER */
+#player{
+width:100%;
+height:350px;
+background:black;
+}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+padding:10px;
+}
+
+/* ADMIN */
+.admin-panel{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.9);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.admin-box{
+background:#111827;
+padding:20px;
+border-radius:12px;
+width:90%;
+max-width:800px;
 }
 
 button{
-padding:8px 12px;border:0;border-radius:6px;cursor:pointer
-}
-
-input{
-padding:10px;margin:5px 0;width:100%;
-border-radius:6px;border:none
-}
-
-.container{padding:10px}
-
-.card{
-background:#1f2937;padding:10px;margin:10px 0;border-radius:10px
-}
-
-.channel{
-padding:10px;margin:5px 0;background:#111827;
-cursor:pointer;border-radius:6px
-}
-
-.channel:hover{background:#2563eb}
-
-#player{
-width:100%;height:300px;background:black;margin-top:10px
-}
-
-.badge{
-background:red;padding:3px 6px;border-radius:5px;font-size:12px
-}
-
-.grid{
-display:grid;grid-template-columns:1fr 1fr;gap:10px
+padding:8px 12px;
+margin:4px;
+border:none;
+border-radius:6px;
+cursor:pointer;
 }
 
 .upgrade{
-position:fixed;bottom:20px;right:20px;background:#ef4444;
-padding:10px;border-radius:10px;cursor:pointer
+position:fixed;
+bottom:20px;
+right:20px;
+background:red;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
 }
 
 .modal{
-position:fixed;top:0;left:0;right:0;bottom:0;
-background:rgba(0,0,0,0.8);display:none;
-justify-content:center;align-items:center
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.8);
+display:none;
+justify-content:center;
+align-items:center;
 }
 
 .modal-content{
-background:#111827;padding:20px;border-radius:10px;width:300px
+background:#111827;
+padding:20px;
+border-radius:12px;
+width:300px;
 }
+
 </style>
+
 </head>
+
 <body>
 
 <!-- ================= AUTH ================= -->
 <div id="auth">
+
 <h2>Login / Register</h2>
+
 <input id="user" placeholder="Username">
 <input id="pass" type="password" placeholder="Password">
+
 <button onclick="register()">Register</button>
 <button onclick="login()">Login</button>
 
-<hr>
+<br><br>
+
 <button onclick="demoLogin('admin')">Demo Admin</button>
 <button onclick="demoLogin('user')">Demo User</button>
+
 </div>
 
 <!-- ================= APP ================= -->
 <div id="app" class="hidden">
 
 <header>
-<div>📺 IPTV SaaS PRO</div>
+
+<div>📺 BTECH-TV ULTRA IPTV SAAS</div>
+
 <div>
-<span id="timer" class="badge"></span>
+<span id="timer"></span>
 <button onclick="logout()">Logout</button>
 </div>
+
 </header>
 
 <div class="container">
 
-<div id="status" class="card"></div>
+<!-- SIDEBAR -->
+<div class="sidebar">
 
-<input id="search" placeholder="Search channels..." onkeyup="renderChannels()">
-
-<div class="grid">
-
-<div class="card">
-<h3>Categories</h3>
-<div onclick="setCat('All')" class="channel">All</div>
-<div onclick="setCat('Sports')" class="channel">Sports</div>
-<div onclick="setCat('News')" class="channel">News</div>
-<div onclick="setCat('Movies')" class="channel">Movies</div>
-</div>
-
-<div class="card">
 <h3>Channels</h3>
-<div id="channels"></div>
-</div>
+<input id="search" placeholder="Search..." oninput="render()">
+
+<div id="list"></div>
 
 </div>
+
+<!-- MAIN -->
+<div class="main">
 
 <video id="player" controls></video>
 
-<div class="card">
+<div class="grid">
+
+<div>
 <h3>Stats</h3>
 <p id="stats"></p>
 </div>
 
+<div>
+<h3>Status</h3>
+<p id="status"></p>
 </div>
 
-<div class="upgrade" onclick="openUpgrade()">
-🔥 Upgrade Plan
 </div>
 
 </div>
 
-<!-- ================= UPGRADE MODAL ================= -->
+</div>
+
+<!-- UPGRADE -->
+<div class="upgrade" onclick="openUpgrade()">🔥 Upgrade</div>
+
+</div>
+
+<!-- ================= UPGRADE ================= -->
 <div class="modal" id="modal">
+
 <div class="modal-content">
+
 <h3>Upgrade Plans</h3>
 
-<button onclick="buy('1-day')">1 Day - $1</button><br><br>
-<button onclick="buy('7-day')">7 Days - $5</button><br><br>
-<button onclick="buy('30-day')">30 Days - $10</button><br><br>
+<button onclick="buy('1-day')">1 Day</button>
+<button onclick="buy('7-day')">7 Days</button>
+<button onclick="buy('30-day')">30 Days</button>
 
+<br><br>
 <button onclick="closeUpgrade()">Close</button>
+
 </div>
+
+</div>
+
+<!-- ================= ADMIN ================= -->
+<div class="admin-panel" id="admin">
+
+<div class="admin-box">
+
+<h2>SUPER ADMIN PANEL</h2>
+
+<button onclick="scan()">Scan Streams</button>
+<button onclick="repair()">Repair</button>
+<button onclick="boost()">Boost</button>
+<button onclick="premium()">Enable Premium</button>
+<button onclick="backup()">Backup</button>
+<button onclick="closeAdmin()">Close</button>
+
+</div>
+
 </div>
 
 <script>
-// ================= DATA =================
-let channels = [
-{name:"BBC News",cat:"News",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"Sky Sports",cat:"Sports",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
-{name:"Movie Channel",cat:"Movies",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
+
+/* ================= DATA ================= */
+let channels=[
+{name:"BBC News",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Sky Sports",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
+{name:"Movie Channel",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
 ];
 
-let currentUser = null;
-let currentCat = "All";
+let user=null;
+let startTime=0;
 
-// ================= AUTH =================
+/* ================= AUTH ================= */
 function register(){
-let u=document.getElementById("user").value;
-let p=document.getElementById("pass").value;
-localStorage.setItem("user_"+u,JSON.stringify({pass:p,trialStart:Date.now(),plan:"trial"}));
-alert("Registered!");
+let u=userField(),p=passField();
+localStorage.setItem("u_"+u,JSON.stringify({p,plan:"trial",t:Date.now()}));
+alert("Registered");
 }
 
 function login(){
-let u=document.getElementById("user").value;
-let p=document.getElementById("pass").value;
-let data=JSON.parse(localStorage.getItem("user_"+u));
-if(data && data.pass===p){
-currentUser=u;
-startApp();
-}else alert("Invalid login");
+let u=userField(),p=passField();
+let d=JSON.parse(localStorage.getItem("u_"+u));
+if(d&&d.p===p){user=u;start();}else alert("Invalid");
 }
 
-function demoLogin(type){
-currentUser=type;
-if(type==="admin"){
-localStorage.setItem("user_admin",JSON.stringify({pass:"admin",trialStart:Date.now(),plan:"30-day"}));
-}
-startApp();
+function demoLogin(t){
+user=t;
+start();
 }
 
-// ================= APP =================
-function startApp(){
+function userField(){return document.getElementById("user").value}
+function passField(){return document.getElementById("pass").value}
+
+/* ================= START ================= */
+function start(){
 document.getElementById("auth").classList.add("hidden");
 document.getElementById("app").classList.remove("hidden");
-checkTrial();
-renderChannels();
-setInterval(updateTimer,1000);
+startTime=Date.now();
+render();
+setInterval(timer,1000);
+setInterval(stats,2000);
 }
 
-function logout(){
-location.reload();
-}
-
-// ================= TRIAL SYSTEM =================
-function checkTrial(){
-let data=JSON.parse(localStorage.getItem("user_"+currentUser));
-if(!data) return;
-
-let now=Date.now();
-let limit=5*60*60*1000; // 5 hours
-
-if(data.plan==="trial" && now-data.trialStart>limit){
-lockApp();
-}else{
-document.getElementById("status").innerHTML=
-"Plan: "+data.plan+" | Active ✔";
-}
-}
-
-function lockApp(){
-document.getElementById("channels").innerHTML=
-"<h3>⛔ Trial Expired</h3><p>Please upgrade</p>";
-alert("Trial expired!");
-}
-
-// ================= TIMER =================
-function updateTimer(){
-let data=JSON.parse(localStorage.getItem("user_"+currentUser));
-if(!data) return;
-
+/* ================= TIMER ================= */
+function timer(){
+let d=JSON.parse(localStorage.getItem("u_"+user)||"{}");
 let limit=5*60*60*1000;
-let left=limit-(Date.now()-data.trialStart);
+let left=limit-(Date.now()-d.t);
 
 if(left<=0){
 document.getElementById("timer").innerText="EXPIRED";
-lockApp();
 return;
 }
 
-let h=Math.floor(left/3600000);
-let m=Math.floor((left%3600000)/60000);
-let s=Math.floor((left%60000)/1000);
-
-document.getElementById("timer").innerText=
-h+"h "+m+"m "+s+"s";
+document.getElementById("timer").innerText=Math.floor(left/3600000)+"h";
 }
 
-// ================= CHANNELS =================
-function setCat(c){
-currentCat=c;
-renderChannels();
-}
-
-function renderChannels(){
-let box=document.getElementById("channels");
+/* ================= CHANNELS ================= */
+function render(){
+let q=document.getElementById("search").value||"";
+let box=document.getElementById("list");
 box.innerHTML="";
 
-let q=document.getElementById("search").value.toLowerCase();
-
-channels.filter(ch=>{
-return (currentCat==="All"||ch.cat===currentCat) &&
-ch.name.toLowerCase().includes(q);
-}).forEach(ch=>{
+channels
+.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()))
+.forEach(c=>{
 let div=document.createElement("div");
 div.className="channel";
-div.innerText=ch.name;
-div.onclick=()=>play(ch.url);
+div.innerText=c.name;
+div.onclick=()=>play(c.url);
 box.appendChild(div);
 });
 }
 
+/* ================= PLAYER ================= */
 function play(url){
-let video=document.getElementById("player");
+let v=document.getElementById("player");
 if(Hls.isSupported()){
-let hls=new Hls();
-hls.loadSource(url);
-hls.attachMedia(video);
+let h=new Hls();
+h.loadSource(url);
+h.attachMedia(v);
 }
-video.play();
-}
-
-// ================= UPGRADE =================
-function openUpgrade(){
-document.getElementById("modal").style.display="flex";
+v.play();
 }
 
-function closeUpgrade(){
-document.getElementById("modal").style.display="none";
-}
-
-function buy(plan){
-alert("Purchased: "+plan+" (demo)");
-let data=JSON.parse(localStorage.getItem("user_"+currentUser));
-data.plan=plan;
-localStorage.setItem("user_"+currentUser,JSON.stringify(data));
-closeUpgrade();
-}
-
-// ================= STATS =================
-setInterval(()=>{
+/* ================= STATS ================= */
+function stats(){
 document.getElementById("stats").innerText=
-"Users: local | Channels: "+channels.length;
-},2000);
+"Channels: "+channels.length;
+}
+
+/* ================= UPGRADE ================= */
+function openUpgrade(){modal.style.display="flex"}
+function closeUpgrade(){modal.style.display="none"}
+
+function buy(p){
+alert("Bought "+p);
+}
+
+/* ================= ADMIN ================= */
+function scan(){alert("Scanning...")}
+function repair(){alert("Repairing...")}
+function boost(){alert("Boost ON")}
+function premium(){alert("Premium Enabled")}
+function backup(){alert("Backup created")}
+function closeAdmin(){admin.style.display="none"}
+
+/* ================= LOGOUT ================= */
+function logout(){location.reload()}
 
 </script>
 
