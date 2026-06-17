@@ -1,0 +1,306 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>📺 IPTV SAAS PRO MAX - ONE PAGE SYSTEM</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden}
+
+/* AUTH */
+#auth{position:fixed;inset:0;background:#050816;display:flex;align-items:center;justify-content:center;z-index:9999}
+.box{background:#0d1324;padding:20px;width:320px;border-radius:10px}
+input{width:100%;padding:10px;margin:5px 0;background:#111a31;border:none;color:#fff}
+button{width:100%;padding:10px;margin-top:5px;background:#00d4ff;border:none;cursor:pointer}
+
+/* SIDEBAR */
+.sidebar{width:260px;background:#0d1324;padding:10px;overflow:auto}
+.btn{width:100%;padding:10px;margin:5px 0;background:#152445;border:none;color:#fff;border-radius:6px;cursor:pointer}
+.btn:hover{background:#00d4ff;color:#000}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;padding:10px}
+.player{height:260px;background:#000;border-radius:10px;overflow:hidden}
+video{width:100%;height:100%}
+
+/* CHANNELS */
+.grid{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:10px}
+.card{background:#111a31;padding:10px;border-radius:8px;cursor:pointer;border:1px solid #1f355d}
+.lock{opacity:.3;pointer-events:none}
+
+/* ADMIN */
+#admin{
+position:fixed;right:0;top:0;width:340px;height:100%;
+background:#0b1220;border-left:2px solid #00d4ff;
+padding:10px;overflow:auto;display:none;z-index:99999
+}
+
+.small{font-size:12px;color:#aaa;margin-top:10px}
+</style>
+</head>
+
+<body>
+
+<div id="auth">
+<div class="box">
+<h3>🔐 IPTV SAAS LOGIN</h3>
+<input id="email" placeholder="email">
+<input id="pass" type="password" placeholder="password">
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
+</div>
+</div>
+
+<div class="sidebar">
+<h3>📺 IPTV SAAS</h3>
+
+<button class="btn" onclick="load()">🌍 Load Channels</button>
+<button class="btn" onclick="openAdmin()">⚙ Super Admin</button>
+<button class="btn" onclick="logout()">🚪 Logout</button>
+</div>
+
+<div class="main">
+<div class="player"><video id="video" controls></video></div>
+<div class="grid" id="grid"></div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin">
+<h3>⚙ SUPER ADMIN CONTROL</h3>
+
+<div class="small">TRIAL CONTROL</div>
+<button class="btn" onclick="setTrial(false)">Disable Trial</button>
+<button class="btn" onclick="setTrial(true)">Enable Trial</button>
+
+<div class="small">CHANNEL CONTROL</div>
+<button class="btn" onclick="lockTop()">Lock Sample Channels</button>
+<button class="btn" onclick="unlockAll()">Unlock All</button>
+
+<div class="small">COUNTRY / CATEGORY</div>
+<button class="btn" onclick="toggleMode('block')">Block Platform</button>
+<button class="btn" onclick="toggleMode('free')">Free Mode</button>
+<button class="btn" onclick="toggleMode('limited')">Limited Mode</button>
+<button class="btn" onclick="toggleMode('upgrade')">Upgrade Page</button>
+<button class="btn" onclick="toggleMode('payment')">Payment Page</button>
+
+<div class="small">USER CONTROL</div>
+<button class="btn" onclick="banDemo()">Ban Demo User</button>
+<button class="btn" onclick="resetExpiry()">Reset All Expiry</button>
+
+<button class="btn" onclick="closeAdmin()">Close</button>
+</div>
+
+<script>
+
+/* =========================
+   DATABASE (LOCAL MOCK)
+========================= */
+
+let DB = JSON.parse(localStorage.getItem("DB")) || {
+users:[],
+config:{
+trial:true,
+mode:"active",
+locked:[]
+}
+};
+
+function save(){localStorage.setItem("DB",JSON.stringify(DB));}
+
+/* =========================
+   AUTH SYSTEM
+========================= */
+
+function register(){
+DB.users.push({
+email:email.value,
+pass:pass.value,
+exp:Date.now()+3600000,
+banned:false
+});
+save();
+alert("Registered");
+}
+
+let currentUser=null;
+
+function login(){
+let u=DB.users.find(x=>x.email==email.value && x.pass==pass.value);
+if(!u) return alert("Invalid");
+
+if(u.banned) return alert("BANNED USER");
+
+currentUser=u;
+
+if(Date.now()>u.exp){
+alert("EXPIRED - LIMITED MODE");
+handleExpiry();
+}
+
+auth.style.display="none";
+load();
+startTimer();
+}
+
+/* =========================
+   TIMER
+========================= */
+
+function startTimer(){
+setInterval(()=>{
+if(!currentUser) return;
+
+let left=currentUser.exp-Date.now();
+
+if(left<=0){
+handleExpiry();
+return;
+}
+
+document.title="⏳ "+Math.floor(left/60000)+" min left";
+},1000);
+}
+
+/* =========================
+   IPTV ENGINE
+========================= */
+
+let all=[],video=document.getElementById("video");
+
+async function load(){
+let res=await fetch("https://iptv-org.github.io/iptv/index.country.m3u");
+let txt=await res.text();
+
+all=[];
+
+txt.split("\n").forEach((l,i,a)=>{
+if(l.startsWith("#EXTINF")){
+let name=l.split(",")[1];
+let url=a[i+1];
+if(url?.startsWith("http")) all.push({name,url});
+}
+});
+
+render();
+}
+
+function render(){
+grid.innerHTML="";
+
+all.forEach((c,i)=>{
+let div=document.createElement("div");
+div.className="card";
+
+if(DB.config.locked.includes(c.name)) div.classList.add("lock");
+
+div.innerHTML=c.name;
+
+div.onclick=()=>play(c);
+
+grid.appendChild(div);
+});
+}
+
+function play(c){
+if(DB.config.locked.includes(c.name)){
+alert("LOCKED CHANNEL");
+return;
+}
+video.src=c.url;
+video.play();
+}
+
+/* =========================
+   ADMIN FUNCTIONS
+========================= */
+
+function openAdmin(){admin.style.display="block";}
+function closeAdmin(){admin.style.display="none";}
+
+function setTrial(v){
+DB.config.trial=v;
+save();
+alert("Trial: "+v);
+}
+
+function lockTop(){
+DB.config.locked=all.slice(0,8).map(c=>c.name);
+save();
+render();
+}
+
+function unlockAll(){
+DB.config.locked=[];
+save();
+render();
+}
+
+function toggleMode(m){
+DB.config.mode=m;
+save();
+handleExpiry();
+}
+
+/* =========================
+   EXPIRY ENGINE
+========================= */
+
+function handleExpiry(){
+
+if(DB.config.mode==="block"){
+document.body.innerHTML="<h1>⛔ PLATFORM BLOCKED</h1>";
+}
+
+if(DB.config.mode==="upgrade"){
+document.body.innerHTML="<h1>⬆ UPGRADE REQUIRED</h1>";
+}
+
+if(DB.config.mode==="payment"){
+document.body.innerHTML="<h1>💳 PAYMENT PAGE</h1>";
+}
+
+if(DB.config.mode==="limited"){
+alert("Limited mode active: Free channels only");
+}
+
+if(DB.config.mode==="free"){
+alert("Free mode enabled");
+}
+}
+
+/* =========================
+   USER CONTROL
+========================= */
+
+function banDemo(){
+if(DB.users[0]) DB.users[0].banned=true;
+save();
+alert("User banned");
+}
+
+function resetExpiry(){
+DB.users.forEach(u=>{
+u.exp=Date.now()+3600000;
+});
+save();
+alert("Expiry reset");
+}
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logout(){
+localStorage.clear();
+location.reload();
+}
+
+</script>
+
+</body>
+</html>
