@@ -1,171 +1,295 @@
-<div class="dashboard-container">
+<!-- ========================================================= -->
+<!-- SUPER ADMIN IPTV + BTECH-TV PRO ULTRA MAX WORLD SAAS -->
+<!-- ONE PAGE FULL SIMULATED BACKEND VERSION 2026 -->
+<!-- ========================================================= -->
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>📺 IPTV SAAS ULTRA MAX</title>
 
-        <!-- LOGO -->
-        <div class="logo-box">
-            <h1>BTECH TV</h1>
-            <p>SUPER ADMIN CONTROL PANEL</p>
-        </div>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-        <!-- DASHBOARD -->
-        <button onclick="showPage('dashboard')">
-            Dashboard
-        </button>
+<style>
+:root{
+--bg:#050816;
+--panel:#111827;
+--card:#172033;
+--accent:#00d4ff;
+--text:#fff;
+}
 
-        <!-- CHANNELS -->
-        <button onclick="showPage('channels')">
-            All Channels
-        </button>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
 
-        <button onclick="showPage('free')">
-            Free Channels
-        </button>
+body{background:var(--bg);color:var(--text);overflow:hidden}
 
-        <button onclick="showPage('premium')">
-            Premium Channels
-        </button>
+/* AUTH */
+#auth{
+position:fixed;inset:0;display:flex;justify-content:center;align-items:center;background:#050816;z-index:9999;
+}
 
-        <button onclick="showPage('locked')">
-            Locked Channels
-        </button>
+.box{
+background:var(--panel);padding:20px;border-radius:12px;width:320px;
+}
 
-        <!-- USERS -->
-        <button onclick="showPage('users')">
-            User Manager
-        </button>
+input,select{
+width:100%;padding:10px;margin:5px 0;border:none;border-radius:8px;background:#0f172a;color:#fff;
+}
 
-        <!-- SUBSCRIPTIONS -->
-        <button onclick="showPage('subscriptions')">
-            Subscription Manager
-        </button>
+button{
+width:100%;padding:10px;margin-top:5px;border:none;border-radius:8px;background:var(--accent);cursor:pointer;font-weight:bold;
+}
 
-        <!-- SERVER -->
-        <button onclick="showPage('servers')">
-            Streaming Servers
-        </button>
+/* APP */
+#app{display:none}
 
-        <!-- SECURITY -->
-        <button onclick="showPage('security')">
-            Security Center
-        </button>
+.topbar{
+height:55px;background:#0f172a;display:flex;justify-content:space-between;align-items:center;padding:0 10px;
+}
 
-        <!-- SETTINGS -->
-        <button onclick="showPage('settings')">
-            Super Settings
-        </button>
+.container{display:flex;height:100vh}
 
-        <!-- CHURCH -->
-        <button onclick="showPage('church')">
-            Church Manager
-        </button>
+.sidebar{
+width:300px;background:#0d1324;overflow:auto;padding:10px;
+}
 
-        <!-- ADMIN -->
-        <button onclick="showPage('admins')">
-            Admin Manager
-        </button>
+.btn{
+width:100%;padding:8px;margin:4px 0;background:#121c33;color:#fff;border:none;border-radius:6px;cursor:pointer;text-align:left;
+}
 
-        <!-- ANALYTICS -->
-        <button onclick="showPage('analytics')">
-            Analytics
-        </button>
+.main{flex:1;display:flex;flex-direction:column}
 
-    </aside>
+.player{height:300px;background:#000}
 
-    <!-- MAIN -->
-    <main class="dashboard-main">
+.channels{flex:1;overflow:auto;padding:10px}
 
-        <!-- DASHBOARD PAGE -->
-        <section id="dashboardPage">
+.channel{
+background:var(--card);padding:10px;margin:5px 0;border-radius:8px;cursor:pointer;
+}
 
-            <!-- STATS -->
-            <div class="stats">
+.modal{
+position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;justify-content:center;align-items:center;
+}
 
-                <div class="stat">
-                    <h3>Total Channels</h3>
-                    <p id="totalChannels">0</p>
-                </div>
+.modal-box{background:#111827;padding:15px;border-radius:10px;width:300px}
+</style>
+</head>
 
-                <div class="stat">
-                    <h3>Premium</h3>
-                    <p id="premiumChannels">0</p>
-                </div>
+<body>
 
-                <div class="stat">
-                    <h3>Locked</h3>
-                    <p id="lockedChannels">0</p>
-                </div>
+<!-- ================= AUTH ================= -->
+<div id="auth">
+<div class="box">
+<h3>IPTV SAAS LOGIN</h3>
 
-                <div class="stat">
-                    <h3>Users</h3>
-                    <p id="totalUsers">0</p>
-                </div>
+<input id="u" placeholder="username">
+<input id="p" type="password" placeholder="password">
 
-            </div>
+<select id="role">
+<option value="user">User</option>
+<option value="admin">Admin</option>
+</select>
 
-        </section>
+<button onclick="login()">Login / Register</button>
+</div>
+</div>
 
-        <!-- CHANNEL GRID -->
-        <section id="channelsPage">
+<!-- ================= APP ================= -->
+<div id="app">
 
-            <div class="channel-grid" id="channelGrid">
+<div class="topbar">
+<div>📺 IPTV SAAS</div>
+<div>
+<span id="me"></span>
+<button onclick="logout()">Logout</button>
+</div>
+</div>
 
-            </div>
+<div class="container">
 
-        </section>
+<!-- SIDEBAR -->
+<div class="sidebar">
 
-        <!-- USER MANAGER -->
-        <section id="usersPage">
+<h4>🌍 Countries</h4>
+<button class="btn" onclick="load('ng')">Nigeria</button>
+<button class="btn" onclick="load('us')">USA</button>
+<button class="btn" onclick="load('uk')">UK</button>
 
-            <div class="card">
+<h4>🎬 Categories</h4>
+<button class="btn" onclick="loadCat('news')">News</button>
+<button class="btn" onclick="loadCat('sports')">Sports</button>
 
-                <h3>User Manager</h3>
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Plan</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="userTable"></tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-        <!-- SERVER DASHBOARD -->
-        <section id="serversPage">
-
-            <div class="card">
-
-                <h3>Streaming Servers</h3>
-
-                <table>
-
-                    <thead>
-                        <tr>
-                            <th>Server</th>
-                            <th>Region</th>
-                            <th>Status</th>
-                            <th>Bandwidth</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="serverTable"></tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-    </main>
+<h4>🔥 SaaS Admin</h4>
+<button class="btn" onclick="openAdmin()">Admin Panel</button>
 
 </div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="player">
+<video id="v" controls style="width:100%;height:100%"></video>
+</div>
+
+<div class="channels" id="list"></div>
+
+</div>
+</div>
+</div>
+
+<!-- ================= ADMIN ================= -->
+<div class="modal" id="admin">
+<div class="modal-box">
+<h3>SUPER ADMIN PANEL</h3>
+
+<button onclick="showUsers()">View Users</button>
+<button onclick="addChannel()">Add Channel</button>
+<button onclick="clearDB()">Reset DB</button>
+<button onclick="closeAdmin()">Close</button>
+
+<div id="adminOut"></div>
+</div>
+</div>
+
+<script>
+
+/* ================= FAKE DATABASE ================= */
+let DB = {
+users: JSON.parse(localStorage.getItem("users")||"[]"),
+channels: JSON.parse(localStorage.getItem("channels")||"[]")
+};
+
+let current=null;
+let channels=[];
+
+/* ================= AUTH ================= */
+function login(){
+let u=document.getElementById("u").value;
+let p=document.getElementById("p").value;
+let r=document.getElementById("role").value;
+
+let user=DB.users.find(x=>x.u===u && x.p===p);
+
+if(!user){
+user={u,p,role:r};
+DB.users.push(user);
+save();
+}
+
+current=user;
+start();
+}
+
+function start(){
+document.getElementById("auth").style.display="none";
+document.getElementById("app").style.display="block";
+document.getElementById("me").innerText=current.u+" ("+current.role+")";
+
+if(DB.channels.length===0){
+DB.channels.push(
+{name:"BBC News",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Sky Sports",url:"https://test-streams.mux.dev/test_001/stream.m3u8"}
+);
+save();
+}
+
+channels=DB.channels;
+render();
+}
+
+function logout(){location.reload();}
+
+/* ================= CHANNELS ================= */
+function render(){
+let box=document.getElementById("list");
+box.innerHTML="";
+channels.forEach(c=>{
+let d=document.createElement("div");
+d.className="channel";
+d.innerText=c.name;
+d.onclick=()=>play(c.url);
+box.appendChild(d);
+});
+}
+
+function play(url){
+let v=document.getElementById("v");
+
+if(Hls.isSupported()){
+let h=new Hls();
+h.loadSource(url);
+h.attachMedia(v);
+h.on(Hls.Events.MANIFEST_PARSED,()=>v.play());
+}
+}
+
+/* ================= LOADERS ================= */
+async function load(code){
+let url=`https://iptv-org.github.io/iptv/countries/${code}.m3u`;
+fetchM3U(url);
+}
+
+async function loadCat(cat){
+let url=`https://iptv-org.github.io/iptv/categories/${cat}.m3u`;
+fetchM3U(url);
+}
+
+async function fetchM3U(url){
+let res=await fetch(url);
+let t=await res.text();
+channels=[];
+
+t.split("\n").forEach((l,i,a)=>{
+if(l.startsWith("#EXTINF")){
+let name=l.split(",")[1];
+let u=a[i+1];
+if(u && u.startsWith("http")){
+channels.push({name,url:u});
+}
+}
+});
+
+render();
+}
+
+/* ================= ADMIN ================= */
+function openAdmin(){
+if(current.role!=="admin") return alert("Admin only");
+document.getElementById("admin").style.display="flex";
+}
+
+function closeAdmin(){
+document.getElementById("admin").style.display="none";
+}
+
+function showUsers(){
+document.getElementById("adminOut").innerHTML=
+DB.users.map(u=>`<div>${u.u} - ${u.role}</div>`).join("");
+}
+
+function addChannel(){
+let name=prompt("Channel name");
+let url=prompt("Stream URL");
+
+DB.channels.push({name,url});
+save();
+render();
+}
+
+function clearDB(){
+localStorage.clear();
+location.reload();
+}
+
+/* ================= SAVE ================= */
+function save(){
+localStorage.setItem("users",JSON.stringify(DB.users));
+localStorage.setItem("channels",JSON.stringify(DB.channels));
+}
+
+</script>
+
+</body>
+</html>
