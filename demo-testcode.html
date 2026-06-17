@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>📺 BTECH-TV WORLD PRO MAX + SUPER SETTINGS</title>
+<title>📺 BTECH-TV WORLD PRO MAX - SUPER ADMIN</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -14,26 +13,28 @@ body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
 
 /* AUTH */
 #authBox{position:fixed;inset:0;background:#050816;display:flex;justify-content:center;align-items:center;z-index:9999}
-.auth-card{background:#0d1324;padding:20px;border-radius:12px;width:320px;text-align:center}
-.auth-card input{width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;background:#101a31;color:#fff}
+.auth-card{background:#0d1324;padding:20px;border-radius:12px;width:320px}
+.auth-card input{width:100%;padding:10px;margin:8px 0;background:#101a31;color:#fff;border:none;border-radius:6px}
 .auth-card button{width:100%;padding:10px;margin-top:10px;background:#00d4ff;border:none;border-radius:6px;cursor:pointer}
 
-/* SIDEBAR */
-.sidebar{width:280px;background:#0d1324;padding:15px;overflow-y:auto;border-right:1px solid #1d2b4f}
-.nav-btn{width:100%;padding:10px;margin:5px 0;background:#121c33;border:none;border-radius:8px;color:#fff;cursor:pointer}
+/* LAYOUT */
+.sidebar{width:260px;background:#0d1324;padding:10px;overflow:auto}
+.main{flex:1;display:flex;flex-direction:column;padding:10px}
+
+.nav-btn{width:100%;padding:10px;margin:5px 0;background:#152445;color:#fff;border:none;border-radius:6px;cursor:pointer}
 .nav-btn:hover{background:#00d4ff;color:#000}
 
-/* MAIN */
-.main{flex:1;display:flex;flex-direction:column;padding:10px}
-.player-container{background:#000;height:300px;border-radius:10px;overflow:hidden}
+/* PLAYER */
+.player{background:#000;height:300px;border-radius:10px;overflow:hidden}
 video{width:100%;height:100%}
-.channels{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;overflow:auto;flex:1;margin-top:10px}
-.card{background:#111a31;padding:10px;border-radius:10px;cursor:pointer;border:1px solid #1f355d}
-.card.locked{opacity:0.3;pointer-events:none}
-.badge{background:red;padding:3px 6px;border-radius:8px;font-size:10px;float:right}
 
-/* SUPER ADMIN */
-#adminPanel{
+/* CHANNELS */
+.channels{flex:1;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:10px}
+.card{background:#111a31;padding:10px;border-radius:8px;cursor:pointer;border:1px solid #1f355d}
+.card.locked{opacity:0.3;pointer-events:none}
+
+/* ADMIN */
+#admin{
 position:fixed;
 right:0;top:0;
 width:320px;
@@ -46,19 +47,16 @@ display:none;
 z-index:99999;
 }
 
-#adminPanel h3{color:#00d4ff}
 .admin-btn{width:100%;padding:10px;margin:5px 0;background:#152445;border:none;color:#fff;border-radius:6px;cursor:pointer}
 .admin-btn:hover{background:#00d4ff;color:#000}
 
-.small{font-size:12px;color:#aaa}
-
-#timerBar{position:fixed;top:10px;right:10px;background:#00d4ff;color:#000;padding:8px;border-radius:8px;font-weight:bold}
+#timer{position:fixed;top:10px;right:10px;background:#00d4ff;color:#000;padding:8px;border-radius:6px;font-weight:bold}
 </style>
 </head>
 
 <body>
 
-<div id="timerBar">Loading...</div>
+<div id="timer">Loading...</div>
 
 <!-- AUTH -->
 <div id="authBox">
@@ -73,9 +71,9 @@ z-index:99999;
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<h2>📺 BTECH TV</h2>
+<h3>📺 IPTV MENU</h3>
 
-<button class="nav-btn" onclick="loadUltra()">🌍 All Channels</button>
+<button class="nav-btn" onclick="load()">🌍 Load Channels</button>
 <button class="nav-btn" onclick="toggleAdmin()">⚙ Super Admin</button>
 <button class="nav-btn" onclick="logout()">🚪 Logout</button>
 </div>
@@ -83,7 +81,7 @@ z-index:99999;
 <!-- MAIN -->
 <div class="main">
 
-<div class="player-container">
+<div class="player">
 <video id="video" controls></video>
 </div>
 
@@ -91,152 +89,160 @@ z-index:99999;
 
 </div>
 
-<!-- SUPER ADMIN PANEL -->
-<div id="adminPanel">
+<!-- ADMIN PANEL -->
+<div id="admin">
+<h3>⚙ SUPER ADMIN PANEL</h3>
 
-<h3>⚙ SUPER ADMIN CONTROL</h3>
+<h4>Trial Controls</h4>
+<button class="admin-btn" onclick="setTrial(false)">Disable Trial</button>
+<button class="admin-btn" onclick="setTrial(true)">Enable Trial</button>
 
-<div class="small">Lock / Unlock Channels</div>
-<button class="admin-btn" onclick="lockSelected()">🔒 Lock Selected</button>
-<button class="admin-btn" onclick="unlockAll()">🔓 Unlock All</button>
+<h4>Channel Controls</h4>
+<button class="admin-btn" onclick="unlockAll()">Unlock All</button>
+<button class="admin-btn" onclick="lockRandom()">Lock Random</button>
 
-<div class="small">Expiration Control</div>
-<button class="admin-btn" onclick="resetAllExpiry()">♻ Reset ALL Expiry</button>
+<h4>System Controls</h4>
+<button class="admin-btn" onclick="setMode('block')">Block Platform</button>
+<button class="admin-btn" onclick="setMode('free')">Free Mode</button>
+<button class="admin-btn" onclick="setMode('radio')">Radio Mode</button>
+<button class="admin-btn" onclick="setMode('upgrade')">Upgrade Page</button>
+<button class="admin-btn" onclick="setMode('payment')">Payment Page</button>
+<button class="admin-btn" onclick="setMode('limited')">Limited Mode</button>
 
-<div class="small">System</div>
-<button class="admin-btn" onclick="clearAllUsers()">🧨 Clear Users</button>
-<button class="admin-btn" onclick="closeAdmin()">❌ Close</button>
-
+<button class="admin-btn" onclick="closeAdmin()">Close</button>
 </div>
 
 <script>
 
-let all=[],filtered=[],i=0;
-let lockedChannels = JSON.parse(localStorage.getItem("lockedChannels")||"[]");
-let video=document.getElementById("video");
-let selected = new Set();
+/* CONFIG */
+let CONFIG = JSON.parse(localStorage.getItem("CONFIG")) || {
+trial:true,
+duration:3600000,
+locked:[],
+mode:"active"
+};
 
-/* USERS */
+function save(){localStorage.setItem("CONFIG",JSON.stringify(CONFIG));}
+
+/* AUTH */
 function register(){
-let u={email:email.value,pass:pass.value,exp:Date.now()+3600000};
-localStorage.setItem("user",JSON.stringify(u));
-alert("Registered 1h trial");
+localStorage.setItem("user",JSON.stringify({
+email:email.value,
+pass:pass.value,
+exp:Date.now()+CONFIG.duration
+}));
+alert("Registered");
 }
 
 function login(){
 let u=JSON.parse(localStorage.getItem("user"));
-if(!u || u.email!==email.value || u.pass!==pass.value){
-alert("Invalid");return;
-}
+if(!u || u.email!=email.value || u.pass!=pass.value) return alert("Invalid");
+
 if(Date.now()>u.exp){
-alert("EXPIRED USER");return;
+handleExpiry();
+return;
 }
+
 authBox.style.display="none";
 startTimer(u);
-loadUltra();
+load();
 }
 
 /* TIMER */
 function startTimer(u){
 setInterval(()=>{
 let left=u.exp-Date.now();
-if(left<=0){document.body.innerHTML="<h1>EXPIRED</h1>";}
-timerBar.innerText="Time Left: "+Math.floor(left/60000)+" min";
+if(left<=0) handleExpiry();
+timer.innerText="Trial: "+Math.floor(left/60000)+" min left";
 },1000);
 }
 
 /* IPTV */
-async function loadUltra(){
+let all=[],current=[],video=document.getElementById("video");
+
+async function load(){
 let res=await fetch("https://iptv-org.github.io/iptv/index.country.m3u");
 let text=await res.text();
 
-all=[];filtered=[];
-
+all=[];
 text.split("\n").forEach((l,i,a)=>{
 if(l.startsWith("#EXTINF")){
 let name=l.split(",")[1];
 let url=a[i+1];
-if(url?.startsWith("http")){
-all.push({name,url});
-}
+if(url?.startsWith("http")) all.push({name,url});
 }
 });
 
-filtered=[...all];
+current=[...all];
 render();
 }
 
 function render(){
 grid.innerHTML="";
-filtered.forEach((c,idx)=>{
+current.forEach((c,i)=>{
 let div=document.createElement("div");
 div.className="card";
 
-if(lockedChannels.includes(c.name)) div.classList.add("locked");
+if(CONFIG.locked.includes(c.name)) div.classList.add("locked");
 
-div.innerHTML=`
-<input type="checkbox" onchange="selectChannel('${c.name}',this)">
-<div class="badge">LIVE</div>${c.name}
-`;
-
-div.onclick=()=>play(idx);
+div.innerHTML=c.name;
+div.onclick=()=>play(c);
 grid.appendChild(div);
 });
 }
 
-function selectChannel(name,el){
-if(el.checked) selected.add(name);
-else selected.delete(name);
-}
-
-/* PLAY */
-function play(idx){
-let c=filtered[idx];
-if(lockedChannels.includes(c.name)){
-alert("LOCKED CHANNEL");
+function play(c){
+if(CONFIG.locked.includes(c.name)){
+alert("LOCKED");
 return;
 }
-
 video.src=c.url;
 video.play();
 }
 
-/* ADMIN FUNCTIONS */
-function toggleAdmin(){
-adminPanel.style.display="block";
-}
+/* ADMIN */
+function toggleAdmin(){admin.style.display="block";}
+function closeAdmin(){admin.style.display="none";}
 
-function closeAdmin(){
-adminPanel.style.display="none";
-}
-
-function lockSelected(){
-lockedChannels=[...new Set([...lockedChannels,...selected])];
-localStorage.setItem("lockedChannels",JSON.stringify(lockedChannels));
-render();
-alert("Locked selected channels");
+function setTrial(v){
+CONFIG.trial=v;save();
+alert("Trial "+v);
 }
 
 function unlockAll(){
-lockedChannels=[];
-localStorage.removeItem("lockedChannels");
-render();
-alert("All unlocked");
+CONFIG.locked=[];save();render();
 }
 
-function resetAllExpiry(){
-let u=JSON.parse(localStorage.getItem("user"));
-if(u){
-u.exp=Date.now()+3600000;
-localStorage.setItem("user",JSON.stringify(u));
-alert("Expiry reset 1h");
-}
+function lockRandom(){
+CONFIG.locked=all.slice(0,5).map(c=>c.name);
+save();render();
 }
 
-function clearAllUsers(){
-localStorage.clear();
-alert("All data cleared");
-location.reload();
+function setMode(m){
+CONFIG.mode=m;save();
+handleExpiry();
+}
+
+/* EXPIRY SYSTEM */
+function handleExpiry(){
+if(CONFIG.mode=="block"){
+document.body.innerHTML="<h1>⛔ PLATFORM BLOCKED</h1>";
+}
+if(CONFIG.mode=="upgrade"){
+document.body.innerHTML="<h1>⬆ UPGRADE REQUIRED</h1>";
+}
+if(CONFIG.mode=="payment"){
+document.body.innerHTML="<h1>💳 PAYMENT REQUIRED</h1>";
+}
+if(CONFIG.mode=="free"){
+alert("Free mode active");
+}
+if(CONFIG.mode=="radio"){
+alert("Radio only mode");
+}
+if(CONFIG.mode=="limited"){
+alert("Limited viewing mode");
+}
 }
 
 /* LOGOUT */
@@ -244,8 +250,6 @@ function logout(){
 localStorage.clear();
 location.reload();
 }
-
-loadUltra();
 
 </script>
 
