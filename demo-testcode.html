@@ -258,8 +258,7 @@ body{flex-direction:column;}
 <script>
 
 /* AUTH + TRIAL */
-const TRIAL_TIME = 5 * 3600 * 1000;
-
+const TRIAL_TIME = Infinity;
 function register(){
 let e=email.value,p=pass.value;
 if(!e||!p)return alert("Fill all");
@@ -294,9 +293,58 @@ if(!s)return;
 
 let d=TRIAL_TIME-(Date.now()-s);
 if(d<=0){
-document.body.innerHTML=`<h1 style='color:white;text-align:center;margin-top:20%'>⛔ TRIAL EXPIRED</h1>`;
+document.body.innerHTML=`
+<div style="
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#050816;
+flex-direction:column;
+color:white;
+font-family:Arial">
+<h1>🔓 Upgrade Required</h1>
+<p>Your trial has ended.</p>
+<button onclick="unlockChannels()" style="
+padding:12px 20px;
+background:#00d4ff;
+border:none;
+border-radius:8px;
+cursor:pointer">
+UNLOCK ALL CHANNELS
+</button>
+</div>
+`;
 return;
 }
+  function unlockChannels(){
+localStorage.setItem("premium","true");
+location.reload();
+}
+  function login(){
+
+let e=email.value,p=pass.value;
+let u=JSON.parse(localStorage.getItem("user"));
+
+if(!u||u.e!==e||u.p!==p)
+return alert("Invalid");
+
+if(localStorage.getItem("premium")==="true"){
+authBox.style.display="none";
+timerBar.innerHTML="🔓 PREMIUM UNLOCKED";
+loadUltra();
+return;
+}
+
+if(!localStorage.getItem("startTime")){
+localStorage.setItem("startTime",Date.now());
+}
+
+authBox.style.display="none";
+startTimer();
+loadUltra();
+}
+  
 
 timerBar.innerText=`Trial Left: ${Math.floor(d/3600000)}h ${Math.floor(d%3600000/60000)}m ${Math.floor(d%60000/1000)}s`;
 },1000);
