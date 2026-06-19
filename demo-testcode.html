@@ -665,6 +665,172 @@ play(current)
 }
 
 </script>
+/* =========================
+   PAYMENT GATEWAY DEMO
+========================= */
 
+function payPage(){
+
+document.body.innerHTML=`
+
+<div style="
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#050816">
+
+<div style="
+width:380px;
+background:#101d39;
+padding:25px;
+border-radius:12px;
+text-align:center;
+color:white">
+
+<h2>💳 Premium Upgrade</h2>
+
+<p style="margin:10px 0">
+Unlock all channels
+</p>
+
+<h1>₦500</h1>
+
+<select id="payMethod"
+style="
+width:100%;
+padding:10px;
+margin-top:15px">
+
+<option value="card">
+💳 Debit Card
+</option>
+
+<option value="bank">
+🏦 Bank Transfer
+</option>
+
+<option value="wallet">
+📱 Mobile Wallet
+</option>
+
+</select>
+
+<input
+id="cardName"
+placeholder="Card Holder Name"
+style="
+width:100%;
+padding:10px;
+margin-top:10px">
+
+<input
+id="cardNumber"
+placeholder="1234 5678 9012 3456"
+style="
+width:100%;
+padding:10px;
+margin-top:10px">
+
+<input
+id="expiry"
+placeholder="MM/YY"
+style="
+width:100%;
+padding:10px;
+margin-top:10px">
+
+<input
+id="cvv"
+placeholder="CVV"
+style="
+width:100%;
+padding:10px;
+margin-top:10px">
+
+<button
+onclick="processPayment()"
+style="
+width:100%;
+padding:12px;
+margin-top:15px;
+background:#00d4ff;
+border:none;
+border-radius:8px">
+
+PAY NOW
+
+</button>
+
+<button
+onclick="location.reload()"
+style="
+width:100%;
+padding:12px;
+margin-top:10px">
+
+Cancel
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function processPayment(){
+
+let method=
+document.getElementById(
+"payMethod"
+).value;
+
+let btn=
+event.target;
+
+btn.innerHTML=
+"Processing...";
+
+btn.disabled=true;
+
+setTimeout(()=>{
+
+let transactionID=
+"BTECH"+
+Math.floor(
+Math.random()*99999999
+);
+
+alert(
+
+`✅ Payment Successful
+
+Gateway: ${method}
+
+Transaction:
+${transactionID}
+
+Premium activated`
+
+);
+
+localStorage.setItem(
+"premium",
+"true"
+);
+
+localStorage.setItem(
+"transactionID",
+transactionID
+);
+
+location.reload();
+
+},2500);
+
+}
 </body>
 </html>
