@@ -1,386 +1,287 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BTECH-TV WORLD PRO MAX</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>📺 BTECH-TV WORLD PRO MAX</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+#authBox{
+position:fixed;inset:0;background:#050816;
+display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:9999;
 }
 
-body{
-background:#050816;
-color:white;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-}
+.auth-card{background:#0d1324;padding:20px;border-radius:12px;width:320px;text-align:center;border:1px solid #1d2b4f;}
+.auth-card input{width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;background:#101a31;color:#fff;}
+.auth-card button{width:100%;padding:10px;margin-top:10px;background:#00d4ff;border:none;border-radius:6px;cursor:pointer;}
 
-.container{
-width:380px;
+.sidebar{width:280px;background:#0d1324;padding:15px;overflow-y:auto;border-right:1px solid #1d2b4f;}
+.logo{font-size:22px;font-weight:900;color:#00d4ff;}
+.sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
+.nav-btn{width:100%;padding:10px;margin:5px 0;background:#121c33;border:none;border-radius:8px;color:#fff;cursor:pointer;}
+
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px;}
+.topbar{display:flex;justify-content:space-between;margin-bottom:10px;}
+
+.player-container{background:#000;border-radius:10px;overflow:hidden;height:320px;}
+video{width:100%;height:100%;}
+
+.channels{overflow-y:auto;flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+
+.card{background:#111a31;padding:10px;border-radius:10px;cursor:pointer;border:1px solid #1f355d;}
+.card:hover{border-color:#00d4ff;}
+.badge{background:red;padding:3px 6px;border-radius:10px;font-size:10px;float:right;}
+
+#timerBar{position:fixed;top:10px;right:10px;background:#00d4ff;color:#000;padding:8px 12px;border-radius:8px;font-weight:bold;z-index:999;}
+
+.upgrade-box{
 background:#0d1324;
-padding:25px;
-border-radius:15px;
-border:1px solid #1f355d;
+padding:10px;
+border-radius:10px;
+margin-bottom:10px;
+border:1px solid #1d2b4f;
 }
 
-h1{
-font-size:22px;
-text-align:center;
-margin-bottom:15px;
-color:#00d4ff;
-}
-
-input{
-width:100%;
-padding:12px;
-margin:8px 0;
+.upgrade-box button{
+margin:5px;
+padding:8px;
 border:none;
-border-radius:8px;
-background:#111a31;
-color:white;
-}
-
-button{
-width:100%;
-padding:12px;
-margin:8px 0;
-border:none;
-border-radius:8px;
+border-radius:6px;
 cursor:pointer;
-font-weight:bold;
-}
-
-.primary{
 background:#00d4ff;
 }
 
-.orange{
-background:orange;
-}
-
-.green{
-background:#00cc88;
-}
-
-.hidden{
+.modal{
+position:fixed;inset:0;
+background:rgba(0,0,0,0.7);
 display:none;
+justify-content:center;
+align-items:center;
+z-index:99999;
 }
 
-#timer{
-text-align:center;
+.modal-content{
+background:#0d1324;
+padding:20px;
+border-radius:12px;
+width:320px;
+border:1px solid #1d2b4f;
+}
+
+.modal-content input{
+width:100%;
+padding:10px;
+margin:6px 0;
+border-radius:6px;
+border:none;
+background:#101a31;
+color:#fff;
+}
+
+.modal-content button{
+width:100%;
+padding:10px;
 margin-top:10px;
-color:#00d4ff;
-font-weight:bold;
+background:#00d4ff;
+border:none;
+border-radius:6px;
+cursor:pointer;
 }
-
 </style>
-
 </head>
+
 <body>
 
-<div class="container">
+<div id="timerBar">Trial Mode</div>
 
-<h1>📺 BTECH-TV WORLD</h1>
-
-<div id="authSection">
-
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
-
-<button class="primary" onclick="register()">
-Register
-</button>
-
-<button class="primary" onclick="login()">
-Login
-</button>
-
+<!-- AUTH -->
+<div id="authBox">
+  <div class="auth-card">
+    <h3>🔐 LOGIN</h3>
+    <input id="email" placeholder="Email">
+    <input id="pass" type="password" placeholder="Password">
+    <button onclick="register()">Register</button>
+    <button onclick="login()">Login</button>
+  </div>
 </div>
 
-
-<div id="timer"></div>
-
-
-<div id="upgradeSection" class="hidden">
-
-<h3 style="text-align:center;margin-top:20px">
-🔓 Upgrade Package
-</h3>
-
-<button
-class="primary"
-onclick="choosePackage('Premium')">
-⭐ Premium Package
-</button>
-
-<button
-class="orange"
-onclick="choosePackage('Super Premium')">
-🚀 Super Premium
-</button>
-
-<button
-class="green"
-onclick="choosePackage('Unlimited')">
-♾ Unlimited Package
-</button>
-
+<!-- UPGRADE MODAL -->
+<div class="modal" id="upgradeModal">
+  <div class="modal-content">
+    <h3>💳 Upgrade Payment</h3>
+    <input id="tier" placeholder="Package" readonly>
+    <input id="bankName" placeholder="Bank Name">
+    <input id="account" placeholder="Account Number">
+    <input id="payer" placeholder="Account Name">
+    <button onclick="payNow()">Pay & Unlock</button>
+    <button onclick="closeModal()" style="background:#ff4d4d">Cancel</button>
+  </div>
 </div>
 
+<!-- SIDEBAR -->
+<div class="sidebar">
+<div class="logo">📺 BTECH-TV WORLD</div>
 
-<div id="paymentSection"
-class="hidden">
-
-<h3 style="margin-top:20px">
-💳 Payment
-</h3>
-
-<input
-id="fullname"
-placeholder="Full Name">
-
-<input
-id="payemail"
-placeholder="Email">
-
-<button
-class="primary"
-onclick="processPayment()">
-
-Proceed Payment
-
-</button>
-
+<div class="upgrade-box">
+<h4>⬆ Upgrade Packages</h4>
+<button onclick="openUpgrade('premium')">Premium</button>
+<button onclick="openUpgrade('super')">Super Premium</button>
+<button onclick="openUpgrade('unlimited')">Unlimited</button>
 </div>
+
+<button class="nav-btn" onclick="loadUltra()">🌍 All Channels</button>
+<button class="nav-btn" onclick="logout()">🚪 Logout</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="topbar">
+<input oninput="search(this.value)" placeholder="Search IPTV...">
+</div>
+
+<div class="player-container">
+<video id="video" controls autoplay muted></video>
+</div>
+
+<div class="channels" id="grid"></div>
 
 </div>
 
 <script>
 
-const TRIAL_TIME=60000;
-let selectedPackage="";
+let all=[],filtered=[],i=0;
+let video=document.getElementById("video");
+let hls;
 
+/* AUTH */
 function register(){
-
-let email=
-document.getElementById(
-"email"
-).value;
-
-let password=
-document.getElementById(
-"password"
-).value;
-
-if(!email||!password){
-
-alert("Fill all fields");
-return;
-
+localStorage.setItem("user",JSON.stringify({e:email.value,p:pass.value}));
+alert("Registered");
 }
-
-localStorage.setItem(
-"user",
-JSON.stringify({
-email,
-password
-})
-);
-
-alert(
-"Registration successful"
-);
-
-}
-
 
 function login(){
+let u=JSON.parse(localStorage.getItem("user"));
+if(!u||u.e!==email.value||u.p!==pass.value)return alert("Invalid");
 
-let email=
-document.getElementById(
-"email"
-).value;
-
-let password=
-document.getElementById(
-"password"
-).value;
-
-let user=
-JSON.parse(
-localStorage.getItem(
-"user"
-)
-);
-
-if(
-!user||
-user.email!==email||
-user.password!==password
-){
-
-alert(
-"Invalid Login"
-);
-
-return;
-
+if(!localStorage.getItem("startTime")){
+localStorage.setItem("startTime",Date.now());
 }
 
-if(
-localStorage.getItem(
-"premium"
-)==="true"
-){
-
-document.getElementById(
-"timer"
-).innerHTML=
-"🔓 Premium Active";
-
-return;
-
+authBox.style.display="none";
+startTimer();
+loadUltra();
 }
 
-startTrial();
-
-}
-
-
-function startTrial(){
-
-let start=Date.now();
-
-let interval=
+/* TIMER */
+function startTimer(){
 setInterval(()=>{
+let start=localStorage.getItem("startTime");
+if(!start)return;
 
-let remaining=
-TRIAL_TIME-
-(Date.now()-start);
+let elapsed=Date.now()-start;
+let limit=24*60*60*1000; // 24h trial
 
-if(
-remaining<=0
-){
+let left=limit-elapsed;
 
-clearInterval(
-interval
-);
-
-document
-.getElementById(
-"timer"
-)
-.innerHTML=
-"Trial Ended";
-
-document
-.getElementById(
-"upgradeSection"
-)
-.classList
-.remove(
-"hidden"
-);
-
+if(left<=0 && !localStorage.getItem("premium")){
+document.body.innerHTML=`
+<div style="height:100vh;display:flex;justify-content:center;align-items:center;flex-direction:column;background:#050816;color:#fff">
+<h1>🔒 Trial Ended</h1>
+<button onclick="location.reload()" style="padding:10px;background:#00d4ff;border:none;border-radius:8px">Upgrade to Continue</button>
+</div>`;
 return;
-
 }
 
-let sec=
-Math.floor(
-remaining/1000
-);
-
-document
-.getElementById(
-"timer"
-)
-.innerHTML=
-"Trial: "
-+sec+
-"s";
-
+timerBar.innerText="Trial Left: "+Math.floor(left/60000)+" min";
 },1000);
-
 }
 
-
-function choosePackage(plan){
-
-selectedPackage=
-plan;
-
-document
-.getElementById(
-"paymentSection"
-)
-.classList
-.remove(
-"hidden"
-);
-
+/* UPGRADE */
+function openUpgrade(t){
+document.getElementById("tier").value=t;
+upgradeModal.style.display="flex";
 }
 
-
-function processPayment(){
-
-let fullname=
-document.getElementById(
-"fullname"
-).value;
-
-let email=
-document.getElementById(
-"payemail"
-).value;
-
-if(
-!fullname||
-!email
-){
-
-alert(
-"Fill payment details"
-);
-
-return;
-
+function closeModal(){
+upgradeModal.style.display="none";
 }
 
+function payNow(){
+let tier=document.getElementById("tier").value;
+localStorage.setItem("premium",tier);
+alert(tier+" activated (DEMO PAYMENT SUCCESS)");
+closeModal();
+}
 
-/* Replace with
-Paystack / Flutterwave */
+/* IPTV */
+async function loadUltra(){
+loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
+}
 
-alert(
-selectedPackage+
-" activated"
-);
+async function loadM3U(url){
+let res=await fetch(url);
+let text=await res.text();
 
-localStorage.setItem(
-"premium",
-"true"
-);
+all=[];filtered=[];i=0;
 
-localStorage.setItem(
-"package",
-selectedPackage
-);
+text.split("\n").forEach((l,idx,arr)=>{
+if(l.startsWith("#EXTINF")){
+let name=l.split(",").pop();
+let url=arr[idx+1];
+if(url?.startsWith("http")) all.push({name,url});
+}
+});
 
+filtered=[...all];
+render();
+}
+
+function render(){
+grid.innerHTML="";
+filtered.forEach((c,idx)=>{
+let div=document.createElement("div");
+div.className="card";
+div.innerHTML=`<div class='badge'>LIVE</div>${c.name}`;
+div.onclick=()=>play(idx);
+grid.appendChild(div);
+});
+}
+
+function play(idx){
+i=idx;
+let c=filtered[i];
+if(hls)hls.destroy();
+
+if(Hls.isSupported()){
+hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(video);
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+}else{
+video.src=c.url;
+video.play();
+}
+}
+
+function search(q){
+filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
+render();
+}
+
+function logout(){
+localStorage.clear();
 location.reload();
-
 }
+
+loadUltra();
 
 </script>
 
 </body>
 </html>
-```
