@@ -8,6 +8,8 @@
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+
+/* BASE */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
 
@@ -16,24 +18,17 @@ body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
 position:fixed;inset:0;background:#050816;
 display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:9999;
 }
-.auth-card{
-background:#0d1324;padding:20px;border-radius:12px;width:320px;text-align:center;border:1px solid #1d2b4f;
-}
-.auth-card input{
-width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;background:#101a31;color:#fff;
-}
-.auth-card button{
-width:100%;padding:10px;margin-top:10px;background:#00d4ff;border:none;border-radius:6px;cursor:pointer;
-}
+.auth-card{background:#0d1324;padding:20px;border-radius:12px;width:320px;text-align:center;border:1px solid #1d2b4f;}
+.auth-card input{width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;background:#101a31;color:#fff;}
+.auth-card button{width:100%;padding:10px;margin-top:10px;background:#00d4ff;border:none;border-radius:6px;cursor:pointer;}
 
 /* SIDEBAR */
-.sidebar{
-width:280px;background:#0d1324;padding:15px;overflow-y:auto;border-right:1px solid #1d2b4f;
-}
+.sidebar{width:280px;background:#0d1324;padding:15px;overflow-y:auto;border-right:1px solid #1d2b4f;}
 .logo{font-size:22px;font-weight:900;color:#00d4ff;}
 .sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
 .menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
 .nav-btn{width:100%;padding:10px;margin:5px 0;background:#121c33;border:none;border-radius:8px;color:#fff;cursor:pointer;}
+.nav-btn:hover{background:#1e2f57}
 
 /* MAIN */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px;}
@@ -47,144 +42,116 @@ width:280px;background:#0d1324;padding:15px;overflow-y:auto;border-right:1px sol
 .stat{background:#101d39;padding:8px;border-radius:8px;text-align:center;}
 
 /* PLAYER */
-.player-container{background:#000;border-radius:10px;overflow:hidden;height:320px;flex-shrink:0;}
+.player-container{background:#000;border-radius:10px;overflow:hidden;height:320px;}
 video{width:100%;height:100%;}
 
 /* CHANNELS */
+.channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
 .channels{
 overflow-y:auto;
 flex:1;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
 gap:10px;
+padding-right:5px;
 }
-.card{
-background:#111a31;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-border:1px solid #1f355d;
-}
-.card:hover{border-color:#00d4ff;}
+.card{background:#111a31;padding:10px;border-radius:10px;cursor:pointer;border:1px solid #1f355d;}
+.card:hover{transform:scale(1.03);border-color:#00d4ff;}
 .badge{background:red;padding:3px 6px;border-radius:10px;font-size:10px;float:right;}
 
 /* TIMER */
 #timerBar{
-position:fixed;
-top:10px;
-right:10px;
-background:#00d4ff;
-color:#000;
-padding:8px 12px;
-border-radius:8px;
-font-weight:bold;
-z-index:999;
+position:fixed;top:10px;right:10px;background:#00d4ff;color:#000;
+padding:8px 12px;border-radius:8px;font-weight:bold;z-index:999;
 }
 
-/* UPGRADE */
+/* MODALS */
 .modal{
-position:fixed;inset:0;
-background:rgba(0,0,0,0.7);
-display:none;
-justify-content:center;
-align-items:center;
-z-index:99999;
+position:fixed;inset:0;background:rgba(0,0,0,0.8);
+display:none;justify-content:center;align-items:center;z-index:99999;
 }
 .modal-box{
-background:#0d1324;
-padding:20px;
-border-radius:12px;
-width:320px;
+background:#0d1324;padding:20px;border-radius:12px;width:340px;text-align:center;
 border:1px solid #1d2b4f;
 }
-.modal-box select,
-.modal-box input{
-width:100%;
-padding:10px;
-margin:6px 0;
-border:none;
-border-radius:6px;
-background:#101a31;
-color:#fff;
-}
 .modal-box button{
-width:100%;
-padding:10px;
-margin-top:10px;
-border:none;
-border-radius:6px;
-background:#00d4ff;
-cursor:pointer;
+width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;cursor:pointer;
 }
-.upgradeBtn{
-display:none;
-width:100%;
-padding:10px;
-margin-top:10px;
-background:#ffb300;
-border:none;
-border-radius:8px;
-cursor:pointer;
-}
+
+.upgrade-btn{background:#ffcc00;color:#000;font-weight:bold;}
+
+.pay-btn{background:#00d4ff;color:#000;}
+
+.close-btn{background:#333;color:#fff;}
+
+@media(max-width:900px){body{flex-direction:column;}.sidebar{width:100%;}}
+
 </style>
 </head>
 
 <body>
 
-<div id="timerBar">Trial: 60s</div>
+<div id="timerBar">Trial Active</div>
 
 <!-- AUTH -->
 <div id="authBox">
   <div class="auth-card">
-    <h3>🔐 LOGIN</h3>
+    <h3>🔐 BTECH-TV ACCESS</h3>
     <input id="email" placeholder="Email">
     <input id="pass" type="password" placeholder="Password">
+    <button onclick="register()">Register</button>
     <button onclick="login()">Login</button>
   </div>
 </div>
 
-<!-- UPGRADE -->
-<div class="modal" id="modal">
+<!-- UPGRADE MODAL -->
+<div class="modal" id="upgradeModal">
   <div class="modal-box">
-    <h3>💳 Upgrade Plan</h3>
+    <h3>⛔ Trial Expired</h3>
+    <p>Upgrade to continue watching</p>
+    <button class="upgrade-btn" onclick="openPayment()">💳 Upgrade Now</button>
+  </div>
+</div>
 
-    <select id="package">
-      <option value="premium">Premium</option>
-      <option value="super">Super Premium</option>
-      <option value="unlimited">Unlimited</option>
-    </select>
+<!-- PAYMENT MODAL -->
+<div class="modal" id="paymentModal">
+  <div class="modal-box">
+    <h3>🏦 Payment Gateway (DEMO)</h3>
 
-    <input id="bank" placeholder="Bank Name">
-    <input id="acc" placeholder="Account Number">
-    <input id="name" placeholder="Account Name">
+    <button onclick="selectPlan('Premium')">Premium</button>
+    <button onclick="selectPlan('Super Premium')">Super Premium</button>
+    <button onclick="selectPlan('Unlimited')">Unlimited</button>
 
-    <button onclick="pay()">Proceed Payment</button>
-    <button onclick="closeModal()" style="background:red">Cancel</button>
+    <hr style="margin:10px 0;opacity:0.2">
+
+    <button class="pay-btn" onclick="payNow()">Pay & Unlock</button>
+    <button class="close-btn" onclick="closePayment()">Close</button>
   </div>
 </div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<div class="logo">📺 BTECH-TV PRO MAX</div>
+<div class="logo">📺 BTECH-TV WORLD PRO MAX</div>
+<div class="sub">Ultra IPTV Engine</div>
 
-<button class="nav-btn" onclick="loadUltra()">🌍 Global Channels</button>
+<div class="menu-title">🌍 Countries</div>
+<button class="nav-btn" onclick="load('ng')">Nigeria</button>
+<button class="nav-btn" onclick="loadUltra()">Global</button>
 
-<button class="upgradeBtn" id="upgradeBtn" onclick="openModal()">
-⬆ Upgrade Required
-</button>
-
+<div class="menu-title">🎬 Tools</div>
+<button class="nav-btn" onclick="logout()">Logout</button>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
 <div class="topbar">
-<input oninput="search(this.value)" placeholder="Search...">
-<div class="live">🔴 LIVE</div>
+<input oninput="search(this.value)" placeholder="Search IPTV..." class="search-box">
+<div class="live">LIVE</div>
 </div>
 
 <div class="hero">
-<h3>IPTV DASHBOARD</h3>
+<h3>System Dashboard</h3>
 <div class="stats">
 <div class="stat">📺 <div id="total">0</div></div>
 <div class="stat">⭐ <div id="fav">0</div></div>
@@ -197,59 +164,95 @@ cursor:pointer;
 <video id="video" controls autoplay muted></video>
 </div>
 
+<div class="channel-wrapper">
 <div class="channels" id="grid"></div>
+</div>
 
 </div>
 
 <script>
 
-let all=[],filtered=[],i=0;
-let video=document.getElementById("video");
+const TRIAL_TIME = 3600000; // 1 hour
+let plan = null;
 
-const TRIAL_TIME = 60000; // ✅ 1 MINUTE TRIAL
+function register(){
+localStorage.setItem("user",JSON.stringify({e:email.value,p:pass.value}));
+alert("Registered");
+}
 
 function login(){
-if(!localStorage.getItem("start")){
-localStorage.setItem("start",Date.now());
+let u=JSON.parse(localStorage.getItem("user"));
+if(!u || u.e!==email.value || u.p!==pass.value) return alert("Invalid");
+
+if(!localStorage.getItem("startTime")){
+localStorage.setItem("startTime",Date.now());
 }
+
 authBox.style.display="none";
 startTimer();
 loadUltra();
 }
 
+function logout(){
+localStorage.clear();
+location.reload();
+}
+
 /* TIMER */
 function startTimer(){
 setInterval(()=>{
-let start=localStorage.getItem("start");
-if(!start)return;
+let start=localStorage.getItem("startTime");
+if(!start) return;
 
-let left=TRIAL_TIME-(Date.now()-start);
+let diff = TRIAL_TIME - (Date.now()-start);
 
-if(left<=0 && !localStorage.getItem("premium")){
-document.getElementById("upgradeBtn").style.display="block";
-timerBar.innerText="⛔ Trial Expired";
+if(localStorage.getItem("premium")==="true"){
+timerBar.innerText="🔓 PREMIUM ACTIVE";
 return;
 }
 
-timerBar.innerText=`Trial Left: ${Math.max(0,Math.floor(left/1000))} sec`;
+if(diff<=0){
+timerBar.innerText="⛔ Trial Expired";
+document.getElementById("upgradeModal").style.display="flex";
+return;
+}
+
+timerBar.innerText=`Trial: ${Math.floor(diff/60000)} min left`;
 },1000);
 }
 
-/* UPGRADE */
-function openModal(){modal.style.display="flex";}
-function closeModal(){modal.style.display="none";}
-
-function pay(){
-localStorage.setItem("premium",document.getElementById("package").value);
-alert("✔ Payment Successful (DEMO)");
-document.getElementById("upgradeBtn").style.display="none";
-modal.style.display="none";
-timerBar.innerText="🔓 PREMIUM ACTIVE";
+/* PAYMENT */
+function openPayment(){
+document.getElementById("paymentModal").style.display="flex";
 }
 
-/* IPTV */
+function closePayment(){
+document.getElementById("paymentModal").style.display="none";
+}
+
+function selectPlan(p){
+plan=p;
+alert("Selected: "+p);
+}
+
+function payNow(){
+if(!plan) return alert("Select plan first");
+
+localStorage.setItem("premium","true");
+document.getElementById("upgradeModal").style.display="none";
+document.getElementById("paymentModal").style.display="none";
+
+timerBar.innerText="🔓 PREMIUM UNLOCKED";
+loadUltra();
+}
+
+/* IPTV CORE */
+let all=[],filtered=[],i=0;
+let video=document.getElementById("video");
+let hls;
+
 async function loadUltra(){
-loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
+await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
 }
 
 async function loadM3U(url){
@@ -258,10 +261,10 @@ let text=await res.text();
 
 all=[];filtered=[];i=0;
 
-text.split("\n").forEach((l,idx,a)=>{
+text.split("\n").forEach((l,idx,arr)=>{
 if(l.startsWith("#EXTINF")){
 let name=l.split(",").pop();
-let url=a[idx+1];
+let url=arr[idx+1];
 if(url?.startsWith("http")) all.push({name,url});
 }
 });
@@ -285,8 +288,10 @@ grid.appendChild(div);
 function play(idx){
 i=idx;
 let c=filtered[i];
+if(hls)hls.destroy();
+
 if(Hls.isSupported()){
-let hls=new Hls();
+hls=new Hls();
 hls.loadSource(c.url);
 hls.attachMedia(video);
 hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
@@ -308,6 +313,7 @@ dead.innerText=0;
 fav.innerText=0;
 }
 
+/* INIT */
 loadUltra();
 
 </script>
