@@ -34,7 +34,6 @@ width:280px;background:#0d1324;padding:15px;overflow-y:auto;border-right:1px sol
 .sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
 .menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
 .nav-btn{width:100%;padding:10px;margin:5px 0;background:#121c33;border:none;border-radius:8px;color:#fff;cursor:pointer;}
-.nav-btn:hover{background:#1e2f57}
 
 /* MAIN */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px;}
@@ -52,14 +51,12 @@ width:280px;background:#0d1324;padding:15px;overflow-y:auto;border-right:1px sol
 video{width:100%;height:100%;}
 
 /* CHANNELS */
-.channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
 .channels{
 overflow-y:auto;
 flex:1;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
 gap:10px;
-padding-right:5px;
 }
 .card{
 background:#111a31;
@@ -84,7 +81,7 @@ font-weight:bold;
 z-index:999;
 }
 
-/* UPGRADE MODAL */
+/* UPGRADE */
 .modal{
 position:fixed;inset:0;
 background:rgba(0,0,0,0.7);
@@ -120,63 +117,60 @@ background:#00d4ff;
 cursor:pointer;
 }
 .upgradeBtn{
-background:#ffb300;
+display:none;
+width:100%;
 padding:10px;
+margin-top:10px;
+background:#ffb300;
 border:none;
 border-radius:8px;
 cursor:pointer;
-margin-top:10px;
-width:100%;
-display:none;
 }
 </style>
 </head>
 
 <body>
 
-<div id="timerBar">Trial: Loading...</div>
+<div id="timerBar">Trial: 60s</div>
 
 <!-- AUTH -->
 <div id="authBox">
   <div class="auth-card">
-    <h3>🔐 BTECH-TV ACCESS</h3>
+    <h3>🔐 LOGIN</h3>
     <input id="email" placeholder="Email">
     <input id="pass" type="password" placeholder="Password">
-    <button onclick="register()">Register</button>
     <button onclick="login()">Login</button>
   </div>
 </div>
 
-<!-- UPGRADE MODAL -->
+<!-- UPGRADE -->
 <div class="modal" id="modal">
   <div class="modal-box">
-    <h3>💳 Upgrade Payment</h3>
+    <h3>💳 Upgrade Plan</h3>
 
     <select id="package">
-      <option value="premium">Premium Package</option>
-      <option value="super">Super Premium Package</option>
-      <option value="unlimited">Unlimited Package</option>
+      <option value="premium">Premium</option>
+      <option value="super">Super Premium</option>
+      <option value="unlimited">Unlimited</option>
     </select>
 
     <input id="bank" placeholder="Bank Name">
     <input id="acc" placeholder="Account Number">
     <input id="name" placeholder="Account Name">
 
-    <button onclick="pay()">Proceed to Pay</button>
-    <button onclick="closeModal()" style="background:#ff4d4d">Cancel</button>
+    <button onclick="pay()">Proceed Payment</button>
+    <button onclick="closeModal()" style="background:red">Cancel</button>
   </div>
 </div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-
-<div class="logo">📺 BTECH-TV WORLD PRO MAX</div>
-<div class="sub">Ultra IPTV Engine</div>
+<div class="logo">📺 BTECH-TV PRO MAX</div>
 
 <button class="nav-btn" onclick="loadUltra()">🌍 Global Channels</button>
 
 <button class="upgradeBtn" id="upgradeBtn" onclick="openModal()">
-⬆ Upgrade to Continue
+⬆ Upgrade Required
 </button>
 
 </div>
@@ -185,19 +179,17 @@ display:none;
 <div class="main">
 
 <div class="topbar">
-<div class="search-box">
-<input oninput="search(this.value)" placeholder="Search IPTV...">
-</div>
+<input oninput="search(this.value)" placeholder="Search...">
 <div class="live">🔴 LIVE</div>
 </div>
 
 <div class="hero">
-<h3>IPTV SYSTEM DASHBOARD</h3>
+<h3>IPTV DASHBOARD</h3>
 <div class="stats">
 <div class="stat">📺 <div id="total">0</div></div>
-<div class="stat">⭐ Fav <div id="fav">0</div></div>
-<div class="stat">⚫ Dead <div id="dead">0</div></div>
-<div class="stat">🌍 Live <div id="live">0</div></div>
+<div class="stat">⭐ <div id="fav">0</div></div>
+<div class="stat">⚫ <div id="dead">0</div></div>
+<div class="stat">🌍 <div id="live">0</div></div>
 </div>
 </div>
 
@@ -205,9 +197,7 @@ display:none;
 <video id="video" controls autoplay muted></video>
 </div>
 
-<div class="channel-wrapper">
 <div class="channels" id="grid"></div>
-</div>
 
 </div>
 
@@ -215,64 +205,49 @@ display:none;
 
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
-let modal=document.getElementById("modal");
 
-const TRIAL_LIMIT = 2*60*60*1000; // 2 hours demo trial
-
-function register(){
-localStorage.setItem("user",JSON.stringify({e:email.value,p:pass.value}));
-alert("Registered");
-}
+const TRIAL_TIME = 60000; // ✅ 1 MINUTE TRIAL
 
 function login(){
-let u=JSON.parse(localStorage.getItem("user"));
-if(!u||u.e!==email.value||u.p!==pass.value)return alert("Invalid");
-
 if(!localStorage.getItem("start")){
 localStorage.setItem("start",Date.now());
 }
-
 authBox.style.display="none";
 startTimer();
 loadUltra();
 }
 
+/* TIMER */
 function startTimer(){
 setInterval(()=>{
 let start=localStorage.getItem("start");
 if(!start)return;
 
-let left=TRIAL_LIMIT-(Date.now()-start);
+let left=TRIAL_TIME-(Date.now()-start);
 
 if(left<=0 && !localStorage.getItem("premium")){
 document.getElementById("upgradeBtn").style.display="block";
-timerBar.innerText="Trial Expired - Upgrade Required";
+timerBar.innerText="⛔ Trial Expired";
 return;
 }
 
-timerBar.innerText=`Trial Left: ${Math.max(0,Math.floor(left/60000))} min`;
+timerBar.innerText=`Trial Left: ${Math.max(0,Math.floor(left/1000))} sec`;
 },1000);
 }
 
-/* UPGRADE SYSTEM */
-function openModal(){
-modal.style.display="flex";
-}
-
-function closeModal(){
-modal.style.display="none";
-}
+/* UPGRADE */
+function openModal(){modal.style.display="flex";}
+function closeModal(){modal.style.display="none";}
 
 function pay(){
-let pkg=document.getElementById("package").value;
-localStorage.setItem("premium",pkg);
-alert("Payment Successful (DEMO) - "+pkg+" unlocked");
-modal.style.display="none";
+localStorage.setItem("premium",document.getElementById("package").value);
+alert("✔ Payment Successful (DEMO)");
 document.getElementById("upgradeBtn").style.display="none";
+modal.style.display="none";
 timerBar.innerText="🔓 PREMIUM ACTIVE";
 }
 
-/* IPTV CORE */
+/* IPTV */
 async function loadUltra(){
 loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
 }
