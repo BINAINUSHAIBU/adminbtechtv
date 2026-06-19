@@ -1,18 +1,18 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BTECH TV WORLD PRO MAX</title>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<title>BTECH-TV WORLD PRO MAX</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif
+font-family:Arial,sans-serif;
 }
 
 body{
@@ -20,801 +20,349 @@ background:#050816;
 color:white;
 height:100vh;
 display:flex;
-overflow:hidden;
-}
-
-.sidebar{
-width:250px;
-background:#0d1324;
-padding:15px;
-overflow:auto;
-}
-
-.logo{
-font-size:22px;
-font-weight:bold;
-color:#00d4ff;
-margin-bottom:15px;
-}
-
-.nav-btn{
-width:100%;
-padding:10px;
-margin:5px 0;
-border:none;
-border-radius:8px;
-background:#18284e;
-color:white;
-cursor:pointer;
-}
-
-.nav-btn:hover{
-background:#00d4ff;
-color:black;
-}
-
-.main{
-flex:1;
-padding:10px;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-}
-
-.topbar{
-display:flex;
-justify-content:space-between;
-margin-bottom:10px;
-}
-
-.search{
-width:300px;
-padding:10px;
-border:none;
-border-radius:8px;
-background:#101a31;
-color:white;
-}
-
-.player{
-height:300px;
-background:black;
-border-radius:10px;
-overflow:hidden;
-}
-
-video{
-width:100%;
-height:100%;
-}
-
-.channels{
-margin-top:10px;
-overflow:auto;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
-gap:10px;
-}
-
-.card{
-background:#101d39;
-padding:12px;
-border-radius:10px;
-cursor:pointer;
-transition:.3s;
-}
-
-.card:hover{
-transform:scale(1.03);
-border:1px solid #00d4ff;
-}
-
-#auth{
-position:fixed;
-inset:0;
-display:flex;
 justify-content:center;
 align-items:center;
-background:#050816;
-z-index:9999;
 }
 
-.auth-box{
-background:#101d39;
-padding:20px;
-border-radius:10px;
-width:300px;
+.container{
+width:380px;
+background:#0d1324;
+padding:25px;
+border-radius:15px;
+border:1px solid #1f355d;
 }
 
-.auth-box input{
+h1{
+font-size:22px;
+text-align:center;
+margin-bottom:15px;
+color:#00d4ff;
+}
+
+input{
 width:100%;
-padding:10px;
+padding:12px;
 margin:8px 0;
-background:#18284e;
 border:none;
+border-radius:8px;
+background:#111a31;
 color:white;
-border-radius:6px;
 }
 
-.auth-box button{
+button{
 width:100%;
-padding:10px;
-margin-top:10px;
+padding:12px;
+margin:8px 0;
 border:none;
-border-radius:6px;
-background:#00d4ff;
+border-radius:8px;
 cursor:pointer;
+font-weight:bold;
+}
+
+.primary{
+background:#00d4ff;
+}
+
+.orange{
+background:orange;
+}
+
+.green{
+background:#00cc88;
+}
+
+.hidden{
+display:none;
 }
 
 #timer{
-position:fixed;
-top:10px;
-right:10px;
-background:#00d4ff;
-color:black;
-padding:8px;
-border-radius:8px;
+text-align:center;
+margin-top:10px;
+color:#00d4ff;
 font-weight:bold;
 }
-</style>
-</head>
 
+</style>
+
+</head>
 <body>
 
-<div id="timer">Trial</div>
+<div class="container">
 
-<div id="auth">
-<div class="auth-box">
+<h1>📺 BTECH-TV WORLD</h1>
 
-<h2>BTECH TV LOGIN</h2>
+<div id="authSection">
 
 <input id="email" placeholder="Email">
-<input id="pass" type="password" placeholder="Password">
+<input id="password" type="password" placeholder="Password">
 
-<button onclick="register()">Register</button>
-<button onclick="login()">Login</button>
+<button class="primary" onclick="register()">
+Register
+</button>
 
-</div>
-</div>
-
-<div class="sidebar">
-
-<div class="logo">📺 BTECH TV</div>
-
-<button class="nav-btn" onclick="loadUltra()">🌍 Global</button>
-<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
-<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
-
-<hr><br>
-
-<button class="nav-btn" onclick="showWatched()">👁 Watched</button>
-<button class="nav-btn" onclick="payPage()">💳 Upgrade</button>
-<button class="nav-btn" onclick="logout()">🚪 Logout</button>
-
-</div>
-
-<div class="main">
-
-<div class="topbar">
-
-<input
-class="search"
-placeholder="Search or /pay /watched"
-oninput="search(this.value)"
->
-
-<div>🔴 LIVE</div>
-
-</div>
-
-<div class="player">
-
-<video
-id="video"
-controls
-autoplay
-muted>
-</video>
-
-</div>
-
-<div style="margin:10px 0">
-
-<button onclick="prev()">◀ Prev</button>
-<button onclick="next()">▶ Next</button>
-<button onclick="video.muted=!video.muted">
-Mute
+<button class="primary" onclick="login()">
+Login
 </button>
 
 </div>
 
-<div
-class="channels"
-id="grid">
+
+<div id="timer"></div>
+
+
+<div id="upgradeSection" class="hidden">
+
+<h3 style="text-align:center;margin-top:20px">
+🔓 Upgrade Package
+</h3>
+
+<button
+class="primary"
+onclick="choosePackage('Premium')">
+⭐ Premium Package
+</button>
+
+<button
+class="orange"
+onclick="choosePackage('Super Premium')">
+🚀 Super Premium
+</button>
+
+<button
+class="green"
+onclick="choosePackage('Unlimited')">
+♾ Unlimited Package
+</button>
+
+</div>
+
+
+<div id="paymentSection"
+class="hidden">
+
+<h3 style="margin-top:20px">
+💳 Payment
+</h3>
+
+<input
+id="fullname"
+placeholder="Full Name">
+
+<input
+id="payemail"
+placeholder="Email">
+
+<button
+class="primary"
+onclick="processPayment()">
+
+Proceed Payment
+
+</button>
+
 </div>
 
 </div>
 
 <script>
 
-const TRIAL_TIME=7200000
-
-let video=document.getElementById("video")
-let all=[]
-let filtered=[]
-let current=0
-let hls
-
-let watched=
-JSON.parse(
-localStorage.getItem(
-"watched"
-)
-)||[]
-
-const premiumChannels=[
-"ESPN",
-"HBO",
-"Netflix",
-"Sky"
-]
+const TRIAL_TIME=60000;
+let selectedPackage="";
 
 function register(){
 
-let e=email.value
-let p=pass.value
+let email=
+document.getElementById(
+"email"
+).value;
 
-if(!e||!p){
-alert("Fill all")
-return
+let password=
+document.getElementById(
+"password"
+).value;
+
+if(!email||!password){
+
+alert("Fill all fields");
+return;
+
 }
 
 localStorage.setItem(
 "user",
-JSON.stringify({e,p})
-)
+JSON.stringify({
+email,
+password
+})
+);
 
-alert("Registered")
+alert(
+"Registration successful"
+);
 
 }
+
 
 function login(){
 
-let u=
+let email=
+document.getElementById(
+"email"
+).value;
+
+let password=
+document.getElementById(
+"password"
+).value;
+
+let user=
 JSON.parse(
 localStorage.getItem(
 "user"
-))
+)
+);
 
 if(
-!u ||
-u.e!==email.value ||
-u.p!==pass.value
+!user||
+user.email!==email||
+user.password!==password
 ){
 
-alert("Invalid")
-return
+alert(
+"Invalid Login"
+);
+
+return;
 
 }
-
-auth.style.display="none"
-
-if(
-!localStorage.getItem(
-"startTime"
-)
-){
-
-localStorage.setItem(
-"startTime",
-Date.now()
-)
-
-}
-
-startTimer()
-loadUltra()
-
-}
-
-function logout(){
-
-localStorage.clear()
-location.reload()
-
-}
-
-function startTimer(){
 
 if(
 localStorage.getItem(
 "premium"
-)
-==="true"
+)==="true"
 ){
 
-timer.innerHTML=
-"🔓 PREMIUM"
+document.getElementById(
+"timer"
+).innerHTML=
+"🔓 Premium Active";
 
-return
+return;
 
 }
 
+startTrial();
+
+}
+
+
+function startTrial(){
+
+let start=Date.now();
+
+let interval=
 setInterval(()=>{
 
-let s=
-localStorage.getItem(
-"startTime"
-)
-
-let left=
+let remaining=
 TRIAL_TIME-
-(Date.now()-s)
+(Date.now()-start);
 
-if(left<=0){
+if(
+remaining<=0
+){
 
-alert(
-"Trial ended"
+clearInterval(
+interval
+);
+
+document
+.getElementById(
+"timer"
 )
+.innerHTML=
+"Trial Ended";
 
-payPage()
+document
+.getElementById(
+"upgradeSection"
+)
+.classList
+.remove(
+"hidden"
+);
+
+return;
 
 }
 
-timer.innerHTML=
-"Trial "+
+let sec=
 Math.floor(
-left/60000
-)+"m"
+remaining/1000
+);
 
-},1000)
-
-}
-
-function payPage(){
-
-document.body.innerHTML=`
-
-<div style="
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column">
-
-<h1>Upgrade</h1>
-
-<p>Unlock premium channels</p>
-
-<button
-onclick="demoPayment()"
-style="
-padding:15px;
-margin-top:15px">
-
-TEST PAYMENT ₦500
-
-</button>
-
-</div>
-
-`
-
-}
-
-function demoPayment(){
-
-alert(
-"Processing..."
+document
+.getElementById(
+"timer"
 )
+.innerHTML=
+"Trial: "
++sec+
+"s";
 
-setTimeout(()=>{
-
-localStorage.setItem(
-"premium",
-"true"
-)
-
-alert(
-"Premium Activated"
-)
-
-location.reload()
-
-},2000)
+},1000);
 
 }
 
-async function load(code){
 
-loadM3U(
-`https://iptv-org.github.io/iptv/countries/${code}.m3u`
+function choosePackage(plan){
+
+selectedPackage=
+plan;
+
+document
+.getElementById(
+"paymentSection"
 )
+.classList
+.remove(
+"hidden"
+);
 
 }
 
-async function loadUltra(){
-
-loadM3U(
-"https://iptv-org.github.io/iptv/index.country.m3u"
-)
-
-}
-
-async function loadM3U(url){
-
-let res=
-await fetch(url)
-
-let text=
-await res.text()
-
-all=[]
-
-text.split("\n")
-.forEach((line,i,arr)=>{
-
-if(
-line.startsWith(
-"#EXTINF"
-)
-){
-
-let name=
-line.split(",")
-.pop()
-
-let url=
-arr[i+1]
-
-if(
-url?.startsWith(
-"http"
-)
-){
-
-all.push({
-name,
-url
-})
-
-}
-
-}
-
-})
-
-filtered=[...all]
-
-render()
-
-}
-
-function render(){
-
-grid.innerHTML=""
-
-filtered.forEach((c,i)=>{
-
-let div=
-document.createElement(
-"div"
-)
-
-div.className=
-"card"
-
-div.innerHTML=
-c.name
-
-div.onclick=
-()=>play(i)
-
-grid.appendChild(
-div
-)
-
-})
-
-}
-
-function play(i){
-
-current=i
-
-let c=
-filtered[i]
-
-if(
-
-premiumChannels.some(
-x=>
-c.name.includes(x)
-)
-
-&&
-
-localStorage.getItem(
-"premium"
-)!=="true"
-
-){
-
-alert(
-"Locked\nUse /pay"
-)
-
-return
-
-}
-
-saveWatched(c)
-
-if(hls)
-hls.destroy()
-
-if(
-Hls.isSupported()
-){
-
-hls=
-new Hls()
-
-hls.loadSource(
-c.url
-)
-
-hls.attachMedia(
-video
-)
-
-}else{
-
-video.src=
-c.url
-
-}
-
-}
-
-function saveWatched(c){
-
-if(
-!watched.includes(
-c.name
-)
-){
-
-watched.unshift(
-c.name
-)
-
-localStorage.setItem(
-"watched",
-JSON.stringify(
-watched
-)
-)
-
-}
-
-}
-
-function showWatched(){
-
-filtered=
-watched.map(
-x=>({
-name:x,
-url:"#"
-})
-)
-
-render()
-
-}
-
-function search(q){
-
-if(q==="/pay"){
-payPage()
-return
-}
-
-if(q==="/watched"){
-showWatched()
-return
-}
-
-filtered=
-all.filter(c=>
-
-c.name
-.toLowerCase()
-.includes(
-q.toLowerCase()
-)
-
-)
-
-render()
-
-}
-
-function next(){
-
-current=
-(current+1)
-%
-filtered.length
-
-play(current)
-
-}
-
-function prev(){
-
-current=
-(current-1+
-filtered.length)
-%
-filtered.length
-
-play(current)
-
-}
-
-</script>
-/* =========================
-   PAYMENT GATEWAY DEMO
-========================= */
-
-function payPage(){
-
-document.body.innerHTML=`
-
-<div style="
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:#050816">
-
-<div style="
-width:380px;
-background:#101d39;
-padding:25px;
-border-radius:12px;
-text-align:center;
-color:white">
-
-<h2>💳 Premium Upgrade</h2>
-
-<p style="margin:10px 0">
-Unlock all channels
-</p>
-
-<h1>₦500</h1>
-
-<select id="payMethod"
-style="
-width:100%;
-padding:10px;
-margin-top:15px">
-
-<option value="card">
-💳 Debit Card
-</option>
-
-<option value="bank">
-🏦 Bank Transfer
-</option>
-
-<option value="wallet">
-📱 Mobile Wallet
-</option>
-
-</select>
-
-<input
-id="cardName"
-placeholder="Card Holder Name"
-style="
-width:100%;
-padding:10px;
-margin-top:10px">
-
-<input
-id="cardNumber"
-placeholder="1234 5678 9012 3456"
-style="
-width:100%;
-padding:10px;
-margin-top:10px">
-
-<input
-id="expiry"
-placeholder="MM/YY"
-style="
-width:100%;
-padding:10px;
-margin-top:10px">
-
-<input
-id="cvv"
-placeholder="CVV"
-style="
-width:100%;
-padding:10px;
-margin-top:10px">
-
-<button
-onclick="processPayment()"
-style="
-width:100%;
-padding:12px;
-margin-top:15px;
-background:#00d4ff;
-border:none;
-border-radius:8px">
-
-PAY NOW
-
-</button>
-
-<button
-onclick="location.reload()"
-style="
-width:100%;
-padding:12px;
-margin-top:10px">
-
-Cancel
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-}
 
 function processPayment(){
 
-let method=
+let fullname=
 document.getElementById(
-"payMethod"
+"fullname"
 ).value;
 
-let btn=
-event.target;
+let email=
+document.getElementById(
+"payemail"
+).value;
 
-btn.innerHTML=
-"Processing...";
-
-btn.disabled=true;
-
-setTimeout(()=>{
-
-let transactionID=
-"BTECH"+
-Math.floor(
-Math.random()*99999999
-);
+if(
+!fullname||
+!email
+){
 
 alert(
+"Fill payment details"
+);
 
-`✅ Payment Successful
+return;
 
-Gateway: ${method}
+}
 
-Transaction:
-${transactionID}
 
-Premium activated`
+/* Replace with
+Paystack / Flutterwave */
 
+alert(
+selectedPackage+
+" activated"
 );
 
 localStorage.setItem(
@@ -823,14 +371,16 @@ localStorage.setItem(
 );
 
 localStorage.setItem(
-"transactionID",
-transactionID
+"package",
+selectedPackage
 );
 
 location.reload();
 
-},2500);
-
 }
+
+</script>
+
 </body>
 </html>
+```
