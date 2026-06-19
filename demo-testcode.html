@@ -1,98 +1,85 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BTECH-TV WORLD PRO MAX</title>
+<title>BTECH TV WORLD PRO MAX</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Arial,sans-serif
 }
 
 body{
 background:#050816;
-color:#fff;
+color:white;
 height:100vh;
+display:flex;
 overflow:hidden;
 }
 
-#timerBar{
-position:fixed;
-top:10px;
-right:10px;
-background:#00d4ff;
-color:#000;
-padding:10px 15px;
-border-radius:8px;
-font-weight:bold;
-z-index:1000;
-}
-
-#authBox,
-#upgradeBox{
-position:fixed;
-inset:0;
-display:flex;
-justify-content:center;
-align-items:center;
-background:#050816;
-z-index:999;
-}
-
-.card{
-width:340px;
-padding:25px;
+.sidebar{
+width:250px;
 background:#0d1324;
-border-radius:12px;
-text-align:center;
-border:1px solid #1f355d;
-}
-
-input{
-width:100%;
-padding:12px;
-margin:8px 0;
-border:none;
-border-radius:6px;
-background:#111d39;
-color:#fff;
-}
-
-button{
-width:100%;
-padding:12px;
-margin-top:10px;
-border:none;
-border-radius:8px;
-background:#00d4ff;
-cursor:pointer;
-font-weight:bold;
-}
-
-.main{
-display:none;
-height:100vh;
-padding:20px;
+padding:15px;
+overflow:auto;
 }
 
 .logo{
-font-size:28px;
-font-weight:900;
+font-size:22px;
+font-weight:bold;
 color:#00d4ff;
 margin-bottom:15px;
+}
+
+.nav-btn{
+width:100%;
+padding:10px;
+margin:5px 0;
+border:none;
+border-radius:8px;
+background:#18284e;
+color:white;
+cursor:pointer;
+}
+
+.nav-btn:hover{
+background:#00d4ff;
+color:black;
+}
+
+.main{
+flex:1;
+padding:10px;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+}
+
+.search{
+width:300px;
+padding:10px;
+border:none;
+border-radius:8px;
+background:#101a31;
+color:white;
 }
 
 .player{
 height:300px;
 background:black;
 border-radius:10px;
-margin-bottom:15px;
 overflow:hidden;
 }
 
@@ -102,261 +89,578 @@ height:100%;
 }
 
 .channels{
+margin-top:10px;
+overflow:auto;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
 gap:10px;
-overflow:auto;
-height:calc(100vh - 420px);
 }
 
-.channel{
+.card{
 background:#101d39;
-padding:15px;
-border-radius:8px;
+padding:12px;
+border-radius:10px;
 cursor:pointer;
+transition:.3s;
 }
 
-.channel:hover{
+.card:hover{
+transform:scale(1.03);
 border:1px solid #00d4ff;
 }
 
+#auth{
+position:fixed;
+inset:0;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#050816;
+z-index:9999;
+}
+
+.auth-box{
+background:#101d39;
+padding:20px;
+border-radius:10px;
+width:300px;
+}
+
+.auth-box input{
+width:100%;
+padding:10px;
+margin:8px 0;
+background:#18284e;
+border:none;
+color:white;
+border-radius:6px;
+}
+
+.auth-box button{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:6px;
+background:#00d4ff;
+cursor:pointer;
+}
+
+#timer{
+position:fixed;
+top:10px;
+right:10px;
+background:#00d4ff;
+color:black;
+padding:8px;
+border-radius:8px;
+font-weight:bold;
+}
 </style>
 </head>
+
 <body>
 
-<div id="timerBar">
-Loading...
-</div>
+<div id="timer">Trial</div>
 
-<div id="authBox">
+<div id="auth">
+<div class="auth-box">
 
-<div class="card">
-
-<h2>🔐 BTECH-TV Login</h2>
+<h2>BTECH TV LOGIN</h2>
 
 <input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Password">
 
-<input id="password"
-type="password"
-placeholder="Password">
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
 
-<button onclick="register()">
-Register
-</button>
+</div>
+</div>
 
-<button onclick="login()">
-Login
-</button>
+<div class="sidebar">
+
+<div class="logo">📺 BTECH TV</div>
+
+<button class="nav-btn" onclick="loadUltra()">🌍 Global</button>
+<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
+<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
+
+<hr><br>
+
+<button class="nav-btn" onclick="showWatched()">👁 Watched</button>
+<button class="nav-btn" onclick="payPage()">💳 Upgrade</button>
+<button class="nav-btn" onclick="logout()">🚪 Logout</button>
 
 </div>
 
-</div>
+<div class="main">
 
-<div id="upgradeBox" style="display:none">
+<div class="topbar">
 
-<div class="card">
+<input
+class="search"
+placeholder="Search or /pay /watched"
+oninput="search(this.value)"
+>
 
-<h1>🔒 Trial Expired</h1>
+<div>🔴 LIVE</div>
 
-<p style="margin:15px">
-Upgrade to continue watching channels
-</p>
-
-<button onclick="unlockChannels()">
-🚀 UPGRADE NOW
-</button>
-
-</div>
-
-</div>
-
-<div class="main" id="main">
-
-<div class="logo">
-📺 BTECH-TV WORLD PRO MAX
 </div>
 
 <div class="player">
-<video id="video" controls autoplay></video>
+
+<video
+id="video"
+controls
+autoplay
+muted>
+</video>
+
 </div>
 
-<div class="channels" id="grid"></div>
+<div style="margin:10px 0">
+
+<button onclick="prev()">◀ Prev</button>
+<button onclick="next()">▶ Next</button>
+<button onclick="video.muted=!video.muted">
+Mute
+</button>
+
+</div>
+
+<div
+class="channels"
+id="grid">
+</div>
 
 </div>
 
 <script>
 
-const TRIAL_TIME=24*60*60*1000;
+const TRIAL_TIME=7200000
 
-const channels=[
+let video=document.getElementById("video")
+let all=[]
+let filtered=[]
+let current=0
+let hls
 
-{
-name:"News TV",
-url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-},
+let watched=
+JSON.parse(
+localStorage.getItem(
+"watched"
+)
+)||[]
 
-{
-name:"Sports TV",
-url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-},
-
-{
-name:"Movie TV",
-url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-},
-
-{
-name:"Kids TV",
-url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-}
-
-];
+const premiumChannels=[
+"ESPN",
+"HBO",
+"Netflix",
+"Sky"
+]
 
 function register(){
 
-let e=email.value;
-let p=password.value;
+let e=email.value
+let p=pass.value
 
 if(!e||!p){
-
-alert("Fill all fields");
-return;
-
+alert("Fill all")
+return
 }
 
 localStorage.setItem(
 "user",
 JSON.stringify({e,p})
-);
+)
 
-alert("Registered");
+alert("Registered")
 
 }
 
 function login(){
 
-let e=email.value;
-let p=password.value;
+let u=
+JSON.parse(
+localStorage.getItem(
+"user"
+))
 
-let u=JSON.parse(
-localStorage.getItem("user")
-);
+if(
+!u ||
+u.e!==email.value ||
+u.p!==pass.value
+){
 
-if(!u||u.e!==e||u.p!==p){
-
-alert("Invalid Login");
-return;
-
-}
-
-authBox.style.display="none";
-main.style.display="block";
-
-if(localStorage.getItem("premium")==="true"){
-
-timerBar.innerHTML=
-"🔓 PREMIUM ACTIVE";
-
-renderChannels();
-
-return;
+alert("Invalid")
+return
 
 }
 
-if(!localStorage.getItem("startTime")){
+auth.style.display="none"
+
+if(
+!localStorage.getItem(
+"startTime"
+)
+){
 
 localStorage.setItem(
 "startTime",
 Date.now()
-);
+)
 
 }
 
-renderChannels();
+startTimer()
+loadUltra()
 
-startTimer();
+}
+
+function logout(){
+
+localStorage.clear()
+location.reload()
 
 }
 
 function startTimer(){
 
+if(
+localStorage.getItem(
+"premium"
+)
+==="true"
+){
+
+timer.innerHTML=
+"🔓 PREMIUM"
+
+return
+
+}
+
 setInterval(()=>{
 
-let start=
-localStorage.getItem("startTime");
+let s=
+localStorage.getItem(
+"startTime"
+)
 
-let remain=
-TRIAL_TIME-(Date.now()-start);
+let left=
+TRIAL_TIME-
+(Date.now()-s)
 
-if(remain<=0){
+if(left<=0){
 
-main.style.display="none";
+alert(
+"Trial ended"
+)
 
-upgradeBox.style.display="flex";
-
-return;
-
-}
-
-let h=Math.floor(
-remain/3600000
-);
-
-let m=Math.floor(
-remain%3600000/60000
-);
-
-let s=Math.floor(
-remain%60000/1000
-);
-
-timerBar.innerHTML=
-`⏳ ${h}h ${m}m ${s}s`;
-
-},1000);
+payPage()
 
 }
 
-function unlockChannels(){
+timer.innerHTML=
+"Trial "+
+Math.floor(
+left/60000
+)+"m"
+
+},1000)
+
+}
+
+function payPage(){
+
+document.body.innerHTML=`
+
+<div style="
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column">
+
+<h1>Upgrade</h1>
+
+<p>Unlock premium channels</p>
+
+<button
+onclick="demoPayment()"
+style="
+padding:15px;
+margin-top:15px">
+
+TEST PAYMENT ₦500
+
+</button>
+
+</div>
+
+`
+
+}
+
+function demoPayment(){
+
+alert(
+"Processing..."
+)
+
+setTimeout(()=>{
 
 localStorage.setItem(
 "premium",
 "true"
-);
+)
 
-upgradeBox.style.display="none";
+alert(
+"Premium Activated"
+)
 
-main.style.display="block";
+location.reload()
 
-timerBar.innerHTML=
-"🔓 PREMIUM ACTIVE";
+},2000)
 
 }
 
-function renderChannels(){
+async function load(code){
 
-grid.innerHTML="";
+loadM3U(
+`https://iptv-org.github.io/iptv/countries/${code}.m3u`
+)
 
-channels.forEach(c=>{
+}
 
-let div=document.createElement(
+async function loadUltra(){
+
+loadM3U(
+"https://iptv-org.github.io/iptv/index.country.m3u"
+)
+
+}
+
+async function loadM3U(url){
+
+let res=
+await fetch(url)
+
+let text=
+await res.text()
+
+all=[]
+
+text.split("\n")
+.forEach((line,i,arr)=>{
+
+if(
+line.startsWith(
+"#EXTINF"
+)
+){
+
+let name=
+line.split(",")
+.pop()
+
+let url=
+arr[i+1]
+
+if(
+url?.startsWith(
+"http"
+)
+){
+
+all.push({
+name,
+url
+})
+
+}
+
+}
+
+})
+
+filtered=[...all]
+
+render()
+
+}
+
+function render(){
+
+grid.innerHTML=""
+
+filtered.forEach((c,i)=>{
+
+let div=
+document.createElement(
 "div"
-);
+)
 
-div.className="channel";
+div.className=
+"card"
 
-div.innerHTML=c.name;
+div.innerHTML=
+c.name
 
-div.onclick=()=>{
+div.onclick=
+()=>play(i)
 
-video.src=c.url;
-video.play();
+grid.appendChild(
+div
+)
 
-};
+})
 
-grid.appendChild(div);
+}
 
-});
+function play(i){
+
+current=i
+
+let c=
+filtered[i]
+
+if(
+
+premiumChannels.some(
+x=>
+c.name.includes(x)
+)
+
+&&
+
+localStorage.getItem(
+"premium"
+)!=="true"
+
+){
+
+alert(
+"Locked\nUse /pay"
+)
+
+return
+
+}
+
+saveWatched(c)
+
+if(hls)
+hls.destroy()
+
+if(
+Hls.isSupported()
+){
+
+hls=
+new Hls()
+
+hls.loadSource(
+c.url
+)
+
+hls.attachMedia(
+video
+)
+
+}else{
+
+video.src=
+c.url
+
+}
+
+}
+
+function saveWatched(c){
+
+if(
+!watched.includes(
+c.name
+)
+){
+
+watched.unshift(
+c.name
+)
+
+localStorage.setItem(
+"watched",
+JSON.stringify(
+watched
+)
+)
+
+}
+
+}
+
+function showWatched(){
+
+filtered=
+watched.map(
+x=>({
+name:x,
+url:"#"
+})
+)
+
+render()
+
+}
+
+function search(q){
+
+if(q==="/pay"){
+payPage()
+return
+}
+
+if(q==="/watched"){
+showWatched()
+return
+}
+
+filtered=
+all.filter(c=>
+
+c.name
+.toLowerCase()
+.includes(
+q.toLowerCase()
+)
+
+)
+
+render()
+
+}
+
+function next(){
+
+current=
+(current+1)
+%
+filtered.length
+
+play(current)
+
+}
+
+function prev(){
+
+current=
+(current-1+
+filtered.length)
+%
+filtered.length
+
+play(current)
 
 }
 
@@ -364,4 +668,3 @@ grid.appendChild(div);
 
 </body>
 </html>
-```
