@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -11,51 +11,80 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
 
+/* AUTH */
 #authBox{
 position:fixed;inset:0;background:#050816;
 display:flex;justify-content:center;align-items:center;flex-direction:column;z-index:9999;
 }
+.auth-card{
+background:#0d1324;padding:20px;border-radius:12px;width:320px;text-align:center;border:1px solid #1d2b4f;
+}
+.auth-card input{
+width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;background:#101a31;color:#fff;
+}
+.auth-card button{
+width:100%;padding:10px;margin-top:10px;background:#00d4ff;border:none;border-radius:6px;cursor:pointer;
+}
 
-.auth-card{background:#0d1324;padding:20px;border-radius:12px;width:320px;text-align:center;border:1px solid #1d2b4f;}
-.auth-card input{width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;background:#101a31;color:#fff;}
-.auth-card button{width:100%;padding:10px;margin-top:10px;background:#00d4ff;border:none;border-radius:6px;cursor:pointer;}
-
-.sidebar{width:280px;background:#0d1324;padding:15px;overflow-y:auto;border-right:1px solid #1d2b4f;}
+/* SIDEBAR */
+.sidebar{
+width:280px;background:#0d1324;padding:15px;overflow-y:auto;border-right:1px solid #1d2b4f;
+}
 .logo{font-size:22px;font-weight:900;color:#00d4ff;}
 .sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
+.menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
 .nav-btn{width:100%;padding:10px;margin:5px 0;background:#121c33;border:none;border-radius:8px;color:#fff;cursor:pointer;}
+.nav-btn:hover{background:#1e2f57}
 
+/* MAIN */
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px;}
 .topbar{display:flex;justify-content:space-between;margin-bottom:10px;}
+.search-box input{padding:10px;border-radius:8px;border:none;background:#101a31;color:#fff;width:260px;}
+.live{background:red;padding:6px 12px;border-radius:20px}
 
-.player-container{background:#000;border-radius:10px;overflow:hidden;height:320px;}
+/* HERO */
+.hero{background:linear-gradient(135deg,#07132f,#0f1d45);padding:10px;border-radius:10px;margin-bottom:10px;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
+.stat{background:#101d39;padding:8px;border-radius:8px;text-align:center;}
+
+/* PLAYER */
+.player-container{background:#000;border-radius:10px;overflow:hidden;height:320px;flex-shrink:0;}
 video{width:100%;height:100%;}
 
-.channels{overflow-y:auto;flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
-
-.card{background:#111a31;padding:10px;border-radius:10px;cursor:pointer;border:1px solid #1f355d;}
+/* CHANNELS */
+.channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+.channels{
+overflow-y:auto;
+flex:1;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+gap:10px;
+padding-right:5px;
+}
+.card{
+background:#111a31;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+border:1px solid #1f355d;
+}
 .card:hover{border-color:#00d4ff;}
 .badge{background:red;padding:3px 6px;border-radius:10px;font-size:10px;float:right;}
 
-#timerBar{position:fixed;top:10px;right:10px;background:#00d4ff;color:#000;padding:8px 12px;border-radius:8px;font-weight:bold;z-index:999;}
-
-.upgrade-box{
-background:#0d1324;
-padding:10px;
-border-radius:10px;
-margin-bottom:10px;
-border:1px solid #1d2b4f;
-}
-
-.upgrade-box button{
-margin:5px;
-padding:8px;
-border:none;
-border-radius:6px;
-cursor:pointer;
+/* TIMER */
+#timerBar{
+position:fixed;
+top:10px;
+right:10px;
 background:#00d4ff;
+color:#000;
+padding:8px 12px;
+border-radius:8px;
+font-weight:bold;
+z-index:999;
 }
 
+/* UPGRADE MODAL */
 .modal{
 position:fixed;inset:0;
 background:rgba(0,0,0,0.7);
@@ -64,45 +93,53 @@ justify-content:center;
 align-items:center;
 z-index:99999;
 }
-
-.modal-content{
+.modal-box{
 background:#0d1324;
 padding:20px;
 border-radius:12px;
 width:320px;
 border:1px solid #1d2b4f;
 }
-
-.modal-content input{
+.modal-box select,
+.modal-box input{
 width:100%;
 padding:10px;
 margin:6px 0;
-border-radius:6px;
 border:none;
+border-radius:6px;
 background:#101a31;
 color:#fff;
 }
-
-.modal-content button{
+.modal-box button{
 width:100%;
 padding:10px;
 margin-top:10px;
-background:#00d4ff;
 border:none;
 border-radius:6px;
+background:#00d4ff;
 cursor:pointer;
+}
+.upgradeBtn{
+background:#ffb300;
+padding:10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin-top:10px;
+width:100%;
+display:none;
 }
 </style>
 </head>
 
 <body>
 
-<div id="timerBar">Trial Mode</div>
+<div id="timerBar">Trial: Loading...</div>
 
 <!-- AUTH -->
 <div id="authBox">
   <div class="auth-card">
-    <h3>🔐 LOGIN</h3>
+    <h3>🔐 BTECH-TV ACCESS</h3>
     <input id="email" placeholder="Email">
     <input id="pass" type="password" placeholder="Password">
     <button onclick="register()">Register</button>
@@ -111,45 +148,66 @@ cursor:pointer;
 </div>
 
 <!-- UPGRADE MODAL -->
-<div class="modal" id="upgradeModal">
-  <div class="modal-content">
+<div class="modal" id="modal">
+  <div class="modal-box">
     <h3>💳 Upgrade Payment</h3>
-    <input id="tier" placeholder="Package" readonly>
-    <input id="bankName" placeholder="Bank Name">
-    <input id="account" placeholder="Account Number">
-    <input id="payer" placeholder="Account Name">
-    <button onclick="payNow()">Pay & Unlock</button>
+
+    <select id="package">
+      <option value="premium">Premium Package</option>
+      <option value="super">Super Premium Package</option>
+      <option value="unlimited">Unlimited Package</option>
+    </select>
+
+    <input id="bank" placeholder="Bank Name">
+    <input id="acc" placeholder="Account Number">
+    <input id="name" placeholder="Account Name">
+
+    <button onclick="pay()">Proceed to Pay</button>
     <button onclick="closeModal()" style="background:#ff4d4d">Cancel</button>
   </div>
 </div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-<div class="logo">📺 BTECH-TV WORLD</div>
 
-<div class="upgrade-box">
-<h4>⬆ Upgrade Packages</h4>
-<button onclick="openUpgrade('premium')">Premium</button>
-<button onclick="openUpgrade('super')">Super Premium</button>
-<button onclick="openUpgrade('unlimited')">Unlimited</button>
-</div>
+<div class="logo">📺 BTECH-TV WORLD PRO MAX</div>
+<div class="sub">Ultra IPTV Engine</div>
 
-<button class="nav-btn" onclick="loadUltra()">🌍 All Channels</button>
-<button class="nav-btn" onclick="logout()">🚪 Logout</button>
+<button class="nav-btn" onclick="loadUltra()">🌍 Global Channels</button>
+
+<button class="upgradeBtn" id="upgradeBtn" onclick="openModal()">
+⬆ Upgrade to Continue
+</button>
+
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
 <div class="topbar">
+<div class="search-box">
 <input oninput="search(this.value)" placeholder="Search IPTV...">
+</div>
+<div class="live">🔴 LIVE</div>
+</div>
+
+<div class="hero">
+<h3>IPTV SYSTEM DASHBOARD</h3>
+<div class="stats">
+<div class="stat">📺 <div id="total">0</div></div>
+<div class="stat">⭐ Fav <div id="fav">0</div></div>
+<div class="stat">⚫ Dead <div id="dead">0</div></div>
+<div class="stat">🌍 Live <div id="live">0</div></div>
+</div>
 </div>
 
 <div class="player-container">
 <video id="video" controls autoplay muted></video>
 </div>
 
+<div class="channel-wrapper">
 <div class="channels" id="grid"></div>
+</div>
 
 </div>
 
@@ -157,9 +215,10 @@ cursor:pointer;
 
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
-let hls;
+let modal=document.getElementById("modal");
 
-/* AUTH */
+const TRIAL_LIMIT = 2*60*60*1000; // 2 hours demo trial
+
 function register(){
 localStorage.setItem("user",JSON.stringify({e:email.value,p:pass.value}));
 alert("Registered");
@@ -169,8 +228,8 @@ function login(){
 let u=JSON.parse(localStorage.getItem("user"));
 if(!u||u.e!==email.value||u.p!==pass.value)return alert("Invalid");
 
-if(!localStorage.getItem("startTime")){
-localStorage.setItem("startTime",Date.now());
+if(!localStorage.getItem("start")){
+localStorage.setItem("start",Date.now());
 }
 
 authBox.style.display="none";
@@ -178,48 +237,42 @@ startTimer();
 loadUltra();
 }
 
-/* TIMER */
 function startTimer(){
 setInterval(()=>{
-let start=localStorage.getItem("startTime");
+let start=localStorage.getItem("start");
 if(!start)return;
 
-let elapsed=Date.now()-start;
-let limit=24*60*60*1000; // 24h trial
-
-let left=limit-elapsed;
+let left=TRIAL_LIMIT-(Date.now()-start);
 
 if(left<=0 && !localStorage.getItem("premium")){
-document.body.innerHTML=`
-<div style="height:100vh;display:flex;justify-content:center;align-items:center;flex-direction:column;background:#050816;color:#fff">
-<h1>🔒 Trial Ended</h1>
-<button onclick="location.reload()" style="padding:10px;background:#00d4ff;border:none;border-radius:8px">Upgrade to Continue</button>
-</div>`;
+document.getElementById("upgradeBtn").style.display="block";
+timerBar.innerText="Trial Expired - Upgrade Required";
 return;
 }
 
-timerBar.innerText="Trial Left: "+Math.floor(left/60000)+" min";
+timerBar.innerText=`Trial Left: ${Math.max(0,Math.floor(left/60000))} min`;
 },1000);
 }
 
-/* UPGRADE */
-function openUpgrade(t){
-document.getElementById("tier").value=t;
-upgradeModal.style.display="flex";
+/* UPGRADE SYSTEM */
+function openModal(){
+modal.style.display="flex";
 }
 
 function closeModal(){
-upgradeModal.style.display="none";
+modal.style.display="none";
 }
 
-function payNow(){
-let tier=document.getElementById("tier").value;
-localStorage.setItem("premium",tier);
-alert(tier+" activated (DEMO PAYMENT SUCCESS)");
-closeModal();
+function pay(){
+let pkg=document.getElementById("package").value;
+localStorage.setItem("premium",pkg);
+alert("Payment Successful (DEMO) - "+pkg+" unlocked");
+modal.style.display="none";
+document.getElementById("upgradeBtn").style.display="none";
+timerBar.innerText="🔓 PREMIUM ACTIVE";
 }
 
-/* IPTV */
+/* IPTV CORE */
 async function loadUltra(){
 loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
 }
@@ -230,16 +283,17 @@ let text=await res.text();
 
 all=[];filtered=[];i=0;
 
-text.split("\n").forEach((l,idx,arr)=>{
+text.split("\n").forEach((l,idx,a)=>{
 if(l.startsWith("#EXTINF")){
 let name=l.split(",").pop();
-let url=arr[idx+1];
+let url=a[idx+1];
 if(url?.startsWith("http")) all.push({name,url});
 }
 });
 
 filtered=[...all];
 render();
+stats();
 }
 
 function render(){
@@ -256,10 +310,8 @@ grid.appendChild(div);
 function play(idx){
 i=idx;
 let c=filtered[i];
-if(hls)hls.destroy();
-
 if(Hls.isSupported()){
-hls=new Hls();
+let hls=new Hls();
 hls.loadSource(c.url);
 hls.attachMedia(video);
 hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
@@ -274,9 +326,11 @@ filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
 render();
 }
 
-function logout(){
-localStorage.clear();
-location.reload();
+function stats(){
+total.innerText=all.length;
+live.innerText=all.length;
+dead.innerText=0;
+fav.innerText=0;
 }
 
 loadUltra();
