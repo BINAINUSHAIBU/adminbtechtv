@@ -1,116 +1,48 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>📺 BTECH-TV PRO MAX IPTV 2026</title>
+<title>📺 BTECH-TV PRO MAX IPTV 2026 + PAYMENTS</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<!-- PAYSTACK -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
+<!-- FLUTTERWAVE -->
+<script src="https://checkout.flutterwave.com/v3.js"></script>
+
+<!-- PAYPAL -->
+<script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
 
-/* AUTH */
-#authBox{
-position:fixed;inset:0;background:#050816;
-display:flex;justify-content:center;align-items:center;z-index:99999;
-}
-.auth-card{
-background:#0d1324;padding:20px;border-radius:12px;width:320px;text-align:center;
-border:1px solid #1d2b4f;
-}
-.auth-card input{
-width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;
-background:#101a31;color:#fff;
-}
-.auth-card button{
-width:100%;padding:10px;margin-top:10px;background:#00d4ff;
-border:none;border-radius:6px;cursor:pointer;
-}
+#authBox{position:fixed;inset:0;background:#050816;display:flex;justify-content:center;align-items:center;z-index:99999;}
+.auth-card{background:#0d1324;padding:20px;border-radius:12px;width:320px;text-align:center;border:1px solid #1d2b4f;}
+.auth-card input{width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;background:#101a31;color:#fff;}
+.auth-card button{width:100%;padding:10px;margin-top:10px;background:#00d4ff;border:none;border-radius:6px;cursor:pointer;}
 
-/* MODAL */
-.modal{
-position:fixed;inset:0;background:rgba(0,0,0,0.8);
-display:none;justify-content:center;align-items:center;z-index:99999;
-}
-.modal-box{
-background:#0d1324;padding:20px;border-radius:12px;width:320px;text-align:center;
-}
-.modal-box button{width:100%;padding:10px;margin:6px 0;border:none;border-radius:6px;cursor:pointer;}
-.upgrade{background:#ffcc00;color:#000;}
-.pay{background:#00d4ff;color:#000;}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,0.8);display:none;justify-content:center;align-items:center;z-index:99999;}
+.modal-box{background:#0d1324;padding:20px;border-radius:12px;width:340px;text-align:center;}
+.paybtn{width:100%;padding:10px;margin:6px 0;border:none;border-radius:6px;cursor:pointer;font-weight:bold;}
+.ps{background:#00c3ff}
+.fw{background:#ff7b00}
+.pp{background:#0070ba}
+.interswitch{background:#2ecc71}
 
-/* TIMER */
-#timerBar{
-position:fixed;top:10px;right:10px;background:#00d4ff;color:#000;
-padding:8px 12px;border-radius:8px;font-weight:bold;z-index:9999;
-}
+.sidebar{width:280px;background:#0d1324;padding:15px;overflow-y:auto;border-right:1px solid #1d2b4f;}
+.nav-btn{width:100%;padding:9px;margin:4px 0;background:#121c33;border:none;border-radius:8px;color:#fff;cursor:pointer;}
 
-/* SIDEBAR */
-.sidebar{
-width:280px;background:#0d1324;padding:15px;overflow-y:auto;
-border-right:1px solid #1d2b4f;
-}
-.logo{font-size:20px;font-weight:900;color:#00d4ff;}
-.sub{font-size:12px;color:#8ea2d9;margin-bottom:10px;}
-.menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
-.nav-btn{
-width:100%;padding:9px;margin:4px 0;background:#121c33;border:none;
-border-radius:8px;color:#fff;cursor:pointer;
-}
-.nav-btn:hover{background:#1e2f57}
-
-/* MAIN */
 .main{flex:1;display:flex;flex-direction:column;padding:10px;overflow:hidden;}
-
-.topbar{display:flex;justify-content:space-between;margin-bottom:10px;}
-.search-box input{
-padding:10px;border-radius:8px;border:none;background:#101a31;
-color:#fff;width:260px;
-}
-.live{background:red;padding:6px 12px;border-radius:20px}
-
-/* HERO */
-.hero{
-background:linear-gradient(135deg,#07132f,#0f1d45);
-padding:10px;border-radius:10px;margin-bottom:10px;
-}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
-.stat{background:#101d39;padding:8px;border-radius:8px;text-align:center;}
-
-/* PLAYER */
-.player-container{
-background:#000;border-radius:10px;overflow:hidden;height:320px;
-}
+.player-container{background:#000;border-radius:10px;overflow:hidden;height:320px;}
 video{width:100%;height:100%;}
+.channels{overflow-y:auto;flex:1;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+.card{background:#111a31;padding:10px;border-radius:10px;cursor:pointer;border:1px solid #1f355d;}
 
-/* CONTROLS */
-.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
-.controls button{
-padding:8px 10px;border:none;border-radius:6px;background:#152445;
-color:#fff;cursor:pointer;
-}
-.controls button:hover{background:#00d4ff;color:#000}
-
-/* CHANNELS */
-.channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
-.channels{
-overflow-y:auto;flex:1;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-gap:10px;
-padding-right:5px;
-}
-.card{
-background:#111a31;padding:10px;border-radius:10px;
-cursor:pointer;border:1px solid #1f355d;
-}
-.card:hover{transform:scale(1.03);border-color:#00d4ff;}
-.badge{background:red;padding:3px 6px;border-radius:10px;font-size:10px;float:right;}
-
+#timerBar{position:fixed;top:10px;right:10px;background:#00d4ff;color:#000;padding:8px 12px;border-radius:8px;font-weight:bold;z-index:9999;}
 </style>
 </head>
 
@@ -121,128 +53,43 @@ cursor:pointer;border:1px solid #1f355d;
 <!-- AUTH -->
 <div id="authBox">
 <div class="auth-card">
-<h3>🔐 BTECH-TV PRO MAX</h3>
+<h3>🔐 LOGIN</h3>
 <input id="email" placeholder="Email">
 <input id="pass" type="password" placeholder="Password">
-<button onclick="register()">Register</button>
 <button onclick="login()">Login</button>
 </div>
 </div>
 
-<!-- UPGRADE -->
-<div class="modal" id="upgradeModal">
-<div class="modal-box">
-<h3>⛔ Trial Expired</h3>
-<button class="upgrade" onclick="openPayment()">Upgrade</button>
-</div>
-</div>
-
-<!-- PAYMENT -->
+<!-- PAYMENT MODAL -->
 <div class="modal" id="paymentModal">
 <div class="modal-box">
-<h3>💳 Payment</h3>
-<button class="pay" onclick="payNow()">Upgrade to Premium</button>
+<h3>💳 Choose Payment Method</h3>
+
+<button class="paybtn ps" onclick="paystackPay()">Paystack</button>
+<button class="paybtn fw" onclick="flutterPay()">Flutterwave</button>
+
+<div id="paypal-button-container" style="margin-top:10px;"></div>
+
+<button class="paybtn interswitch" onclick="interswitchPay()">Interswitch WebPAY</button>
+
 </div>
 </div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
-
-<div class="logo">📺 BTECH-TV PRO MAX</div>
-<div class="sub">Ultra IPTV Engine X</div>
-
-<div class="menu-title">🌍 Countries</div>
-<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
-<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
-<button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
-<button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
-<button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
-<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
-<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
-<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
-<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
-<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
-<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
-<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
-<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
-<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
-<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
-<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
-<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
-<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
-<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
-<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
-<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
-<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
-<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
-<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
-<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
-
-<div class="menu-title">🎬 Categories</div>
-<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
-<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
-<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
-<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
-<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
-<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
-<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
-<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
-<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
-<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
-
-<div class="menu-title">🗣 Languages</div>
-<button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
-<button class="nav-btn" onclick="load('spa')">🇪🇸 Spanish</button>
-<button class="nav-btn" onclick="load('ara')">🇸🇦 Arabic</button>
-<button class="nav-btn" onclick="load('fra')">🇫🇷 French</button>
-<button class="nav-btn" onclick="load('hin')">🇮🇳 Hindi</button>
-<button class="nav-btn" onclick="load('zho')">🇨🇳 Chinese</button>
-<button class="nav-btn" onclick="load('por')">🇵🇹 Portuguese</button>
-
-<div class="menu-title">🔥 Tools</div>
-<button class="nav-btn" onclick="scan()">📡 Scan</button>
-<button class="nav-btn" onclick="boost()">⚡ Boost</button>
-<button class="nav-btn" onclick="pip()">📺 PiP</button>
-<button class="nav-btn" onclick="repair()">🛠 Repair</button>
-<button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
+<h3>📺 IPTV PRO MAX</h3>
+<button class="nav-btn" onclick="loadUltra()">🌍 Load Channels</button>
 <button class="nav-btn" onclick="logout()">🚪 Logout</button>
-
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-<div class="topbar">
-<div class="search-box">
-<input oninput="search(this.value)" placeholder="Search IPTV...">
-</div>
-<div class="live">🔴 LIVE</div>
-</div>
-
-<div class="hero">
-<h3>PRO MAX DASHBOARD</h3>
-<div class="stats">
-<div class="stat">📺 <div id="total">0</div></div>
-<div class="stat">⭐ <div id="fav">0</div></div>
-<div class="stat">⚫ <div id="dead">0</div></div>
-<div class="stat">🌍 <div id="live">0</div></div>
-</div>
-</div>
-
 <div class="player-container">
 <video id="video" controls autoplay muted></video>
 </div>
 
-<div class="controls">
-<button onclick="prev()">◀ Prev</button>
-<button onclick="next()">Next ▶</button>
-<button onclick="toggleMute()">🔊</button>
-<button onclick="toggleFullscreen()">⛶</button>
-</div>
-
-<div class="channel-wrapper">
 <div class="channels" id="grid"></div>
-</div>
 
 </div>
 
@@ -251,102 +98,115 @@ cursor:pointer;border:1px solid #1f355d;
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
-const TRIAL=3600000;
 
-/* AUTH */
-function register(){
-localStorage.setItem("user",JSON.stringify({e:email.value,p:pass.value}));
-alert("Registered");
-}
-
+/* LOGIN */
 function login(){
-let u=JSON.parse(localStorage.getItem("user"));
-if(!u||u.e!==email.value||u.p!==pass.value)return alert("Invalid");
-
-if(!localStorage.getItem("start"))localStorage.setItem("start",Date.now());
-
+localStorage.setItem("logged",true);
 authBox.style.display="none";
-timer();
 loadUltra();
 }
 
-function logout(){localStorage.clear();location.reload();}
-
-/* TIMER */
-function timer(){
-setInterval(()=>{
-let s=localStorage.getItem("start");
-if(!s)return;
-
-if(localStorage.getItem("premium")==="true"){
-timerBar.innerText="PREMIUM ACTIVE";
-return;
+/* PAYMENT GATE */
+function openPayment(){
+paymentModal.style.display="flex";
+renderPaypal();
 }
 
-let d=TRIAL-(Date.now()-s);
-if(d<=0){
-timerBar.innerText="EXPIRED";
-upgradeModal.style.display="flex";
-return;
+/* PAYSTACK */
+function paystackPay(){
+let handler = PaystackPop.setup({
+key: "YOUR_PAYSTACK_PUBLIC_KEY",
+email: "user@email.com",
+amount: 5000 * 100,
+currency: "NGN",
+callback: function(response){
+alert("Paystack Success: " + response.reference);
+activatePremium();
+}
+});
+handler.openIframe();
 }
 
-timerBar.innerText=`Trial ${Math.floor(d/60000)}m`;
-},1000);
+/* FLUTTERWAVE */
+function flutterPay(){
+FlutterwaveCheckout({
+public_key: "YOUR_FLUTTERWAVE_PUBLIC_KEY",
+tx_ref: Date.now(),
+amount: 5000,
+currency: "NGN",
+payment_options: "card,banktransfer,ussd",
+callback: function (data) {
+alert("Flutterwave Success");
+activatePremium();
+}
+});
 }
 
-/* PAYMENT */
-function openPayment(){paymentModal.style.display="flex";}
-function payNow(){
-localStorage.setItem("premium","true");
+/* PAYPAL */
+function renderPaypal(){
+paypal.Buttons({
+createOrder: (data, actions) => {
+return actions.order.create({
+purchase_units: [{
+amount: { value: "10.00" }
+}]
+});
+},
+onApprove: (data, actions) => {
+return actions.order.capture().then(function(details){
+alert("PayPal Success " + details.payer.name.given_name);
+activatePremium();
+});
+}
+}).render('#paypal-button-container');
+}
+
+/* INTERSWITCH WEBPAY (redirect style) */
+function interswitchPay(){
+alert("Redirecting to Interswitch WebPAY...");
+window.location.href =
+"https://webpay.interswitchng.com/collections/payment?amount=5000";
+}
+
+/* PREMIUM */
+function activatePremium(){
+localStorage.setItem("premium",true);
 paymentModal.style.display="none";
-upgradeModal.style.display="none";
 }
 
 /* IPTV */
-async function load(code){
-await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
-}
-async function loadCat(c){
-await loadM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`);
-}
 async function loadUltra(){
-await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
-}
+let res = await fetch("https://iptv-org.github.io/iptv/index.country.m3u");
+let txt = await res.text();
 
-async function loadM3U(url){
-let res=await fetch(url);
-let txt=await res.text();
-all=[];filtered=[];i=0;
-
-txt.split("\n").forEach((l,x,a)=>{
+all=[];
+txt.split("\n").forEach((l,i,a)=>{
 if(l.startsWith("#EXTINF")){
-let name=l.split(",").pop();
-let url=a[x+1];
+let name=l.split(",")[1];
+let url=a[i+1];
 if(url?.startsWith("http"))all.push({name,url});
 }
 });
 
 filtered=[...all];
 render();
-stats();
 }
 
-/* RENDER */
 function render(){
 grid.innerHTML="";
 filtered.forEach((c,idx)=>{
 let div=document.createElement("div");
 div.className="card";
-div.innerHTML=`<div class="badge">LIVE</div>${c.name}`;
+div.innerHTML=c.name;
 div.onclick=()=>play(idx);
 grid.appendChild(div);
 });
 }
 
-/* PLAY */
 function play(idx){
 i=idx;
 let c=filtered[i];
+
 if(hls)hls.destroy();
 
 if(Hls.isSupported()){
@@ -360,33 +220,10 @@ video.play();
 }
 }
 
-/* NAV */
-function search(q){
-filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
-render();
+function logout(){
+localStorage.clear();
+location.reload();
 }
-function next(){i=(i+1)%filtered.length;play(i);}
-function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
-function toggleMute(){video.muted=!video.muted;}
-function toggleFullscreen(){video.requestFullscreen();}
-
-/* TOOLS */
-function scan(){alert("Scanning...");}
-function boost(){video.playbackRate=1.2;}
-function repair(){alert("Repairing streams...");}
-function pip(){video.requestPictureInPicture();}
-function loadUltra(){loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");}
-
-/* STATS */
-function stats(){
-total.innerText=all.length;
-live.innerText=all.length;
-dead.innerText=0;
-fav.innerText=0;
-}
-
-/* START */
-loadUltra();
 
 </script>
 
