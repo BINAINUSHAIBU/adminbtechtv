@@ -11,148 +11,137 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
 
-/* SIDEBAR */
-.sidebar{
-width:280px;
-background:#0d1324;
-padding:15px;
-overflow-y:auto;
-border-right:1px solid #1d2b4f;
+/* AUTH */
+#authBox{
+position:fixed;inset:0;background:#050816;
+display:flex;justify-content:center;align-items:center;z-index:99999;
+}
+.auth-card{
+background:#0d1324;padding:20px;border-radius:12px;width:320px;text-align:center;
+border:1px solid #1d2b4f;
+}
+.auth-card input{
+width:100%;padding:10px;margin:8px 0;border:none;border-radius:6px;
+background:#101a31;color:#fff;
+}
+.auth-card button{
+width:100%;padding:10px;margin-top:10px;background:#00d4ff;
+border:none;border-radius:6px;cursor:pointer;
 }
 
-.logo{font-size:22px;font-weight:900;color:#00d4ff;}
-.sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
+/* MODAL */
+.modal{
+position:fixed;inset:0;background:rgba(0,0,0,0.8);
+display:none;justify-content:center;align-items:center;z-index:99999;
+}
+.modal-box{
+background:#0d1324;padding:20px;border-radius:12px;width:320px;text-align:center;
+}
+.modal-box button{width:100%;padding:10px;margin:6px 0;border:none;border-radius:6px;cursor:pointer;}
+.upgrade{background:#ffcc00;color:#000;}
+.pay{background:#00d4ff;color:#000;}
 
+/* TIMER */
+#timerBar{
+position:fixed;top:10px;right:10px;background:#00d4ff;color:#000;
+padding:8px 12px;border-radius:8px;font-weight:bold;z-index:9999;
+}
+
+/* SIDEBAR */
+.sidebar{
+width:280px;background:#0d1324;padding:15px;overflow-y:auto;
+border-right:1px solid #1d2b4f;
+}
+.logo{font-size:20px;font-weight:900;color:#00d4ff;}
+.sub{font-size:12px;color:#8ea2d9;margin-bottom:10px;}
 .menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
-
 .nav-btn{
-width:100%;
-padding:10px;
-margin:5px 0;
-background:#121c33;
-border:none;
-border-radius:8px;
-color:#fff;
-cursor:pointer;
+width:100%;padding:9px;margin:4px 0;background:#121c33;border:none;
+border-radius:8px;color:#fff;cursor:pointer;
 }
 .nav-btn:hover{background:#1e2f57}
 
 /* MAIN */
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-padding:10px;
-}
+.main{flex:1;display:flex;flex-direction:column;padding:10px;overflow:hidden;}
 
-/* TOP */
-.topbar{
-display:flex;
-justify-content:space-between;
-margin-bottom:10px;
-}
-
+.topbar{display:flex;justify-content:space-between;margin-bottom:10px;}
 .search-box input{
-padding:10px;
-border-radius:8px;
-border:none;
-background:#101a31;
-color:#fff;
-width:260px;
+padding:10px;border-radius:8px;border:none;background:#101a31;
+color:#fff;width:260px;
 }
-
 .live{background:red;padding:6px 12px;border-radius:20px}
 
 /* HERO */
 .hero{
 background:linear-gradient(135deg,#07132f,#0f1d45);
-padding:10px;
-border-radius:10px;
-margin-bottom:10px;
+padding:10px;border-radius:10px;margin-bottom:10px;
 }
-
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:8px;
-margin-top:8px;
-}
-
-.stat{
-background:#101d39;
-padding:8px;
-border-radius:8px;
-text-align:center;
-}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
+.stat{background:#101d39;padding:8px;border-radius:8px;text-align:center;}
 
 /* PLAYER */
 .player-container{
-background:#000;
-border-radius:10px;
-overflow:hidden;
-height:320px;
-flex-shrink:0;
+background:#000;border-radius:10px;overflow:hidden;height:320px;
 }
-
 video{width:100%;height:100%;}
 
 /* CONTROLS */
-.controls{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-margin:10px 0;
-}
-
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;}
 .controls button{
-padding:8px 10px;
-border:none;
-border-radius:6px;
-background:#152445;
-color:#fff;
-cursor:pointer;
+padding:8px 10px;border:none;border-radius:6px;background:#152445;
+color:#fff;cursor:pointer;
 }
 .controls button:hover{background:#00d4ff;color:#000}
 
 /* CHANNELS */
 .channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
-
 .channels{
-overflow-y:auto;
-flex:1;
+overflow-y:auto;flex:1;
 display:grid;
 grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
 gap:10px;
 padding-right:5px;
 }
-
 .card{
-background:#111a31;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-border:1px solid #1f355d;
-transition:.3s;
+background:#111a31;padding:10px;border-radius:10px;
+cursor:pointer;border:1px solid #1f355d;
 }
 .card:hover{transform:scale(1.03);border-color:#00d4ff;}
+.badge{background:red;padding:3px 6px;border-radius:10px;font-size:10px;float:right;}
 
-.badge{
-background:red;
-padding:3px 6px;
-border-radius:10px;
-font-size:10px;
-float:right;
-}
-
-@media(max-width:900px){
-body{flex-direction:column;}
-.sidebar{width:100%;}
-}
 </style>
 </head>
 
 <body>
+
+<div id="timerBar">Trial Active</div>
+
+<!-- AUTH -->
+<div id="authBox">
+<div class="auth-card">
+<h3>🔐 BTECH-TV PRO MAX</h3>
+<input id="email" placeholder="Email">
+<input id="pass" type="password" placeholder="Password">
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
+</div>
+</div>
+
+<!-- UPGRADE -->
+<div class="modal" id="upgradeModal">
+<div class="modal-box">
+<h3>⛔ Trial Expired</h3>
+<button class="upgrade" onclick="openPayment()">Upgrade</button>
+</div>
+</div>
+
+<!-- PAYMENT -->
+<div class="modal" id="paymentModal">
+<div class="modal-box">
+<h3>💳 Payment</h3>
+<button class="pay" onclick="payNow()">Upgrade to Premium</button>
+</div>
+</div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
@@ -161,7 +150,6 @@ body{flex-direction:column;}
 <div class="sub">Ultra IPTV Engine X</div>
 
 <div class="menu-title">🌍 Countries</div>
-
 <button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
 <button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
 <button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
@@ -261,8 +249,58 @@ body{flex-direction:column;}
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
+const TRIAL=3600000;
 
-/* LOAD */
+/* AUTH */
+function register(){
+localStorage.setItem("user",JSON.stringify({e:email.value,p:pass.value}));
+alert("Registered");
+}
+
+function login(){
+let u=JSON.parse(localStorage.getItem("user"));
+if(!u||u.e!==email.value||u.p!==pass.value)return alert("Invalid");
+
+if(!localStorage.getItem("start"))localStorage.setItem("start",Date.now());
+
+authBox.style.display="none";
+timer();
+loadUltra();
+}
+
+function logout(){localStorage.clear();location.reload();}
+
+/* TIMER */
+function timer(){
+setInterval(()=>{
+let s=localStorage.getItem("start");
+if(!s)return;
+
+if(localStorage.getItem("premium")==="true"){
+timerBar.innerText="PREMIUM ACTIVE";
+return;
+}
+
+let d=TRIAL-(Date.now()-s);
+if(d<=0){
+timerBar.innerText="EXPIRED";
+upgradeModal.style.display="flex";
+return;
+}
+
+timerBar.innerText=`Trial ${Math.floor(d/60000)}m`;
+},1000);
+}
+
+/* PAYMENT */
+function openPayment(){paymentModal.style.display="flex";}
+function payNow(){
+localStorage.setItem("premium","true");
+paymentModal.style.display="none";
+upgradeModal.style.display="none";
+}
+
+/* IPTV */
 async function load(code){
 await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
@@ -273,18 +311,16 @@ async function loadUltra(){
 await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
 }
 
-/* M3U */
 async function loadM3U(url){
-const res=await fetch(url);
-const text=await res.text();
-
+let res=await fetch(url);
+let txt=await res.text();
 all=[];filtered=[];i=0;
 
-text.split("\n").forEach((l,x,a)=>{
+txt.split("\n").forEach((l,x,a)=>{
 if(l.startsWith("#EXTINF")){
 let name=l.split(",").pop();
 let url=a[x+1];
-if(url?.startsWith("http")) all.push({name,url});
+if(url?.startsWith("http"))all.push({name,url});
 }
 });
 
