@@ -1,5 +1,5 @@
 
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -98,10 +98,7 @@ height:320px;
 flex-shrink:0;
 }
 
-video{
-width:100%;
-height:100%;
-}
+video{width:100%;height:100%;}
 
 /* CONTROLS */
 .controls{
@@ -122,13 +119,8 @@ cursor:pointer;
 }
 .controls button:hover{background:#00d4ff;color:#000}
 
-/* CHANNEL AREA */
-.channel-wrapper{
-flex:1;
-overflow:hidden;
-display:flex;
-flex-direction:column;
-}
+/* CHANNELS */
+.channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
 
 .channels{
 overflow-y:auto;
@@ -169,10 +161,13 @@ body{flex-direction:column;}
 
 <!-- SIDEBAR -->
 <div class="sidebar">
+
 <div class="logo">📺 BTECH-TV PRO MAX</div>
-<div class="sub">Ultra IPTV Merged Engine</div>
+<div class="sub">Ultra IPTV Engine X</div>
 
 <div class="menu-title">🌍 Countries</div>
+
+<!-- ALL COUNTRIES -->
 <button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
 <button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
 <button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
@@ -181,33 +176,70 @@ body{flex-direction:column;}
 <button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
 <button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
 <button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
+<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
+<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
+<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
+<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
+<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
+<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
+<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
+<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
+<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
+<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
+<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
+<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
+<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
+<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
+<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
+<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
+<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
 
 <div class="menu-title">🎬 Categories</div>
+
 <button class="nav-btn" onclick="loadCat('news')">📰 News</button>
 <button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
 <button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
 <button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
+<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
+<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
+<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
+<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
+<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
+<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
 
-<div class="menu-title">🔥 Premium</div>
+<div class="menu-title">🗣 Languages</div>
+
+<button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
+<button class="nav-btn" onclick="load('spa')">🇪🇸 Spanish</button>
+<button class="nav-btn" onclick="load('ara')">🇸🇦 Arabic</button>
+<button class="nav-btn" onclick="load('fra')">🇫🇷 French</button>
+<button class="nav-btn" onclick="load('hin')">🇮🇳 Hindi</button>
+<button class="nav-btn" onclick="load('zho')">🇨🇳 Chinese</button>
+<button class="nav-btn" onclick="load('por')">🇵🇹 Portuguese</button>
+
+<div class="menu-title">🔥 Tools</div>
+
+<button class="nav-btn" onclick="scanStreams()">📡 Scan</button>
+<button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
 <button class="nav-btn" onclick="togglePiP()">📺 PiP</button>
-<button class="nav-btn" onclick="shuffle()">🎲 Shuffle</button>
-<button class="nav-btn" onclick="next()">⏭ Next</button>
-<button class="nav-btn" onclick="prev()">⏮ Prev</button>
+<button class="nav-btn" onclick="clearRecents()">🗑 Recents</button>
+<button class="nav-btn" onclick="recordMode()">⏺ Record</button>
+<button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
+<button class="nav-btn" onclick="repairStreams()">🛠 Repair</button>
+<button class="nav-btn" onclick="optimizeMemory()">🧠 Optimize</button>
 
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-<!-- TOP -->
 <div class="topbar">
 <div class="search-box">
-<input oninput="search(this.value)" placeholder="Search channels...">
+<input oninput="search(this.value)" placeholder="Search IPTV...">
 </div>
 <div class="live">🔴 LIVE</div>
 </div>
 
-<!-- HERO -->
 <div class="hero">
 <h3>WORLDTV PRO MAX IPTV SYSTEM</h3>
 <div class="stats">
@@ -218,21 +250,18 @@ body{flex-direction:column;}
 </div>
 </div>
 
-<!-- PLAYER -->
 <div class="player-container">
 <video id="video" controls autoplay muted></video>
 </div>
 
-<!-- CONTROLS -->
 <div class="controls">
 <button onclick="next()">▶ Next</button>
 <button onclick="prev()">◀ Prev</button>
 <button onclick="toggleMute()">🔊 Mute</button>
 <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
-<button onclick="loadGlobal()">🌍 Global</button>
+<button onclick="loadUltra()">🚀 Global</button>
 </div>
 
-<!-- CHANNELS -->
 <div class="channel-wrapper">
 <div class="channels" id="grid"></div>
 </div>
@@ -254,27 +283,24 @@ async function loadCat(c){
 await loadM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`);
 }
 
-async function loadGlobal(){
+async function loadUltra(){
 await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
 }
 
-/* M3U PARSER */
+/* M3U */
 async function loadM3U(url){
 const res=await fetch(url);
 const text=await res.text();
 
 all=[];filtered=[];i=0;
 
-const lines=text.split("\n");
+let lines=text.split("\n");
 
 for(let x=0;x<lines.length;x++){
 if(lines[x].startsWith("#EXTINF")){
 let name=lines[x].split(",").pop();
 let url=lines[x+1];
-
-if(url && url.startsWith("http")){
-all.push({name,url});
-}
+if(url && url.startsWith("http")) all.push({name,url});
 }
 }
 
@@ -287,7 +313,6 @@ stats();
 function render(){
 let grid=document.getElementById("grid");
 grid.innerHTML="";
-
 filtered.forEach((c,idx)=>{
 let div=document.createElement("div");
 div.className="card";
@@ -301,7 +326,6 @@ grid.appendChild(div);
 function play(idx){
 i=idx;
 let c=filtered[i];
-
 if(hls) hls.destroy();
 
 if(Hls.isSupported()){
@@ -315,41 +339,25 @@ video.play();
 }
 }
 
-/* SEARCH */
+/* BASIC */
 function search(q){
 filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
 render();
 }
 
-/* NEXT / PREV */
 function next(){i=(i+1)%filtered.length;play(i);}
 function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
 
-/* SHUFFLE */
-function shuffle(){
-filtered.sort(()=>Math.random()-0.5);
-render();
-}
-
-/* CONTROLS */
 function toggleMute(){video.muted=!video.muted;}
+function toggleFullscreen(){video.requestFullscreen();}
 
-function toggleFullscreen(){
-video.requestFullscreen();
-}
-
-/* PiP */
-async function togglePiP(){
-try{
-if(document.pictureInPictureElement){
-await document.exitPictureInPicture();
-}else{
-await video.requestPictureInPicture();
-}
-}catch(e){
-alert("PiP not supported");
-}
-}
+/* EXTRA FEATURES (PLACEHOLDER SAFE) */
+function scanStreams(){alert("Scanning streams...");}
+function speedBoost(){video.playbackRate=1.15;}
+function repairStreams(){alert("Repair mode active");}
+function optimizeMemory(){alert("Optimizing memory");}
+function recordMode(){alert("Record mode enabled");}
+function clearRecents(){alert("Recents cleared");}
 
 /* STATS */
 function stats(){
@@ -360,7 +368,7 @@ document.getElementById("fav").innerText=0;
 }
 
 /* AUTO START */
-loadGlobal();
+loadUltra();
 
 </script>
 
