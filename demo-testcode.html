@@ -1,138 +1,189 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BTECH Streaming Subscription Demo</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>📺 Ultra IPTV Engine X PRO MAX</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body{
-font-family:Arial,sans-serif;
-background:#050816;
-color:#fff;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-margin:0;
-}
+body{margin:0;font-family:Arial;background:#050505;color:#fff}
+header{padding:15px;background:#111;text-align:center;font-size:20px;font-weight:bold}
+.container{padding:15px}
 
-.container{
-width:420px;
-background:#0d1324;
-padding:20px;
-border-radius:12px;
-box-shadow:0 0 20px rgba(0,0,0,.4);
-}
+.badge{display:inline-block;padding:5px 10px;background:#0f0;color:#000;border-radius:5px;margin:5px;font-size:12px}
 
-h2{
-text-align:center;
-color:#00d4ff;
-}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:10px}
 
-input,select,button{
-width:100%;
-padding:12px;
-margin:8px 0;
-border:none;
-border-radius:6px;
-}
+.card{background:#111;padding:10px;border-radius:10px;text-align:center;cursor:pointer}
+.card:hover{background:#222}
 
-input,select{
-background:#101a31;
-color:white;
-}
+video{width:100%;margin-top:15px;border-radius:10px;background:#000}
 
-button{
-background:#00d4ff;
-color:black;
-font-weight:bold;
-cursor:pointer;
-}
-
-button:hover{
-opacity:.9;
-}
-
-.gateway{
-background:#152445;
-color:white;
-}
-
-#result{
-margin-top:15px;
-padding:10px;
-border-radius:6px;
-background:#101a31;
+#overlay{
+position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,0.95);
 display:none;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+z-index:9999;
+}
+
+button{padding:10px 15px;border:none;border-radius:8px;margin:5px;cursor:pointer}
+
+.btn{background:#0f0;color:#000}
+.btn2{background:#ff9800}
+.btn3{background:#2196f3;color:#fff}
+
+.modal{
+background:#111;padding:20px;border-radius:10px;width:90%;max-width:400px
+}
+input,select{
+width:100%;padding:10px;margin:5px 0;border-radius:5px;border:none
 }
 </style>
 </head>
+
 <body>
+
+<header>📺 Ultra IPTV Engine X PRO MAX</header>
 
 <div class="container">
 
-<h2>💳 Subscription Upgrade</h2>
+<div id="trialBox" class="badge">⏱️ Trial Active: 3:00 minutes</div>
+<div id="status" class="badge">🟢 Premium Locked</div>
 
-<input type="text" id="name" placeholder="Full Name">
+<h3>🌍 Countries</h3>
+<div class="grid">
+<div class="card">🇳🇬 Nigeria</div>
+<div class="card">🇺🇸 USA</div>
+<div class="card">🇬🇧 UK</div>
+<div class="card">🇮🇳 India</div>
+<div class="card">🇫🇷 France</div>
+<div class="card">🇩🇪 Germany</div>
+<div class="card">🇧🇷 Brazil</div>
+<div class="card">🇿🇦 South Africa</div>
+<div class="card">🇨🇦 Canada</div>
+<div class="card">🇦🇺 Australia</div>
+<div class="card">🇯🇵 Japan</div>
+<div class="card">🇰🇷 South Korea</div>
+<div class="card">🇨🇳 China</div>
+<div class="card">🇪🇸 Spain</div>
+<div class="card">🇮🇹 Italy</div>
+<div class="card">🇹🇷 Turkey</div>
+<div class="card">🇲🇽 Mexico</div>
+<div class="card">🇦🇪 UAE</div>
+<div class="card">🇸🇦 Saudi Arabia</div>
+<div class="card">🇪🇬 Egypt</div>
+<div class="card">🇦🇷 Argentina</div>
+<div class="card">🇵🇰 Pakistan</div>
+<div class="card">🇮🇩 Indonesia</div>
+<div class="card">🇵🇭 Philippines</div>
+</div>
 
-<input type="email" id="email" placeholder="Email Address">
+<h3>🎬 Categories</h3>
+<div class="grid">
+<div class="card">📰 News</div>
+<div class="card">⚽ Sports</div>
+<div class="card">🎬 Movies</div>
+<div class="card">🎵 Music</div>
+<div class="card">👶 Kids</div>
+<div class="card">😂 Comedy</div>
+<div class="card">📚 Documentary</div>
+<div class="card">💼 Business</div>
+</div>
 
-<select id="plan">
-<option value="Premium">Premium - ₦5,000</option>
-<option value="Super Premium">Super Premium - ₦10,000</option>
-<option value="Ultra Premium">Ultra Premium - ₦20,000</option>
-</select>
+<video id="video" controls></video>
+
+</div>
+
+<!-- OVERLAY -->
+<div id="overlay">
+<div class="modal" id="upgradeBox">
+<h2>🚫 Trial Expired</h2>
+<p>Upgrade to continue watching premium channels</p>
+
+<button class="btn" onclick="openPayment()">💳 Upgrade Now</button>
+</div>
+
+<!-- PAYMENT -->
+<div class="modal" id="paymentBox" style="display:none">
+<h2>💳 Select Payment Method</h2>
 
 <select id="gateway">
 <option>Paystack</option>
 <option>Flutterwave</option>
-<option>Interswitch WebPAY</option>
-<option>OPay</option>
+<option>Interswitch</option>
+<option>Opay</option>
 <option>PalmPay</option>
 <option>PayPal</option>
 </select>
 
-<button onclick="payNow()">
-Proceed To Payment
-</button>
+<input id="name" placeholder="Full Name">
+<input id="email" placeholder="Email">
 
-<div id="result"></div>
+<h4>🏦 Demo Bank Details (Fake)</h4>
+<input placeholder="Card Number (demo)">
+<input placeholder="Expiry Date">
+<input placeholder="CVV">
 
+<button class="btn3" onclick="payNow()">💰 Pay & Unlock</button>
+</div>
 </div>
 
 <script>
-function payNow(){
+let trialTime = 180000; // 3 minutes
+let unlocked = false;
 
-const name=document.getElementById('name').value;
-const email=document.getElementById('email').value;
-const plan=document.getElementById('plan').value;
-const gateway=document.getElementById('gateway').value;
+const overlay = document.getElementById("overlay");
+const status = document.getElementById("status");
+const trialBox = document.getElementById("trialBox");
 
-if(!name || !email){
-alert("Please complete all fields");
-return;
+setTimeout(()=>{
+    if(!unlocked){
+        overlay.style.display="flex";
+    }
+}, trialTime);
+
+let interval = setInterval(()=>{
+    if(unlocked) return;
+    trialTime -= 1000;
+    if(trialTime <= 0) return;
+    let m = Math.floor(trialTime/60000);
+    let s = Math.floor((trialTime%60000)/1000);
+    trialBox.innerHTML = `⏱️ Trial Active: ${m}:${s < 10 ? "0"+s : s}`;
+},1000);
+
+function openPayment(){
+    document.getElementById("upgradeBox").style.display="none";
+    document.getElementById("paymentBox").style.display="block";
 }
 
-localStorage.setItem("subscription","active");
-localStorage.setItem("plan",plan);
+function payNow(){
+    let gateway = document.getElementById("gateway").value;
 
-const result=document.getElementById("result");
+    setTimeout(()=>{
+        unlocked = true;
+        overlay.style.display="none";
+        status.innerHTML = "🔓 Premium Unlocked via " + gateway;
+        status.style.background = "#0f0";
+        status.style.color = "#000";
+    },1500);
+}
 
-result.style.display="block";
-result.innerHTML=
-`
-<h3>✅ Payment Successful</h3>
-<p><b>Name:</b> ${name}</p>
-<p><b>Email:</b> ${email}</p>
-<p><b>Plan:</b> ${plan}</p>
-<p><b>Gateway:</b> ${gateway}</p>
-<p>Subscription Activated Successfully.</p>
-`;
+// SAMPLE STREAM (replace with real IPTV M3U)
+let video = document.getElementById("video");
+let url = "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+
+if(Hls.isSupported()){
+    let hls = new Hls();
+    hls.loadSource(url);
+    hls.attachMedia(video);
 }
 </script>
 
 </body>
 </html>
-```
