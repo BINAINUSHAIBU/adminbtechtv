@@ -379,7 +379,11 @@ grid.innerHTML="";
 filtered.forEach((c,idx)=>{
 let div=document.createElement("div");
 div.className="card";
-div.innerHTML=`<div class="badge">LIVE</div>${c.name}`;
+div.innerHTML=`<div class="badge">LIVE</div>
+<span style="color:#00d4ff;font-weight:bold">
+CH ${String(idx + 1).padStart(4,'0')}
+</span>
+ - ${c.name}`;
 div.onclick=()=>play(idx);
 grid.appendChild(div);
 });
