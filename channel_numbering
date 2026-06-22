@@ -1,0 +1,50 @@
+If you want to add channel numbering only and keep everything else unchanged, replace this part inside your render() function:
+
+div.innerHTML=`<div class="badge">LIVE</div>${c.name}`;
+
+with:
+
+div.innerHTML=`<div class="badge">LIVE</div>
+<b>${idx + 1}.</b> ${c.name}`;
+
+Or for a cleaner IPTV-style format:
+
+div.innerHTML=`<div class="badge">LIVE</div>
+<span style="color:#00d4ff;font-weight:bold">
+CH ${String(idx + 1).padStart(4,'0')}
+</span>
+ - ${c.name}`;
+
+Example output:
+
+LIVE
+CH 0001 - ACNN (480p)
+
+LIVE
+CH 0002 - Advocate Broadcasting Network (576p)
+
+LIVE
+CH 0003 - Africa TV3 (720p)
+
+LIVE
+CH 0004 - BCS StarCross TV (576p)
+
+LIVE
+CH 0005 - Bride TV (576p)
+
+LIVE
+CH 0006 - Caught-Up TV (480p)
+
+LIVE
+CH 0007 - Channels 24
+
+LIVE
+CH 0008 - Channels TV
+
+LIVE
+CH 0009 - Chosen TV English (360p)
+
+LIVE
+CH 0010 - Loveworld TV (480p)
+
+This automatically numbers all 1350+ channels dynamically without changing any other feature in your existing IPTV dashboard.
