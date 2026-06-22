@@ -1,6 +1,6 @@
 <!-- ========================================================= -->
 <!-- SUPER ADMIN IPTV + BTECH-TV PRO ULTRA MAX WORLD -->
-<!-- FULL MERGED ONE PAGE VERSION 2026 -->
+<!-- TABLE ADMIN VERSION 2026 -->
 <!-- ========================================================= -->
 
 <!DOCTYPE html>
@@ -35,7 +35,6 @@ color:var(--text);
 overflow:hidden;
 }
 
-/* ================= LAYOUT ================= */
 .container{display:flex;height:100vh}
 
 /* SIDEBAR */
@@ -70,7 +69,7 @@ cursor:pointer;
 
 /* PLAYER */
 .player{
-height:320px;
+height:300px;
 background:black;
 position:relative;
 }
@@ -89,7 +88,7 @@ justify-content:center;
 align-items:center;
 }
 
-/* CHANNEL TABLE */
+/* TABLE */
 .table-wrap{
 flex:1;
 overflow:auto;
@@ -103,29 +102,34 @@ background:var(--panel);
 }
 
 th{
-background:#0f172a;
-color:var(--accent);
 position:sticky;
 top:0;
+background:#0f172a;
+color:var(--accent);
+padding:10px;
 }
 
-td,th{
+td{
 padding:10px;
 border-bottom:1px solid #1f2b4d;
-text-align:left;
+}
+
+tr:hover{
+background:#172033;
+cursor:pointer;
 }
 
 .action{
 padding:6px 8px;
 border:none;
 border-radius:6px;
-cursor:pointer;
 margin-right:5px;
+cursor:pointer;
 }
 
 .lock{background:#f59e0b;}
-.edit{background:#2563eb;color:white;}
-.delete{background:#dc2626;color:white;}
+.edit{background:#2563eb;color:#fff;}
+.delete{background:#dc2626;color:#fff;}
 
 /* TOPBAR */
 .topbar{
@@ -133,26 +137,8 @@ display:flex;
 justify-content:space-between;
 padding:10px;
 background:#0f172a;
+color:white;
 }
-
-/* MODAL */
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.8);
-display:none;
-justify-content:center;
-align-items:center;
-}
-
-.modal-box{
-background:var(--panel);
-padding:20px;
-border-radius:12px;
-width:320px;
-}
-
-button{cursor:pointer}
 
 </style>
 </head>
@@ -201,8 +187,7 @@ button{cursor:pointer}
 <button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
 <button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
 <button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
-<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
-<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
+<button class="nav-btn" onclick="loadCat('education')">📚 Education</button>
 <button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
 <button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
 <button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
@@ -230,9 +215,10 @@ button{cursor:pointer}
 <div class="overlay" id="overlay"></div>
 </div>
 
-<!-- ================= CHANNEL TABLE ================= -->
+<!-- ================= TABLE ================= -->
 <div class="table-wrap">
 <table>
+
 <thead>
 <tr>
 <th>Channel Name</th>
@@ -244,24 +230,24 @@ button{cursor:pointer}
 </thead>
 
 <tbody id="grid"></tbody>
+
 </table>
 
 <button class="nav-btn" onclick="loadMore()">⬇ LOAD MORE CHANNELS</button>
 </div>
 
 </div>
-
 </div>
 
 <!-- ================= ADMIN ================= -->
-<div class="modal" id="admin">
-<div class="modal-box">
+<div class="overlay" id="admin" style="display:none; position:fixed;inset:0;background:rgba(0,0,0,.8);justify-content:center;align-items:center;">
+<div style="background:#111827;padding:20px;border-radius:10px;">
 <h3>SUPER ADMIN PANEL</h3>
 <button onclick="scan()">Scan</button>
 <button onclick="boost()">Boost</button>
 <button onclick="repair()">Repair</button>
 <button onclick="optimize()">Optimize</button>
-<button onclick="closeAdmin()">Close</button>
+<button onclick="openAdmin()">Close</button>
 </div>
 </div>
 
@@ -271,7 +257,7 @@ let all=[],filtered=[],page=1;
 let video=document.getElementById("video");
 let hls;
 
-/* ================= LOAD ================= */
+/* LOAD */
 async function load(code){
 await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
@@ -280,7 +266,7 @@ async function loadCat(cat){
 await loadM3U(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`);
 }
 
-/* ================= M3U ================= */
+/* PARSE M3U */
 async function loadM3U(url){
 
 const res=await fetch(url);
@@ -306,10 +292,11 @@ lock:Math.random()>0.8?"Locked":"Unlocked"
 });
 
 filtered=[...all];
+page=1;
 render();
 }
 
-/* ================= RENDER TABLE ================= */
+/* RENDER TABLE */
 function render(){
 
 let body=document.getElementById("grid");
@@ -319,18 +306,15 @@ filtered.slice(0,page*50).forEach((c,i)=>{
 
 body.innerHTML+=`
 <tr onclick="play(${i})">
-
 <td>${c.name}</td>
 <td>${c.category}</td>
 <td>${c.type}</td>
 <td>${c.lock}</td>
-
 <td>
 <button class="action lock">Lock</button>
 <button class="action edit">Edit</button>
 <button class="action delete">Delete</button>
 </td>
-
 </tr>
 `;
 
@@ -338,13 +322,13 @@ body.innerHTML+=`
 
 }
 
-/* ================= LOAD MORE ================= */
+/* LOAD MORE */
 function loadMore(){
 page++;
 render();
 }
 
-/* ================= PLAY ================= */
+/* PLAY */
 function play(i){
 
 let c=filtered[i];
@@ -363,13 +347,16 @@ video.play();
 
 }
 
-/* ================= ADMIN ================= */
-function openAdmin(){document.getElementById("admin").style.display="flex";}
-function closeAdmin(){document.getElementById("admin").style.display="none";}
-function scan(){alert("Scanning Channels...");}
+/* ADMIN */
+function openAdmin(){
+let a=document.getElementById("admin");
+a.style.display = a.style.display==="flex"?"none":"flex";
+}
+
+function scan(){alert("Scanning...");}
 function boost(){video.playbackRate=1.2;}
-function repair(){alert("Repairing Streams...");}
-function optimize(){alert("Optimizing System...");}
+function repair(){alert("Repairing...");}
+function optimize(){alert("Optimizing...");}
 
 </script>
 
