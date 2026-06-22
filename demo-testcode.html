@@ -1,82 +1,104 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>
-BTECH TV WORLD PRO MAX
-SUPER ADMIN DASHBOARD
-</title>
+<title>BTECH TV WORLD PRO MAX SUPER ADMIN</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-
-/* GLOBAL */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
 
 body{
 background:#050816;
 color:#fff;
-font-family:Arial;
 display:flex;
 height:100vh;
 overflow:hidden;
 }
 
-/* LEFT ADMIN MENU */
-
 .sidebar{
 width:280px;
 background:#0d1324;
-overflow-y:auto;
 padding:20px;
+overflow-y:auto;
 }
 
-.sidebar ul{
-list-style:none;
+.logo{
+font-size:24px;
+font-weight:bold;
+color:#00d4ff;
+margin-bottom:20px;
 }
 
-.sidebar li{
+.menu button{
+width:100%;
 padding:12px;
-margin-bottom:6px;
+margin-bottom:8px;
 background:#121c33;
+border:none;
 border-radius:8px;
+color:white;
 cursor:pointer;
+text-align:left;
 }
 
-/* MAIN */
+.menu button:hover{
+background:#1f355d;
+}
 
 .main{
 flex:1;
-padding:15px;
-overflow:hidden;
 display:flex;
 flex-direction:column;
+padding:15px;
+overflow:hidden;
 }
 
-/* DASHBOARD */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
+
+.search{
+width:320px;
+padding:12px;
+border:none;
+border-radius:8px;
+background:#111a31;
+color:white;
+}
 
 .stats{
 display:grid;
-grid-template-columns:
-repeat(4,1fr);
+grid-template-columns:repeat(4,1fr);
 gap:10px;
+margin-bottom:15px;
 }
 
-.stat{
+.card{
 background:#111a31;
 padding:20px;
 border-radius:10px;
 text-align:center;
 }
 
-/* PLAYER */
-
 .player{
-height:350px;
+height:320px;
 background:black;
 border-radius:10px;
 overflow:hidden;
-margin-top:10px;
+margin-bottom:15px;
 }
 
 .player video{
@@ -84,12 +106,11 @@ width:100%;
 height:100%;
 }
 
-/* CHANNEL TABLE */
-
 .table-wrap{
 flex:1;
 overflow:auto;
-margin-top:15px;
+background:#111a31;
+border-radius:10px;
 }
 
 table{
@@ -100,140 +121,109 @@ border-collapse:collapse;
 th{
 background:#0f1d45;
 color:#00d4ff;
+position:sticky;
+top:0;
 }
 
 td,th{
 padding:12px;
 border-bottom:1px solid #1f355d;
+text-align:left;
 }
 
-/* STATUS */
-
-.free{
-background:#16a34a;
-padding:5px 10px;
-border-radius:20px;
+.action{
+padding:6px 10px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+margin-right:5px;
 }
 
-.paid{
-background:#dc2626;
-padding:5px 10px;
-border-radius:20px;
-}
-
-.locked{
+.lock{
 background:#f59e0b;
-padding:5px 10px;
-border-radius:20px;
 }
 
-.unlocked{
+.edit{
 background:#2563eb;
-padding:5px 10px;
-border-radius:20px;
+color:white;
 }
 
+.delete{
+background:#dc2626;
+color:white;
+}
+
+.load-more{
+width:100%;
+padding:14px;
+background:#00d4ff;
+border:none;
+cursor:pointer;
+font-weight:bold;
+}
 </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
-
 <div class="sidebar">
 
-<h2>📺 BTECH TV</h2>
-
-<ul>
-
-<li>Dashboard</li>
-
-<li>All Channels</li>
-
-<li>Free Channels</li>
-
-<li>Pay To View</li>
-
-<li>BTECH Super Channels</li>
-
-<li>Locked Channels</li>
-
-<li>Users</li>
-
-<li>Subscription Plans</li>
-
-<li>Settings</li>
-
-</ul>
-
-<hr>
-
-<h3>🌍 Countries</h3>
-
-<button>🇳🇬 Nigeria</button>
-<button>🇺🇸 USA</button>
-<button>🇬🇧 UK</button>
-<button>🇮🇳 India</button>
-
-<h3>🎬 Categories</h3>
-
-<button>📰 News</button>
-<button>⚽ Sports</button>
-<button>🎬 Movies</button>
-<button>🎵 Music</button>
-
-<h3>🔥 Tools</h3>
-
-<button>📡 Scan</button>
-<button>⚡ Boost</button>
-<button>📺 PiP</button>
-<button>⏺ Record</button>
-<button>🚀 Ultra Feed</button>
-
+<div class="logo">
+📺 BTECH TV
 </div>
 
-<!-- MAIN -->
+<div class="menu">
+<button>📊 Dashboard</button>
+<button>📺 All Channels</button>
+<button>🟢 Free Channels</button>
+<button>💳 Pay To View</button>
+<button>🚀 BTECH Super Channels</button>
+<button>🔒 Locked Channels</button>
+<button>👥 Users</button>
+<button>💎 Subscription Plans</button>
+<button>⚙ Settings</button>
+</div>
+
+</div>
 
 <div class="main">
 
-<h1>
-BTECH TV WORLD PRO MAX
-SUPER ADMIN
-</h1>
+<div class="header">
+<h2>BTECH TV WORLD PRO MAX</h2>
+
+<input
+class="search"
+id="search"
+placeholder="Search Channels..."
+onkeyup="searchChannels()">
+</div>
 
 <div class="stats">
 
-<div class="stat">
+<div class="card">
 <h3>Total Channels</h3>
-<h1 id="totalChannels">40,000</h1>
+<h1>40,000</h1>
 </div>
 
-<div class="stat">
+<div class="card">
 <h3>Free Channels</h3>
-<h1 id="freeChannels">26,077</h1>
+<h1>26,077</h1>
 </div>
 
-<div class="stat">
+<div class="card">
 <h3>Pay To View</h3>
-<h1 id="paidChannels">13,923</h1>
+<h1>13,923</h1>
 </div>
 
-<div class="stat">
+<div class="card">
 <h3>Locked</h3>
-<h1 id="lockedChannels">6,006</h1>
+<h1>6,006</h1>
 </div>
 
 </div>
 
 <div class="player">
-
-<video
-id="videoPlayer"
-controls
-autoplay
-muted>
-</video>
-
+<video id="player" controls autoplay muted></video>
 </div>
 
 <div class="table-wrap">
@@ -241,28 +231,25 @@ muted>
 <table>
 
 <thead>
-
 <tr>
-
-<th>Channel Name</th>
-
+<th>Channel</th>
 <th>Category</th>
-
 <th>Type</th>
-
 <th>Status</th>
-
 <th>Actions</th>
-
 </tr>
-
 </thead>
 
-<tbody id="channelTable">
-
+<tbody id="tableBody">
 </tbody>
 
 </table>
+
+<button
+class="load-more"
+onclick="loadMore()">
+LOAD MORE CHANNELS
+</button>
 
 </div>
 
@@ -270,16 +257,13 @@ muted>
 
 <script>
 
-/* 40,000 CHANNEL DATABASE */
-
 const channels=[];
-
 const categories=[
 "Movies",
 "Sports",
 "Music",
-"Kids",
 "News",
+"Kids",
 "Documentary",
 "Education",
 "Entertainment"
@@ -290,7 +274,6 @@ for(let i=1;i<=40000;i++){
 channels.push({
 
 id:i,
-
 name:`BTECH Channel ${i}`,
 
 category:
@@ -312,79 +295,53 @@ Math.random()>0.85
 ?
 "Locked"
 :
-"Unlocked",
-
-stream:
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+"Unlocked"
 
 });
 
 }
 
-function renderChannels(){
+let page=1;
 
-const table=
+function render(){
+
+const body=
 document.getElementById(
-"channelTable"
+"tableBody"
 );
 
-table.innerHTML="";
+body.innerHTML="";
 
 channels
-.slice(0,50)
-.forEach(channel=>{
+.slice(0,page*50)
+.forEach(c=>{
 
-table.innerHTML+=`
+body.innerHTML+=`
 
 <tr>
 
-<td>${channel.name}</td>
+<td>${c.name}</td>
 
-<td>${channel.category}</td>
+<td>${c.category}</td>
 
-<td>
+<td>${c.type}</td>
 
-<span class="${
-channel.type==="Free"
-?
-"free"
-:
-"paid"
-}">
-
-${channel.type}
-
-</span>
-
-</td>
+<td>${c.status}</td>
 
 <td>
 
-<span class="${
-channel.status==="Locked"
-?
-"locked"
-:
-"unlocked"
-}">
-
-${channel.status}
-
-</span>
-
-</td>
-
-<td>
-
-<button>
+<button
+class="action lock">
 Lock
 </button>
 
-<button>
+<button
+class="action edit">
 Edit
 </button>
 
-<button>
+<button
+class="action delete">
 Delete
 </button>
 
@@ -398,9 +355,75 @@ Delete
 
 }
 
-renderChannels();
+function loadMore(){
+
+page++;
+
+render();
+
+}
+
+function searchChannels(){
+
+const value=
+document
+.getElementById("search")
+.value
+.toLowerCase();
+
+const body=
+document.getElementById(
+"tableBody"
+);
+
+body.innerHTML="";
+
+channels
+.filter(c=>
+c.name
+.toLowerCase()
+.includes(value)
+)
+.slice(0,100)
+.forEach(c=>{
+
+body.innerHTML+=`
+
+<tr>
+
+<td>${c.name}</td>
+<td>${c.category}</td>
+<td>${c.type}</td>
+<td>${c.status}</td>
+
+<td>
+
+<button class="action lock">
+Lock
+</button>
+
+<button class="action edit">
+Edit
+</button>
+
+<button class="action delete">
+Delete
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+render();
 
 </script>
 
 </body>
 </html>
+```
