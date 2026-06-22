@@ -1,11 +1,9 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH-TV ULTRA MAX 2026</title>
+<title>BTECH-TV ULTRA MAX 2026 MERGED CORE</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -140,7 +138,7 @@ border-radius:8px;
 
 <!-- TOPBAR -->
 <div class="topbar">
-<h3>🚀 ULTRA MAX 2026 GOD MODE ++</h3>
+<h3>🚀 ULTRA MAX 2026 GOD MODE ++ (MERGED CORE)</h3>
 <div id="status">LOCKED</div>
 </div>
 
@@ -160,10 +158,13 @@ border-radius:8px;
 
 <!-- MAIN -->
 <div class="main">
+
 <div class="player">
 <video id="video" controls></video>
 </div>
+
 <div class="list" id="list"></div>
+
 </div>
 
 <!-- RIGHT -->
@@ -183,6 +184,7 @@ border-radius:8px;
 </div>
 
 <script>
+
 /* =====================
 LOGIN
 ===================== */
@@ -195,49 +197,52 @@ document.getElementById("status").innerText="BTECH-TV MODE ACTIVE";
 }
 
 /* =====================
-IPTV ENGINE MERGED
+UNIFIED DATA ENGINE (MERGED ONLY ONCE)
 ===================== */
 
-let channels=[],filtered=[],cur=null;
+let channels = [];
+let filtered = [];
+let cur = null;
 
-function flag(cc){
-if(!cc||cc.length!==2)return'🌐';
-var a=0x1F1E6;
-return String.fromCodePoint(a+cc.charCodeAt(0)-65,a+cc.charCodeAt(1)-65);
-}
-
-/* LOAD IPTV */
+/* =====================
+LOAD IPTV API + MERGED ENGINE
+===================== */
 async function loadAPI(){
 try{
-const [ch,st,lg]=await Promise.all([
-fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
-fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
-fetch('https://iptv-org.github.io/api/logos.json').then(r=>r.json())
-]);
 
-let map={},logos={};
+const streams = await fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json());
 
-ch.forEach(c=>map[c.id]=c);
-lg.forEach(l=>logos[l.channel]=l.url);
+let seen = {};
 
-let seen={};
-st.forEach(s=>{
-if(!s.url||seen[s.url])return;
-seen[s.url]=1;
+streams.forEach(s=>{
+if(!s.url || seen[s.url]) return;
+seen[s.url] = 1;
+
 channels.push({
-id:channels.length,
-name:s.title||"Channel",
-url:s.url,
-type:"free",
-status:"free",
-cc:map[s.channel]?.country||"",
-logo:logos[s.channel]||""
+name: s.title || "IPTV Channel",
+url: s.url,
+type: "free",
+status: "free"
 });
 });
 
-filtered=[...channels];
+/* MERGED ENTERPRISE CHANNELS */
+for(let i=1;i<=800;i++){
+channels.push({
+name:`Enterprise Channel ${i}`,
+url:"",
+type: Math.random()>0.7 ? "paid":"free",
+status: Math.random()>0.85 ? "locked":"free"
+});
+}
+
+filtered = [...channels];
 render();
-document.getElementById("status").innerText="LIVE: "+channels.length;
+stats();
+
+document.getElementById("status").innerText =
+"LIVE SYSTEM: " + channels.length;
+
 }catch(e){
 console.log(e);
 }
@@ -246,7 +251,6 @@ console.log(e);
 /* =====================
 RENDER
 ===================== */
-
 function render(){
 const box=document.getElementById("list");
 box.innerHTML="";
@@ -261,7 +265,8 @@ div.innerHTML=`
 <span class="badge ${c.status}">${c.status}</span>
 `;
 
-div.onclick=()=>play(i);
+div.onclick=()=>play(c.url);
+
 box.appendChild(div);
 });
 
@@ -271,29 +276,28 @@ stats();
 /* =====================
 PLAY
 ===================== */
-
-function play(i){
-const c=filtered[i];
+function play(url){
 const v=document.getElementById("video");
+if(!url) return;
 
 if(Hls.isSupported()){
 const h=new Hls();
-h.loadSource(c.url);
+h.loadSource(url);
 h.attachMedia(v);
-}else v.src=c.url;
-cur=c;
+}else v.src=url;
 }
 
 /* =====================
-FILTER
+FILTER SYSTEM
 ===================== */
-
 function filterAll(){filtered=[...channels];render();}
 function filterLocked(){filtered=channels.filter(c=>c.status==="locked");render();}
 function filterFree(){filtered=channels.filter(c=>c.type==="free");render();}
 function filterPaid(){filtered=channels.filter(c=>c.type==="paid");render();}
 
-/* SEARCH */
+/* =====================
+SEARCH
+===================== */
 function search(v){
 filtered=channels.filter(c=>
 c.name.toLowerCase().includes(v.toLowerCase())
@@ -301,15 +305,19 @@ c.name.toLowerCase().includes(v.toLowerCase())
 render();
 }
 
-/* ADMIN */
+/* =====================
+ADMIN CONTROL
+===================== */
 function lockAll(){channels.forEach(c=>c.status="locked");render();}
 function unlockAll(){channels.forEach(c=>c.status="free");render();}
 function deleteLocked(){
-channels=channels.filter(c=>c.status!=="locked");
+channels = channels.filter(c=>c.status!=="locked");
 render();
 }
 
-/* STATS */
+/* =====================
+STATS
+===================== */
 function stats(){
 document.getElementById("t").innerText=channels.length;
 document.getElementById("f").innerText=channels.filter(c=>c.type==="free").length;
@@ -319,6 +327,7 @@ document.getElementById("l").innerText=channels.filter(c=>c.status==="locked").l
 
 /* BOOT */
 loadAPI();
+
 </script>
 
 </body>
