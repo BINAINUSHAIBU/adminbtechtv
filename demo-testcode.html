@@ -1,4 +1,3 @@
-
 <!-- ========================================================= -->
 <!-- SUPER ADMIN IPTV + BTECH-TV PRO ULTRA MAX WORLD -->
 <!-- FULL MERGED ONE PAGE VERSION 2026 -->
@@ -90,20 +89,43 @@ justify-content:center;
 align-items:center;
 }
 
-/* CHANNELS */
-.channels{
+/* CHANNEL TABLE */
+.table-wrap{
 flex:1;
 overflow:auto;
 padding:10px;
 }
 
-.channel{
-background:var(--card);
-padding:10px;
-margin:6px 0;
-border-radius:10px;
-cursor:pointer;
+table{
+width:100%;
+border-collapse:collapse;
+background:var(--panel);
 }
+
+th{
+background:#0f172a;
+color:var(--accent);
+position:sticky;
+top:0;
+}
+
+td,th{
+padding:10px;
+border-bottom:1px solid #1f2b4d;
+text-align:left;
+}
+
+.action{
+padding:6px 8px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+margin-right:5px;
+}
+
+.lock{background:#f59e0b;}
+.edit{background:#2563eb;color:white;}
+.delete{background:#dc2626;color:white;}
 
 /* TOPBAR */
 .topbar{
@@ -113,7 +135,7 @@ padding:10px;
 background:#0f172a;
 }
 
-/* MODALS */
+/* MODAL */
 .modal{
 position:fixed;
 inset:0;
@@ -137,7 +159,6 @@ button{cursor:pointer}
 
 <body>
 
-<!-- ================= APP ================= -->
 <div class="container">
 
 <!-- ================= SIDEBAR ================= -->
@@ -186,16 +207,6 @@ button{cursor:pointer}
 <button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
 <button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
 
-<h4>🗣 Languages</h4>
-
-<button class="nav-btn">🇬🇧 English</button>
-<button class="nav-btn">🇪🇸 Spanish</button>
-<button class="nav-btn">🇸🇦 Arabic</button>
-<button class="nav-btn">🇫🇷 French</button>
-<button class="nav-btn">🇮🇳 Hindi</button>
-<button class="nav-btn">🇨🇳 Chinese</button>
-<button class="nav-btn">🇵🇹 Portuguese</button>
-
 <h4>🔥 Tools</h4>
 
 <button class="nav-btn" onclick="scan()">📡 Scan</button>
@@ -219,7 +230,24 @@ button{cursor:pointer}
 <div class="overlay" id="overlay"></div>
 </div>
 
-<div class="channels" id="grid"></div>
+<!-- ================= CHANNEL TABLE ================= -->
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Channel Name</th>
+<th>Category</th>
+<th>Type</th>
+<th>Lock Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="grid"></tbody>
+</table>
+
+<button class="nav-btn" onclick="loadMore()">⬇ LOAD MORE CHANNELS</button>
+</div>
 
 </div>
 
@@ -228,25 +256,22 @@ button{cursor:pointer}
 <!-- ================= ADMIN ================= -->
 <div class="modal" id="admin">
 <div class="modal-box">
-
 <h3>SUPER ADMIN PANEL</h3>
-
 <button onclick="scan()">Scan</button>
 <button onclick="boost()">Boost</button>
 <button onclick="repair()">Repair</button>
 <button onclick="optimize()">Optimize</button>
 <button onclick="closeAdmin()">Close</button>
-
 </div>
 </div>
 
 <script>
 
-let all=[],filtered=[],i=0;
+let all=[],filtered=[],page=1;
 let video=document.getElementById("video");
 let hls;
 
-/* LOAD COUNTRY OR CATEGORY */
+/* ================= LOAD ================= */
 async function load(code){
 await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
@@ -255,19 +280,27 @@ async function loadCat(cat){
 await loadM3U(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`);
 }
 
-/* PARSE M3U */
+/* ================= M3U ================= */
 async function loadM3U(url){
+
 const res=await fetch(url);
 const text=await res.text();
 
-all=[];filtered=[];i=0;
+all=[];
 
-text.split("\n").forEach((line,idx,arr)=>{
+text.split("\n").forEach((line,i,arr)=>{
 if(line.startsWith("#EXTINF")){
 let name=line.split(",").pop();
-let url=arr[idx+1];
+let url=arr[i+1];
+
 if(url && url.startsWith("http")){
-all.push({name,url});
+all.push({
+name,
+url,
+category:["News","Sports","Movies","Music","Kids","Education"][Math.floor(Math.random()*6)],
+type:Math.random()>0.5?"Free":"Pay To View",
+lock:Math.random()>0.8?"Locked":"Unlocked"
+});
 }
 }
 });
@@ -276,23 +309,44 @@ filtered=[...all];
 render();
 }
 
-/* RENDER */
+/* ================= RENDER TABLE ================= */
 function render(){
-let g=document.getElementById("grid");
-g.innerHTML="";
 
-filtered.forEach((c,idx)=>{
-let d=document.createElement("div");
-d.className="channel";
-d.innerText=c.name;
-d.onclick=()=>play(idx);
-g.appendChild(d);
+let body=document.getElementById("grid");
+body.innerHTML="";
+
+filtered.slice(0,page*50).forEach((c,i)=>{
+
+body.innerHTML+=`
+<tr onclick="play(${i})">
+
+<td>${c.name}</td>
+<td>${c.category}</td>
+<td>${c.type}</td>
+<td>${c.lock}</td>
+
+<td>
+<button class="action lock">Lock</button>
+<button class="action edit">Edit</button>
+<button class="action delete">Delete</button>
+</td>
+
+</tr>
+`;
+
 });
+
 }
 
-/* PLAY */
-function play(idx){
-i=idx;
+/* ================= LOAD MORE ================= */
+function loadMore(){
+page++;
+render();
+}
+
+/* ================= PLAY ================= */
+function play(i){
+
 let c=filtered[i];
 
 if(hls) hls.destroy();
@@ -306,19 +360,16 @@ hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
 video.src=c.url;
 video.play();
 }
+
 }
 
-/* ADMIN */
-function openAdmin(){
-document.getElementById("admin").style.display="flex";
-}
-function closeAdmin(){
-document.getElementById("admin").style.display="none";
-}
-function scan(){alert("Scanning...");}
+/* ================= ADMIN ================= */
+function openAdmin(){document.getElementById("admin").style.display="flex";}
+function closeAdmin(){document.getElementById("admin").style.display="none";}
+function scan(){alert("Scanning Channels...");}
 function boost(){video.playbackRate=1.2;}
-function repair(){alert("Repairing...");}
-function optimize(){alert("Optimizing...");}
+function repair(){alert("Repairing Streams...");}
+function optimize(){alert("Optimizing System...");}
 
 </script>
 
