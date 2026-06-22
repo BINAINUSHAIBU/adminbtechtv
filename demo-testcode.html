@@ -1,3 +1,7 @@
+
+
+
+```html
 <!DOCTYPE html>
 <html lang="en"> 
 <head>
@@ -24,24 +28,23 @@ height:100vh;
 overflow:hidden;
 }
 
-/* SIDEBAR */
 .sidebar{
 width:280px;
 background:#0d1324;
-padding:15px;
+padding:20px;
 overflow-y:auto;
 }
 
 .logo{
-font-size:22px;
+font-size:24px;
 font-weight:bold;
 color:#00d4ff;
-margin-bottom:15px;
+margin-bottom:20px;
 }
 
 .menu button{
 width:100%;
-padding:10px;
+padding:12px;
 margin-bottom:8px;
 background:#121c33;
 border:none;
@@ -55,12 +58,11 @@ text-align:left;
 background:#1f355d;
 }
 
-/* MAIN */
 .main{
 flex:1;
 display:flex;
 flex-direction:column;
-padding:12px;
+padding:15px;
 overflow:hidden;
 }
 
@@ -68,42 +70,38 @@ overflow:hidden;
 display:flex;
 justify-content:space-between;
 align-items:center;
-margin-bottom:10px;
-gap:10px;
+margin-bottom:15px;
 }
 
 .search{
 width:320px;
-padding:10px;
+padding:12px;
 border:none;
 border-radius:8px;
 background:#111a31;
 color:white;
 }
 
-/* STATS */
 .stats{
 display:grid;
 grid-template-columns:repeat(4,1fr);
 gap:10px;
-margin-bottom:10px;
+margin-bottom:15px;
 }
 
 .card{
 background:#111a31;
-padding:15px;
+padding:20px;
 border-radius:10px;
 text-align:center;
 }
 
-/* PLAYER */
 .player{
-height:280px;
+height:320px;
 background:black;
 border-radius:10px;
 overflow:hidden;
-margin-bottom:10px;
-position:relative;
+margin-bottom:15px;
 }
 
 .player video{
@@ -111,18 +109,6 @@ width:100%;
 height:100%;
 }
 
-.overlay{
-position:absolute;
-inset:0;
-background:rgba(0,0,0,.7);
-display:flex;
-align-items:center;
-justify-content:center;
-flex-direction:column;
-font-weight:bold;
-}
-
-/* TABLE */
 .table-wrap{
 flex:1;
 overflow:auto;
@@ -143,26 +129,36 @@ top:0;
 }
 
 td,th{
-padding:10px;
+padding:12px;
 border-bottom:1px solid #1f355d;
+text-align:left;
 }
 
 .action{
-padding:5px 8px;
+padding:6px 10px;
 border:none;
 border-radius:6px;
 cursor:pointer;
 margin-right:5px;
 }
 
-.lock{background:#f59e0b;}
-.edit{background:#2563eb;color:white;}
-.delete{background:#dc2626;color:white;}
-.fav{background:#00d4ff;color:#000;}
+.lock{
+background:#f59e0b;
+}
+
+.edit{
+background:#2563eb;
+color:white;
+}
+
+.delete{
+background:#dc2626;
+color:white;
+}
 
 .load-more{
 width:100%;
-padding:12px;
+padding:14px;
 background:#00d4ff;
 border:none;
 cursor:pointer;
@@ -173,86 +169,90 @@ font-weight:bold;
 
 <body>
 
-<!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="logo">📺 BTECH TV PRO MAX</div>
+<div class="logo">
+📺 BTECH TV
+</div>
 
 <div class="menu">
-
-<button onclick="setTab('all')">📊 All Channels</button>
-<button onclick="setTab('favs')">⭐ Favorites</button>
-<button onclick="setTab('recent')">🕘 Recent</button>
-<button onclick="loadExtraFeeds()">🚀 Global Feeds</button>
-<button onclick="shuffleChannels()">🎲 Shuffle</button>
-<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
-<button onclick="toggleMini()">📺 Mini Player</button>
-<button onclick="togglePiP()">📺 PiP</button>
-<button onclick="speedBoost()">⚡ Boost</button>
-<button onclick="exportChannels()">⬇ Export</button>
-
+<button>📊 Dashboard</button>
+<button>📺 All Channels</button>
+<button>🟢 Free Channels</button>
+<button>💳 Pay To View</button>
+<button>🚀 BTECH Super Channels</button>
+<button>🔒 Locked Channels</button>
+<button>👥 Users</button>
+<button>💎 Subscription Plans</button>
+<button>⚙ Settings</button>
 </div>
 
 </div>
 
-<!-- MAIN -->
 <div class="main">
 
 <div class="header">
-<h2>BTECH IPTV DASHBOARD</h2>
-<input class="search" id="search" placeholder="Search Channels..." oninput="searchChannels()">
+<h2>BTECH TV WORLD PRO MAX</h2>
+
+<input
+class="search"
+id="search"
+placeholder="Search Channels..."
+onkeyup="searchChannels()">
 </div>
 
-<!-- STATS -->
 <div class="stats">
 
 <div class="card">
-<h3>Total</h3>
-<h2 id="total">0</h2>
+<h3>Total Channels</h3>
+<h1>40,000</h1>
 </div>
 
 <div class="card">
-<h3>Favorites</h3>
-<h2 id="favCount">0</h2>
+<h3>Free Channels</h3>
+<h1>26,077</h1>
+</div>
+
+<div class="card">
+<h3>Pay To View</h3>
+<h1>13,923</h1>
 </div>
 
 <div class="card">
 <h3>Locked</h3>
-<h2 id="locked">0</h2>
-</div>
-
-<div class="card">
-<h3>Dead</h3>
-<h2 id="dead">0</h2>
+<h1>6,006</h1>
 </div>
 
 </div>
 
-<!-- PLAYER -->
 <div class="player">
-<div class="overlay" id="overlay">Loading IPTV...</div>
 <video id="player" controls autoplay muted></video>
 </div>
 
-<!-- TABLE -->
 <div class="table-wrap">
 
 <table>
+
 <thead>
 <tr>
 <th>Channel</th>
-<th>Group</th>
+<th>Category</th>
 <th>Type</th>
 <th>Status</th>
 <th>Actions</th>
 </tr>
 </thead>
 
-<tbody id="body"></tbody>
+<tbody id="tableBody">
+</tbody>
 
 </table>
 
-<button class="load-more" onclick="loadMore()">LOAD MORE</button>
+<button
+class="load-more"
+onclick="loadMore()">
+LOAD MORE CHANNELS
+</button>
 
 </div>
 
@@ -260,245 +260,173 @@ font-weight:bold;
 
 <script>
 
-/* =========================
-DATA
-========================= */
-let channels=[];
-let filtered=[];
-let favs=JSON.parse(localStorage.getItem("favs")||"{}");
-let recent=JSON.parse(localStorage.getItem("recent")||"[]");
-let page=1;
-let currentIndex=0;
-let hls=null;
-let miniOn=false;
+const channels=[];
+const categories=[
+"Movies",
+"Sports",
+"Music",
+"News",
+"Kids",
+"Documentary",
+"Education",
+"Entertainment"
+];
 
-/* =========================
-LOAD M3U
-========================= */
-async function load(url,group="Global"){
-
-document.getElementById("overlay").style.display="flex";
-
-const res=await fetch(url);
-const text=await res.text();
-
-parse(text,group);
-
-filtered=[...channels];
-
-render();
-stats();
-
-document.getElementById("overlay").style.display="none";
-}
-
-/* =========================
-PARSE
-========================= */
-function parse(data,group){
-
-const lines=data.split("\n");
-
-for(let i=0;i<lines.length;i++){
-
-if(lines[i].includes("#EXTINF")){
-
-const url=lines[i+1];
-if(!url || !url.startsWith("http")) continue;
+for(let i=1;i<=40000;i++){
 
 channels.push({
-id:channels.length+1,
-name:lines[i].split(",").pop(),
-url:url,
-group:group,
-type:Math.random()>0.6?"Paid":"Free",
-status:Math.random()>0.85?"Locked":"Live"
+
+id:i,
+name:`BTECH Channel ${i}`,
+
+category:
+categories[
+Math.floor(
+Math.random()*categories.length
+)
+],
+
+type:
+Math.random()>0.65
+?
+"Pay To View"
+:
+"Free",
+
+status:
+Math.random()>0.85
+?
+"Locked"
+:
+"Unlocked"
+
 });
 
 }
 
-}
+let page=1;
 
-}
-
-/* =========================
-RENDER
-========================= */
 function render(){
 
-const body=document.getElementById("body");
+const body=
+document.getElementById(
+"tableBody"
+);
+
 body.innerHTML="";
 
-filtered.slice(0,page*50).forEach((c,i)=>{
+channels
+.slice(0,page*50)
+.forEach(c=>{
 
 body.innerHTML+=`
-<tr onclick="play(${i})">
+
+<tr>
 
 <td>${c.name}</td>
-<td>${c.group}</td>
+
+<td>${c.category}</td>
+
 <td>${c.type}</td>
+
 <td>${c.status}</td>
 
 <td>
-<button class="action fav" onclick="event.stopPropagation();fav(${c.id})">★</button>
-<button class="action lock">Lock</button>
-<button class="action delete">Del</button>
+
+<button
+class="action lock">
+Lock
+</button>
+
+<button
+class="action edit">
+Edit
+</button>
+
+<button
+class="action delete">
+Delete
+</button>
+
 </td>
 
 </tr>
+
 `;
 
 });
 
 }
 
-/* =========================
-PLAY
-========================= */
-function play(i){
+function loadMore(){
 
-currentIndex=i;
-const c=filtered[i];
-
-const video=document.getElementById("player");
-
-document.getElementById("overlay").style.display="flex";
-
-if(hls) hls.destroy();
-
-if(Hls.isSupported()){
-
-hls=new Hls();
-hls.loadSource(c.url);
-hls.attachMedia(video);
-
-hls.on(Hls.Events.MANIFEST_PARSED,()=>{
-video.play();
-document.getElementById("overlay").style.display="none";
-});
-
-}else{
-video.src=c.url;
-video.play();
-}
-
-addRecent(c.id);
-}
-
-/* =========================
-FAV
-========================= */
-function fav(id){
-
-favs[id]=!favs[id];
-localStorage.setItem("favs",JSON.stringify(favs));
-stats();
-}
-
-/* =========================
-RECENT
-========================= */
-function addRecent(id){
-
-recent.unshift(id);
-recent=[...new Set(recent)];
-localStorage.setItem("recent",JSON.stringify(recent));
-}
-
-/* =========================
-TABS
-========================= */
-function setTab(type){
-
-if(type==="all") filtered=[...channels];
-
-if(type==="favs")
-filtered=channels.filter(c=>favs[c.id]);
-
-if(type==="recent")
-filtered=recent.map(id=>channels.find(c=>c.id===id)).filter(Boolean);
+page++;
 
 render();
+
 }
 
-/* =========================
-SEARCH
-========================= */
 function searchChannels(){
 
-const v=document.getElementById("search").value.toLowerCase();
+const value=
+document
+.getElementById("search")
+.value
+.toLowerCase();
 
-filtered=channels.filter(c=>
-c.name.toLowerCase().includes(v)
-|| c.group.toLowerCase().includes(v)
+const body=
+document.getElementById(
+"tableBody"
 );
 
+body.innerHTML="";
+
+channels
+.filter(c=>
+c.name
+.toLowerCase()
+.includes(value)
+)
+.slice(0,100)
+.forEach(c=>{
+
+body.innerHTML+=`
+
+<tr>
+
+<td>${c.name}</td>
+<td>${c.category}</td>
+<td>${c.type}</td>
+<td>${c.status}</td>
+
+<td>
+
+<button class="action lock">
+Lock
+</button>
+
+<button class="action edit">
+Edit
+</button>
+
+<button class="action delete">
+Delete
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
 render();
-}
-
-/* =========================
-UTILS
-========================= */
-function shuffleChannels(){
-filtered.sort(()=>Math.random()-0.5);
-render();
-}
-
-function loadExtraFeeds(){
-alert("Loading global feeds...");
-}
-
-function speedBoost(){
-document.getElementById("player").playbackRate=1.2;
-}
-
-function toggleFullscreen(){
-if(!document.fullscreenElement){
-document.documentElement.requestFullscreen();
-}else{
-document.exitFullscreen();
-}
-}
-
-function togglePiP(){
-const v=document.getElementById("player");
-if(document.pictureInPictureElement){
-document.exitPictureInPicture();
-}else{
-v.requestPictureInPicture();
-}
-}
-
-function toggleMini(){
-alert("Mini Player Toggle (hook ready)");
-}
-
-function exportChannels(){
-const blob=new Blob([JSON.stringify(filtered)],{type:"application/json"});
-const a=document.createElement("a");
-a.href=URL.createObjectURL(blob);
-a.download="channels.json";
-a.click();
-}
-
-function loadMore(){
-page++;
-render();
-}
-
-function stats(){
-document.getElementById("total").innerText=channels.length;
-document.getElementById("favCount").innerText=Object.keys(favs).length;
-document.getElementById("locked").innerText=channels.filter(c=>c.status==="Locked").length;
-document.getElementById("dead").innerText=0;
-}
-
-/* =========================
-BOOT
-========================= */
-load("https://iptv-org.github.io/iptv/index.country.m3u");
 
 </script>
 
 </body>
 </html>
+```
