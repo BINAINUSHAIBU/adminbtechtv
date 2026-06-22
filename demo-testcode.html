@@ -1,4 +1,5 @@
 
+
 ```html
 <!DOCTYPE html>
 <html lang="en"> 
@@ -257,43 +258,32 @@ LOAD MORE CHANNELS
 </div>
 
 <script>
+
 const channels=[];
+const categories=[
+"Movies",
+"Sports",
+"Music",
+"News",
+"Kids",
+"Documentary",
+"Education",
+"Entertainment"
+];
 
-async function loadAPIChannels(){
-
-try{
-
-const [chRes, stRes] = await Promise.all([
-fetch("https://iptv-org.github.io/api/channels.json").then(r=>r.json()),
-fetch("https://iptv-org.github.io/api/streams.json").then(r=>r.json())
-]);
-
-const map={};
-
-chRes.forEach(c=>{
-map[c.id]=c;
-});
-
-let id=1;
-
-stRes.forEach(stream=>{
-
-const ch=map[stream.channel];
-
-if(!ch) return;
+for(let i=1;i<=40000;i++){
 
 channels.push({
 
-id:id++,
-
-name:ch.name || `BTECH Channel ${id}`,
+id:i,
+name:`BTECH Channel ${i}`,
 
 category:
-ch.categories && ch.categories.length
-?
-ch.categories[0]
-:
-"Entertainment",
+categories[
+Math.floor(
+Math.random()*categories.length
+)
+],
 
 type:
 Math.random()>0.65
@@ -307,35 +297,12 @@ Math.random()>0.85
 ?
 "Locked"
 :
-"Unlocked",
-
-url:stream.url,
-
-country:ch.country || "Unknown",
-
-logo:ch.logo || ""
+"Unlocked"
 
 });
 
-});
-
-document.querySelector(".card h1").innerText =
-channels.length.toLocaleString();
-
-render();
-
-}
-catch(err){
-
-console.error(err);
-
-alert("Failed to load IPTV API");
-
 }
 
-}
-
-loadAPIChannels();
 let page=1;
 
 function render(){
@@ -352,22 +319,19 @@ channels
 .forEach(c=>{
 
 body.innerHTML+=`
-<td>
-${c.logo ? `<img src="${c.logo}" width="30">` : ""}
-${c.name}
-</td>
+
+<tr>
+
+<td>${c.name}</td>
 
 <td>${c.category}</td>
 
 <td>${c.type}</td>
 
+<td>${c.status}</td>
+
 <td>
-<span style="
-color:${c.status==="Locked"?"#ef4444":"#22c55e"};
-font-weight:bold;">
-${c.status}
-</span>
-</td>
+
 <button
 class="action lock">
 Lock
@@ -461,39 +425,6 @@ Delete
 render();
 
 </script>
-  document.querySelector("#tableBody").addEventListener("click",(e)=>{
-
-const row=e.target.closest("tr");
-
-if(!row) return;
-
-const index=row.dataset.index;
-
-playChannel(channels[index]);
-
-});
-  function playChannel(channel){
-
-const video=document.getElementById("player");
-
-if(Hls.isSupported()){
-
-const hls=new Hls();
-
-hls.loadSource(channel.url);
-
-hls.attachMedia(video);
-
-}
-else{
-
-video.src=channel.url;
-
-}
-
-video.play();
-
-}
 
 </body>
 </html>
