@@ -1,182 +1,324 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📺 BTECH TV ULTRA MAX - FULL CHANNEL UNIFIED SYSTEM</title>
+<title>BTECH-TV ULTRA MAX 2026</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body{margin:0;font-family:Arial;background:#050816;color:#fff;display:flex;flex-direction:column;height:100vh;overflow:hidden}
-.top{padding:10px;background:#0d1324;display:flex;justify-content:space-between;align-items:center}
-.main{display:flex;flex:1;overflow:hidden}
-.side{width:260px;background:#0d1324;overflow:auto;padding:10px}
-.content{flex:1;display:flex;flex-direction:column;padding:10px}
-.player{height:300px;background:#000;border-radius:10px;overflow:hidden}
-video{width:100%;height:100%}
-.list{flex:1;overflow:auto;margin-top:10px}
-.card{padding:8px;background:#111a31;margin-bottom:6px;border-radius:8px;cursor:pointer}
-.badge{padding:2px 6px;border-radius:20px;font-size:11px;margin-left:5px}
-.free{background:#16a34a}
-.paid{background:#dc2626}
-.locked{background:#f59e0b;color:#000}
-input{width:100%;padding:8px;margin-bottom:10px;border:none;border-radius:6px}
-button{width:100%;padding:8px;margin:3px 0;border:none;border-radius:6px;cursor:pointer}
+:root{
+--bg:#0b0f1a;
+--panel:#11182a;
+--card:#1b2438;
+--accent:#00bfff;
+--text:#fff;
+--free:#16a34a;
+--paid:#dc2626;
+--locked:#f59e0b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:var(--bg);color:var(--text);overflow:hidden}
+
+/* LOGIN */
+#login{
+position:fixed;inset:0;
+background:#000;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.box{
+width:300px;
+background:var(--panel);
+padding:20px;
+border-radius:10px;
+}
+
+input,button{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:6px;
+}
+
+button{
+background:var(--accent);
+font-weight:bold;
+cursor:pointer;
+}
+
+/* LAYOUT */
+.topbar{
+height:60px;
+background:var(--panel);
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 15px;
+}
+
+.container{display:flex;height:calc(100vh - 60px)}
+
+.sidebar{
+width:240px;
+background:#0f1628;
+padding:10px;
+overflow:auto;
+}
+
+.main{flex:1;display:flex;flex-direction:column}
+
+.player{height:260px;background:black}
+video{width:100%;height:100%;object-fit:contain}
+
+.list{
+flex:1;
+overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+gap:10px;
+padding:10px;
+}
+
+.card{
+background:var(--card);
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+border:1px solid transparent;
+}
+
+.card:hover{border-color:var(--accent)}
+
+.badge{
+padding:4px 8px;
+border-radius:20px;
+font-size:11px;
+margin-right:4px;
+}
+
+.free{background:var(--free)}
+.paid{background:var(--paid)}
+.locked{background:var(--locked);color:#000}
+
+/* RIGHT */
+.right{
+width:260px;
+background:var(--panel);
+padding:10px;
+overflow:auto;
+}
+
+.stat{
+background:#0f1628;
+padding:10px;
+margin-bottom:8px;
+border-radius:8px;
+}
 </style>
 </head>
 
 <body>
 
-<div class="top">
-<h3>📺 UNIFIED ULTRA MAX CHANNEL ENGINE</h3>
-<div id="stats">Loading...</div>
+<!-- LOGIN -->
+<div id="login">
+<div class="box">
+<h3>🔐 ULTRA MAX LOGIN</h3>
+<p style="font-size:12px;opacity:.7">Demo password: <b>1234</b></p>
+<input id="pass" type="password" placeholder="Enter Password">
+<button onclick="login()">ENTER GOD MODE</button>
+</div>
 </div>
 
-<div class="main">
+<!-- TOPBAR -->
+<div class="topbar">
+<h3>🚀 ULTRA MAX 2026 GOD MODE ++</h3>
+<div id="status">LOCKED</div>
+</div>
 
-<div class="side">
+<div class="container">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+<h4>⚙ CONTROL PANEL</h4>
+
+<button onclick="filterAll()">All</button>
+<button onclick="filterLocked()">Locked</button>
+<button onclick="filterFree()">Free</button>
+<button onclick="filterPaid()">Paid</button>
+
 <input placeholder="Search..." oninput="search(this.value)">
-
-<button onclick="filter('all')">ALL</button>
-<button onclick="filter('free')">FREE</button>
-<button onclick="filter('paid')">PAID</button>
-<button onclick="filter('locked')">LOCKED</button>
 </div>
 
-<div class="content">
-
+<!-- MAIN -->
+<div class="main">
 <div class="player">
-<video id="v" controls></video>
+<video id="video" controls></video>
+</div>
+<div class="list" id="list"></div>
 </div>
 
-<div class="list" id="list"></div>
+<!-- RIGHT -->
+<div class="right">
+<h4>📊 SYSTEM STATS</h4>
 
+<div class="stat">Total: <span id="t">0</span></div>
+<div class="stat">Free: <span id="f">0</span></div>
+<div class="stat">Paid: <span id="p">0</span></div>
+<div class="stat">Locked: <span id="l">0</span></div>
+
+<button onclick="lockAll()">🔒 Lock ALL</button>
+<button onclick="unlockAll()">🔓 Unlock ALL</button>
+<button onclick="deleteLocked()">❌ Delete Locked</button>
 </div>
 
 </div>
 
 <script>
+/* =====================
+LOGIN
+===================== */
+function login(){
+const p=document.getElementById("pass").value;
+if(p==="1234"){
+document.getElementById("login").style.display="none";
+document.getElementById("status").innerText="BTECH-TV MODE ACTIVE";
+}else alert("Wrong password");
+}
 
-/* =========================
-UNIFIED CHANNEL ENGINE
-========================= */
+/* =====================
+IPTV ENGINE MERGED
+===================== */
 
-let channels = [];
-let view = [];
+let channels=[],filtered=[],cur=null;
 
-/* LIVE IPTV + ENTERPRISE MERGE INTO ONE ARRAY */
-async function boot(){
+function flag(cc){
+if(!cc||cc.length!==2)return'🌐';
+var a=0x1F1E6;
+return String.fromCodePoint(a+cc.charCodeAt(0)-65,a+cc.charCodeAt(1)-65);
+}
 
-/* 1. LIVE IPTV */
+/* LOAD IPTV */
+async function loadAPI(){
 try{
-const streams = await fetch("https://iptv-org.github.io/api/streams.json").then(r=>r.json());
+const [ch,st,lg]=await Promise.all([
+fetch('https://iptv-org.github.io/api/channels.json').then(r=>r.json()),
+fetch('https://iptv-org.github.io/api/streams.json').then(r=>r.json()),
+fetch('https://iptv-org.github.io/api/logos.json').then(r=>r.json())
+]);
 
-streams.forEach(s=>{
-if(!s.url) return;
+let map={},logos={};
 
+ch.forEach(c=>map[c.id]=c);
+lg.forEach(l=>logos[l.channel]=l.url);
+
+let seen={};
+st.forEach(s=>{
+if(!s.url||seen[s.url])return;
+seen[s.url]=1;
 channels.push({
-name: s.title || "LIVE CHANNEL",
-url: s.url,
-type: "free",
-status: "unlocked",
-source: "IPTV LIVE"
+id:channels.length,
+name:s.title||"Channel",
+url:s.url,
+type:"free",
+status:"free",
+cc:map[s.channel]?.country||"",
+logo:logos[s.channel]||""
 });
 });
-}catch(e){}
 
-/* 2. ENTERPRISE MASS GENERATION (ALL INSIDE SAME ARRAY) */
-const cats=["Sports","News","Movies","Kids","Music","Docs","Entertainment"];
-
-for(let i=1;i<=2000;i++){
-channels.push({
-name:`Enterprise Channel ${i}`,
-url:"",
-type:Math.random()>0.7?"paid":"free",
-status:Math.random()>0.85?"locked":"unlocked",
-source:"ENTERPRISE CORE"
-});
-}
-
-/* 3. FINAL UNIFIED VIEW */
-view=[...channels];
-
+filtered=[...channels];
 render();
-stats();
+document.getElementById("status").innerText="LIVE: "+channels.length;
+}catch(e){
+console.log(e);
+}
 }
 
-/* =========================
+/* =====================
 RENDER
-========================= */
+===================== */
 
 function render(){
 const box=document.getElementById("list");
 box.innerHTML="";
 
-view.slice(0,200).forEach((c,i)=>{
+filtered.forEach((c,i)=>{
 const div=document.createElement("div");
 div.className="card";
 
 div.innerHTML=`
 <b>${c.name}</b><br>
-<small>${c.source}</small>
 <span class="badge ${c.type}">${c.type}</span>
 <span class="badge ${c.status}">${c.status}</span>
 `;
 
-div.onclick=()=>play(c.url);
-
+div.onclick=()=>play(i);
 box.appendChild(div);
 });
+
+stats();
 }
 
-/* =========================
-PLAYER
-========================= */
+/* =====================
+PLAY
+===================== */
 
-function play(url){
-const v=document.getElementById("v");
-if(!url) return;
+function play(i){
+const c=filtered[i];
+const v=document.getElementById("video");
 
 if(Hls.isSupported()){
 const h=new Hls();
-h.loadSource(url);
+h.loadSource(c.url);
 h.attachMedia(v);
-}else v.src=url;
+}else v.src=c.url;
+cur=c;
 }
 
-/* =========================
-FILTER SYSTEM
-========================= */
+/* =====================
+FILTER
+===================== */
 
-function filter(type){
-if(type==="all") view=[...channels];
-else view=channels.filter(c=>c.type===type);
-render();
-}
+function filterAll(){filtered=[...channels];render();}
+function filterLocked(){filtered=channels.filter(c=>c.status==="locked");render();}
+function filterFree(){filtered=channels.filter(c=>c.type==="free");render();}
+function filterPaid(){filtered=channels.filter(c=>c.type==="paid");render();}
 
-/* =========================
-SEARCH
-========================= */
-
+/* SEARCH */
 function search(v){
-v=v.toLowerCase();
-view=channels.filter(c=>c.name.toLowerCase().includes(v));
+filtered=channels.filter(c=>
+c.name.toLowerCase().includes(v.toLowerCase())
+);
 render();
 }
 
-/* =========================
-STATS
-========================= */
-
-function stats(){
-document.getElementById("stats").innerText=
-`TOTAL:${channels.length} | FREE:${channels.filter(c=>c.type==="free").length} | PAID:${channels.filter(c=>c.type==="paid").length} | LOCKED:${channels.filter(c=>c.status==="locked").length}`;
+/* ADMIN */
+function lockAll(){channels.forEach(c=>c.status="locked");render();}
+function unlockAll(){channels.forEach(c=>c.status="free");render();}
+function deleteLocked(){
+channels=channels.filter(c=>c.status!=="locked");
+render();
 }
 
-/* START */
-boot();
+/* STATS */
+function stats(){
+document.getElementById("t").innerText=channels.length;
+document.getElementById("f").innerText=channels.filter(c=>c.type==="free").length;
+document.getElementById("p").innerText=channels.filter(c=>c.type==="paid").length;
+document.getElementById("l").innerText=channels.filter(c=>c.status==="locked").length;
+}
 
+/* BOOT */
+loadAPI();
 </script>
 
 </body>
