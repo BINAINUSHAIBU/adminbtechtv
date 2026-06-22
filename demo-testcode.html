@@ -1,10 +1,5 @@
 
 
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -144,10 +139,18 @@ cursor:pointer;border:1px solid #1f355d;
 
 <!-- PAYMENT -->
 <div class="modal" id="paymentModal">
-<div class="modal-box">
-<h3>💳 Payment</h3>
-<button class="pay" onclick="payNow()">Upgrade to Premium</button>
-</div>
+  <div class="modal-box">
+    <h3>💳 Upgrade To Premium</h3>
+
+    <input id="payEmail"
+      placeholder="Email Address"
+      style="width:100%;padding:10px;margin:10px 0;
+      background:#101a31;color:#fff;border:none;border-radius:6px;">
+
+    <button class="pay" onclick="payWithPaystack()">
+      Pay ₦5,000 With Paystack
+    </button>
+  </div>
 </div>
 
 <!-- SIDEBAR -->
@@ -256,8 +259,7 @@ cursor:pointer;border:1px solid #1f355d;
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
-const TRIAL=3600000;
-
+const TRIAL=240000;
 /* AUTH */
 function register(){
 localStorage.setItem("user",JSON.stringify({e:email.value,p:pass.value}));
@@ -299,14 +301,49 @@ timerBar.innerText=`Trial ${Math.floor(d/60000)}m`;
 },1000);
 }
 
-/* PAYMENT */
-function openPayment(){paymentModal.style.display="flex";}
-function payNow(){
+/* PAYMENT */function payWithPaystack(){
+
+let email =
+document.getElementById("payEmail").value ||
+"customer@example.com";
+
+let handler = PaystackPop.setup({
+
+key:"pk_test_xxxxxxxxxxxxxxxxxxxxxxxxx",
+
+email:email,
+
+amount:5000 * 100,
+
+currency:"NGN",
+
+ref:"BTECHTV_" + Date.now(),
+
+callback:function(response){
+
+alert(
+"Payment Successful\nReference: " +
+response.reference
+);
+
 localStorage.setItem("premium","true");
+
 paymentModal.style.display="none";
 upgradeModal.style.display="none";
+
+timerBar.innerText="PREMIUM ACTIVE";
+
+},
+
+onClose:function(){
+alert("Payment Cancelled");
 }
 
+});
+
+handler.openIframe();
+
+}
 /* IPTV */
 async function load(code){
 await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
@@ -394,6 +431,7 @@ fav.innerText=0;
 loadUltra();
 
 </script>
+  <script src="https://js.paystack.co/v1/inline.js"></script>
 
 </body>
 </html>
