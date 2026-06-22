@@ -268,38 +268,342 @@ const categories=[
 "Education",
 "Entertainment"
 ];
+const channels = [
 
-for(let i=1;i<=40000;i++){
+{
+id:1,
+name:"AMC (1080p)",
+category:"Movies",
+type:"Free",
+status:"Unlocked"
+},
 
-channels.push({
+{
+id:2,
+name:"Tolo News (720p)",
+category:"News",
+type:"Pay To View",
+status:"Unlocked"
+},
 
-id:i,
-name:`BTECH Channel ${i}`,
+{
+id:3,
+name:"RTSH Sport (1080p)",
+category:"Sports",
+type:"Pay To View",
+status:"Unlocked"
+},
 
-category:
-categories[
-Math.floor(
-Math.random()*categories.length
-)
-],
+{
+id:4,
+name:"Disney Junior MENA",
+category:"Kids",
+type:"Free",
+status:"Unlocked"
+},
 
-type:
-Math.random()>0.65
-?
-"Pay To View"
-:
-"Free",
+{
+id:5,
+name:"DirecTV Sports (1080p)",
+category:"Sports",
+type:"Pay To View",
+status:"Unlocked"
+},
 
-status:
-Math.random()>0.85
-?
-"Locked"
-:
-"Unlocked"
+{
+id:6,
+name:"FOX Sports (720p)",
+category:"Sports",
+type:"Free",
+status:"Unlocked"
+},
 
-});
+{
+id:7,
+name:"TyC Sports (1080p)",
+category:"Sports",
+type:"Pay To View",
+status:"Unlocked"
+},
 
+{
+id:8,
+name:"National Geographic HD",
+category:"Documentary",
+type:"Pay To View",
+status:"Unlocked"
+},
+
+{
+id:9,
+name:"National Geographic Wild HD",
+category:"Documentary",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:10,
+name:"Disney Channel Latin America",
+category:"Kids",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:11,
+name:"Nickelodeon",
+category:"Kids",
+type:"Pay To View",
+status:"Unlocked"
+},
+
+{
+id:12,
+name:"Comedy Central",
+category:"Entertainment",
+type:"Pay To View",
+status:"Unlocked"
+},
+
+{
+id:13,
+name:"MovieSphere AU",
+category:"Movies",
+type:"Pay To View",
+status:"Unlocked"
+},
+
+{
+id:14,
+name:"Pluto TV Movies",
+category:"Movies",
+type:"Pay To View",
+status:"Unlocked"
+},
+
+{
+id:15,
+name:"Pluto TV Horror",
+category:"Movies",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:16,
+name:"Pluto TV Sci-Fi",
+category:"Movies",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:17,
+name:"CNN",
+category:"News",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:18,
+name:"ABC News",
+category:"News",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:19,
+name:"Sky News Extra 1",
+category:"News",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:20,
+name:"Euronews French",
+category:"News",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:21,
+name:"Bloomberg TV Australia",
+category:"Business",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:22,
+name:"ABC Australia",
+category:"Entertainment",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:23,
+name:"ABC Kids",
+category:"Kids",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:24,
+name:"ABC TV NSW",
+category:"Entertainment",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:25,
+name:"Channel 7 Australia",
+category:"Entertainment",
+type:"Pay To View",
+status:"Unlocked"
+},
+
+{
+id:26,
+name:"Channel 9 Sydney",
+category:"Entertainment",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:27,
+name:"Cricket Gold",
+category:"Sports",
+type:"Pay To View",
+status:"Unlocked"
+},
+
+{
+id:28,
+name:"Racing.com",
+category:"Sports",
+type:"Pay To View",
+status:"Unlocked"
+},
+
+{
+id:29,
+name:"Sky Racing 1",
+category:"Sports",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:30,
+name:"Sky Racing 2",
+category:"Sports",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:31,
+name:"Zee Bangla HD",
+category:"Entertainment",
+type:"Pay To View",
+status:"Unlocked"
+},
+
+{
+id:32,
+name:"Star Jalsha HD",
+category:"Entertainment",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:33,
+name:"Jamuna TV",
+category:"News",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:34,
+name:"Independent TV",
+category:"News",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:35,
+name:"Somoy News",
+category:"News",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:36,
+name:"T Sports",
+category:"Sports",
+type:"Pay To View",
+status:"Unlocked"
+},
+
+{
+id:37,
+name:"Gazi TV",
+category:"Sports",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:38,
+name:"ATN News",
+category:"News",
+type:"Pay To View",
+status:"Unlocked"
+},
+
+{
+id:39,
+name:"RTV Bangladesh",
+category:"Entertainment",
+type:"Free",
+status:"Unlocked"
+},
+
+{
+id:40,
+name:"NTV Bangladesh",
+category:"Entertainment",
+type:"Free",
+status:"Unlocked"
 }
+
+];
+  {
+id:41,
+name:"Channel Name",
+category:"Movies",
+type:"Free",
+status:"Unlocked"
+},
+  fetch("channels.json")
+.then(r=>r.json())
+.then(data=>{
+   channels.push(...data);
+   render();
+});
 
 let page=1;
 
