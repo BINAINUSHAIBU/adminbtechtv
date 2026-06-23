@@ -1,4 +1,3 @@
-
 <!-- ========================================================= -->
 <!-- SUPER ADMIN IPTV + BTECH-TV PRO ULTRA MAX WORLD -->
 <!-- FULL MERGED ONE PAGE VERSION 2026 -->
@@ -36,7 +35,6 @@ color:var(--text);
 overflow:hidden;
 }
 
-/* ================= LAYOUT ================= */
 .container{display:flex;height:100vh}
 
 /* SIDEBAR */
@@ -69,7 +67,6 @@ cursor:pointer;
 /* MAIN */
 .main{flex:1;display:flex;flex-direction:column}
 
-/* TOPBAR */
 .topbar{
 display:flex;
 justify-content:space-between;
@@ -77,7 +74,13 @@ padding:10px;
 background:#0f172a;
 }
 
-/* DASHBOARD HEADER */
+.brand-header{
+padding:10px;
+background:#0b1220;
+font-weight:700;
+}
+
+/* DASHBOARD */
 .dashboard{
 padding:8px;
 background:#0b1220;
@@ -111,7 +114,6 @@ border-radius:6px;
 .player{
 height:300px;
 background:black;
-position:relative;
 }
 
 .player video{
@@ -119,22 +121,13 @@ width:100%;
 height:100%;
 }
 
-/* CHANNEL LIST */
-.channels{
+/* TABLE */
+.table-wrap{
 flex:1;
 overflow:auto;
 padding:10px;
 }
 
-.channel{
-background:var(--card);
-padding:10px;
-margin:6px 0;
-border-radius:10px;
-cursor:pointer;
-}
-
-/* TABLE */
 .table{
 width:100%;
 border-collapse:collapse;
@@ -143,24 +136,7 @@ border-collapse:collapse;
 .table th,.table td{
 padding:6px;
 border-bottom:1px solid #22304d;
-font-size:13px;
-}
-
-/* MODAL */
-.modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.8);
-display:none;
-justify-content:center;
-align-items:center;
-}
-
-.modal-box{
-background:var(--panel);
-padding:20px;
-border-radius:12px;
-width:340px;
+font-size:12px;
 }
 
 button{cursor:pointer}
@@ -172,63 +148,60 @@ button{cursor:pointer}
 
 <div class="container">
 
-<!-- ================= SIDEBAR ================= -->
+<!-- SIDEBAR -->
 <div class="sidebar">
 
 <div class="logo">📺 BTECH-TV PRO MAX</div>
 
 <h4>🌍 Countries</h4>
-
-<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
-<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
-<button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
-<button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
-<button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
-<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
-<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
-<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
-<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
-<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
-<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
-<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
-<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
-<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
-<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
-<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
-<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
-<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
-<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
-<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
-<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
-<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
-<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
-<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
-<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
+<button class="nav-btn">🇳🇬 Nigeria</button>
+<button class="nav-btn">🇺🇸 USA</button>
+<button class="nav-btn">🇬🇧 UK</button>
+<button class="nav-btn">🇮🇳 India</button>
+<button class="nav-btn">🇫🇷 France</button>
+<button class="nav-btn">🇩🇪 Germany</button>
+<button class="nav-btn">🇧🇷 Brazil</button>
+<button class="nav-btn">🇿🇦 South Africa</button>
+<button class="nav-btn">🇨🇦 Canada</button>
+<button class="nav-btn">🇦🇺 Australia</button>
+<button class="nav-btn">🇯🇵 Japan</button>
+<button class="nav-btn">🇰🇷 South Korea</button>
+<button class="nav-btn">🇨🇳 China</button>
+<button class="nav-btn">🇪🇸 Spain</button>
+<button class="nav-btn">🇮🇹 Italy</button>
+<button class="nav-btn">🇹🇷 Turkey</button>
+<button class="nav-btn">🇲🇽 Mexico</button>
+<button class="nav-btn">🇦🇪 UAE</button>
+<button class="nav-btn">🇸🇦 Saudi Arabia</button>
+<button class="nav-btn">🇪🇬 Egypt</button>
+<button class="nav-btn">🇦🇷 Argentina</button>
+<button class="nav-btn">🇵🇰 Pakistan</button>
+<button class="nav-btn">🇮🇩 Indonesia</button>
+<button class="nav-btn">🇵🇭 Philippines</button>
+<button class="nav-btn">🇦🇱 Albania</button>
 
 <h4>🎬 Categories</h4>
-
-<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
-<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
-<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
-<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
-<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
-<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
-<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
-<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
-<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
-<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
+<button class="nav-btn">📰 News</button>
+<button class="nav-btn">⚽ Sports</button>
+<button class="nav-btn">🎬 Movies</button>
+<button class="nav-btn">🎵 Music</button>
+<button class="nav-btn">👶 Kids</button>
+<button class="nav-btn">😂 Comedy</button>
+<button class="nav-btn">📚 Documentary</button>
+<button class="nav-btn">💼 Business</button>
+<button class="nav-btn">🔬 Science</button>
+<button class="nav-btn">✈ Travel</button>
 
 <h4>🔥 Tools</h4>
-
-<button class="nav-btn" onclick="scan()">📡 Scan</button>
-<button class="nav-btn" onclick="boost()">⚡ Boost</button>
-<button class="nav-btn" onclick="repair()">🛠 Repair</button>
-<button class="nav-btn" onclick="optimize()">🧠 Optimize</button>
-<button class="nav-btn" onclick="openAdmin()">⚙ Admin</button>
+<button class="nav-btn">📡 Scan</button>
+<button class="nav-btn">⚡ Boost</button>
+<button class="nav-btn">🛠 Repair</button>
+<button class="nav-btn">🧠 Optimize</button>
+<button class="nav-btn">⚙ Admin</button>
 
 </div>
 
-<!-- ================= MAIN ================= -->
+<!-- MAIN -->
 <div class="main">
 
 <div class="topbar">
@@ -236,125 +209,167 @@ button{cursor:pointer}
 <div>🔴 LIVE</div>
 </div>
 
-<!-- DASHBOARD -->
+<div class="brand-header">
+📺 BTECH-TV PRO MAX | GLOBAL IPTV ENGINE
+</div>
+
 <div class="dashboard">
 <input id="search" placeholder="Search Channels..." oninput="searchChannels()"/>
 </div>
 
-<!-- STATS -->
 <div class="stats">
-<div class="stat">📺 Channels: <span id="count">0</span></div>
+<div class="stat">📺 Channels: <span id="count">46</span></div>
 <div class="stat">⚡ CDN Active</div>
 <div class="stat">🧠 AI Ready</div>
 <div class="stat">🌍 Global Feed</div>
 </div>
 
-<!-- PLAYER -->
 <div class="player">
 <video id="video" controls autoplay muted></video>
 </div>
 
-<!-- CHANNEL LIST (LIVE VIEW) -->
-<div class="channels" id="grid"></div>
-
+<div class="table-wrap">
+<table class="table">
+<thead>
+<tr>
+<th>Channel Name</th>
+<th>Category</th>
+<th>Type</th>
+<th>Lock Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
 </div>
-</div>
 
-<!-- ================= ADMIN ================= -->
-<div class="modal" id="admin">
-<div class="modal-box">
-<h3>SUPER ADMIN PANEL</h3>
-<button onclick="scan()">Scan</button>
-<button onclick="boost()">Boost</button>
-<button onclick="repair()">Repair</button>
-<button onclick="optimize()">Optimize</button>
-<button onclick="closeAdmin()">Close</button>
 </div>
 </div>
 
 <script>
 
-let all=[],filtered=[],i=0;
+/* ================= FULL 46 CHANNEL DATABASE ================= */
+let channels = [
+{name:"ACNN (480p)",category:"Sports",type:"Free",lock:"Unlocked"},
+{name:"Advocate Broadcasting Network (576p)",category:"News",type:"Pay To View",lock:"Locked"},
+{name:"Africa TV3 (720p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Unlocked"},
+{name:"BCS StarCross TV (576p)",category:"Education",type:"Free",lock:"Unlocked"},
+{name:"Bride TV (576p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"Caught-Up TV (480p) [Not 24/7]",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"Channels 24",category:"Sports",type:"Pay To View",lock:"Unlocked"},
+{name:"Channels TV",category:"Music",type:"Pay To View",lock:"Unlocked"},
+{name:"Chosen TV English (360p)",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"cLoveworld TV (480p)",category:"Kids",type:"Free",lock:"Unlocked"},
+{name:"Coza TV (576p)",category:"Music",type:"Pay To View",lock:"Unlocked"},
+{name:"Dunamis TV (576p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Unlocked"},
+{name:"Flame TV (576p)",category:"Music",type:"Pay To View",lock:"Unlocked"},
+{name:"Foursquare TV (360p) [Not 24/7]",category:"Education",type:"Pay To View",lock:"Unlocked"},
+{name:"Itage TV (480p)",category:"Music",type:"Pay To View",lock:"Unlocked"},
+{name:"Kingsview TV (1080p)",category:"Education",type:"Free",lock:"Unlocked"},
+{name:"LN247 (1080p)",category:"Sports",type:"Free",lock:"Unlocked"},
+{name:"LoveWorld Arabic (360p)",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"LoveWorld Persia (720p)",category:"Sports",type:"Pay To View",lock:"Unlocked"},
+{name:"Loveworld UK (1080p) [Not 24/7]",category:"Education",type:"Pay To View",lock:"Locked"},
+{name:"LoveWorld USA (720p)",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"LoveworldSAT (1080p)",category:"News",type:"Pay To View",lock:"Unlocked"},
+{name:"Master's TV (720p)",category:"Sports",type:"Pay To View",lock:"Unlocked"},
+{name:"More Grace TV (410p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Locked"},
+{name:"New Vision TV (360p)",category:"News",type:"Free",lock:"Unlocked"},
+{name:"News Central",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"NTA International (576p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Locked"},
+{name:"Phenomenal Life TV (1080p)",category:"News",type:"Free",lock:"Unlocked"},
+{name:"Plus TV Africa (720p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Unlocked"},
+{name:"Qausain TV (720p)",category:"Movies",type:"Free",lock:"Unlocked"},
+{name:"Quest TV (240p) [Not 24/7]",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"Rave TV (576p)",category:"News",type:"Pay To View",lock:"Unlocked"},
+{name:"Salvation TV (576p)",category:"Kids",type:"Free",lock:"Unlocked"},
+{name:"Silverbird News 24 (576p)",category:"News",type:"Pay To View",lock:"Unlocked"},
+{name:"Soundcity TV",category:"Education",type:"Pay To View",lock:"Locked"},
+{name:"Sunna TV (576p)",category:"Music",type:"Free",lock:"Locked"},
+{name:"Superscreen TV (412p)",category:"Sports",type:"Pay To View",lock:"Unlocked"},
+{name:"Synagogue TV (576p)",category:"Kids",type:"Free",lock:"Unlocked"},
+{name:"TVC (1080p)",category:"Sports",type:"Free",lock:"Unlocked"},
+{name:"TVC News (576p)",category:"News",type:"Pay To View",lock:"Locked"},
+{name:"Waffi TV (240p)",category:"Kids",type:"Free",lock:"Locked"},
+{name:"Wap TV (720p) [Not 24/7]",category:"Education",type:"Pay To View",lock:"Locked"},
+{name:"Wazobia Max TV Abuja (720p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"Wazobia Max TV Nigeria (720p)",category:"Movies",type:"Free",lock:"Unlocked"},
+{name:"Wazobia Max TV Port Harcourt (720p)",category:"Kids",type:"Free",lock:"Locked"},
+{name:"Whole Word TV (720p)",category:"Education",type:"Pay To View",lock:"Unlocked"}
+];
+
+let filtered=[...channels];
 let video=document.getElementById("video");
 let hls;
 
-/* LOAD */
-async function load(code){
-await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
-}
-
-async function loadCat(cat){
-await loadM3U(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`);
-}
-
-/* M3U PARSER */
-async function loadM3U(url){
-const res=await fetch(url);
-const text=await res.text();
-
-all=[];filtered=[];
-
-text.split("\n").forEach((line,idx,arr)=>{
-if(line.startsWith("#EXTINF")){
-let name=line.split(",").pop();
-let url=arr[idx+1];
-if(url && url.startsWith("http")){
-all.push({name,url});
-}
-}
-});
-
-filtered=[...all];
-document.getElementById("count").innerText=filtered.length;
-render();
-}
-
-/* SEARCH */
-function searchChannels(){
-let v=document.getElementById("search").value.toLowerCase();
-filtered=all.filter(c=>c.name.toLowerCase().includes(v));
-render();
-}
-
-/* RENDER */
+/* RENDER TABLE */
 function render(){
-let g=document.getElementById("grid");
-g.innerHTML="";
+let t=document.getElementById("tbody");
+t.innerHTML="";
 
-filtered.forEach((c,idx)=>{
-let d=document.createElement("div");
-d.className="channel";
-d.innerText=c.name;
-d.onclick=()=>play(idx);
-g.appendChild(d);
+filtered.forEach((c,i)=>{
+t.innerHTML+=`
+<tr>
+<td>${c.name}</td>
+<td>${c.category}</td>
+<td>${c.type}</td>
+<td>${c.lock}</td>
+<td>
+<button onclick="play(${i})">Play</button>
+<button onclick="toggleLock(${i})">Lock</button>
+<button onclick="edit(${i})">Edit</button>
+<button onclick="del(${i})">Delete</button>
+</td>
+</tr>`;
 });
+document.getElementById("count").innerText=filtered.length;
 }
+render();
 
 /* PLAY */
-function play(idx){
-i=idx;
-let c=filtered[i];
+function play(i){
+let url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 
 if(hls) hls.destroy();
 
 if(Hls.isSupported()){
 hls=new Hls();
-hls.loadSource(c.url);
+hls.loadSource(url);
 hls.attachMedia(video);
 hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
 }else{
-video.src=c.url;
+video.src=url;
 video.play();
 }
 }
 
-/* ADMIN */
-function openAdmin(){document.getElementById("admin").style.display="flex";}
-function closeAdmin(){document.getElementById("admin").style.display="none";}
-function scan(){alert("Scanning...");}
-function boost(){video.playbackRate=1.2;}
-function repair(){alert("Repairing...");}
-function optimize(){alert("Optimizing...");}
+/* SEARCH */
+function searchChannels(){
+let v=document.getElementById("search").value.toLowerCase();
+filtered=channels.filter(c=>
+c.name.toLowerCase().includes(v) ||
+c.category.toLowerCase().includes(v)
+);
+render();
+}
+
+/* ACTIONS */
+function toggleLock(i){
+filtered[i].lock = filtered[i].lock==="Locked"?"Unlocked":"Locked";
+render();
+}
+
+function edit(i){
+let c=filtered[i];
+c.name=prompt("Edit Name",c.name)||c.name;
+render();
+}
+
+function del(i){
+channels = channels.filter(x=>x.name!==filtered[i].name);
+filtered=[...channels];
+render();
+}
 
 </script>
 
