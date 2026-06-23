@@ -1,0 +1,361 @@
+
+<!-- ========================================================= -->
+<!-- SUPER ADMIN IPTV + BTECH-TV PRO ULTRA MAX WORLD -->
+<!-- FULL MERGED ONE PAGE VERSION 2026 -->
+<!-- ========================================================= -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>📺 SUPER ADMIN IPTV ULTRA MAX WORLD</title>
+
+<meta name="theme-color" content="#050816"/>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+
+:root{
+--bg:#050816;
+--panel:#111827;
+--card:#172033;
+--hover:#22304d;
+--accent:#00d4ff;
+--text:#ffffff;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+
+body{
+background:var(--bg);
+color:var(--text);
+overflow:hidden;
+}
+
+/* ================= LAYOUT ================= */
+.container{display:flex;height:100vh}
+
+/* SIDEBAR */
+.sidebar{
+width:340px;
+background:#0d1324;
+padding:10px;
+overflow:auto;
+border-right:1px solid #1d2b4f;
+}
+
+.logo{
+font-size:20px;
+font-weight:900;
+color:var(--accent);
+margin-bottom:10px;
+}
+
+.nav-btn{
+width:100%;
+padding:8px;
+margin:4px 0;
+background:#121c33;
+border:none;
+border-radius:8px;
+color:white;
+cursor:pointer;
+}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column}
+
+/* TOPBAR */
+.topbar{
+display:flex;
+justify-content:space-between;
+padding:10px;
+background:#0f172a;
+}
+
+/* PLAYER */
+.player{
+height:320px;
+background:black;
+position:relative;
+}
+
+.player video{
+width:100%;
+height:100%;
+}
+
+/* SEARCH + DASHBOARD */
+.dashboard{
+padding:10px;
+background:#0b1220;
+display:flex;
+gap:10px;
+align-items:center;
+}
+
+.dashboard input{
+flex:1;
+padding:8px;
+border-radius:6px;
+border:none;
+}
+
+/* CHANNEL LIST */
+.channels{
+flex:1;
+overflow:auto;
+padding:10px;
+}
+
+.channel{
+background:var(--card);
+padding:10px;
+margin:6px 0;
+border-radius:10px;
+cursor:pointer;
+}
+
+/* TABLE VIEW */
+.table{
+width:100%;
+border-collapse:collapse;
+}
+
+.table th,.table td{
+padding:6px;
+border-bottom:1px solid #22304d;
+font-size:13px;
+}
+
+/* MODAL */
+.modal{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.8);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.modal-box{
+background:var(--panel);
+padding:20px;
+border-radius:12px;
+width:340px;
+}
+
+button{cursor:pointer}
+
+.stats{
+display:flex;
+gap:10px;
+padding:10px;
+font-size:13px;
+}
+
+.stat{
+background:#111827;
+padding:6px 10px;
+border-radius:6px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- ================= SIDEBAR ================= -->
+<div class="sidebar">
+
+<div class="logo">📺 BTECH-TV PRO MAX</div>
+
+<h4>🌍 Countries</h4>
+
+<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
+<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
+<button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
+<button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
+<button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
+<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
+<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
+<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
+<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
+<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
+<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
+<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
+<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
+<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
+<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
+<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
+<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
+<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
+<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
+<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
+<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
+<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
+<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
+<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
+<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
+
+<h4>🎬 Categories</h4>
+
+<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
+<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
+<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
+<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
+<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
+<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
+<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
+<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
+<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
+<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
+
+<h4>🔥 Tools</h4>
+
+<button class="nav-btn" onclick="scan()">📡 Scan</button>
+<button class="nav-btn" onclick="boost()">⚡ Boost</button>
+<button class="nav-btn" onclick="repair()">🛠 Repair</button>
+<button class="nav-btn" onclick="optimize()">🧠 Optimize</button>
+<button class="nav-btn" onclick="openAdmin()">⚙ Admin</button>
+
+</div>
+
+<!-- ================= MAIN ================= -->
+<div class="main">
+
+<div class="topbar">
+<div>📺 SUPER ADMIN IPTV SYSTEM</div>
+<div>🔴 LIVE</div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard">
+<input id="search" placeholder="Search Channels..." oninput="searchChannels()"/>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+<div class="stat">📺 Channels: <span id="count">0</span></div>
+<div class="stat">⚡ CDN Active</div>
+<div class="stat">🧠 AI Ready</div>
+<div class="stat">🌍 Global Feed</div>
+</div>
+
+<!-- PLAYER -->
+<div class="player">
+<video id="video" controls autoplay muted></video>
+</div>
+
+<!-- CHANNEL LIST -->
+<div class="channels" id="grid"></div>
+
+</div>
+</div>
+
+<!-- ================= ADMIN ================= -->
+<div class="modal" id="admin">
+<div class="modal-box">
+<h3>SUPER ADMIN PANEL</h3>
+<button onclick="scan()">Scan</button>
+<button onclick="boost()">Boost</button>
+<button onclick="repair()">Repair</button>
+<button onclick="optimize()">Optimize</button>
+<button onclick="closeAdmin()">Close</button>
+</div>
+</div>
+
+<script>
+
+let all=[],filtered=[],i=0;
+let video=document.getElementById("video");
+let hls;
+
+/* LOAD */
+async function load(code){
+await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
+}
+
+async function loadCat(cat){
+await loadM3U(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`);
+}
+
+/* M3U */
+async function loadM3U(url){
+const res=await fetch(url);
+const text=await res.text();
+
+all=[];filtered=[];
+
+text.split("\n").forEach((line,idx,arr)=>{
+if(line.startsWith("#EXTINF")){
+let name=line.split(",").pop();
+let url=arr[idx+1];
+if(url && url.startsWith("http")){
+all.push({name,url});
+}
+}
+});
+
+filtered=[...all];
+document.getElementById("count").innerText=filtered.length;
+render();
+}
+
+/* SEARCH */
+function searchChannels(){
+let v=document.getElementById("search").value.toLowerCase();
+filtered=all.filter(c=>c.name.toLowerCase().includes(v));
+render();
+}
+
+/* RENDER */
+function render(){
+let g=document.getElementById("grid");
+g.innerHTML="";
+
+filtered.forEach((c,idx)=>{
+let d=document.createElement("div");
+d.className="channel";
+d.innerText=c.name;
+d.onclick=()=>play(idx);
+g.appendChild(d);
+});
+}
+
+/* PLAY */
+function play(idx){
+i=idx;
+let c=filtered[i];
+
+if(hls) hls.destroy();
+
+if(Hls.isSupported()){
+hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(video);
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+}else{
+video.src=c.url;
+video.play();
+}
+}
+
+/* ADMIN */
+function openAdmin(){document.getElementById("admin").style.display="flex";}
+function closeAdmin(){document.getElementById("admin").style.display="none";}
+function scan(){alert("Scanning...");}
+function boost(){video.playbackRate=1.2;}
+function repair(){alert("Repairing...");}
+function optimize(){alert("Optimizing...");}
+
+</script>
+
+</body>
+</html>
