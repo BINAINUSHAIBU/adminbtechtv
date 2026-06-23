@@ -1,21 +1,11 @@
-
-
-
-<!-- ========================================================= -->
-<!-- SUPER ADMIN IPTV + BTECH-TV PRO ULTRA MAX WORLD -->
-<!-- FULL MERGED ONE PAGE VERSION 2026 -->
-<!-- ========================================================= -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>📺 SUPER ADMIN IPTV ULTRA MAX WORLD</title>
-
 <meta name="theme-color" content="#050816"/>
+
+<title>📺 BTECH-TV PRO MAX</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -28,9 +18,17 @@
 --hover:#22304d;
 --accent:#00d4ff;
 --text:#ffffff;
+--success:#16a34a;
+--danger:#dc2626;
+--warning:#f59e0b;
 }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
 
 body{
 background:var(--bg);
@@ -39,39 +37,84 @@ overflow:hidden;
 }
 
 /* ================= LAYOUT ================= */
-.container{display:flex;height:100vh}
 
-/* SIDEBAR */
+.container{
+display:flex;
+height:100vh;
+}
+
+/* ================= SIDEBAR ================= */
+
 .sidebar{
 width:320px;
 background:#0d1324;
-padding:10px;
+padding:12px;
 overflow:auto;
 border-right:1px solid #1d2b4f;
 }
 
 .logo{
-font-size:20px;
+font-size:24px;
 font-weight:900;
 color:var(--accent);
-margin-bottom:10px;
+margin-bottom:15px;
+text-align:center;
+}
+
+.section-title{
+margin-top:15px;
+margin-bottom:8px;
+font-size:16px;
+font-weight:bold;
+color:var(--accent);
 }
 
 .nav-btn{
 width:100%;
-padding:8px;
+padding:10px;
 margin:4px 0;
 background:#121c33;
 border:none;
 border-radius:8px;
 color:white;
 cursor:pointer;
+transition:.3s;
+text-align:left;
+font-size:14px;
 }
 
-/* MAIN */
-.main{flex:1;display:flex;flex-direction:column}
+.nav-btn:hover{
+background:var(--hover);
+transform:translateX(3px);
+}
 
-/* PLAYER */
+/* ================= MAIN ================= */
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+/* ================= TOPBAR ================= */
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px;
+background:#0f172a;
+border-bottom:1px solid #1d2b4f;
+font-weight:bold;
+}
+
+.live{
+color:red;
+font-size:15px;
+}
+
+/* ================= PLAYER ================= */
+
 .player{
 height:320px;
 background:black;
@@ -81,6 +124,7 @@ position:relative;
 .player video{
 width:100%;
 height:100%;
+background:black;
 }
 
 .overlay{
@@ -90,9 +134,12 @@ background:rgba(0,0,0,.8);
 display:none;
 justify-content:center;
 align-items:center;
+font-size:30px;
+font-weight:bold;
 }
 
-/* CHANNEL TABLE */
+/* ================= TABLE ================= */
+
 .table-wrap{
 flex:1;
 overflow:auto;
@@ -110,35 +157,59 @@ background:#0f172a;
 color:var(--accent);
 position:sticky;
 top:0;
+z-index:10;
 }
 
 td,th{
 padding:10px;
 border-bottom:1px solid #1f2b4d;
 text-align:left;
+font-size:14px;
 }
+
+tr:hover{
+background:#16213a;
+cursor:pointer;
+}
+
+.locked{
+color:red;
+font-weight:bold;
+}
+
+.unlocked{
+color:lime;
+font-weight:bold;
+}
+
+/* ================= ACTION BUTTONS ================= */
 
 .action{
 padding:6px 8px;
 border:none;
 border-radius:6px;
 cursor:pointer;
-margin-right:5px;
+margin:2px;
+font-size:12px;
 }
 
-.lock{background:#f59e0b;}
-.edit{background:#2563eb;color:white;}
-.delete{background:#dc2626;color:white;}
-
-/* TOPBAR */
-.topbar{
-display:flex;
-justify-content:space-between;
-padding:10px;
-background:#0f172a;
+.lock{
+background:var(--warning);
+color:black;
 }
 
-/* MODAL */
+.edit{
+background:#2563eb;
+color:white;
+}
+
+.delete{
+background:var(--danger);
+color:white;
+}
+
+/* ================= MODAL ================= */
+
 .modal{
 position:fixed;
 inset:0;
@@ -146,6 +217,7 @@ background:rgba(0,0,0,.8);
 display:none;
 justify-content:center;
 align-items:center;
+z-index:1000;
 }
 
 .modal-box{
@@ -155,7 +227,67 @@ border-radius:12px;
 width:320px;
 }
 
-button{cursor:pointer}
+.modal-box h3{
+margin-bottom:15px;
+color:var(--accent);
+}
+
+.modal-box button{
+width:100%;
+padding:10px;
+margin-top:8px;
+border:none;
+border-radius:8px;
+background:#1e293b;
+color:white;
+cursor:pointer;
+}
+
+/* ================= SEARCH ================= */
+
+.search-box{
+padding:10px;
+background:#111827;
+}
+
+.search-box input{
+width:100%;
+padding:10px;
+border:none;
+border-radius:8px;
+background:#1e293b;
+color:white;
+}
+
+/* ================= STATUS ================= */
+
+.status-bar{
+padding:8px;
+background:#0f172a;
+display:flex;
+gap:15px;
+font-size:13px;
+border-top:1px solid #1d2b4f;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+
+.container{
+flex-direction:column;
+}
+
+.sidebar{
+width:100%;
+height:240px;
+}
+
+.player{
+height:240px;
+}
+
+}
 
 </style>
 </head>
@@ -165,11 +297,12 @@ button{cursor:pointer}
 <div class="container">
 
 <!-- ================= SIDEBAR ================= -->
+
 <div class="sidebar">
 
 <div class="logo">📺 BTECH-TV PRO MAX</div>
 
-<h4>🌍 Countries</h4>
+<div class="section-title">🌍 Countries</div>
 
 <button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
 <button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
@@ -197,7 +330,7 @@ button{cursor:pointer}
 <button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
 <button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
 
-<h4>🎬 Categories</h4>
+<div class="section-title">🎬 Categories</div>
 
 <button class="nav-btn" onclick="loadCat('news')">📰 News</button>
 <button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
@@ -210,7 +343,7 @@ button{cursor:pointer}
 <button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
 <button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
 
-<h4>🔥 Tools</h4>
+<div class="section-title">🔥 Tools</div>
 
 <button class="nav-btn" onclick="scan()">📡 Scan</button>
 <button class="nav-btn" onclick="boost()">⚡ Boost</button>
@@ -221,21 +354,31 @@ button{cursor:pointer}
 </div>
 
 <!-- ================= MAIN ================= -->
+
 <div class="main">
 
 <div class="topbar">
 <div>📺 SUPER ADMIN IPTV SYSTEM</div>
-<div>🔴 LIVE</div>
+<div class="live">🔴 LIVE</div>
 </div>
+
+<div class="search-box">
+<input type="text" id="search" placeholder="Search Channels..." onkeyup="searchChannels()">
+</div>
+
+<!-- ================= PLAYER ================= -->
 
 <div class="player">
 <video id="video" controls autoplay muted></video>
-<div class="overlay" id="overlay"></div>
+<div class="overlay" id="overlay">LOADING...</div>
 </div>
 
 <!-- ================= CHANNEL TABLE ================= -->
+
 <div class="table-wrap">
+
 <table>
+
 <thead>
 <tr>
 <th>Channel Name</th>
@@ -247,132 +390,316 @@ button{cursor:pointer}
 </thead>
 
 <tbody id="grid"></tbody>
+
 </table>
 
 <button class="nav-btn" onclick="loadMore()">⬇ LOAD MORE CHANNELS</button>
+
+</div>
+
+<div class="status-bar">
+<div>📡 Server: Online</div>
+<div>⚡ CDN: Active</div>
+<div>🧠 AI Optimize: Ready</div>
+<div>📺 Channels: <span id="count">0</span></div>
 </div>
 
 </div>
 
 </div>
 
-<!-- ================= ADMIN ================= -->
+<!-- ================= ADMIN PANEL ================= -->
+
 <div class="modal" id="admin">
+
 <div class="modal-box">
-<h3>SUPER ADMIN PANEL</h3>
-<button onclick="scan()">Scan</button>
-<button onclick="boost()">Boost</button>
-<button onclick="repair()">Repair</button>
-<button onclick="optimize()">Optimize</button>
-<button onclick="closeAdmin()">Close</button>
+
+<h3>⚙ SUPER ADMIN PANEL</h3>
+
+<button onclick="scan()">📡 Scan Channels</button>
+<button onclick="boost()">⚡ Boost Streaming</button>
+<button onclick="repair()">🛠 Repair Streams</button>
+<button onclick="optimize()">🧠 Optimize System</button>
+<button onclick="closeAdmin()">❌ Close</button>
+
 </div>
+
 </div>
 
 <script>
 
-let all=[],filtered=[],page=1;
 let video=document.getElementById("video");
+let overlay=document.getElementById("overlay");
+
 let hls;
+let page=1;
 
-/* ================= LOAD ================= */
-async function load(code){
-await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
-}
+let channels=[
 
-async function loadCat(cat){
-await loadM3U(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`);
-}
+{name:"ACNN (480p)",category:"Sports",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Advocate Broadcasting Network (576p)",category:"News",type:"Pay To View",lock:"Locked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Africa TV3 (720p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"BCS StarCross TV (576p)",category:"Education",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Bride TV (576p)",category:"Kids",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Caught-Up TV (480p) [Not 24/7]",category:"Music",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Channels 24",category:"Sports",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Channels TV",category:"Music",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Chosen TV English (360p)",category:"Music",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"cLoveworld TV (480p)",category:"Kids",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Coza TV (576p)",category:"Music",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Dunamis TV (576p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Flame TV (576p)",category:"Music",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Foursquare TV (360p) [Not 24/7]",category:"Education",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Itage TV (480p)",category:"Music",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Kingsview TV (1080p)",category:"Education",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"LN247 (1080p)",category:"Sports",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"LoveWorld Arabic (360p)",category:"Music",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"LoveWorld Persia (720p)",category:"Sports",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Loveworld UK (1080p) [Not 24/7]",category:"Education",type:"Pay To View",lock:"Locked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"LoveWorld USA (720p)",category:"Music",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"LoveworldSAT (1080p)",category:"News",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Master's TV (720p)",category:"Sports",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"More Grace TV (410p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Locked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"New Vision TV (360p)",category:"News",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"News Central",category:"Music",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"NTA International (576p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Locked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Phenomenal Life TV (1080p)",category:"News",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Plus TV Africa (720p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Qausain TV (720p)",category:"Movies",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Quest TV (240p) [Not 24/7]",category:"Music",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Rave TV (576p)",category:"News",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Salvation TV (576p)",category:"Kids",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Silverbird News 24 (576p)",category:"News",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Soundcity TV",category:"Education",type:"Pay To View",lock:"Locked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Sunna TV (576p)",category:"Music",type:"Free",lock:"Locked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Superscreen TV (412p)",category:"Sports",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Synagogue TV (576p)",category:"Kids",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"TVC (1080p)",category:"Sports",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"TVC News (576p)",category:"News",type:"Pay To View",lock:"Locked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Waffi TV (240p)",category:"Kids",type:"Free",lock:"Locked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Wap TV (720p) [Not 24/7]",category:"Education",type:"Pay To View",lock:"Locked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Wazobia Max TV Abuja (720p)",category:"Kids",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Wazobia Max TV Nigeria (720p)",category:"Movies",type:"Free",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Wazobia Max TV Port Harcourt (720p)",category:"Kids",type:"Free",lock:"Locked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
+{name:"Whole Word TV (720p)",category:"Education",type:"Pay To View",lock:"Unlocked",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
 
-/* ================= M3U ================= */
-async function loadM3U(url){
+];
 
-const res=await fetch(url);
-const text=await res.text();
+let filtered=[...channels];
 
-all=[];
+/* ================= RENDER ================= */
 
-text.split("\n").forEach((line,i,arr)=>{
-if(line.startsWith("#EXTINF")){
-let name=line.split(",").pop();
-let url=arr[i+1];
-
-if(url && url.startsWith("http")){
-all.push({
-name,
-url,
-category:["News","Sports","Movies","Music","Kids","Education"][Math.floor(Math.random()*6)],
-type:Math.random()>0.5?"Free":"Pay To View",
-lock:Math.random()>0.8?"Locked":"Unlocked"
-});
-}
-}
-});
-
-filtered=[...all];
-render();
-}
-
-/* ================= RENDER TABLE ================= */
 function render(){
 
 let body=document.getElementById("grid");
+
 body.innerHTML="";
 
 filtered.slice(0,page*50).forEach((c,i)=>{
 
 body.innerHTML+=`
+
 <tr onclick="play(${i})">
 
 <td>${c.name}</td>
 <td>${c.category}</td>
 <td>${c.type}</td>
-<td>${c.lock}</td>
+
+<td class="${c.lock==='Locked'?'locked':'unlocked'}">
+${c.lock}
+</td>
 
 <td>
-<button class="action lock">Lock</button>
-<button class="action edit">Edit</button>
-<button class="action delete">Delete</button>
+
+<button class="action lock"
+onclick="event.stopPropagation();toggleLock(${i})">
+Lock
+</button>
+
+<button class="action edit"
+onclick="event.stopPropagation();editChannel(${i})">
+Edit
+</button>
+
+<button class="action delete"
+onclick="event.stopPropagation();deleteChannel(${i})">
+Delete
+</button>
+
 </td>
 
 </tr>
+
 `;
 
 });
 
+document.getElementById("count").innerText=filtered.length;
+
 }
 
-/* ================= LOAD MORE ================= */
-function loadMore(){
-page++;
 render();
-}
 
 /* ================= PLAY ================= */
+
 function play(i){
 
 let c=filtered[i];
 
+if(c.lock==="Locked"){
+alert("🔒 Locked Channel");
+return;
+}
+
+overlay.style.display="flex";
+
 if(hls) hls.destroy();
 
 if(Hls.isSupported()){
+
 hls=new Hls();
+
 hls.loadSource(c.url);
+
 hls.attachMedia(video);
-hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
-}else{
-video.src=c.url;
+
+hls.on(Hls.Events.MANIFEST_PARSED,()=>{
+
+overlay.style.display="none";
 video.play();
+
+});
+
+}else{
+
+video.src=c.url;
+
+video.play();
+
+overlay.style.display="none";
+
 }
+
+}
+
+/* ================= ACTIONS ================= */
+
+function toggleLock(i){
+
+filtered[i].lock=
+filtered[i].lock==="Locked"?"Unlocked":"Locked";
+
+render();
+
+}
+
+function editChannel(i){
+
+let name=prompt("Edit Channel Name",filtered[i].name);
+
+if(name){
+
+filtered[i].name=name;
+
+render();
+
+}
+
+}
+
+function deleteChannel(i){
+
+if(confirm("Delete Channel?")){
+
+filtered.splice(i,1);
+
+render();
+
+}
+
+}
+
+/* ================= SEARCH ================= */
+
+function searchChannels(){
+
+let q=document.getElementById("search").value.toLowerCase();
+
+filtered=channels.filter(c=>
+c.name.toLowerCase().includes(q)
+);
+
+render();
+
+}
+
+/* ================= LOAD MORE ================= */
+
+function loadMore(){
+
+page++;
+
+render();
+
+}
+
+/* ================= COUNTRY LOAD ================= */
+
+async function load(code){
+
+alert("🌍 Loading Country Channels: "+code.toUpperCase());
+
+}
+
+/* ================= CATEGORY LOAD ================= */
+
+async function loadCat(cat){
+
+alert("🎬 Loading Category: "+cat.toUpperCase());
+
+}
+
+/* ================= TOOLS ================= */
+
+function scan(){
+
+alert("📡 Scanning Channels...");
+
+}
+
+function boost(){
+
+video.playbackRate=1.2;
+
+alert("⚡ Streaming Boost Activated");
+
+}
+
+function repair(){
+
+alert("🛠 Repairing IPTV Streams...");
+
+}
+
+function optimize(){
+
+alert("🧠 Optimizing IPTV System...");
 
 }
 
 /* ================= ADMIN ================= */
-function openAdmin(){document.getElementById("admin").style.display="flex";}
-function closeAdmin(){document.getElementById("admin").style.display="none";}
-function scan(){alert("Scanning Channels...");}
-function boost(){video.playbackRate=1.2;}
-function repair(){alert("Repairing Streams...");}
-function optimize(){alert("Optimizing System...");}
+
+function openAdmin(){
+
+document.getElementById("admin").style.display="flex";
+
+}
+
+function closeAdmin(){
+
+document.getElementById("admin").style.display="none";
+
+}
 
 </script>
 
