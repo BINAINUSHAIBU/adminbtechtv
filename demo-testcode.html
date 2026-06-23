@@ -307,7 +307,113 @@ lock:Math.random()>0.8?"Locked":"Unlocked"
 });
 
 filtered=[...all];
+function render(){
+
+let body=document.getElementById("grid");
+body.innerHTML="";
+
+filtered.slice(0,page*50).forEach((c,i)=>{
+
+body.innerHTML += `
+<tr>
+
+<td onclick="play(${i})">${c.name}</td>
+<td>${c.category}</td>
+<td>${c.type}</td>
+
+<td id="status-${i}">
+${c.lock}
+</td>
+
+<td>
+
+<button class="action lock"
+onclick="toggleLock(${i})">
+
+${c.lock==="Locked" ? "Unlock" : "Lock"}
+
+</button>
+
+<button class="action edit"
+onclick="editChannel(${i})">
+
+Edit
+
+</button>
+
+<button class="action delete"
+onclick="deleteChannel(${i})">
+
+Delete
+
+</button>
+
+</td>
+
+</tr>
+`;
+
+});
+
+}
+  /* ================= LOCK / UNLOCK ================= */
+
+function toggleLock(i){
+
+let channel = filtered[i];
+
+if(channel.lock==="Locked"){
+channel.lock="Unlocked";
+}else{
+channel.lock="Locked";
+}
+
 render();
+
+}
+
+/* ================= EDIT CHANNEL ================= */
+
+function editChannel(i){
+
+let channel = filtered[i];
+
+let newName = prompt(
+"Edit Channel Name:",
+channel.name
+);
+
+if(newName && newName.trim()!==""){
+channel.name = newName;
+}
+
+let newCategory = prompt(
+"Edit Category:",
+channel.category
+);
+
+if(newCategory && newCategory.trim()!==""){
+channel.category = newCategory;
+}
+
+render();
+
+}
+
+/* ================= DELETE CHANNEL ================= */
+
+function deleteChannel(i){
+
+if(confirm(
+"Delete this channel permanently?"
+)){
+
+filtered.splice(i,1);
+
+render();
+
+}
+
 }
 
 /* ================= RENDER TABLE ================= */
@@ -319,8 +425,40 @@ body.innerHTML="";
 filtered.slice(0,page*50).forEach((c,i)=>{
 
 body.innerHTML+=`
-<tr onclick="play(${i})">
+function play(i){
 
+let c = filtered[i];
+
+if(c.lock==="Locked"){
+
+alert(
+"🔒 This channel is locked.\nUpgrade or unlock from Admin."
+);
+
+return;
+}
+
+if(hls) hls.destroy();
+
+if(Hls.isSupported()){
+
+hls = new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(video);
+
+hls.on(
+Hls.Events.MANIFEST_PARSED,
+()=>video.play()
+);
+
+}else{
+
+video.src = c.url;
+video.play();
+
+}
+
+}
 <td>${c.name}</td>
 <td>${c.category}</td>
 <td>${c.type}</td>
@@ -371,8 +509,31 @@ function scan(){alert("Scanning Channels...");}
 function boost(){video.playbackRate=1.2;}
 function repair(){alert("Repairing Streams...");}
 function optimize(){alert("Optimizing System...");}
+  <button onclick="addChannel()">➕ Add Channel</button>
 
 </script>
+function addChannel(){
 
+let name = prompt("Channel Name");
+if(!name) return;
+
+let url = prompt("Stream URL");
+if(!url) return;
+
+all.unshift({
+name:name,
+url:url,
+category:"News",
+type:"Free",
+lock:"Unlocked"
+});
+
+filtered=[...all];
+
+render();
+
+alert("Channel Added Successfully");
+
+}
 </body>
 </html>
