@@ -1,3 +1,4 @@
+
 <!-- ========================================================= -->
 <!-- SUPER ADMIN IPTV + BTECH-TV PRO ULTRA MAX WORLD -->
 <!-- FULL MERGED ONE PAGE VERSION 2026 -->
@@ -35,7 +36,7 @@ color:var(--text);
 overflow:hidden;
 }
 
-/* LAYOUT */
+/* ================= LAYOUT ================= */
 .container{display:flex;height:100vh}
 
 /* SIDEBAR */
@@ -75,14 +76,12 @@ padding:10px;
 background:#0f172a;
 }
 
-/* HEADER */
 .brand-header{
 padding:10px;
 background:#0b1220;
 font-weight:700;
 }
 
-/* SEARCH */
 .dashboard{
 padding:8px;
 background:#0b1220;
@@ -98,7 +97,6 @@ border-radius:6px;
 border:none;
 }
 
-/* STATS */
 .stats{
 display:flex;
 gap:10px;
@@ -114,7 +112,7 @@ border-radius:6px;
 
 /* PLAYER */
 .player{
-height:260px;
+height:280px;
 background:black;
 }
 
@@ -123,7 +121,7 @@ width:100%;
 height:100%;
 }
 
-/* TABLE */
+/* TABLE GRID */
 .table-wrap{
 flex:1;
 overflow:auto;
@@ -140,8 +138,6 @@ padding:6px;
 border-bottom:1px solid #22304d;
 font-size:12px;
 }
-
-button{cursor:pointer}
 
 /* MODAL */
 .modal{
@@ -160,6 +156,8 @@ border-radius:12px;
 width:340px;
 }
 
+button{cursor:pointer}
+
 </style>
 </head>
 
@@ -167,35 +165,30 @@ width:340px;
 
 <div class="container">
 
-<!-- SIDEBAR -->
+<!-- ================= SIDEBAR ================= -->
 <div class="sidebar">
 
 <div class="logo">📺 BTECH-TV PRO MAX</div>
 
 <h4>🌍 Countries</h4>
-<button class="nav-btn">🇳🇬 Nigeria</button>
-<button class="nav-btn">🇺🇸 USA</button>
-<button class="nav-btn">🇬🇧 UK</button>
-<button class="nav-btn">🇮🇳 India</button>
-<button class="nav-btn">🇫🇷 France</button>
-<button class="nav-btn">🇩🇪 Germany</button>
+<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
+<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
+<button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
+<button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
 
 <h4>🎬 Categories</h4>
-<button class="nav-btn">📰 News</button>
-<button class="nav-btn">⚽ Sports</button>
-<button class="nav-btn">🎬 Movies</button>
-<button class="nav-btn">🎵 Music</button>
-<button class="nav-btn">👶 Kids</button>
+<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
+<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
+<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
 
 <h4>🔥 Tools</h4>
-<button class="nav-btn">📡 Scan</button>
-<button class="nav-btn">⚡ Boost</button>
-<button class="nav-btn">🛠 Repair</button>
-<button class="nav-btn">🧠 Optimize</button>
+<button class="nav-btn" onclick="scan()">📡 Scan</button>
+<button class="nav-btn" onclick="boost()">⚡ Boost</button>
+<button class="nav-btn" onclick="openAdmin()">⚙ Admin</button>
 
 </div>
 
-<!-- MAIN -->
+<!-- ================= MAIN ================= -->
 <div class="main">
 
 <div class="topbar">
@@ -204,7 +197,7 @@ width:340px;
 </div>
 
 <div class="brand-header">
-📺 BTECH-TV PRO MAX | 🌍 Global IPTV Dashboard | ⚡ Ultra Control Panel
+📺 BTECH-TV PRO MAX | GLOBAL IPTV ENGINE
 </div>
 
 <div class="dashboard">
@@ -229,7 +222,7 @@ width:340px;
 <th>Channel Name</th>
 <th>Category</th>
 <th>Type</th>
-<th>Lock Status</th>
+<th>Lock</th>
 <th>Actions</th>
 </tr>
 </thead>
@@ -240,103 +233,134 @@ width:340px;
 </div>
 </div>
 
+<!-- ================= ADMIN ================= -->
+<div class="modal" id="admin">
+<div class="modal-box">
+<h3>SUPER ADMIN PANEL</h3>
+<button onclick="scan()">Scan</button>
+<button onclick="boost()">Boost</button>
+<button onclick="closeAdmin()">Close</button>
+</div>
+</div>
+
 <script>
 
-/* ================= CHANNEL DATA (46+ YOUR LIST) ================= */
-let all = [
-{n:"ACNN (480p)",c:"Sports",t:"Free",l:"Unlocked"},
-{n:"Advocate Broadcasting Network (576p)",c:"News",t:"Pay To View",l:"Locked"},
-{n:"Africa TV3 (720p) [Not 24/7]",c:"Music",t:"Pay To View",l:"Unlocked"},
-{n:"BCS StarCross TV (576p)",c:"Education",t:"Free",l:"Unlocked"},
-{n:"Bride TV (576p)",c:"Kids",t:"Pay To View",l:"Unlocked"},
-{n:"Caught-Up TV (480p)",c:"Music",t:"Free",l:"Unlocked"},
-{n:"Channels 24",c:"Sports",t:"Pay To View",l:"Unlocked"},
-{n:"Channels TV",c:"Music",t:"Pay To View",l:"Unlocked"},
-{n:"Chosen TV English (360p)",c:"Music",t:"Free",l:"Unlocked"},
-{n:"cLoveworld TV (480p)",c:"Kids",t:"Free",l:"Unlocked"},
-{n:"Coza TV (576p)",c:"Music",t:"Pay To View",l:"Unlocked"},
-{n:"Dunamis TV (576p)",c:"Music",t:"Pay To View",l:"Unlocked"},
-{n:"Flame TV (576p)",c:"Music",t:"Pay To View",l:"Unlocked"},
-{n:"Foursquare TV (360p)",c:"Education",t:"Pay To View",l:"Unlocked"},
-{n:"Itage TV (480p)",c:"Music",t:"Pay To View",l:"Unlocked"},
-{n:"Kingsview TV (1080p)",c:"Education",t:"Free",l:"Unlocked"},
-{n:"LN247 (1080p)",c:"Sports",t:"Free",l:"Unlocked"},
-{n:"LoveWorld Arabic (360p)",c:"Music",t:"Free",l:"Unlocked"},
-{n:"LoveWorld Persia (720p)",c:"Sports",t:"Pay To View",l:"Unlocked"},
-{n:"Loveworld UK (1080p)",c:"Education",t:"Pay To View",l:"Locked"},
-{n:"LoveWorld USA (720p)",c:"Music",t:"Free",l:"Unlocked"},
-{n:"LoveworldSAT (1080p)",c:"News",t:"Pay To View",l:"Unlocked"},
-{n:"Master's TV (720p)",c:"Sports",t:"Pay To View",l:"Unlocked"},
-{n:"More Grace TV (410p)",c:"Music",t:"Pay To View",l:"Locked"},
-{n:"New Vision TV (360p)",c:"News",t:"Free",l:"Unlocked"},
-{n:"News Central",c:"Music",t:"Free",l:"Unlocked"},
-{n:"NTA International (576p)",c:"Music",t:"Pay To View",l:"Locked"},
-{n:"Phenomenal Life TV (1080p)",c:"News",t:"Free",l:"Unlocked"},
-{n:"Plus TV Africa (720p)",c:"Music",t:"Pay To View",l:"Unlocked"},
-{n:"Qausain TV (720p)",c:"Movies",t:"Free",l:"Unlocked"},
-{n:"Quest TV (240p)",c:"Music",t:"Free",l:"Unlocked"},
-{n:"Rave TV (576p)",c:"News",t:"Pay To View",l:"Unlocked"},
-{n:"Salvation TV (576p)",c:"Kids",t:"Free",l:"Unlocked"},
-{n:"Silverbird News 24",c:"News",t:"Pay To View",l:"Unlocked"},
-{n:"Soundcity TV",c:"Education",t:"Pay To View",l:"Locked"},
-{n:"Sunna TV (576p)",c:"Music",t:"Free",l:"Locked"},
-{n:"Superscreen TV (412p)",c:"Sports",t:"Pay To View",l:"Unlocked"},
-{n:"Synagogue TV (576p)",c:"Kids",t:"Free",l:"Unlocked"},
-{n:"TVC (1080p)",c:"Sports",t:"Free",l:"Unlocked"},
-{n:"TVC News (576p)",c:"News",t:"Pay To View",l:"Locked"},
-{n:"Waffi TV (240p)",c:"Kids",t:"Free",l:"Locked"},
-{n:"Wap TV (720p)",c:"Education",t:"Pay To View",l:"Locked"},
-{n:"Wazobia Max TV Abuja",c:"Kids",t:"Pay To View",l:"Unlocked"},
-{n:"Wazobia Max TV Nigeria",c:"Movies",t:"Free",l:"Unlocked"},
-{n:"Wazobia Max TV Port Harcourt",c:"Kids",t:"Free",l:"Locked"},
-{n:"Whole Word TV (720p)",c:"Education",t:"Pay To View",l:"Unlocked"}
+/* ================= CHANNEL DATABASE ================= */
+let channels = [
+{name:"ACNN (480p)",category:"Sports",type:"Free",lock:"Unlocked"},
+{name:"Advocate Broadcasting Network (576p)",category:"News",type:"Pay To View",lock:"Locked"},
+{name:"Africa TV3 (720p) [Not 24/7]",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"BCS StarCross TV (576p)",category:"Education",type:"Free",lock:"Unlocked"},
+{name:"Bride TV (576p)",category:"Kids",type:"Free",lock:"Unlocked"},
+{name:"Channels 24",category:"Sports",type:"Free",lock:"Unlocked"},
+{name:"Channels TV",category:"News",type:"Free",lock:"Unlocked"},
+{name:"LN247 (1080p)",category:"Sports",type:"Free",lock:"Unlocked"},
+{name:"LoveWorld USA (720p)",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"TVC (1080p)",category:"Sports",type:"Free",lock:"Unlocked"},
+{name:"TVC News (576p)",category:"News",type:"Pay To View",lock:"Locked"},
+{name:"Whole Word TV (720p)",category:"Education",type:"Pay To View",lock:"Unlocked"}
 ];
 
-let filtered=[...all];
+let all=[],filtered=[];
 let video=document.getElementById("video");
 let hls;
 
-/* RENDER */
+/* ================= INIT ================= */
+function init(){
+all = channels.map(c=>({
+...c,
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+}));
+
+filtered=[...all];
+render();
+updateCount();
+}
+init();
+
+/* ================= PLAY ================= */
+function play(i){
+let c=filtered[i];
+
+if(hls) hls.destroy();
+
+if(Hls.isSupported()){
+hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(video);
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+}else{
+video.src=c.url;
+video.play();
+}
+}
+
+/* ================= SEARCH ================= */
+function searchChannels(){
+let v=document.getElementById("search").value.toLowerCase();
+filtered = all.filter(c =>
+c.name.toLowerCase().includes(v) ||
+c.category.toLowerCase().includes(v)
+);
+render();
+updateCount();
+}
+
+/* ================= LOCK ================= */
+function toggleLock(i){
+filtered[i].lock = filtered[i].lock==="Locked"?"Unlocked":"Locked";
+render();
+}
+
+/* ================= EDIT ================= */
+function edit(i){
+let c=filtered[i];
+c.name = prompt("Name",c.name)||c.name;
+c.category = prompt("Category",c.category)||c.category;
+render();
+}
+
+/* ================= DELETE ================= */
+function del(i){
+let item=filtered[i];
+all = all.filter(c=>c.name!==item.name);
+filtered=[...all];
+render();
+updateCount();
+}
+
+/* ================= RENDER ================= */
 function render(){
-document.getElementById("count").innerText=filtered.length;
 let t=document.getElementById("tbody");
 t.innerHTML="";
 
-filtered.forEach((x,i)=>{
+filtered.forEach((c,i)=>{
 t.innerHTML += `
 <tr>
-<td>${x.n}</td>
-<td>${x.c}</td>
-<td>${x.t}</td>
-<td>${x.l}</td>
+<td>${c.name}</td>
+<td>${c.category}</td>
+<td>${c.type}</td>
+<td>${c.lock}</td>
 <td>
 <button onclick="play(${i})">Play</button>
-<button>Lock</button>
-<button>Edit</button>
-<button>Delete</button>
+<button onclick="toggleLock(${i})">Lock</button>
+<button onclick="edit(${i})">Edit</button>
+<button onclick="del(${i})">Delete</button>
 </td>
 </tr>`;
 });
 }
-render();
 
-/* SEARCH */
-function searchChannels(){
-let v=document.getElementById("search").value.toLowerCase();
-filtered=all.filter(x=>x.n.toLowerCase().includes(v));
-render();
+/* ================= ADMIN ================= */
+function openAdmin(){document.getElementById("admin").style.display="flex";}
+function closeAdmin(){document.getElementById("admin").style.display="none";}
+function scan(){alert("Scanning IPTV...");}
+function boost(){video.playbackRate=1.25;}
+
+/* ================= COUNT ================= */
+function updateCount(){
+document.getElementById("count").innerText=filtered.length;
 }
-
-/* PLAY (demo placeholder stream) */
-function play(i){
-alert("Playing: " + filtered[i].n);
-}
-
-/* TOOL FUNCTIONS */
-function scan(){alert("Scanning Channels...");}
-function boost(){video.playbackRate=1.2;}
-function repair(){alert("Repair Mode");}
-function optimize(){alert("Optimizing System");}
 
 </script>
 
