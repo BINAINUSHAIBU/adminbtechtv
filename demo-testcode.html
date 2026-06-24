@@ -1,29 +1,32 @@
-```html
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📺 BTECH-TV PRO MAX | SUPER ADMIN IPTV WORLD 2026</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>📺 SUPER ADMIN IPTV ULTRA MAX WORLD 2026</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+
 :root{
 --bg:#050816;
 --panel:#111827;
 --card:#172033;
+--hover:#22304d;
 --accent:#00d4ff;
 --text:#fff;
 --success:#00ff99;
 --danger:#ff4d4d;
+--warning:#ff9800;
 }
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial,sans-serif;
+font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
@@ -40,7 +43,7 @@ height:100vh;
 
 .sidebar{
 width:330px;
-background:#0d1324;
+background:#0b1220;
 overflow-y:auto;
 padding:15px;
 border-right:1px solid #22304d;
@@ -54,71 +57,84 @@ margin-bottom:15px;
 }
 
 .section-title{
-margin:15px 0 8px;
-font-size:16px;
-color:#fff;
+margin:15px 0 10px;
+color:var(--accent);
+font-size:15px;
 }
 
 .nav-btn{
 width:100%;
-padding:10px;
-margin:3px 0;
-background:#121c33;
-border:none;
-border-radius:8px;
+padding:12px;
+margin-bottom:8px;
+background:var(--card);
 color:#fff;
+border:none;
+border-radius:10px;
 cursor:pointer;
 transition:.3s;
+text-align:left;
 }
 
 .nav-btn:hover{
-background:#22304d;
+background:var(--hover);
+transform:translateX(4px);
 }
 
 .main{
 flex:1;
 display:flex;
 flex-direction:column;
+overflow:hidden;
 }
 
 .topbar{
+background:#0f172a;
+padding:12px 15px;
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:15px;
-background:#0f172a;
 border-bottom:1px solid #22304d;
 }
 
-.live{
-color:#ff4d4d;
-font-weight:bold;
+.top-actions{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.top-actions button{
+padding:8px 12px;
+background:var(--card);
+color:#fff;
+border:none;
+border-radius:8px;
 }
 
 .stats{
 display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:10px;
-padding:10px;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:12px;
+padding:12px;
 }
 
 .card{
 background:var(--panel);
 padding:15px;
-border-radius:10px;
-text-align:center;
+border-radius:12px;
 }
 
-.card h3{
-margin-bottom:10px;
+.card h2{
+color:var(--accent);
+margin-top:8px;
 }
 
 .player{
-height:300px;
-margin:10px;
+height:320px;
 background:#000;
-border-radius:10px;
+margin:10px;
+border-radius:12px;
 overflow:hidden;
+position:relative;
 }
 
 .player video{
@@ -126,26 +142,77 @@ width:100%;
 height:100%;
 }
 
-.search{
-padding:10px;
+.live{
+position:absolute;
+top:10px;
+left:10px;
+background:red;
+padding:6px 12px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
 }
 
-.search input{
-width:100%;
+.search-bar{
+padding:10px;
+display:flex;
+gap:10px;
+}
+
+.search-bar input{
+flex:1;
 padding:12px;
 border:none;
 border-radius:8px;
 }
 
-.table-wrap{
+.channels{
 flex:1;
 overflow:auto;
 padding:10px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+gap:10px;
+}
+
+.channel{
+background:var(--card);
+padding:15px;
+border-radius:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+cursor:pointer;
+}
+
+.channel:hover{
+background:var(--hover);
+}
+
+.badge{
+padding:4px 10px;
+border-radius:20px;
+font-size:11px;
+font-weight:bold;
+}
+
+.liveBadge{
+background:#00aa55;
+}
+
+.locked{
+background:#ff9800;
+}
+
+.table-wrap{
+padding:10px;
+overflow:auto;
 }
 
 table{
 width:100%;
 border-collapse:collapse;
+background:var(--panel);
 }
 
 th,td{
@@ -154,19 +221,51 @@ border-bottom:1px solid #22304d;
 text-align:left;
 }
 
-.action{
+.action-btn{
 padding:6px 10px;
 border:none;
 border-radius:5px;
 cursor:pointer;
-margin-right:5px;
+margin-right:4px;
 }
 
-.play{background:#00d4ff;}
-.lock{background:#ff9800;}
+.play{background:#00d4ff;color:#000;}
+.lock{background:#ff9800;color:#fff;}
 .edit{background:#00ff99;color:#000;}
 .delete{background:#ff4d4d;color:#fff;}
+
+.rightpanel{
+width:320px;
+background:var(--panel);
+overflow:auto;
+padding:15px;
+border-left:1px solid #22304d;
+}
+
+.panel-card{
+background:var(--card);
+padding:15px;
+border-radius:12px;
+margin-bottom:12px;
+}
+
+@media(max-width:1200px){
+
+.container{
+flex-direction:column;
+overflow:auto;
+}
+
+.sidebar,
+.rightpanel{
+width:100%;
+height:250px;
+}
+
+}
+
 </style>
+
 </head>
 
 <body>
@@ -175,110 +274,96 @@ margin-right:5px;
 
 <div class="sidebar">
 
-<div class="logo">📺 BTECH-TV PRO MAX</div>
+<div class="logo">
+📺 BTECH-TV PRO MAX
+</div>
 
 <div class="section-title">🌍 Countries</div>
 
-<button class="nav-btn">🇳🇬 Nigeria</button>
-<button class="nav-btn">🇺🇸 USA</button>
-<button class="nav-btn">🇬🇧 UK</button>
-<button class="nav-btn">🇮🇳 India</button>
-<button class="nav-btn">🇫🇷 France</button>
-<button class="nav-btn">🇩🇪 Germany</button>
-<button class="nav-btn">🇧🇷 Brazil</button>
-<button class="nav-btn">🇿🇦 South Africa</button>
-<button class="nav-btn">🇨🇦 Canada</button>
-<button class="nav-btn">🇦🇺 Australia</button>
-<button class="nav-btn">🇯🇵 Japan</button>
-<button class="nav-btn">🇰🇷 South Korea</button>
-<button class="nav-btn">🇨🇳 China</button>
-<button class="nav-btn">🇪🇸 Spain</button>
-<button class="nav-btn">🇮🇹 Italy</button>
-<button class="nav-btn">🇹🇷 Turkey</button>
-<button class="nav-btn">🇲🇽 Mexico</button>
-<button class="nav-btn">🇦🇪 UAE</button>
-<button class="nav-btn">🇸🇦 Saudi Arabia</button>
-<button class="nav-btn">🇪🇬 Egypt</button>
-<button class="nav-btn">🇦🇷 Argentina</button>
-<button class="nav-btn">🇵🇰 Pakistan</button>
-<button class="nav-btn">🇮🇩 Indonesia</button>
-<button class="nav-btn">🇵🇭 Philippines</button>
-<button class="nav-btn">🇦🇱 Albania</button>
+<button class="nav-btn">🇳🇬 Nigeria</button> <button class="nav-btn">🇺🇸 USA</button> <button class="nav-btn">🇬🇧 UK</button> <button class="nav-btn">🇮🇳 India</button> <button class="nav-btn">🇫🇷 France</button> <button class="nav-btn">🇩🇪 Germany</button> <button class="nav-btn">🇧🇷 Brazil</button> <button class="nav-btn">🇿🇦 South Africa</button> <button class="nav-btn">🇨🇦 Canada</button> <button class="nav-btn">🇦🇺 Australia</button> <button class="nav-btn">🇯🇵 Japan</button> <button class="nav-btn">🇰🇷 South Korea</button> <button class="nav-btn">🇨🇳 China</button> <button class="nav-btn">🇪🇸 Spain</button> <button class="nav-btn">🇮🇹 Italy</button>
 
 <div class="section-title">🎬 Categories</div>
 
-<button class="nav-btn">📰 News</button>
-<button class="nav-btn">⚽ Sports</button>
-<button class="nav-btn">🎬 Movies</button>
-<button class="nav-btn">🎵 Music</button>
-<button class="nav-btn">👶 Kids</button>
-<button class="nav-btn">😂 Comedy</button>
-<button class="nav-btn">📚 Documentary</button>
-<button class="nav-btn">💼 Business</button>
-<button class="nav-btn">🔬 Science</button>
-<button class="nav-btn">✈ Travel</button>
+<button class="nav-btn">📰 News</button> <button class="nav-btn">⚽ Sports</button> <button class="nav-btn">🎬 Movies</button> <button class="nav-btn">🎵 Music</button> <button class="nav-btn">👶 Kids</button> <button class="nav-btn">😂 Comedy</button> <button class="nav-btn">📚 Documentary</button> <button class="nav-btn">💼 Business</button>
 
-<div class="section-title">🗣 Languages</div>
+<div class="section-title">⚙ Admin Tools</div>
 
-<button class="nav-btn">🇬🇧 English</button>
-<button class="nav-btn">🇪🇸 Spanish</button>
-<button class="nav-btn">🇸🇦 Arabic</button>
-<button class="nav-btn">🇫🇷 French</button>
-<button class="nav-btn">🇮🇳 Hindi</button>
-<button class="nav-btn">🇨🇳 Chinese</button>
-<button class="nav-btn">🇵🇹 Portuguese</button>
-
-<div class="section-title">🔥 Tools</div>
-
-<button class="nav-btn">📡 IPTV Scanner</button>
-<button class="nav-btn">📥 Import M3U</button>
-<button class="nav-btn">🔑 Xtream API</button>
-<button class="nav-btn">⚡ Boost</button>
-<button class="nav-btn">🛠 Repair</button>
-<button class="nav-btn">🧠 Optimize</button>
-<button class="nav-btn">👥 Users</button>
-<button class="nav-btn">💳 Payments</button>
-<button class="nav-btn">⚙ Admin</button>
+<button class="nav-btn">📡 IPTV Scanner</button> <button class="nav-btn">📥 Import M3U</button> <button class="nav-btn">🔑 Xtream API</button> <button class="nav-btn">👥 Users</button> <button class="nav-btn">💳 Payments</button> <button class="nav-btn">🔒 Locked Channels</button> <button class="nav-btn">🧠 Quiz Channels</button>
 
 </div>
 
 <div class="main">
 
 <div class="topbar">
-<h2>📺 SUPER ADMIN IPTV SYSTEM</h2>
-<div class="live">🔴 LIVE</div>
+
+<h2>📺 SUPER ADMIN IPTV ULTRA MAX WORLD</h2>
+
+<div class="top-actions">
+
+<button>⭐ Favorites</button> <button>🕘 Recent</button> <button>📺 Mini Player</button> <button>📡 Scan</button> <button>⚡ Boost</button> <button>⬇ Export</button>
+
+</div>
+
 </div>
 
 <div class="stats">
 
 <div class="card">
-<h3>📺 Channels</h3>
-<p id="count">46</p>
+<div>📺 Channels</div>
+<h2>46</h2>
 </div>
 
 <div class="card">
-<h3>👥 Users</h3>
-<p>12,450</p>
+<div>👥 Users</div>
+<h2>12,450</h2>
 </div>
 
 <div class="card">
-<h3>💳 Revenue</h3>
-<p>$25,600</p>
+<div>💳 Revenue</div>
+<h2>$25,600</h2>
 </div>
 
 <div class="card">
-<h3>⚡ Server</h3>
-<p style="color:#00ff99">ONLINE</p>
+<div>⚡ Server</div>
+<h2 style="color:#00ff99">ONLINE</h2>
 </div>
 
-</div>
-
-<div class="search">
-<input type="text" placeholder="Search Channel..." id="search">
 </div>
 
 <div class="player">
-<video id="video" controls autoplay muted></video>
+
+<div class="live">
+🔴 LIVE IPTV
+</div>
+
+<video id="videoPlayer" controls autoplay muted></video>
+
+</div>
+
+<div class="search-bar">
+
+<input type="text" placeholder="Search Channel...">
+
+</div>
+
+<div class="channels">
+
+<div class="channel">
+<div>
+<h4>Channels TV</h4>
+<small>News</small>
+</div>
+<span class="badge liveBadge">LIVE</span>
+</div>
+
+<div class="channel">
+<div>
+<h4>TVC News</h4>
+<small>News</small>
+</div>
+<span class="badge locked">PREMIUM</span>
+</div>
+
 </div>
 
 <div class="table-wrap">
@@ -303,10 +388,10 @@ margin-right:5px;
 <td>Free</td>
 <td>Unlocked</td>
 <td>
-<button class="action play">Play</button>
-<button class="action lock">Lock</button>
-<button class="action edit">Edit</button>
-<button class="action delete">Delete</button>
+<button class="action-btn play">Play</button>
+<button class="action-btn lock">Lock</button>
+<button class="action-btn edit">Edit</button>
+<button class="action-btn delete">Delete</button>
 </td>
 </tr>
 
@@ -316,10 +401,10 @@ margin-right:5px;
 <td>Premium</td>
 <td>Unlocked</td>
 <td>
-<button class="action play">Play</button>
-<button class="action lock">Lock</button>
-<button class="action edit">Edit</button>
-<button class="action delete">Delete</button>
+<button class="action-btn play">Play</button>
+<button class="action-btn lock">Lock</button>
+<button class="action-btn edit">Edit</button>
+<button class="action-btn delete">Delete</button>
 </td>
 </tr>
 
@@ -331,25 +416,53 @@ margin-right:5px;
 
 </div>
 
+<div class="rightpanel">
+
+<div class="panel-card">
+
+<h3>📊 System Stats</h3>
+
+<p>Loaded Channels: 46</p>
+<p>Favorites: 0</p>
+<p>Revenue: $25,600</p>
+<p>Status: ONLINE</p>
+
+</div>
+
+<div class="panel-card">
+
+<h3>🔥 Quick Tools</h3>
+
+<button class="nav-btn">🎲 Shuffle</button> <button class="nav-btn">📺 PiP</button> <button class="nav-btn">⛶ Fullscreen</button> <button class="nav-btn">⏰ Sleep Timer</button>
+
+</div>
+
+</div>
+
 </div>
 
 <script>
 
-const video=document.getElementById("video");
+const video=document.getElementById("videoPlayer");
 
-const stream=
+const demo=
 "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
 
 if(Hls.isSupported()){
+
 const hls=new Hls();
-hls.loadSource(stream);
+
+hls.loadSource(demo);
+
 hls.attachMedia(video);
+
 }else{
-video.src=stream;
+
+video.src=demo;
+
 }
 
 </script>
 
 </body>
 </html>
-```
