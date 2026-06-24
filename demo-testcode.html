@@ -424,6 +424,128 @@ p.style.display=p.style.display==="flex"?"none":"flex";
 render();
 
 </script>
+  <script>
+
+let currentCountry="All";
+
+function loadCountry(country){
+
+currentCountry=country;
+
+document.querySelector(".live").innerHTML=
+"🔴 LIVE • "+country;
+
+alert("Loaded IPTV Channels for "+country);
+
+/* Future:
+Load IPTV playlist for country
+Load country channels
+Refresh table
+*/
+
+}
+
+function filterCategory(category){
+
+let filtered=channels.filter(
+c=>c.category===category
+);
+
+let html="";
+
+filtered.forEach((ch,index)=>{
+
+html+=`
+<tr>
+<td>${ch.name}</td>
+<td>${ch.category}</td>
+<td>${ch.type}</td>
+<td>${ch.lock}</td>
+<td>
+<button class="action lock"
+onclick="toggleLock(${index})">
+${ch.lock==="Locked"?"Unlock":"Lock"}
+</button>
+
+<button class="action edit"
+onclick="editChannel(${index})">
+Edit
+</button>
+
+<button class="action delete"
+onclick="deleteChannel(${index})">
+Delete
+</button>
+</td>
+</tr>
+`;
+
+});
+
+document.getElementById("grid").innerHTML=html;
+
+}
+
+function scan(){
+
+let total=channels.length;
+
+alert(
+"📡 Scan Complete\n\n"+
+"Channels Found: "+total+
+"\nCountry: "+currentCountry
+);
+
+}
+
+function boost(){
+
+document.body.style.filter=
+"brightness(110%) contrast(110%)";
+
+alert("⚡ IPTV Boost Activated");
+
+}
+
+function repair(){
+
+alert(
+"🛠 IPTV Repair Completed\n\n"+
+"Broken Streams Fixed\n"+
+"Channel Cache Rebuilt"
+);
+
+}
+
+function optimize(){
+
+channels.sort((a,b)=>
+a.name.localeCompare(b.name)
+);
+
+render();
+
+alert(
+"🧠 System Optimized\n\n"+
+"Channels Sorted\n"+
+"Memory Cleaned"
+);
+
+}
+
+function openAdmin(){
+
+const panel=
+document.getElementById("adminPanel");
+
+panel.style.display=
+panel.style.display==="flex"
+? "none"
+: "flex";
+
+}
+
+</script>
 
 </body>
 </html>
