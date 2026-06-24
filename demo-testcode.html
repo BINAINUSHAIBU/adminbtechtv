@@ -1,3 +1,4 @@
+
 <!-- ========================================================= -->
 <!-- SUPER ADMIN IPTV + BTECH-TV PRO ULTRA MAX WORLD -->
 <!-- FULL MERGED ONE PAGE VERSION 2026 -->
@@ -22,6 +23,7 @@
 --bg:#050816;
 --panel:#111827;
 --card:#172033;
+--hover:#22304d;
 --accent:#00d4ff;
 --text:#ffffff;
 }
@@ -34,86 +36,34 @@ color:var(--text);
 overflow:hidden;
 }
 
-/* AUTH */
-#auth{
-position:fixed;
-inset:0;
-display:flex;
-justify-content:center;
-align-items:center;
-background:#050816;
-z-index:9999;
-}
-
-.auth-box{
-background:var(--panel);
-padding:25px;
-border-radius:12px;
-width:320px;
-}
-
-.auth-box input{
-width:100%;
-padding:10px;
-margin:6px 0;
-border:none;
-border-radius:8px;
-background:#0f172a;
-color:#fff;
-}
-
-.auth-box button{
-width:100%;
-padding:10px;
-margin-top:6px;
-background:var(--accent);
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-}
-
-/* TOPBAR */
-.topbar{
-height:60px;
-background:#0f172a;
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:0 15px;
-}
-
-.logo{color:var(--accent);font-weight:bold}
-
-/* LAYOUT */
+/* ================= LAYOUT ================= */
 .container{display:flex;height:100vh}
 
 /* SIDEBAR */
 .sidebar{
 width:320px;
 background:#0d1324;
-overflow:auto;
 padding:10px;
+overflow:auto;
 border-right:1px solid #1d2b4f;
 }
 
-.section-title{
-margin:10px 0;
+.logo{
+font-size:20px;
+font-weight:900;
 color:var(--accent);
-font-size:12px;
-font-weight:bold;
+margin-bottom:10px;
 }
 
-.btn{
+.nav-btn{
 width:100%;
 padding:8px;
 margin:4px 0;
+background:#121c33;
 border:none;
 border-radius:8px;
-background:#121c33;
-color:#fff;
+color:white;
 cursor:pointer;
-text-align:left;
 }
 
 /* MAIN */
@@ -122,7 +72,7 @@ text-align:left;
 /* PLAYER */
 .player{
 height:320px;
-background:#000;
+background:black;
 position:relative;
 }
 
@@ -134,13 +84,13 @@ height:100%;
 .overlay{
 position:absolute;
 inset:0;
-background:rgba(0,0,0,.7);
+background:rgba(0,0,0,.8);
 display:none;
 justify-content:center;
 align-items:center;
 }
 
-/* CHANNEL AREA */
+/* CHANNELS */
 .channels{
 flex:1;
 overflow:auto;
@@ -150,28 +100,34 @@ padding:10px;
 .channel{
 background:var(--card);
 padding:10px;
-margin:5px 0;
-border-radius:8px;
+margin:6px 0;
+border-radius:10px;
 cursor:pointer;
+}
+
+/* TOPBAR */
+.topbar{
 display:flex;
 justify-content:space-between;
+padding:10px;
+background:#0f172a;
 }
 
 /* MODALS */
 .modal{
 position:fixed;
 inset:0;
+background:rgba(0,0,0,.8);
 display:none;
 justify-content:center;
 align-items:center;
-background:rgba(0,0,0,.8);
 }
 
 .modal-box{
 background:var(--panel);
 padding:20px;
-border-radius:10px;
-width:300px;
+border-radius:12px;
+width:320px;
 }
 
 button{cursor:pointer}
@@ -181,231 +137,188 @@ button{cursor:pointer}
 
 <body>
 
-<!-- AUTH -->
-<div id="auth">
-<div class="auth-box">
-<h3>Login / Register</h3>
-
-<input id="user" placeholder="Username">
-<input id="pass" type="password" placeholder="Password">
-
-<button onclick="register()">Register</button>
-<button onclick="login()">Login</button>
-
-<button onclick="demo('admin')">Demo Admin</button>
-<button onclick="demo('user')">Demo User</button>
-
-</div>
-</div>
-
-<!-- APP -->
-<div id="app" style="display:none">
-
-<div class="topbar">
-<div class="logo">📺 SUPER ADMIN IPTV</div>
-<div>
-<span id="timer"></span>
-<button onclick="logout()">Logout</button>
-</div>
-</div>
-
+<!-- ================= APP ================= -->
 <div class="container">
 
-<!-- SIDEBAR (ALL CHANNEL MENU YOU REQUESTED) -->
+<!-- ================= SIDEBAR ================= -->
 <div class="sidebar">
 
-<div class="section-title">🌍 COUNTRIES</div>
-<button class="btn" onclick="load('ng')">🇳🇬 Nigeria</button>
-<button class="btn" onclick="load('us')">🇺🇸 USA</button>
-<button class="btn" onclick="load('uk')">🇬🇧 UK</button>
-<button class="btn" onclick="load('in')">🇮🇳 India</button>
-<button class="btn" onclick="load('fr')">🇫🇷 France</button>
-<button class="btn" onclick="load('de')">🇩🇪 Germany</button>
-<button class="btn" onclick="load('br')">🇧🇷 Brazil</button>
-<button class="btn" onclick="load('za')">🇿🇦 South Africa</button>
-<button class="btn" onclick="load('ca')">🇨🇦 Canada</button>
-<button class="btn" onclick="load('au')">🇦🇺 Australia</button>
-<button class="btn" onclick="load('jp')">🇯🇵 Japan</button>
-<button class="btn" onclick="load('kr')">🇰🇷 South Korea</button>
-<button class="btn" onclick="load('cn')">🇨🇳 China</button>
-<button class="btn" onclick="load('es')">🇪🇸 Spain</button>
-<button class="btn" onclick="load('it')">🇮🇹 Italy</button>
-<button class="btn" onclick="load('tr')">🇹🇷 Turkey</button>
-<button class="btn" onclick="load('mx')">🇲🇽 Mexico</button>
-<button class="btn" onclick="load('ae')">🇦🇪 UAE</button>
-<button class="btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
-<button class="btn" onclick="load('eg')">🇪🇬 Egypt</button>
-<button class="btn" onclick="load('ar')">🇦🇷 Argentina</button>
-<button class="btn" onclick="load('pk')">🇵🇰 Pakistan</button>
-<button class="btn" onclick="load('id')">🇮🇩 Indonesia</button>
-<button class="btn" onclick="load('ph')">🇵🇭 Philippines</button>
-<button class="btn" onclick="load('al')">🇦🇱 Albania</button>
+<div class="logo">📺 BTECH-TV PRO MAX</div>
 
-<div class="section-title">🎬 CATEGORIES</div>
-<button class="btn" onclick="loadCat('news')">📰 News</button>
-<button class="btn" onclick="loadCat('sports')">⚽ Sports</button>
-<button class="btn" onclick="loadCat('movies')">🎬 Movies</button>
-<button class="btn" onclick="loadCat('music')">🎵 Music</button>
-<button class="btn" onclick="loadCat('kids')">👶 Kids</button>
-<button class="btn" onclick="loadCat('comedy')">😂 Comedy</button>
-<button class="btn" onclick="loadCat('documentary')">📚 Documentary</button>
-<button class="btn" onclick="loadCat('business')">💼 Business</button>
-<button class="btn" onclick="loadCat('science')">🔬 Science</button>
-<button class="btn" onclick="loadCat('travel')">✈ Travel</button>
+<h4>🌍 Countries</h4>
 
-<div class="section-title">🗣 LANGUAGES</div>
-<button class="btn" onclick="load('eng')">🇬🇧 English</button>
-<button class="btn" onclick="load('spa')">🇪🇸 Spanish</button>
-<button class="btn" onclick="load('ara')">🇸🇦 Arabic</button>
-<button class="btn" onclick="load('fra')">🇫🇷 French</button>
-<button class="btn" onclick="load('hin')">🇮🇳 Hindi</button>
-<button class="btn" onclick="load('zho')">🇨🇳 Chinese</button>
-<button class="btn" onclick="load('por')">🇵🇹 Portuguese</button>
+<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
+<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
+<button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
+<button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
+<button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
+<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
+<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
+<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
+<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
+<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
+<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
+<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
+<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
+<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
+<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
+<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
+<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
+<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
+<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
+<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
+<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
+<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
+<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
+<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
+<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
 
-<div class="section-title">🔥 PREMIUM FEATURES</div>
-<button class="btn">📡 Scan Streams</button>
-<button class="btn">⚡ Boost</button>
-<button class="btn">📺 PiP Mode</button>
-<button class="btn">🧠 Optimize</button>
-<button class="btn">🛠 Repair</button>
-<button class="btn">🔒 Lock System</button>
-<button class="btn" onclick="openAdmin()">⚙ Admin</button>
+<h4>🎬 Categories</h4>
+
+<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
+<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
+<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
+<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
+<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
+<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
+<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
+<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
+<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
+<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
+
+<h4>🗣 Languages</h4>
+
+<button class="nav-btn">🇬🇧 English</button>
+<button class="nav-btn">🇪🇸 Spanish</button>
+<button class="nav-btn">🇸🇦 Arabic</button>
+<button class="nav-btn">🇫🇷 French</button>
+<button class="nav-btn">🇮🇳 Hindi</button>
+<button class="nav-btn">🇨🇳 Chinese</button>
+<button class="nav-btn">🇵🇹 Portuguese</button>
+
+<h4>🔥 Tools</h4>
+
+<button class="nav-btn" onclick="scan()">📡 Scan</button>
+<button class="nav-btn" onclick="boost()">⚡ Boost</button>
+<button class="nav-btn" onclick="repair()">🛠 Repair</button>
+<button class="nav-btn" onclick="optimize()">🧠 Optimize</button>
+<button class="nav-btn" onclick="openAdmin()">⚙ Admin</button>
 
 </div>
 
-<!-- MAIN -->
+<!-- ================= MAIN ================= -->
 <div class="main">
 
+<div class="topbar">
+<div>📺 SUPER ADMIN IPTV SYSTEM</div>
+<div>🔴 LIVE</div>
+</div>
+
 <div class="player">
-<video id="video" controls></video>
-<div class="overlay" id="overlay">Loading...</div>
+<video id="video" controls autoplay muted></video>
+<div class="overlay" id="overlay"></div>
 </div>
 
-<div class="channels" id="channels"></div>
+<div class="channels" id="grid"></div>
 
 </div>
 
 </div>
 
-<!-- ADMIN -->
+<!-- ================= ADMIN ================= -->
 <div class="modal" id="admin">
 <div class="modal-box">
-<h3>SUPER ADMIN</h3>
-<button onclick="alert('Scan')">Scan</button>
-<button onclick="alert('Boost')">Boost</button>
-<button onclick="alert('Repair')">Repair</button>
+
+<h3>SUPER ADMIN PANEL</h3>
+
+<button onclick="scan()">Scan</button>
+<button onclick="boost()">Boost</button>
+<button onclick="repair()">Repair</button>
+<button onclick="optimize()">Optimize</button>
 <button onclick="closeAdmin()">Close</button>
+
 </div>
 </div>
 
 <script>
 
-/* AUTH */
-let user=null;
+let all=[],filtered=[],i=0;
+let video=document.getElementById("video");
+let hls;
 
-function register(){
-let u=userBox(),p=passBox();
-localStorage.setItem("u_"+u,JSON.stringify({p,t:Date.now()}));
-alert("Registered");
-}
-
-function login(){
-let u=userBox(),p=passBox();
-let d=JSON.parse(localStorage.getItem("u_"+u));
-if(d && d.p===p){user=u;start();} else alert("Invalid");
-}
-
-function demo(t){user=t;start();}
-
-function userBox(){return document.getElementById("user").value}
-function passBox(){return document.getElementById("pass").value}
-
-/* START */
-function start(){
-document.getElementById("auth").style.display="none";
-document.getElementById("app").style.display="block";
-render();
-setInterval(timer,1000);
-}
-
-/* TIMER */
-function timer(){
-document.getElementById("timer").innerText="LIVE";
-}
-
-/* CHANNELS */
-let channels=[
-{name:"BBC News",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"Sky Sports",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
-{name:"Movie Channel",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
-];
-
-function render(){
-let box=document.getElementById("channels");
-box.innerHTML="";
-channels.forEach(c=>{
-let d=document.createElement("div");
-d.className="channel";
-d.innerHTML=c.name;
-d.onclick=()=>play(c.url);
-box.appendChild(d);
-});
-}
-
-/* LOAD IPTV */
+/* LOAD COUNTRY OR CATEGORY */
 async function load(code){
-let url=`https://iptv-org.github.io/iptv/countries/${code}.m3u`;
-fetchM3U(url);
+await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
 
 async function loadCat(cat){
-let url=`https://iptv-org.github.io/iptv/categories/${cat}.m3u`;
-fetchM3U(url);
+await loadM3U(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`);
 }
 
-async function fetchM3U(url){
-let res=await fetch(url);
-let text=await res.text();
+/* PARSE M3U */
+async function loadM3U(url){
+const res=await fetch(url);
+const text=await res.text();
 
-channels=[];
+all=[];filtered=[];i=0;
 
-text.split("\n").forEach((l,i,a)=>{
-if(l.startsWith("#EXTINF")){
-let name=l.split(",")[1];
-let u=a[i+1];
-if(u && u.startsWith("http")){
-channels.push({name,url:u});
+text.split("\n").forEach((line,idx,arr)=>{
+if(line.startsWith("#EXTINF")){
+let name=line.split(",").pop();
+let url=arr[idx+1];
+if(url && url.startsWith("http")){
+all.push({name,url});
 }
 }
 });
 
+filtered=[...all];
 render();
 }
 
+/* RENDER */
+function render(){
+let g=document.getElementById("grid");
+g.innerHTML="";
+
+filtered.forEach((c,idx)=>{
+let d=document.createElement("div");
+d.className="channel";
+d.innerText=c.name;
+d.onclick=()=>play(idx);
+g.appendChild(d);
+});
+}
+
 /* PLAY */
-function play(url){
-let v=document.getElementById("video");
-document.getElementById("overlay").style.display="flex";
+function play(idx){
+i=idx;
+let c=filtered[i];
+
+if(hls) hls.destroy();
 
 if(Hls.isSupported()){
-let h=new Hls();
-h.loadSource(url);
-h.attachMedia(v);
-h.on(Hls.Events.MANIFEST_PARSED,()=>{
-v.play();
-document.getElementById("overlay").style.display="none";
-});
+hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(video);
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+}else{
+video.src=c.url;
+video.play();
 }
 }
 
 /* ADMIN */
-function openAdmin(){document.getElementById("admin").style.display="flex";}
-function closeAdmin(){document.getElementById("admin").style.display="none";}
-
-/* LOGOUT */
-function logout(){location.reload();}
-
-start();
+function openAdmin(){
+document.getElementById("admin").style.display="flex";
+}
+function closeAdmin(){
+document.getElementById("admin").style.display="none";
+}
+function scan(){alert("Scanning...");}
+function boost(){video.playbackRate=1.2;}
+function repair(){alert("Repairing...");}
+function optimize(){alert("Optimizing...");}
 
 </script>
 
