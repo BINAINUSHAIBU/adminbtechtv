@@ -153,7 +153,6 @@ button{cursor:pointer}
 <div class="sidebar">
 
 <div class="logo">📺 BTECH-TV PRO MAX</div>
-
 <h4>🌍 Countries</h4>
 
 <button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
@@ -183,27 +182,39 @@ button{cursor:pointer}
 <button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
 
 <h4>🎬 Categories</h4>
-<button class="nav-btn">📰 News</button>
-<button class="nav-btn">⚽ Sports</button>
-<button class="nav-btn">🎬 Movies</button>
-<button class="nav-btn">🎵 Music</button>
-<button class="nav-btn">👶 Kids</button>
-<button class="nav-btn">😂 Comedy</button>
-<button class="nav-btn">📚 Documentary</button>
-<button class="nav-btn">💼 Business</button>
-<button class="nav-btn">🔬 Science</button>
-<button class="nav-btn">✈ Travel</button>
+
+<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
+<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
+<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
+<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
+<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
+<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
+<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
+<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
+<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
+<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
+
+<h4>🗣 Languages</h4>
+
+<button class="nav-btn">🇬🇧 English</button>
+<button class="nav-btn">🇪🇸 Spanish</button>
+<button class="nav-btn">🇸🇦 Arabic</button>
+<button class="nav-btn">🇫🇷 French</button>
+<button class="nav-btn">🇮🇳 Hindi</button>
+<button class="nav-btn">🇨🇳 Chinese</button>
+<button class="nav-btn">🇵🇹 Portuguese</button>
 
 <h4>🔥 Tools</h4>
-<button class="nav-btn">📡 Scan</button>
-<button class="nav-btn">⚡ Boost</button>
-<button class="nav-btn">🛠 Repair</button>
-<button class="nav-btn">🧠 Optimize</button>
-<button class="nav-btn">⚙ Admin</button>
+
+<button class="nav-btn" onclick="scan()">📡 Scan</button>
+<button class="nav-btn" onclick="boost()">⚡ Boost</button>
+<button class="nav-btn" onclick="repair()">🛠 Repair</button>
+<button class="nav-btn" onclick="optimize()">🧠 Optimize</button>
+<button class="nav-btn" onclick="openAdmin()">⚙ Admin</button>
 
 </div>
 
-<!-- MAIN -->
+<!-- ================= MAIN ================= -->
 <div class="main">
 
 <div class="topbar">
@@ -211,6 +222,33 @@ button{cursor:pointer}
 <div>🔴 LIVE</div>
 </div>
 
+<div class="player">
+<video id="video" controls autoplay muted></video>
+<div class="overlay" id="overlay"></div>
+</div>
+
+<div class="channels" id="grid"></div>
+
+</div>
+
+</div>
+
+<!-- ================= ADMIN ================= -->
+<div class="modal" id="admin">
+<div class="modal-box">
+
+<h3>SUPER ADMIN PANEL</h3>
+
+<button onclick="scan()">Scan</button>
+<button onclick="boost()">Boost</button>
+<button onclick="repair()">Repair</button>
+<button onclick="optimize()">Optimize</button>
+<button onclick="closeAdmin()">Close</button>
+
+</div>
+</div>
+
+<script>
 <div class="brand-header">
 📺 BTECH-TV PRO MAX | GLOBAL IPTV ENGINE
 </div>
@@ -372,6 +410,88 @@ channels = channels.filter(x=>x.name!==filtered[i].name);
 filtered=[...channels];
 render();
 }
+
+</script>
+
+<script>
+
+let all=[],filtered=[],i=0;
+let video=document.getElementById("video");
+let hls;
+
+/* LOAD COUNTRY OR CATEGORY */
+async function load(code){
+await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
+}
+
+async function loadCat(cat){
+await loadM3U(`https://iptv-org.github.io/iptv/categories/${cat}.m3u`);
+}
+
+/* PARSE M3U */
+async function loadM3U(url){
+const res=await fetch(url);
+const text=await res.text();
+
+all=[];filtered=[];i=0;
+
+text.split("\n").forEach((line,idx,arr)=>{
+if(line.startsWith("#EXTINF")){
+let name=line.split(",").pop();
+let url=arr[idx+1];
+if(url && url.startsWith("http")){
+all.push({name,url});
+}
+}
+});
+
+filtered=[...all];
+render();
+}
+
+/* RENDER */
+function render(){
+let g=document.getElementById("grid");
+g.innerHTML="";
+
+filtered.forEach((c,idx)=>{
+let d=document.createElement("div");
+d.className="channel";
+d.innerText=c.name;
+d.onclick=()=>play(idx);
+g.appendChild(d);
+});
+}
+
+/* PLAY */
+function play(idx){
+i=idx;
+let c=filtered[i];
+
+if(hls) hls.destroy();
+
+if(Hls.isSupported()){
+hls=new Hls();
+hls.loadSource(c.url);
+hls.attachMedia(video);
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+}else{
+video.src=c.url;
+video.play();
+}
+}
+
+/* ADMIN */
+function openAdmin(){
+document.getElementById("admin").style.display="flex";
+}
+function closeAdmin(){
+document.getElementById("admin").style.display="none";
+}
+function scan(){alert("Scanning...");}
+function boost(){video.playbackRate=1.2;}
+function repair(){alert("Repairing...");}
+function optimize(){alert("Optimizing...");}
 
 </script>
 
