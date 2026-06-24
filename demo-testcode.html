@@ -1,95 +1,34 @@
+
+
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📺 BTECH-TV PRO MAX - SUPER ADMIN IPTV SYSTEM</title>
+
+<title>📺 BTECH-TV PRO MAX - Channel Manager</title>
 
 <style>
 
 body{
 margin:0;
-font-family:Arial,sans-serif;
 background:#050816;
 color:white;
-overflow:hidden;
+font-family:Arial,sans-serif;
 }
 
-.container{
-display:flex;
-height:100vh;
-}
-
-/* SIDEBAR */
-
-.sidebar{
-width:300px;
-background:#0d1324;
-overflow:auto;
+.header{
+background:#0f172a;
 padding:15px;
-border-right:1px solid #1f2b4d;
-}
-
-.logo{
 font-size:24px;
 font-weight:bold;
 color:#00d4ff;
-margin-bottom:15px;
+text-align:center;
 }
 
-.section{
-margin-top:20px;
-}
-
-.section h3{
-color:#00d4ff;
-margin-bottom:10px;
-}
-
-.nav-btn{
-width:100%;
-padding:8px;
-margin-bottom:5px;
-border:none;
-border-radius:6px;
-background:#172033;
-color:white;
-cursor:pointer;
-}
-
-.nav-btn:hover{
-background:#22304d;
-}
-
-/* MAIN */
-
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-}
-
-/* TOPBAR */
-
-.topbar{
-background:#0f172a;
-padding:15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-font-size:20px;
-font-weight:bold;
-}
-
-.live{
-color:red;
-}
-
-/* TABLE */
-
-.table-container{
-flex:1;
-overflow:auto;
+.container{
 padding:15px;
 }
 
@@ -116,14 +55,12 @@ tr:hover{
 background:#172033;
 }
 
-/* BUTTONS */
-
 .action{
-padding:6px 10px;
 border:none;
-border-radius:5px;
-cursor:pointer;
+padding:6px 10px;
 margin-right:4px;
+border-radius:6px;
+cursor:pointer;
 font-weight:bold;
 }
 
@@ -152,125 +89,16 @@ color:#00ff88;
 font-weight:bold;
 }
 
-.loadmore{
-margin-top:10px;
-padding:12px;
-width:100%;
-background:#00d4ff;
-border:none;
-border-radius:6px;
-font-weight:bold;
-cursor:pointer;
-}
-
-/* ADMIN PANEL */
-
-.admin-panel{
-position:fixed;
-inset:0;
-display:none;
-justify-content:center;
-align-items:center;
-background:rgba(0,0,0,.8);
-}
-
-.admin-box{
-background:#111827;
-padding:25px;
-border-radius:10px;
-width:300px;
-text-align:center;
-}
-
-.admin-box button{
-margin:5px;
-padding:10px;
-border:none;
-border-radius:5px;
-cursor:pointer;
-}
-
 </style>
 </head>
+
 <body>
 
+<div class="header">
+📺 BTECH-TV PRO MAX - IPTV CHANNEL MANAGEMENT
+</div>
+
 <div class="container">
-
-<div class="sidebar">
-
-<div class="logo">📺 BTECH-TV PRO MAX</div>
-
-<div class="section">
-<h3>🌍 Countries</h3>
-
-<button class="nav-btn">🇳🇬 Nigeria</button>
-<button class="nav-btn">🇺🇸 USA</button>
-<button class="nav-btn">🇬🇧 UK</button>
-<button class="nav-btn">🇮🇳 India</button>
-<button class="nav-btn">🇫🇷 France</button>
-<button class="nav-btn">🇩🇪 Germany</button>
-<button class="nav-btn">🇧🇷 Brazil</button>
-<button class="nav-btn">🇿🇦 South Africa</button>
-<button class="nav-btn">🇨🇦 Canada</button>
-<button class="nav-btn">🇦🇺 Australia</button>
-<button class="nav-btn">🇯🇵 Japan</button>
-<button class="nav-btn">🇰🇷 South Korea</button>
-<button class="nav-btn">🇨🇳 China</button>
-<button class="nav-btn">🇪🇸 Spain</button>
-<button class="nav-btn">🇮🇹 Italy</button>
-<button class="nav-btn">🇹🇷 Turkey</button>
-<button class="nav-btn">🇲🇽 Mexico</button>
-<button class="nav-btn">🇦🇪 UAE</button>
-<button class="nav-btn">🇸🇦 Saudi Arabia</button>
-<button class="nav-btn">🇪🇬 Egypt</button>
-<button class="nav-btn">🇦🇷 Argentina</button>
-<button class="nav-btn">🇵🇰 Pakistan</button>
-<button class="nav-btn">🇮🇩 Indonesia</button>
-<button class="nav-btn">🇵🇭 Philippines</button>
-<button class="nav-btn">🇦🇱 Albania</button>
-
-</div>
-
-<div class="section">
-
-<h3>🎬 Categories</h3>
-
-<button class="nav-btn">📰 News</button>
-<button class="nav-btn">⚽ Sports</button>
-<button class="nav-btn">🎬 Movies</button>
-<button class="nav-btn">🎵 Music</button>
-<button class="nav-btn">👶 Kids</button>
-<button class="nav-btn">📚 Education</button>
-<button class="nav-btn">💼 Business</button>
-<button class="nav-btn">🔬 Science</button>
-<button class="nav-btn">✈ Travel</button>
-
-</div>
-
-<div class="section">
-
-<h3>🔥 Tools</h3>
-
-<button class="nav-btn" onclick="scan()">📡 Scan</button>
-<button class="nav-btn" onclick="boost()">⚡ Boost</button>
-<button class="nav-btn" onclick="repair()">🛠 Repair</button>
-<button class="nav-btn" onclick="optimize()">🧠 Optimize</button>
-<button class="nav-btn" onclick="openAdmin()">⚙ Admin</button>
-
-</div>
-
-</div>
-
-<div class="main">
-
-<div class="topbar">
-<div>📺 SUPER ADMIN IPTV SYSTEM</div>
-<div class="live">🔴 LIVE</div>
-</div>
-
-<div class="table-container">
-
-<h2>📺 BTECH-TV PRO MAX - IPTV CHANNEL MANAGEMENT</h2>
 
 <table>
 
@@ -288,35 +116,12 @@ cursor:pointer;
 
 </table>
 
-<button class="loadmore" onclick="loadMore()">
-⬇ LOAD MORE CHANNELS
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<div class="admin-panel" id="adminPanel">
-<div class="admin-box">
-
-<h2>⚙ SUPER ADMIN PANEL</h2>
-
-<button onclick="scan()">📡 Scan</button>
-<button onclick="boost()">⚡ Boost</button>
-<button onclick="repair()">🛠 Repair</button>
-<button onclick="optimize()">🧠 Optimize</button>
-<button onclick="openAdmin()">❌ Close</button>
-
-</div>
 </div>
 
 <script>
 
-let page=1;
-
 let channels=[
+
 {name:"ACNN (480p)",category:"Movies",type:"Pay To View",lock:"Unlocked"},
 {name:"Advocate Broadcasting Network (576p)",category:"Kids",type:"Free",lock:"Unlocked"},
 {name:"Africa TV3 (720p) [Not 24/7]",category:"Movies",type:"Pay To View",lock:"Unlocked"},
@@ -363,61 +168,96 @@ let channels=[
 {name:"Wazobia Max TV Nigeria (720p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
 {name:"Wazobia Max TV Port Harcourt (720p)",category:"News",type:"Free",lock:"Unlocked"},
 {name:"Whole Word TV (720p)",category:"Movies",type:"Pay To View",lock:"Unlocked"}
+
 ];
 
 function render(){
+
 let html="";
-channels.slice(0,page*20).forEach((ch,index)=>{
+
+channels.forEach((ch,index)=>{
+
 html+=`
 <tr>
+
 <td>${ch.name}</td>
+
 <td>${ch.category}</td>
+
 <td>${ch.type}</td>
-<td class="${ch.lock==='Locked'?'locked':'unlocked'}">${ch.lock}</td>
-<td>
-<button class="action lock" onclick="toggleLock(${index})">${ch.lock==='Locked'?'Unlock':'Lock'}</button>
-<button class="action edit" onclick="editChannel(${index})">Edit</button>
-<button class="action delete" onclick="deleteChannel(${index})">Delete</button>
+
+<td class="${ch.lock==='Locked'?'locked':'unlocked'}">
+${ch.lock}
 </td>
-</tr>`;
+
+<td>
+
+<button class="action lock"
+onclick="toggleLock(${index})">
+${ch.lock==='Locked'?'Unlock':'Lock'}
+</button>
+
+<button class="action edit"
+onclick="editChannel(${index})">
+Edit
+</button>
+
+<button class="action delete"
+onclick="deleteChannel(${index})">
+Delete
+</button>
+
+</td>
+
+</tr>
+`;
+
 });
+
 document.getElementById("grid").innerHTML=html;
+
 }
 
 function toggleLock(index){
-channels[index].lock=
-channels[index].lock==="Locked"?"Unlocked":"Locked";
+
+channels[index].lock =
+channels[index].lock==="Locked"
+? "Unlocked"
+: "Locked";
+
 render();
+
 }
 
 function editChannel(index){
-let name=prompt("Edit Channel Name",channels[index].name);
-if(name&&name.trim()!==""){
-channels[index].name=name;
+
+let newName=prompt(
+"Edit Channel Name",
+channels[index].name
+);
+
+if(newName && newName.trim()!==""){
+
+channels[index].name=newName;
+
 render();
+
 }
+
 }
 
 function deleteChannel(index){
-if(confirm("Delete "+channels[index].name+" ?")){
+
+if(confirm(
+"Delete "+channels[index].name+" ?"
+)){
+
 channels.splice(index,1);
+
 render();
-}
-}
 
-function loadMore(){
-page++;
-render();
 }
 
-function scan(){alert("📡 Channel Scan Complete");}
-function boost(){alert("⚡ IPTV Boost Activated");}
-function repair(){alert("🛠 Repair Complete");}
-function optimize(){alert("🧠 System Optimized");}
-
-function openAdmin(){
-let p=document.getElementById("adminPanel");
-p.style.display=p.style.display==="flex"?"none":"flex";
 }
 
 render();
@@ -426,3 +266,4 @@ render();
 
 </body>
 </html>
+```
