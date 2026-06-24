@@ -305,16 +305,33 @@ body.innerHTML="";
 
 filtered.slice(0,page*50).forEach((c,i)=>{
 
-body.innerHTML+=`
-<tr onclick="play(${i})">
-<td>${c.name}</td>
+body.innerHTML += `
+<tr>
+<td onclick="play(${i})">${c.name}</td>
 <td>${c.category}</td>
 <td>${c.type}</td>
-<td>${c.lock}</td>
+
+<td id="lockStatus${i}">
+${c.lock}
+</td>
+
 <td>
-<button class="action lock">Lock</button>
-<button class="action edit">Edit</button>
-<button class="action delete">Delete</button>
+
+<button class="action lock"
+onclick="toggleLock(${i})">
+${c.lock==="Locked"?"Unlock":"Lock"}
+</button>
+
+<button class="action edit"
+onclick="editChannel(${i})">
+Edit
+</button>
+
+<button class="action delete"
+onclick="deleteChannel(${i})">
+Delete
+</button>
+
 </td>
 </tr>
 `;
@@ -322,7 +339,6 @@ body.innerHTML+=`
 });
 
 }
-
 /* LOAD MORE */
 function loadMore(){
 page++;
@@ -334,20 +350,34 @@ function play(i){
 
 let c=filtered[i];
 
+if(c.lock==="Locked"){
+
+alert("🔒 This channel is locked.");
+return;
+
+}
+
 if(hls) hls.destroy();
 
 if(Hls.isSupported()){
+
 hls=new Hls();
 hls.loadSource(c.url);
 hls.attachMedia(video);
-hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+
+hls.on(
+Hls.Events.MANIFEST_PARSED,
+()=>video.play()
+);
+
 }else{
+
 video.src=c.url;
 video.play();
-}
 
 }
 
+}
 /* ADMIN */
 function openAdmin(){
 let a=document.getElementById("admin");
@@ -360,6 +390,68 @@ function repair(){alert("Repairing...");}
 function optimize(){alert("Optimizing...");}
 
 </script>
+  /* LOCK / UNLOCK */
+
+function toggleLock(index){
+
+if(filtered[index].lock==="Locked"){
+
+filtered[index].lock="Unlocked";
+
+}else{
+
+filtered[index].lock="Locked";
+
+}
+
+render();
+
+}
+
+/* EDIT CHANNEL */
+
+function editChannel(index){
+
+let ch=filtered[index];
+
+let newName=prompt(
+"Edit Channel Name",
+ch.name
+);
+
+if(newName && newName.trim()!==""){
+
+filtered[index].name=newName;
+
+render();
+
+}
+
+}
+
+/* DELETE CHANNEL */
+
+function deleteChannel(index){
+
+if(confirm(
+"Delete "+filtered[index].name+" ?"
+)){
+
+let realIndex=all.indexOf(filtered[index]);
+
+if(realIndex>-1){
+
+all.splice(realIndex,1);
+
+}
+
+filtered.splice(index,1);
+
+render();
+
+}
+
+}
 
 </body>
 </html>
