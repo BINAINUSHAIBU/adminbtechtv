@@ -1,0 +1,270 @@
+
+
+
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>📺 BTECH-TV PRO MAX - Channel Manager</title>
+
+<style>
+
+body{
+margin:0;
+background:#050816;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+.header{
+background:#0f172a;
+padding:15px;
+font-size:24px;
+font-weight:bold;
+color:#00d4ff;
+text-align:center;
+}
+
+.container{
+padding:15px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:#111827;
+}
+
+th{
+background:#0f172a;
+color:#00d4ff;
+padding:12px;
+position:sticky;
+top:0;
+}
+
+td{
+padding:10px;
+border-bottom:1px solid #1f2b4d;
+}
+
+tr:hover{
+background:#172033;
+}
+
+.action{
+border:none;
+padding:6px 10px;
+margin-right:4px;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.lock{
+background:#f59e0b;
+color:white;
+}
+
+.edit{
+background:#2563eb;
+color:white;
+}
+
+.delete{
+background:#dc2626;
+color:white;
+}
+
+.locked{
+color:#ff5555;
+font-weight:bold;
+}
+
+.unlocked{
+color:#00ff88;
+font-weight:bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+📺 BTECH-TV PRO MAX - IPTV CHANNEL MANAGEMENT
+</div>
+
+<div class="container">
+
+<table>
+
+<thead>
+<tr>
+<th>Channel Name</th>
+<th>Category</th>
+<th>Type</th>
+<th>Lock Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="grid"></tbody>
+
+</table>
+
+</div>
+
+<script>
+
+let channels=[
+
+{name:"ACNN (480p)",category:"Movies",type:"Pay To View",lock:"Unlocked"},
+{name:"Advocate Broadcasting Network (576p)",category:"Kids",type:"Free",lock:"Unlocked"},
+{name:"Africa TV3 (720p) [Not 24/7]",category:"Movies",type:"Pay To View",lock:"Unlocked"},
+{name:"BCS StarCross TV (576p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"Bride TV (576p)",category:"Sports",type:"Free",lock:"Unlocked"},
+{name:"Caught-Up TV (480p) [Not 24/7]",category:"Sports",type:"Pay To View",lock:"Unlocked"},
+{name:"Channels 24",category:"Sports",type:"Free",lock:"Unlocked"},
+{name:"Channels TV",category:"Education",type:"Pay To View",lock:"Unlocked"},
+{name:"Chosen TV English (360p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"cLoveworld TV (480p)",category:"News",type:"Free",lock:"Unlocked"},
+{name:"Coza TV (576p)",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"Dunamis TV (576p) [Not 24/7]",category:"Sports",type:"Free",lock:"Unlocked"},
+{name:"Flame TV (576p)",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"Foursquare TV (360p) [Not 24/7]",category:"News",type:"Pay To View",lock:"Unlocked"},
+{name:"Itage TV (480p)",category:"Movies",type:"Free",lock:"Unlocked"},
+{name:"Kingsview TV (1080p)",category:"Education",type:"Free",lock:"Locked"},
+{name:"LN247 (1080p)",category:"News",type:"Pay To View",lock:"Locked"},
+{name:"LoveWorld Arabic (360p)",category:"Education",type:"Pay To View",lock:"Unlocked"},
+{name:"LoveWorld Persia (720p)",category:"Music",type:"Free",lock:"Locked"},
+{name:"Loveworld UK (1080p)",category:"Music",type:"Pay To View",lock:"Unlocked"},
+{name:"LoveWorld USA (720p)",category:"Movies",type:"Pay To View",lock:"Locked"},
+{name:"LoveworldSAT (1080p)",category:"Education",type:"Free",lock:"Unlocked"},
+{name:"Master's TV (720p)",category:"Education",type:"Free",lock:"Unlocked"},
+{name:"More Grace TV (410p) [Not 24/7]",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"New Vision TV (360p)",category:"News",type:"Free",lock:"Unlocked"},
+{name:"News Central",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"NTA International (576p) [Not 24/7]",category:"Movies",type:"Pay To View",lock:"Locked"},
+{name:"Phenomenal Life TV (1080p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"Plus TV Africa (720p) [Not 24/7]",category:"News",type:"Free",lock:"Unlocked"},
+{name:"Qausain TV (720p)",category:"News",type:"Pay To View",lock:"Unlocked"},
+{name:"Quest TV (240p) [Not 24/7]",category:"Education",type:"Free",lock:"Unlocked"},
+{name:"Rave TV (576p)",category:"Sports",type:"Pay To View",lock:"Locked"},
+{name:"Salvation TV (576p)",category:"News",type:"Pay To View",lock:"Unlocked"},
+{name:"Silverbird News 24 (576p)",category:"Kids",type:"Pay To View",lock:"Locked"},
+{name:"Soundcity TV",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"Sunna TV (576p)",category:"Sports",type:"Pay To View",lock:"Unlocked"},
+{name:"Superscreen TV (412p)",category:"Movies",type:"Free",lock:"Unlocked"},
+{name:"Synagogue TV (576p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"TVC (1080p)",category:"Education",type:"Free",lock:"Unlocked"},
+{name:"TVC News (576p)",category:"Sports",type:"Pay To View",lock:"Unlocked"},
+{name:"Waffi TV (240p)",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"Wap TV (720p) [Not 24/7]",category:"Kids",type:"Free",lock:"Unlocked"},
+{name:"Wazobia Max TV Abuja (720p)",category:"Kids",type:"Free",lock:"Unlocked"},
+{name:"Wazobia Max TV Nigeria (720p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"Wazobia Max TV Port Harcourt (720p)",category:"News",type:"Free",lock:"Unlocked"},
+{name:"Whole Word TV (720p)",category:"Movies",type:"Pay To View",lock:"Unlocked"}
+
+];
+
+function render(){
+
+let html="";
+
+channels.forEach((ch,index)=>{
+
+html+=`
+<tr>
+
+<td>${ch.name}</td>
+
+<td>${ch.category}</td>
+
+<td>${ch.type}</td>
+
+<td class="${ch.lock==='Locked'?'locked':'unlocked'}">
+${ch.lock}
+</td>
+
+<td>
+
+<button class="action lock"
+onclick="toggleLock(${index})">
+${ch.lock==='Locked'?'Unlock':'Lock'}
+</button>
+
+<button class="action edit"
+onclick="editChannel(${index})">
+Edit
+</button>
+
+<button class="action delete"
+onclick="deleteChannel(${index})">
+Delete
+</button>
+
+</td>
+
+</tr>
+`;
+
+});
+
+document.getElementById("grid").innerHTML=html;
+
+}
+
+function toggleLock(index){
+
+channels[index].lock =
+channels[index].lock==="Locked"
+? "Unlocked"
+: "Locked";
+
+render();
+
+}
+
+function editChannel(index){
+
+let newName=prompt(
+"Edit Channel Name",
+channels[index].name
+);
+
+if(newName && newName.trim()!==""){
+
+channels[index].name=newName;
+
+render();
+
+}
+
+}
+
+function deleteChannel(index){
+
+if(confirm(
+"Delete "+channels[index].name+" ?"
+)){
+
+channels.splice(index,1);
+
+render();
+
+}
+
+}
+
+render();
+
+</script>
+
+</body>
+</html>
+```
