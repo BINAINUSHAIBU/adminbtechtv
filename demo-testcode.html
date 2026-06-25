@@ -6,7 +6,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WORLDTV PRO MAX</title>
 
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
 <style>
+:root{
+    --bg:#050816;
+    --card:#111a31;
+    --sidebar:#0d1324;
+    --text:#ffffff;
+    --accent:#00d4ff;
+}
+
+body.light{
+    --bg:#f4f6fb;
+    --card:#ffffff;
+    --sidebar:#e8eef8;
+    --text:#111;
+}
+
 *{
     margin:0;
     padding:0;
@@ -15,88 +32,87 @@
 }
 
 body{
-    background:#050816;
-    color:#fff;
+    background:var(--bg);
+    color:var(--text);
+    display:flex;
+    min-height:100vh;
 }
 
-header{
-    background:#0d1324;
-    padding:15px 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    border-bottom:1px solid #1d2b4f;
+.sidebar{
+    width:260px;
+    background:var(--sidebar);
+    padding:20px;
 }
 
 .logo{
-    font-size:24px;
+    color:var(--accent);
+    font-size:22px;
     font-weight:bold;
-    color:#00d4ff;
+    margin-bottom:20px;
 }
 
-.subscription-btn{
-    background:#00d4ff;
-    color:#000;
-    border:none;
-    padding:10px 15px;
-    border-radius:8px;
-    cursor:pointer;
-}
-
-.hero{
-    padding:30px;
-    text-align:center;
-}
-
-.hero h1{
+.menu button{
+    width:100%;
     margin-bottom:10px;
-}
-
-.hero p{
-    color:#9cb0df;
-}
-
-.video-area{
-    max-width:1000px;
-    margin:20px auto;
-    padding:20px;
-}
-
-video{
-    width:100%;
-    border-radius:12px;
-    background:#000;
-}
-
-.plans{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-    padding:30px;
-}
-
-.plan{
-    background:#111a31;
-    padding:20px;
-    border-radius:12px;
-    text-align:center;
-    border:1px solid #1f355d;
-}
-
-.plan h3{
-    color:#00d4ff;
-}
-
-.plan button{
-    margin-top:15px;
-    width:100%;
     padding:10px;
     border:none;
     border-radius:8px;
     cursor:pointer;
-    background:#00d4ff;
-    color:#000;
-    font-weight:bold;
+}
+
+.main{
+    flex:1;
+    padding:20px;
+}
+
+.topbar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.search{
+    flex:1;
+    min-width:220px;
+    padding:10px;
+}
+
+.card{
+    background:var(--card);
+    padding:20px;
+    border-radius:12px;
+    margin-bottom:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.plan button,
+.favorite-btn,
+.theme-btn{
+    margin-top:10px;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.hidden{
+    display:none;
+}
+
+@media(max-width:768px){
+    body{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+    }
 }
 </style>
 
@@ -104,48 +120,199 @@ video{
 
 <body>
 
-<header>
+<div class="sidebar">
+
 <div class="logo">📺 WORLDTV PRO MAX</div>
-<button class="subscription-btn">
-Subscription Plans
-</button>
-</header>
 
-<section class="hero">
-<h1>Premium Streaming Platform</h1>
-<p>Watch your licensed media content on any device.</p>
-</section>
+<div class="menu">
+<button onclick="showPage('home')">Home</button>
+<button onclick="showPage('favorites')">Favorites</button>
+<button onclick="showPage('subscriptions')">Subscriptions</button>
+<button onclick="showPage('login')">Login</button>
+</div>
 
-<section class="video-area">
-<video controls>
-<source src="" type="video/mp4">
-</video>
-</section>
+</div>
 
-<section class="plans">
+<div class="main">
 
-<div class="plan">
+<div class="topbar">
+<input class="search" id="searchInput" placeholder="Search channels..." onkeyup="searchChannels()">
+<button class="theme-btn" onclick="toggleTheme()">🌙 Theme</button>
+</div>
+
+<div id="homePage">
+
+<div class="card">
+<h2>Featured Channels</h2>
+<div id="channelList" class="grid">
+
+<div class="card channel">
+<h3>News Channel</h3>
+<button class="favorite-btn" onclick="addFavorite('News Channel')">⭐ Favorite</button>
+</div>
+
+<div class="card channel">
+<h3>Sports Channel</h3>
+<button class="favorite-btn" onclick="addFavorite('Sports Channel')">⭐ Favorite</button>
+</div>
+
+<div class="card channel">
+<h3>Movie Channel</h3>
+<button class="favorite-btn" onclick="addFavorite('Movie Channel')">⭐ Favorite</button>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<div id="favoritesPage" class="hidden">
+<div class="card">
+<h2>Favorites</h2>
+<ul id="favoritesList"></ul>
+</div>
+</div>
+
+<div id="subscriptionsPage" class="hidden">
+
+<div class="card">
+<h2>Subscription Plans</h2>
+
+<div class="grid">
+
+<div class="card plan">
 <h3>Weekly</h3>
-<h2>₦1,000</h2>
-<p>7 Days Access</p>
-<button>Select Plan</button>
+<p>₦1,000</p>
+<button onclick="subscribe('weekly',1000)">Subscribe</button>
 </div>
 
-<div class="plan">
+<div class="card plan">
 <h3>Monthly</h3>
-<h2>₦3,000</h2>
-<p>30 Days Access</p>
-<button>Select Plan</button>
+<p>₦3,000</p>
+<button onclick="subscribe('monthly',3000)">Subscribe</button>
 </div>
 
-<div class="plan">
+<div class="card plan">
 <h3>Yearly</h3>
-<h2>₦20,000</h2>
-<p>365 Days Access</p>
-<button>Select Plan</button>
+<p>₦20,000</p>
+<button onclick="subscribe('yearly',20000)">Subscribe</button>
 </div>
 
-</section>
+</div>
+</div>
+
+</div>
+
+<div id="loginPage" class="hidden">
+
+<div class="card">
+<h2>User Login</h2>
+
+<input type="email" id="email" placeholder="Email" style="width:100%;padding:10px;margin:10px 0;">
+<input type="password" placeholder="Password" style="width:100%;padding:10px;margin:10px 0;">
+
+<button onclick="login()">Login</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let favorites=[];
+
+function showPage(page){
+
+document.getElementById('homePage').classList.add('hidden');
+document.getElementById('favoritesPage').classList.add('hidden');
+document.getElementById('subscriptionsPage').classList.add('hidden');
+document.getElementById('loginPage').classList.add('hidden');
+
+if(page==='home')
+document.getElementById('homePage').classList.remove('hidden');
+
+if(page==='favorites')
+document.getElementById('favoritesPage').classList.remove('hidden');
+
+if(page==='subscriptions')
+document.getElementById('subscriptionsPage').classList.remove('hidden');
+
+if(page==='login')
+document.getElementById('loginPage').classList.remove('hidden');
+}
+
+function toggleTheme(){
+document.body.classList.toggle('light');
+}
+
+function addFavorite(name){
+
+if(!favorites.includes(name)){
+favorites.push(name);
+renderFavorites();
+}
+}
+
+function renderFavorites(){
+
+let list=document.getElementById('favoritesList');
+list.innerHTML='';
+
+favorites.forEach(item=>{
+let li=document.createElement('li');
+li.textContent=item;
+list.appendChild(li);
+});
+}
+
+function searchChannels(){
+
+let filter=document.getElementById('searchInput').value.toLowerCase();
+
+document.querySelectorAll('.channel').forEach(card=>{
+
+let txt=card.innerText.toLowerCase();
+
+card.style.display=
+txt.includes(filter) ? 'block' : 'none';
+
+});
+}
+
+function login(){
+alert('Connect this form to your backend authentication API.');
+}
+
+function subscribe(plan,amount){
+
+let email=
+document.getElementById('email').value ||
+'customer@example.com';
+
+PaystackPop.setup({
+key:'YOUR_PAYSTACK_PUBLIC_KEY',
+email:email,
+amount:amount*100,
+
+callback:function(response){
+
+alert(
+plan +
+' subscription payment successful.'
+);
+
+/*
+Verify payment on backend:
+POST /verify-payment
+*/
+
+}
+}).openIframe();
+}
+
+</script>
 
 </body>
 </html>
