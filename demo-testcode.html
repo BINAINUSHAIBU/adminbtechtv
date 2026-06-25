@@ -3,13 +3,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>📺 BTECH-TV PRO MAX Subscription System</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BTECH-TV PRO MAX Subscription System</title>
 
 <script src="https://js.paystack.co/v1/inline.js"></script>
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -19,13 +18,13 @@ font-family:Arial,sans-serif;
 
 body{
 background:#050816;
-color:#fff;
+color:white;
 min-height:100vh;
 }
 
 .header{
 background:#081126;
-padding:15px 25px;
+padding:15px;
 display:flex;
 justify-content:space-between;
 align-items:center;
@@ -34,14 +33,14 @@ border-bottom:1px solid #1e2f57;
 
 .logo{
 font-size:24px;
-font-weight:bold;
+font-weight:900;
 color:#00d4ff;
 }
 
 .container{
+padding:20px;
 max-width:1200px;
 margin:auto;
-padding:20px;
 }
 
 .card{
@@ -54,7 +53,7 @@ margin-bottom:20px;
 input{
 width:100%;
 padding:12px;
-margin:10px 0;
+margin:8px 0;
 background:#101a31;
 border:none;
 border-radius:8px;
@@ -82,7 +81,6 @@ display:none;
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:15px;
-margin-top:20px;
 }
 
 .plan{
@@ -93,51 +91,44 @@ text-align:center;
 }
 
 .price{
-font-size:32px;
+font-size:30px;
 font-weight:bold;
 color:#00d4ff;
-margin:15px 0;
+margin:10px 0;
 }
 
 .status{
-padding:15px;
+font-size:18px;
+padding:10px;
+margin-top:10px;
 border-radius:8px;
-margin-top:15px;
-font-weight:bold;
-}
-
-.active{
-background:#0f5d2d;
+background:#152445;
 }
 
 .expired{
 background:#5a1010;
 }
 
+.active{
+background:#0f5d2d;
+}
+
 .player{
 height:400px;
 background:black;
+border-radius:10px;
 display:flex;
 justify-content:center;
 align-items:center;
-border-radius:12px;
 margin-top:20px;
-font-size:30px;
+font-size:28px;
 }
 
 .countdown{
-margin-top:15px;
 font-size:18px;
+margin-top:10px;
 color:#00d4ff;
 }
-
-.payment-history{
-margin-top:15px;
-background:#081126;
-padding:15px;
-border-radius:8px;
-}
-
 </style>
 </head>
 
@@ -152,22 +143,18 @@ border-radius:8px;
 
 <!-- Registration -->
 <div class="card" id="registerBox">
-
 <h2>Create Account</h2>
 
-<input type="text" id="name" placeholder="Full Name">
-
-<input type="email" id="email" placeholder="Email Address">
+<input id="name" placeholder="Full Name">
+<input id="email" type="email" placeholder="Email Address">
 
 <button onclick="registerUser()">
-Start Free 7-Day Trial
+Start 7-Day Free Trial
 </button>
-
 </div>
 
 <!-- Dashboard -->
 <div class="card hidden" id="dashboard">
-
 <h2>User Dashboard</h2>
 
 <div id="welcome"></div>
@@ -175,22 +162,16 @@ Start Free 7-Day Trial
 <div id="statusBox" class="status"></div>
 
 <div class="countdown" id="countdown"></div>
-
-<div class="payment-history" id="paymentHistory">
-No payment records.
 </div>
 
-</div>
-
-<!-- Plans -->
+<!-- Subscription Plans -->
 <div class="card hidden" id="plans">
-
 <h2>Subscription Plans</h2>
 
 <div class="plan-grid">
 
 <div class="plan">
-<h3>Basic</h3>
+<h2>Basic</h2>
 <div class="price">₦5,000</div>
 <p>30 Days Access</p>
 <br>
@@ -200,7 +181,7 @@ Subscribe
 </div>
 
 <div class="plan">
-<h3>Premium</h3>
+<h2>Premium</h2>
 <div class="price">₦10,000</div>
 <p>30 Days Access</p>
 <br>
@@ -210,7 +191,7 @@ Subscribe
 </div>
 
 <div class="plan">
-<h3>Ultimate</h3>
+<h2>Ultimate</h2>
 <div class="price">₦20,000</div>
 <p>30 Days Access</p>
 <br>
@@ -220,12 +201,10 @@ Subscribe
 </div>
 
 </div>
-
 </div>
 
 <!-- IPTV Section -->
 <div class="card hidden" id="iptvSection">
-
 <h2>IPTV Access Unlocked</h2>
 
 <div class="player">
@@ -238,23 +217,26 @@ Subscribe
 
 <script>
 
+// Register User
 function registerUser(){
 
 const name=document.getElementById("name").value.trim();
 const email=document.getElementById("email").value.trim();
 
 if(!name || !email){
-alert("Please complete all fields.");
+alert("Complete all fields");
 return;
 }
 
+const trialEnd=
+Date.now()+(7*24*60*60*1000);
+
 const user={
-name:name,
-email:email,
-trialEnd:Date.now()+(7*24*60*60*1000),
+name,
+email,
+trialEnd,
 subscriptionEnd:null,
-lastPaymentReference:null,
-lastPaymentDate:null
+paymentReference:null
 };
 
 localStorage.setItem(
@@ -265,6 +247,7 @@ JSON.stringify(user)
 loadUser();
 }
 
+// Load User
 function loadUser(){
 
 const user=JSON.parse(
@@ -284,39 +267,12 @@ document.getElementById("userInfo")
 
 document.getElementById("welcome")
 .innerHTML=
-"<h3>Welcome, "+user.name+"</h3>";
+"<h3>Welcome "+user.name+"</h3>";
 
-showPaymentInfo();
 checkAccess();
 }
 
-function showPaymentInfo(){
-
-const user=JSON.parse(
-localStorage.getItem("iptvUser")
-);
-
-if(!user) return;
-
-let html="No payment records.";
-
-if(user.lastPaymentReference){
-
-html=
-"<b>Last Payment Reference:</b><br>"
-+user.lastPaymentReference+
-"<br><br><b>Payment Date:</b><br>"
-+new Date(user.lastPaymentDate)
-.toLocaleString();
-
-}
-
-document.getElementById(
-"paymentHistory"
-).innerHTML=html;
-
-}
-
+// Check Access
 function checkAccess(){
 
 const user=JSON.parse(
@@ -329,49 +285,46 @@ const now=Date.now();
 
 let active=false;
 
-if(user.subscriptionEnd &&
-now<user.subscriptionEnd){
+if(
+user.subscriptionEnd &&
+now<user.subscriptionEnd
+){
 active=true;
 }
 else if(now<user.trialEnd){
 active=true;
 }
 
-const box=document.getElementById(
-"statusBox"
-);
+const box=
+document.getElementById("statusBox");
 
 if(active){
 
 box.className="status active";
-box.innerHTML="✅ Active Access";
+box.innerHTML="✅ Active Subscription";
 
-document.getElementById(
-"iptvSection"
-).classList.remove("hidden");
+document.getElementById("iptvSection")
+.classList.remove("hidden");
 
-document.getElementById(
-"plans"
-).classList.add("hidden");
+document.getElementById("plans")
+.classList.add("hidden");
 
 }else{
 
 box.className="status expired";
-box.innerHTML="❌ Subscription Expired";
+box.innerHTML="❌ Trial Expired";
 
-document.getElementById(
-"iptvSection"
-).classList.add("hidden");
+document.getElementById("plans")
+.classList.remove("hidden");
 
-document.getElementById(
-"plans"
-).classList.remove("hidden");
-
+document.getElementById("iptvSection")
+.classList.add("hidden");
 }
 
 updateCountdown();
 }
 
+// Countdown
 function updateCountdown(){
 
 const user=JSON.parse(
@@ -388,25 +341,33 @@ const diff=
 expiry-Date.now();
 
 if(diff<=0){
-
-document.getElementById(
-"countdown"
-).innerHTML="Expired";
-
+document.getElementById("countdown")
+.innerHTML="Expired";
 return;
 }
 
-const days=Math.floor(
+const days=
+Math.floor(
 diff/(1000*60*60*24)
 );
 
-document.getElementById(
-"countdown"
-).innerHTML=
-"Access Ends In: "+days+" Days";
+const hours=
+Math.floor(
+(diff%(1000*60*60*24))
+/
+(1000*60*60)
+);
 
+document.getElementById("countdown")
+.innerHTML=
+"Access Ends In: "+
+days+
+" Days "+
+hours+
+" Hours";
 }
 
+// Paystack Payment
 function payNow(amount){
 
 const user=JSON.parse(
@@ -414,13 +375,13 @@ localStorage.getItem("iptvUser")
 );
 
 if(!user){
-alert("Please register first.");
+alert("Please create an account first");
 return;
 }
 
 let handler=PaystackPop.setup({
 
-key:"pk_test_REPLACE_WITH_YOUR_KEY",
+key:"YOUR_PAYSTACK_PUBLIC_KEY",
 
 email:user.email,
 
@@ -428,16 +389,11 @@ amount:amount*100,
 
 currency:"NGN",
 
-ref:"BTECHTV_"+
-Math.floor(
-Math.random()*1000000000
-),
-
 metadata:{
 custom_fields:[
 {
-display_name:"Customer",
-variable_name:"customer",
+display_name:"Customer Name",
+variable_name:"customer_name",
 value:user.name
 }
 ]
@@ -445,15 +401,16 @@ value:user.name
 
 callback:function(response){
 
+let user=JSON.parse(
+localStorage.getItem("iptvUser")
+);
+
 user.subscriptionEnd=
 Date.now()+
 (30*24*60*60*1000);
 
-user.lastPaymentReference=
+user.paymentReference=
 response.reference;
-
-user.lastPaymentDate=
-new Date().toISOString();
 
 localStorage.setItem(
 "iptvUser",
@@ -461,13 +418,11 @@ JSON.stringify(user)
 );
 
 alert(
-"Payment Successful!\nReference: "+
-response.reference
+"Payment Successful!\nReference: "
++response.reference
 );
 
-showPaymentInfo();
 checkAccess();
-
 },
 
 onClose:function(){
@@ -477,11 +432,12 @@ alert("Payment Cancelled");
 });
 
 handler.openIframe();
-
 }
 
+// Auto Load User
 loadUser();
 
+// Refresh Status
 setInterval(checkAccess,5000);
 
 </script>
