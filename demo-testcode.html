@@ -1,6 +1,5 @@
-
+```html
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -19,7 +18,7 @@ font-family:Arial,sans-serif;
 
 body{
 background:#050816;
-color:#fff;
+color:white;
 height:100vh;
 overflow:hidden;
 }
@@ -42,6 +41,12 @@ border-right:1px solid #1f2b4d;
 font-size:24px;
 font-weight:bold;
 color:#00d4ff;
+margin-bottom:5px;
+}
+
+.sub{
+color:#8ea2d9;
+font-size:12px;
 margin-bottom:20px;
 }
 
@@ -76,7 +81,6 @@ display:flex;
 flex-direction:column;
 }
 
-/* TOPBAR */
 .topbar{
 background:#0f172a;
 padding:15px;
@@ -89,17 +93,32 @@ font-weight:bold;
 
 .live{
 color:red;
+font-weight:bold;
 }
 
-/* PLAYER */
 .player{
 height:300px;
-background:#000;
+background:black;
 }
 
 .player video{
 width:100%;
 height:100%;
+}
+
+/* STATS */
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+padding:10px;
+}
+
+.stat{
+background:#111827;
+padding:15px;
+border-radius:8px;
+text-align:center;
 }
 
 /* TABLE */
@@ -128,10 +147,6 @@ padding:10px;
 border-bottom:1px solid #1f2b4d;
 }
 
-tr:hover{
-background:#172033;
-}
-
 .action{
 padding:6px 10px;
 border:none;
@@ -141,20 +156,9 @@ margin-right:4px;
 font-weight:bold;
 }
 
-.lock{
-background:#f59e0b;
-color:white;
-}
-
-.edit{
-background:#2563eb;
-color:white;
-}
-
-.delete{
-background:#dc2626;
-color:white;
-}
+.lock{background:#f59e0b;color:white;}
+.edit{background:#2563eb;color:white;}
+.delete{background:#dc2626;color:white;}
 
 .locked{
 color:#ff5555;
@@ -167,44 +171,18 @@ font-weight:bold;
 }
 
 .loadmore{
-margin-top:10px;
 width:100%;
 padding:12px;
+margin-top:10px;
 background:#00d4ff;
 border:none;
 border-radius:6px;
 font-weight:bold;
 cursor:pointer;
 }
-
-/* ADMIN */
-.admin-panel{
-position:fixed;
-inset:0;
-display:none;
-justify-content:center;
-align-items:center;
-background:rgba(0,0,0,.8);
-}
-
-.admin-box{
-background:#111827;
-padding:25px;
-border-radius:10px;
-width:320px;
-text-align:center;
-}
-
-.admin-box button{
-margin:5px;
-padding:10px;
-border:none;
-border-radius:5px;
-cursor:pointer;
-}
 </style>
-
 </head>
+
 <body>
 
 <div class="container">
@@ -212,12 +190,36 @@ cursor:pointer;
 <div class="sidebar">
 
 <div class="logo">📺 BTECH-TV PRO MAX</div>
+<div class="sub">Ultra BTECH-TV WORLD PRO MAX Engine X</div>
 
 <div class="section">
 <h3>🌍 Countries</h3>
 
-<button class="nav-btn">🇳🇬 Nigeria</button> <button class="nav-btn">🇺🇸 USA</button> <button class="nav-btn">🇬🇧 UK</button> <button class="nav-btn">🇮🇳 India</button> <button class="nav-btn">🇫🇷 France</button> <button class="nav-btn">🇩🇪 Germany</button> <button class="nav-btn">🇧🇷 Brazil</button> <button class="nav-btn">🇿🇦 South Africa</button> <button class="nav-btn">🇨🇦 Canada</button> <button class="nav-btn">🇦🇺 Australia</button> <button class="nav-btn">🇯🇵 Japan</button> <button class="nav-btn">🇰🇷 South Korea</button> <button class="nav-btn">🇨🇳 China</button> <button class="nav-btn">🇪🇸 Spain</button> <button class="nav-btn">🇮🇹 Italy</button> <button class="nav-btn">🇹🇷 Turkey</button> <button class="nav-btn">🇲🇽 Mexico</button> <button class="nav-btn">🇦🇪 UAE</button> <button class="nav-btn">🇸🇦 Saudi Arabia</button> <button class="nav-btn">🇪🇬 Egypt</button> <button class="nav-btn">🇦🇷 Argentina</button> <button class="nav-btn">🇵🇰 Pakistan</button> <button class="nav-btn">🇮🇩 Indonesia</button> <button class="nav-btn">🇵🇭 Philippines</button> <button class="nav-btn">🇦🇱 Albania</button>
-
+<button class="nav-btn">🇳🇬 Nigeria</button>
+<button class="nav-btn">🇺🇸 USA</button>
+<button class="nav-btn">🇬🇧 UK</button>
+<button class="nav-btn">🇮🇳 India</button>
+<button class="nav-btn">🇫🇷 France</button>
+<button class="nav-btn">🇩🇪 Germany</button>
+<button class="nav-btn">🇧🇷 Brazil</button>
+<button class="nav-btn">🇿🇦 South Africa</button>
+<button class="nav-btn">🇨🇦 Canada</button>
+<button class="nav-btn">🇦🇺 Australia</button>
+<button class="nav-btn">🇯🇵 Japan</button>
+<button class="nav-btn">🇰🇷 South Korea</button>
+<button class="nav-btn">🇨🇳 China</button>
+<button class="nav-btn">🇪🇸 Spain</button>
+<button class="nav-btn">🇮🇹 Italy</button>
+<button class="nav-btn">🇹🇷 Turkey</button>
+<button class="nav-btn">🇲🇽 Mexico</button>
+<button class="nav-btn">🇦🇪 UAE</button>
+<button class="nav-btn">🇸🇦 Saudi Arabia</button>
+<button class="nav-btn">🇪🇬 Egypt</button>
+<button class="nav-btn">🇦🇷 Argentina</button>
+<button class="nav-btn">🇵🇰 Pakistan</button>
+<button class="nav-btn">🇮🇩 Indonesia</button>
+<button class="nav-btn">🇵🇭 Philippines</button>
+<button class="nav-btn">🇦🇱 Albania</button>
 </div>
 
 <div class="section">
@@ -231,6 +233,19 @@ cursor:pointer;
 <button class="nav-btn">💼 Business</button>
 <button class="nav-btn">🔬 Science</button>
 <button class="nav-btn">✈ Travel</button>
+<button class="nav-btn">😂 Comedy</button>
+<button class="nav-btn">📖 Documentary</button>
+</div>
+
+<div class="section">
+<h3>🗣 Languages</h3>
+<button class="nav-btn">🇬🇧 English</button>
+<button class="nav-btn">🇪🇸 Spanish</button>
+<button class="nav-btn">🇸🇦 Arabic</button>
+<button class="nav-btn">🇫🇷 French</button>
+<button class="nav-btn">🇮🇳 Hindi</button>
+<button class="nav-btn">🇨🇳 Chinese</button>
+<button class="nav-btn">🇵🇹 Portuguese</button>
 </div>
 
 <div class="section">
@@ -239,7 +254,10 @@ cursor:pointer;
 <button class="nav-btn" onclick="boost()">⚡ Boost</button>
 <button class="nav-btn" onclick="repair()">🛠 Repair</button>
 <button class="nav-btn" onclick="optimize()">🧠 Optimize</button>
-<button class="nav-btn" onclick="openAdmin()">⚙ Admin</button>
+<button class="nav-btn">📺 PiP</button>
+<button class="nav-btn">🗑 Recents</button>
+<button class="nav-btn">⏺ Record</button>
+<button class="nav-btn">🚀 Ultra Feeds</button>
 </div>
 
 </div>
@@ -253,6 +271,13 @@ cursor:pointer;
 
 <div class="player">
 <video id="video" controls autoplay muted></video>
+</div>
+
+<div class="stats">
+<div class="stat">📺 Total<br><span id="total">18</span></div>
+<div class="stat">⭐ Favorites<br>0</div>
+<div class="stat">⚫ Dead<br>0</div>
+<div class="stat">🌍 Live<br>18</div>
 </div>
 
 <div class="table-container">
@@ -276,29 +301,16 @@ cursor:pointer;
 
 </table>
 
-<button class="loadmore" onclick="loadMore()">
+<button class="loadmore">
 ⬇ LOAD MORE CHANNELS
 </button>
 
 </div>
 
 </div>
-
-</div>
-
-<div class="admin-panel" id="adminPanel">
-<div class="admin-box">
-
-<h2>⚙ SUPER ADMIN PANEL</h2>
-
-<button onclick="scan()">📡 Scan</button> <button onclick="boost()">⚡ Boost</button> <button onclick="repair()">🛠 Repair</button> <button onclick="optimize()">🧠 Optimize</button> <button onclick="openAdmin()">❌ Close</button>
-
-</div>
 </div>
 
 <script>
-
-let page=1;
 
 const channels=[
 {name:"ACNN (480p)",category:"Movies",type:"Pay To View",lock:"Unlocked"},
@@ -323,9 +335,7 @@ const channels=[
 
 function render(){
 let html="";
-
-channels.slice(0,page*20).forEach((ch,index)=>{
-
+channels.forEach((ch,index)=>{
 html+=`
 <tr>
 <td>${ch.name}</td>
@@ -337,22 +347,19 @@ html+=`
 <button class="action edit" onclick="editChannel(${index})">Edit</button>
 <button class="action delete" onclick="deleteChannel(${index})">Delete</button>
 </td>
-</tr>
-`;
-
+</tr>`;
 });
-
 document.getElementById("grid").innerHTML=html;
 }
 
 function toggleLock(index){
 channels[index].lock=
-channels[index].lock==="Locked"?"Unlocked":"Locked";
+channels[index].lock==="Locked" ? "Unlocked":"Locked";
 render();
 }
 
 function editChannel(index){
-let name=prompt("Edit Channel Name",channels[index].name);
+const name=prompt("Edit Channel Name",channels[index].name);
 if(name){
 channels[index].name=name;
 render();
@@ -366,32 +373,10 @@ render();
 }
 }
 
-function loadMore(){
-page++;
-render();
-}
-
-function scan(){
-alert("📡 Channel Scan Complete");
-}
-
-function boost(){
-alert("⚡ IPTV Boost Activated");
-}
-
-function repair(){
-alert("🛠 Repair Complete");
-}
-
-function optimize(){
-alert("🧠 System Optimized");
-}
-
-function openAdmin(){
-const panel=document.getElementById("adminPanel");
-panel.style.display=
-panel.style.display==="flex"?"none":"flex";
-}
+function scan(){alert("📡 Channel Scan Complete");}
+function boost(){alert("⚡ IPTV Boost Activated");}
+function repair(){alert("🛠 Repair Complete");}
+function optimize(){alert("🧠 System Optimized");}
 
 render();
 
@@ -399,3 +384,4 @@ render();
 
 </body>
 </html>
+```
