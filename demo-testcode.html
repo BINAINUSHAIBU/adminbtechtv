@@ -9,6 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -18,7 +19,7 @@ font-family:Arial,sans-serif;
 
 body{
 background:#050816;
-color:#fff;
+color:white;
 height:100vh;
 overflow:hidden;
 }
@@ -29,6 +30,7 @@ height:100vh;
 }
 
 /* SIDEBAR */
+
 .sidebar{
 width:320px;
 background:#0d1324;
@@ -57,9 +59,9 @@ margin-bottom:10px;
 width:100%;
 padding:8px;
 margin-bottom:5px;
-background:#172033;
 border:none;
 border-radius:6px;
+background:#172033;
 color:white;
 cursor:pointer;
 }
@@ -69,31 +71,29 @@ background:#22304d;
 }
 
 /* MAIN */
+
 .main{
 flex:1;
 display:flex;
 flex-direction:column;
 }
 
-/* TOPBAR */
 .topbar{
 background:#0f172a;
 padding:15px;
 display:flex;
 justify-content:space-between;
-align-items:center;
-font-size:20px;
 font-weight:bold;
+font-size:20px;
 }
 
 .live{
 color:red;
 }
 
-/* PLAYER */
 .player{
 height:300px;
-background:#000;
+background:black;
 }
 
 .player video{
@@ -102,6 +102,7 @@ height:100%;
 }
 
 /* TABLE */
+
 .table-container{
 flex:1;
 overflow:auto;
@@ -166,17 +167,16 @@ font-weight:bold;
 }
 
 .loadmore{
-margin-top:10px;
 width:100%;
+margin-top:10px;
 padding:12px;
-background:#00d4ff;
 border:none;
 border-radius:6px;
+background:#00d4ff;
 font-weight:bold;
 cursor:pointer;
 }
 
-/* ADMIN */
 .admin-panel{
 position:fixed;
 inset:0;
@@ -195,12 +195,13 @@ text-align:center;
 }
 
 .admin-box button{
-margin:5px;
 padding:10px;
+margin:5px;
 border:none;
 border-radius:5px;
 cursor:pointer;
 }
+
 </style>
 
 </head>
@@ -215,30 +216,23 @@ cursor:pointer;
 <div class="section">
 <h3>🌍 Countries</h3>
 
-<button class="nav-btn">🇳🇬 Nigeria</button> <button class="nav-btn">🇺🇸 USA</button> <button class="nav-btn">🇬🇧 UK</button> <button class="nav-btn">🇮🇳 India</button> <button class="nav-btn">🇫🇷 France</button> <button class="nav-btn">🇩🇪 Germany</button> <button class="nav-btn">🇧🇷 Brazil</button> <button class="nav-btn">🇿🇦 South Africa</button> <button class="nav-btn">🇨🇦 Canada</button> <button class="nav-btn">🇦🇺 Australia</button> <button class="nav-btn">🇯🇵 Japan</button> <button class="nav-btn">🇰🇷 South Korea</button> <button class="nav-btn">🇨🇳 China</button> <button class="nav-btn">🇪🇸 Spain</button> <button class="nav-btn">🇮🇹 Italy</button> <button class="nav-btn">🇹🇷 Turkey</button> <button class="nav-btn">🇲🇽 Mexico</button> <button class="nav-btn">🇦🇪 UAE</button> <button class="nav-btn">🇸🇦 Saudi Arabia</button> <button class="nav-btn">🇪🇬 Egypt</button> <button class="nav-btn">🇦🇷 Argentina</button> <button class="nav-btn">🇵🇰 Pakistan</button> <button class="nav-btn">🇮🇩 Indonesia</button> <button class="nav-btn">🇵🇭 Philippines</button> <button class="nav-btn">🇦🇱 Albania</button>
+<button class="nav-btn" onclick="filterCountry('ng')">🇳🇬 Nigeria</button> <button class="nav-btn" onclick="filterCountry('us')">🇺🇸 USA</button> <button class="nav-btn" onclick="filterCountry('uk')">🇬🇧 UK</button> <button class="nav-btn" onclick="filterCountry('in')">🇮🇳 India</button> <button class="nav-btn" onclick="renderChannels()">🌍 All Countries</button>
 
 </div>
 
 <div class="section">
 <h3>🎬 Categories</h3>
-<button class="nav-btn">📰 News</button>
-<button class="nav-btn">⚽ Sports</button>
-<button class="nav-btn">🎬 Movies</button>
-<button class="nav-btn">🎵 Music</button>
-<button class="nav-btn">👶 Kids</button>
-<button class="nav-btn">📚 Education</button>
-<button class="nav-btn">💼 Business</button>
-<button class="nav-btn">🔬 Science</button>
-<button class="nav-btn">✈ Travel</button>
+
+<button class="nav-btn" onclick="filterCategory('news')">📰 News</button> <button class="nav-btn" onclick="filterCategory('sports')">⚽ Sports</button> <button class="nav-btn" onclick="filterCategory('movies')">🎬 Movies</button> <button class="nav-btn" onclick="filterCategory('music')">🎵 Music</button> <button class="nav-btn" onclick="filterCategory('kids')">👶 Kids</button> <button class="nav-btn" onclick="filterCategory('education')">📚 Education</button> <button class="nav-btn" onclick="renderChannels()">📺 All Categories</button>
+
 </div>
 
 <div class="section">
+
 <h3>🔥 Tools</h3>
-<button class="nav-btn" onclick="scan()">📡 Scan</button>
-<button class="nav-btn" onclick="boost()">⚡ Boost</button>
-<button class="nav-btn" onclick="repair()">🛠 Repair</button>
-<button class="nav-btn" onclick="optimize()">🧠 Optimize</button>
-<button class="nav-btn" onclick="openAdmin()">⚙ Admin</button>
+
+<button class="nav-btn" onclick="scan()">📡 Scan</button> <button class="nav-btn" onclick="boost()">⚡ Boost</button> <button class="nav-btn" onclick="repair()">🛠 Repair</button> <button class="nav-btn" onclick="optimize()">🧠 Optimize</button> <button class="nav-btn" onclick="openAdmin()">⚙ Admin</button>
+
 </div>
 
 </div>
@@ -256,11 +250,10 @@ cursor:pointer;
 
 <div class="table-container">
 
-<h2 style="margin-bottom:15px;">
-📺 BTECH-TV PRO MAX - IPTV CHANNEL MANAGEMENT
-</h2>
+<h2>📺 BTECH-TV PRO MAX - IPTV CHANNEL MANAGEMENT</h2>
 
 <table>
+
 <thead>
 <tr>
 <th>Channel Name</th>
@@ -300,74 +293,187 @@ cursor:pointer;
 let page=1;
 
 const channels=[
-{name:"ACNN (480p)",category:"Movies",type:"Pay To View",lock:"Unlocked"},
-{name:"Advocate Broadcasting Network (576p)",category:"Kids",type:"Free",lock:"Unlocked"},
-{name:"Africa TV3 (720p)",category:"Movies",type:"Pay To View",lock:"Unlocked"},
-{name:"BCS StarCross TV (576p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
-{name:"Bride TV (576p)",category:"Sports",type:"Free",lock:"Unlocked"},
-{name:"Caught-Up TV (480p)",category:"Sports",type:"Pay To View",lock:"Unlocked"},
-{name:"Channels 24",category:"Sports",type:"Free",lock:"Unlocked"},
-{name:"Channels TV",category:"Education",type:"Pay To View",lock:"Unlocked"},
-{name:"Chosen TV English (360p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
-{name:"cLoveworld TV (480p)",category:"News",type:"Free",lock:"Unlocked"},
-{name:"Coza TV (576p)",category:"Music",type:"Free",lock:"Unlocked"},
-{name:"Dunamis TV (576p)",category:"Sports",type:"Free",lock:"Unlocked"},
-{name:"Flame TV (576p)",category:"Music",type:"Free",lock:"Unlocked"},
-{name:"Kingsview TV (1080p)",category:"Education",type:"Free",lock:"Locked"},
-{name:"LN247 (1080p)",category:"News",type:"Pay To View",lock:"Locked"},
-{name:"LoveWorld Arabic (360p)",category:"Education",type:"Pay To View",lock:"Unlocked"},
-{name:"LoveWorld Persia (720p)",category:"Music",type:"Free",lock:"Locked"},
-{name:"Loveworld UK (1080p)",category:"Music",type:"Pay To View",lock:"Unlocked"}
+
+{
+name:"Channels TV",
+country:"ng",
+category:"news",
+type:"Pay To View",
+lock:"Unlocked",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+},
+
+{
+name:"Bride TV",
+country:"ng",
+category:"sports",
+type:"Free",
+lock:"Unlocked",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+},
+
+{
+name:"LoveWorld UK",
+country:"uk",
+category:"music",
+type:"Pay To View",
+lock:"Unlocked",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+},
+
+{
+name:"Kingsview TV",
+country:"ng",
+category:"education",
+type:"Free",
+lock:"Locked",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+},
+
+{
+name:"LN247",
+country:"ng",
+category:"news",
+type:"Pay To View",
+lock:"Locked",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+}
+
 ];
 
-function render(){
+function renderChannels(list=channels){
+
 let html="";
 
-channels.slice(0,page*20).forEach((ch,index)=>{
+list.forEach((ch,index)=>{
 
 html+=`
 <tr>
-<td>${ch.name}</td>
+
+<td onclick="playChannel('${ch.url}')"
+style="cursor:pointer;color:#00d4ff">
+${ch.name}
+</td>
+
 <td>${ch.category}</td>
 <td>${ch.type}</td>
-<td class="${ch.lock==='Locked'?'locked':'unlocked'}">${ch.lock}</td>
-<td>
-<button class="action lock" onclick="toggleLock(${index})">${ch.lock==='Locked'?'Unlock':'Lock'}</button>
-<button class="action edit" onclick="editChannel(${index})">Edit</button>
-<button class="action delete" onclick="deleteChannel(${index})">Delete</button>
+
+<td class="${ch.lock==='Locked'
+?'locked'
+:'unlocked'}">
+${ch.lock}
 </td>
+
+<td>
+
+<button class="action lock"
+onclick="toggleLock(${index})">
+${ch.lock==='Locked'
+?'Unlock'
+:'Lock'}
+</button>
+
+<button class="action edit"
+onclick="editChannel(${index})">
+Edit
+</button>
+
+<button class="action delete"
+onclick="deleteChannel(${index})">
+Delete
+</button>
+
+</td>
+
 </tr>
 `;
 
 });
 
 document.getElementById("grid").innerHTML=html;
+
+}
+
+function playChannel(url){
+
+const video=
+document.getElementById("video");
+
+if(window.hls){
+window.hls.destroy();
+}
+
+if(Hls.isSupported()){
+
+window.hls=new Hls();
+
+window.hls.loadSource(url);
+
+window.hls.attachMedia(video);
+
+window.hls.on(
+Hls.Events.MANIFEST_PARSED,
+()=>video.play()
+);
+
+}else{
+
+video.src=url;
+video.play();
+
+}
+
+}
+
+function filterCountry(code){
+renderChannels(
+channels.filter(c=>c.country===code)
+);
+}
+
+function filterCategory(cat){
+renderChannels(
+channels.filter(c=>c.category===cat)
+);
 }
 
 function toggleLock(index){
+
 channels[index].lock=
-channels[index].lock==="Locked"?"Unlocked":"Locked";
-render();
+channels[index].lock==="Locked"
+?"Unlocked"
+:"Locked";
+
+renderChannels();
+
 }
 
 function editChannel(index){
-let name=prompt("Edit Channel Name",channels[index].name);
-if(name){
-channels[index].name=name;
-render();
+
+let newName=
+prompt(
+"Edit Channel Name",
+channels[index].name
+);
+
+if(newName){
+channels[index].name=newName;
+renderChannels();
 }
+
 }
 
 function deleteChannel(index){
+
 if(confirm("Delete Channel?")){
 channels.splice(index,1);
-render();
+renderChannels();
 }
+
 }
 
 function loadMore(){
-page++;
-render();
+alert("Loading More Channels...");
 }
 
 function scan(){
@@ -387,12 +493,18 @@ alert("🧠 System Optimized");
 }
 
 function openAdmin(){
-const panel=document.getElementById("adminPanel");
+
+const panel=
+document.getElementById("adminPanel");
+
 panel.style.display=
-panel.style.display==="flex"?"none":"flex";
+panel.style.display==="flex"
+?"none"
+:"flex";
+
 }
 
-render();
+renderChannels();
 
 </script>
 
