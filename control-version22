@@ -1,0 +1,429 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📺 BTECH-TV PRO MAX - SUPER ADMIN IPTV SYSTEM</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#050816;
+color:white;
+overflow:hidden;
+}
+
+.container{
+display:flex;
+height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:300px;
+background:#0d1324;
+overflow:auto;
+padding:15px;
+border-right:1px solid #1f2b4d;
+}
+
+.logo{
+font-size:24px;
+font-weight:bold;
+color:#00d4ff;
+margin-bottom:15px;
+}
+
+.section{
+margin-top:20px;
+}
+
+.section h3{
+color:#00d4ff;
+margin-bottom:10px;
+}
+
+.nav-btn{
+width:100%;
+padding:8px;
+margin-bottom:5px;
+border:none;
+border-radius:6px;
+background:#172033;
+color:white;
+cursor:pointer;
+}
+
+.nav-btn:hover{
+background:#22304d;
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+/* TOPBAR */
+
+.topbar{
+background:#0f172a;
+padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:20px;
+font-weight:bold;
+}
+
+.live{
+color:red;
+}
+
+/* TABLE */
+
+.table-container{
+flex:1;
+overflow:auto;
+padding:15px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:#111827;
+}
+
+th{
+background:#0f172a;
+color:#00d4ff;
+padding:12px;
+position:sticky;
+top:0;
+}
+
+td{
+padding:10px;
+border-bottom:1px solid #1f2b4d;
+}
+
+tr:hover{
+background:#172033;
+}
+
+/* BUTTONS */
+
+.action{
+padding:6px 10px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+margin-right:4px;
+font-weight:bold;
+}
+
+.lock{
+background:#f59e0b;
+color:white;
+}
+
+.edit{
+background:#2563eb;
+color:white;
+}
+
+.delete{
+background:#dc2626;
+color:white;
+}
+
+.locked{
+color:#ff5555;
+font-weight:bold;
+}
+
+.unlocked{
+color:#00ff88;
+font-weight:bold;
+}
+
+.loadmore{
+margin-top:10px;
+padding:12px;
+width:100%;
+background:#00d4ff;
+border:none;
+border-radius:6px;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* ADMIN PANEL */
+
+.admin-panel{
+position:fixed;
+inset:0;
+display:none;
+justify-content:center;
+align-items:center;
+background:rgba(0,0,0,.8);
+}
+
+.admin-box{
+background:#111827;
+padding:25px;
+border-radius:10px;
+width:300px;
+text-align:center;
+}
+
+.admin-box button{
+margin:5px;
+padding:10px;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="sidebar">
+
+<div class="logo">📺 BTECH-TV PRO MAX</div>
+
+<div class="section">
+<h3>🌍 Countries</h3>
+
+<button class="nav-btn">🇳🇬 Nigeria</button>
+<button class="nav-btn">🇺🇸 USA</button>
+<button class="nav-btn">🇬🇧 UK</button>
+<button class="nav-btn">🇮🇳 India</button>
+<button class="nav-btn">🇫🇷 France</button>
+<button class="nav-btn">🇩🇪 Germany</button>
+<button class="nav-btn">🇧🇷 Brazil</button>
+<button class="nav-btn">🇿🇦 South Africa</button>
+<button class="nav-btn">🇨🇦 Canada</button>
+<button class="nav-btn">🇦🇺 Australia</button>
+<button class="nav-btn">🇯🇵 Japan</button>
+<button class="nav-btn">🇰🇷 South Korea</button>
+<button class="nav-btn">🇨🇳 China</button>
+<button class="nav-btn">🇪🇸 Spain</button>
+<button class="nav-btn">🇮🇹 Italy</button>
+<button class="nav-btn">🇹🇷 Turkey</button>
+<button class="nav-btn">🇲🇽 Mexico</button>
+<button class="nav-btn">🇦🇪 UAE</button>
+<button class="nav-btn">🇸🇦 Saudi Arabia</button>
+<button class="nav-btn">🇪🇬 Egypt</button>
+<button class="nav-btn">🇦🇷 Argentina</button>
+<button class="nav-btn">🇵🇰 Pakistan</button>
+<button class="nav-btn">🇮🇩 Indonesia</button>
+<button class="nav-btn">🇵🇭 Philippines</button>
+<button class="nav-btn">🇦🇱 Albania</button>
+
+</div>
+
+<div class="section">
+
+<h3>🎬 Categories</h3>
+
+<button class="nav-btn">📰 News</button>
+<button class="nav-btn">⚽ Sports</button>
+<button class="nav-btn">🎬 Movies</button>
+<button class="nav-btn">🎵 Music</button>
+<button class="nav-btn">👶 Kids</button>
+<button class="nav-btn">📚 Education</button>
+<button class="nav-btn">💼 Business</button>
+<button class="nav-btn">🔬 Science</button>
+<button class="nav-btn">✈ Travel</button>
+
+</div>
+
+<div class="section">
+
+<h3>🔥 Tools</h3>
+
+<button class="nav-btn" onclick="scan()">📡 Scan</button>
+<button class="nav-btn" onclick="boost()">⚡ Boost</button>
+<button class="nav-btn" onclick="repair()">🛠 Repair</button>
+<button class="nav-btn" onclick="optimize()">🧠 Optimize</button>
+<button class="nav-btn" onclick="openAdmin()">⚙ Admin</button>
+
+</div>
+
+</div>
+
+<div class="main">
+
+<div class="topbar">
+<div>📺 SUPER ADMIN IPTV SYSTEM</div>
+<div class="live">🔴 LIVE</div>
+</div>
+
+<div class="table-container">
+
+<h2>📺 BTECH-TV PRO MAX - IPTV CHANNEL MANAGEMENT</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Channel Name</th>
+<th>Category</th>
+<th>Type</th>
+<th>Lock Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="grid"></tbody>
+
+</table>
+
+<button class="loadmore" onclick="loadMore()">
+⬇ LOAD MORE CHANNELS
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="admin-panel" id="adminPanel">
+<div class="admin-box">
+
+<h2>⚙ SUPER ADMIN PANEL</h2>
+
+<button onclick="scan()">📡 Scan</button>
+<button onclick="boost()">⚡ Boost</button>
+<button onclick="repair()">🛠 Repair</button>
+<button onclick="optimize()">🧠 Optimize</button>
+<button onclick="openAdmin()">❌ Close</button>
+
+</div>
+</div>
+
+<script>
+
+let page=1;
+
+let channels=[
+{name:"ACNN (480p)",category:"Movies",type:"Pay To View",lock:"Unlocked"},
+{name:"Advocate Broadcasting Network (576p)",category:"Kids",type:"Free",lock:"Unlocked"},
+{name:"Africa TV3 (720p) [Not 24/7]",category:"Movies",type:"Pay To View",lock:"Unlocked"},
+{name:"BCS StarCross TV (576p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"Bride TV (576p)",category:"Sports",type:"Free",lock:"Unlocked"},
+{name:"Caught-Up TV (480p) [Not 24/7]",category:"Sports",type:"Pay To View",lock:"Unlocked"},
+{name:"Channels 24",category:"Sports",type:"Free",lock:"Unlocked"},
+{name:"Channels TV",category:"Education",type:"Pay To View",lock:"Unlocked"},
+{name:"Chosen TV English (360p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"cLoveworld TV (480p)",category:"News",type:"Free",lock:"Unlocked"},
+{name:"Coza TV (576p)",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"Dunamis TV (576p) [Not 24/7]",category:"Sports",type:"Free",lock:"Unlocked"},
+{name:"Flame TV (576p)",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"Foursquare TV (360p) [Not 24/7]",category:"News",type:"Pay To View",lock:"Unlocked"},
+{name:"Itage TV (480p)",category:"Movies",type:"Free",lock:"Unlocked"},
+{name:"Kingsview TV (1080p)",category:"Education",type:"Free",lock:"Locked"},
+{name:"LN247 (1080p)",category:"News",type:"Pay To View",lock:"Locked"},
+{name:"LoveWorld Arabic (360p)",category:"Education",type:"Pay To View",lock:"Unlocked"},
+{name:"LoveWorld Persia (720p)",category:"Music",type:"Free",lock:"Locked"},
+{name:"Loveworld UK (1080p)",category:"Music",type:"Pay To View",lock:"Unlocked"},
+{name:"LoveWorld USA (720p)",category:"Movies",type:"Pay To View",lock:"Locked"},
+{name:"LoveworldSAT (1080p)",category:"Education",type:"Free",lock:"Unlocked"},
+{name:"Master's TV (720p)",category:"Education",type:"Free",lock:"Unlocked"},
+{name:"More Grace TV (410p) [Not 24/7]",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"New Vision TV (360p)",category:"News",type:"Free",lock:"Unlocked"},
+{name:"News Central",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"NTA International (576p) [Not 24/7]",category:"Movies",type:"Pay To View",lock:"Locked"},
+{name:"Phenomenal Life TV (1080p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"Plus TV Africa (720p) [Not 24/7]",category:"News",type:"Free",lock:"Unlocked"},
+{name:"Qausain TV (720p)",category:"News",type:"Pay To View",lock:"Unlocked"},
+{name:"Quest TV (240p) [Not 24/7]",category:"Education",type:"Free",lock:"Unlocked"},
+{name:"Rave TV (576p)",category:"Sports",type:"Pay To View",lock:"Locked"},
+{name:"Salvation TV (576p)",category:"News",type:"Pay To View",lock:"Unlocked"},
+{name:"Silverbird News 24 (576p)",category:"Kids",type:"Pay To View",lock:"Locked"},
+{name:"Soundcity TV",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"Sunna TV (576p)",category:"Sports",type:"Pay To View",lock:"Unlocked"},
+{name:"Superscreen TV (412p)",category:"Movies",type:"Free",lock:"Unlocked"},
+{name:"Synagogue TV (576p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"TVC (1080p)",category:"Education",type:"Free",lock:"Unlocked"},
+{name:"TVC News (576p)",category:"Sports",type:"Pay To View",lock:"Unlocked"},
+{name:"Waffi TV (240p)",category:"Music",type:"Free",lock:"Unlocked"},
+{name:"Wap TV (720p) [Not 24/7]",category:"Kids",type:"Free",lock:"Unlocked"},
+{name:"Wazobia Max TV Abuja (720p)",category:"Kids",type:"Free",lock:"Unlocked"},
+{name:"Wazobia Max TV Nigeria (720p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
+{name:"Wazobia Max TV Port Harcourt (720p)",category:"News",type:"Free",lock:"Unlocked"},
+{name:"Whole Word TV (720p)",category:"Movies",type:"Pay To View",lock:"Unlocked"}
+];
+
+function render(){
+let html="";
+channels.slice(0,page*20).forEach((ch,index)=>{
+html+=`
+<tr>
+<td>${ch.name}</td>
+<td>${ch.category}</td>
+<td>${ch.type}</td>
+<td class="${ch.lock==='Locked'?'locked':'unlocked'}">${ch.lock}</td>
+<td>
+<button class="action lock" onclick="toggleLock(${index})">${ch.lock==='Locked'?'Unlock':'Lock'}</button>
+<button class="action edit" onclick="editChannel(${index})">Edit</button>
+<button class="action delete" onclick="deleteChannel(${index})">Delete</button>
+</td>
+</tr>`;
+});
+document.getElementById("grid").innerHTML=html;
+}
+
+function toggleLock(index){
+channels[index].lock=
+channels[index].lock==="Locked"?"Unlocked":"Locked";
+render();
+}
+
+function editChannel(index){
+let name=prompt("Edit Channel Name",channels[index].name);
+if(name&&name.trim()!==""){
+channels[index].name=name;
+render();
+}
+}
+
+function deleteChannel(index){
+if(confirm("Delete "+channels[index].name+" ?")){
+channels.splice(index,1);
+render();
+}
+}
+
+function loadMore(){
+page++;
+render();
+}
+
+function scan(){alert("📡 Channel Scan Complete");}
+function boost(){alert("⚡ IPTV Boost Activated");}
+function repair(){alert("🛠 Repair Complete");}
+function optimize(){alert("🧠 System Optimized");}
+
+function openAdmin(){
+let p=document.getElementById("adminPanel");
+p.style.display=p.style.display==="flex"?"none":"flex";
+}
+
+render();
+
+</script>
+
+</body>
+</html>
