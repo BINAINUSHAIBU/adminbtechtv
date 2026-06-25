@@ -1,5 +1,6 @@
-```html
+
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -9,6 +10,7 @@
 <script src="https://js.paystack.co/v1/inline.js"></script>
 
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -90,6 +92,10 @@ border-radius:10px;
 text-align:center;
 }
 
+.plan h2{
+margin-bottom:10px;
+}
+
 .price{
 font-size:30px;
 font-weight:bold;
@@ -121,7 +127,6 @@ display:flex;
 justify-content:center;
 align-items:center;
 margin-top:20px;
-font-size:28px;
 }
 
 .countdown{
@@ -129,7 +134,9 @@ font-size:18px;
 margin-top:10px;
 color:#00d4ff;
 }
+
 </style>
+
 </head>
 
 <body>
@@ -141,20 +148,25 @@ color:#00d4ff;
 
 <div class="container">
 
-<!-- Registration -->
+<!-- REGISTER -->
+
 <div class="card" id="registerBox">
+
 <h2>Create Account</h2>
 
 <input id="name" placeholder="Full Name">
-<input id="email" type="email" placeholder="Email Address">
+<input id="email" placeholder="Email">
 
 <button onclick="registerUser()">
 Start 7-Day Free Trial
 </button>
+
 </div>
 
-<!-- Dashboard -->
+<!-- DASHBOARD -->
+
 <div class="card hidden" id="dashboard">
+
 <h2>User Dashboard</h2>
 
 <div id="welcome"></div>
@@ -162,10 +174,13 @@ Start 7-Day Free Trial
 <div id="statusBox" class="status"></div>
 
 <div class="countdown" id="countdown"></div>
+
 </div>
 
-<!-- Subscription Plans -->
+<!-- SUBSCRIPTION -->
+
 <div class="card hidden" id="plans">
+
 <h2>Subscription Plans</h2>
 
 <div class="plan-grid">
@@ -174,7 +189,6 @@ Start 7-Day Free Trial
 <h2>Basic</h2>
 <div class="price">₦5,000</div>
 <p>30 Days Access</p>
-<br>
 <button onclick="payNow(5000)">
 Subscribe
 </button>
@@ -184,7 +198,6 @@ Subscribe
 <h2>Premium</h2>
 <div class="price">₦10,000</div>
 <p>30 Days Access</p>
-<br>
 <button onclick="payNow(10000)">
 Subscribe
 </button>
@@ -194,21 +207,23 @@ Subscribe
 <h2>Ultimate</h2>
 <div class="price">₦20,000</div>
 <p>30 Days Access</p>
-<br>
 <button onclick="payNow(20000)">
 Subscribe
 </button>
 </div>
 
 </div>
+
 </div>
 
-<!-- IPTV Section -->
+<!-- IPTV -->
+
 <div class="card hidden" id="iptvSection">
+
 <h2>IPTV Access Unlocked</h2>
 
 <div class="player">
-📺 IPTV PLAYER AREA
+<h1>📺 IPTV PLAYER AREA</h1>
 </div>
 
 </div>
@@ -217,37 +232,30 @@ Subscribe
 
 <script>
 
-// Register User
 function registerUser(){
 
-const name=document.getElementById("name").value.trim();
-const email=document.getElementById("email").value.trim();
+const name=document.getElementById("name").value;
+const email=document.getElementById("email").value;
 
 if(!name || !email){
 alert("Complete all fields");
 return;
 }
 
-const trialEnd=
-Date.now()+(7*24*60*60*1000);
+const trialEnd=Date.now()+(7*24*60*60*1000);
 
 const user={
 name,
 email,
 trialEnd,
-subscriptionEnd:null,
-paymentReference:null
+subscriptionEnd:null
 };
 
-localStorage.setItem(
-"iptvUser",
-JSON.stringify(user)
-);
+localStorage.setItem("iptvUser",JSON.stringify(user));
 
 loadUser();
 }
 
-// Load User
 function loadUser(){
 
 const user=JSON.parse(
@@ -272,31 +280,27 @@ document.getElementById("welcome")
 checkAccess();
 }
 
-// Check Access
 function checkAccess(){
 
 const user=JSON.parse(
 localStorage.getItem("iptvUser")
 );
 
-if(!user) return;
-
 const now=Date.now();
 
 let active=false;
 
-if(
-user.subscriptionEnd &&
-now<user.subscriptionEnd
-){
+if(user.subscriptionEnd &&
+now < user.subscriptionEnd){
+
 active=true;
-}
-else if(now<user.trialEnd){
+
+}else if(now < user.trialEnd){
+
 active=true;
 }
 
-const box=
-document.getElementById("statusBox");
+const box=document.getElementById("statusBox");
 
 if(active){
 
@@ -324,7 +328,6 @@ document.getElementById("iptvSection")
 updateCountdown();
 }
 
-// Countdown
 function updateCountdown(){
 
 const user=JSON.parse(
@@ -333,71 +336,37 @@ localStorage.getItem("iptvUser")
 
 if(!user) return;
 
-const expiry=
-user.subscriptionEnd ||
-user.trialEnd;
+let expiry=
+user.subscriptionEnd || user.trialEnd;
 
-const diff=
-expiry-Date.now();
+let diff=expiry-Date.now();
 
-if(diff<=0){
+if(diff<0){
 document.getElementById("countdown")
 .innerHTML="Expired";
 return;
 }
 
-const days=
-Math.floor(
+let days=Math.floor(
 diff/(1000*60*60*24)
-);
-
-const hours=
-Math.floor(
-(diff%(1000*60*60*24))
-/
-(1000*60*60)
 );
 
 document.getElementById("countdown")
 .innerHTML=
-"Access Ends In: "+
-days+
-" Days "+
-hours+
-" Hours";
+"Access Ends In: "+days+" Days";
 }
 
-// Paystack Payment
 function payNow(amount){
-
-const user=JSON.parse(
-localStorage.getItem("iptvUser")
-);
-
-if(!user){
-alert("Please create an account first");
-return;
-}
 
 let handler=PaystackPop.setup({
 
 key:"YOUR_PAYSTACK_PUBLIC_KEY",
 
-email:user.email,
+email:"customer@email.com",
 
 amount:amount*100,
 
 currency:"NGN",
-
-metadata:{
-custom_fields:[
-{
-display_name:"Customer Name",
-variable_name:"customer_name",
-value:user.name
-}
-]
-},
 
 callback:function(response){
 
@@ -406,11 +375,7 @@ localStorage.getItem("iptvUser")
 );
 
 user.subscriptionEnd=
-Date.now()+
-(30*24*60*60*1000);
-
-user.paymentReference=
-response.reference;
+Date.now()+(30*24*60*60*1000);
 
 localStorage.setItem(
 "iptvUser",
@@ -418,15 +383,12 @@ JSON.stringify(user)
 );
 
 alert(
-"Payment Successful!\nReference: "
+"Payment Successful\nReference: "
 +response.reference
 );
 
 checkAccess();
-},
 
-onClose:function(){
-alert("Payment Cancelled");
 }
 
 });
@@ -434,14 +396,11 @@ alert("Payment Cancelled");
 handler.openIframe();
 }
 
-// Auto Load User
 loadUser();
 
-// Refresh Status
 setInterval(checkAccess,5000);
 
 </script>
 
 </body>
 </html>
-```
