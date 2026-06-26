@@ -421,6 +421,385 @@ localStorage.getItem('subscriptionStatus')
 window.onload=updateSubscriptionStatus;
 
 </script>
+<script>
 
+// -----------------------------
+// Favorites
+// -----------------------------
+let favorites=[];
+
+function addFavorite(name){
+
+    if(!favorites.includes(name)){
+        favorites.push(name);
+        localStorage.setItem(
+            "favorites",
+            JSON.stringify(favorites)
+        );
+    }
+
+    renderFavorites();
+
+}
+
+function renderFavorites(){
+
+    let list=document.getElementById("favoritesList");
+
+    if(!list) return;
+
+    favorites=
+    JSON.parse(
+        localStorage.getItem("favorites")
+        || "[]"
+    );
+
+    list.innerHTML="";
+
+    favorites.forEach(item=>{
+
+        let li=document.createElement("li");
+
+        li.textContent=item;
+
+        list.appendChild(li);
+
+    });
+
+}
+
+// -----------------------------
+// Theme
+// -----------------------------
+function toggleTheme(){
+
+    document.body.classList.toggle("light");
+
+}
+
+// -----------------------------
+// Search
+// -----------------------------
+function searchChannels(){
+
+    let filter=document
+    .getElementById("searchInput")
+    .value
+    .toLowerCase();
+
+    document
+    .querySelectorAll(".channel")
+    .forEach(card=>{
+
+        card.style.display=
+        card.innerText
+        .toLowerCase()
+        .includes(filter)
+        ?"block":"none";
+
+    });
+
+}
+
+// -----------------------------
+// Login
+// -----------------------------
+function login(){
+
+    let email=document
+    .getElementById("email")
+    .value
+    .trim();
+
+    if(email===""){
+
+        alert("Enter your email.");
+
+        return;
+
+    }
+
+    localStorage.setItem(
+        "subscriberEmail",
+        email
+    );
+
+    alert("Login Successful.");
+
+}
+
+// -----------------------------
+// Paystack Subscription
+// -----------------------------
+function subscribe(plan,amount){
+
+    let email=document
+    .getElementById("email")
+    .value
+    .trim();
+
+    if(email===""){
+
+        alert("Please login first.");
+
+        return;
+
+    }
+
+    let handler=PaystackPop.setup({
+
+        key:"YOUR_PAYSTACK_PUBLIC_KEY",
+
+        email:email,
+
+        amount:amount*100,
+
+        currency:"NGN",
+
+        ref:"WORLDTV-"+Date.now(),
+
+        metadata:{
+
+            custom_fields:[
+
+                {
+
+                    display_name:"Subscription",
+
+                    variable_name:"plan",
+
+                    value:plan
+
+                }
+
+            ]
+
+        },
+
+        callback:function(response){
+
+            localStorage.setItem(
+                "subscriptionPlan",
+                plan
+            );
+
+            localStorage.setItem(
+                "subscriptionStatus",
+                "Active"
+            );
+
+            localStorage.setItem(
+                "paymentReference",
+                response.reference
+            );
+
+            let expiry=new Date();
+
+            expiry.setMonth(
+                expiry.getMonth()+1
+            );
+
+            localStorage.setItem(
+                "subscriptionExpiry",
+                expiry.toISOString()
+            );
+
+            unlockChannels();
+
+            updateSubscriptionStatus();
+
+            alert(
+
+                "Subscription Activated\n\n"+
+
+                "Plan : "+plan+
+
+                "\nReference : "+response.reference
+
+            );
+
+        },
+
+        onClose:function(){
+
+            alert("Payment Cancelled");
+
+        }
+
+    });
+
+    handler.openIframe();
+
+}
+
+// -----------------------------
+// Unlock Channels
+// -----------------------------
+function unlockChannels(){
+
+    let plan=
+    localStorage.getItem(
+        "subscriptionPlan"
+    );
+
+    if(plan==="Basic Monthly"){
+
+        console.log("Basic Enabled");
+
+    }
+
+    if(plan==="Premium"){
+
+        console.log("Premium Enabled");
+
+        // Premium channels
+
+    }
+
+    if(plan==="Super Premium"){
+
+        console.log("Everything Enabled");
+
+        // Unlock all channels
+
+    }
+
+}
+
+// -----------------------------
+// Expiry Check
+// -----------------------------
+function checkSubscriptionExpiry(){
+
+    let expiry=
+    localStorage.getItem(
+        "subscriptionExpiry"
+    );
+
+    if(!expiry) return;
+
+    if(
+
+        new Date()
+
+        >
+
+        new Date(expiry)
+
+    ){
+
+        localStorage.removeItem(
+            "subscriptionPlan"
+        );
+
+        localStorage.removeItem(
+            "paymentReference"
+        );
+
+        localStorage.removeItem(
+            "subscriptionExpiry"
+        );
+
+        localStorage.setItem(
+            "subscriptionStatus",
+            "Expired"
+        );
+
+        alert(
+            "Subscription Expired"
+        );
+
+    }
+
+}
+
+// -----------------------------
+// Subscription Dashboard
+// -----------------------------
+function updateSubscriptionStatus(){
+
+    let plan=
+    localStorage.getItem(
+        "subscriptionPlan"
+    );
+
+    let status=
+    localStorage.getItem(
+        "subscriptionStatus"
+    );
+
+    let expiry=
+    localStorage.getItem(
+        "subscriptionExpiry"
+    );
+
+    if(document.getElementById("subPlan"))
+        document.getElementById("subPlan").innerHTML=
+        plan||"No Active Subscription";
+
+    if(document.getElementById("subStatus"))
+        document.getElementById("subStatus").innerHTML=
+        status||"Inactive";
+
+    if(document.getElementById("expiryDate"))
+        document.getElementById("expiryDate").innerHTML=
+
+        expiry
+
+        ?
+
+        "Expires : "+
+
+        new Date(expiry).toLocaleDateString()
+
+        :
+
+        "-";
+
+}
+
+// -----------------------------
+// Navigation
+// -----------------------------
+function showPage(page){
+
+    document
+    .querySelectorAll(
+        "[id$='Page']"
+    )
+    .forEach(div=>{
+
+        div.classList.add(
+            "hidden"
+        );
+
+    });
+
+    document
+    .getElementById(
+        page+"Page"
+    )
+    .classList.remove(
+        "hidden"
+    );
+
+}
+
+// -----------------------------
+// Startup
+// -----------------------------
+window.onload=function(){
+
+    renderFavorites();
+
+    checkSubscriptionExpiry();
+
+    unlockChannels();
+
+    updateSubscriptionStatus();
+
+};
+
+</script>
 </body>
 </html>
