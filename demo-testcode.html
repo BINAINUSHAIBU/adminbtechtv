@@ -1,166 +1,174 @@
 
 
-
-
-
-
-<!-- ========================================================= -->
-<!-- SUPER ADMIN IPTV + BTECH-TV PRO ULTRA MAX WORLD -->
-<!-- FULL MERGED ONE PAGE VERSION 2026 -->
-<!-- ========================================================= -->
-
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
-
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-<title>📺 SUPER ADMIN IPTV ULTRA MAX WORLD</title>
-
-<meta name="theme-color" content="#050816"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BTECH-TV WORLD PRO MAX </title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
-:root{
---bg:#050816;
---panel:#111827;
---card:#172033;
---hover:#22304d;
---accent:#00d4ff;
---text:#ffffff;
-}
-
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-
-body{
-background:var(--bg);
-color:var(--text);
-overflow:hidden;
-}
-
-.container{display:flex;height:100vh}
+/* BASE */
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
 
 /* SIDEBAR */
 .sidebar{
-width:340px;
+width:280px;
 background:#0d1324;
-padding:10px;
-overflow:auto;
+padding:15px;
+overflow-y:auto;
 border-right:1px solid #1d2b4f;
 }
 
-.logo{
-font-size:20px;
-font-weight:900;
-color:var(--accent);
-margin-bottom:10px;
-}
+.logo{font-size:22px;font-weight:900;color:#00d4ff;}
+.sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
+
+.menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
 
 .nav-btn{
 width:100%;
-padding:8px;
-margin:4px 0;
+padding:10px;
+margin:5px 0;
 background:#121c33;
 border:none;
 border-radius:8px;
-color:white;
+color:#fff;
 cursor:pointer;
 }
+.nav-btn:hover{background:#1e2f57}
 
 /* MAIN */
-.main{flex:1;display:flex;flex-direction:column}
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+padding:10px;
+}
 
+/* TOP */
 .topbar{
 display:flex;
 justify-content:space-between;
+margin-bottom:10px;
+}
+
+.search-box input{
 padding:10px;
-background:#0f172a;
-}
-
-.brand-header{
-padding:10px;
-background:#0b1220;
-font-weight:700;
-}
-
-/* DASHBOARD */
-.dashboard{
-padding:8px;
-background:#0b1220;
-display:flex;
-gap:10px;
-align-items:center;
-}
-
-.dashboard input{
-flex:1;
-padding:8px;
-border-radius:6px;
+border-radius:8px;
 border:none;
+background:#101a31;
+color:#fff;
+width:260px;
 }
 
-/* STATS */
+.live{background:red;padding:6px 12px;border-radius:20px}
+
+/* HERO */
+.hero{
+background:linear-gradient(135deg,#07132f,#0f1d45);
+padding:10px;
+border-radius:10px;
+margin-bottom:10px;
+}
+
 .stats{
-display:flex;
-gap:10px;
-padding:8px;
-font-size:13px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin-top:8px;
 }
 
 .stat{
-background:#111827;
-padding:6px 10px;
-border-radius:6px;
+background:#101d39;
+padding:8px;
+border-radius:8px;
+text-align:center;
 }
 
 /* PLAYER */
-.player{
-height:300px;
-background:black;
+.player-container{
+background:#000;
+border-radius:10px;
+overflow:hidden;
+height:320px;
+flex-shrink:0;
 }
 
-.player video{
-width:100%;
-height:100%;
+video{width:100%;height:100%;}
+
+/* CONTROLS */
+.controls{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin:10px 0;
+flex-shrink:0;
 }
 
-/* TABLE */
-.table-wrap{
+.controls button{
+padding:8px 10px;
+border:none;
+border-radius:6px;
+background:#152445;
+color:#fff;
+cursor:pointer;
+}
+.controls button:hover{background:#00d4ff;color:#000}
+
+/* CHANNELS */
+.channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+
+.channels{
+overflow-y:auto;
 flex:1;
-overflow:auto;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+gap:10px;
+padding-right:5px;
+}
+
+.card{
+background:#111a31;
 padding:10px;
+border-radius:10px;
+cursor:pointer;
+border:1px solid #1f355d;
+transition:.3s;
+}
+.card:hover{transform:scale(1.03);border-color:#00d4ff;}
+
+.badge{
+background:red;
+padding:3px 6px;
+border-radius:10px;
+font-size:10px;
+float:right;
 }
 
-.table{
-width:100%;
-border-collapse:collapse;
+@media(max-width:900px){
+body{flex-direction:column;}
+.sidebar{width:100%;}
 }
-
-.table th,.table td{
-padding:6px;
-border-bottom:1px solid #22304d;
-font-size:12px;
-}
-
-button{cursor:pointer}
 
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
 <!-- SIDEBAR -->
 <div class="sidebar">
 
 <div class="logo">📺 BTECH-TV PRO MAX</div>
+<div class="sub">Ultra BTECH-TV world Engine X</div>
 
-<h4>🌍 Countries</h4>
+<div class="menu-title">🌍 Countries</div>
 
+<!-- ALL COUNTRIES -->
 <button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
 <button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
 <button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
@@ -187,24 +195,39 @@ button{cursor:pointer}
 <button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
 <button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
 
-<h4>🎬 Categories</h4>
-<button class="nav-btn">📰 News</button>
-<button class="nav-btn">⚽ Sports</button>
-<button class="nav-btn">🎬 Movies</button>
-<button class="nav-btn">🎵 Music</button>
-<button class="nav-btn">👶 Kids</button>
-<button class="nav-btn">😂 Comedy</button>
-<button class="nav-btn">📚 Documentary</button>
-<button class="nav-btn">💼 Business</button>
-<button class="nav-btn">🔬 Science</button>
-<button class="nav-btn">✈ Travel</button>
+<div class="menu-title">🎬 Categories</div>
 
-<h4>🔥 Tools</h4>
-<button class="nav-btn">📡 Scan</button>
-<button class="nav-btn">⚡ Boost</button>
-<button class="nav-btn">🛠 Repair</button>
-<button class="nav-btn">🧠 Optimize</button>
-<button class="nav-btn">⚙ Admin</button>
+<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
+<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
+<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
+<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
+<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
+<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
+<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
+<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
+<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
+<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
+
+<div class="menu-title">🗣 Languages</div>
+
+<button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
+<button class="nav-btn" onclick="load('spa')">🇪🇸 Spanish</button>
+<button class="nav-btn" onclick="load('ara')">🇸🇦 Arabic</button>
+<button class="nav-btn" onclick="load('fra')">🇫🇷 French</button>
+<button class="nav-btn" onclick="load('hin')">🇮🇳 Hindi</button>
+<button class="nav-btn" onclick="load('zho')">🇨🇳 Chinese</button>
+<button class="nav-btn" onclick="load('por')">🇵🇹 Portuguese</button>
+
+<div class="menu-title">🔥 Tools</div>
+
+<button class="nav-btn" onclick="scanStreams()">📡 Scan</button>
+<button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
+<button class="nav-btn" onclick="togglePiP()">📺 PiP</button>
+<button class="nav-btn" onclick="clearRecents()">🗑 Recents</button>
+<button class="nav-btn" onclick="recordMode()">⏺ Record</button>
+<button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
+<button class="nav-btn" onclick="repairStreams()">🛠 Repair</button>
+<button class="nav-btn" onclick="optimizeMemory()">🧠 Optimize</button>
 
 </div>
 
@@ -212,171 +235,180 @@ button{cursor:pointer}
 <div class="main">
 
 <div class="topbar">
-<div>📺 SUPER ADMIN IPTV SYSTEM</div>
-<div>🔴 LIVE</div>
+<div class="search-box">
+<input oninput="search(this.value)" placeholder="Search BTECH-TV World...">
+</div>
+<div class="live">🔴 BTECH-TV LIVE</div>
 </div>
 
-<div class="brand-header">
-📺 BTECH-TV PRO MAX | GLOBAL IPTV ENGINE
-</div>
-
-<div class="dashboard">
-<input id="search" placeholder="Search Channels..." oninput="searchChannels()"/>
-</div>
-
+<div class="hero">
+<h3>BTECH-TV World PRO MAX SYSTEM</h3>
 <div class="stats">
-<div class="stat">📺 Channels: <span id="count">46</span></div>
-<div class="stat">⚡ CDN Active</div>
-<div class="stat">🧠 AI Ready</div>
-<div class="stat">🌍 Global Feed</div>
+<div class="stat">📺 <div id="total">0</div></div>
+<div class="stat">⭐ Fav <div id="fav">0</div></div>
+<div class="stat">⚫ Dead <div id="dead">0</div></div>
+<div class="stat">🌍 Live <div id="live">0</div></div>
+</div>
 </div>
 
-<div class="player">
+<div class="player-container">
 <video id="video" controls autoplay muted></video>
 </div>
 
-<div class="table-wrap">
-<table class="table">
-<thead>
-<tr>
-<th>Channel Name</th>
-<th>Category</th>
-<th>Type</th>
-<th>Lock Status</th>
-<th>Actions</th>
-</tr>
-</thead>
-<tbody id="tbody"></tbody>
-</table>
+<div class="controls">
+<button onclick="next()">▶ Next</button>
+<button onclick="prev()">◀ Prev</button>
+<button onclick="toggleMute()">🔊 Mute</button>
+<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+<button onclick="loadUltra()">🚀 Global</button>
 </div>
 
+<div class="channel-wrapper">
+<div class="channels" id="grid"></div>
 </div>
+
 </div>
 
 <script>
 
-/* ================= FULL 46 CHANNEL DATABASE ================= */
-let channels = [
-{name:"ACNN (480p)",category:"Sports",type:"Free",lock:"Unlocked"},
-{name:"Advocate Broadcasting Network (576p)",category:"News",type:"Pay To View",lock:"Locked"},
-{name:"Africa TV3 (720p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Unlocked"},
-{name:"BCS StarCross TV (576p)",category:"Education",type:"Free",lock:"Unlocked"},
-{name:"Bride TV (576p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
-{name:"Caught-Up TV (480p) [Not 24/7]",category:"Music",type:"Free",lock:"Unlocked"},
-{name:"Channels 24",category:"Sports",type:"Pay To View",lock:"Unlocked"},
-{name:"Channels TV",category:"Music",type:"Pay To View",lock:"Unlocked"},
-{name:"Chosen TV English (360p)",category:"Music",type:"Free",lock:"Unlocked"},
-{name:"cLoveworld TV (480p)",category:"Kids",type:"Free",lock:"Unlocked"},
-{name:"Coza TV (576p)",category:"Music",type:"Pay To View",lock:"Unlocked"},
-{name:"Dunamis TV (576p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Unlocked"},
-{name:"Flame TV (576p)",category:"Music",type:"Pay To View",lock:"Unlocked"},
-{name:"Foursquare TV (360p) [Not 24/7]",category:"Education",type:"Pay To View",lock:"Unlocked"},
-{name:"Itage TV (480p)",category:"Music",type:"Pay To View",lock:"Unlocked"},
-{name:"Kingsview TV (1080p)",category:"Education",type:"Free",lock:"Unlocked"},
-{name:"LN247 (1080p)",category:"Sports",type:"Free",lock:"Unlocked"},
-{name:"LoveWorld Arabic (360p)",category:"Music",type:"Free",lock:"Unlocked"},
-{name:"LoveWorld Persia (720p)",category:"Sports",type:"Pay To View",lock:"Unlocked"},
-{name:"Loveworld UK (1080p) [Not 24/7]",category:"Education",type:"Pay To View",lock:"Locked"},
-{name:"LoveWorld USA (720p)",category:"Music",type:"Free",lock:"Unlocked"},
-{name:"LoveworldSAT (1080p)",category:"News",type:"Pay To View",lock:"Unlocked"},
-{name:"Master's TV (720p)",category:"Sports",type:"Pay To View",lock:"Unlocked"},
-{name:"More Grace TV (410p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Locked"},
-{name:"New Vision TV (360p)",category:"News",type:"Free",lock:"Unlocked"},
-{name:"News Central",category:"Music",type:"Free",lock:"Unlocked"},
-{name:"NTA International (576p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Locked"},
-{name:"Phenomenal Life TV (1080p)",category:"News",type:"Free",lock:"Unlocked"},
-{name:"Plus TV Africa (720p) [Not 24/7]",category:"Music",type:"Pay To View",lock:"Unlocked"},
-{name:"Qausain TV (720p)",category:"Movies",type:"Free",lock:"Unlocked"},
-{name:"Quest TV (240p) [Not 24/7]",category:"Music",type:"Free",lock:"Unlocked"},
-{name:"Rave TV (576p)",category:"News",type:"Pay To View",lock:"Unlocked"},
-{name:"Salvation TV (576p)",category:"Kids",type:"Free",lock:"Unlocked"},
-{name:"Silverbird News 24 (576p)",category:"News",type:"Pay To View",lock:"Unlocked"},
-{name:"Soundcity TV",category:"Education",type:"Pay To View",lock:"Locked"},
-{name:"Sunna TV (576p)",category:"Music",type:"Free",lock:"Locked"},
-{name:"Superscreen TV (412p)",category:"Sports",type:"Pay To View",lock:"Unlocked"},
-{name:"Synagogue TV (576p)",category:"Kids",type:"Free",lock:"Unlocked"},
-{name:"TVC (1080p)",category:"Sports",type:"Free",lock:"Unlocked"},
-{name:"TVC News (576p)",category:"News",type:"Pay To View",lock:"Locked"},
-{name:"Waffi TV (240p)",category:"Kids",type:"Free",lock:"Locked"},
-{name:"Wap TV (720p) [Not 24/7]",category:"Education",type:"Pay To View",lock:"Locked"},
-{name:"Wazobia Max TV Abuja (720p)",category:"Kids",type:"Pay To View",lock:"Unlocked"},
-{name:"Wazobia Max TV Nigeria (720p)",category:"Movies",type:"Free",lock:"Unlocked"},
-{name:"Wazobia Max TV Port Harcourt (720p)",category:"Kids",type:"Free",lock:"Locked"},
-{name:"Whole Word TV (720p)",category:"Education",type:"Pay To View",lock:"Unlocked"}
-];
-
-let filtered=[...channels];
+let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
 
-/* RENDER TABLE */
-function render(){
-let t=document.getElementById("tbody");
-t.innerHTML="";
-
-filtered.forEach((c,i)=>{
-t.innerHTML+=`
-<tr>
-<td>${c.name}</td>
-<td>${c.category}</td>
-<td>${c.type}</td>
-<td>${c.lock}</td>
-<td>
-<button onclick="play(${i})">Play</button>
-<button onclick="toggleLock(${i})">Lock</button>
-<button onclick="edit(${i})">Edit</button>
-<button onclick="del(${i})">Delete</button>
-</td>
-</tr>`;
-});
-document.getElementById("count").innerText=filtered.length;
+/* LOAD */
+async function load(code){
+await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
+
+async function loadCat(c){
+await loadM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`);
+}
+
+async function loadUltra(){
+await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
+}
+
+/* M3U */
+async function loadM3U(url){
+const res=await fetch(url);
+const text=await res.text();
+
+all=[];filtered=[];i=0;
+
+let lines=text.split("\n");
+
+for(let x=0;x<lines.length;x++){
+if(lines[x].startsWith("#EXTINF")){
+let name=lines[x].split(",").pop();
+let url=lines[x+1];
+if(url && url.startsWith("http")) all.push({name,url});
+}
+}
+
+filtered=[...all];
 render();
+stats();
+}
+
+/* RENDER */
+/* RENDER */
+function render(){
+
+    let grid = document.getElementById("grid");
+    grid.innerHTML = "";
+
+    filtered.forEach((c, idx)=>{
+
+        // Remove quality tags only
+        let cleanName = c.name
+            .replace(/\s*\(1080p\)/gi,"")
+            .replace(/\s*\(720p\)/gi,"")
+            .replace(/\s*\(540p\)/gi,"")
+            .replace(/\s*\(480p\)/gi,"")
+            .replace(/\s*\(360p\)/gi,"")
+            .replace(/\s*\(240p\)/gi,"")
+            .replace(/\s*\(144p\)/gi,"")
+            .trim();
+
+        let div = document.createElement("div");
+        div.className = "card";
+
+        div.innerHTML = `
+            <div class="badge">LIVE</div>
+            <strong>${idx + 1}.</strong> ${cleanName}
+        `;
+
+        div.onclick = ()=>play(idx);
+
+        grid.appendChild(div);
+
+    });
+
+}
 
 /* PLAY */
-function play(i){
-let url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8";
+/* PLAY */
+function play(idx){
 
-if(hls) hls.destroy();
+    i = idx;
 
-if(Hls.isSupported()){
-hls=new Hls();
-hls.loadSource(url);
-hls.attachMedia(video);
-hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
-}else{
-video.src=url;
-video.play();
+    let c = filtered[i];
+
+    let cleanName = c.name
+        .replace(/\s*\(1080p\)/gi,"")
+        .replace(/\s*\(720p\)/gi,"")
+        .replace(/\s*\(540p\)/gi,"")
+        .replace(/\s*\(480p\)/gi,"")
+        .replace(/\s*\(360p\)/gi,"")
+        .replace(/\s*\(240p\)/gi,"")
+        .replace(/\s*\(144p\)/gi,"")
+        .trim();
+
+    document.title = `${idx + 1}. ${cleanName} | BTECH-TV WORLD PRO MAX`;
+
+    if(hls) hls.destroy();
+
+    if(Hls.isSupported()){
+        hls = new Hls();
+        hls.loadSource(c.url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+    }else{
+        video.src = c.url;
+        video.play();
+    }
+
 }
-}
-
-/* SEARCH */
-function searchChannels(){
-let v=document.getElementById("search").value.toLowerCase();
-filtered=channels.filter(c=>
-c.name.toLowerCase().includes(v) ||
-c.category.toLowerCase().includes(v)
-);
+/* BASIC */
+function search(q){
+filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
 render();
 }
 
-/* ACTIONS */
-function toggleLock(i){
-filtered[i].lock = filtered[i].lock==="Locked"?"Unlocked":"Locked";
-render();
+function next(){i=(i+1)%filtered.length;play(i);}
+function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
+
+function toggleMute(){video.muted=!video.muted;}
+function toggleFullscreen(){video.requestFullscreen();}
+
+/* EXTRA FEATURES (PLACEHOLDER SAFE) */
+function scanStreams(){alert("Scanning streams...");}
+function speedBoost(){video.playbackRate=1.15;}
+function repairStreams(){alert("Repair mode active");}
+function optimizeMemory(){alert("Optimizing memory");}
+function recordMode(){alert("Record mode enabled");}
+function clearRecents(){alert("Recents cleared");}
+
+/* STATS */
+function stats(){
+document.getElementById("total").innerText=all.length;
+document.getElementById("live").innerText=all.length;
+document.getElementById("dead").innerText=0;
+document.getElementById("fav").innerText=0;
 }
 
-function edit(i){
-let c=filtered[i];
-c.name=prompt("Edit Name",c.name)||c.name;
-render();
-}
-
-function del(i){
-channels = channels.filter(x=>x.name!==filtered[i].name);
-filtered=[...channels];
-render();
-}
+/* AUTO START */
+loadUltra();
 
 </script>
 
