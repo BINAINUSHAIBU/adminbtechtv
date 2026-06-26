@@ -456,47 +456,211 @@ WORLD TV PRO MAX IPTV
 </div>
 
 <script>
+// ===============================
+// BTECH TV PRO MAX IPTV
+// PART 2
+// ===============================
 
-const channels=[];
+let channels = JSON.parse(localStorage.getItem("channels") || "[]");
+let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+let recent = JSON.parse(localStorage.getItem("recent") || "[]");
 
-function showLogin(){
+const player = document.getElementById("video");
+const list = document.getElementById("channelList");
+const search = document.getElementById("search");
+const total = document.getElementById("count");
 
-document.getElementById("login").style.display="flex";
+function saveStorage() {
+    localStorage.setItem("channels", JSON.stringify(channels));
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+    localStorage.setItem("recent", JSON.stringify(recent));
+}
+
+function renderChannels(data = channels) {
+
+    list.innerHTML = "";
+
+    data.forEach((c, i) => {
+
+        list.innerHTML += `
+        <div class="channel" onclick="playChannel(${i})">
+
+            <img src="${c.logo || 'https://dummyimage.com/80x80/333/fff&text=TV'}">
+
+            <div>
+
+                <b>${String(i + 1).padStart(3, "0")}</b><br>
+
+                ${c.name}
+
+            </div>
+
+        </div>
+        `;
+
+    });
+
+    total.innerHTML = data.length;
 
 }
 
-window.onclick=e=>{
+function playChannel(index) {
 
-if(e.target.className=="modal")
+    const c = channels[index];
 
-e.target.style.display="none";
+    recent.unshift(c);
+
+    recent = [...new Map(recent.map(x => [x.url, x])).values()].slice(0,20);
+
+    saveStorage();
+
+    if (Hls.isSupported()) {
+
+        const hls = new Hls();
+
+        hls.loadSource(c.url);
+
+        hls.attachMedia(player);
+
+    } else {
+
+        player.src = c.url;
+
+    }
+
+    player.play();
+
+}
+
+search.addEventListener("keyup", () => {
+
+    const q = search.value.toLowerCase();
+
+    renderChannels(
+
+        channels.filter(x =>
+
+            x.name.toLowerCase().includes(q)
+
+        )
+
+    );
+
+});
+
+function parseM3U(text){
+
+    channels=[];
+
+    const lines=text.split("\n");
+
+    let current={};
+
+    lines.forEach(line=>{
+
+        line=line.trim();
+
+        if(line.startsWith("#EXTINF")){
+
+            current={};
+
+            const name=line.split(",").pop();
+
+            current.name=name;
+
+            const lg=line.match(/tvg-logo="(.*?)"/);
+
+            if(lg) current.logo=lg[1];
+
+            const gp=line.match(/group-title="(.*?)"/);
+
+            if(gp) current.group=gp[1];
+
+        }
+
+        else if(line.startsWith("http")){
+
+            current.url=line;
+
+            channels.push(current);
+
+        }
+
+    });
+
+    saveStorage();
+
+    renderChannels();
 
 }
 
 function uploadPlaylist(){
 
-alert("Upload M3U Coming in Part 2");
+    const input=document.createElement("input");
+
+    input.type="file";
+
+    input.accept=".m3u,.m3u8";
+
+    input.onchange=e=>{
+
+        const file=e.target.files[0];
+
+        const reader=new FileReader();
+
+        reader.onload=x=>{
+
+            parseM3U(x.target.result);
+
+        };
+
+        reader.readAsText(file);
+
+    };
+
+    input.click();
 
 }
 
-function importURL(){
+async function importURL(){
 
-alert("Import URL Coming in Part 2");
+    const url=prompt("Enter M3U URL");
 
-}
+    if(!url) return;
 
-function subscribe(){
+    const txt=await fetch(url).then(r=>r.text());
 
-alert("Paystack Integration Coming in Part 3");
-
-}
-
-function showSettings(){
-
-alert("Settings Coming in Part 4");
+    parseM3U(txt);
 
 }
 
+function addFavorite(index){
+
+    favorites.push(channels[index]);
+
+    favorites=[...new Map(favorites.map(x=>[x.url,x])).values()];
+
+    saveStorage();
+
+}
+
+function showFavorites(){
+
+    renderChannels(favorites);
+
+}
+
+function showRecent(){
+
+    renderChannels(recent);
+
+}
+
+window.onload=()=>{
+
+    renderChannels();
+
+};
 </script>
 // ===============================
 // BTECH TV PRO MAX IPTV
