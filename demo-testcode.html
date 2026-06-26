@@ -1,214 +1,249 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live Sports Channel Dashboard</title>
+<title>ULTRA OTT PRODUCTION SYSTEM</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0b1220;
-  color: #fff;
+body{margin:0;font-family:Arial;background:#0b0f1a;color:white;overflow:hidden}
+
+/* TOPBAR */
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px;
+background:#111827;
+}
+.logo{color:#00d4ff;font-weight:bold}
+
+/* BUTTONS */
+button{
+padding:8px;
+margin:2px;
+border:none;
+border-radius:6px;
+background:#1f2937;
+color:white;
+cursor:pointer;
 }
 
-header {
-  background: #111827;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* LAYOUT */
+.container{display:flex;height:calc(100vh - 50px)}
+
+/* SIDEBAR */
+.sidebar{
+width:220px;
+background:#0f172a;
+padding:10px;
+overflow:auto;
 }
 
-h1 { font-size: 18px; }
-
-.search input {
-  padding: 8px;
-  border-radius: 6px;
-  border: none;
-  width: 200px;
+.cat{
+padding:8px;
+margin:5px 0;
+background:#1f2937;
+border-radius:6px;
+cursor:pointer;
 }
 
-.container {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  height: calc(100vh - 60px);
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column}
+
+/* PLAYER */
+.player{height:260px;background:black;position:relative}
+video{width:100%;height:100%}
+.live{position:absolute;top:10px;left:10px;background:red;padding:5px}
+
+/* LIST */
+.list{flex:1;overflow:auto;padding:10px}
+.item{
+padding:10px;
+background:#1f2937;
+margin-bottom:5px;
+border-radius:6px;
+cursor:pointer;
+display:flex;
+justify-content:space-between;
 }
 
-.sidebar {
-  background: #0f172a;
-  overflow-y: auto;
-  padding: 10px;
-  border-right: 1px solid #1f2937;
+/* ADMIN */
+.admin{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.9);
+display:none;
+padding:20px;
+overflow:auto;
 }
 
-.channel {
-  background: #1e293b;
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  position: relative;
-}
-
-.channel:hover {
-  background: #273449;
-}
-
-.badge {
-  font-size: 10px;
-  padding: 3px 6px;
-  border-radius: 5px;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
-.free { background: #22c55e; }
-.premium { background: #ef4444; }
-
-.locked {
-  opacity: 0.6;
-}
-
-.main {
-  padding: 15px;
-}
-
-.player {
-  width: 100%;
-  height: 60vh;
-  background: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  margin-bottom: 15px;
-  font-size: 18px;
-}
-
-.info {
-  background: #111827;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.btn {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
-.pay {
-  background: #f59e0b;
-  color: black;
-}
-
-.watch {
-  background: #22c55e;
-  color: white;
+.box{
+background:#111827;
+padding:15px;
+border-radius:10px;
+margin-bottom:10px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1>📺 Live Sports Channels</h1>
-  <div class="search">
-    <input type="text" id="search" placeholder="Search channels...">
-  </div>
-</header>
+<!-- TOPBAR -->
+<div class="topbar">
+<div class="logo">📺 ULTRA OTT PRO</div>
 
+<div>
+<button onclick="loadMovies()">Movies</button>
+<button onclick="loadLive()">Live TV</button>
+<button onclick="loadSeries()">Series</button>
+<button onclick="openAdmin()">Admin</button>
+<button onclick="openPay()">Subscribe</button>
+</div>
+</div>
+
+<!-- MAIN -->
 <div class="container">
 
-  <!-- SIDEBAR -->
-  <div class="sidebar" id="channelList"></div>
+<div class="sidebar">
+<h3>Categories</h3>
+<div class="cat" onclick="loadMovies()">🎬 Movies</div>
+<div class="cat" onclick="loadSeries()">📺 Series</div>
+<div class="cat" onclick="loadLive()">📡 Live TV</div>
+<div class="cat" onclick="clearList()">🧹 Clear</div>
+</div>
 
-  <!-- MAIN PLAYER -->
-  <div class="main">
-    <div class="player" id="player">
-      Select a channel to watch
-    </div>
+<div class="main">
 
-    <div class="info" id="info">
-      Channel info will appear here
-    </div>
-  </div>
+<div class="player">
+<div class="live">LIVE</div>
+<video id="video" controls></video>
+</div>
+
+<div class="list" id="list"></div>
+
+</div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin" id="admin">
+
+<div class="box">
+<h2>ADMIN DASHBOARD</h2>
+<p id="stats"></p>
+<button onclick="closeAdmin()">Close</button>
+</div>
+
+<div class="box">
+<h3>Add Movie</h3>
+<input id="mname" placeholder="Movie Name">
+<input id="murl" placeholder="Video URL">
+<button onclick="addMovie()">Add</button>
+</div>
+
+<div class="box">
+<h3>Add Live Channel</h3>
+<input id="cname" placeholder="Channel Name">
+<input id="curl" placeholder="Stream URL">
+<button onclick="addChannel()">Add</button>
+</div>
 
 </div>
 
 <script>
-const channels = [
-  { id: 1, name: "Sky Sports Premier League", type: "premium", stream: "LIVE STREAM 1" },
-  { id: 2, name: "ESPN Sports HD", type: "free", stream: "LIVE STREAM 2" },
-  { id: 3, name: "BeIN Sports HD", type: "premium", stream: "LIVE STREAM 3" },
-  { id: 4, name: "SuperSport Football", type: "free", stream: "LIVE STREAM 4" },
-  { id: 5, name: "NBA TV Live", type: "premium", stream: "LIVE STREAM 5" },
 
-];
+let video=document.getElementById("video");
 
-let unlocked = {};
+/* SIMULATED DATABASE */
+let DB={
+movies:[
+{name:"Action Movie",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
+],
+series:[
+{name:"Episode 1",url:"https://test-streams.mux.dev/test_001/stream.m3u8"}
+],
+live:[
+{name:"DSTV Sports",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"}
+]
+};
 
-function render(list) {
-  const container = document.getElementById("channelList");
-  container.innerHTML = "";
+/* RENDER */
+function render(items){
+let box=document.getElementById("list");
+box.innerHTML="";
 
-  list.forEach(ch => {
-    const isLocked = ch.type === "premium" && !unlocked[ch.id];
-
-    container.innerHTML += `
-      <div class="channel ${isLocked ? "locked" : ""}" onclick="openChannel(${ch.id})">
-        ${ch.name}
-        <span class="badge ${ch.type === "free" ? "free" : "premium"}">
-          ${ch.type.toUpperCase()}
-        </span>
-      </div>
-    `;
-  });
-}
-
-function openChannel(id) {
-  const ch = channels.find(c => c.id === id);
-  const player = document.getElementById("player");
-  const info = document.getElementById("info");
-
-  const isLocked = ch.type === "premium" && !unlocked[id];
-
-  if (isLocked) {
-    player.innerHTML = "🔒 Premium Channel Locked";
-    info.innerHTML = `
-      <b>${ch.name}</b><br>
-      This is a premium channel.<br>
-      <button class="btn pay" onclick="unlock(${id})">Pay to Unlock</button>
-    `;
-    return;
-  }
-
-  player.innerHTML = "▶ Playing: " + ch.stream;
-  info.innerHTML = `
-    <b>${ch.name}</b><br>
-    Status: LIVE
-  `;
-}
-
-function unlock(id) {
-  // simulate payment success (replace with Paystack/Flutterwave later)
-  unlocked[id] = true;
-  alert("Payment Successful! Channel Unlocked");
-  render(channels);
-}
-
-document.getElementById("search").addEventListener("input", e => {
-  const value = e.target.value.toLowerCase();
-  const filtered = channels.filter(c => c.name.toLowerCase().includes(value));
-  render(filtered);
+items.forEach((i,idx)=>{
+let div=document.createElement("div");
+div.className="item";
+div.innerHTML=`<span>${i.name}</span><span>▶</span>`;
+div.onclick=()=>play(i.url);
+box.appendChild(div);
 });
+}
 
-render(channels);
+/* PLAY */
+function play(url){
+if(Hls.isSupported()){
+let hls=new Hls();
+hls.loadSource(url);
+hls.attachMedia(video);
+hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+}else{
+video.src=url;
+video.play();
+}
+}
+
+/* LOAD SYSTEM */
+function loadMovies(){render(DB.movies)}
+function loadSeries(){render(DB.series)}
+function loadLive(){render(DB.live)}
+
+function clearList(){
+document.getElementById("list").innerHTML="";
+}
+
+/* ADMIN */
+function openAdmin(){
+document.getElementById("admin").style.display="block";
+updateStats();
+}
+
+function closeAdmin(){
+document.getElementById("admin").style.display="none";
+}
+
+function updateStats(){
+document.getElementById("stats").innerHTML=
+"Movies: "+DB.movies.length+
+"<br>Series: "+DB.series.length+
+"<br>Live: "+DB.live.length;
+}
+
+function addMovie(){
+DB.movies.push({
+name:document.getElementById("mname").value,
+url:document.getElementById("murl").value
+});
+updateStats();
+}
+
+function addChannel(){
+DB.live.push({
+name:document.getElementById("cname").value,
+url:document.getElementById("curl").value
+});
+updateStats();
+}
+
+/* PAYMENT SIMULATION */
+function openPay(){
+alert("Subscription Activated (SIMULATED PAYSTACK)");
+}
+
 </script>
 
 </body>
