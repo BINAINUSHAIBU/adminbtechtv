@@ -206,7 +206,7 @@ body{flex-direction:column;}
 <button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
 <button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
 <button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
-
+<p id="expiryDate"></p>
 <div class="menu-title">🗣 Languages</div>
 
 <button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
@@ -371,6 +371,143 @@ document.getElementById("fav").innerText=0;
 loadUltra();
 
 </script>
+function subscribe(plan, amount){
 
+    let email = document.getElementById("email").value.trim();
+
+    if(email==""){
+        alert("Please login first.");
+        return;
+    }
+
+    let handler = PaystackPop.setup({
+
+        key: "pk_live_xxxxxxxxxxxxxxxxxxxxxxxxx", // Your Public Key
+
+        email: email,
+
+        amount: amount * 100,
+
+        currency: "NGN",
+
+        ref: "TV-"+Date.now(),
+
+        metadata:{
+            custom_fields:[
+                {
+                    display_name:"Subscription",
+                    variable_name:"subscription",
+                    value:plan
+                }
+            ]
+        },
+
+        callback:function(response){
+
+            // Normally verify on backend first
+
+            localStorage.setItem("subscriptionPlan",plan);
+
+            localStorage.setItem("subscriptionStatus","Active");
+
+            localStorage.setItem("paymentReference",response.reference);
+
+            localStorage.setItem("subscriberEmail",email);
+
+            // Expiry Date
+
+            let expiry=new Date();
+
+            expiry.setMonth(expiry.getMonth()+1);
+
+            localStorage.setItem("subscriptionExpiry",expiry);
+
+function updateSubscriptionStatus(){
+
+    let plan=localStorage.getItem("subscriptionPlan");
+
+    let status=localStorage.getItem("subscriptionStatus");
+
+    let expiry=localStorage.getItem("subscriptionExpiry");
+
+    if(expiry){
+
+        let today=new Date();
+
+        let exp=new Date(expiry);
+
+        if(today>exp){
+
+            status="Expired";
+
+            plan="No Active Subscription";
+
+            localStorage.setItem("subscriptionStatus","Expired");
+
+            localStorage.removeItem("subscriptionPlan");
+
+        }
+
+    }
+
+    document.getElementById("subPlan").innerHTML=
+    plan || "No Active Subscription";
+
+    document.getElementById("subStatus").innerHTML=
+    status || "Inactive";
+
+}
+  let plan = localStorage.getItem("subscriptionPlan");
+
+if(plan=="Premium"){
+
+    // Unlock Premium Channels
+
+}
+
+if(plan=="Super Premium"){
+
+    // Unlock EVERYTHING
+
+}
+  let expiry = localStorage.getItem("subscriptionExpiry");
+
+if(expiry){
+
+    if(new Date()>new Date(expiry)){
+
+        alert("Subscription expired.");
+
+        localStorage.removeItem("subscriptionPlan");
+
+        localStorage.setItem("subscriptionStatus","Expired");
+
+        updateSubscriptionStatus();
+
+    }
+
+}
+            alert(
+                "Payment Successful!\n\n"+
+                "Plan : "+plan+
+                "\nReference : "+response.reference
+            );
+
+        },
+
+        onClose:function(){
+
+            alert("Payment cancelled.");
+
+        }
+
+    });
+
+    handler.openIframe();
+
+}
+  document.getElementById("expiryDate").innerHTML =
+"Expires : " +
+(localStorage.getItem("subscriptionExpiry") || "-");
 </body>
 </html>
