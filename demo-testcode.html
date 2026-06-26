@@ -1,426 +1,214 @@
-
-
-
-
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WORLDTV PRO MAX IPTV</title>
-
-<script src="https://js.paystack.co/v1/inline.js"></script>
+<title>Live Sports Channel Dashboard</title>
 
 <style>
-
-:root{
---bg:#050816;
---card:#111a31;
---sidebar:#0d1324;
---text:#ffffff;
---accent:#00d4ff;
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b1220;
+  color: #fff;
 }
 
-body.light{
---bg:#f4f6fb;
---card:#ffffff;
---sidebar:#e8eef8;
---text:#111111;
+header {
+  background: #111827;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+h1 { font-size: 18px; }
+
+.search input {
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+  width: 200px;
 }
 
-body{
-background:var(--bg);
-color:var(--text);
-display:flex;
-min-height:100vh;
+.container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  height: calc(100vh - 60px);
 }
 
-.sidebar{
-width:260px;
-background:var(--sidebar);
-padding:20px;
+.sidebar {
+  background: #0f172a;
+  overflow-y: auto;
+  padding: 10px;
+  border-right: 1px solid #1f2937;
 }
 
-.logo{
-font-size:22px;
-font-weight:bold;
-color:var(--accent);
-margin-bottom:20px;
+.channel {
+  background: #1e293b;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
 }
 
-.menu button{
-width:100%;
-padding:12px;
-margin-bottom:10px;
-border:none;
-border-radius:8px;
-cursor:pointer;
+.channel:hover {
+  background: #273449;
 }
 
-.main{
-flex:1;
-padding:20px;
+.badge {
+  font-size: 10px;
+  padding: 3px 6px;
+  border-radius: 5px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
-.topbar{
-display:flex;
-gap:10px;
-margin-bottom:20px;
-flex-wrap:wrap;
+.free { background: #22c55e; }
+.premium { background: #ef4444; }
+
+.locked {
+  opacity: 0.6;
 }
 
-.search{
-flex:1;
-padding:10px;
-border-radius:8px;
-border:none;
+.main {
+  padding: 15px;
 }
 
-.theme-btn{
-padding:10px 15px;
-border:none;
-border-radius:8px;
-cursor:pointer;
+.player {
+  width: 100%;
+  height: 60vh;
+  background: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  font-size: 18px;
 }
 
-.card{
-background:var(--card);
-padding:20px;
-border-radius:12px;
-margin-bottom:20px;
+.info {
+  background: #111827;
+  padding: 10px;
+  border-radius: 8px;
 }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
+.btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
 }
 
-.plan button,
-.favorite-btn{
-margin-top:10px;
-padding:10px;
-width:100%;
-border:none;
-border-radius:8px;
-cursor:pointer;
-background:#00d4ff;
-color:#000;
-font-weight:bold;
+.pay {
+  background: #f59e0b;
+  color: black;
 }
 
-.hidden{
-display:none;
+.watch {
+  background: #22c55e;
+  color: white;
 }
-
-input{
-width:100%;
-padding:10px;
-margin-top:10px;
-border-radius:8px;
-border:none;
-}
-
-@media(max-width:768px){
-body{
-flex-direction:column;
-}
-.sidebar{
-width:100%;
-}
-}
-
 </style>
-
 </head>
 
 <body>
 
-<div class="sidebar">
+<header>
+  <h1>📺 Live Sports Channels</h1>
+  <div class="search">
+    <input type="text" id="search" placeholder="Search channels...">
+  </div>
+</header>
 
-<div class="logo">📺 WORLDTV PRO MAX</div>
+<div class="container">
 
-<div class="menu">
-<button onclick="showPage('home')">Home</button>
-<button onclick="showPage('favorites')">Favorites</button>
-<button onclick="showPage('subscriptions')">Subscriptions</button>
-<button onclick="showPage('login')">Login</button>
-</div>
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="channelList"></div>
 
-</div>
+  <!-- MAIN PLAYER -->
+  <div class="main">
+    <div class="player" id="player">
+      Select a channel to watch
+    </div>
 
-<div class="main">
-
-<div class="topbar">
-<input type="text" class="search" id="searchInput"
-placeholder="Search channels..."
-onkeyup="searchChannels()">
-
-<button class="theme-btn" onclick="toggleTheme()">
-🌙 Theme
-</button>
-</div>
-
-<!-- HOME -->
-
-<div id="homePage">
-
-<div class="card">
-<h2>Featured Channels</h2>
-
-<div class="grid" id="channelList">
-
-<div class="card channel">
-<h3>News Channel</h3>
-<button class="favorite-btn"
-onclick="addFavorite('News Channel')">
-⭐ Favorite
-</button>
-</div>
-
-<div class="card channel">
-<h3>Sports Channel</h3>
-<button class="favorite-btn"
-onclick="addFavorite('Sports Channel')">
-⭐ Favorite
-</button>
-</div>
-
-<div class="card channel">
-<h3>Movie Channel</h3>
-<button class="favorite-btn"
-onclick="addFavorite('Movie Channel')">
-⭐ Favorite
-</button>
-</div>
-
-</div>
-</div>
-
-</div>
-
-<!-- FAVORITES -->
-
-<div id="favoritesPage" class="hidden">
-
-<div class="card">
-<h2>Favorites</h2>
-<ul id="favoritesList"></ul>
-</div>
-
-</div>
-
-<!-- SUBSCRIPTIONS -->
-
-<div id="subscriptionsPage" class="hidden">
-
-<div class="card">
-<h2>Current Subscription</h2>
-<p id="subPlan">No Active Subscription</p>
-<p id="subStatus">Inactive</p>
-</div>
-
-<div class="card">
-<h2>Subscription Plans</h2>
-
-<div class="grid">
-
-<div class="card plan">
-<h3>Basic Monthly</h3>
-<p>₦3,000 / Month</p>
-<button onclick="subscribe('Basic Monthly',3000)">
-Subscribe
-</button>
-</div>
-
-<div class="card plan">
-<h3>Premium</h3>
-<p>₦7,500 / Month</p>
-<button onclick="subscribe('Premium',7500)">
-Subscribe
-</button>
-</div>
-
-<div class="card plan">
-<h3>Super Premium</h3>
-<p>₦15,000 / Month</p>
-<button onclick="subscribe('Super Premium',15000)">
-Subscribe
-</button>
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- LOGIN -->
-
-<div id="loginPage" class="hidden">
-
-<div class="card">
-
-<h2>User Login</h2>
-
-<input type="email"
-id="email"
-placeholder="Email Address">
-
-<input type="password"
-placeholder="Password">
-
-<button class="favorite-btn"
-onclick="login()">
-Login </button>
-
-</div>
-
-</div>
+    <div class="info" id="info">
+      Channel info will appear here
+    </div>
+  </div>
 
 </div>
 
 <script>
+const channels = [
+  { id: 1, name: "Sky Sports Premier League", type: "premium", stream: "LIVE STREAM 1" },
+  { id: 2, name: "ESPN Sports HD", type: "free", stream: "LIVE STREAM 2" },
+  { id: 3, name: "BeIN Sports HD", type: "premium", stream: "LIVE STREAM 3" },
+  { id: 4, name: "SuperSport Football", type: "free", stream: "LIVE STREAM 4" },
+  { id: 5, name: "NBA TV Live", type: "premium", stream: "LIVE STREAM 5" },
 
-let favorites=[];
+];
 
-function showPage(page){
+let unlocked = {};
 
-document.getElementById('homePage').classList.add('hidden');
-document.getElementById('favoritesPage').classList.add('hidden');
-document.getElementById('subscriptionsPage').classList.add('hidden');
-document.getElementById('loginPage').classList.add('hidden');
+function render(list) {
+  const container = document.getElementById("channelList");
+  container.innerHTML = "";
 
-if(page==='home')
-document.getElementById('homePage').classList.remove('hidden');
+  list.forEach(ch => {
+    const isLocked = ch.type === "premium" && !unlocked[ch.id];
 
-if(page==='favorites')
-document.getElementById('favoritesPage').classList.remove('hidden');
-
-if(page==='subscriptions')
-document.getElementById('subscriptionsPage').classList.remove('hidden');
-
-if(page==='login')
-document.getElementById('loginPage').classList.remove('hidden');
+    container.innerHTML += `
+      <div class="channel ${isLocked ? "locked" : ""}" onclick="openChannel(${ch.id})">
+        ${ch.name}
+        <span class="badge ${ch.type === "free" ? "free" : "premium"}">
+          ${ch.type.toUpperCase()}
+        </span>
+      </div>
+    `;
+  });
 }
 
-function toggleTheme(){
-document.body.classList.toggle('light');
+function openChannel(id) {
+  const ch = channels.find(c => c.id === id);
+  const player = document.getElementById("player");
+  const info = document.getElementById("info");
+
+  const isLocked = ch.type === "premium" && !unlocked[id];
+
+  if (isLocked) {
+    player.innerHTML = "🔒 Premium Channel Locked";
+    info.innerHTML = `
+      <b>${ch.name}</b><br>
+      This is a premium channel.<br>
+      <button class="btn pay" onclick="unlock(${id})">Pay to Unlock</button>
+    `;
+    return;
+  }
+
+  player.innerHTML = "▶ Playing: " + ch.stream;
+  info.innerHTML = `
+    <b>${ch.name}</b><br>
+    Status: LIVE
+  `;
 }
 
-function addFavorite(name){
-
-if(!favorites.includes(name)){
-favorites.push(name);
-renderFavorites();
+function unlock(id) {
+  // simulate payment success (replace with Paystack/Flutterwave later)
+  unlocked[id] = true;
+  alert("Payment Successful! Channel Unlocked");
+  render(channels);
 }
-}
 
-function renderFavorites(){
-
-let list=document.getElementById('favoritesList');
-list.innerHTML='';
-
-favorites.forEach(item=>{
-let li=document.createElement('li');
-li.textContent=item;
-list.appendChild(li);
+document.getElementById("search").addEventListener("input", e => {
+  const value = e.target.value.toLowerCase();
+  const filtered = channels.filter(c => c.name.toLowerCase().includes(value));
+  render(filtered);
 });
-}
 
-function searchChannels(){
-
-let filter=
-document.getElementById('searchInput')
-.value.toLowerCase();
-
-document.querySelectorAll('.channel')
-.forEach(card=>{
-
-card.style.display=
-card.innerText.toLowerCase()
-.includes(filter)
-? 'block':'none';
-
-});
-}
-
-function login(){
-alert('Connect Login API Backend');
-}
-
-function subscribe(plan,amount){
-
-let email=
-document.getElementById('email').value;
-
-if(!email){
-alert('Please login first');
-return;
-}
-
-PaystackPop.setup({
-
-key:'YOUR_PAYSTACK_PUBLIC_KEY',
-
-email:email,
-
-amount:amount*100,
-
-currency:'NGN',
-
-callback:function(response){
-
-localStorage.setItem(
-'subscriptionPlan',
-plan
-);
-
-localStorage.setItem(
-'subscriptionStatus',
-'Active'
-);
-
-localStorage.setItem(
-'paymentReference',
-response.reference
-);
-
-updateSubscriptionStatus();
-
-alert(
-plan +
-' subscription activated.'
-);
-
-}
-
-}).openIframe();
-}
-
-function updateSubscriptionStatus(){
-
-document.getElementById('subPlan')
-.innerHTML=
-localStorage.getItem('subscriptionPlan')
-|| 'No Active Subscription';
-
-document.getElementById('subStatus')
-.innerHTML=
-localStorage.getItem('subscriptionStatus')
-|| 'Inactive';
-}
-
-window.onload=updateSubscriptionStatus;
-
+render(channels);
 </script>
 
 </body>
