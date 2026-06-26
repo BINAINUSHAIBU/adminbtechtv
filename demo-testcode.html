@@ -309,8 +309,6 @@ filtered=[...all];
 render();
 stats();
 }
-
-/* RENDER */
 /* RENDER */
 function render(){
 
@@ -319,7 +317,7 @@ function render(){
 
     filtered.forEach((c, idx)=>{
 
-        // Remove quality tags only
+        // Remove quality labels only
         let cleanName = c.name
             .replace(/\s*\(1080p\)/gi,"")
             .replace(/\s*\(720p\)/gi,"")
@@ -330,12 +328,18 @@ function render(){
             .replace(/\s*\(144p\)/gi,"")
             .trim();
 
+        // Channel number with leading zeros
+        let ch = String(idx + 1).padStart(3, "0");
+
         let div = document.createElement("div");
         div.className = "card";
 
         div.innerHTML = `
             <div class="badge">LIVE</div>
-            <strong>${idx + 1}.</strong> ${cleanName}
+            <div style="font-weight:bold;color:#00d4ff;margin-bottom:6px;">
+                CH ${ch}
+            </div>
+            <div>${cleanName}</div>
         `;
 
         div.onclick = ()=>play(idx);
@@ -347,11 +351,9 @@ function render(){
 }
 
 /* PLAY */
-/* PLAY */
 function play(idx){
 
     i = idx;
-
     let c = filtered[i];
 
     let cleanName = c.name
@@ -364,7 +366,9 @@ function play(idx){
         .replace(/\s*\(144p\)/gi,"")
         .trim();
 
-    document.title = `${idx + 1}. ${cleanName} | BTECH-TV WORLD PRO MAX`;
+    let ch = String(idx + 1).padStart(3, "0");
+
+    document.title = `CH ${ch} - ${cleanName} | BTECH-TV WORLD PRO MAX`;
 
     if(hls) hls.destroy();
 
