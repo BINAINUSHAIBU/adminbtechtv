@@ -1,1 +1,427 @@
 
+
+
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WORLDTV PRO MAX IPTV</title>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
+<style>
+
+:root{
+--bg:#050816;
+--card:#111a31;
+--sidebar:#0d1324;
+--text:#ffffff;
+--accent:#00d4ff;
+}
+
+body.light{
+--bg:#f4f6fb;
+--card:#ffffff;
+--sidebar:#e8eef8;
+--text:#111111;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:260px;
+background:var(--sidebar);
+padding:20px;
+}
+
+.logo{
+font-size:22px;
+font-weight:bold;
+color:var(--accent);
+margin-bottom:20px;
+}
+
+.menu button{
+width:100%;
+padding:12px;
+margin-bottom:10px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+.main{
+flex:1;
+padding:20px;
+}
+
+.topbar{
+display:flex;
+gap:10px;
+margin-bottom:20px;
+flex-wrap:wrap;
+}
+
+.search{
+flex:1;
+padding:10px;
+border-radius:8px;
+border:none;
+}
+
+.theme-btn{
+padding:10px 15px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+.card{
+background:var(--card);
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.plan button,
+.favorite-btn{
+margin-top:10px;
+padding:10px;
+width:100%;
+border:none;
+border-radius:8px;
+cursor:pointer;
+background:#00d4ff;
+color:#000;
+font-weight:bold;
+}
+
+.hidden{
+display:none;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:8px;
+border:none;
+}
+
+@media(max-width:768px){
+body{
+flex-direction:column;
+}
+.sidebar{
+width:100%;
+}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<div class="logo">📺 WORLDTV PRO MAX</div>
+
+<div class="menu">
+<button onclick="showPage('home')">Home</button>
+<button onclick="showPage('favorites')">Favorites</button>
+<button onclick="showPage('subscriptions')">Subscriptions</button>
+<button onclick="showPage('login')">Login</button>
+</div>
+
+</div>
+
+<div class="main">
+
+<div class="topbar">
+<input type="text" class="search" id="searchInput"
+placeholder="Search channels..."
+onkeyup="searchChannels()">
+
+<button class="theme-btn" onclick="toggleTheme()">
+🌙 Theme
+</button>
+</div>
+
+<!-- HOME -->
+
+<div id="homePage">
+
+<div class="card">
+<h2>Featured Channels</h2>
+
+<div class="grid" id="channelList">
+
+<div class="card channel">
+<h3>News Channel</h3>
+<button class="favorite-btn"
+onclick="addFavorite('News Channel')">
+⭐ Favorite
+</button>
+</div>
+
+<div class="card channel">
+<h3>Sports Channel</h3>
+<button class="favorite-btn"
+onclick="addFavorite('Sports Channel')">
+⭐ Favorite
+</button>
+</div>
+
+<div class="card channel">
+<h3>Movie Channel</h3>
+<button class="favorite-btn"
+onclick="addFavorite('Movie Channel')">
+⭐ Favorite
+</button>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<!-- FAVORITES -->
+
+<div id="favoritesPage" class="hidden">
+
+<div class="card">
+<h2>Favorites</h2>
+<ul id="favoritesList"></ul>
+</div>
+
+</div>
+
+<!-- SUBSCRIPTIONS -->
+
+<div id="subscriptionsPage" class="hidden">
+
+<div class="card">
+<h2>Current Subscription</h2>
+<p id="subPlan">No Active Subscription</p>
+<p id="subStatus">Inactive</p>
+</div>
+
+<div class="card">
+<h2>Subscription Plans</h2>
+
+<div class="grid">
+
+<div class="card plan">
+<h3>Basic Monthly</h3>
+<p>₦3,000 / Month</p>
+<button onclick="subscribe('Basic Monthly',3000)">
+Subscribe
+</button>
+</div>
+
+<div class="card plan">
+<h3>Premium</h3>
+<p>₦7,500 / Month</p>
+<button onclick="subscribe('Premium',7500)">
+Subscribe
+</button>
+</div>
+
+<div class="card plan">
+<h3>Super Premium</h3>
+<p>₦15,000 / Month</p>
+<button onclick="subscribe('Super Premium',15000)">
+Subscribe
+</button>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- LOGIN -->
+
+<div id="loginPage" class="hidden">
+
+<div class="card">
+
+<h2>User Login</h2>
+
+<input type="email"
+id="email"
+placeholder="Email Address">
+
+<input type="password"
+placeholder="Password">
+
+<button class="favorite-btn"
+onclick="login()">
+Login </button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let favorites=[];
+
+function showPage(page){
+
+document.getElementById('homePage').classList.add('hidden');
+document.getElementById('favoritesPage').classList.add('hidden');
+document.getElementById('subscriptionsPage').classList.add('hidden');
+document.getElementById('loginPage').classList.add('hidden');
+
+if(page==='home')
+document.getElementById('homePage').classList.remove('hidden');
+
+if(page==='favorites')
+document.getElementById('favoritesPage').classList.remove('hidden');
+
+if(page==='subscriptions')
+document.getElementById('subscriptionsPage').classList.remove('hidden');
+
+if(page==='login')
+document.getElementById('loginPage').classList.remove('hidden');
+}
+
+function toggleTheme(){
+document.body.classList.toggle('light');
+}
+
+function addFavorite(name){
+
+if(!favorites.includes(name)){
+favorites.push(name);
+renderFavorites();
+}
+}
+
+function renderFavorites(){
+
+let list=document.getElementById('favoritesList');
+list.innerHTML='';
+
+favorites.forEach(item=>{
+let li=document.createElement('li');
+li.textContent=item;
+list.appendChild(li);
+});
+}
+
+function searchChannels(){
+
+let filter=
+document.getElementById('searchInput')
+.value.toLowerCase();
+
+document.querySelectorAll('.channel')
+.forEach(card=>{
+
+card.style.display=
+card.innerText.toLowerCase()
+.includes(filter)
+? 'block':'none';
+
+});
+}
+
+function login(){
+alert('Connect Login API Backend');
+}
+
+function subscribe(plan,amount){
+
+let email=
+document.getElementById('email').value;
+
+if(!email){
+alert('Please login first');
+return;
+}
+
+PaystackPop.setup({
+
+key:'YOUR_PAYSTACK_PUBLIC_KEY',
+
+email:email,
+
+amount:amount*100,
+
+currency:'NGN',
+
+callback:function(response){
+
+localStorage.setItem(
+'subscriptionPlan',
+plan
+);
+
+localStorage.setItem(
+'subscriptionStatus',
+'Active'
+);
+
+localStorage.setItem(
+'paymentReference',
+response.reference
+);
+
+updateSubscriptionStatus();
+
+alert(
+plan +
+' subscription activated.'
+);
+
+}
+
+}).openIframe();
+}
+
+function updateSubscriptionStatus(){
+
+document.getElementById('subPlan')
+.innerHTML=
+localStorage.getItem('subscriptionPlan')
+|| 'No Active Subscription';
+
+document.getElementById('subStatus')
+.innerHTML=
+localStorage.getItem('subscriptionStatus')
+|| 'Inactive';
+}
+
+window.onload=updateSubscriptionStatus;
+
+</script>
+
+</body>
+</html>
