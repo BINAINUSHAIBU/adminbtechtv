@@ -332,8 +332,8 @@ function render(){
     let grid = document.getElementById("grid");
     grid.innerHTML = "";
 
-// Super-COMPACT-PLUS: display only the first 10,000 channels
-const displayChannels = filtered.slice(0, 10000);
+// Super-Premium-PLUS: display every available channel
+const displayChannels = filtered.slice(0, 13186);
 
 displayChannels.forEach((c, idx)=>{
     
@@ -411,13 +411,8 @@ function play(idx){
 }
 /* BASIC */
 function search(q){
-
-    filtered = all.filter(c =>
-        c.name.toLowerCase().includes(q.toLowerCase())
-    );
-
-    render();
-
+filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
+render();
 }
 
 function next(){i=(i+1)%filtered.length;play(i);}
@@ -437,7 +432,7 @@ function clearRecents(){alert("Recents cleared");}
 /* STATS */
 function stats(){
 
-    const visible = Math.min(10000, all.length);
+    const visible = Math.min(13186, all.length);
 
     document.getElementById("total").innerText =
         `${visible} / ${all.length}`;
@@ -447,8 +442,6 @@ function stats(){
     document.getElementById("fav").innerText = 0;
 
 }
-    
-
 /* AUTO START */
 loadUltra();
 
