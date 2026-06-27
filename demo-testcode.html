@@ -318,15 +318,9 @@ function render(){
     filtered.forEach((c, idx)=>{
 
         // Remove quality labels only
-        let cleanName = c.name
-            .replace(/\s*\(1080p\)/gi,"")
-            .replace(/\s*\(720p\)/gi,"")
-            .replace(/\s*\(540p\)/gi,"")
-            .replace(/\s*\(480p\)/gi,"")
-            .replace(/\s*\(360p\)/gi,"")
-            .replace(/\s*\(240p\)/gi,"")
-            .replace(/\s*\(144p\)/gi,"")
-            .trim();
+      let cleanName = c.name
+    .replace(/\s*\(\d+p\)/gi, "")
+    .trim();
 
         // Channel number with leading zeros
         let ch = String(idx + 1).padStart(3, "0");
