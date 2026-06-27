@@ -332,7 +332,8 @@ function render(){
     let grid = document.getElementById("grid");
     grid.innerHTML = "";
 
-const displayChannels = filtered.slice(0, 500);
+// Show only the first 1500 channels on the dashboard
+const displayChannels = filtered.slice(0, 1500);
 
 displayChannels.forEach((c, idx)=>{
     
@@ -418,7 +419,7 @@ function search(q){
     render();
 
 }
-
+    
 function next(){i=(i+1)%filtered.length;play(i);}
 function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
 
@@ -436,11 +437,12 @@ function clearRecents(){alert("Recents cleared");}
 /* STATS */
 function stats(){
 
+    const visible = Math.min(1500, all.length);
+
     document.getElementById("total").innerText =
-        `500 / ${all.length}`;
+        `${visible} / ${all.length}`;
 
-    document.getElementById("live").innerText = 500;
-
+    document.getElementById("live").innerText = visible;
     document.getElementById("dead").innerText = 0;
     document.getElementById("fav").innerText = 0;
 
