@@ -1,12 +1,11 @@
 
 
-
 <!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>📺 BTECH-TV WORLD PRO MAX</title>
+<title>BTECH-TV WORLD PRO MAX </title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -15,47 +14,6 @@
 /* BASE */
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
 body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
-
-/* AUTH SCREEN */
-#authBox{
-position:fixed;
-inset:0;
-background:#050816;
-display:flex;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-z-index:9999;
-}
-
-.auth-card{
-background:#0d1324;
-padding:20px;
-border-radius:12px;
-width:320px;
-text-align:center;
-border:1px solid #1d2b4f;
-}
-
-.auth-card input{
-width:100%;
-padding:10px;
-margin:8px 0;
-border:none;
-border-radius:6px;
-background:#101a31;
-color:#fff;
-}
-
-.auth-card button{
-width:100%;
-padding:10px;
-margin-top:10px;
-background:#00d4ff;
-border:none;
-border-radius:6px;
-cursor:pointer;
-}
 
 /* SIDEBAR */
 .sidebar{
@@ -68,32 +26,103 @@ border-right:1px solid #1d2b4f;
 
 .logo{font-size:22px;font-weight:900;color:#00d4ff;}
 .sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
+
 .menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
-.nav-btn{width:100%;padding:10px;margin:5px 0;background:#121c33;border:none;border-radius:8px;color:#fff;cursor:pointer;}
+
+.nav-btn{
+width:100%;
+padding:10px;
+margin:5px 0;
+background:#121c33;
+border:none;
+border-radius:8px;
+color:#fff;
+cursor:pointer;
+}
 .nav-btn:hover{background:#1e2f57}
 
 /* MAIN */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:10px;}
-.topbar{display:flex;justify-content:space-between;margin-bottom:10px;}
-.search-box input{padding:10px;border-radius:8px;border:none;background:#101a31;color:#fff;width:260px;}
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+padding:10px;
+}
+
+/* TOP */
+.topbar{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+}
+
+.search-box input{
+padding:10px;
+border-radius:8px;
+border:none;
+background:#101a31;
+color:#fff;
+width:260px;
+}
+
 .live{background:red;padding:6px 12px;border-radius:20px}
 
 /* HERO */
-.hero{background:linear-gradient(135deg,#07132f,#0f1d45);padding:10px;border-radius:10px;margin-bottom:10px;}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px;}
-.stat{background:#101d39;padding:8px;border-radius:8px;text-align:center;}
+.hero{
+background:linear-gradient(135deg,#07132f,#0f1d45);
+padding:10px;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin-top:8px;
+}
+
+.stat{
+background:#101d39;
+padding:8px;
+border-radius:8px;
+text-align:center;
+}
 
 /* PLAYER */
-.player-container{background:#000;border-radius:10px;overflow:hidden;height:320px;flex-shrink:0;}
+.player-container{
+background:#000;
+border-radius:10px;
+overflow:hidden;
+height:320px;
+flex-shrink:0;
+}
+
 video{width:100%;height:100%;}
 
 /* CONTROLS */
-.controls{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;flex-shrink:0;}
-.controls button{padding:8px 10px;border:none;border-radius:6px;background:#152445;color:#fff;cursor:pointer;}
+.controls{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin:10px 0;
+flex-shrink:0;
+}
+
+.controls button{
+padding:8px 10px;
+border:none;
+border-radius:6px;
+background:#152445;
+color:#fff;
+cursor:pointer;
+}
 .controls button:hover{background:#00d4ff;color:#000}
 
 /* CHANNELS */
 .channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+
 .channels{
 overflow-y:auto;
 flex:1;
@@ -102,6 +131,7 @@ grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
 gap:10px;
 padding-right:5px;
 }
+
 .card{
 background:#111a31;
 padding:10px;
@@ -111,19 +141,13 @@ border:1px solid #1f355d;
 transition:.3s;
 }
 .card:hover{transform:scale(1.03);border-color:#00d4ff;}
-.badge{background:red;padding:3px 6px;border-radius:10px;font-size:10px;float:right;}
 
-/* TIMER */
-#timerBar{
-position:fixed;
-top:10px;
-right:10px;
-background:#00d4ff;
-color:#000;
-padding:8px 12px;
-border-radius:8px;
-font-weight:bold;
-z-index:999;
+.badge{
+background:red;
+padding:3px 6px;
+border-radius:10px;
+font-size:10px;
+float:right;
 }
 
 @media(max-width:900px){
@@ -136,28 +160,15 @@ body{flex-direction:column;}
 
 <body>
 
-<!-- TIMER -->
-<div id="timerBar">Trial: Loading...</div>
-
-<!-- AUTH -->
-<div id="authBox">
-  <div class="auth-card">
-    <h3>🔐 BTECH-TV WORLD  ACCESS</h3>
-    <input id="email" placeholder="Email">
-    <input id="pass" type="password" placeholder="Password">
-
-    <button onclick="register()">Register</button>
-    <button onclick="login()">Login</button>
-  </div>
-</div>
-
 <!-- SIDEBAR -->
 <div class="sidebar">
 
-<div class="logo">📺 BTECH-TV WORLD PRO MAX</div>
-<div class="sub">Ultra BTECH-TV WORLD PRO MAX Engine X</div>
+<div class="logo">📺 BTECH-TV PRO MAX</div>
+<div class="sub">Ultra BTECH-TV world Engine X</div>
 
 <div class="menu-title">🌍 Countries</div>
+
+<!-- ALL COUNTRIES -->
 <button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
 <button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
 <button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
@@ -185,6 +196,7 @@ body{flex-direction:column;}
 <button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
 
 <div class="menu-title">🎬 Categories</div>
+
 <button class="nav-btn" onclick="loadCat('news')">📰 News</button>
 <button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
 <button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
@@ -197,6 +209,7 @@ body{flex-direction:column;}
 <button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
 
 <div class="menu-title">🗣 Languages</div>
+
 <button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
 <button class="nav-btn" onclick="load('spa')">🇪🇸 Spanish</button>
 <button class="nav-btn" onclick="load('ara')">🇸🇦 Arabic</button>
@@ -206,6 +219,7 @@ body{flex-direction:column;}
 <button class="nav-btn" onclick="load('por')">🇵🇹 Portuguese</button>
 
 <div class="menu-title">🔥 Tools</div>
+
 <button class="nav-btn" onclick="scanStreams()">📡 Scan</button>
 <button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
 <button class="nav-btn" onclick="togglePiP()">📺 PiP</button>
@@ -214,7 +228,6 @@ body{flex-direction:column;}
 <button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
 <button class="nav-btn" onclick="repairStreams()">🛠 Repair</button>
 <button class="nav-btn" onclick="optimizeMemory()">🧠 Optimize</button>
-<button class="nav-btn" onclick="logout()">🚪 Logout</button>
 
 </div>
 
@@ -223,13 +236,13 @@ body{flex-direction:column;}
 
 <div class="topbar">
 <div class="search-box">
-<input oninput="search(this.value)" placeholder="Search IPTV...">
+<input oninput="search(this.value)" placeholder="Search BTECH-TV World...">
 </div>
-<div class="live">🔴 LIVE</div>
+<div class="live">🔴 BTECH-TV LIVE</div>
 </div>
 
 <div class="hero">
-<h3>BTECH-TV WORLD PRO MAX SYSTEM</h3>
+<h3>BTECH-TV World PRO MAX SYSTEM</h3>
 <div class="stats">
 <div class="stat">📺 <div id="total">0</div></div>
 <div class="stat">⭐ Fav <div id="fav">0</div></div>
@@ -243,11 +256,28 @@ body{flex-direction:column;}
 </div>
 
 <div class="controls">
-<button onclick="next()">▶ Next</button>
-<button onclick="prev()">◀ Prev</button>
-<button onclick="toggleMute()">🔊 Mute</button>
-<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
-<button onclick="loadUltra()">🚀 Global</button>
+
+<div class="controls" style="display:flex;align-items:center;width:100%;">
+
+    <button onclick="next()">▶ Next</button>
+    <button onclick="prev()">◀ Prev</button>
+    <button onclick="toggleMute()">🔊 Mute</button>
+    <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    <button onclick="loadUltra()">🚀 Global</button>
+
+    <!-- Pushes the text to the far right -->
+    <div style="
+        margin-left:auto;
+        color:#00d4ff;
+        font-size:13px;
+        font-weight:bold;
+        white-space:nowrap;
+        padding-left:20px;
+    ">
+        Design by <span style="color:#ffffff;">BINAINU SHAIBU</span> | BTECH WEBSITE DESIGN
+    </div>
+
+</div>
 </div>
 
 <div class="channel-wrapper">
@@ -258,70 +288,11 @@ body{flex-direction:column;}
 
 <script>
 
-/* AUTH + TRIAL */
-const TRIAL_TIME = 5 * 3600 * 1000;
-
-function register(){
-let e=email.value,p=pass.value;
-if(!e||!p)return alert("Fill all");
-localStorage.setItem("user",JSON.stringify({e,p}));
-alert("Registered");
-}
-
-function login(){
-let e=email.value,p=pass.value;
-let u=JSON.parse(localStorage.getItem("user"));
-if(!u||u.e!==e||u.p!==p)return alert("Invalid");
-
-/* start timer */
-if(!localStorage.getItem("startTime")){
-localStorage.setItem("startTime",Date.now());
-}
-
-authBox.style.display="none";
-startTimer();
-loadUltra();
-}
-
-function logout(){
-localStorage.removeItem("startTime");
-location.reload();
-}
-
-function startTimer(){
-setInterval(()=>{
-let s=localStorage.getItem("startTime");
-if(!s)return;
-
-let d=TRIAL_TIME-(Date.now()-s);
-if (d <= 0) {
-    clearInterval(timer);
-
-    // Stop video playback
-    video.pause();
-
-    // Blur dashboard
-    document.querySelector(".main").style.filter = "blur(5px)";
-    document.querySelector(".sidebar").style.filter = "blur(5px)";
-
-    // Show subscription overlay
-    document.getElementById("subscriptionOverlay").style.display = "flex";
-
-    // Open the subscription page at "Trial Expired"
-    show("expired");
-
-    return;
-}
-  
-timerBar.innerText=`Trial Left: ${Math.floor(d/3600000)}h ${Math.floor(d%3600000/60000)}m ${Math.floor(d%60000/1000)}s`;
-},1000);
-}
-
-/* IPTV CORE */
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
 
+/* LOAD */
 async function load(code){
 await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
@@ -334,52 +305,108 @@ async function loadUltra(){
 await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
 }
 
+/* M3U */
 async function loadM3U(url){
-let res=await fetch(url);
-let text=await res.text();
+const res=await fetch(url);
+const text=await res.text();
 
 all=[];filtered=[];i=0;
 
-text.split("\n").forEach((l,idx,arr)=>{
-if(l.startsWith("#EXTINF")){
-let name=l.split(",").pop();
-let url=arr[idx+1];
-if(url?.startsWith("http")) all.push({name,url});
+let lines=text.split("\n");
+
+for(let x=0;x<lines.length;x++){
+if(lines[x].startsWith("#EXTINF")){
+let name=lines[x].split(",").pop();
+let url=lines[x+1];
+if(url && url.startsWith("http")) all.push({name,url});
 }
-});
+}
 
 filtered=[...all];
 render();
 stats();
 }
-
+/* RENDER */
 function render(){
-grid.innerHTML="";
-filtered.forEach((c,idx)=>{
-let div=document.createElement("div");
-div.className="card";
-div.innerHTML=`<div class='badge'>LIVE</div>${c.name}`;
-div.onclick=()=>play(idx);
-grid.appendChild(div);
-});
+
+    let grid = document.getElementById("grid");
+    grid.innerHTML = "";
+
+    filtered.forEach((c, idx)=>{
+
+        // Remove quality labels only
+      let cleanName = c.name
+    .replace(/\s*\(\d+p\)/gi, "")
+    .trim();
+
+        // Channel number with leading zeros
+        let ch = String(idx + 1).padStart(3, "0");
+
+        let div = document.createElement("div");
+        div.className = "card";
+
+        div.innerHTML = `
+    <div class="badge">LIVE</div>
+
+    <div style="
+        color:#00d4ff;
+        font-weight:bold;
+        font-size:14px;
+        margin-bottom:6px;
+    ">
+        BTECH-TV&nbsp;&nbsp;CH ${ch}
+    </div>
+
+    <div style="
+        color:#fff;
+        font-size:16px;
+        font-weight:600;
+    ">
+        ${cleanName}
+    </div>
+`;
+        div.onclick = ()=>play(idx);
+
+        grid.appendChild(div);
+
+    });
+
 }
 
+/* PLAY */
 function play(idx){
-i=idx;
-let c=filtered[i];
-if(hls)hls.destroy();
 
-if(Hls.isSupported()){
-hls=new Hls();
-hls.loadSource(c.url);
-hls.attachMedia(video);
-hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
-}else{
-video.src=c.url;
-video.play();
-}
-}
+    i = idx;
+    let c = filtered[i];
 
+    let cleanName = c.name
+        .replace(/\s*\(1080p\)/gi,"")
+        .replace(/\s*\(720p\)/gi,"")
+        .replace(/\s*\(540p\)/gi,"")
+        .replace(/\s*\(480p\)/gi,"")
+        .replace(/\s*\(360p\)/gi,"")
+        .replace(/\s*\(240p\)/gi,"")
+        .replace(/\s*\(144p\)/gi,"")
+        .trim();
+
+    let ch = String(idx + 1).padStart(3, "0");
+
+    document.title = `CH ${ch} - ${cleanName} | BTECH-TV WORLD PRO MAX`;
+
+    if(hls) hls.destroy();
+
+    if(Hls.isSupported()){
+        hls = new Hls();
+        hls.loadSource(c.url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+    }else{
+        video.src = c.url;
+        video.play();
+    }
+
+}
+/* BASIC */
 function search(q){
 filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
 render();
@@ -387,54 +414,30 @@ render();
 
 function next(){i=(i+1)%filtered.length;play(i);}
 function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
+
 function toggleMute(){video.muted=!video.muted;}
 function toggleFullscreen(){video.requestFullscreen();}
 
-function scanStreams(){alert("Scanning...");}
+/* EXTRA FEATURES (PLACEHOLDER SAFE) */
+function scanStreams(){alert("Scanning streams...");}
 function speedBoost(){video.playbackRate=1.15;}
-function repairStreams(){alert("Repairing...");}
-function optimizeMemory(){alert("Optimizing...");}
+function repairStreams(){alert("Repair mode active");}
+function optimizeMemory(){alert("Optimizing memory");}
+function recordMode(){alert("Record mode enabled");}
+function clearRecents(){alert("Recents cleared");}
 
+/* STATS */
 function stats(){
-total.innerText=all.length;
-live.innerText=all.length;
-dead.innerText=0;
-fav.innerText=0;
+document.getElementById("total").innerText=all.length;
+document.getElementById("live").innerText=all.length;
+document.getElementById("dead").innerText=0;
+document.getElementById("fav").innerText=0;
 }
 
-/* INIT */
+/* AUTO START */
 loadUltra();
 
 </script>
-
-  function openDashboard(){
-
-localStorage.setItem(
-"subscriptionExpiry",
-Date.now()+30*24*60*60*1000
-);
-
-document.querySelector(".main").style.filter="none";
-document.querySelector(".sidebar").style.filter="none";
-
-document.getElementById("subscriptionOverlay").style.display="none";
-
-}
-  window.onload=function(){
-
-let exp=localStorage.getItem("subscriptionExpiry");
-
-if(exp && Date.now()<exp){
-
-document.getElementById("subscriptionOverlay").style.display="none";
-
-}else{
-
-document.getElementById("subscriptionOverlay").style.display="none";
-
-}
-
-};
 
 </body>
 </html>
