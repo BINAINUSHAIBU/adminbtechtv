@@ -438,6 +438,178 @@ document.getElementById("fav").innerText=0;
 loadUltra();
 
 </script>
+    // App State
+let trialSeconds = 120;
+let subscriptionDays = 30;
+let subscriptionActive = false;
+
+// Start Trial
+startTrial();
+
+// ----------------------
+// Trial Timer
+// ----------------------
+function startTrial() {
+
+    const timer = setInterval(() => {
+
+        trialSeconds--;
+
+        updateTrialDisplay();
+
+        if(trialSeconds <= 0){
+
+            clearInterval(timer);
+
+            showTrialExpired();
+
+        }
+
+    },1000);
+
+}
+
+// ----------------------
+// Trial Expired
+// ----------------------
+function showTrialExpired(){
+
+    showScreen("expired");
+
+}
+
+// ----------------------
+// Package Selected
+// ----------------------
+function choosePackage(packageName){
+
+    localStorage.setItem("package",packageName);
+
+    showScreen("customer");
+
+}
+
+// ----------------------
+// Customer Details
+// ----------------------
+function submitCustomer(){
+
+    showScreen("payment");
+
+}
+
+// ----------------------
+// Demo Payment
+// ----------------------
+function payNow(){
+
+    showScreen("processing");
+
+    setTimeout(()=>{
+
+        paymentSuccess();
+
+    },3000);
+
+}
+
+// ----------------------
+// Payment Success
+// ----------------------
+function paymentSuccess(){
+
+    showScreen("success");
+
+    setTimeout(()=>{
+
+        verifyServer();
+
+    },2000);
+
+}
+
+// ----------------------
+// Simulated Verification
+// ----------------------
+function verifyServer(){
+
+    showScreen("verifying");
+
+    setTimeout(()=>{
+
+        activateSubscription();
+
+    },2500);
+
+}
+
+// ----------------------
+// Activate
+// ----------------------
+function activateSubscription(){
+
+    subscriptionActive = true;
+
+    localStorage.setItem("subscription","active");
+
+    localStorage.setItem(
+        "expiry",
+        Date.now() + (30*24*60*60*1000)
+    );
+
+    unlockChannels();
+
+}
+
+// ----------------------
+// Unlock Channels
+// ----------------------
+function unlockChannels(){
+
+    showScreen("dashboard");
+
+    document.querySelectorAll(".locked")
+        .forEach(c=>{
+
+            c.classList.remove("locked");
+
+            c.classList.add("unlocked");
+
+        });
+
+    start30DayCountdown();
+
+}
+
+// ----------------------
+// Countdown
+// ----------------------
+function start30DayCountdown(){
+
+    setInterval(()=>{
+
+        const expiry = Number(localStorage.getItem("expiry"));
+
+        const remain = expiry - Date.now();
+
+        if(remain <= 0){
+
+            subscriptionActive = false;
+
+            location.reload();
+
+            return;
+
+        }
+
+        const days = Math.floor(remain/86400000);
+
+        document.getElementById("days").textContent =
+            days + " Days Remaining";
+
+    },1000);
+
+}
 
 </body>
 </html>
