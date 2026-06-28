@@ -332,11 +332,8 @@ function render(){
     let grid = document.getElementById("grid");
     grid.innerHTML = "";
 
-// Super-Premium-PLUS: display every available channel
-const displayChannels = filtered.slice(0, 13186);
+    filtered.forEach((c, idx)=>{
 
-displayChannels.forEach((c, idx)=>{
-    
         // Remove quality labels only
       let cleanName = c.name
     .replace(/\s*\(\d+p\)/gi, "")
@@ -431,17 +428,12 @@ function clearRecents(){alert("Recents cleared");}
 
 /* STATS */
 function stats(){
-
-    const visible = Math.min(13186, all.length);
-
-    document.getElementById("total").innerText =
-        `${visible} / ${all.length}`;
-
-    document.getElementById("live").innerText = visible;
-    document.getElementById("dead").innerText = 0;
-    document.getElementById("fav").innerText = 0;
-
+document.getElementById("total").innerText=all.length;
+document.getElementById("live").innerText=all.length;
+document.getElementById("dead").innerText=0;
+document.getElementById("fav").innerText=0;
 }
+
 /* AUTO START */
 loadUltra();
 
