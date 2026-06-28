@@ -1,9 +1,12 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BTECH-TV Subscription</title>
+<title>BTECH-TV WORLD PRO MAX</title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
@@ -17,63 +20,69 @@ font-family:Arial,sans-serif;
 body{
 background:#050816;
 color:#fff;
+overflow:hidden;
+}
+
+/* ==========================
+SUBSCRIPTION OVERLAY
+========================== */
+
+#subscriptionOverlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#050816;
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
+z-index:9999;
 }
 
 .container{
 width:95%;
 max-width:700px;
-background:#0d1324;
+background:#111c36;
 padding:30px;
 border-radius:15px;
-box-shadow:0 0 25px rgba(0,212,255,.3);
+box-shadow:0 0 25px #00d4ff55;
 }
 
 .logo{
 font-size:32px;
-font-weight:bold;
 text-align:center;
 color:#00d4ff;
-margin-bottom:10px;
+font-weight:bold;
 }
 
 .subtitle{
 text-align:center;
-margin-bottom:30px;
-color:#9db6ff;
+margin:10px 0 30px;
+color:#8da6ff;
 }
 
 .step{
 display:none;
-animation:fade .4s;
 }
 
 .step.active{
 display:block;
 }
 
-@keyframes fade{
-from{opacity:0;}
-to{opacity:1;}
-}
-
 .timer{
-font-size:40px;
-color:#00ff90;
+font-size:45px;
 text-align:center;
-margin:20px 0;
+margin:20px;
+color:#00ff99;
 }
 
 .package{
-background:#111d39;
 padding:15px;
 margin:10px 0;
-border-radius:10px;
+background:#18294a;
+border-radius:8px;
 cursor:pointer;
-transition:.3s;
 }
 
 .package:hover{
@@ -81,174 +90,154 @@ background:#00d4ff;
 color:#000;
 }
 
-input,select{
-
+input{
 width:100%;
 padding:12px;
 margin:8px 0;
-border:none;
-border-radius:8px;
-background:#18294a;
+background:#0d1830;
 color:#fff;
-
+border:none;
+border-radius:6px;
 }
 
 button{
-
 width:100%;
 padding:14px;
+margin-top:15px;
 background:#00d4ff;
 color:#000;
 border:none;
-border-radius:8px;
 font-size:18px;
-font-weight:bold;
 cursor:pointer;
-margin-top:15px;
-
-}
-
-button:hover{
-
-background:#00ffff;
-
+border-radius:8px;
 }
 
 .loader{
-
 width:80px;
 height:80px;
-border:8px solid #222;
+border:8px solid #333;
 border-top:8px solid #00d4ff;
 border-radius:50%;
-margin:30px auto;
+margin:20px auto;
 animation:spin 1s linear infinite;
-
 }
 
 @keyframes spin{
-
 100%{
 transform:rotate(360deg);
 }
-
 }
 
 .success{
-
 font-size:90px;
 text-align:center;
-color:#00ff90;
-
+color:#00ff88;
 }
 
-.countdown{
+/* ==========================
+IPTV DASHBOARD
+========================== */
 
-font-size:28px;
-text-align:center;
-margin:20px;
-
+#dashboard{
+display:none;
+height:100vh;
 }
 
-.unlock{
+.sidebar{
+width:250px;
+height:100%;
+float:left;
+background:#111c36;
+overflow:auto;
+padding:15px;
+}
 
-text-align:center;
-font-size:30px;
-color:#00ff90;
+.main{
+margin-left:250px;
+height:100%;
+padding:15px;
+}
 
+video{
+width:100%;
+height:350px;
+background:#000;
+border-radius:10px;
+}
+
+.channels{
+margin-top:15px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+gap:10px;
+}
+
+.card{
+background:#17264a;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+}
+
+.card:hover{
+background:#00d4ff;
+color:#000;
 }
 
 </style>
-
 </head>
 
 <body>
 
+<div id="subscriptionOverlay">
+
 <div class="container">
 
-<div class="logo">
-
-📺 BTECH-TV WORLD PRO MAX
-
-</div>
+<div class="logo">📺 BTECH-TV WORLD PRO MAX</div>
 
 <div class="subtitle">
-
 Premium Subscription
-
 </div>
-
-<!-- STEP 1 -->
 
 <div id="trial" class="step active">
 
-<h2 align="center">
-
-🎁 Claim Offer
-
-</h2>
+<h2 align="center">🎁 Free Trial</h2>
 
 <div class="timer" id="trialTimer">
-
 02:00
-
 </div>
 
-<button onclick="expireTrial()">
-
+<button onclick="startTrial()">
 Start Free Trial
-
 </button>
 
 </div>
 
-<!-- STEP 2 -->
-
 <div id="expired" class="step">
 
 <h2 align="center">
-
 Trial Expired
-
 </h2>
 
-<br>
-
-<div class="package" onclick="choose('Starter')">
-
-Starter — ₦2,000 / Month
-
+<div class="package" onclick="choosePackage('Starter')">
+Starter ₦2,000
 </div>
 
-<div class="package" onclick="choose('Premium')">
-
-Premium — ₦5,000 / Month
-
+<div class="package" onclick="choosePackage('Premium')">
+Premium ₦5,000
 </div>
 
-<div class="package" onclick="choose('VIP')">
-
-VIP — ₦10,000 / Month
-
+<div class="package" onclick="choosePackage('VIP')">
+VIP ₦10,000
 </div>
 
-<div class="package" onclick="choose('Lifetime')">
-
-Lifetime — ₦50,000
-
+<div class="package" onclick="choosePackage('Lifetime')">
+Lifetime ₦50,000
 </div>
 
 </div>
-
-<!-- STEP 3 -->
 
 <div id="details" class="step">
-
-<h2>
-
-Customer Details
-
-</h2>
 
 <input placeholder="Full Name">
 
@@ -256,24 +245,18 @@ Customer Details
 
 <input placeholder="Phone">
 
-<input id="package" readonly>
+<input id="pkg" readonly>
 
-<button onclick="payment()">
-
+<button onclick="showPayment()">
 Proceed To Payment
-
 </button>
 
 </div>
 
-<!-- STEP 4 -->
-
 <div id="payment" class="step">
 
-<h2>
-
+<h2 align="center">
 Demo Payment
-
 </h2>
 
 <input value="4111 1111 1111 1111">
@@ -282,67 +265,79 @@ Demo Payment
 
 <input placeholder="CVV">
 
-<button onclick="processPayment()">
-
+<button onclick="payNow()">
 Pay Now
-
 </button>
 
 </div>
-
-<!-- STEP 5 -->
 
 <div id="processing" class="step">
 
 <div class="loader"></div>
 
 <h2 align="center">
-
-Processing Payment...
-
+Processing...
 </h2>
 
 </div>
-
-<!-- STEP 6 -->
 
 <div id="verify" class="step">
 
 <div class="loader"></div>
 
 <h2 align="center">
-
 Server Verification...
-
 </h2>
 
 </div>
-
-<!-- STEP 7 -->
 
 <div id="active" class="step">
 
 <div class="success">
-
 ✔
-
 </div>
 
 <h2 align="center">
-
 Subscription Activated
-
 </h2>
 
-<div class="countdown" id="days">
-
-30 Days Remaining
+<button onclick="openDashboard()">
+Enter IPTV
+</button>
 
 </div>
 
-<div class="unlock">
+</div>
 
-🔓 All Channels Unlocked
+</div>
+
+<div id="dashboard">
+
+<div class="sidebar">
+
+<h2>BTECH-TV</h2>
+
+<p>Countries</p>
+
+<button>Nigeria</button><br><br>
+<button>USA</button><br><br>
+<button>UK</button><br><br>
+<button>Sports</button><br><br>
+
+</div>
+
+<div class="main">
+
+<video controls id="video"></video>
+
+<div class="channels">
+
+<div class="card">CH 001 BBC News</div>
+<div class="card">CH 002 CNN</div>
+<div class="card">CH 003 Al Jazeera</div>
+<div class="card">CH 004 SuperSport</div>
+<div class="card">CH 005 ESPN</div>
+<div class="card">CH 006 TNT Sports</div>
 
 </div>
 
@@ -352,35 +347,29 @@ Subscription Activated
 
 <script>
 
-let selectedPackage="";
-
 function show(id){
 
-document.querySelectorAll(".step").forEach(x=>x.classList.remove("active"));
+document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
 
 document.getElementById(id).classList.add("active");
 
 }
 
-function expireTrial(){
+function startTrial(){
 
 let sec=120;
 
-let timer=setInterval(function(){
+let t=setInterval(()=>{
 
 sec--;
 
-let m=Math.floor(sec/60);
-
-let s=sec%60;
-
-document.getElementById("trialTimer").innerHTML=
-
-String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+trialTimer.innerHTML=
+String(Math.floor(sec/60)).padStart(2,"0")+":"+
+String(sec%60).padStart(2,"0");
 
 if(sec<=0){
 
-clearInterval(timer);
+clearInterval(t);
 
 show("expired");
 
@@ -390,59 +379,43 @@ show("expired");
 
 }
 
-function choose(p){
+function choosePackage(x){
 
-selectedPackage=p;
-
-document.getElementById("package").value=p;
+pkg.value=x;
 
 show("details");
 
 }
 
-function payment(){
+function showPayment(){
 
 show("payment");
 
 }
 
-function processPayment(){
+function payNow(){
 
 show("processing");
 
-setTimeout(function(){
+setTimeout(()=>{
 
 show("verify");
 
 },3000);
 
-setTimeout(function(){
+setTimeout(()=>{
 
 show("active");
-
-startCountdown();
 
 },6000);
 
 }
 
-function startCountdown(){
+function openDashboard(){
 
-let days=30;
+subscriptionOverlay.style.display="none";
 
-setInterval(function(){
-
-document.getElementById("days").innerHTML=
-
-days+" Days Remaining";
-
-if(days>0){
-
-days--;
-
-}
-
-},86400000);
+dashboard.style.display="block";
 
 }
 
@@ -450,3 +423,4 @@ days--;
 
 </body>
 </html>
+```
