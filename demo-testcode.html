@@ -435,9 +435,139 @@ document.getElementById("fav").innerText=0;
 }
 
 /* AUTO START */
+    /* ===========
+   2 Minute Trial
+=========== */
+
+const TRIAL_TIME = 2 * 60 * 1000;
+
+let trialStart = localStorage.getItem("trialStart");
+
+if(!trialStart){
+    trialStart = Date.now();
+    localStorage.setItem("trialStart", trialStart);
+}
+
+trialStart = Number(trialStart);
+
+function checkTrial(){
+
+    const elapsed = Date.now() - trialStart;
+
+    if(elapsed >= TRIAL_TIME){
+
+        document.getElementById("upgradeModal").style.display="flex";
+
+    }
+
+}
+
+setInterval(checkTrial,1000);
+
+function renewPackage(packageName){
+
+    alert(
+        "You selected:\n\n" +
+        packageName +
+        "\n\nProceed to payment and activation."
+    );
+
+}
+
+function selectPackage(){
+
+    alert(
+        "Free package activated.\n\nOnly 500 channels available."
+    );
+
+}
 loadUltra();
 
 </script>
+<div id="upgradeModal" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.92);
+z-index:999999;
+justify-content:center;
+align-items:center;
+">
 
+<div style="
+width:900px;
+max-width:95%;
+background:#07132f;
+border:2px solid #00d4ff;
+border-radius:15px;
+padding:25px;
+">
+
+<h2 style="text-align:center;color:#00d4ff;">
+🚀 Trial Version Expired
+</h2>
+
+<p style="text-align:center;color:#fff;margin:15px 0;">
+Upgrade or Renew your package to continue enjoying BTECH-TV WORLD PRO MAX.
+</p>
+
+<table style="width:100%;border-collapse:collapse;text-align:center;">
+
+<tr style="background:#00d4ff;color:#000;">
+<th>Package</th>
+<th>Channels</th>
+<th>Action</th>
+</tr>
+
+<tr>
+<td>🆓 Free</td>
+<td>500</td>
+<td><button onclick="selectPackage('Free')">Use Free</button></td>
+</tr>
+
+<tr>
+<td>💎 Premium</td>
+<td>1000</td>
+<td><button onclick="renewPackage('Premium')">Upgrade</button></td>
+</tr>
+
+<tr>
+<td>💠 Super Premium</td>
+<td>1500</td>
+<td><button onclick="renewPackage('Super Premium')">Upgrade</button></td>
+</tr>
+
+<tr>
+<td>🚀 Super-Premium COMPACT</td>
+<td>2000</td>
+<td><button onclick="renewPackage('Compact')">Upgrade</button></td>
+</tr>
+
+<tr>
+<td>👑 Super-Premium COMPACT-PLUS</td>
+<td>3500</td>
+<td><button onclick="renewPackage('Compact Plus')">Upgrade</button></td>
+</tr>
+
+<tr>
+<td>🔥 Super-COMPACT-PLUS</td>
+<td>10000</td>
+<td><button onclick="renewPackage('Compact Ultra')">Upgrade</button></td>
+</tr>
+
+<tr>
+<td>🌎 Super-Premium-PLUS</td>
+<td>13186</td>
+<td><button onclick="renewPackage('Ultimate')">Upgrade</button></td>
+</tr>
+
+</table>
+
+</div>
+
+</div>
 </body>
 </html>
