@@ -48,13 +48,97 @@ const t=setInterval(()=>{
  if(s<=0){clearInterval(t);video.pause();overlay.style.display='flex';}
 },1000);
 function pay(){
- status.innerHTML='Processing...';
- setTimeout(()=>status.innerHTML='Verifying...',1500);
- setTimeout(()=>{
- localStorage.setItem('btechSubscribed','yes');
- overlay.style.display='none';
- alert('Subscription Activated. Channels Unlocked.');
- },3000);
+
+    const status = document.getElementById("status");
+
+    status.innerHTML = `
+        <h3>Demo Payment Gateway</h3>
+
+        <input id="cardNumber"
+        placeholder="4111 1111 1111 1111"
+        value="4111 1111 1111 1111">
+
+        <input id="expiry"
+        placeholder="12/30"
+        value="12/30">
+
+        <input id="cvv"
+        placeholder="123"
+        value="123">
+
+        <button onclick="processDemoPayment()">
+        Pay Now
+        </button>
+    `;
+}
+
+function processDemoPayment(){
+
+    const status=document.getElementById("status");
+
+    const card=document.getElementById("cardNumber").value;
+    const exp=document.getElementById("expiry").value;
+    const cvv=document.getElementById("cvv").value;
+
+    if(card.length<16){
+        alert("Invalid Card Number");
+        return;
+    }
+
+    if(exp==""){
+        alert("Enter Expiry Date");
+        return;
+    }
+
+    if(cvv.length<3){
+        alert("Invalid CVV");
+        return;
+    }
+
+    status.innerHTML=`
+        <div style="text-align:center">
+            <h3>Processing Payment...</h3>
+            <br>
+            <div class="loader"></div>
+        </div>
+    `;
+
+    setTimeout(function(){
+
+        status.innerHTML=`
+            <div style="text-align:center">
+                <h3>Verifying Subscription...</h3>
+                <br>
+                <div class="loader"></div>
+            </div>
+        `;
+
+    },3000);
+
+    setTimeout(function(){
+
+        localStorage.setItem("btechSubscribed","yes");
+
+        status.innerHTML=`
+            <div style="text-align:center">
+                <h1 style="color:#00ff90;font-size:70px;">✔</h1>
+                <h2>Payment Successful</h2>
+                <p>Subscription Activated</p>
+            </div>
+        `;
+
+    },6000);
+
+    setTimeout(function(){
+
+        document.getElementById("overlay").style.display="none";
+
+        alert("🎉 Welcome to BTECH-TV WORLD PRO MAX");
+
+        playDemo();
+
+    },8000);
+
 }
 if(localStorage.getItem('btechSubscribed')==='yes'){overlay.style.display='none';}
 </script>
