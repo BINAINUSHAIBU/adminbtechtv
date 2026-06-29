@@ -31,6 +31,163 @@ input{width:100%;margin:6px 0;padding:8px}
 <input placeholder="Email">
 <input placeholder="Phone">
 <button onclick="pay()">Proceed to Payment</button>
+ <div class="payment-tabs">
+    <button class="active" onclick="showMethod('card')">💳 Card</button>
+    <button onclick="showMethod('bank')">🏦 Bank Transfer</button>
+    <button onclick="showMethod('ussd')">📱 USSD</button>
+    <button onclick="showMethod('wallet')">👛 Wallet</button>
+</div>
+ <div id="cardMethod" class="payMethod">
+
+<label>Card Number</label>
+<input id="cardNumber"
+placeholder="4111 1111 1111 1111"
+maxlength="19">
+
+<label>Card Holder</label>
+<input id="cardHolder"
+placeholder="BTECH-TV DEMO">
+
+<div style="display:flex;gap:10px;">
+
+<div style="flex:1">
+<label>Expiry</label>
+<input id="expiry"
+placeholder="12/30">
+</div>
+
+<div style="flex:1">
+<label>CVV</label>
+<input id="cvv"
+placeholder="123">
+</div>
+
+</div>
+
+<button onclick="demoCardPayment()">
+Pay Securely
+</button>
+
+</div>
+ <div id="bankMethod" class="payMethod" style="display:none;">
+
+<h3>Demo Bank Transfer</h3>
+
+<p><b>Bank:</b> Demo Bank</p>
+
+<p><b>Account Name:</b> BTECH-TV WORLD PRO MAX</p>
+
+<p><b>Account Number:</b> 0123456789</p>
+
+<button onclick="simulateTransfer()">
+I've Made Payment
+</button>
+
+</div>
+ <div id="ussdMethod" class="payMethod" style="display:none;">
+
+<h3>Demo USSD</h3>
+
+<h2>*737*12345#</h2>
+
+<button onclick="simulateUSSD()">
+Payment Completed
+</button>
+
+</div>
+ <div id="walletMethod" class="payMethod" style="display:none;">
+
+<h3>BTECH Wallet</h3>
+
+<p>Balance</p>
+
+<h1>₦500,000</h1>
+
+<button onclick="walletPay()">
+Pay with Wallet
+</button>
+
+</div>
+ <div id="processing">
+
+<div class="loader"></div>
+
+<h2>Connecting to Payment Gateway...</h2>
+
+<div class="progress">
+
+<div id="bar"></div>
+
+</div>
+
+</div>
+ function startGateway(){
+
+let width=0;
+
+let bar=document.getElementById("bar");
+
+let timer=setInterval(function(){
+
+width++;
+
+bar.style.width=width+"%";
+
+if(width>=100){
+
+clearInterval(timer);
+
+activateSubscription();
+
+}
+
+},50);
+
+}
+ <div id="success">
+
+<div class="tick">
+
+✔
+
+</div>
+
+<h2>Payment Successful</h2>
+
+<p>Your subscription has been activated.</p>
+
+<button onclick="continueWatching()">
+
+Continue Watching
+
+</button>
+
+</div>
+ ────────────────────────────
+
+BTECH-TV WORLD PRO MAX
+
+Payment Receipt
+
+────────────────────────────
+
+Reference:
+BTV-20260629-583942
+
+Package:
+Premium
+
+Amount:
+₦5,000
+
+Status:
+PAID
+
+Date:
+29 Jun 2026
+
+────────────────────────────
+ 
 <div id="status"></div>
 </div>
 </div>
