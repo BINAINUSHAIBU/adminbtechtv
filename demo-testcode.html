@@ -1,526 +1,452 @@
 
-
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BTECH-TV WORLD PRO MAX </title>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<title>BTECH-TV Subscription</title>
 
 <style>
 
-/* BASE */
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
 
-/* SIDEBAR */
-.sidebar{
-width:280px;
+body{
+background:#050816;
+color:#fff;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+}
+
+.container{
+width:95%;
+max-width:700px;
 background:#0d1324;
-padding:15px;
-overflow-y:auto;
-border-right:1px solid #1d2b4f;
+padding:30px;
+border-radius:15px;
+box-shadow:0 0 25px rgba(0,212,255,.3);
 }
 
-.logo{font-size:22px;font-weight:900;color:#00d4ff;}
-.sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
-
-.menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
-
-.nav-btn{
-width:100%;
-padding:10px;
-margin:5px 0;
-background:#121c33;
-border:none;
-border-radius:8px;
-color:#fff;
-cursor:pointer;
-}
-.nav-btn:hover{background:#1e2f57}
-
-/* MAIN */
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-padding:10px;
-}
-
-/* TOP */
-.topbar{
-display:flex;
-justify-content:space-between;
-margin-bottom:10px;
-}
-
-.search-box input{
-padding:10px;
-border-radius:8px;
-border:none;
-background:#101a31;
-color:#fff;
-width:260px;
-}
-
-.live{background:red;padding:6px 12px;border-radius:20px}
-
-/* HERO */
-.hero{
-background:linear-gradient(135deg,#07132f,#0f1d45);
-padding:10px;
-border-radius:10px;
-margin-bottom:10px;
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:8px;
-margin-top:8px;
-}
-
-.stat{
-background:#101d39;
-padding:8px;
-border-radius:8px;
+.logo{
+font-size:32px;
+font-weight:bold;
 text-align:center;
+color:#00d4ff;
+margin-bottom:10px;
 }
 
-/* PLAYER */
-.player-container{
-background:#000;
-border-radius:10px;
-overflow:hidden;
-height:320px;
-flex-shrink:0;
+.subtitle{
+text-align:center;
+margin-bottom:30px;
+color:#9db6ff;
 }
 
-video{width:100%;height:100%;}
+.step{
+display:none;
+animation:fade .4s;
+}
 
-/* CONTROLS */
-.controls{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
+.step.active{
+display:block;
+}
+
+@keyframes fade{
+from{opacity:0;}
+to{opacity:1;}
+}
+
+.timer{
+font-size:40px;
+color:#00ff90;
+text-align:center;
+margin:20px 0;
+}
+
+.package{
+background:#111d39;
+padding:15px;
 margin:10px 0;
-flex-shrink:0;
-}
-
-.controls button{
-padding:8px 10px;
-border:none;
-border-radius:6px;
-background:#152445;
-color:#fff;
-cursor:pointer;
-}
-.controls button:hover{background:#00d4ff;color:#000}
-
-/* CHANNELS */
-.channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
-
-.channels{
-overflow-y:auto;
-flex:1;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-gap:10px;
-padding-right:5px;
-}
-
-.card{
-background:#111a31;
-padding:10px;
 border-radius:10px;
 cursor:pointer;
-border:1px solid #1f355d;
 transition:.3s;
 }
-.card:hover{transform:scale(1.03);border-color:#00d4ff;}
 
-.badge{
-background:red;
-padding:3px 6px;
-border-radius:10px;
-font-size:10px;
-float:right;
+.package:hover{
+background:#00d4ff;
+color:#000;
 }
 
-@media(max-width:900px){
-body{flex-direction:column;}
-.sidebar{width:100%;}
+input,select{
+
+width:100%;
+padding:12px;
+margin:8px 0;
+border:none;
+border-radius:8px;
+background:#18294a;
+color:#fff;
+
+}
+
+button{
+
+width:100%;
+padding:14px;
+background:#00d4ff;
+color:#000;
+border:none;
+border-radius:8px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+margin-top:15px;
+
+}
+
+button:hover{
+
+background:#00ffff;
+
+}
+
+.loader{
+
+width:80px;
+height:80px;
+border:8px solid #222;
+border-top:8px solid #00d4ff;
+border-radius:50%;
+margin:30px auto;
+animation:spin 1s linear infinite;
+
+}
+
+@keyframes spin{
+
+100%{
+transform:rotate(360deg);
+}
+
+}
+
+.success{
+
+font-size:90px;
+text-align:center;
+color:#00ff90;
+
+}
+
+.countdown{
+
+font-size:28px;
+text-align:center;
+margin:20px;
+
+}
+
+.unlock{
+
+text-align:center;
+font-size:30px;
+color:#00ff90;
+
 }
 
 </style>
+
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
+<div class="container">
 
-<div class="logo">📺 BTECH-TV PRO MAX</div>
-<div class="sub">Ultra BTECH-TV world Engine X</div>
+<div class="logo">
 
-<div class="menu-title">🌍 Countries</div>
-
-<!-- ALL COUNTRIES -->
-<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
-<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
-<button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
-<button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
-<button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
-<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
-<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
-<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
-<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
-<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
-<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
-<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
-<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
-<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
-<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
-<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
-<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
-<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
-<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
-<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
-<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
-<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
-<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
-<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
-<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
-
-<div class="menu-title">🎬 Categories</div>
-
-<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
-<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
-<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
-<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
-<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
-<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
-<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
-<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
-<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
-<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
-
-<div class="menu-title">🗣 Languages</div>
-
-<button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
-<button class="nav-btn" onclick="load('spa')">🇪🇸 Spanish</button>
-<button class="nav-btn" onclick="load('ara')">🇸🇦 Arabic</button>
-<button class="nav-btn" onclick="load('fra')">🇫🇷 French</button>
-<button class="nav-btn" onclick="load('hin')">🇮🇳 Hindi</button>
-<button class="nav-btn" onclick="load('zho')">🇨🇳 Chinese</button>
-<button class="nav-btn" onclick="load('por')">🇵🇹 Portuguese</button>
-
-<div class="menu-title">🔥 Tools</div>
-
-<button class="nav-btn" onclick="scanStreams()">📡 Scan</button>
-<button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
-<button class="nav-btn" onclick="togglePiP()">📺 PiP</button>
-<button class="nav-btn" onclick="clearRecents()">🗑 Recents</button>
-<button class="nav-btn" onclick="recordMode()">⏺ Record</button>
-<button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
-<button class="nav-btn" onclick="repairStreams()">🛠 Repair</button>
-<button class="nav-btn" onclick="optimizeMemory()">🧠 Optimize</button>
+📺 BTECH-TV WORLD PRO MAX
 
 </div>
 
-<!-- MAIN -->
-<div class="main">
+<div class="subtitle">
 
-<div class="topbar">
-<div class="search-box">
-<input oninput="search(this.value)" placeholder="Search BTECH-TV World...">
-</div>
-<div class="live">🔴 BTECH-TV LIVE</div>
-</div>
-
-<div class="hero">
-<h3>BTECH-TV World PRO MAX SYSTEM</h3>
-<div class="stats">
-<div class="stat">📺 <div id="total">0</div></div>
-<div class="stat">⭐ Fav <div id="fav">0</div></div>
-<div class="stat">⚫ Dead <div id="dead">0</div></div>
-<div class="stat">🌍 Live <div id="live">0</div></div>
-</div>
-</div>
-
-<div class="player-container">
-<video id="video" controls autoplay muted></video>
-</div>
-
-<div class="controls">
-
-<div class="controls" style="display:flex;align-items:center;width:100%;">
-
-    <button onclick="next()">▶ Next</button>
-    <button onclick="prev()">◀ Prev</button>
-    <button onclick="toggleMute()">🔊 Mute</button>
-    <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
-    <button onclick="loadUltra()">🚀 Global</button>
-
-    <!-- Pushes the text to the far right -->
-    <div style="
-        margin-left:auto;
-        color:#00d4ff;
-        font-size:13px;
-        font-weight:bold;
-        white-space:nowrap;
-        padding-left:20px;
-    ">
-        Design by <span style="color:#ffffff;">BINAINU SHAIBU</span> | BTECH WEBSITE DESIGN
-    </div>
+Premium Subscription
 
 </div>
+
+<!-- STEP 1 -->
+
+<div id="trial" class="step active">
+
+<h2 align="center">
+
+🎁 Claim Offer
+
+</h2>
+
+<div class="timer" id="trialTimer">
+
+02:00
+
 </div>
 
-<div class="channel-wrapper">
-<div class="channels" id="grid"></div>
+<button onclick="expireTrial()">
+
+Start Free Trial
+
+</button>
+
+</div>
+
+<!-- STEP 2 -->
+
+<div id="expired" class="step">
+
+<h2 align="center">
+
+Trial Expired
+
+</h2>
+
+<br>
+
+<div class="package" onclick="choose('Starter')">
+
+Starter — ₦2,000 / Month
+
+</div>
+
+<div class="package" onclick="choose('Premium')">
+
+Premium — ₦5,000 / Month
+
+</div>
+
+<div class="package" onclick="choose('VIP')">
+
+VIP — ₦10,000 / Month
+
+</div>
+
+<div class="package" onclick="choose('Lifetime')">
+
+Lifetime — ₦50,000
+
+</div>
+
+</div>
+
+<!-- STEP 3 -->
+
+<div id="details" class="step">
+
+<h2>
+
+Customer Details
+
+</h2>
+
+<input placeholder="Full Name">
+
+<input placeholder="Email">
+
+<input placeholder="Phone">
+
+<input id="package" readonly>
+
+<button onclick="payment()">
+
+Proceed To Payment
+
+</button>
+
+</div>
+
+<!-- STEP 4 -->
+
+<div id="payment" class="step">
+
+<h2>
+
+Demo Payment
+
+</h2>
+
+<input value="4111 1111 1111 1111">
+
+<input placeholder="MM/YY">
+
+<input placeholder="CVV">
+
+<button onclick="processPayment()">
+
+Pay Now
+
+</button>
+
+</div>
+
+<!-- STEP 5 -->
+
+<div id="processing" class="step">
+
+<div class="loader"></div>
+
+<h2 align="center">
+
+Processing Payment...
+
+</h2>
+
+</div>
+
+<!-- STEP 6 -->
+
+<div id="verify" class="step">
+
+<div class="loader"></div>
+
+<h2 align="center">
+
+Server Verification...
+
+</h2>
+
+</div>
+
+<!-- STEP 7 -->
+
+<div id="active" class="step">
+
+<div class="success">
+
+✔
+
+</div>
+
+<h2 align="center">
+
+Subscription Activated
+
+</h2>
+
+<div class="countdown" id="days">
+
+30 Days Remaining
+
+</div>
+
+<div class="unlock">
+
+🔓 All Channels Unlocked
+
+</div>
+
 </div>
 
 </div>
 
 <script>
-let trialActive = true;
-let unlocked = false;
-let trialSeconds = 120;
-    
-let all=[],filtered=[],i=0;
-let video=document.getElementById("video");
-let hls;
 
-/* LOAD */
-async function load(code){
-await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
-}
+let selectedPackage="";
 
-async function loadCat(c){
-await loadM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`);
-}
+function show(id){
 
-async function loadUltra(){
-await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
-}
+document.querySelectorAll(".step").forEach(x=>x.classList.remove("active"));
 
-/* M3U */
-async function loadM3U(url){
-const res=await fetch(url);
-const text=await res.text();
-
-all=[];filtered=[];i=0;
-
-let lines=text.split("\n");
-
-for(let x=0;x<lines.length;x++){
-if(lines[x].startsWith("#EXTINF")){
-let name=lines[x].split(",").pop();
-let url=lines[x+1];
-if(url && url.startsWith("http")) all.push({name,url});
-}
-}
-
-filtered=[...all];
-render();
-stats();
-}
-/* RENDER */
-function render(){
-
-    let grid = document.getElementById("grid");
-    grid.innerHTML = "";
-
-    filtered.forEach((c, idx)=>{
-
-        // Remove quality labels only
-      let cleanName = c.name
-    .replace(/\s*\(\d+p\)/gi, "")
-    .trim();
-
-        // Channel number with leading zeros
-        let ch = String(idx + 1).padStart(3, "0");
-
-        let div = document.createElement("div");
-        div.className = "card";
-
-        div.innerHTML = `
-    <div class="badge">LIVE</div>
-
-    <div style="
-        color:#00d4ff;
-        font-weight:bold;
-        font-size:14px;
-        margin-bottom:6px;
-    ">
-        BTECH-TV&nbsp;&nbsp;CH ${ch}
-    </div>
-
-    <div style="
-        color:#fff;
-        font-size:16px;
-        font-weight:600;
-    ">
-        ${cleanName}
-    </div>
-`;
-        div.onclick = ()=>play(idx);
-
-        grid.appendChild(div);
-
-    });
+document.getElementById(id).classList.add("active");
 
 }
 
-/* PLAY */
-function play(idx){
+function expireTrial(){
 
-    i = idx;
-    let c = filtered[i];
+let sec=120;
 
-    let cleanName = c.name
-        .replace(/\s*\(1080p\)/gi,"")
-        .replace(/\s*\(720p\)/gi,"")
-        .replace(/\s*\(540p\)/gi,"")
-        .replace(/\s*\(480p\)/gi,"")
-        .replace(/\s*\(360p\)/gi,"")
-        .replace(/\s*\(240p\)/gi,"")
-        .replace(/\s*\(144p\)/gi,"")
-        .trim();
+let timer=setInterval(function(){
 
-    let ch = String(idx + 1).padStart(3, "0");
+sec--;
 
-    document.title = `CH ${ch} - ${cleanName} | BTECH-TV WORLD PRO MAX`;
+let m=Math.floor(sec/60);
 
-    if(hls) hls.destroy();
+let s=sec%60;
 
-    if(Hls.isSupported()){
-        hls = new Hls();
-        hls.loadSource(c.url);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
-    }else{
-        video.src = c.url;
-        video.play();
-    }
+document.getElementById("trialTimer").innerHTML=
+
+String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");
+
+if(sec<=0){
+
+clearInterval(timer);
+
+show("expired");
 
 }
-/* BASIC */
-function search(q){
-filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
-render();
-}
 
-function next(){i=(i+1)%filtered.length;play(i);}
-function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
-
-function toggleMute(){video.muted=!video.muted;}
-function toggleFullscreen(){video.requestFullscreen();}
-
-/* EXTRA FEATURES (PLACEHOLDER SAFE) */
-function scanStreams(){alert("Scanning streams...");}
-function speedBoost(){video.playbackRate=1.15;}
-function repairStreams(){alert("Repair mode active");}
-function optimizeMemory(){alert("Optimizing memory");}
-function recordMode(){alert("Record mode enabled");}
-function clearRecents(){alert("Recents cleared");}
-
-/* STATS */
-function stats(){
-document.getElementById("total").innerText=all.length;
-document.getElementById("live").innerText=all.length;
-document.getElementById("dead").innerText=0;
-document.getElementById("fav").innerText=0;
-}
-
-/* AUTO START */
-loadUltra();
-startTrial();
-    function startTrial(){
-
-    let timer = setInterval(function(){
-
-        trialSeconds--;
-
-        if(trialSeconds<=0){
-
-            clearInterval(timer);
-
-            trialActive = false;
-
-            showUpgrade();
-
-        }
-
-    },1000);
+},1000);
 
 }
-    if(!trialActive && !unlocked && idx>=20){
 
-    showUpgrade();
+function choose(p){
 
-    return;
+selectedPackage=p;
 
-}
-    <div id="upgradeScreen" style="
-display:none;
-position:fixed;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:#050816;
-z-index:9999;
-overflow:auto;
-padding:30px;
-">
+document.getElementById("package").value=p;
 
-<h1 align="center">
-🔒 Premium Channels Locked
-</h1>
-
-<br>
-
-<div class="package" onclick="choose('Starter')">
-Starter — ₦2,000 / Month
-</div>
-
-<div class="package" onclick="choose('Premium')">
-Premium — ₦5,000 / Month
-</div>
-
-<div class="package" onclick="choose('VIP')">
-VIP — ₦10,000 / Month
-</div>
-
-<div class="package" onclick="choose('Lifetime')">
-Lifetime — ₦50,000
-</div>
-
-</div>
-    function showUpgrade(){
-
-    document.getElementById("upgradeScreen").style.display="block";
+show("details");
 
 }
-    function unlockChannels(){
 
-    unlocked=true;
+function payment(){
 
-    document.getElementById("upgradeScreen").style.display="none";
-
-    alert("Subscription Activated");
+show("payment");
 
 }
-    unlockChannels();
+
+function processPayment(){
+
+show("processing");
+
+setTimeout(function(){
+
+show("verify");
+
+},3000);
+
+setTimeout(function(){
+
 show("active");
-    unlocked = true;
-show("active");
-document.getElementById("upgradeScreen").style.display="none";
+
+startCountdown();
+
+},6000);
+
+}
+
+function startCountdown(){
+
+let days=30;
+
+setInterval(function(){
+
+document.getElementById("days").innerHTML=
+
+days+" Days Remaining";
+
+if(days>0){
+
+days--;
+
+}
+
+},86400000);
+
+}
+
 </script>
 
 </body>
