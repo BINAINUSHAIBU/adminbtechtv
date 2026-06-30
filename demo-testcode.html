@@ -190,8 +190,62 @@ Free Trial :
 
 </div>
 
+<!-- PREMIUM UNLOCK SCREEN -->
+
 <div id="expiredBox">
 
+<div class="premium-box">
+
+<h1>🔒 Free Trial Expired</h1>
+
+<p>
+Your 2-minute free trial has ended.
+Unlock unlimited access to all live TV channels by choosing one of our premium packages.
+</p>
+
+<div class="package-grid">
+
+<a href="index_premium-package.html" class="package">
+<h2>Premium</h2>
+<p>Unlimited IPTV</p>
+<button>Select Package</button>
+</a>
+
+<a href="index_super-Compact_plus-package.html" class="package">
+<h2>Super Compact Plus</h2>
+<p>Best Value</p>
+<button>Select Package</button>
+</a>
+
+<a href="index_super-premium-package.html" class="package">
+<h2>Super Premium</h2>
+<p>Premium Entertainment</p>
+<button>Select Package</button>
+</a>
+
+<a href="index_super-premium_Compact-package.html" class="package">
+<h2>Super Premium Compact</h2>
+<p>Compact Bundle</p>
+<button>Select Package</button>
+</a>
+
+<a href="index_super-premium_Compact_plus-package.html" class="package">
+<h2>Super Premium Compact Plus</h2>
+<p>Most Popular</p>
+<button>Select Package</button>
+</a>
+
+<a href="index_super-premium_plus-package.html" class="package">
+<h2>Super Premium Plus</h2>
+<p>Everything Included</p>
+<button>Select Package</button>
+</a>
+
+</div>
+
+</div>
+
+</div>
 <div class="popup">
 
 <h1>Free Trial Expired</h1>
@@ -287,5 +341,31 @@ alert("Now Playing: "+channel.innerText);
 
 </script>
 
-</body>
+if(totalSeconds<=0){
+
+clearInterval(countdown);
+
+player.pause();
+
+if(window.hls){
+window.hls.destroy();
+}
+
+player.controls=false;
+
+document.querySelectorAll(".channel").forEach(function(channel){
+
+channel.classList.add("locked");
+
+channel.onclick=function(){
+
+alert("Your free trial has expired.");
+
+};
+
+});
+
+document.getElementById("expiredBox").style.display="flex";
+
+}</body>
 </html>
