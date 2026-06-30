@@ -1,501 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- ===========================
+PREMIUM LOCK SCREEN
+=========================== -->
 
-<title>BTECH-TV WORLD PRO MAX</title>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,Helvetica,sans-serif;
-}
-
-body{
-background:#06111d;
-color:white;
-}
-
-header{
-background:#0d1d35;
-padding:15px 20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-position:sticky;
-top:0;
-z-index:100;
-box-shadow:0 2px 10px rgba(0,0,0,.4);
-}
-
-header h2{
-color:#00d9ff;
-}
-
-#timer{
-font-size:20px;
-font-weight:bold;
-color:#00ff66;
-}
-
-.player{
-padding:20px;
-}
-
-video{
-width:100%;
-height:500px;
-background:#000;
-border-radius:10px;
-}
-
-.channels{
-
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-gap:15px;
-padding:20px;
-
-}
-
-.channel{
-background:#11284a;
-padding:15px;
-border-radius:10px;
-cursor:pointer;
-transition:.3s;
-text-align:center;
-}
-
-.channel:hover{
-background:#1b3f70;
-transform:translateY(-4px);
-}
-
-.channel.locked{
-opacity:.45;
-cursor:not-allowed;
-}
-
-.channel h3{
-margin-bottom:10px;
-}
-
-.lock{
+<div id="trialLock" style="
 display:none;
-font-size:40px;
-margin-bottom:10px;
-}
-
-.locked .lock{
-display:block;
-}
-
-.overlay{
 position:fixed;
-left:0;
 top:0;
+left:0;
 width:100%;
 height:100%;
-display:none;
-justify-content:center;
-align-items:center;
-background:rgba(0,0,0,.88);
-z-index:999;
-}
-
-.popup{
-background:#12243f;
+background:#030814;
+z-index:999999;
+overflow:auto;
 padding:40px;
-border-radius:15px;
-text-align:center;
-width:90%;
-max-width:500px;
-}
+">
 
-.popup h1{
-color:#ff4444;
-margin-bottom:15px;
-}
+<h1 style="text-align:center;color:#00d4ff">
+🔒 BTECH-TV WORLD PRO MAX
+</h1>
 
-.popup p{
-margin:20px 0;
-font-size:18px;
-}
+<h2 style="text-align:center;margin-top:10px">
+Free Trial Expired
+</h2>
 
-button{
-
-padding:14px 30px;
-font-size:18px;
-border:none;
-border-radius:8px;
-background:#00d9ff;
-cursor:pointer;
-font-weight:bold;
-
-}
-
-button:hover{
-background:#00b6d8;
-}
-
-@media(max-width:768px){
-
-video{
-height:250px;
-}
-
-header{
-flex-direction:column;
-gap:10px;
-}
-
-}
-
-</style>
-</head>
-
-<body>
-
-<header>
-
-<h2>📺 BTECH-TV WORLD PRO MAX</h2>
-
-<div>
-FREE TRIAL:
-<span id="timer">02:00</span>
-</div>
-
-</header>
-
-<div class="player">
-
-<video id="video" controls autoplay></video>
-
-</div>
-<a href="payment.html?package=Premium&amount=5000">
-    Premium Package
-</a>
-
-<a href="payment.html?package=Super Premium&amount=10000">
-    Super Premium Package
-</a>
-    <h2>Subscription Payment</h2>
-
-<form id="paymentForm">
-
-<label>Customer Name</label>
-<input type="text" id="name" required>
-
-<label>Email</label>
-<input type="email" id="email" required>
-
-<label>Phone Number</label>
-<input type="tel" id="phone" required>
-
-<label>Package Selected</label>
-<input type="text" id="package" readonly>
-
-<label>Amount (₦)</label>
-<input type="text" id="amount" readonly>
-
-<button type="submit">
-Proceed to Payment
-</button>
-
-</form>
-<div class="channels">
-
-<div class="channel" onclick="playChannel(0)">
-<h3>News HD</h3>
-</div>
-
-<div class="channel" onclick="playChannel(1)">
-<h3>Sports HD</h3>
-</div>
-
-<div class="channel" onclick="playChannel(2)">
-<h3>Movies HD</h3>
-</div>
-
-<div class="channel" onclick="playChannel(3)">
-<h3>Kids HD</h3>
-</div>
-
-<div class="channel" onclick="playChannel(4)">
-<h3>Music HD</h3>
-</div>
-
-<div class="channel" onclick="playChannel(5)">
-<h3>Documentary</h3>
-</div>
-
-</div>
-
-<!-- PREMIUM UNLOCK SCREEN -->
-
-<div class="overlay" id="expired">
-
-<div class="popup premium">
-
-<h1>🔒 Free Trial Expired</h1>
-
-<p>
-Your 2-minute free trial has ended.
+<p style="text-align:center;color:#bbb;margin-bottom:30px">
+Subscribe to continue watching Premium Channels.
 </p>
 
-<p>
-Subscribe to continue watching all IPTV channels.
-</p>
+<div style="
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+">
 
-<div class="packages">
-
-<a href="index_premium-package.html" class="package">
+<div class="card">
 <h3>Premium Package</h3>
-<p>Unlimited Streaming</p>
-</a>
+<h2>₦5,000</h2>
+<p>30 Days</p>
+<button onclick="payNow('Premium',5000)">
+Unlock
+</button>
+</div>
 
-<a href="index_super-Compact_plus-package.html" class="package">
-<h3>Super Compact Plus</h3>
-<p>Affordable Plan</p>
-</a>
+<div class="card">
+<h3>Super Compact</h3>
+<h2>₦3,000</h2>
+<p>30 Days</p>
+<button onclick="payNow('Compact',3000)">
+Unlock
+</button>
+</div>
 
-<a href="index_super-premium-package.html" class="package">
+<div class="card">
+<h3>Compact Plus</h3>
+<h2>₦4,000</h2>
+<p>30 Days</p>
+<button onclick="payNow('Compact Plus',4000)">
+Unlock
+</button>
+</div>
+
+<div class="card">
 <h3>Super Premium</h3>
-<p>HD + Premium Channels</p>
-</a>
+<h2>₦8,000</h2>
+<p>90 Days</p>
+<button onclick="payNow('Super Premium',8000)">
+Unlock
+</button>
+</div>
 
-<a href="index_super-premium_Compact-package.html" class="package">
-<h3>Super Premium Compact</h3>
-<p>Compact HD Package</p>
-</a>
-
-<a href="index_super-premium_Compact_plus-package.html" class="package">
-<h3>Super Premium Compact Plus</h3>
-<p>More Channels</p>
-</a>
-
-<a href="index_super-premium_plus-package.html" class="package">
+<div class="card">
 <h3>Super Premium Plus</h3>
-<p>Ultimate IPTV Experience</p>
-</a>
-
-</div>
-
-<button onclick="location.reload()">
-Restart Free Trial
+<h2>₦10,000</h2>
+<p>180 Days</p>
+<button onclick="payNow('Premium Plus',10000)">
+Unlock
 </button>
-
-</div>
-
-</div>
-<div class="popup">
-
-<h1>Trial Expired</h1>
-
-<p>Your free 2-minute trial has ended.</p>
-
-<p>All IPTV channels are now locked.</p>
-
-<button onclick="location.reload()">Restart Demo</button>
-
 </div>
 
 </div>
 
-<script>
-
-const channels=[
-
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
-
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-
-];
-
-const video=document.getElementById("video");
-
-let trialExpired=false;
-
-function playChannel(index){
-
-if(trialExpired){
-
-alert("Trial has expired.\nAll channels are locked.");
-
-return;
-
-}
-
-const url=channels[index];
-
-if(Hls.isSupported()){
-
-const hls=new Hls();
-
-hls.loadSource(url);
-
-hls.attachMedia(video);
-
-}
-
-else{
-
-video.src=url;
-
-}
-
-video.play();
-
-}
-
-playChannel(0);
-
-let seconds=120;
-
-const timer=document.getElementById("timer");
-
-const interval=setInterval(()=>{
-
-seconds--;
-
-let m=Math.floor(seconds/60);
-
-let s=seconds%60;
-
-timer.innerHTML=
-
-String(m).padStart(2,'0')+
-
-":"+
-
-String(s).padStart(2,'0');
-
-if(seconds<=0){
-
-clearInterval(interval);
-
-function expireTrial(){
-
-trialExpired = true;
-
-video.pause();
-
-video.removeAttribute("src");
-
-video.load();
-
-timer.innerHTML="00:00";
-
-timer.style.color="red";
-
-document.querySelectorAll(".channel").forEach(channel=>{
-
-channel.classList.add("locked");
-
-channel.innerHTML="<div class='lock'>🔒</div><h3>Locked</h3>";
-
-});
-
-document.getElementById("expired").style.display="flex";
-
-}
-
-},1000);
-
-function expireTrial(){
-
-trialExpired=true;
-
-video.pause();
-
-video.removeAttribute("src");
-video.load();
-
-timer.innerHTML="00:00";
-
-timer.style.color="red";
-
-document.querySelectorAll(".channel").forEach(card=>{
-
-card.classList.add("locked");
-
-card.innerHTML="<div class='lock'>🔒</div><h3>Locked</h3>";
-
-});
-
-document.getElementById("expired").style.display="flex";
-
-}
-
-</script>
-    const params = new URLSearchParams(window.location.search);
-
-document.getElementById("package").value =
-params.get("package");
-
-document.getElementById("amount").value =
-params.get("amount");
-    <div class="success">
-
-<h1>✅ Payment Successful</h1>
-
-<p>Thank you for subscribing.</p>
-
-<p>Your IPTV account has been activated.</p>
-
-<button onclick="location.href='index.html'">
-Start Watching
-</button>
-
 </div>
-    // This should run only AFTER your backend confirms the payment.
-
-const packageName = paymentResult.package; // Returned by your server
-
-switch (packageName) {
-
-    case "Premium":
-        window.location.href = "index_premium-package.html";
-        break;
-
-    case "Super Compact Plus":
-        window.location.href = "index_super-Compact_plus-package.html";
-        break;
-
-    case "Super Premium":
-        window.location.href = "index_super-premium-package.html";
-        break;
-
-    case "Super Premium Compact":
-        window.location.href = "index_super-premium_Compact-package.html";
-        break;
-
-    case "Super Premium Compact Plus":
-        window.location.href = "index_super-premium_Compact_plus-package.html";
-        break;
-
-    case "Super Premium Plus":
-        window.location.href = "index_super-premium_plus-package.html";
-        break;
-
-    default:
-        alert("Unknown subscription package.");
-}
-
-</body>
-</html>
