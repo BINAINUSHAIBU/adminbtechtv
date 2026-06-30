@@ -1,564 +1,203 @@
-
-
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BTECH-TV WORLD PRO MAX </title>
-
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTECH-TV Demo</title>
 
 <style>
-
-/* BASE */
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
-
-/* SIDEBAR */
-.sidebar{
-width:280px;
-background:#0d1324;
-padding:15px;
-overflow-y:auto;
-border-right:1px solid #1d2b4f;
+body{
+margin:0;
+font-family:Arial;
+background:#08101f;
+color:white;
 }
 
-.logo{font-size:22px;font-weight:900;color:#00d4ff;}
-.sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
-
-.menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
-
-.nav-btn{
-width:100%;
-padding:10px;
-margin:5px 0;
-background:#121c33;
-border:none;
-border-radius:8px;
-color:#fff;
-cursor:pointer;
-}
-.nav-btn:hover{background:#1e2f57}
-
-/* MAIN */
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-padding:10px;
-}
-
-/* TOP */
-.topbar{
-display:flex;
-justify-content:space-between;
-margin-bottom:10px;
-}
-
-.search-box input{
-padding:10px;
-border-radius:8px;
-border:none;
-background:#101a31;
-color:#fff;
-width:260px;
-}
-
-.live{background:red;padding:6px 12px;border-radius:20px}
-
-/* HERO */
-.hero{
-background:linear-gradient(135deg,#07132f,#0f1d45);
-padding:10px;
-border-radius:10px;
-margin-bottom:10px;
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:8px;
-margin-top:8px;
-}
-
-.stat{
-background:#101d39;
-padding:8px;
-border-radius:8px;
+header{
+background:#0f1932;
+padding:20px;
 text-align:center;
+font-size:28px;
+font-weight:bold;
+color:#00d4ff;
 }
 
-/* PLAYER */
-.player-container{
+.player{
+width:90%;
+margin:20px auto;
 background:#000;
-border-radius:10px;
-overflow:hidden;
-height:320px;
-flex-shrink:0;
-}
-
-video{width:100%;height:100%;}
-
-/* CONTROLS */
-.controls{
+height:350px;
 display:flex;
-flex-wrap:wrap;
-gap:8px;
-margin:10px 0;
-flex-shrink:0;
+align-items:center;
+justify-content:center;
+border-radius:10px;
 }
 
-.controls button{
-padding:8px 10px;
+button{
+padding:12px 20px;
 border:none;
-border-radius:6px;
-background:#152445;
-color:#fff;
+border-radius:8px;
+background:#00d4ff;
 cursor:pointer;
+font-size:16px;
+margin:5px;
 }
-.controls button:hover{background:#00d4ff;color:#000}
 
-/* CHANNELS */
-.channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+#timer{
+font-size:20px;
+text-align:center;
+margin:15px;
+}
 
-.channels{
-overflow-y:auto;
-flex:1;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-gap:10px;
-padding-right:5px;
+#payment{
+display:none;
+position:fixed;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:rgba(0,0,0,.9);
+justify-content:center;
+align-items:center;
 }
 
 .card{
-background:#111a31;
+background:#16223f;
+padding:30px;
+border-radius:15px;
+width:320px;
+text-align:center;
+}
+
+input{
+width:100%;
 padding:10px;
-border-radius:10px;
-cursor:pointer;
-border:1px solid #1f355d;
-transition:.3s;
+margin:8px 0;
+border:none;
+border-radius:6px;
 }
-.card:hover{transform:scale(1.03);border-color:#00d4ff;}
-
-.badge{
-background:red;
-padding:3px 6px;
-border-radius:10px;
-font-size:10px;
-float:right;
-}
-
-@media(max-width:900px){
-body{flex-direction:column;}
-.sidebar{width:100%;}
-}
-
 </style>
 </head>
 
 <body>
-<div id="mainApp">
 
-    <!-- EVERYTHING from your current IPTV page goes here -->
+<header>
+📺 BTECH-TV WORLD PRO MAX
+</header>
 
-</div>
-    <div id="paymentPage" style="display:none;">
-
-    <div class="container">
-
-        <h2>Premium Subscription</h2>
-
-        <label>Card Number</label>
-        <input type="text" placeholder="1234 5678 9012 3456">
-
-        <label>Card Holder</label>
-        <input type="text" placeholder="John Doe">
-
-        <div class="row">
-
-            <div style="flex:1">
-                <label>Expiry</label>
-                <input type="text" placeholder="12/30">
-            </div>
-
-            <div style="flex:1">
-                <label>CVV</label>
-                <input type="password" placeholder="123">
-            </div>
-
-        </div>
-
-        <label>Amount</label>
-        <input type="text" value="₦5,000" readonly>
-
-        <button onclick="payNow()">Pay Now</button>
-
-        <div id="processing">
-
-            <div class="loader"></div>
-
-            <h3>Processing Payment...</h3>
-
-        </div>
-
-        <div id="success">
-
-            <div class="success">✓</div>
-
-            <h2>Payment Successful</h2>
-
-        </div>
-
-    </div>
-
-</div>
-<!-- SIDEBAR -->
-<div class="sidebar">
-
-<div class="logo">📺 BTECH-TV PRO MAX</div>
-<div class="sub">Ultra BTECH-TV world Engine X</div>
-
-<div class="menu-title">🌍 Countries</div>
-
-<!-- ALL COUNTRIES -->
-<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
-<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
-<button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
-<button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
-<button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
-<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
-<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
-<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
-<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
-<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
-<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
-<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
-<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
-<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
-<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
-<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
-<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
-<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
-<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
-<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
-<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
-<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
-<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
-<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
-<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
-
-<div class="menu-title">🎬 Categories</div>
-
-<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
-<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
-<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
-<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
-<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
-<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
-<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
-<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
-<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
-<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
-
-<div class="menu-title">🗣 Languages</div>
-
-<button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
-<button class="nav-btn" onclick="load('spa')">🇪🇸 Spanish</button>
-<button class="nav-btn" onclick="load('ara')">🇸🇦 Arabic</button>
-<button class="nav-btn" onclick="load('fra')">🇫🇷 French</button>
-<button class="nav-btn" onclick="load('hin')">🇮🇳 Hindi</button>
-<button class="nav-btn" onclick="load('zho')">🇨🇳 Chinese</button>
-<button class="nav-btn" onclick="load('por')">🇵🇹 Portuguese</button>
-
-<div class="menu-title">🔥 Tools</div>
-
-<button class="nav-btn" onclick="scanStreams()">📡 Scan</button>
-<button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
-<button class="nav-btn" onclick="togglePiP()">📺 PiP</button>
-<button class="nav-btn" onclick="clearRecents()">🗑 Recents</button>
-<button class="nav-btn" onclick="recordMode()">⏺ Record</button>
-<button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
-<button class="nav-btn" onclick="repairStreams()">🛠 Repair</button>
-<button class="nav-btn" onclick="optimizeMemory()">🧠 Optimize</button>
-
+<div id="timer">
+Trial Remaining:
+<span id="time">120</span>s
 </div>
 
-<!-- MAIN -->
-<div class="main">
-
-<div class="topbar">
-<div class="search-box">
-<input oninput="search(this.value)" placeholder="Search BTECH-TV World...">
-</div><div class="live">
-🔴 Trial:
-<span id="timer">02:00</span>
+<div class="player">
+VIDEO PLAYER DEMO
 </div>
 
-<div class="hero">
-<h3>BTECH-TV World PRO MAX SYSTEM</h3>
-<div class="stats">
-<div class="stat">📺 <div id="total">0</div></div>
-<div class="stat">⭐ Fav <div id="fav">0</div></div>
-<div class="stat">⚫ Dead <div id="dead">0</div></div>
-<div class="stat">🌍 Live <div id="live">0</div></div>
-</div>
-</div>
+<center>
 
-<div class="player-container">
-<video id="video" controls autoplay muted></video>
-</div>
+<button onclick="play()">
+▶ Play
+</button>
 
-<div class="controls">
+<button onclick="resetDemo()">
+Reset Demo
+</button>
 
-<div class="controls" style="display:flex;align-items:center;width:100%;">
+</center>
 
-    <button onclick="next()">▶ Next</button>
-    <button onclick="prev()">◀ Prev</button>
-    <button onclick="toggleMute()">🔊 Mute</button>
-    <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
-    <button onclick="loadUltra()">🚀 Global</button>
+<div id="payment">
 
-    <!-- Pushes the text to the far right -->
-    <div style="
-        margin-left:auto;
-        color:#00d4ff;
-        font-size:13px;
-        font-weight:bold;
-        white-space:nowrap;
-        padding-left:20px;
-    ">
-        Design by <span style="color:#ffffff;">BINAINU SHAIBU</span> | BTECH WEBSITE DESIGN
-    </div>
+<div class="card">
 
-</div>
-</div>
+<h2>Trial Expired</h2>
 
-<div class="channel-wrapper">
-<div class="channels" id="grid"></div>
+<p>Select Package</p>
+
+<button onclick="pay('Premium')">
+Premium ₦3000
+</button>
+
+<button onclick="pay('Super Premium')">
+Super Premium ₦5000
+</button>
+
+<input placeholder="4111 1111 1111 1111">
+
+<input placeholder="12/30">
+
+<input placeholder="123">
+
+<p id="status"></p>
+
 </div>
 
 </div>
 
 <script>
 
-let all=[],filtered=[],i=0;
-let video=document.getElementById("video");
-let hls;
+let seconds=120;
 
-/* LOAD */
-async function load(code){
-await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
-}
+if(localStorage.plan){
 
-async function loadCat(c){
-await loadM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`);
-}
-
-async function loadUltra(){
-await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
-}
-
-/* M3U */
-async function loadM3U(url){
-const res=await fetch(url);
-const text=await res.text();
-
-all=[];filtered=[];i=0;
-
-let lines=text.split("\n");
-
-for(let x=0;x<lines.length;x++){
-if(lines[x].startsWith("#EXTINF")){
-let name=lines[x].split(",").pop();
-let url=lines[x+1];
-if(url && url.startsWith("http")) all.push({name,url});
-}
-}
-
-filtered=[...all];
-render();
-stats();
-}
-/* RENDER */
-function render(){
-
-    let grid = document.getElementById("grid");
-    grid.innerHTML = "";
-
-    filtered.forEach((c, idx)=>{
-
-        // Remove quality labels only
-      let cleanName = c.name
-    .replace(/\s*\(\d+p\)/gi, "")
-    .trim();
-
-        // Channel number with leading zeros
-        let ch = String(idx + 1).padStart(3, "0");
-
-        let div = document.createElement("div");
-        div.className = "card";
-
-        div.innerHTML = `
-    <div class="badge">LIVE</div>
-
-    <div style="
-        color:#00d4ff;
-        font-weight:bold;
-        font-size:14px;
-        margin-bottom:6px;
-    ">
-        BTECH-TV&nbsp;&nbsp;CH ${ch}
-    </div>
-
-    <div style="
-        color:#fff;
-        font-size:16px;
-        font-weight:600;
-    ">
-        ${cleanName}
-    </div>
-`;
-        div.onclick = ()=>play(idx);
-
-        grid.appendChild(div);
-
-    });
+document.getElementById("timer").innerHTML=
+"Active Plan: "+localStorage.plan;
 
 }
 
-/* PLAY */
-function play(idx){
+let countdown=setInterval(()=>{
 
-    if(!unlocked && trialSeconds<=0){
+if(localStorage.plan) return;
 
-        document.getElementById("mainApp").style.display="none";
-        document.getElementById("paymentPage").style.display="flex";
+seconds--;
 
-        return;
+document.getElementById("time").innerHTML=seconds;
 
-    }
+if(seconds<=0){
 
-    i = idx;
+clearInterval(countdown);
 
-    let c = filtered[i];
-
-    // Continue with the rest of your existing play() code...
-}
-
-    i = idx;
-    let c = filtered[i];
-
-    let cleanName = c.name
-        .replace(/\s*\(1080p\)/gi,"")
-        .replace(/\s*\(720p\)/gi,"")
-        .replace(/\s*\(540p\)/gi,"")
-        .replace(/\s*\(480p\)/gi,"")
-        .replace(/\s*\(360p\)/gi,"")
-        .replace(/\s*\(240p\)/gi,"")
-        .replace(/\s*\(144p\)/gi,"")
-        .trim();
-
-    let ch = String(idx + 1).padStart(3, "0");
-
-    document.title = `CH ${ch} - ${cleanName} | BTECH-TV WORLD PRO MAX`;
-
-    if(hls) hls.destroy();
-
-    if(Hls.isSupported()){
-        hls = new Hls();
-        hls.loadSource(c.url);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
-    }else{
-        video.src = c.url;
-        video.play();
-    }
+document.getElementById("payment").style.display="flex";
 
 }
-/* BASIC */
-function search(q){
-filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
-render();
-}
-
-function next(){i=(i+1)%filtered.length;play(i);}
-function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
-
-function toggleMute(){video.muted=!video.muted;}
-function toggleFullscreen(){video.requestFullscreen();}
-
-/* EXTRA FEATURES (PLACEHOLDER SAFE) */
-function scanStreams(){alert("Scanning streams...");}
-function speedBoost(){video.playbackRate=1.15;}
-function repairStreams(){alert("Repair mode active");}
-function optimizeMemory(){alert("Optimizing memory");}
-function recordMode(){alert("Record mode enabled");}
-function clearRecents(){alert("Recents cleared");}
-
-/* STATS */
-function stats(){
-document.getElementById("total").innerText=all.length;
-document.getElementById("live").innerText=all.length;
-document.getElementById("dead").innerText=0;
-document.getElementById("fav").innerText=0;
-}
-
-/* AUTO START */
-loadUltra();
-
-</script>
-let trialSeconds = 120;
-let unlocked = false;
-    const timer = setInterval(function(){
-
-    if(unlocked){
-        clearInterval(timer);
-        return;
-    }
-
-    trialSeconds--;
-
-    let m = String(Math.floor(trialSeconds/60)).padStart(2,"0");
-    let s = String(trialSeconds%60).padStart(2,"0");
-
-    document.getElementById("timer").innerHTML = m + ":" + s;
-
-    if(trialSeconds<=0){
-
-        clearInterval(timer);
-
-        document.getElementById("mainApp").style.display="none";
-        document.getElementById("paymentPage").style.display="flex";
-
-    }
 
 },1000);
-</body>
-</html>
-function payNow(){
 
-document.getElementById("processing").style.display="block";
+function play(){
 
-setTimeout(function(){
-
-document.getElementById("processing").style.display="none";
-
-document.getElementById("success").style.display="block";
-
-setTimeout(function(){
-
-unlocked=true;
-
-document.getElementById("paymentPage").style.display="none";
-
-document.getElementById("mainApp").style.display="flex";
-
-alert("Subscription Activated!\n\nAll Channels Unlocked.");
-
-},3000);
-
-},4000);
+alert("Demo Player Started");
 
 }
+
+function pay(plan){
+
+document.getElementById("status").innerHTML=
+"Processing Demo Payment...";
+
+setTimeout(()=>{
+
+localStorage.plan=plan;
+
+document.getElementById("payment").style.display="none";
+
+document.getElementById("timer").innerHTML=
+"Subscription Active: "+plan;
+
+alert(plan+" Activated!");
+
+},2000);
+
+}
+
+function resetDemo(){
+
+localStorage.removeItem("plan");
+
+location.reload();
+
+}
+
+</script>
+
+</body>
+</html>
