@@ -1,158 +1,161 @@
-
-
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BTECH-TV WORLD PRO MAX </title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BTECH-TV WORLD PRO MAX</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
 
-/* BASE */
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
-
-/* SIDEBAR */
-.sidebar{
-width:280px;
-background:#0d1324;
-padding:15px;
-overflow-y:auto;
-border-right:1px solid #1d2b4f;
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
 }
 
-.logo{font-size:22px;font-weight:900;color:#00d4ff;}
-.sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
-
-.menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
-
-.nav-btn{
-width:100%;
-padding:10px;
-margin:5px 0;
-background:#121c33;
-border:none;
-border-radius:8px;
-color:#fff;
-cursor:pointer;
-}
-.nav-btn:hover{background:#1e2f57}
-
-/* MAIN */
-.main{
-flex:1;
-display:flex;
-flex-direction:column;
-overflow:hidden;
-padding:10px;
+body{
+background:#06111d;
+color:white;
 }
 
-/* TOP */
-.topbar{
+header{
+background:#0d1d35;
+padding:15px 20px;
 display:flex;
 justify-content:space-between;
-margin-bottom:10px;
+align-items:center;
+position:sticky;
+top:0;
+z-index:100;
+box-shadow:0 2px 10px rgba(0,0,0,.4);
 }
 
-.search-box input{
-padding:10px;
-border-radius:8px;
-border:none;
-background:#101a31;
-color:#fff;
-width:260px;
+header h2{
+color:#00d9ff;
 }
 
-.live{background:red;padding:6px 12px;border-radius:20px}
+#timer{
+font-size:20px;
+font-weight:bold;
+color:#00ff66;
+}
 
-/* HERO */
-.hero{
-background:linear-gradient(135deg,#07132f,#0f1d45);
-padding:10px;
+.player{
+padding:20px;
+}
+
+video{
+width:100%;
+height:500px;
+background:#000;
 border-radius:10px;
-margin-bottom:10px;
 }
 
-.stats{
+.channels{
+
 display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:8px;
-margin-top:8px;
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+gap:15px;
+padding:20px;
+
 }
 
-.stat{
-background:#101d39;
-padding:8px;
-border-radius:8px;
+.channel{
+background:#11284a;
+padding:15px;
+border-radius:10px;
+cursor:pointer;
+transition:.3s;
 text-align:center;
 }
 
-/* PLAYER */
-.player-container{
-background:#000;
-border-radius:10px;
-overflow:hidden;
-height:320px;
-flex-shrink:0;
+.channel:hover{
+background:#1b3f70;
+transform:translateY(-4px);
 }
 
-video{width:100%;height:100%;}
-
-/* CONTROLS */
-.controls{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-margin:10px 0;
-flex-shrink:0;
+.channel.locked{
+opacity:.45;
+cursor:not-allowed;
 }
 
-.controls button{
-padding:8px 10px;
+.channel h3{
+margin-bottom:10px;
+}
+
+.lock{
+display:none;
+font-size:40px;
+margin-bottom:10px;
+}
+
+.locked .lock{
+display:block;
+}
+
+.overlay{
+position:fixed;
+left:0;
+top:0;
+width:100%;
+height:100%;
+display:none;
+justify-content:center;
+align-items:center;
+background:rgba(0,0,0,.88);
+z-index:999;
+}
+
+.popup{
+background:#12243f;
+padding:40px;
+border-radius:15px;
+text-align:center;
+width:90%;
+max-width:500px;
+}
+
+.popup h1{
+color:#ff4444;
+margin-bottom:15px;
+}
+
+.popup p{
+margin:20px 0;
+font-size:18px;
+}
+
+button{
+
+padding:14px 30px;
+font-size:18px;
 border:none;
-border-radius:6px;
-background:#152445;
-color:#fff;
+border-radius:8px;
+background:#00d9ff;
 cursor:pointer;
+font-weight:bold;
+
 }
-.controls button:hover{background:#00d4ff;color:#000}
 
-/* CHANNELS */
-.channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+button:hover{
+background:#00b6d8;
+}
 
-.channels{
-overflow-y:auto;
-flex:1;
-display:grid;
-grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+@media(max-width:768px){
+
+video{
+height:250px;
+}
+
+header{
+flex-direction:column;
 gap:10px;
-padding-right:5px;
 }
 
-.card{
-background:#111a31;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
-border:1px solid #1f355d;
-transition:.3s;
-}
-.card:hover{transform:scale(1.03);border-color:#00d4ff;}
-
-.badge{
-background:red;
-padding:3px 6px;
-border-radius:10px;
-font-size:10px;
-float:right;
-}
-
-@media(max-width:900px){
-body{flex-direction:column;}
-.sidebar{width:100%;}
 }
 
 </style>
@@ -160,284 +163,339 @@ body{flex-direction:column;}
 
 <body>
 
-<!-- SIDEBAR -->
-<div class="sidebar">
+<header>
 
-<div class="logo">📺 BTECH-TV PRO MAX</div>
-<div class="sub">Ultra BTECH-TV world Engine X</div>
+<h2>📺 BTECH-TV WORLD PRO MAX</h2>
 
-<div class="menu-title">🌍 Countries</div>
+<div>
+FREE TRIAL:
+<span id="timer">02:00</span>
+</div>
 
-<!-- ALL COUNTRIES -->
-<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
-<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
-<button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
-<button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
-<button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
-<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
-<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
-<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
-<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
-<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
-<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
-<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
-<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
-<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
-<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
-<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
-<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
-<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
-<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
-<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
-<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
-<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
-<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
-<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
-<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
+</header>
 
-<div class="menu-title">🎬 Categories</div>
+<div class="player">
 
-<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
-<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
-<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
-<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
-<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
-<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
-<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
-<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
-<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
-<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
+<video id="video" controls autoplay></video>
 
-<div class="menu-title">🗣 Languages</div>
+</div>
+<a href="payment.html?package=Premium&amount=5000">
+    Premium Package
+</a>
 
-<button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
-<button class="nav-btn" onclick="load('spa')">🇪🇸 Spanish</button>
-<button class="nav-btn" onclick="load('ara')">🇸🇦 Arabic</button>
-<button class="nav-btn" onclick="load('fra')">🇫🇷 French</button>
-<button class="nav-btn" onclick="load('hin')">🇮🇳 Hindi</button>
-<button class="nav-btn" onclick="load('zho')">🇨🇳 Chinese</button>
-<button class="nav-btn" onclick="load('por')">🇵🇹 Portuguese</button>
+<a href="payment.html?package=Super Premium&amount=10000">
+    Super Premium Package
+</a>
+    <h2>Subscription Payment</h2>
 
-<div class="menu-title">🔥 Tools</div>
+<form id="paymentForm">
 
-<button class="nav-btn" onclick="scanStreams()">📡 Scan</button>
-<button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
-<button class="nav-btn" onclick="togglePiP()">📺 PiP</button>
-<button class="nav-btn" onclick="clearRecents()">🗑 Recents</button>
-<button class="nav-btn" onclick="recordMode()">⏺ Record</button>
-<button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
-<button class="nav-btn" onclick="repairStreams()">🛠 Repair</button>
-<button class="nav-btn" onclick="optimizeMemory()">🧠 Optimize</button>
+<label>Customer Name</label>
+<input type="text" id="name" required>
+
+<label>Email</label>
+<input type="email" id="email" required>
+
+<label>Phone Number</label>
+<input type="tel" id="phone" required>
+
+<label>Package Selected</label>
+<input type="text" id="package" readonly>
+
+<label>Amount (₦)</label>
+<input type="text" id="amount" readonly>
+
+<button type="submit">
+Proceed to Payment
+</button>
+
+</form>
+<div class="channels">
+
+<div class="channel" onclick="playChannel(0)">
+<h3>News HD</h3>
+</div>
+
+<div class="channel" onclick="playChannel(1)">
+<h3>Sports HD</h3>
+</div>
+
+<div class="channel" onclick="playChannel(2)">
+<h3>Movies HD</h3>
+</div>
+
+<div class="channel" onclick="playChannel(3)">
+<h3>Kids HD</h3>
+</div>
+
+<div class="channel" onclick="playChannel(4)">
+<h3>Music HD</h3>
+</div>
+
+<div class="channel" onclick="playChannel(5)">
+<h3>Documentary</h3>
+</div>
 
 </div>
 
-<!-- MAIN -->
-<div class="main">
+<!-- PREMIUM UNLOCK SCREEN -->
 
-<div class="topbar">
-<div class="search-box">
-<input oninput="search(this.value)" placeholder="Search BTECH-TV World...">
+<div class="overlay" id="expired">
+
+<div class="popup premium">
+
+<h1>🔒 Free Trial Expired</h1>
+
+<p>
+Your 2-minute free trial has ended.
+</p>
+
+<p>
+Subscribe to continue watching all IPTV channels.
+</p>
+
+<div class="packages">
+
+<a href="index_premium-package.html" class="package">
+<h3>Premium Package</h3>
+<p>Unlimited Streaming</p>
+</a>
+
+<a href="index_super-Compact_plus-package.html" class="package">
+<h3>Super Compact Plus</h3>
+<p>Affordable Plan</p>
+</a>
+
+<a href="index_super-premium-package.html" class="package">
+<h3>Super Premium</h3>
+<p>HD + Premium Channels</p>
+</a>
+
+<a href="index_super-premium_Compact-package.html" class="package">
+<h3>Super Premium Compact</h3>
+<p>Compact HD Package</p>
+</a>
+
+<a href="index_super-premium_Compact_plus-package.html" class="package">
+<h3>Super Premium Compact Plus</h3>
+<p>More Channels</p>
+</a>
+
+<a href="index_super-premium_plus-package.html" class="package">
+<h3>Super Premium Plus</h3>
+<p>Ultimate IPTV Experience</p>
+</a>
+
 </div>
-<div class="live">🔴 BTECH-TV LIVE</div>
-</div>
 
-<div class="hero">
-<h3>BTECH-TV World PRO MAX SYSTEM</h3>
-<div class="stats">
-<div class="stat">📺 <div id="total">0</div></div>
-<div class="stat">⭐ Fav <div id="fav">0</div></div>
-<div class="stat">⚫ Dead <div id="dead">0</div></div>
-<div class="stat">🌍 Live <div id="live">0</div></div>
-</div>
-</div>
-
-<div class="player-container">
-<video id="video" controls autoplay muted></video>
-</div>
-
-<div class="controls">
-
-<div class="controls" style="display:flex;align-items:center;width:100%;">
-
-    <button onclick="next()">▶ Next</button>
-    <button onclick="prev()">◀ Prev</button>
-    <button onclick="toggleMute()">🔊 Mute</button>
-    <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
-    <button onclick="loadUltra()">🚀 Global</button>
-
-    <!-- Pushes the text to the far right -->
-    <div style="
-        margin-left:auto;
-        color:#00d4ff;
-        font-size:13px;
-        font-weight:bold;
-        white-space:nowrap;
-        padding-left:20px;
-    ">
-        Design by <span style="color:#ffffff;">BINAINU SHAIBU</span> | BTECH WEBSITE DESIGN
-    </div>
+<button onclick="location.reload()">
+Restart Free Trial
+</button>
 
 </div>
-</div>
 
-<div class="channel-wrapper">
-<div class="channels" id="grid"></div>
+</div>
+<div class="popup">
+
+<h1>Trial Expired</h1>
+
+<p>Your free 2-minute trial has ended.</p>
+
+<p>All IPTV channels are now locked.</p>
+
+<button onclick="location.reload()">Restart Demo</button>
+
 </div>
 
 </div>
 
 <script>
 
-let all=[],filtered=[],i=0;
-let video=document.getElementById("video");
-let hls;
+const channels=[
 
-/* LOAD */
-async function load(code){
-await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
-}
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
 
-async function loadCat(c){
-await loadM3U(`https://iptv-org.github.io/iptv/categories/${c}.m3u`);
-}
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
 
-async function loadUltra(){
-await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
-}
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
 
-/* M3U */
-async function loadM3U(url){
-const res=await fetch(url);
-const text=await res.text();
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
 
-all=[];filtered=[];i=0;
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
 
-let lines=text.split("\n");
+"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
 
-for(let x=0;x<lines.length;x++){
-if(lines[x].startsWith("#EXTINF")){
-let name=lines[x].split(",").pop();
-let url=lines[x+1];
-if(url && url.startsWith("http")) all.push({name,url});
-}
-}
+];
 
-filtered=[...all];
-render();
-stats();
-}
-/* RENDER */
-function render(){
+const video=document.getElementById("video");
 
-    let grid = document.getElementById("grid");
-    grid.innerHTML = "";
+let trialExpired=false;
 
-    filtered.forEach((c, idx)=>{
+function playChannel(index){
 
-        // Remove quality labels only
-      let cleanName = c.name
-    .replace(/\s*\(\d+p\)/gi, "")
-    .trim();
+if(trialExpired){
 
-        // Channel number with leading zeros
-        let ch = String(idx + 1).padStart(3, "0");
+alert("Trial has expired.\nAll channels are locked.");
 
-        let div = document.createElement("div");
-        div.className = "card";
-
-        div.innerHTML = `
-    <div class="badge">LIVE</div>
-
-    <div style="
-        color:#00d4ff;
-        font-weight:bold;
-        font-size:14px;
-        margin-bottom:6px;
-    ">
-        BTECH-TV&nbsp;&nbsp;CH ${ch}
-    </div>
-
-    <div style="
-        color:#fff;
-        font-size:16px;
-        font-weight:600;
-    ">
-        ${cleanName}
-    </div>
-`;
-        div.onclick = ()=>play(idx);
-
-        grid.appendChild(div);
-
-    });
+return;
 
 }
 
-/* PLAY */
-function play(idx){
+const url=channels[index];
 
-    i = idx;
-    let c = filtered[i];
+if(Hls.isSupported()){
 
-    let cleanName = c.name
-        .replace(/\s*\(1080p\)/gi,"")
-        .replace(/\s*\(720p\)/gi,"")
-        .replace(/\s*\(540p\)/gi,"")
-        .replace(/\s*\(480p\)/gi,"")
-        .replace(/\s*\(360p\)/gi,"")
-        .replace(/\s*\(240p\)/gi,"")
-        .replace(/\s*\(144p\)/gi,"")
-        .trim();
+const hls=new Hls();
 
-    let ch = String(idx + 1).padStart(3, "0");
+hls.loadSource(url);
 
-    document.title = `CH ${ch} - ${cleanName} | BTECH-TV WORLD PRO MAX`;
-
-    if(hls) hls.destroy();
-
-    if(Hls.isSupported()){
-        hls = new Hls();
-        hls.loadSource(c.url);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
-    }else{
-        video.src = c.url;
-        video.play();
-    }
+hls.attachMedia(video);
 
 }
-/* BASIC */
-function search(q){
-filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
-render();
+
+else{
+
+video.src=url;
+
 }
 
-function next(){i=(i+1)%filtered.length;play(i);}
-function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
+video.play();
 
-function toggleMute(){video.muted=!video.muted;}
-function toggleFullscreen(){video.requestFullscreen();}
-
-/* EXTRA FEATURES (PLACEHOLDER SAFE) */
-function scanStreams(){alert("Scanning streams...");}
-function speedBoost(){video.playbackRate=1.15;}
-function repairStreams(){alert("Repair mode active");}
-function optimizeMemory(){alert("Optimizing memory");}
-function recordMode(){alert("Record mode enabled");}
-function clearRecents(){alert("Recents cleared");}
-
-/* STATS */
-function stats(){
-document.getElementById("total").innerText=all.length;
-document.getElementById("live").innerText=all.length;
-document.getElementById("dead").innerText=0;
-document.getElementById("fav").innerText=0;
 }
 
-/* AUTO START */
-loadUltra();
+playChannel(0);
+
+let seconds=120;
+
+const timer=document.getElementById("timer");
+
+const interval=setInterval(()=>{
+
+seconds--;
+
+let m=Math.floor(seconds/60);
+
+let s=seconds%60;
+
+timer.innerHTML=
+
+String(m).padStart(2,'0')+
+
+":"+
+
+String(s).padStart(2,'0');
+
+if(seconds<=0){
+
+clearInterval(interval);
+
+function expireTrial(){
+
+trialExpired = true;
+
+video.pause();
+
+video.removeAttribute("src");
+
+video.load();
+
+timer.innerHTML="00:00";
+
+timer.style.color="red";
+
+document.querySelectorAll(".channel").forEach(channel=>{
+
+channel.classList.add("locked");
+
+channel.innerHTML="<div class='lock'>🔒</div><h3>Locked</h3>";
+
+});
+
+document.getElementById("expired").style.display="flex";
+
+}
+
+},1000);
+
+function expireTrial(){
+
+trialExpired=true;
+
+video.pause();
+
+video.removeAttribute("src");
+video.load();
+
+timer.innerHTML="00:00";
+
+timer.style.color="red";
+
+document.querySelectorAll(".channel").forEach(card=>{
+
+card.classList.add("locked");
+
+card.innerHTML="<div class='lock'>🔒</div><h3>Locked</h3>";
+
+});
+
+document.getElementById("expired").style.display="flex";
+
+}
 
 </script>
+    const params = new URLSearchParams(window.location.search);
+
+document.getElementById("package").value =
+params.get("package");
+
+document.getElementById("amount").value =
+params.get("amount");
+    <div class="success">
+
+<h1>✅ Payment Successful</h1>
+
+<p>Thank you for subscribing.</p>
+
+<p>Your IPTV account has been activated.</p>
+
+<button onclick="location.href='index.html'">
+Start Watching
+</button>
+
+</div>
+    // This should run only AFTER your backend confirms the payment.
+
+const packageName = paymentResult.package; // Returned by your server
+
+switch (packageName) {
+
+    case "Premium":
+        window.location.href = "index_premium-package.html";
+        break;
+
+    case "Super Compact Plus":
+        window.location.href = "index_super-Compact_plus-package.html";
+        break;
+
+    case "Super Premium":
+        window.location.href = "index_super-premium-package.html";
+        break;
+
+    case "Super Premium Compact":
+        window.location.href = "index_super-premium_Compact-package.html";
+        break;
+
+    case "Super Premium Compact Plus":
+        window.location.href = "index_super-premium_Compact_plus-package.html";
+        break;
+
+    case "Super Premium Plus":
+        window.location.href = "index_super-premium_plus-package.html";
+        break;
+
+    default:
+        alert("Unknown subscription package.");
+}
 
 </body>
 </html>
