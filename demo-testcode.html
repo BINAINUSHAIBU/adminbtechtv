@@ -287,34 +287,7 @@ body{flex-direction:column;}
 </div>
 
 <script>
-/*==============================
-2 MINUTE TRIAL
-==============================*/
 
-let TRIAL_TIME = 120;
-let trialExpired = false;
-
-const trialTimer = setInterval(() => {
-
-if(trialExpired) return;
-
-TRIAL_TIME--;
-
-if(TRIAL_TIME<=0){
-
-trialExpired=true;
-
-video.pause();
-
-if(hls) hls.destroy();
-
-document.getElementById("trialLock").style.display="block";
-
-clearInterval(trialTimer);
-
-}
-
-},1000);
 let all=[],filtered=[],i=0;
 let video=document.getElementById("video");
 let hls;
@@ -392,13 +365,6 @@ function render(){
         ${cleanName}
     </div>
 `;
-      if(trialExpired){
-
-document.getElementById("trialLock").style.display="block";
-
-return;
-
-}
         div.onclick = ()=>play(idx);
 
         grid.appendChild(div);
@@ -472,10 +438,12 @@ document.getElementById("fav").innerText=0;
 loadUltra();
 
 </script>
+<!-- PAYSTACK -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
 <!-- ===========================
 PREMIUM LOCK SCREEN
 =========================== -->
-
 <div id="trialLock" style="
 display:none;
 position:fixed;
@@ -489,15 +457,15 @@ overflow:auto;
 padding:40px;
 ">
 
-<h1 style="text-align:center;color:#00d4ff">
+<h1 style="text-align:center;color:#00d4ff;">
 🔒 BTECH-TV WORLD PRO MAX
 </h1>
 
-<h2 style="text-align:center;margin-top:10px">
+<h2 style="text-align:center;margin-top:10px;">
 Free Trial Expired
 </h2>
 
-<p style="text-align:center;color:#bbb;margin-bottom:30px">
+<p style="text-align:center;color:#bbb;margin-bottom:30px;">
 Subscribe to continue watching Premium Channels.
 </p>
 
@@ -505,129 +473,163 @@ Subscribe to continue watching Premium Channels.
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:20px;
+max-width:1200px;
+margin:auto;
 ">
 
 <div class="card">
 <h3>Premium Package</h3>
 <h2>₦5,000</h2>
 <p>30 Days</p>
-<button onclick="payNow('Premium',5000)">
-Unlock
-</button>
+<button onclick="payNow('Premium Package',5000)">Unlock</button>
 </div>
 
 <div class="card">
 <h3>Super Compact</h3>
 <h2>₦3,000</h2>
 <p>30 Days</p>
-function payNow(pkg,amount){
-
-let handler=PaystackPop.setup({
-
-key:"YOUR_PUBLIC_KEY",
-
-email:"customer@email.com",
-
-amount:amount*100,
-
-currency:"NGN",
-
-callback:function(response){
-
-alert("Payment Successful");
-
-unlockChannels();
-
-},
-
-onClose:function(){
-
-alert("Payment Cancelled");
-
-}
-
-});
-
-handler.openIframe();
-
-}Unlock
-</button>
+<button onclick="payNow('Super Compact',3000)">Unlock</button>
 </div>
 
 <div class="card">
 <h3>Compact Plus</h3>
 <h2>₦4,000</h2>
 <p>30 Days</p>
-<button onclick="payNow('Compact Plus',4000)">
-Unlock
-</button>
+<button onclick="payNow('Compact Plus',4000)">Unlock</button>
 </div>
 
 <div class="card">
 <h3>Super Premium</h3>
 <h2>₦8,000</h2>
 <p>90 Days</p>
-<button onclick="payNow('Super Premium',8000)">
-Unlock
-</button>
+<button onclick="payNow('Super Premium',8000)">Unlock</button>
 </div>
 
 <div class="card">
 <h3>Super Premium Plus</h3>
 <h2>₦10,000</h2>
 <p>180 Days</p>
-<button onclick="payNow('Premium Plus',10000)">
-Unlock
-</button>
+<button onclick="payNow('Super Premium Plus',10000)">Unlock</button>
 </div>
 
 </div>
 
 </div>
-  /*==============================
-PAYMENT
-==============================*/
+    /*====================================
+    2 MINUTE FREE TRIAL
+=====================================*/
+
+let TRIAL_TIME = 120;
+let trialExpired = false;
+
+/* Optional countdown element */
+const timerElement = document.getElementById("timer");
+
+const trialTimer = setInterval(function(){
+
+    if(trialExpired) return;
+
+    TRIAL_TIME--;
+
+    if(timerElement){
+
+        let min=Math.floor(TRIAL_TIME/60);
+        let sec=TRIAL_TIME%60;
+
+        timerElement.innerHTML=
+            String(min).padStart(2,"0")+":"+
+            String(sec).padStart(2,"0");
+    }
+
+    if(TRIAL_TIME<=0){
+
+        trialExpired=true;
+
+        video.pause();
+
+        if(hls) hls.destroy();
+
+        document.getElementById("trialLock").style.display="block";
+
+        clearInterval(trialTimer);
+
+    }
+
+},1000);
+
+
+/*====================================
+    PAYMENT
+=====================================*/
 
 function payNow(packageName,amount){
 
-alert(
-"Package : "+packageName+
-"\nAmount : ₦"+amount+
-"\n\nRedirecting to payment..."
-);
+    var handler=PaystackPop.setup({
 
-/*
-PAYSTACK
+        key:"YOUR_PAYSTACK_PUBLIC_KEY",
 
-window.location.href="paystack.html";
+        email:"customer@email.com",
 
-OR
+        amount:amount*100,
 
-FLUTTERWAVE
+        currency:"NGN",
 
-window.location.href="flutterwave.html";
+        callback:function(response){
 
-OR
+            alert("Payment Successful");
 
-STRIPE
+            unlockChannels();
 
-window.location.href="stripe.html";
+        },
 
-*/
+        onClose:function(){
 
-}
-  unlockChannels();
-  function unlockChannels(){
+            alert("Payment Cancelled");
 
-trialExpired=false;
+        }
 
-document.getElementById("trialLock").style.display="none";
+    });
 
-video.play();
+    handler.openIframe();
 
 }
-  <script src="https://js.paystack.co/v1/inline.js"></script>
-  
+
+
+/*====================================
+    UNLOCK CHANNELS
+=====================================*/
+
+function unlockChannels(){
+
+    trialExpired=false;
+
+    document.getElementById("trialLock").style.display="none";
+
+    video.play();
+
+}
+
+
+/*====================================
+    CHECK TRIAL BEFORE PLAY
+=====================================*/
+
+const originalPlay=play;
+
+play=function(idx){
+
+    if(trialExpired){
+
+        document.getElementById("trialLock").style.display="block";
+
+        return;
+
+    }
+
+    originalPlay(idx);
+
+};
+        
 </body>
 </html>
 
