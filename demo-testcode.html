@@ -8,7 +8,7 @@
 <title>BTECH-TV WORLD PRO MAX </title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
+<script src="https://js.paystack.co/v1/inline.js"></script>
 <style>
 
 /* BASE */
@@ -629,7 +629,147 @@ play=function(idx){
     originalPlay(idx);
 
 };
-        
+
+        <!-- ==========================
+     PREMIUM LOCK SCREEN
+========================== -->
+<div id="trialLock" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(3,8,20,.97);
+z-index:999999;
+overflow:auto;
+">
+
+<div style="
+max-width:500px;
+margin:80px auto;
+background:#101a31;
+border:2px solid #00d4ff;
+border-radius:16px;
+padding:30px;
+text-align:center;
+box-shadow:0 0 30px rgba(0,212,255,.25);
+">
+
+<div style="font-size:70px;">🔒</div>
+
+<h1 style="
+margin:15px 0;
+color:#00d4ff;
+font-size:32px;
+">
+Free Trial Expired
+</h1>
+
+<p style="
+color:#d5d5d5;
+font-size:18px;
+margin-bottom:25px;
+">
+Subscribe to continue watching all premium channels.
+</p>
+
+<div style="
+display:grid;
+gap:15px;
+">
+
+<button onclick="payNow('Premium Package',5000)" style="
+padding:15px;
+font-size:18px;
+font-weight:bold;
+background:#00c853;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+">
+💳 Pay with Paystack
+</button>
+
+<button onclick="location.reload()" style="
+padding:12px;
+font-size:16px;
+background:#1b294d;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+">
+🔄 Restart Trial
+</button>
+
+</div>
+
+</div>
+
+</div>
+        /*=========================
+  PAYSTACK PAYMENT
+==========================*/
+
+function payNow(packageName, amount){
+
+    const email = prompt("Enter your email address:");
+
+    if(!email){
+        alert("Email is required.");
+        return;
+    }
+
+    const handler = PaystackPop.setup({
+
+        key: "YOUR_PAYSTACK_PUBLIC_KEY",
+
+        email: email,
+
+        amount: amount * 100,
+
+        currency: "NGN",
+
+        callback: function(response){
+
+            alert("Payment Successful!");
+
+            unlockChannels();
+
+        },
+
+        onClose: function(){
+
+            alert("Payment Cancelled");
+
+        }
+
+    });
+
+    handler.openIframe();
+
+}
+
+/*=========================
+  UNLOCK CHANNELS
+==========================*/
+
+let isPremium = false;
+
+function unlockChannels(){
+
+    isPremium = true;
+
+    trialExpired = false;
+
+    document.getElementById("trialLock").style.display = "none";
+
+    video.play();
+
+}
+        YOUR_PAYSTACK_PUBLIC_KEY
 </body>
 </html>
 
