@@ -2,125 +2,178 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>BTECH-TV Demo</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Enterprise V5 Ultimate Demo</title>
 
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:#08101f;
-color:white;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#08101f;color:#fff}
 header{
-background:#0f1932;
+background:#111c35;
 padding:20px;
-text-align:center;
-font-size:28px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+.logo{
+font-size:26px;
 font-weight:bold;
 color:#00d4ff;
 }
-
-.player{
-width:90%;
-margin:20px auto;
-background:#000;
-height:350px;
-display:flex;
-align-items:center;
-justify-content:center;
-border-radius:10px;
-}
-
-button{
-padding:12px 20px;
-border:none;
-border-radius:8px;
+.plan{
 background:#00d4ff;
-cursor:pointer;
-font-size:16px;
-margin:5px;
+color:#000;
+padding:8px 15px;
+border-radius:20px;
+font-weight:bold;
 }
 
-#timer{
-font-size:20px;
+.hero{
+padding:50px;
 text-align:center;
-margin:15px;
+background:linear-gradient(135deg,#111c35,#0b1430);
 }
 
-#payment{
-display:none;
-position:fixed;
-top:0;
-left:0;
-right:0;
-bottom:0;
-background:rgba(0,0,0,.9);
-justify-content:center;
-align-items:center;
+.hero h1{
+font-size:42px;
+margin-bottom:15px;
+}
+
+.hero p{
+opacity:.8;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+padding:30px;
 }
 
 .card{
-background:#16223f;
+background:#101c38;
+padding:25px;
+border-radius:12px;
+text-align:center;
+}
+
+.card h2{
+margin-bottom:10px;
+color:#00d4ff;
+}
+
+button{
+margin-top:15px;
+padding:12px 25px;
+background:#00d4ff;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
+}
+
+button:hover{
+transform:scale(1.03);
+}
+
+#trial{
+font-size:22px;
+margin:20px;
+text-align:center;
+}
+
+#modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.85);
+justify-content:center;
+align-items:center;
+}
+
+.popup{
+background:#142347;
 padding:30px;
 border-radius:15px;
-width:320px;
+width:350px;
 text-align:center;
 }
 
 input{
 width:100%;
 padding:10px;
-margin:8px 0;
-border:none;
+margin:10px 0;
 border-radius:6px;
+border:none;
+}
+
+footer{
+padding:20px;
+text-align:center;
+background:#111c35;
+margin-top:40px;
 }
 </style>
-</head>
 
+</head>
 <body>
 
 <header>
-📺 BTECH-TV WORLD PRO MAX
+
+<div class="logo">
+📺 Enterprise V5 Ultimate
+</div>
+
+<div class="plan" id="plan">
+TRIAL
+</div>
+
 </header>
 
-<div id="timer">
+<section class="hero">
+
+<h1>Enterprise IPTV Platform</h1>
+
+<p>
+Single Page Demo
+</p>
+
+</section>
+
+<div id="trial">
+
 Trial Remaining:
 <span id="time">120</span>s
+
 </div>
 
-<div class="player">
-VIDEO PLAYER DEMO
-</div>
-
-<center>
-
-<button onclick="play()">
-▶ Play
-</button>
-
-<button onclick="resetDemo()">
-Reset Demo
-</button>
-
-</center>
-
-<div id="payment">
+<section class="cards">
 
 <div class="card">
+<h2>Premium</h2>
+<p>Unlimited HD Channels</p>
+<button onclick="buy('Premium')">Buy ₦3000</button>
+</div>
 
-<h2>Trial Expired</h2>
+<div class="card">
+<h2>Super Premium</h2>
+<p>4K + Ultra Features</p>
+<button onclick="buy('Super Premium')">Buy ₦5000</button>
+</div>
 
-<p>Select Package</p>
+<div class="card">
+<h2>Enterprise</h2>
+<p>Business Package</p>
+<button onclick="buy('Enterprise')">Buy ₦10000</button>
+</div>
 
-<button onclick="pay('Premium')">
-Premium ₦3000
-</button>
+</section>
 
-<button onclick="pay('Super Premium')">
-Super Premium ₦5000
-</button>
+<div id="modal">
+
+<div class="popup">
+
+<h2>Demo Payment</h2>
 
 <input placeholder="4111 1111 1111 1111">
 
@@ -128,26 +181,33 @@ Super Premium ₦5000
 
 <input placeholder="123">
 
-<p id="status"></p>
+<button onclick="completePayment()">
+Pay Now
+</button>
 
 </div>
 
 </div>
+
+<footer>
+
+Enterprise V5 Ultimate Demo
+
+</footer>
 
 <script>
 
 let seconds=120;
+let selected="";
 
-if(localStorage.plan){
+const saved=localStorage.getItem("plan");
 
-document.getElementById("timer").innerHTML=
-"Active Plan: "+localStorage.plan;
+if(saved){
+document.getElementById("plan").innerHTML=saved;
+document.getElementById("trial").innerHTML="Subscription Active";
+}else{
 
-}
-
-let countdown=setInterval(()=>{
-
-if(localStorage.plan) return;
+const timer=setInterval(()=>{
 
 seconds--;
 
@@ -155,45 +215,35 @@ document.getElementById("time").innerHTML=seconds;
 
 if(seconds<=0){
 
-clearInterval(countdown);
+clearInterval(timer);
 
-document.getElementById("payment").style.display="flex";
+document.getElementById("modal").style.display="flex";
 
 }
 
 },1000);
 
-function play(){
+}
 
-alert("Demo Player Started");
+function buy(plan){
+
+selected=plan;
+
+document.getElementById("modal").style.display="flex";
 
 }
 
-function pay(plan){
+function completePayment(){
 
-document.getElementById("status").innerHTML=
-"Processing Demo Payment...";
+localStorage.setItem("plan",selected||"Premium");
 
-setTimeout(()=>{
+document.getElementById("modal").style.display="none";
 
-localStorage.plan=plan;
+document.getElementById("plan").innerHTML=selected||"Premium";
 
-document.getElementById("payment").style.display="none";
+document.getElementById("trial").innerHTML="Subscription Active";
 
-document.getElementById("timer").innerHTML=
-"Subscription Active: "+plan;
-
-alert(plan+" Activated!");
-
-},2000);
-
-}
-
-function resetDemo(){
-
-localStorage.removeItem("plan");
-
-location.reload();
+alert("Demo payment completed.");
 
 }
 
