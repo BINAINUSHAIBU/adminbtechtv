@@ -1,0 +1,1431 @@
+
+
+
+
+Claim offer
+
+
+Pasted text(41).txt
+Document
+ADD AUTOMATIC UPGRADE AFTER TRIAL VERSION OF 2 minute TO THIS-AFTER PAYMENT 
+index_premium-package.html
+Create index_premium-package.html
+index_super-Compact_plus-package.html
+Create index_super-Compact_plus-package.html
+4 days ago
+index_super-premium-package.html
+Create index_super-premium-package.html
+index_super-premium_Compact-package.html
+Rename index_super-premium_Compact Plus-package.html to index_super-p…
+index_super-premium_Compact_plus-package.html
+Create index_super-premium_Compact_plus-package.html
+index_super-premium_plus-package.html
+
+
+Pasted text(42).txt
+Document
+convert and re write this- User Opens App 
+       │
+       ▼
+2 Minute Free Trial Starts
+       │
+       ▼
+Trial Ends
+       │
+       ▼
+Premium Packages Screen
+       │
+       ▼
+User Clicks Package
+       │
+       ▼
+Payment Gateway
+       │
+       ▼
+Payment Successful
+       │
+       ▼
+Automatically Redirect &
+Unlock Selected Package
+
+
+Pasted text(43).txt
+Document
+merge this-<!-- FREE TRIAL SCREEN -->
+<div id="trialScreen" class="trial-screen">
+
+    <div class="trial-card">
+
+        <h1>🎁 2-Minute Free Trial</h1>
+
+        <p class="subtitle">
+            Enjoy full access to <strong>BTECH-TV WORLD PRO MAX</strong>
+            for two minutes absolutely FREE.
+        </p>
+
+        <div class="features">
+
+            <div class="feature">
+                ✅ All Features Enabled
+            </div>
+
+            <div class="feature">
+                📺 Unlimited Channel Access
+            </div>
+
+            <div class="feature">
+                🚀 HD & 4K Streaming
+            </div>
+
+            <div class="feature">
+                ⚡ Fast Playback
+            </div>
+
+            <div class="feature">
+                ⏳ Countdown Timer Starts
+            </div>
+
+        </div>
+
+        <div class="timer-box">
+
+            <h3>Free Trial Remaining</h3>
+
+            <div id="trialTimer">
+                02:00
+            </div>
+
+        </div>
+
+    </div>
+
+</div>, let trialSeconds = 120;
+
+const countdown = setInterval(function(){
+
+    trialSeconds--;
+
+    let minutes = Math.floor(trialSeconds / 60);
+    let seconds = trialSeconds % 60;
+
+    document.getElementById("trialTimer").innerHTML =
+        String(minutes).padStart(2,"0") +
+        ":" +
+        String(seconds).padStart(2,"0");
+
+    if(trialSeconds <= 0){
+
+        clearInterval(countdown);
+
+        alert("Your 2-minute free trial has ended. Please subscribe to continue.");
+
+        // Show Premium Subscription Page
+        document.getElementById("trialScreen").style.display="none";
+        document.getElementById("premiumScreen").style.display="flex";
+
+    }
+
+},1000); <!-- FREE TRIAL EXPIRED -->
+<div id="trialExpiredScreen" class="expired-screen" style="display:none;">
+
+    <div class="expired-card">
+
+        <div class="expired-icon">⏰</div>
+
+        <h1>Free Trial Expired</h1>
+
+        <p>
+            Your complimentary 2-minute trial has ended.
+        </p>
+
+        <p>
+            Subscribe to any Premium Package below to continue enjoying
+            unlimited access to <strong>BTECH-TV WORLD PRO MAX</strong>.
+        </p>
+
+        <div class="expired-info">
+
+            <div>❌ Trial Access Ended</div>
+            <div>🔒 Premium Channels Locked</div>
+            <div>💎 Upgrade to Continue Watching</div>
+
+        </div>
+
+        <button class="upgrade-btn" onclick="showPremiumPackages()">
+            Upgrade to Premium
+        </button>
+
+    </div>
+
+</div>, if(trialSeconds <= 0){
+
+    clearInterval(countdown);
+
+    // Hide IPTV Player
+    document.querySelector(".main").style.display = "none";
+
+    // Show Trial Expired Screen
+    document.getElementById("trialExpiredScreen").style.display = "flex";
+
+}, <!-- PREMIUM SUBSCRIPTION SCREEN -->
+<div id="premiumScreen" class="premium-screen" style="display:none;">
+
+    <div class="premium-card">
+
+        <div class="premium-header">
+            <h1>👑 Upgrade to Premium</h1>
+            <p>
+                Your free trial has ended. Choose a subscription plan to
+                continue enjoying unlimited IPTV streaming.
+            </p>
+        </div>
+
+        <div class="packages">
+
+            <div class="package">
+                <h2>Premium Package</h2>
+                <p>Unlimited Entertainment</p>
+                <button onclick="location.href='index_premium-package.html'">
+                    Subscribe
+                </button>
+            </div>
+
+            <div class="package">
+                <h2>Super Compact Plus</h2>
+                <p>Most Popular</p>
+                <button onclick="location.href='index_super-Compact_plus-package.html'">
+                    Subscribe
+                </button>
+            </div>
+
+            <div class="package">
+                <h2>Super Premium</h2>
+                <p>Premium Channels Included</p>
+                <button onclick="location.href='index_super-premium-package.html'">
+                    Subscribe
+                </button>
+            </div>
+
+            <div class="package">
+                <h2>Super Premium Compact</h2>
+                <p>Affordable Premium Access</p>
+                <button onclick="location.href='index_super-premium_Compact-package.html'">
+                    Subscribe
+                </button>
+            </div>
+
+            <div class="package">
+                <h2>Super Premium Compact Plus</h2>
+                <p>Best Value Package</p>
+                <button onclick="location.href='index_super-premium_Compact_plus-package.html'">
+                    Subscribe
+                </button>
+            </div>
+
+            <div class="package featured">
+                <div class="badge">BEST VALUE</div>
+
+                <h2>Super Premium Plus</h2>
+                <p>All Channels • 4K • Sports • Movies • TV Shows</p>
+
+                <button onclick="location.href='index_super-premium_plus-package.html'">
+                    Subscribe Now
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>, <!-- PACKAGE SELECTED -->
+<div id="packageSelection" class="selection-screen">
+
+    <div class="selection-card">
+
+        <div class="icon">📦</div>
+
+        <h1>Select Your Preferred Package</h1>
+
+        <p>
+            Choose the subscription plan that best fits your entertainment needs.
+            Your selected package will be activated immediately after successful payment.
+        </p>
+
+        <div class="selected-package" id="selectedPackage">
+            No package selected.
+        </div>
+
+        <button id="continueBtn" disabled onclick="proceedToPayment()">
+            Continue to Secure Payment →
+        </button>
+
+    </div>
+
+</div>, let selectedPackage = "";
+
+function selectPackage(packageName, packagePage){
+
+    selectedPackage = packagePage;
+
+    document.getElementById("selectedPackage").innerHTML =
+        "✅ Selected Package: <strong>" + packageName + "</strong>";
+
+    document.getElementById("continueBtn").disabled = false;
+
+}
+
+function proceedToPayment(){
+
+    if(selectedPackage==="") return;
+
+    window.location.href = selectedPackage;
+
+}, <button onclick="selectPackage('Premium Package','index_premium-package.html')">
+Subscribe
+</button>
+
+<button onclick="selectPackage('Super Compact Plus','index_super-Compact_plus-package.html')">
+Subscribe
+</button>
+
+<button onclick="selectPackage('Super Premium','index_super-premium-package.html')">
+Subscribe
+</button>
+
+<button onclick="selectPackage('Super Premium Compact','index_super-premium_Compact-package.html')">
+Subscribe
+</button>
+
+<button onclick="selectPackage('Super Premium Compact Plus','index_super-premium_Compact_plus-package.html')">
+Subscribe
+</button>
+
+<button onclick="selectPackage('Super Premium Plus','index_super-premium_plus-package.html')">
+Subscribe
+</button>, <!-- SECURE PAYMENT GATEWAY -->
+<div id="paymentGateway" class="payment-screen" style="display:none;">
+
+    <div class="payment-card">
+
+        <div class="payment-icon">🔐</div>
+
+        <h1>Secure Payment Gateway</h1>
+
+        <p>
+            Complete your subscription securely using your preferred payment method.
+            Your Premium subscription will be activated automatically after successful payment verification.
+        </p>
+
+        <div class="selected-plan">
+            <h3>Selected Package</h3>
+            <div id="paymentPackage">
+                Super Premium Plus
+            </div>
+        </div>
+
+        <div class="payment-methods">
+
+            <button class="gateway paystack" onclick="payWithPaystack()">
+                💳 Pay with Paystack
+            </button>
+
+            <button class="gateway flutterwave" onclick="payWithFlutterwave()">
+                🌍 Pay with Flutterwave
+            </button>
+
+            <button class="gateway stripe" onclick="payWithStripe()">
+                💳 Pay with Stripe
+            </button>
+
+            <button class="gateway monnify" onclick="payWithMonnify()">
+                🏦 Pay with Monnify
+            </button>
+
+        </div>
+
+        <div class="security">
+
+            🔒 256-bit SSL Encryption<br>
+            ✅ Secure Payment Processing<br>
+            ✅ Instant Subscription Activation
+
+        </div>
+
+    </div>
+
+</div>, function payWithPaystack(){
+
+    alert("Redirecting to Paystack...");
+    window.location.href="paystack-payment.html";
+
+}
+
+function payWithFlutterwave(){
+
+    alert("Redirecting to Flutterwave...");
+    window.location.href="flutterwave-payment.html";
+
+}
+
+function payWithStripe(){
+
+    alert("Redirecting to Stripe...");
+    window.location.href="stripe-payment.html";
+
+}
+
+function payWithMonnify(){
+
+    alert("Redirecting to Monnify...");
+    window.location.href="monnify-payment.html";
+
+} ,<!-- PAYMENT SUCCESSFULLY VERIFIED -->
+<div id="paymentSuccess" class="success-screen" style="display:none;">
+
+    <div class="success-card">
+
+        <div class="success-icon">✅</div>
+
+        <h1>Payment Successfully Verified</h1>
+
+        <p>
+            Thank you for your subscription!
+        </p>
+
+        <p>
+            Your payment has been securely verified and your Premium
+            subscription is now active.
+        </p>
+
+        <div class="subscription-details">
+
+            <div class="detail">
+                <strong>Selected Package</strong><br>
+                <span id="successPackage">Super Premium Plus</span>
+            </div>
+
+            <div class="detail">
+                <strong>Payment Status</strong><br>
+                <span class="verified">Verified ✓</span>
+            </div>
+
+            <div class="detail">
+                <strong>Subscription Status</strong><br>
+                <span class="active">Active</span>
+            </div>
+
+        </div>
+
+        <button class="continue-btn" onclick="activatePremium()">
+            Continue to Premium IPTV
+        </button>
+
+    </div>
+
+</div>, function paymentVerified(packageName){
+
+    // Save Premium Status
+    localStorage.setItem("premium", "true");
+    localStorage.setItem("package", packageName);
+
+    // Display Selected Package
+    document.getElementById("successPackage").innerHTML = packageName;
+
+    // Show Success Screen
+    document.getElementById("paymentGateway").style.display = "none";
+    document.getElementById("paymentSuccess").style.display = "flex";
+
+}
+
+// Continue to IPTV Player
+function activatePremium(){
+
+    window.location.href = "index.html";
+
+},<!-- SUBSCRIPTION ACTIVATED -->
+<div id="subscriptionActivated" class="activated-screen" style="display:none;">
+
+    <div class="activated-card">
+
+        <div class="activated-icon">🎉</div>
+
+        <h1>Subscription Activated Successfully</h1>
+
+        <p>
+            Congratulations, <!-- AUTO REDIRECT TO IPTV PLAYER -->
+<div id="redirectScreen" class="redirect-screen" style="display:none;">
+
+    <div class="redirect-card">
+
+        <div class="redirect-icon">📺</div>
+
+        <h1>Welcome to BTECH-TV WORLD PRO MAX</h1>
+
+        <h2>Premium Subscription Activated</h2>
+
+        <p>
+            Your subscription has been successfully activated.
+            You now have unlimited access to all premium content.
+        </p>
+
+        <div class="premium-benefits">
+
+            <div class="benefit">✅ Unlimited Streaming</div>
+            <div class="benefit">✅ Premium Channels Unlocked</div>
+            <div class="benefit">✅ Premium Features Enabled</div>
+            <div class="benefit">✅ HD • FHD • 4K Streaming</div>
+            <div class="benefit">✅ Unlimited Viewing Time</div>
+            <div class="benefit">✅ Premium Customer Support</div>
+
+        </div>
+
+        <div class="countdown">
+
+            Redirecting to IPTV Player in
+
+            <div id="redirectTimer">5</div>
+
+            seconds...
+
+        </div>
+
+        <button class="enter-btn" onclick="enterPlayer()">
+            Enter IPTV Player Now
+        </button>
+
+    </div>
+
+</div>, // Show Redirect Screen
+function showRedirectScreen(){
+
+    document.getElementById("subscriptionActivated").style.display = "none";
+    document.getElementById("redirectScreen").style.display = "flex";
+
+    let seconds = 5;
+
+    document.getElementById("redirectTimer").innerHTML = seconds;
+
+    const timer = setInterval(function(){
+
+        seconds--;
+
+        document.getElementById("redirectTimer").innerHTML = seconds;
+
+        if(seconds <= 0){
+
+            clearInterval(timer);
+
+            enterPlayer();
+
+        }
+
+    },1000);
+
+}
+
+// Enter IPTV Player
+function enterPlayer(){
+
+    window.location.href = "index.html";
+
+}, - into this format and keep all features -
+
+Generated image: Bold tech logo with globe emblem
+
+
+Edit
+
+
+Generated image: Premium VIP crown design
+
+Edit
+
+
+Generated image: Payment success celebration design
+
+Edit
+
+
+Generated image: Futuristic media hub with neon screens
+
+
+Edit
+
+
+// ======================================================
+// GET /api/player/dashboard
+// Player Dashboard
+// ======================================================
+
+router.get(
+
+    "/dashboard",
+
+    auth,
+
+    async (req, res) => {
+
+        try {
+
+            // Normally these values come from MongoDB
+
+            const dashboard = {
+
+                success: true,
+
+                application: "BTECH-TV WORLD PRO MAX",
+
+                user: {
+
+                    id: req.user.id,
+
+                    name: req.user.name,
+
+                    email: req.user.email,
+
+                    premium: req.user.premium || false,
+
+                    package:
+
+                        req.user.package ||
+
+                        "Free Trial"
+
+                },
+
+                player: {
+
+                    status: "Online",
+
+                    engine: "HLS.js",
+
+                    streaming: true,
+
+                    liveTV: true
+
+                },
+
+                subscription: {
+
+                    freeTrial:
+
+                        !req.user.premium,
+
+                    premium:
+
+                        req.user.premium ||
+
+                        false,
+
+                    package:
+
+                        req.user.package ||
+
+                        "Free Trial",
+
+                    expires:
+
+                        req.user.subscriptionEnd ||
+
+                        null
+
+                },
+
+                statistics: {
+
+                    totalChannels: 5000,
+
+                    liveChannels: 3500,
+
+                    premiumChannels: 2000,
+
+                    movies: 15000,
+
+                    series: 8000,
+
+                    sportsChannels: 350,
+
+                    kidsChannels: 120,
+
+                    newsChannels: 180,
+
+                    radioStations: 400
+
+                },
+
+                playback: {
+
+                    favoriteChannels: 0,
+
+                    recentlyWatched: 
+
+/api/player/channels
+
+// ======================================================
+// GET /api/player/channels
+// Get All IPTV Channels
+// ======================================================
+
+router.get(
+
+    "/channels",
+
+    auth,
+
+    async (req, res) => {
+
+        try {
+
+            // Replace with MongoDB query in production
+            const channels = [
+
+                {
+                    id: 1,
+                    name: "BTECH News",
+                    category: "News",
+                    country: "Nigeria",
+                    logo: "/images/logo.png",
+                    stream: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                    quality: "HD",
+                    premium: false,
+                    status: "Online"
+                },
+
+                {
+                    id: 2,
+                    name: "BTECH Sports",
+                    category: "Sports",
+                    country: "United Kingdom",
+                    logo: "/images/logo.png",
+                    stream: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                    quality: "FHD",
+                    premium: true,
+                    status: "Online"
+                },
+
+                {
+                    id: 3,
+                    name: "Movie World",
+                    category: "Movies",
+                    country: "USA",
+                    logo: "/images/logo.png",
+                    stream: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                    quality: "4K",
+                    premium: true,
+                    status: "Online"
+                },
+
+                {
+                    id: 4,
+                    name: "Kids Planet",
+                    category: "Kids",
+                    country: "Canada",
+                    logo: "/images/logo.png",
+                    stream: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                    quality: "HD",
+                    premium: false,
+                    status: "Online"
+                },
+
+                {
+                    id: 5,
+                    name: "Music TV",
+                    category: "Entertainment",
+                    country: "France",
+                    logo: "/images/logo.png",
+                    stream: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                    quality: "HD",
+                    premium: false,
+                    status: "Online"
+                }
+
+            ];
+
+            // Free Trial users cannot access premium channels
+            let availableChannels = channels;
+
+            if (!req.user.premium) {
+
+                availableChannels = channels.filter(
+
+                    channel => !channel.premium
+
+                );
+
+            }
+
+            res.status(200).json({
+
+                success: true,
+
+                application: "BTECH-TV WORLD PRO MAX",
+
+                totalChannels: availableChannels.length,
+
+                premiumUser: req.user.premium || false,
+
+                package: req.user.package || "Free Trial",
+
+                channels: availableChannels
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            res.status(500).json({
+
+                success: false,
+
+                message: "Unable to load IPTV channels."
+
+            });
+
+        }
+
+    }
+
+);
+Example Response (Premium User)
+{
+  "success": true,
+  "application": "BTECH-TV WORLD PRO MAX",
+  "totalChannels": 5,
+  "premiumUser": true,
+  "package": "Super Premium Plus",
+  "channels": [
+    {
+      "id": 1,
+      "name": "BTECH News",
+      "category": "News",
+      "country": "Nigeria",
+      "quality": "HD",
+      "premium": false,
+      "status": "Online"
+    },
+    {
+      "id": 2,
+      "name": "BTECH Sports",
+      "category": "Sports",
+      "country": "United Kingdom",
+      "quality": "FHD",
+      "premium": true,
+      "status": "Online"
+    }
+  ]
+}
+Features
+✅ JWT authentication
+
+✅ Returns all IPTV channels
+
+✅ Automatically filters premium channels for free-trial users
+
+✅ Supports HLS (.m3u8) streams
+
+✅ Channel metadata (category, country, quality, logo)
+
+✅ Online/offline status
+
+✅ Ready to replace the sample array with MongoDB or a database-backed playlist
+
+In production, you would typically replace the hardcoded channels array with a database query (for example, Channel.find()), and use the authenticated user's subscription status to determine which channels they are authorized to access.
+
+
+// ======================================================
+// GET /api/player/channel/:id
+// Get Single IPTV Channel
+// BTECH-TV WORLD PRO MAX
+// ======================================================
+
+router.get(
+
+    "/channel/:id",
+
+    auth,
+
+    async (req, res) => {
+
+        try {
+
+            const channelId = Number(req.params.id);
+
+            // Replace with MongoDB query in production
+
+            const channels = [
+
+                {
+                    id: 1,
+                    name: "BTECH News",
+                    category: "News",
+                    country: "Nigeria",
+                    language: "English",
+                    logo: "/images/logo.png",
+                    stream: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                    quality: "HD",
+                    premium: false,
+                    description: "24/7 News Coverage",
+                    status: "Online"
+                },
+
+                {
+                    id: 2,
+                    name: "BTECH Sports",
+                    category: "Sports",
+                    country: "United Kingdom",
+                    language: "English",
+                    logo: "/images/logo.png",
+                    stream: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                    quality: "FHD",
+                    premium: true,
+                    description: "Live Football & Sports",
+                    status: "Online"
+                },
+
+                {
+                    id: 3,
+                    name: "Movie World 4K",
+                    category: "Movies",
+                    country: "USA",
+                    language: "English",
+                    logo: "/images/logo.png",
+                    stream: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                    quality: "4K",
+                    premium: true,
+                    description: "Hollywood Movies",
+                    status: "Online"
+                },
+
+                {
+                    id: 4,
+                    name: "Kids Planet",
+                    category: "Kids",
+                    country: "Canada",
+                    language: "English",
+                    logo: "/images/logo.png",
+                    stream: "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+                    quality: "HD",
+                    premium: false,
+                    description: "Kids Entertainment",
+                    status: "Online"
+                }
+
+            ];
+
+            const channel = channels.find(
+
+                item => item.id === channelId
+
+            );
+
+            if (!channel) {
+
+                return res.status(404).json({
+
+                    success: false,
+
+                    message: "Channel not found."
+
+                });
+
+            }
+
+            // Prevent Free Users from accessing Premium Channels
+
+            if (
+
+                channel.premium &&
+
+                !req.user.premium
+
+            ) {
+
+                return res.status(403).json({
+
+                    success: false,
+
+                    message: "Premium subscription required.",
+
+                    upgrade: true,
+
+                    packages: [
+
+                        "Premium Package",
+
+                        "Super Compact Plus",
+
+                        "Super Premium",
+
+                        "Super Premium Compact",
+
+                        "Super Premium Compact Plus",
+
+                        "Super Premium Plus"
+
+                    ]
+
+                });
+
+            }
+
+            res.status(200).json({
+
+                success: true,
+
+                application: "BTECH-TV WORLD PRO MAX",
+
+                premiumUser:
+
+                    req.user.premium,
+
+                package:
+
+                    req.user.package ||
+
+                    "Free Trial",
+
+                channel
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            res.status(500).json({
+
+                success: false,
+
+                message: "Unable to retrieve channel."
+
+            });
+
+        }
+
+    }
+
+);
+Example Request
+GET /api/player/channel/2
+Authorization: Bearer YOUR_JWT_TOKEN
+Example Success Response
+{
+    "success": true,
+    "application": "BTECH-TV WORLD PRO MAX",
+    "premiumUser": true,
+    "package": "Super Premium Plus",
+    "channel": {
+        "id": 2,
+        "name": "BTECH Sports",
+        "category": "Sports",
+        "country": "United Kingdom",
+        "language": "English",
+        "logo": "/images/logo.png",
+        "stream": "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+        "quality": "FHD",
+        "premium": true,
+        "description": "Live Football & Sports",
+        "status": "Online"
+    }
+}
+Example Response (Free User Requesting Premium Channel)
+{
+    "success": false,
+    "message": "Premium subscription required.",
+    "upgrade": true,
+    "packages": [
+        "Premium Package",
+        "Super Compact Plus",
+        "Super Premium",
+        "Super Premium Compact",
+        "Super Premium Compact Plus",
+        "Super Premium Plus"
+    ]
+}
+Features Included
+✅ JWT authentication
+
+✅ Retrieve a single IPTV channel by ID
+
+✅ Returns full channel details (name, category, country, language, quality, logo, stream URL, description, status)
+
+✅ Prevents free/trial users from accessing premium channels
+
+✅ Returns 404 Not Found for invalid channel IDs
+
+✅ Returns 403 Forbidden with upgrade information for unauthorized premium access
+
+✅ Ready to replace the sample array with a MongoDB Channel model (for example, Channel.findById() or Channel.findOne({ id: channelId }))
+
+
+/api/player/playlist
+
+// ======================================================
+// GET /api/player/playlist
+// Load IPTV M3U Playlist
+// BTECH-TV WORLD PRO MAX
+// ======================================================
+
+const fs = require("fs");
+const path = require("path");
+
+router.get(
+
+    "/playlist",
+
+    auth,
+
+    async (req, res) => {
+
+        try {
+
+            // Premium users get full playlist
+            // Free users get free playlist
+
+            const playlistFile = req.user.premium
+
+                ? "premium_playlist.m3u"
+
+                : "free_playlist.m3u";
+
+            const playlistPath = path.join(
+
+                __dirname,
+
+                "..",
+
+                "playlists",
+
+                playlistFile
+
+            );
+
+            if (!fs.existsSync(playlistPath)) {
+
+                return res.status(404).json({
+
+                    success: false,
+
+                    message: "Playlist file not found."
+
+                });
+
+            }
+
+            res.setHeader(
+
+                "Content-Type",
+
+                "audio/x-mpegurl"
+
+            );
+
+            res.setHeader(
+
+                "Content-Disposition",
+
+                `inline; filename="${playlistFile}"`
+
+            );
+
+            fs.createReadStream(
+
+                playlistPath
+
+            ).pipe(res);
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            res.status(500).json({
+
+                success: false,
+
+                message: "Unable to load playlist."
+
+            });
+
+        }
+
+    }
+
+);
+Folder Structure
+BTECH-TV-WORLD-PRO-MAX/
+
+playlists/
+│
+├── free_playlist.m3u
+└── premium_playlist.m3u
+Example free_playlist.m3u
+#EXTM3U
+
+#EXTINF:-1 tvg-id="news1" group-title="News",BTECH News
+https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+
+#EXTINF:-1 tvg-id="kids1" group-title="Kids",Kids Planet
+https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+
+#EXTINF:-1 tvg-id="music1" group-title="Music",Music TV
+https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+Example premium_playlist.m3u
+#EXTM3U
+
+#EXTINF:-1 tvg-id="sports1" group-title="Sports",BTECH Sports HD
+https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+
+#EXTINF:-1 tvg-id="movie1" group-title="Movies",Movie World 4K
+https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+
+#EXTINF:-1 tvg-id="football1" group-title="Sports",Football Live
+https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+
+#EXTINF:-1 tvg-id="cinema1" group-title="Movies",Cinema Plus
+https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
+Example Request
+GET /api/player/playlist
+Authorization: Bearer YOUR_JWT_TOKEN
+Example Response Headers
+HTTP/1.1 200 OK
+
+Content-Type: audio/x-mpegurl
+
+Content-Disposition: inline; filename="premium_playlist.m3u"
+Features
+✅ JWT authentication required
+
+✅ Automatically serves the appropriate playlist based on the user's subscription status
+
+✅ Free users receive free_playlist.m3u
+
+✅ Premium users receive premium_playlist.m3u
+
+✅ Streams the playlist instead of loading it entirely into memory
+
+✅ Correct audio/x-mpegurl content type
+
+✅ Compatible with HLS.js, VLC, Kodi, OTT Navigator, TiviMate, and other M3U-compatible IPTV players
+
+✅ Ready for production by replacing static playlist files with dynamically generated playlists from a database or playlist management service
+
+
+	/api/player/favorites	
+
+// ======================================================
+// POST /api/player/favorites
+// Add Channel to User Favorites
+// BTECH-TV WORLD PRO MAX
+// ======================================================
+
+router.post(
+
+    "/favorites",
+
+    auth,
+
+    async (req, res) => {
+
+        try {
+
+            const {
+
+                channelId
+
+            } = req.body;
+
+            if (!channelId) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message: "Channel ID is required."
+
+                });
+
+            }
+
+            // ==================================================
+            // Replace with MongoDB Models in Production
+            // ==================================================
+
+            const channels = [
+
+                {
+                    id: 1,
+                    name: "BTECH News",
+                    premium: false
+                },
+
+                {
+                    id: 2,
+                    name: "BTECH Sports",
+                    premium: true
+                },
+
+                {
+                    id: 3,
+                    name: "Movie World",
+                    premium: true
+                },
+
+                {
+                    id: 4,
+                    name: "Kids Planet",
+                    premium: false
+                }
+
+            ];
+
+            const channel = channels.find(
+
+                item => item.id == channelId
+
+            );
+
+            if (!channel) {
+
+                return res.status(404).json({
+
+                    success: false,
+
+                    message: "Channel not found."
+
+                });
+
+            }
+
+            // Free users cannot favorite premium channels
+
+            if (
+
+                channel.premium &&
+
+                !req.user.premium
+
+            ) {
+
+                return res.status(403).json({
+
+                    success: false,
+
+                    message:
+                    "Premium subscription required.",
+
+                    upgrade: true
+
+                });
+
+            }
+
+            // Sample favorite object
+            // Save to MongoDB in production
+
+            const favorite = {
+
+                id: Date.now(),
+
+                userId: req.user.id,
+
+                channelId: channel.id,
+
+                channelName: channel.name,
+
+                addedAt: new Date()
+
+            };
+
+            res.status(201).json({
+
+                success: true,
+
+                message:
+
+                "Channel added to favorites.",
+
+                favorite
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            res.status(500).json({
+
+                success: false,
+
+                message:
+
+                "Unable to add favorite."
+
+            });
+
+        }
+
+    }
+
+);
+Example Request
+POST /api/player/favorites
+Authorization: Bearer YOUR_JWT_TOKEN
+Content-Type: application/json
+Request Body
+{
+    "channelId": 2
+}
+Success Response
+{
+    "success": true,
+    "message": "Channel added to favorites.",
+    "favorite": {
+        "id": 1751452365000,
+        "userId": 101,
+        "channelId": 2,
+        "channelName": "BTECH Sports",
+        "addedAt": "2026-07-02T12:30:20.000Z"
+    }
+}
+Error Response (Premium Required)
+{
+    "success": false,
+    "message": "Premium subscription required.",
+    "upgrade": true
+}
+Features
+✅ JWT authentication
+
+✅ Add a channel to the authenticated user's favorites
+
+✅ Validates the channel exists
+
+✅ Prevents free users from favoriting premium-only channels
+
+✅ Returns the created favorite object
+
+✅ Returns 400 for missing channelId
+
+✅ Returns 404 if the channel does not exist
+
+✅ Returns 403 when a premium subscription is required
+
+✅ Ready to replace the sample arrays with MongoDB models (for example, Channel and Favorite) for persistent storage
+
+
+You’ve reached the Free limit for chats with attachments
+Upgrade now or wait until 2:31 PM to keep using files, or chat now without files.
+
+New chat
+
+Claim free offer
+
