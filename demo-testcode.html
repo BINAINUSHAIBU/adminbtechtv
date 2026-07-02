@@ -230,43 +230,363 @@ body{flex-direction:column;}
 <button class="nav-btn" onclick="optimizeMemory()">🧠 Optimize</button>
 
 </div>
-<div id="premiumScreen" style="display:none;">
 
-<h2>Free Trial Expired</h2>
-
-<p>Please choose a subscription.</p>
-
-<button onclick="buyPackage('premium')">
-Premium Package
-</button>
-
-<button onclick="buyPackage('compactplus')">
-Super Compact Plus
-</button>
-
-<button onclick="buyPackage('superpremium')">
-Super Premium
-</button>
-
-<button onclick="buyPackage('compact')">
-Super Premium Compact
-</button>
-
-<button onclick="buyPackage('compact_plus')">
-Super Premium Compact Plus
-</button>
-
-<button onclick="buyPackage('premium_plus')">
-Super Premium Plus
-</button>
-
-</div>
 <!-- MAIN -->
 <div class="main">
 
 <div class="topbar">
 <div class="search-box">
 <input oninput="search(this.value)" placeholder="Search BTECH-TV World...">
+</div>
+    <!-- FREE TRIAL SCREEN -->
+<div id="trialScreen" class="trial-screen">
+
+    <div class="trial-card">
+
+        <h1>🎁 2-Minute Free Trial</h1>
+
+        <p class="subtitle">
+            Enjoy full access to <strong>BTECH-TV WORLD PRO MAX</strong>
+            for two minutes absolutely FREE.
+        </p>
+
+        <div class="features">
+
+            <div class="feature">
+                ✅ All Features Enabled
+            </div>
+
+            <div class="feature">
+                📺 Unlimited Channel Access
+            </div>
+
+            <div class="feature">
+                🚀 HD & 4K Streaming
+            </div>
+
+            <div class="feature">
+                ⚡ Fast Playback
+            </div>
+
+            <div class="feature">
+                ⏳ Countdown Timer Starts
+            </div>
+
+        </div>
+
+        <div class="timer-box">
+
+            <h3>Free Trial Remaining</h3>
+
+            <div id="trialTimer">
+                02:00
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+    <!-- FREE TRIAL EXPIRED -->
+<div id="trialExpiredScreen" class="expired-screen" style="display:none;">
+
+    <div class="expired-card">
+
+        <div class="expired-icon">⏰</div>
+
+        <h1>Free Trial Expired</h1>
+
+        <p>
+            Your complimentary 2-minute trial has ended.
+        </p>
+
+        <p>
+          <button onclick="selectPackage('Premium Package','index_premium-package.html')">
+Subscribe
+</button>
+
+<button onclick="selectPackage('Super Compact Plus','index_super-Compact_plus-package.html')">
+Subscribe
+</button>
+
+<button onclick="selectPackage('Super Premium','index_super-premium-package.html')">
+Subscribe
+</button>
+
+<button onclick="selectPackage('Super Premium Compact','index_super-premium_Compact-package.html')">
+Subscribe
+</button>
+
+<button onclick="selectPackage('Super Premium Compact Plus','index_super-premium_Compact_plus-package.html')">
+Subscribe
+</button>
+
+<button onclick="selectPackage('Super Premium Plus','index_super-premium_plus-package.html')">
+Subscribe
+</button> <strong>BTECH-TV WORLD PRO MAX</strong>.
+        </p>
+        <!-- SECURE PAYMENT GATEWAY -->
+<div id="paymentGateway" class="payment-screen" style="display:none;">
+
+    <div class="payment-card">
+
+        <div class="payment-icon">🔐</div>
+
+        <h1>Secure Payment Gateway</h1>
+
+        <p>
+            Complete your subscription securely using your preferred payment method.
+            Your Premium subscription will be activated automatically after successful payment verification.
+        </p>
+
+        <div class="selected-plan">
+            <h3>Selected Package</h3>
+            <div id="paymentPackage">
+                Super Premium Plus
+            </div>
+        </div>
+
+        <div class="payment-methods">
+
+            <button class="gateway paystack" onclick="payWithPaystack()">
+                💳 Pay with Paystack
+            </button>
+
+            <button class="gateway flutterwave" onclick="payWithFlutterwave()">
+                🌍 Pay with Flutterwave
+            </button>
+
+            <button class="gateway stripe" onclick="payWithStripe()">
+                💳 Pay with Stripe
+            </button>
+
+            <button class="gateway monnify" onclick="payWithMonnify()">
+                🏦 Pay with Monnify
+            </button>
+
+        </div>
+
+        <div class="security">
+
+            🔒 256-bit SSL Encryption<br>
+            ✅ Secure Payment Processing<br>
+            ✅ Instant Subscription Activation
+
+        </div>
+
+    </div>
+
+</div>
+
+        <div class="expired-info">
+
+            <div>❌ Trial Access Ended</div>
+            <div>🔒 Premium Channels Locked</div>
+            <div>💎 Upgrade to Continue Watching</div>
+
+        </div>
+
+        <button class="upgrade-btn" onclick="showPremiumPackages()">
+            Upgrade to Premium
+        </button>
+
+    </div>
+
+</div>
+    <!-- PREMIUM SUBSCRIPTION SCREEN -->
+<div id="premiumScreen" class="premium-screen" style="display:none;">
+
+    <div class="premium-card">
+
+        <div class="premium-header">
+            <h1>👑 Upgrade to Premium</h1>
+            <p>
+                Your free trial has ended. Choose a subscription plan to
+                continue enjoying unlimited IPTV streaming.
+            </p>
+        </div>
+
+        <div class="packages">
+
+            <div class="package">
+                <h2>Premium Package</h2>
+                <p>Unlimited Entertainment</p>
+                <button onclick="location.href='index_premium-package.html'">
+                    Subscribe
+                </button>
+            </div>
+
+            <div class="package">
+                <h2>Super Compact Plus</h2>
+                <p>Most Popular</p>
+                <button onclick="location.href='index_super-Compact_plus-package.html'">
+                    Subscribe
+                </button>
+            </div>
+
+            <div class="package">
+                <h2>Super Premium</h2>
+                <p>Premium Channels Included</p>
+                <button onclick="location.href='index_super-premium-package.html'">
+                    Subscribe
+                </button>
+            </div>
+
+            <div class="package">
+                <h2>Super Premium Compact</h2>
+                <p>Affordable Premium Access</p>
+                <button onclick="location.href='index_super-premium_Compact-package.html'">
+                    Subscribe
+                </button>
+            </div>
+
+            <div class="package">
+                <h2>Super Premium Compact Plus</h2>
+                <p>Best Value Package</p>
+                <button onclick="location.href='index_super-premium_Compact_plus-package.html'">
+                    Subscribe
+                </button>
+            </div>
+
+            <div class="package featured">
+                <div class="badge">BEST VALUE</div>
+
+                <h2>Super Premium Plus</h2>
+                <p>All Channels • 4K • Sports • Movies • TV Shows</p>
+
+                <button onclick="location.href='index_super-premium_plus-package.html'">
+                    Subscribe Now
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+    <!-- PACKAGE SELECTED -->
+<div id="packageSelection" class="selection-screen">
+
+    <div class="selection-card">
+
+        <div class="icon">📦</div>
+
+        <h1>Select Your Preferred Package</h1>
+
+        <p>
+            Choose the subscription plan that best fits your entertainment needs.
+            Your selected package will be activated immediately after successful payment.
+        </p>
+
+        <div class="selected-package" id="selectedPackage">
+            No package selected.
+        </div>
+
+        <button id="continueBtn" disabled onclick="proceedToPayment()">
+            Continue to Secure Payment →
+        </button>
+
+    </div>
+
+</div>
+    <!-- PAYMENT SUCCESSFULLY VERIFIED -->
+<div id="paymentSuccess" class="success-screen" style="display:none;">
+
+    <div class="success-card">
+
+        <div class="success-icon">✅</div>
+
+        <h1>Payment Successfully Verified</h1>
+
+        <p>
+            Thank you for your subscription!
+        </p>
+
+        <p>
+            Your payment has been securely verified and your Premium
+            subscription is now active.
+        </p>
+
+        <div class="subscription-details">
+
+            <div class="detail">
+                <strong>Selected Package</strong><br>
+                <span id="successPackage">Super Premium Plus</span>
+            </div>
+
+            <div class="detail">
+                <strong>Payment Status</strong><br>
+                <span class="verified">Verified ✓</span>
+            </div>
+
+            <div class="detail">
+                <strong>Subscription Status</strong><br>
+                <span class="active">Active</span>
+            </div>
+
+        </div>
+
+        <button class="continue-btn" onclick="activatePremium()">
+            Continue to Premium IPTV
+        </button>
+
+    </div>
+
+</div>
+    <!-- SUBSCRIPTION ACTIVATED -->
+<div id="subscriptionActivated" class="activated-screen" style="display:none;">
+
+    <div class="activated-card">
+
+        <div class="activated-icon">🎉</div>
+
+        <h1>Subscription Activated Successfully</h1>
+
+        <p>
+            Congratulations
+            <!-- AUTO REDIRECT TO IPTV PLAYER -->
+<div id="redirectScreen" class="redirect-screen" style="display:none;">
+
+    <div class="redirect-card">
+
+        <div class="redirect-icon">📺</div>
+
+        <h1>Welcome to BTECH-TV WORLD PRO MAX</h1>
+
+        <h2>Premium Subscription Activated</h2>
+
+        <p>
+            Your subscription has been successfully activated.
+            You now have unlimited access to all premium content.
+        </p>
+
+        <div class="premium-benefits">
+
+            <div class="benefit">✅ Unlimited Streaming</div>
+            <div class="benefit">✅ Premium Channels Unlocked</div>
+            <div class="benefit">✅ Premium Features Enabled</div>
+            <div class="benefit">✅ HD • FHD • 4K Streaming</div>
+            <div class="benefit">✅ Unlimited Viewing Time</div>
+            <div class="benefit">✅ Premium Customer Support</div>
+
+        </div>
+
+        <div class="countdown">
+
+            Redirecting to IPTV Player in
+
+            <div id="redirectTimer">5</div>
+
+            seconds...
+
+        </div>
+
+        <button class="enter-btn" onclick="enterPlayer()">
+            Enter IPTV Player Now
+        </button>
+
+    </div>
+
 </div>
 <div class="live">🔴 BTECH-TV LIVE</div>
 </div>
@@ -323,16 +643,6 @@ let video=document.getElementById("video");
 let hls;
 
 /* LOAD */
-  if(localStorage.getItem("premium")=="true"){
-
-document.getElementById("premiumScreen").style.display="none";
-
-document.querySelector(".main").style.display="flex";
-
-// Unlimited viewing
-clearInterval(trial);
-
-}
 async function load(code){
 await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
@@ -480,30 +790,146 @@ loadUltra();
 </script>
 let trialSeconds = 120;
 
-let trial = setInterval(function(){
+const countdown = setInterval(function(){
 
     trialSeconds--;
 
-    if(trialSeconds <= 0){
+    let minutes = Math.floor(trialSeconds / 60);
+    let seconds = trialSeconds % 60;
 
-        clearInterval(trial);
+    document.getElementById("trialTimer").innerHTML =
+        String(minutes).padStart(2,"0") +
+        ":" +
+        String(seconds).padStart(2,"0");
 
-        // Hide IPTV
-        document.querySelector(".main").style.display="none";
+   if(trialSeconds <= 0){
 
-        // Show Premium Page
+    clearInterval(countdown);
+
+    // Hide IPTV Player
+    document.querySelector(".main").style.display = "none";
+
+    // Show Trial Expired Screen
+    document.getElementById("trialExpiredScreen").style.display = "flex";
+
+}
+        alert("Your 2-minute free trial has ended. Please subscribe to continue.");
+
+        // Show Premium Subscription Page
+        document.getElementById("trialScreen").style.display="none";
         document.getElementById("premiumScreen").style.display="flex";
 
     }
 
 },1000);
-</body>
-</html>
-function paymentSuccess(packageName){
+function showPremiumPackages(){
 
-localStorage.setItem("premium",true);
-localStorage.setItem("package",packageName);
+    document.getElementById("trialExpiredScreen").style.display = "none";
 
-window.location.href="index.html";
+    document.getElementById("premiumScreen").style.display = "flex";
+
+}    
+       function payWithPaystack(){
+
+    alert("Redirecting to Paystack...");
+    window.location.href="paystack-payment.html";
 
 }
+
+function payWithFlutterwave(){
+
+    alert("Redirecting to Flutterwave...");
+    window.location.href="flutterwave-payment.html";
+
+}
+
+function payWithStripe(){
+
+    alert("Redirecting to Stripe...");
+    window.location.href="stripe-payment.html";
+
+}
+
+function payWithMonnify(){
+
+    alert("Redirecting to Monnify...");
+    window.location.href="monnify-payment.html";
+
+}
+       let selectedPackage = "";
+
+function selectPackage(packageName, packagePage){
+
+    selectedPackage = packagePage;
+
+    document.getElementById("selectedPackage").innerHTML =
+        "✅ Selected Package: <strong>" + packageName + "</strong>";
+
+    document.getElementById("continueBtn").disabled = false;
+
+}
+
+function proceedToPayment(){
+
+    if(selectedPackage==="") return;
+
+    window.location.href = selectedPackage;
+
+}
+       function paymentVerified(packageName){
+
+    // Save Premium Status
+    localStorage.setItem("premium", "true");
+    localStorage.setItem("package", packageName);
+
+    // Display Selected Package
+    document.getElementById("successPackage").innerHTML = packageName;
+
+    // Show Success Screen
+    document.getElementById("paymentGateway").style.display = "none";
+    document.getElementById("paymentSuccess").style.display = "flex";
+
+}
+
+// Continue to IPTV Player
+function activatePremium(){
+
+    window.location.href = "index.html";
+
+}
+       // Show Redirect Screen
+function showRedirectScreen(){
+
+    document.getElementById("subscriptionActivated").style.display = "none";
+    document.getElementById("redirectScreen").style.display = "flex";
+
+    let seconds = 5;
+
+    document.getElementById("redirectTimer").innerHTML = seconds;
+
+    const timer = setInterval(function(){
+
+        seconds--;
+
+        document.getElementById("redirectTimer").innerHTML = seconds;
+
+        if(seconds <= 0){
+
+            clearInterval(timer);
+
+            enterPlayer();
+
+        }
+
+    },1000);
+
+}
+
+// Enter IPTV Player
+function enterPlayer(){
+
+    window.location.href = "index.html";
+
+}
+</body>
+</html>
