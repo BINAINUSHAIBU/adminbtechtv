@@ -1,55 +1,33 @@
-
+Part 1 - Home & Landing Page
+This document contains the starter HTML for the Home/Landing page of the IPTV website.
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>IPTV Trial Demo</title>
+<title>BTECH IPTV</title>
 <style>
-body{font-family:Arial;background:#08111f;color:#fff;text-align:center}
-#player{display:none}
-#upgrade{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85)}
-button{padding:12px 20px;margin:10px}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial;background:#050816;color:#fff}
+header{padding:20px;background:#0d1324;display:flex;justify-content:space-between}
+.hero{display:flex;flex-direction:column;align-items:center;justify-content:center;height:80vh;text-align:center}
+button{padding:15px 30px;border:none;border-radius:8px;background:#00d4ff;color:#000;font-weight:bold;cursor:pointer}
 </style>
 </head>
 <body>
-<h1>HOME</h1>
-<button onclick="startTrial()">Start Free Trial</button>
-<h2 id="timer"></h2>
+<header>
+<h2>BTECH IPTV</h2>
+<nav>Home | Packages | Contact</nav>
+</header>
 
-<div id="player">
-<h2>Premium IPTV Demo</h2>
-<video id="video" controls width="700"></video>
-</div>
+<section class="hero">
+<h1>Unlimited IPTV Entertainment</h1>
+<p>Watch thousands of live TV channels worldwide.</p>
+<button onclick="location.href='trial.html'">Start Free Trial</button>
+</section>
 
-<div id="upgrade">
-<h1>Trial Ended</h1>
-<button>Basic</button>
-<button>Premium</button>
-<button>VIP</button>
-<button onclick="pay()">Flutterwave Checkout</button>
-</div>
-
-<script>
-let t=120,id;
-function startTrial(){
-document.getElementById('player').style.display='block';
-id=setInterval(()=>{
-let m=Math.floor(t/60),s=t%60;
-timer.textContent=`${m}:${String(s).padStart(2,'0')}`;
-if(t--<=0){
-clearInterval(id);
-video.pause();
-upgrade.style.display='block';
-}
-},1000);
-}
-function pay(){
-alert('Payment Successful');
-localStorage.setItem('premium','true');
-upgrade.style.display='none';
-alert('Premium Activated');
-}
-</script>
+<footer style="text-align:center;padding:20px">
+© 2026 BTECH IPTV
+</footer>
 </body>
 </html>
