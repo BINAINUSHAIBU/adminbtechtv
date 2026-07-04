@@ -1,41 +1,361 @@
-Single-Page index.html Template
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>IPTV Trial Demo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trial & Premium Upgrade System</title>
+
 <style>
-body{font-family:Arial;background:#111;color:#fff;text-align:center;padding:40px}
-button{padding:12px 24px;font-size:18px}
-#popup{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8)}
-#box{background:#222;padding:20px;max-width:400px;margin:10% auto}
+body{
+font-family:Arial,sans-serif;
+background:#f4f6f9;
+margin:0;
+padding:20px;
+}
+
+.container{
+max-width:800px;
+margin:auto;
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 5px 20px rgba(0,0,0,.1);
+}
+
+h1{
+text-align:center;
+}
+
+.timer{
+font-size:22px;
+font-weight:bold;
+color:#ff5722;
+padding:15px;
+text-align:center;
+}
+
+.expired{
+color:red;
+}
+
+.hidden{
+display:none;
+}
+
+.package-list{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-top:20px;
+}
+
+.card{
+padding:15px;
+border:1px solid #ddd;
+border-radius:10px;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-top:10px;
+margin-bottom:10px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+button{
+padding:12px;
+border:none;
+background:#0066ff;
+color:white;
+cursor:pointer;
+width:100%;
+border-radius:8px;
+font-size:16px;
+}
+
+button:hover{
+background:#004bcc;
+}
+
+.success{
+background:#d8ffd8;
+padding:15px;
+border-radius:10px;
+margin-top:15px;
+}
 </style>
+
 </head>
 <body>
-<h1>Open Website</h1>
-<p>2-Minute Trial</p>
-<div id="timer">02:00</div>
-<button onclick="startTrial()">Start Trial</button>
-<div id="popup"><div id="box">
-<h2>Subscription Required</h2>
-<p>Choose Package</p>
-<button>Monthly</button>
-<button>Quarterly</button>
-<button>Yearly</button>
-<p>Flutterwave Payment → Payment Successful → Premium Activated → Watch Unlimited</p>
-</div></div>
+
+<div class="container">
+
+<h1>Trial Version System</h1>
+
+<div id="timer" class="timer"></div>
+
+<div id="mainContent">
+<h2>Application Features</h2>
+<p>
+Premium content is temporarily available during trial mode.
+</p>
+</div>
+
+<div id="paymentSection" class="hidden">
+
+<h2>Trial Expired</h2>
+<p>Select package and continue (Demo Payment Only)</p>
+
+<form id="paymentForm">
+
+<input
+type="text"
+placeholder="Full Name"
+required
+id="fullname">
+
+<input
+type="email"
+placeholder="Email"
+required
+id="email">
+
+<input
+type="tel"
+placeholder="Phone Number"
+required
+id="phone">
+
+<select id="paymentType" required>
+<option value="">Select Payment Type</option>
+<option>Demo Card</option>
+<option>Demo Bank Transfer</option>
+<option>Demo Wallet</option>
+</select>
+
+<select id="package" required>
+<option value="">Select Package</option>
+
+<option value="index_premium-package.html">
+Premium Package
+</option>
+
+<option value="index_super-Compact_plus-package.html">
+Super Compact Plus
+</option>
+
+<option value="index_super-premium-package.html">
+Super Premium
+</option>
+
+<option value="index_super-premium_Compact-package.html">
+Super Premium Compact
+</option>
+
+<option value="index_super-premium_Compact_plus-package.html">
+Super Premium Compact Plus
+</option>
+
+<option value="index_super-premium_plus-package.html">
+Super Premium Plus
+</option>
+
+</select>
+
+<button type="submit">
+Pay (Demo)
+</button>
+
+</form>
+
+<div
+id="paymentSuccess"
+class="success hidden">
+Payment Successful.
+Upgrading package...
+</div>
+
+</div>
+
+</div>
+
 <script>
-let t=120,i;
-function startTrial(){
- clearInterval(i);
- i=setInterval(()=>{
-  t--;
-  let m=String(Math.floor(t/60)).padStart(2,'0');
-  let s=String(t%60).padStart(2,'0');
-  timer.textContent=m+':'+s;
-  if(t<=0){clearInterval(i);popup.style.display='block';}
- },1000);
+
+// ========= SETTINGS =========
+
+const trialMinutes=2;
+
+// ============================
+
+let trialStart=
+localStorage.getItem("trialStart");
+
+if(!trialStart){
+
+trialStart=Date.now();
+
+localStorage.setItem(
+"trialStart",
+trialStart
+);
+
 }
+
+const trialEnd=
+parseInt(trialStart)+
+(trialMinutes*60*1000);
+
+const timer=
+document.getElementById("timer");
+
+const paymentSection=
+document.getElementById("paymentSection");
+
+const mainContent=
+document.getElementById("mainContent");
+
+function updateTimer(){
+
+const now=Date.now();
+
+const remaining=
+trialEnd-now;
+
+if(
+localStorage.getItem(
+"upgraded"
+)==="true"
+){
+
+timer.innerHTML=
+"Premium Package Activated";
+
+clearInterval(interval);
+
+return;
+}
+
+if(remaining<=0){
+
+timer.innerHTML=
+"Trial Expired";
+
+timer.classList.add(
+"expired"
+);
+
+mainContent.style.display=
+"none";
+
+paymentSection.classList.remove(
+"hidden"
+);
+
+clearInterval(interval);
+
+return;
+
+}
+
+let minutes=
+Math.floor(
+remaining/60000
+);
+
+let seconds=
+Math.floor(
+(remaining%60000)/1000
+);
+
+timer.innerHTML=
+`Trial Time Left:
+${minutes}m
+${seconds}s`;
+
+}
+
+const interval=
+setInterval(
+updateTimer,
+1000
+);
+
+updateTimer();
+
+
+// Payment Simulation
+
+document
+.getElementById(
+"paymentForm"
+)
+.addEventListener(
+"submit",
+function(e){
+
+e.preventDefault();
+
+const packageURL=
+document.getElementById(
+"package"
+).value;
+
+document
+.getElementById(
+"paymentSuccess"
+)
+.classList.remove(
+"hidden"
+);
+
+// simulate payment delay
+
+setTimeout(()=>{
+
+localStorage.setItem(
+"upgraded",
+"true"
+);
+
+localStorage.setItem(
+"package",
+packageURL
+);
+
+window.location.href=
+packageURL;
+
+},3000);
+
+});
+
+
+// Auto redirect if already upgraded
+
+const savedPackage=
+localStorage.getItem(
+"package"
+);
+
+if(
+localStorage.getItem(
+"upgraded"
+)==="true"
+&& savedPackage
+){
+
+setTimeout(()=>{
+
+window.location.href=
+savedPackage;
+
+},1000);
+
+}
+
 </script>
-</body></html>
+
+</body>
+</html>
