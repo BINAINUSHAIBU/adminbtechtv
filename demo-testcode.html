@@ -2,7 +2,6 @@
 
 
 
-
 <!DOCTYPE html> 
 <html lang="en">
 <head>
@@ -261,7 +260,7 @@ box-shadow:0 0 10px rgba(0,212,255,.5);
 <div style="display:flex;align-items:center;gap:10px"><div id="floatingTimer">⏱ 2m 00s</div><div class="live">🔴 BTECH-TV LIVE</div></div>
 </div>
 
-<div class="hero" id="dashboardHero">
+<div class="hero">
 <h3>BTECH-TV World PRO MAX SYSTEM</h3>
 <div class="stats">
 <div class="stat">📺 <div id="total">0</div></div>
@@ -462,8 +461,12 @@ loadUltra();
 <script>let t=120;setTimeout(()=>{document.getElementById('trialOverlay').style.pointerEvents='none';document.getElementById('trialOverlay').style.background='transparent';document.getElementById('trialBox').style.display='none';},1000);let tx=setInterval(()=>{let timeText='Trial expires in: '+Math.floor(t/60)+'m '+(t%60)+'s';document.getElementById('timer').innerText=timeText;document.getElementById('floatingTimer').innerText='⏱ '+Math.floor(t/60)+'m '+(t%60)+'s';t--;if(t<0){clearInterval(tx);video.pause();document.getElementById('trialOverlay').style.pointerEvents='auto';document.getElementById('trialOverlay').style.background='rgba(0,0,0,.92)';document.getElementById('trialBox').style.display='block';document.getElementById('paymentArea').style.display='block';document.getElementById('timer').innerText='Trial Expired';}},1000);function pay(){alert('Payment successfully completed.');window.location=document.getElementById('package').value;}</script>
 <script>
 function showExpiredDashboard(){
-document.getElementById('dashboardHero').innerHTML=`
-<h3>BTECH-TV Trial Version</h3>
+const player=document.querySelector('.player-container');
+if(player){
+player.innerHTML=`
+<div style="padding:20px;height:100%;display:flex;align-items:center;justify-content:center">
+<div style="width:100%;max-width:600px">
+<h2>BTECH-TV Trial Version</h2>
 <h3>Trial Expired</h3>
 <p>Watch free for 2 minutes.</p>
 <p>Your trial version has expired.</p>
@@ -480,13 +483,15 @@ document.getElementById('dashboardHero').innerHTML=`
 <input placeholder="Email Address" style="width:100%;padding:10px;margin:8px 0">
 <input placeholder="Phone Number" style="width:100%;padding:10px;margin:8px 0">
 <input placeholder="Other Information" style="width:100%;padding:10px;margin:8px 0">
-`;
+</div>
+</div>`;
+}
 }
 
-let oldInterval=setInterval(()=>{
+let monitorCheck=setInterval(()=>{
 if(typeof t!=='undefined' && t<0){
 showExpiredDashboard();
-clearInterval(oldInterval);
+clearInterval(monitorCheck);
 }
 },1000);
 </script>
