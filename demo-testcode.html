@@ -1,9 +1,6 @@
 
 
 
-
-
-
 <!DOCTYPE html> 
 <html lang="en">
 <head>
@@ -160,48 +157,9 @@ body{flex-direction:column;}
 }
 
 </style>
-<style>#trialOverlay{position:relative;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center}#trialBox{background:#111;padding:20px;border-radius:12px;width:420px;color:white;border:1px solid #00d4ff}#paymentArea{display:none}#trialBox input,#trialBox select,#trialBox button{width:100%;padding:10px;margin:8px 0;border-radius:6px}</style>
-<style>
-#floatingTimer{
-position:relative;
-top:15px;
-right:15px;
-z-index:10000;
-background:#111a31;
-color:#00d4ff;
-padding:12px 18px;
-border-radius:10px;
-border:1px solid #00d4ff;
-font-weight:bold;
-font-size:18px;
-box-shadow:0 0 10px rgba(0,212,255,.5);
-}
-</style>
 </head>
 
-<body><div id="trialOverlay"><div id="trialBox"><h2>BTECH-TV Trial Version</h2><h3 id="timer"></h3><p>Watch free for 2 minutes.</p><div id="paymentArea"><h3>Your trial version has expired.</h3><select id="paymentType"><option>Demo Payment</option></select><select id="package" style="width:100%;padding:10px;margin:8px 0">
-
-<option value="index_premium-package.html">
-Premium - $9.99 / month
-</option>
-
-<option value="index_super-Compact_plus-package.html">
-Super Compact Plus - $14.99 / month
-</option>
-
-<option value="index_super-premium-package.html">
-Super Premium - $19.99 / month
-</option>
-
-<option value="index_super-premium_Compact_plus-package.html">
-Super Premium Compact Plus - $24.99 / month
-</option>
-
-<option value="index_super-premium_plus-package.html">
-Super Premium Plus - $29.99 / month
-</option>
-
-</select><input placeholder="Full Name"><input placeholder="Email Address"><input placeholder="Phone Number"><input placeholder="Other Information"><button onclick="pay()">Pay Demo</button></div></div></div>
+<body>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
@@ -281,8 +239,20 @@ Super Premium Plus - $29.99 / month
 <div class="search-box">
 <input oninput="search(this.value)" placeholder="Search BTECH-TV World...">
 </div>
-<div style="display:flex;align-items:center;gap:10px"><div id="floatingTimer">⏱ 2m 00s</div><div class="live">🔴 BTECH-TV LIVE</div></div>
-</div>
+<div class="live" style="display:flex;align-items:center;gap:10px">
+
+<span>🔴 BTECH-TV LIVE</span>
+
+<span id="packageTimer"
+style="
+font-size:12px;
+font-weight:bold;
+color:#ffffff;
+">
+⏳ 30d 00h 00m 00s
+</span>
+
+</div></div>
 
 <div class="hero">
 <h3>BTECH-TV World PRO MAX SYSTEM</h3>
@@ -375,8 +345,10 @@ function render(){
     let grid = document.getElementById("grid");
     grid.innerHTML = "";
 
-    filtered.forEach((c, idx)=>{
+const displayChannels = filtered.slice(0, 500);
 
+displayChannels.forEach((c, idx)=>{
+    
         // Remove quality labels only
       let cleanName = c.name
     .replace(/\s*\(\d+p\)/gi, "")
@@ -451,8 +423,13 @@ function play(idx){
 }
 /* BASIC */
 function search(q){
-filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
-render();
+
+    filtered = all.filter(c =>
+        c.name.toLowerCase().includes(q.toLowerCase())
+    );
+
+    render();
+
 }
 
 function next(){i=(i+1)%filtered.length;play(i);}
@@ -471,53 +448,110 @@ function clearRecents(){alert("Recents cleared");}
 
 /* STATS */
 function stats(){
-document.getElementById("total").innerText=all.length;
-document.getElementById("live").innerText=all.length;
-document.getElementById("dead").innerText=0;
-document.getElementById("fav").innerText=0;
+
+    document.getElementById("total").innerText =
+        `500 / ${all.length}`;
+
+    document.getElementById("live").innerText = 500;
+
+    document.getElementById("dead").innerText = 0;
+    document.getElementById("fav").innerText = 0;
+
 }
 
 /* AUTO START */
 loadUltra();
 
 </script>
+/* PACKAGE VALIDITY
+STARTS ON FIRST USER OPEN */
 
-<script>let t=120;setTimeout(()=>{document.getElementById('trialOverlay').style.pointerEvents='none';document.getElementById('trialOverlay').style.background='transparent';document.getElementById('trialBox').style.display='none';},1000);let tx=setInterval(()=>{let timeText='Trial expires in: '+Math.floor(t/60)+'m '+(t%60)+'s';document.getElementById('timer').innerText=timeText;document.getElementById('floatingTimer').innerText='⏱ '+Math.floor(t/60)+'m '+(t%60)+'s';t--;if(t<0){clearInterval(tx);video.pause();document.getElementById('trialOverlay').style.pointerEvents='auto';document.getElementById('trialOverlay').style.background='rgba(0,0,0,.92)';document.getElementById('trialBox').style.display='block';document.getElementById('paymentArea').style.display='block';document.getElementById('timer').innerText='Trial Expired';}},1000);function pay(){alert('Payment successfully completed.');window.location=document.getElementById('package').value;}</script>
-<script>
-function showExpiredDashboard(){
-const player=document.querySelector('.player-container');
-if(player){
-player.innerHTML=`
-<div style="padding:20px;height:100%;display:flex;align-items:center;justify-content:center">
-<div style="width:100%;max-width:600px">
-<h2>BTECH-TV Trial Version</h2>
-<h3>Trial Expired</h3>
-<p>Watch free for 2 minutes.</p>
-<p>Your trial version has expired.</p>
+const validityPeriod=
+30*24*60*60*1000;
 
-<select style="width:100%;padding:10px;margin:8px 0">
-<option>Demo Payment</option>
-</select>
+let packageStart=
+localStorage.getItem(
+"BTECH_PACKAGE_START"
+);
 
-<select style="width:100%;padding:10px;margin:8px 0">
-<option>Premium</option>
-</select>
+if(!packageStart){
 
-<input placeholder="Full Name" style="width:100%;padding:10px;margin:8px 0">
-<input placeholder="Email Address" style="width:100%;padding:10px;margin:8px 0">
-<input placeholder="Phone Number" style="width:100%;padding:10px;margin:8px 0">
-<input placeholder="Other Information" style="width:100%;padding:10px;margin:8px 0">
-</div>
-</div>`;
-}
+packageStart=Date.now();
+
+localStorage.setItem(
+"BTECH_PACKAGE_START",
+packageStart
+);
+
 }
 
-let monitorCheck=setInterval(()=>{
-if(typeof t!=='undefined' && t<0){
-showExpiredDashboard();
-clearInterval(monitorCheck);
+const packageExpiry=
+Number(packageStart)
++
+validityPeriod;
+
+
+function updatePackageTimer(){
+
+let remaining=
+packageExpiry-Date.now();
+
+if(remaining<=0){
+
+document.getElementById(
+"packageTimer"
+).innerHTML=
+"⛔ Expired";
+
+return;
+
 }
-},1000);
-</script>
+
+let days=Math.floor(
+remaining/
+(1000*60*60*24)
+);
+
+let hours=Math.floor(
+(
+remaining%
+(1000*60*60*24)
+)
+/
+(1000*60*60)
+);
+
+let minutes=Math.floor(
+(
+remaining%
+(1000*60*60)
+)
+/
+(1000*60)
+);
+
+let seconds=Math.floor(
+(
+remaining%
+(1000*60)
+)
+/
+1000
+);
+
+document.getElementById(
+"packageTimer"
+).innerHTML=
+`⏳ ${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+}
+
+updatePackageTimer();
+
+setInterval(
+updatePackageTimer,
+1000);
+    
+
 </body>
 </html>
