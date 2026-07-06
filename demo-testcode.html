@@ -282,8 +282,20 @@ Super Premium Plus - $29.99 / month
 <div class="search-box">
 <input oninput="search(this.value)" placeholder="Search BTECH-TV World...">
 </div>
-<div style="display:flex;align-items:center;gap:10px"><div id="floatingTimer">⏱ 2m 00s</div><div class="live">🔴 BTECH-TV LIVE</div></div>
-</div>
+<div class="live" style="display:flex;align-items:center;gap:10px">
+
+<span>🔴 BTECH-TV LIVE</span>
+
+<span id="packageTimer"
+style="
+font-size:12px;
+font-weight:bold;
+color:white;
+">
+⏳ 30d 00h 00m 00s
+</span>
+
+</div></div>
 
 <div class="hero">
 <h3>BTECH-TV World PRO MAX SYSTEM</h3>
@@ -519,6 +531,88 @@ showExpiredDashboard();
 clearInterval(monitorCheck);
 }
 },1000);
+</script>
+    <script>
+
+/* 30-DAY PACKAGE VALIDITY TIMER
+Starts when user first opens after payment */
+
+const packageDuration =
+30 * 24 * 60 * 60 * 1000;
+
+let packageStart =
+localStorage.getItem(
+"BTECH_PACKAGE_START"
+);
+
+if(!packageStart){
+
+packageStart = Date.now();
+
+localStorage.setItem(
+"BTECH_PACKAGE_START",
+packageStart
+);
+
+}
+
+const packageExpiry =
+Number(packageStart)
++
+packageDuration;
+
+function updatePackageCountdown(){
+
+let remaining =
+packageExpiry - Date.now();
+
+if(remaining <= 0){
+
+document.getElementById(
+"packageTimer"
+).innerHTML =
+"⛔ Expired";
+
+return;
+
+}
+
+let days = Math.floor(
+remaining/(1000*60*60*24)
+);
+
+let hours = Math.floor(
+(remaining%(1000*60*60*24))
+/
+(1000*60*60)
+);
+
+let minutes = Math.floor(
+(remaining%(1000*60*60))
+/
+(1000*60)
+);
+
+let seconds = Math.floor(
+(remaining%(1000*60))
+/
+1000
+);
+
+document.getElementById(
+"packageTimer"
+).innerHTML =
+`⏳ ${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+}
+
+updatePackageCountdown();
+
+setInterval(
+updatePackageCountdown,
+1000
+);
+
 </script>
 </body>
 </html>
