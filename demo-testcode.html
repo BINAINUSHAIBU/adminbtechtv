@@ -1,10 +1,4 @@
 
-
-
-
-
-
-
 <!DOCTYPE html> 
 <html lang="en">
 <head>
@@ -180,7 +174,126 @@ box-shadow:0 0 10px rgba(0,212,255,.5);
 </style>
 </head>
 
-<body><div id="trialOverlay"><div id="trialBox"><h2>BTECH-TV Trial Version</h2><h3 id="timer"></h3><p>Watch free for 2 minutes.</p><div id="paymentArea"><h3>Your trial version has expired.</h3><select id="paymentType"><option>Demo Payment</option></select><select id="package"><option value="index_premium-package.html">Premium</option><option value="index_super-Compact_plus-package.html">Super Compact Plus</option><option value="index_super-premium-package.html">Super Premium</option><option value="index_super-premium_Compact_plus-package.html">Super Premium Compact Plus</option><option value="index_super-premium_plus-package.html">Super Premium Plus</option></select><input placeholder="Full Name"><input placeholder="Email Address"><input placeholder="Phone Number"><input placeholder="Other Information"><button onclick="pay()">Pay Demo</button></div></div></div>
+<body<!-- ===========================
+     BTECH-TV Trial Version
+============================ -->
+
+<section class="trial-box">
+
+    <h1>📺 BTECH-TV Trial Version</h1>
+
+    <div class="trial-expired">
+        <h2 style="color:#ff4d4d;">❌ Trial Expired</h2>
+
+        <p>Watch free for <strong>2 minutes</strong>.</p>
+
+        <p>Your trial version has expired.</p>
+    </div>
+
+    <hr>
+
+    <h2>💳 Demo Payment</h2>
+
+    <form id="demoPaymentForm">
+
+        <input
+            type="text"
+            id="fullname"
+            placeholder="Full Name"
+            required
+        >
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Email Address"
+            required
+        >
+
+        <input
+            type="tel"
+            id="phone"
+            placeholder="Phone Number"
+            required
+        >
+
+        <textarea
+            id="info"
+            placeholder="Other Information"
+            rows="4"
+        ></textarea>
+
+        <select id="paymentMethod" required>
+            <option value="">Select Payment Method</option>
+            <option value="paystack">💳 Paystack Demo Test</option>
+            <option value="moniepoint">🏦 Moniepoint Transfer</option>
+            <option value="paypal">🌎 PayPal</option>
+        </select>
+
+        <br><br>
+
+        <button
+            type="button"
+            onclick="payDemo()"
+            class="payBtn">
+            💳 Pay Demo
+        </button>
+
+    </form>
+
+</section>
+
+<script>
+function payDemo(){
+
+    const method=document.getElementById("paymentMethod").value;
+
+    if(method===""){
+        alert("Please select a payment method.");
+        return;
+    }
+
+    if(method==="paystack"){
+
+        alert(
+            "PAYSTACK DEMO TEST\n\n" +
+            "This is a demo integration.\n" +
+            "Replace with your Paystack Test Public Key."
+        );
+
+        // Example:
+        // PaystackPop.setup({...});
+
+    }
+
+    else if(method==="moniepoint"){
+
+        alert(
+            "MONIEPOINT DEMO\n\n" +
+            "Bank: Moniepoint MFB\n" +
+            "Account Name: BTECH-TV DEMO\n" +
+            "Account Number: 1234567890\n\n" +
+            "Replace with your real account."
+        );
+
+    }
+
+    else if(method==="paypal"){
+
+        alert(
+            "PAYPAL DEMO\n\nRedirecting to PayPal Sandbox..."
+        );
+
+        // Example Sandbox URL
+        window.open(
+            "https://www.sandbox.paypal.com/",
+            "_blank"
+        );
+
+    }
+
+}
+</script>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
