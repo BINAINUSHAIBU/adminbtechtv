@@ -1,6 +1,13 @@
 
 
 
+
+
+
+
+
+
+
 <!DOCTYPE html> 
 <html lang="en">
 <head>
@@ -179,226 +186,183 @@ box-shadow:0 0 10px rgba(0,212,255,.5);
 <body><!-- ===========================
      BTECH-TV TRIAL VERSION
 =========================== -->
-<!-- ===========================
-     BTECH-TV Trial Version
-=========================== -->
 
-<section class="trial-box">
+<div id="trialOverlay">
+    <div id="trialBox">
 
-    <h1>📺 BTECH-TV Trial Version</h1>
+        <h2>📺 BTECH-TV Trial Version</h2>
 
-    <div class="trial-expired">
+        <h3 id="timer" style="color:#00d4ff;"></h3>
 
-        <h2 style="color:#ff4d4d;">
-            ❌ Trial Expired
-        </h2>
+        <p>Watch free for <strong>2 minutes.</strong></p>
 
-        <p>
-            Watch free for <strong>2 minutes.</strong>
-        </p>
+        <div id="paymentArea" style="display:none;">
 
-        <p>
-            Your trial version has expired.
-        </p>
+            <h3 style="color:#ff4d4d;">Trial Expired</h3>
+
+            <p>Your trial version has expired.</p>
+
+            <h3 style="margin-top:15px;">💳 Demo Payment</h3>
+
+            <!-- Package -->
+            <select id="package">
+                <option value="premium">⭐ Premium</option>
+            </select>
+
+            <!-- Customer Information -->
+            <input
+                type="text"
+                id="fullname"
+                placeholder="Full Name"
+                required>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Email Address"
+                required>
+
+            <input
+                type="tel"
+                id="phone"
+                placeholder="Phone Number"
+                required>
+
+            <textarea
+                id="info"
+                rows="4"
+                placeholder="Other Information"></textarea>
+
+            <!-- Payment Method -->
+            <select id="paymentMethod">
+
+                <option value="">
+                    Select Payment Method
+                </option>
+
+                <option value="paystack">
+                    💳 Paystack Demo
+                </option>
+
+                <option value="paypal">
+                    🌎 PayPal Demo
+                </option>
+
+            </select>
+
+            <button onclick="payDemo()">
+                💳 Pay Demo
+            </button>
+
+        </div>
 
     </div>
+</div>
 
-    <hr>
-
-    <h2>💳 Demo Payment</h2>
-
-    <form id="demoPaymentForm">
-
-        <!-- Package -->
-
-        <label><strong>Package</strong></label>
-
-        <select id="package" required>
-
-            <option value="premium">
-                ⭐ Premium
-            </option>
-
-        </select>
-
-        <!-- Customer Details -->
-
-        <input
-            type="text"
-            id="fullname"
-            placeholder="Full Name"
-            required>
-
-        <input
-            type="email"
-            id="email"
-            placeholder="Email Address"
-            required>
-
-        <input
-            type="tel"
-            id="phone"
-            placeholder="Phone Number"
-            required>
-
-        <textarea
-            id="info"
-            rows="4"
-            placeholder="Other Information"></textarea>
-
-        <!-- Payment Method -->
-
-        <label><strong>Payment Method</strong></label>
-
-        <select id="paymentMethod" required>
-
-            <option value="">
-                Select Demo Payment
-            </option>
-
-            <option value="paystack">
-                💳 Paystack Demo Test
-            </option>
-
-            <option value="moniepoint">
-                🏦 Moniepoint Demo Test
-            </option>
-
-            <option value="paypal">
-                🌎 PayPal Demo Test
-            </option>
-
-        </select>
-
-        <button
-            type="button"
-            onclick="payDemo()"
-            class="payBtn">
-
-            💳 Pay Demo
-
-        </button>
-
-    </form>
-
-</section>
+<!-- Paystack -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
 
 <script>
 
+let trialTime = 120;
+
+const timer = setInterval(function(){
+
+    let min = Math.floor(trialTime / 60);
+    let sec = trialTime % 60;
+
+    document.getElementById("timer").innerHTML =
+    "Trial expires in : " +
+    min + "m " +
+    sec + "s";
+
+    trialTime--;
+
+    if(trialTime < 0){
+
+        clearInterval(timer);
+
+        if(typeof video !== "undefined"){
+            video.pause();
+        }
+
+        document.getElementById("timer").innerHTML =
+        "Trial Expired";
+
+        document.getElementById("paymentArea").style.display =
+        "block";
+
+    }
+
+},1000);
+
+
 function payDemo(){
 
-    const packageName =
-        document.getElementById("package").value;
-
-    const fullName =
-        document.getElementById("fullname").value;
-
-    const email =
-        document.getElementById("email").value;
-
-    const phone =
-        document.getElementById("phone").value;
-
-    const info =
-        document.getElementById("info").value;
-
-    const method =
-        document.getElementById("paymentMethod").value;
-
-    if(fullName==""){
-        alert("Enter Full Name.");
-        return;
-    }
-
-    if(email==""){
-        alert("Enter Email Address.");
-        return;
-    }
-
-    if(phone==""){
-        alert("Enter Phone Number.");
-        return;
-    }
+    let method =
+    document.getElementById("paymentMethod").value;
 
     if(method==""){
-        alert("Select Demo Payment Method.");
+
+        alert("Please select a payment method.");
+
         return;
+
     }
 
-    const reference =
-        "BTECH-" +
-        Math.floor(Math.random()*100000000);
-
-    /* ==========================
-       PAYSTACK DEMO TEST
-    ========================== */
+    /* ===================
+       PAYSTACK DEMO
+    ==================== */
 
     if(method=="paystack"){
 
-        alert(
+        let handler = PaystackPop.setup({
 
-"✅ PAYSTACK DEMO TEST\n\n"+
+            key: "pk_test_xxxxxxxxxxxxxxxxxxxxxxxxx",
 
-"Package : "+packageName+
+            email:
+            document.getElementById("email").value,
 
-"\n\nReference : "+reference+
+            amount:10000,
 
-"\n\nCustomer : "+fullName+
+            currency:"NGN",
 
-"\n\nEmail : "+email+
+            ref:"BTECHTV-"+Date.now(),
 
-"\n\nPhone : "+phone+
+            callback:function(response){
 
-"\n\nStatus : SUCCESSFUL\n\n"+
+                alert(
+                "Paystack Demo Payment Successful\n\nReference : "
+                + response.reference
+                );
 
-"This is only a DEMO TEST.\nNo real payment has been processed."
+            },
 
-        );
+            onClose:function(){
 
-    }
+                alert("Payment Cancelled");
 
-    /* ==========================
-       MONIEPOINT DEMO TEST
-    ========================== */
+            }
 
-    else if(method=="moniepoint"){
+        });
 
-        alert(
-
-"🏦 MONIEPOINT DEMO TEST\n\n"+
-
-"Package : "+packageName+
-
-"\n\nReference : "+reference+
-
-"\n\nBank : Moniepoint MFB"+
-
-"\n\nStatus : SUCCESSFUL\n\n"+
-
-"This is only a DEMO TEST.\nNo money was transferred."
-
-        );
+        handler.openIframe();
 
     }
 
-    /* ==========================
-       PAYPAL DEMO TEST
-    ========================== */
+    /* ===================
+       PAYPAL DEMO
+    ==================== */
 
     else if(method=="paypal"){
 
         alert(
+        "Opening PayPal Sandbox Demo..."
+        );
 
-"🌎 PAYPAL DEMO TEST\n\n"+
-
-"Package : "+packageName+
-
-"\n\nReference : "+reference+
-
-"\n\nStatus : SUCCESSFUL\n\n"+
-
-"This is only a DEMO TEST.\nNo real PayPal payment has been made."
-
+        window.open(
+        "https://www.sandbox.paypal.com/",
+        "_blank"
         );
 
     }
@@ -406,6 +370,72 @@ function payDemo(){
 }
 
 </script>
+
+<style>
+
+#trialOverlay{
+
+position:fixed;
+left:0;
+top:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.90);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:999999;
+
+}
+
+#trialBox{
+
+width:450px;
+max-width:95%;
+background:#101827;
+padding:25px;
+border-radius:12px;
+border:2px solid #00d4ff;
+color:white;
+text-align:center;
+
+}
+
+#trialBox input,
+#trialBox textarea,
+#trialBox select{
+
+width:100%;
+padding:12px;
+margin:8px 0;
+border:none;
+border-radius:6px;
+background:#1b2942;
+color:white;
+font-size:15px;
+
+}
+
+#trialBox button{
+
+width:100%;
+padding:14px;
+margin-top:10px;
+background:#00d4ff;
+border:none;
+border-radius:8px;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+
+}
+
+#trialBox button:hover{
+
+background:#00b4d8;
+
+}
+
 </style></div></div></div>
 
 <!-- SIDEBAR -->
@@ -723,144 +753,6 @@ showExpiredDashboard();
 clearInterval(monitorCheck);
 }
 },1000);
-</script>
-
-     <!-- Official Test Payment Libraries -->
-<script src="https://js.paystack.co/v1/inline.js"></script>
-
-<script>
-
-function payDemo(){
-
-    const fullName = document.getElementById("fullname").value.trim();
-    const email    = document.getElementById("email").value.trim();
-    const phone    = document.getElementById("phone").value.trim();
-    const info     = document.getElementById("info").value.trim();
-    const package  = document.getElementById("package").value;
-    const payment  = document.getElementById("paymentMethod").value;
-
-    if(fullName===""){
-        alert("Please enter Full Name.");
-        return;
-    }
-
-    if(email===""){
-        alert("Please enter Email Address.");
-        return;
-    }
-
-    if(phone===""){
-        alert("Please enter Phone Number.");
-        return;
-    }
-
-    if(payment===""){
-        alert("Please select a payment method.");
-        return;
-    }
-
-    /* Generate Demo Reference */
-
-    const reference =
-        "BTECH-DEMO-" +
-        Date.now() +
-        "-" +
-        Math.floor(Math.random()*100000);
-
-    /* ===============================
-       PAYSTACK OFFICIAL TEST MODE
-    ================================ */
-
-    if(payment==="paystack"){
-
-        let handler = PaystackPop.setup({
-
-            /* Replace with your Paystack Test Public Key */
-            key: "pk_test_REPLACE_WITH_YOUR_TEST_PUBLIC_KEY",
-
-            email: email,
-
-            firstname: fullName,
-
-            amount: 10000,      // ₦100.00
-
-            currency: "NGN",
-
-            ref: reference,
-
-            metadata:{
-
-                custom_fields:[
-
-                    {
-                        display_name:"Phone",
-                        variable_name:"phone",
-                        value:phone
-                    },
-
-                    {
-                        display_name:"Package",
-                        variable_name:"package",
-                        value:package
-                    },
-
-                    {
-                        display_name:"Information",
-                        variable_name:"info",
-                        value:info
-                    }
-
-                ]
-
-            },
-
-            callback:function(response){
-
-                alert(
-                    "✅ PAYSTACK TEST PAYMENT SUCCESSFUL\n\n"+
-                    "Reference:\n"+
-                    response.reference+
-                    "\n\n"+
-                    "No real money has been charged."
-                );
-
-                console.log(response);
-
-            },
-
-            onClose:function(){
-
-                alert("Payment Cancelled.");
-
-            }
-
-        });
-
-        handler.openIframe();
-
-    }
-
-    /* ===============================
-       PAYPAL SANDBOX TEST
-    ================================ */
-
-    else if(payment==="paypal"){
-
-        alert(
-            "Opening PayPal Sandbox...\n\n"+
-            "Sign in using your Sandbox Test Account.\n"+
-            "No real money will be charged."
-        );
-
-        window.open(
-            "https://www.sandbox.paypal.com/",
-            "_blank"
-        );
-
-    }
-
-}
-
 </script>
 </body>
 </html>
