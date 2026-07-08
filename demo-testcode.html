@@ -1,10 +1,17 @@
 
 
+
+
+
+
+
+
+
+
 <!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-     
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>BTECH-TV WORLD PRO MAX </title>
 
@@ -179,11 +186,6 @@ box-shadow:0 0 10px rgba(0,212,255,.5);
 <body><!-- ===========================
      BTECH-TV TRIAL VERSION
 =========================== -->
-<body>
-
-<!-- ===========================
-     BTECH-TV TRIAL VERSION
-=========================== -->
 
 <div id="trialOverlay">
     <div id="trialBox">
@@ -202,10 +204,12 @@ box-shadow:0 0 10px rgba(0,212,255,.5);
 
             <h3 style="margin-top:15px;">💳 Demo Payment</h3>
 
+            <!-- Package -->
             <select id="package">
                 <option value="premium">⭐ Premium</option>
             </select>
 
+            <!-- Customer Information -->
             <input
                 type="text"
                 id="fullname"
@@ -228,6 +232,23 @@ box-shadow:0 0 10px rgba(0,212,255,.5);
                 id="info"
                 rows="4"
                 placeholder="Other Information"></textarea>
+
+            <!-- Payment Method -->
+            <select id="paymentMethod">
+
+                <option value="">
+                    Select Payment Method
+                </option>
+
+                <option value="paystack">
+                    💳 Paystack Demo
+                </option>
+
+                <option value="paypal">
+                    🌎 PayPal Demo
+                </option>
+
+            </select>
 
             <button onclick="payDemo()">
                 💳 Pay Demo
@@ -276,55 +297,19 @@ const timer = setInterval(function(){
 },1000);
 
 
-function payDemo() {
+function payDemo(){
 
-    const fullname = document.getElementById("fullname").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const phone = document.getElementById("phone").value.trim();
+    let method =
+    document.getElementById("paymentMethod").value;
 
-    if(fullname === ""){
-        alert("Please enter your full name.");
+    if(method==""){
+
+        alert("Please select a payment method.");
+
         return;
+
     }
 
-    if(email === ""){
-        alert("Please enter your email address.");
-        return;
-    }
-
-    if(phone === ""){
-        alert("Please enter your phone number.");
-        return;
-    }
-
-    // Generate demo payment reference
-    const reference = "BTECH-" + Date.now();
-
-    // Simulate processing
-    document.querySelector("#trialBox button").disabled = true;
-    document.querySelector("#trialBox button").innerHTML = "Processing Demo Payment...";
-
-    setTimeout(function(){
-
-        alert(
-            "✅ DEMO PAYMENT SUCCESSFUL\n\n" +
-            "Reference: " + reference +
-            "\n\nThank you " + fullname + "!"
-        );
-
-        // Unlock the trial
-        document.getElementById("trialOverlay").style.display = "none";
-
-        if(typeof video !== "undefined"){
-            video.play();
-        }
-
-        document.querySelector("#trialBox button").disabled = false;
-        document.querySelector("#trialBox button").innerHTML = "💳 Pay Demo";
-
-    },2000);
-
-}
     /* ===================
        PAYSTACK DEMO
     ==================== */
@@ -769,17 +754,5 @@ clearInterval(monitorCheck);
 }
 },1000);
 </script>
-     localStorage.setItem("btech_demo_paid","yes");
-     window.addEventListener("load",function(){
-
-    if(localStorage.getItem("btech_demo_paid") === "yes"){
-
-        document.getElementById("trialOverlay").style.display = "none";
-
-    }
-
-});
-     localStorage.removeItem("btech_demo_paid");
-location.reload();
 </body>
 </html>
