@@ -719,6 +719,7 @@ loadUltra();
 
 </script>
 
+<script>let t=120;setTimeout(()=>{document.getElementById('trialOverlay').style.pointerEvents='none';document.getElementById('trialOverlay').style.background='transparent';document.getElementById('trialBox').style.display='none';},1000);let tx=setInterval(()=>{let timeText='Trial expires in: '+Math.floor(t/60)+'m '+(t%60)+'s';document.getElementById('timer').innerText=timeText;document.getElementById('floatingTimer').innerText='⏱ '+Math.floor(t/60)+'m '+(t%60)+'s';t--;if(t<0){clearInterval(tx);video.pause();document.getElementById('trialOverlay').style.pointerEvents='auto';document.getElementById('trialOverlay').style.background='rgba(0,0,0,.92)';document.getElementById('trialBox').style.display='block';document.getElementById('paymentArea').style.display='block';document.getElementById('timer').innerText='Trial Expired';}},1000);function pay(){alert('Payment successfully completed.');window.location=document.getElementById('package').value;}</script>
 <script>
 function showExpiredDashboard(){
 const player=document.querySelector('.player-container');
@@ -749,7 +750,10 @@ player.innerHTML=`
 }
 
 let monitorCheck=setInterval(()=>{
-if(typeof trialTime!=="undefined" && trialTime<0)
+if(typeof t!=='undefined' && t<0){
+showExpiredDashboard();
+clearInterval(monitorCheck);
+}
 },1000);
 </script>
 </body>
