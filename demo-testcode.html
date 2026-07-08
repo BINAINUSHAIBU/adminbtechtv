@@ -1,12 +1,6 @@
 
 
 
-
-
-
-
-
-
 <!DOCTYPE html> 
 <html lang="en">
 <head>
@@ -752,6 +746,144 @@ showExpiredDashboard();
 clearInterval(monitorCheck);
 }
 },1000);
+</script>
+
+     <!-- Official Test Payment Libraries -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
+<script>
+
+function payDemo(){
+
+    const fullName = document.getElementById("fullname").value.trim();
+    const email    = document.getElementById("email").value.trim();
+    const phone    = document.getElementById("phone").value.trim();
+    const info     = document.getElementById("info").value.trim();
+    const package  = document.getElementById("package").value;
+    const payment  = document.getElementById("paymentMethod").value;
+
+    if(fullName===""){
+        alert("Please enter Full Name.");
+        return;
+    }
+
+    if(email===""){
+        alert("Please enter Email Address.");
+        return;
+    }
+
+    if(phone===""){
+        alert("Please enter Phone Number.");
+        return;
+    }
+
+    if(payment===""){
+        alert("Please select a payment method.");
+        return;
+    }
+
+    /* Generate Demo Reference */
+
+    const reference =
+        "BTECH-DEMO-" +
+        Date.now() +
+        "-" +
+        Math.floor(Math.random()*100000);
+
+    /* ===============================
+       PAYSTACK OFFICIAL TEST MODE
+    ================================ */
+
+    if(payment==="paystack"){
+
+        let handler = PaystackPop.setup({
+
+            /* Replace with your Paystack Test Public Key */
+            key: "pk_test_REPLACE_WITH_YOUR_TEST_PUBLIC_KEY",
+
+            email: email,
+
+            firstname: fullName,
+
+            amount: 10000,      // ₦100.00
+
+            currency: "NGN",
+
+            ref: reference,
+
+            metadata:{
+
+                custom_fields:[
+
+                    {
+                        display_name:"Phone",
+                        variable_name:"phone",
+                        value:phone
+                    },
+
+                    {
+                        display_name:"Package",
+                        variable_name:"package",
+                        value:package
+                    },
+
+                    {
+                        display_name:"Information",
+                        variable_name:"info",
+                        value:info
+                    }
+
+                ]
+
+            },
+
+            callback:function(response){
+
+                alert(
+                    "✅ PAYSTACK TEST PAYMENT SUCCESSFUL\n\n"+
+                    "Reference:\n"+
+                    response.reference+
+                    "\n\n"+
+                    "No real money has been charged."
+                );
+
+                console.log(response);
+
+            },
+
+            onClose:function(){
+
+                alert("Payment Cancelled.");
+
+            }
+
+        });
+
+        handler.openIframe();
+
+    }
+
+    /* ===============================
+       PAYPAL SANDBOX TEST
+    ================================ */
+
+    else if(payment==="paypal"){
+
+        alert(
+            "Opening PayPal Sandbox...\n\n"+
+            "Sign in using your Sandbox Test Account.\n"+
+            "No real money will be charged."
+        );
+
+        window.open(
+            "https://www.sandbox.paypal.com/",
+            "_blank"
+        );
+
+    }
+
+}
+
 </script>
 </body>
 </html>
