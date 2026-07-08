@@ -185,255 +185,92 @@ box-shadow:0 0 10px rgba(0,212,255,.5);
 <body><!-- ===========================
      BTECH-TV TRIAL VERSION
 =========================== -->
+<div id="paymentArea" style="display:none;">
 
-<div id="trialOverlay">
-    <div id="trialBox">
+<h3 style="color:#ff4444;">Trial Expired</h3>
 
-        <h2>📺 BTECH-TV Trial Version</h2>
+<p>Watch free for <b>2 minutes.</b></p>
 
-        <h3 id="timer" style="color:#00d4ff;"></h3>
+<p>Your trial version has expired.</p>
 
-        <p>Watch free for <strong>2 minutes.</strong></p>
+<h3>💳 Demo Test Payment</h3>
 
-        <div id="paymentArea" style="display:none;">
+<select id="package">
+    <option value="premium">⭐ Premium</option>
+</select>
 
-            <h3 style="color:#ff4d4d;">Trial Expired</h3>
+<input type="text" id="fullname" placeholder="Full Name">
 
-            <p>Your trial version has expired.</p>
+<input type="email" id="email" placeholder="Email Address">
 
-            <h3 style="margin-top:15px;">💳 Demo Payment</h3>
+<input type="tel" id="phone" placeholder="Phone Number">
 
-            <!-- Package -->
-            <select id="package">
-                <option value="premium">⭐ Premium</option>
-            </select>
+<textarea id="info" placeholder="Other Information"></textarea>
 
-            <!-- Customer Information -->
-            <input
-                type="text"
-                id="fullname"
-                placeholder="Full Name"
-                required>
+<select id="paymentMethod">
 
-            <input
-                type="email"
-                id="email"
-                placeholder="Email Address"
-                required>
+    <option value="">Select Demo Payment</option>
 
-            <input
-                type="tel"
-                id="phone"
-                placeholder="Phone Number"
-                required>
+    <option value="paystack">
+        💳 Paystack Demo Test
+    </option>
 
-            <textarea
-                id="info"
-                rows="4"
-                placeholder="Other Information"></textarea>
+    <option value="paypal">
+        🌍 PayPal Demo Test
+    </option>
 
-            <!-- Payment Method -->
-            <select id="paymentMethod">
+</select>
 
-                <option value="">
-                    Select Payment Method
-                </option>
+<button onclick="payDemoTest()">
+💳 Pay Demo
+</button>
 
-                <option value="paystack">
-                    💳 Paystack Demo
-                </option>
-
-                <option value="paypal">
-                    🌎 PayPal Demo
-                </option>
-
-            </select>
-
-            <button onclick="payDemo()">
-                💳 Pay Demo
-            </button>
-
-        </div>
-
-    </div>
 </div>
-
-<!-- Paystack -->
-<script src="https://js.paystack.co/v1/inline.js"></script>
 
 <script>
 
-let trialTime = 120;
+function payDemoTest(){
 
-const timer = setInterval(function(){
+const method=document.getElementById("paymentMethod").value;
 
-    let min = Math.floor(trialTime / 60);
-    let sec = trialTime % 60;
+if(method==""){
+alert("Please select a demo payment method.");
+return;
+}
 
-    document.getElementById("timer").innerHTML =
-    "Trial expires in : " +
-    min + "m " +
-    sec + "s";
+if(method=="paystack"){
 
-    trialTime--;
+setTimeout(function(){
 
-    if(trialTime < 0){
-
-        clearInterval(timer);
-
-        if(typeof video !== "undefined"){
-            video.pause();
-        }
-
-        document.getElementById("timer").innerHTML =
-        "Trial Expired";
-
-        document.getElementById("paymentArea").style.display =
-        "block";
-
-    }
+alert(
+"✅ PAYSTACK DEMO TEST\n\n"+
+"Status : Successful\n"+
+"Reference : PST-DEMO-"+Math.floor(Math.random()*1000000)+"\n\n"+
+"No real payment was processed."
+);
 
 },1000);
 
+}
 
-function payDemo(){
+else if(method=="paypal"){
 
-    let method =
-    document.getElementById("paymentMethod").value;
+setTimeout(function(){
 
-    if(method==""){
+alert(
+"✅ PAYPAL DEMO TEST\n\n"+
+"Status : Successful\n"+
+"Transaction ID : PP-DEMO-"+Math.floor(Math.random()*1000000)+"\n\n"+
+"No real payment was processed."
+);
 
-        alert("Please select a payment method.");
+},1000);
 
-        return;
-
-    }
-
-    /* ===================
-       PAYSTACK DEMO
-    ==================== */
-
-    if(method=="paystack"){
-
-        let handler = PaystackPop.setup({
-
-            key: "pk_test_xxxxxxxxxxxxxxxxxxxxxxxxx",
-
-            email:
-            document.getElementById("email").value,
-
-            amount:10000,
-
-            currency:"NGN",
-
-            ref:"BTECHTV-"+Date.now(),
-
-            callback:function(response){
-
-                alert(
-                "Paystack Demo Payment Successful\n\nReference : "
-                + response.reference
-                );
-
-            },
-
-            onClose:function(){
-
-                alert("Payment Cancelled");
-
-            }
-
-        });
-
-        handler.openIframe();
-
-    }
-
-    /* ===================
-       PAYPAL DEMO
-    ==================== */
-
-    else if(method=="paypal"){
-
-        alert(
-        "Opening PayPal Sandbox Demo..."
-        );
-
-        window.open(
-        "https://www.sandbox.paypal.com/",
-        "_blank"
-        );
-
-    }
+}
 
 }
 
 </script>
-
-<style>
-
-#trialOverlay{
-
-position:fixed;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.90);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:999999;
-
-}
-
-#trialBox{
-
-width:450px;
-max-width:95%;
-background:#101827;
-padding:25px;
-border-radius:12px;
-border:2px solid #00d4ff;
-color:white;
-text-align:center;
-
-}
-
-#trialBox input,
-#trialBox textarea,
-#trialBox select{
-
-width:100%;
-padding:12px;
-margin:8px 0;
-border:none;
-border-radius:6px;
-background:#1b2942;
-color:white;
-font-size:15px;
-
-}
-
-#trialBox button{
-
-width:100%;
-padding:14px;
-margin-top:10px;
-background:#00d4ff;
-border:none;
-border-radius:8px;
-font-size:16px;
-font-weight:bold;
-cursor:pointer;
-
-}
-
-#trialBox button:hover{
-
-background:#00b4d8;
-
-}
 
 </style></div></div></div>
 
