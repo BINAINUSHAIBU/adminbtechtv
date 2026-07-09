@@ -1,6 +1,15 @@
 
 
 
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html> 
 <html lang="en">
 <head>
@@ -175,69 +184,83 @@ box-shadow:0 0 10px rgba(0,212,255,.5);
 }
 </style>
 </head>
+
+<body><!-- ===========================
+     BTECH-TV TRIAL VERSION
+=========================== -->
+
 <div id="trialOverlay">
     <div id="trialBox">
 
-        <h2>BTECH-TV Trial Version</h2>
+        <h2>📺 BTECH-TV Trial Version</h2>
 
-        <h3 id="timer"></h3>
+        <h3 id="timer" style="color:#00d4ff;"></h3>
 
-        <p>Watch free for 2 minutes.</p>
+        <p>Watch free for <strong>2 minutes.</strong></p>
 
         <div id="paymentArea" style="display:none;">
 
-            <h3>Your trial version has expired.</h3>
+            <h3 style="color:#ff4d4d;">Trial Expired</h3>
 
-            <select id="paymentType">
-                <option>Demo Payment</option>
-            </select>
+            <p>Your trial version has expired.</p>
 
+            <h3 style="margin-top:15px;">💳 Demo Payment</h3>
+
+            <!-- Package -->
             <select id="package">
-                <option value="index_premium-package.html">
-                    Premium
-                </option>
-
-                <option value="index_super-Compact_plus-package.html">
-                    Super Compact Plus
-                </option>
-
-                <option value="index_super-premium-package.html">
-                    Super Premium
-                </option>
-
-                <option value="index_super-premium_Compact_plus-package.html">
-                    Super Premium Compact Plus
-                </option>
-
-                <option value="index_super-premium_plus-package.html">
-                    Super Premium Plus
-                </option>
+                <option value="premium">⭐ Premium</option>
             </select>
 
+            <!-- Customer Information -->
             <input
                 type="text"
-                placeholder="Full Name">
+                id="fullname"
+                placeholder="Full Name"
+                required>
 
             <input
                 type="email"
-                placeholder="Email Address">
+                id="email"
+                placeholder="Email Address"
+                required>
 
             <input
                 type="tel"
-                placeholder="Phone Number">
+                id="phone"
+                placeholder="Phone Number"
+                required>
 
-            <input
-                type="text"
-                placeholder="Other Information">
+            <textarea
+                id="info"
+                rows="4"
+                placeholder="Other Information"></textarea>
 
-            <button onclick="pay()">
-                Pay Demo
+            <!-- Payment Method -->
+            <select id="paymentMethod">
+
+                <option value="">
+                    Select Payment Method
+                </option>
+
+                <option value="paystack">
+                    💳 Paystack Demo
+                </option>
+
+                <option value="paypal">
+                    🌎 PayPal Demo
+                </option>
+
+            </select>
+
+            <button onclick="payDemo()">
+                💳 Pay Demo
             </button>
 
         </div>
 
     </div>
 </div>
+
 <!-- Paystack -->
 <script src="https://js.paystack.co/v1/inline.js"></script>
 
