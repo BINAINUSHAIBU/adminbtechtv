@@ -1,4 +1,10 @@
 
+
+
+
+
+
+
 <!DOCTYPE html> 
 <html lang="en">
 <head>
@@ -174,73 +180,7 @@ box-shadow:0 0 10px rgba(0,212,255,.5);
 </style>
 </head>
 
-<body><div id="trialOverlay"><div id="trialBox"><h2>BTECH-TV Trial Version</h2><h3 id="timer"></h3><p>Watch free for 2 minutes.</p><div id="paymentArea"><h3>Your trial version has expired.</h3><select id="paymentType"><option>Demo Payment</option></select><select id="package"><option value="index_premium-package.html">Premium</option><option value="index_super-Compact_plus-package.html">Super Compact Plus</option><option value="index_super-premium-package.html">Super Premium</option><option value="index_super-premium_Compact_plus-package.html">Super Premium Compact Plus</option><option value="index_super-premium_plus-package.html">Super Premium Plus</option></select><input placeholder="Full Name"><input placeholder="Email Address"><input placeholder="Phone Number"><input placeholder="Other Information"><!-- ===========================
-     DEMO CARD DETAILS
-=========================== -->
-
-<div style="
-background:#172033;
-padding:15px;
-border-radius:10px;
-margin:15px 0;
-border:1px solid #00d4ff;
-">
-
-<h3 style="color:#00d4ff;margin-bottom:10px;">
-💳 Demo Test Card Details
-</h3>
-
-<input
-type="text"
-id="cardName"
-placeholder="Card Holder Name"
-value="BTECH DEMO USER">
-
-<input
-type="text"
-id="cardNumber"
-placeholder="Card Number"
-value="4084084084084081"
-maxlength="19">
-
-<div style="display:flex;gap:10px;">
-
-<input
-type="text"
-id="expiry"
-placeholder="MM/YY"
-value="12/30">
-
-<input
-type="password"
-id="cvv"
-placeholder="CVV"
-value="408"
-maxlength="4">
-
-</div>
-
-<input
-type="password"
-id="pin"
-placeholder="PIN"
-value="1234"
-maxlength="4">
-
-<p style="
-font-size:12px;
-color:#9ecfff;
-margin-top:10px;
-line-height:1.6;
-">
-✅ Demo Test Card Number: <b>4084 0840 8408 4081</b><br>
-✅ Expiry: <b>12/30</b><br>
-✅ CVV: <b>408</b><br>
-✅ PIN: <b>1234</b><br>
-✅ OTP: <b>123456</b> (Demo)
-</p>
-
-</div><button onclick="pay()">Pay Demo</button></div></div></div>
+<body><div id="trialOverlay"><div id="trialBox"><h2>BTECH-TV Trial Version</h2><h3 id="timer"></h3><p>Watch free for 2 minutes.</p><div id="paymentArea"><h3>Your trial version has expired.</h3><select id="paymentType"><option>Demo Payment</option></select><select id="package"><option value="index_premium-package.html">Premium</option><option value="index_super-Compact_plus-package.html">Super Compact Plus</option><option value="index_super-premium-package.html">Super Premium</option><option value="index_super-premium_Compact_plus-package.html">Super Premium Compact Plus</option><option value="index_super-premium_plus-package.html">Super Premium Plus</option></select><input placeholder="Full Name"><input placeholder="Email Address"><input placeholder="Phone Number"><input placeholder="Other Information"><button onclick="pay()">Pay Demo</button></div></div></div>
 
 <!-- SIDEBAR -->
 <div class="sidebar">
@@ -521,33 +461,7 @@ loadUltra();
 
 </script>
 
-<script>let t=120;setTimeout(()=>{document.getElementById('trialOverlay').style.pointerEvents='none';document.getElementById('trialOverlay').style.background='transparent';document.getElementById('trialBox').style.display='none';},1000);let tx=setInterval(()=>{let timeText='Trial expires in: '+Math.floor(t/60)+'m '+(t%60)+'s';document.getElementById('timer').innerText=timeText;document.getElementById('floatingTimer').innerText='⏱ '+Math.floor(t/60)+'m '+(t%60)+'s';t--;if(t<0){clearInterval(tx);video.pause();document.getElementById('trialOverlay').style.pointerEvents='auto';document.getElementById('trialOverlay').style.background='rgba(0,0,0,.92)';document.getElementById('trialBox').style.display='block';document.getElementById('paymentArea').style.display='block';document.getElementById('timer').innerText='Trial Expired';}},1000);function pay(){
-
-    let ref = "BTECH-" + Math.floor(Math.random()*900000000+100000000);
-
-    alert(
-`✅ DEMO PAYMENT SUCCESSFUL
-
-Package:
-${document.getElementById("package").options[document.getElementById("package").selectedIndex].text}
-
-Reference:
-${ref}
-
-Amount:
-₦1.00 (Demo)
-
-Status:
-PAID
-
-Thank you for testing BTECH-TV Demo.`
-    );
-
-    window.location = document.getElementById("package").value;
-
-}
- </script>
-    
+<script>let t=120;setTimeout(()=>{document.getElementById('trialOverlay').style.pointerEvents='none';document.getElementById('trialOverlay').style.background='transparent';document.getElementById('trialBox').style.display='none';},1000);let tx=setInterval(()=>{let timeText='Trial expires in: '+Math.floor(t/60)+'m '+(t%60)+'s';document.getElementById('timer').innerText=timeText;document.getElementById('floatingTimer').innerText='⏱ '+Math.floor(t/60)+'m '+(t%60)+'s';t--;if(t<0){clearInterval(tx);video.pause();document.getElementById('trialOverlay').style.pointerEvents='auto';document.getElementById('trialOverlay').style.background='rgba(0,0,0,.92)';document.getElementById('trialBox').style.display='block';document.getElementById('paymentArea').style.display='block';document.getElementById('timer').innerText='Trial Expired';}},1000);function pay(){alert('Payment successfully completed.');window.location=document.getElementById('package').value;}</script>
 <script>
 function showExpiredDashboard(){
 const player=document.querySelector('.player-container');
