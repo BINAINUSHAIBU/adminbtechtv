@@ -1,0 +1,74 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BTECH CONNECT Prototype</title>
+<style>
+body{margin:0;font-family:Arial;background:#0b1220;color:#fff}
+header{background:#18243d;padding:16px;text-align:center}
+.container{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+.sidebar{background:#111a2e;padding:16px}
+.main{padding:20px}
+input,button{padding:10px;margin:6px 0;width:100%;border-radius:6px;border:none}
+button{background:#2f80ed;color:#fff;cursor:pointer}
+#remoteVideo,#localVideo{background:#000;width:100%;max-height:320px}
+.chat{height:180px;border:1px solid #444;overflow:auto;padding:8px;margin:10px 0}
+.controls button{width:auto;margin-right:8px}
+.small{font-size:12px;color:#bbb}
+</style>
+</head>
+<body>
+<header><h1>BTECH CONNECT - Single Page Prototype</h1></header>
+<div class="container">
+<div class="sidebar">
+<h3>Login</h3>
+<input id="user" placeholder="Username">
+<input id="pin" placeholder="6-digit PIN" maxlength="6">
+<button onclick="login()">Login</button>
+<hr>
+<h3>Contacts</h3>
+<div>John</div><div>Mary</div><div>David</div>
+</div>
+<div class="main">
+<h2>Video Call</h2>
+<video id="remoteVideo" autoplay playsinline></video><br><br>
+<video id="localVideo" autoplay muted playsinline width="240"></video>
+<div class="controls">
+<button onclick="startMedia()">Start Camera</button>
+<button onclick="alert('Requires signaling server')">Audio Call</button>
+<button onclick="alert('Requires signaling server')">Video Call</button>
+<button onclick="alert('Mute toggled')">Mute</button>
+<button onclick="share()">Share Screen</button>
+</div>
+<h3>Chat</h3>
+<div class="chat" id="chat"></div>
+<input id="msg" placeholder="Type message">
+<button onclick="send()">Send</button>
+<p class="small">Prototype only. Real WebRTC calls require a signaling server and STUN/TURN infrastructure.</p>
+</div></div>
+<script>
+let localStream;
+async function startMedia(){
+ try{
+ localStream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+ document.getElementById('localVideo').srcObject=localStream;
+ }catch(e){alert(e);}
+}
+async function share(){
+ try{
+ const s=await navigator.mediaDevices.getDisplayMedia({video:true});
+ document.getElementById('remoteVideo').srcObject=s;
+ }catch(e){}
+}
+function login(){alert("Welcome "+document.getElementById('user').value);}
+function send(){
+ let m=document.getElementById('msg');
+ let c=document.getElementById('chat');
+ c.innerHTML+="<div><b>You:</b> "+m.value+"</div>";
+ m.value="";
+}
+</script>
+</body>
+</html>
