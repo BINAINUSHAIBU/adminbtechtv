@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>BTECH-TV Offline</title>
@@ -19,200 +18,17 @@ input{width:100%;padding:8px}
 <input id="picker" type="file" multiple accept="video/*" style="display:none">
 </div>
 <div id="main">
-<video id="v" controls autoplay>
-    <div style="margin:10px 0;">
-<button onclick="prev()">⏮ Previous</button>
-<button onclick="next()">⏭ Next</button>
-<button onclick="toggleFS()">⛶ Fullscreen</button>
-<button onclick="shuffle()">🔀 Shuffle</button>
-        <button onclick="sleep(30)">🌙 Sleep 30 Min</button>
-        <button onclick="pip()">📺 Mini Player</button>
-        <h3 id="count"></h3>
-</div>
-</video>
+<video id="v" controls autoplay></video>
 <div id="grid"></div>
 </div>
 <script>
 let files=[],filtered=[],i=0,v=document.getElementById('v');
 picker.onchange=e=>{
 files=[...e.target.files].map(f=>({name:f.name.replace(/\.[^.]+$/,''),url:URL.createObjectURL(f)}));
-filtered=[...files];render();if(filtered.length)play(0);
-}
+filtered=[...files];render();if(filtered.length)play(0);}
 function pick(){picker.click()}
-function render(count.innerHTML=
-filtered.length+" Channels Loaded";){
-grid.innerHTML='';
-filtered.forEach((c,n)=>{
-let d=document.createElement('div');
-d.className='card';
-d.innerHTML='<b>CH '+String(n+1).padStart(3,'0')+'</b><br>'+c.name;
-d.onclick=()=>play(n);
-grid.appendChild(d);
-});
-function play(n){
-    if(!filtered.length) return;
-
-    i = n;
-    v.src = filtered[n].url;
-
-    document.querySelectorAll('.card').forEach(c=>c.style.border='none');
-    document.querySelectorAll('.card')[n].style.border='2px solid #00e5ff';
-
-    v.play();
-}
-
-v.onended=()=>{
-    if(filtered.length)
-        play((i+1)%filtered.length);
-};
+function render(){grid.innerHTML='';filtered.forEach((c,n)=>{let d=document.createElement('div');d.className='card';d.innerHTML='<b>CH '+String(n+1).padStart(3,'0')+'</b><br>'+c.name;d.onclick=()=>play(n);grid.appendChild(d);});}
+function play(n){i=n;v.src=filtered[n].url;v.play();}
 function search(){let q=document.getElementById('q').value.toLowerCase();filtered=files.filter(f=>f.name.toLowerCase().includes(q));render();}
 document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'&&filtered.length)play((i+1)%filtered.length);if(e.key==='ArrowLeft'&&filtered.length)play((i-1+filtered.length)%filtered.length);});
-</script>
-    function next(){
-    play((i+1)%filtered.length);
-}
-
-function prev(){
-    play((i-1+filtered.length)%filtered.length);
-}
-
-function toggleFS(){
-    if(v.requestFullscreen)
-        v.requestFullscreen();
-}
-
-function shuffle(){
-    filtered.sort(()=>Math.random()-0.5);
-    render();
-    play(0);
-}
-    document.body.ondragover=e=>e.preventDefault();
-
-document.body.ondrop=e=>{
-    e.preventDefault();
-
-    files=[...e.dataTransfer.files]
-    .filter(f=>f.type.startsWith("video"))
-    .map(f=>({
-        name:f.name.replace(/\.[^.]+$/,''),
-        url:URL.createObjectURL(f)
-    }));
-
-    filtered=[...files];
-
-    render();
-
-    if(filtered.length)
-        play(0);
-}
-    let fav=[];
-
-function favorite(n){
-
-if(!fav.includes(filtered[n].name))
-fav.push(filtered[n].name);
-
-localStorage.setItem("fav",JSON.stringify(fav));
-
-alert("Added to Favorites");
-
-}
-    d.innerHTML=
-`
-<b>CH ${String(n+1).padStart(3,'0')}</b><br>
-${c.name}
-<br><br>
-<button onclick="event.stopPropagation();favorite(${n})">★</button>
-`;
-    count.innerHTML=
-filtered.length+" Channels Loaded";
-    async function pip(){
-
-if(document.pictureInPictureElement)
-await document.exitPictureInPicture();
-
-else
-await v.requestPictureInPicture();
-
-}
-    function play(n){
-
-i=n;
-
-localStorage.setItem("last",n);
-
-v.src=filtered[n].url;
-
-v.play();
-
-}
-    let last=localStorage.getItem("last");
-
-if(last)
-play(Number(last));
-    document.addEventListener("keydown",e=>{
-
-switch(e.key){
-
-case "ArrowRight":
-next();
-break;
-
-case "ArrowLeft":
-prev();
-break;
-
-case " ":
-e.preventDefault();
-
-if(v.paused)
-v.play();
-else
-v.pause();
-
-break;
-
-case "f":
-toggleFS();
-break;
-
-}
-
-});
-    function sleep(minutes){
-
-setTimeout(()=>{
-
-v.pause();
-
-alert("Sleep Timer Finished");
-
-},minutes*60000);
-
-}
-    const CACHE="offline-tv-v1";
-
-self.addEventListener("install",e=>{
-
-e.waitUntil(
-
-caches.open(CACHE).then(c=>c.addAll([
-"/",
-"index.html"
-]))
-
-);
-
-});
-
-self.addEventListener("fetch",e=>{
-
-e.respondWith(
-
-caches.match(e.request).then(r=>r||fetch(e.request))
-
-);
-
-});
-</body>
-</html>
+</script></body></html>
