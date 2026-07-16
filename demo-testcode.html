@@ -1,45 +1,309 @@
-
 <!DOCTYPE html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>QuantumMesh Voice Prototype</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuantumMesh Voice - BlackBerry Style</title>
+
 <style>
-body{margin:0;font-family:Arial;background:#111;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh}
-.phone{width:360px;background:#1b1b1b;border-radius:18px;padding:16px;box-shadow:0 0 20px #000}
-.top{display:flex;justify-content:space-between;font-size:12px;color:#8f8}
-.avatar{width:90px;height:90px;border-radius:50%;background:#444;margin:20px auto}
-.name{text-align:center;font-size:24px}.loc{text-align:center;color:#8fd}
-.timer{text-align:center;font-size:28px;margin:20px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-button{padding:14px;border:none;border-radius:12px;background:#2d2d2d;color:#fff;cursor:pointer}
-.end{background:#b00}
-</style></head><body>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#0b0b0b;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.phone{
+
+    width:360px;
+    background:#1c1c1c;
+    border-radius:25px;
+    overflow:hidden;
+    box-shadow:0 0 25px black;
+
+}
+
+.header{
+
+    background:#111;
+    padding:12px;
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+    color:#00ff88;
+
+}
+
+.screen{
+
+    padding:25px;
+    text-align:center;
+
+}
+
+.avatar{
+
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    background:#333;
+    margin:auto;
+    border:4px solid #00cc66;
+
+}
+
+.name{
+
+    margin-top:18px;
+    font-size:26px;
+    font-weight:bold;
+
+}
+
+.status{
+
+    color:#00ff99;
+    margin-top:8px;
+
+}
+
+.location{
+
+    margin-top:12px;
+    color:#7fdcff;
+
+}
+
+.timer{
+
+    font-size:34px;
+    margin:25px;
+
+}
+
+.buttons{
+
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+
+}
+
+button{
+
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#2f2f2f;
+    color:white;
+    cursor:pointer;
+    transition:.3s;
+
+}
+
+button:hover{
+
+    background:#444;
+
+}
+
+.end{
+
+    background:red;
+
+}
+
+.footer{
+
+    text-align:center;
+    padding:15px;
+    color:#888;
+    font-size:12px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
 <div class="phone">
-<div class="top"><span>🔒 Encrypted</span><span id="net">Online</span></div>
+
+<div class="header">
+
+<div>🔒 Encrypted</div>
+
+<div id="network">Online</div>
+
+</div>
+
+<div class="screen">
+
 <div class="avatar"></div>
+
 <div class="name">John Doe</div>
-<div class="loc" id="loc">Detecting location…</div>
-<div class="timer" id="t">00:00</div>
-<div class="grid">
-<button onclick="alert('Mute')">🎤 Mute</button>
-<button onclick="alert('Speaker')">🔊 Speaker</button>
-<button onclick="alert('Hold')">⏸ Hold</button>
-<button onclick="share()">📍 Share</button>
-<button onclick="alert('Contacts')">👥 Contacts</button>
-<button class="end" onclick="endCall()">❌ End</button>
-</div></div>
+
+<div class="status">
+HD Audio Calling
+</div>
+
+<div class="location" id="location">
+Detecting Location...
+</div>
+
+<div class="timer" id="timer">
+00:00
+</div>
+
+<div class="buttons">
+
+<button onclick="mute()">
+🎤<br>Mute
+</button>
+
+<button onclick="speaker()">
+🔊<br>Speaker
+</button>
+
+<button onclick="holdCall()">
+⏸<br>Hold
+</button>
+
+<button onclick="shareLocation()">
+📍<br>Location
+</button>
+
+<button onclick="contacts()">
+👥<br>Contacts
+</button>
+
+<button class="end" onclick="endCall()">
+❌<br>End
+</button>
+
+</div>
+
+</div>
+
+<div class="footer">
+
+QuantumMesh Voice Prototype
+
+</div>
+
+</div>
+
 <script>
-let s=0;setInterval(()=>{s++;let m=String(Math.floor(s/60)).padStart(2,'0');let ss=String(s%60).padStart(2,'0');t.textContent=m+':'+ss;},1000);
-function endCall(){alert("Prototype: Call ended");}
-function share(){alert(loc.textContent);}
+
+let seconds=0;
+
+setInterval(function(){
+
+seconds++;
+
+let m=Math.floor(seconds/60);
+
+let s=seconds%60;
+
+document.getElementById("timer").innerHTML=
+String(m).padStart(2,"0")+":"+
+String(s).padStart(2,"0");
+
+},1000);
+
+function mute(){
+
+alert("Microphone Muted");
+
+}
+
+function speaker(){
+
+alert("Speaker Enabled");
+
+}
+
+function holdCall(){
+
+alert("Call on Hold");
+
+}
+
+function contacts(){
+
+alert("Opening Contacts");
+
+}
+
+function endCall(){
+
+alert("Call Ended");
+
+}
+
+function shareLocation(){
+
+alert(document.getElementById("location").innerHTML);
+
+}
+
 if(navigator.geolocation){
- navigator.geolocation.getCurrentPosition(async p=>{
-  const {latitude,longitude}=p.coords;
-  try{
-   const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`);
-   const j=await r.json();
-   const a=j.address||{};
-   loc.textContent=(a.city||a.town||a.village||"Unknown")+", "+(a.country||"Unknown");
-  }catch(e){loc.textContent=latitude.toFixed(4)+","+longitude.toFixed(4);}
- },()=>loc.textContent="Location unavailable");
-}else loc.textContent="Geolocation unsupported";
-</script></body></html>
+
+navigator.geolocation.getCurrentPosition(function(position){
+
+let lat=position.coords.latitude;
+
+let lon=position.coords.longitude;
+
+fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`)
+
+.then(response=>response.json())
+
+.then(data=>{
+
+let city=
+data.address.city||
+data.address.town||
+data.address.village||
+"Unknown";
+
+let country=
+data.address.country||
+"Unknown";
+
+document.getElementById("location").innerHTML=
+"📍 "+city+", "+country;
+
+})
+
+.catch(()=>{
+
+document.getElementById("location").innerHTML=
+lat.toFixed(4)+", "+lon.toFixed(4);
+
+});
+
+});
+
+}
+else{
+
+document.getElementById("location").innerHTML=
+"Location not supported";
+
+}
+
+</script>
+
+</body>
+</html>
