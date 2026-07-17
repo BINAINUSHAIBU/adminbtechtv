@@ -585,8 +585,429 @@ BTECH-TV ULTIMATE IPTV PLAYER
 
 <script>
 
-/* JavaScript will be added in Part 2 */
+/**********************************************************************
+ BTECH-TV ULTIMATE
+ JavaScript Engine
+**********************************************************************/
 
+const video = document.getElementById("player");
+const list = document.getElementById("channelList");
+const search = document.getElementById("search");
+const admin = document.getElementById("admin");
+const count = document.getElementById("count");
+const adminCount = document.getElementById("adminCount");
+const favCount = document.getElementById("favCount");
+const categoryTitle = document.getElementById("currentCategory");
+
+let channels = [];
+let filteredChannels = [];
+let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+
+updateFavoriteCounter();
+
+function updateFavoriteCounter() {
+    favCount.textContent = favorites.length;
+}
+
+function toggleAdmin() {
+    admin.style.display =
+        admin.style.display === "block"
+            ? "none"
+            : "block";
+}
+
+function toggleFullscreen() {
+
+    if (!document.fullscreenElement) {
+
+        document.documentElement.requestFullscreen();
+
+    } else {
+
+        document.exitFullscreen();
+
+    }
+
+}
+
+function playChannel(channel){
+
+    if(Hls.isSupported()){
+
+        const hls = new Hls();
+
+        hls.loadSource(channel.url);
+
+        hls.attachMedia(video);
+
+    }else{
+
+        video.src = channel.url;
+
+    }
+
+    video.play();
+
+}
+
+function render(data){
+
+    list.innerHTML="";
+
+    count.innerHTML=data.length;
+
+    adminCount.innerHTML=data.length;
+
+    data.forEach(channel=>{
+
+        const card=document.createElement("div");
+
+        card.className="card";
+
+        const star=favorites.includes(channel.name)
+        ? "★"
+        : "☆";
+
+        card.innerHTML=`
+
+<h3>${channel.name}</h3>
+
+<p>${channel.group}</p>
+
+<button style="margin-top:10px">
+
+▶ Play
+
+</button>
+
+<button
+style="margin-left:8px"
+onclick="event.stopPropagation();toggleFavorite('${channel.name}')">
+
+${star}
+
+</button>
+
+`;
+
+        card.onclick=()=>playChannel(channel);
+
+        list.appendChild(card);
+
+    });
+
+}
+
+function toggleFavorite(name){
+
+    if(favorites.includes(name)){
+
+        favorites=favorites.filter(x=>x!==name);
+
+    }else{
+
+        favorites.push(name);
+
+    }
+
+    localStorage.setItem(
+
+        "favorites",
+
+        JSON.stringify(favorites)
+
+    );
+
+    updateFavoriteCounter();
+
+    render(filteredChannels);
+
+}
+
+function showFavorites(){
+
+    categoryTitle.innerHTML="Favorites";
+
+    filteredChannels=channels.filter(c=>favorites.includes(c.name));
+
+    render(filteredChannels);
+
+}
+
+function filterCategory(cat){
+
+    categoryTitle.innerHTML=cat;
+
+    if(cat==="ALL"){
+
+        filteredChannels=channels;
+
+    }else{
+
+        filteredChannels=channels.filter(c=>
+
+            c.group.toUpperCase().includes(cat.toUpperCase())
+
+        );
+
+    }
+
+    render(filteredChannels);
+
+}
+
+search.addEventListener("input",()=>{
+
+    const value=search.value.toLowerCase();
+
+    filteredChannels=channels.filter(c=>
+
+        c.name.toLowerCase().includes(value)
+
+    );
+
+    render(filteredChannels);
+
+});
+
+/*****************************************************************
+ M3U Parser
+*****************************************************************/
+
+function parseM3U(text){
+
+    const lines=text.split("\n");
+
+    channels=[];
+
+    let current={};
+
+    lines.forEach(line=>{
+
+        if(line.startsWith("#EXTINF")){
+
+            const group=line.match(/group-title="([^"]+)"/);
+
+            const name=line.split(",").pop();
+
+            current={
+
+                name:name.trim(),
+
+                group:group?group[1]:"Other"
+
+            };
+
+        }
+
+        else if(
+
+            line.startsWith("http")
+
+        ){
+
+            current.url=line.trim();
+
+            channels.push(current);
+
+        }
+
+    });
+
+    filteredChannels=channels;
+
+    render(channels);
+
+}
+
+/*****************************************************************
+ Sample playlist
+ Replace with your complete playlist in Part 3
+*****************************************************************/
+
+const playlist = `
+#EXTM3U
+
+############################################################
+# DSTV GENERAL
+############################################################
+
+#EXTINF:-1 tvg-id="cnn" group-title="DSTV GENERAL",CNN INTERNATIONAL HD
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/355042
+
+#EXTINF:-1 tvg-id="aljazeera" group-title="DSTV GENERAL",AL JAZEERA HD
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/355041
+
+#EXTINF:-1 group-title="DSTV GENERAL",CGTN NEWS FHD
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/354996
+
+#EXTINF:-1 group-title="DSTV GENERAL",TVC NEWS
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14473
+
+#EXTINF:-1 group-title="DSTV GENERAL",CHANNELS 24
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14466
+
+#EXTINF:-1 group-title="DSTV GENERAL",JOY NEWS
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14419
+
+#EXTINF:-1 group-title="DSTV GENERAL",CNBC AFRICA
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14403
+
+#EXTINF:-1 group-title="DSTV GENERAL",LAGOS TV
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/333516
+
+#EXTINF:-1 group-title="DSTV GENERAL",SABC NEWS
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/354998
+
+############################################################
+# SPORTS
+############################################################
+
+#EXTINF:-1 group-title="SPORTS",SUPERSPORT PREMIER LEAGUE
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/159892
+
+#EXTINF:-1 group-title="SPORTS",SUPERSPORT FOOTBALL
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186875
+
+#EXTINF:-1 group-title="SPORTS",SUPERSPORT LALIGA
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/159894
+
+#EXTINF:-1 group-title="SPORTS",SUPERSPORT RUGBY
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/159889
+
+#EXTINF:-1 group-title="SPORTS",SUPERSPORT CRICKET
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/117926
+
+#EXTINF:-1 group-title="SPORTS",SUPERSPORT TENNIS
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/159890
+
+#EXTINF:-1 group-title="SPORTS",ESPN
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186855
+
+#EXTINF:-1 group-title="SPORTS",ESPN 2
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/7229
+
+############################################################
+# MOVIES
+############################################################
+
+#EXTINF:-1 group-title="MOVIES",M-NET
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14582
+
+#EXTINF:-1 group-title="MOVIES",M-NET MOVIES 1
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14583
+
+#EXTINF:-1 group-title="MOVIES",M-NET MOVIES 2
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14580
+
+#EXTINF:-1 group-title="MOVIES",AFRICA MAGIC FAMILY
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186819
+
+#EXTINF:-1 group-title="MOVIES",AFRICA MAGIC EPIC
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186823
+
+#EXTINF:-1 group-title="MOVIES",ROK TV
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186792
+
+############################################################
+# KIDS
+############################################################
+
+#EXTINF:-1 group-title="KIDS",DISNEY CHANNEL
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/110610
+
+#EXTINF:-1 group-title="KIDS",DISNEY JUNIOR
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/110609
+
+#EXTINF:-1 group-title="KIDS",CARTOON NETWORK
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186864
+
+#EXTINF:-1 group-title="KIDS",BOOMERANG
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14567
+
+#EXTINF:-1 group-title="KIDS",CBEEBIES
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186821
+
+############################################################
+# MUSIC
+############################################################
+
+#EXTINF:-1 group-title="MUSIC",MTV
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186844
+
+#EXTINF:-1 group-title="MUSIC",MTV BASE
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186843
+
+#EXTINF:-1 group-title="MUSIC",TRACE AFRICA
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186826
+
+#EXTINF:-1 group-title="MUSIC",TRACE NAIJA
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14548
+
+############################################################
+# DOCUMENTARY
+############################################################
+
+#EXTINF:-1 group-title="DOCUMENTARY",NATIONAL GEOGRAPHIC
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/7261
+
+#EXTINF:-1 group-title="DOCUMENTARY",DISCOVERY CHANNEL
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186861
+
+#EXTINF:-1 group-title="DOCUMENTARY",DISCOVERY ID
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186860
+
+############################################################
+# RELIGION
+############################################################
+
+#EXTINF:-1 group-title="RELIGION",TBN
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/159897
+
+#EXTINF:-1 group-title="RELIGION",DOVE TV
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14291
+
+#EXTINF:-1 group-title="RELIGION",FAITH TV
+http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14298
+
+############################################################
+# Continue pasting the remaining channels here...
+############################################################
+`;
+
+/*****************************************************************
+ Future features
+*****************************************************************/
+
+function refreshPlaylist(){
+
+    parseM3U(playlist);
+
+}
+
+function exportFavorites(){
+
+    const json=JSON.stringify(favorites);
+
+    const blob=new Blob([json]);
+
+    const a=document.createElement("a");
+
+    a.href=URL.createObjectURL(blob);
+
+    a.download="favorites.json";
+
+    a.click();
+
+}
+
+function importPlaylist(text){
+
+    parseM3U(text);
+
+}
+
+console.log("BTECH-TV Ultimate Ready");
 </script>
 
 </body>
