@@ -3,9 +3,9 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>BTECH-TV ULTIMATE</title>
+<title>BTECH-TV Admin Starter</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
@@ -19,324 +19,115 @@ font-family:Segoe UI,Arial,sans-serif;
 }
 
 body{
-
-background:#060b12;
-color:white;
+background:#111;
+color:#fff;
+display:flex;
 height:100vh;
 overflow:hidden;
-
-}
-
-header{
-
-height:70px;
-
-background:#101927;
-
-display:flex;
-
-align-items:center;
-
-justify-content:space-between;
-
-padding:20px;
-
-border-bottom:1px solid #222;
-
-}
-
-.logo{
-
-font-size:26px;
-
-font-weight:bold;
-
-color:#00e6ff;
-
-}
-
-.logo span{
-
-color:#00ff7f;
-
-}
-
-.search{
-
-width:350px;
-
-max-width:45%;
-
-padding:12px;
-
-border:none;
-
-border-radius:30px;
-
-background:#1c2736;
-
-color:white;
-
-}
-
-button{
-
-cursor:pointer;
-
-}
-
-.headerButtons button{
-
-padding:10px 18px;
-
-margin-left:8px;
-
-border:none;
-
-border-radius:8px;
-
-background:#00b4ff;
-
-color:white;
-
-}
-
-.container{
-
-display:flex;
-
-height:calc(100vh - 70px);
-
 }
 
 .sidebar{
+width:300px;
+background:#1a1a1a;
+display:flex;
+flex-direction:column;
+border-right:1px solid #333;
+}
 
-width:270px;
+.logo{
+padding:20px;
+font-size:24px;
+font-weight:bold;
+background:#0080ff;
+text-align:center;
+}
 
-background:#111b2a;
+.search{
+padding:10px;
+}
 
+.search input{
+width:100%;
+padding:10px;
+border:none;
+outline:none;
+border-radius:5px;
+}
+
+.channel-list{
+flex:1;
 overflow:auto;
-
-padding:15px;
-
 }
 
-.sidebar h2{
-
-font-size:18px;
-
-margin-bottom:15px;
-
-color:#00ffea;
-
-}
-
-.category{
-
+.channel{
 padding:12px;
-
-margin-bottom:8px;
-
-background:#162336;
-
-border-radius:8px;
-
+border-bottom:1px solid #333;
 cursor:pointer;
-
-transition:.3s;
-
 }
 
-.category:hover{
-
-background:#00b4ff;
-
+.channel:hover{
+background:#222;
 }
 
 .main{
-
 flex:1;
-
 display:flex;
-
 flex-direction:column;
-
-overflow:hidden;
-
 }
 
-.playerArea{
-
-height:45%;
-
-background:black;
-
+.player{
+height:60%;
+background:#000;
 display:flex;
-
 justify-content:center;
-
 align-items:center;
-
 }
 
 video{
-
 width:100%;
-
 height:100%;
-
-background:black;
-
+background:#000;
 }
 
-.channelHeader{
-
-display:flex;
-
-justify-content:space-between;
-
-padding:12px 20px;
-
-background:#121e2d;
-
-}
-
-.channelList{
-
-flex:1;
-
-overflow:auto;
-
+.info{
 padding:15px;
-
-display:grid;
-
-grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
-
-gap:12px;
-
-}
-
-.card{
-
-background:#152338;
-
-border-radius:12px;
-
-padding:15px;
-
-cursor:pointer;
-
-transition:.3s;
-
-}
-
-.card:hover{
-
-transform:scale(1.03);
-
-background:#008cff;
-
-}
-
-.card h3{
-
-font-size:16px;
-
-margin-bottom:10px;
-
-}
-
-.card p{
-
-font-size:13px;
-
-opacity:.8;
-
-}
-
-footer{
-
-height:40px;
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-background:#111827;
-
+background:#181818;
 }
 
 .admin{
-
-position:fixed;
-
-top:70px;
-
-right:0;
-
-width:320px;
-
-height:calc(100vh - 70px);
-
-background:#08111b;
-
-border-left:1px solid #222;
-
-padding:20px;
-
+height:40%;
 overflow:auto;
-
-display:none;
-
+padding:15px;
+background:#202020;
 }
 
-.admin h2{
-
-margin-bottom:20px;
-
-color:#00ffd5;
-
+table{
+width:100%;
+border-collapse:collapse;
 }
 
-.stat{
-
-background:#122236;
-
-padding:12px;
-
-margin-bottom:10px;
-
-border-radius:8px;
-
+th,td{
+padding:10px;
+border:1px solid #444;
+text-align:left;
 }
 
-.lock{
-
-background:#ff4040!important;
-
+button{
+padding:8px 14px;
+border:none;
+background:#0080ff;
+color:#fff;
+cursor:pointer;
+margin:2px;
 }
 
-.favorite{
-
-color:gold;
-
+button:hover{
+background:#0066cc;
 }
 
-::-webkit-scrollbar{
-
-width:8px;
-
-}
-
-::-webkit-scrollbar-thumb{
-
-background:#00aaff;
-
-border-radius:20px;
-
+input,select{
+padding:8px;
+margin:3px;
 }
 
 </style>
@@ -345,117 +136,17 @@ border-radius:20px;
 
 <body>
 
-<header>
-
-<div class="logo">
-
-BTECH<span>-TV</span>
-
-</div>
-
-<input
-
-id="search"
-
-class="search"
-
-placeholder="Search channels..."
-
->
-
-<div class="headerButtons">
-
-<button onclick="toggleAdmin()">
-
-ADMIN
-
-</button>
-
-<button onclick="toggleFullscreen()">
-
-FULL
-
-</button>
-
-</div>
-
-</header>
-
-<div class="container">
-
 <div class="sidebar">
 
-<h2>Categories</h2>
-
-<div class="category" onclick="filterCategory('ALL')">
-
-All Channels
-
+<div class="logo">
+BTECH-TV
 </div>
 
-<div class="category" onclick="filterCategory('DSTV GENERAL')">
-
-DSTV General
-
+<div class="search">
+<input id="search" placeholder="Search channel...">
 </div>
 
-<div class="category" onclick="filterCategory('SPORT')">
-
-Sports
-
-</div>
-
-<div class="category" onclick="filterCategory('MOVIES')">
-
-Movies
-
-</div>
-
-<div class="category" onclick="filterCategory('ENTERTAINMENT')">
-
-Entertainment
-
-</div>
-
-<div class="category" onclick="filterCategory('DOCUMENTARY')">
-
-Documentary
-
-</div>
-
-<div class="category" onclick="filterCategory('NEWS')">
-
-News
-
-</div>
-
-<div class="category" onclick="filterCategory('KIDS')">
-
-Kids
-
-</div>
-
-<div class="category" onclick="filterCategory('MUSIC')">
-
-Music
-
-</div>
-
-<div class="category" onclick="filterCategory('RELIGION')">
-
-Religion
-
-</div>
-
-<div class="category" onclick="filterCategory('CANAL+')">
-
-Canal+
-
-</div>
-
-<div class="category" onclick="showFavorites()">
-
-Favorites
+<div class="channel-list" id="channelList">
 
 </div>
 
@@ -463,585 +154,263 @@ Favorites
 
 <div class="main">
 
-<div class="playerArea">
+<div class="player">
 
-<video
-
-id="player"
-
-controls
-
-autoplay
-
-></video>
+<video id="video" controls autoplay></video>
 
 </div>
 
-<div class="channelHeader">
+<div class="info">
 
-<div>
+<h2 id="title">Select Channel</h2>
 
-<h2 id="currentCategory">
-
-All Channels
-
-</h2>
+<p id="category">Category</p>
 
 </div>
 
-<div>
+<div class="admin">
 
-<span id="count">
-
-0
-
-</span>
-
-Channels
-
-</div>
-
-</div>
-
-<div
-
-class="channelList"
-
-id="channelList"
-
->
-
-</div>
-
-</div>
-
-</div>
-
-<div
-
-class="admin"
-
-id="admin"
-
->
-
-<h2>
-
-SUPER ADMIN
-
-</h2>
-
-<div class="stat">
-
-Users
+<h2>Admin Panel</h2>
 
 <br>
 
-<b>1</b>
+<input id="name" placeholder="Channel Name">
+
+<input id="url" placeholder="Stream URL">
+
+<select id="cat">
+
+<option>News</option>
+<option>Sports</option>
+<option>Movies</option>
+<option>Kids</option>
+<option>Entertainment</option>
+
+</select>
+
+<button onclick="addChannel()">Add</button>
+
+<br><br>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Name</th>
+<th>Category</th>
+<th>Play</th>
+<th>Delete</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tableBody">
+
+</tbody>
+
+</table>
 
 </div>
 
-<div class="stat">
-
-Channels
-
-<br>
-
-<b id="adminCount">
-
-0
-
-</b>
-
 </div>
-
-<div class="stat">
-
-Favorites
-
-<br>
-
-<b id="favCount">
-
-0
-
-</b>
-
-</div>
-
-<button style="width:100%;padding:14px;margin-top:20px;background:#00b4ff;border:none;border-radius:8px">
-
-Refresh Playlist
-
-</button>
-
-</div>
-
-<footer>
-
-BTECH-TV ULTIMATE IPTV PLAYER
-
-</footer>
 
 <script>
 
-/**********************************************************************
- BTECH-TV ULTIMATE
- JavaScript Engine
-**********************************************************************/
+const video=document.getElementById("video");
 
-const video = document.getElementById("player");
-const list = document.getElementById("channelList");
-const search = document.getElementById("search");
-const admin = document.getElementById("admin");
-const count = document.getElementById("count");
-const adminCount = document.getElementById("adminCount");
-const favCount = document.getElementById("favCount");
-const categoryTitle = document.getElementById("currentCategory");
+let channels=[
 
-let channels = [];
-let filteredChannels = [];
-let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+{
+id:1,
+name:"Big Buck Bunny Demo",
+category:"Demo",
+url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
+},
 
-updateFavoriteCounter();
-
-function updateFavoriteCounter() {
-    favCount.textContent = favorites.length;
+{
+id:2,
+name:"Sintel Demo",
+category:"Demo",
+url:"https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
 }
 
-function toggleAdmin() {
-    admin.style.display =
-        admin.style.display === "block"
-            ? "none"
-            : "block";
-}
+];
 
-function toggleFullscreen() {
+function playChannel(id){
 
-    if (!document.fullscreenElement) {
+const c=channels.find(x=>x.id==id);
 
-        document.documentElement.requestFullscreen();
+document.getElementById("title").innerHTML=c.name;
+document.getElementById("category").innerHTML=c.category;
 
-    } else {
+if(Hls.isSupported()){
 
-        document.exitFullscreen();
+if(window.hls)window.hls.destroy();
 
-    }
+window.hls=new Hls();
 
-}
+window.hls.loadSource(c.url);
 
-function playChannel(channel){
+window.hls.attachMedia(video);
 
-    if(Hls.isSupported()){
+}else{
 
-        const hls = new Hls();
-
-        hls.loadSource(channel.url);
-
-        hls.attachMedia(video);
-
-    }else{
-
-        video.src = channel.url;
-
-    }
-
-    video.play();
+video.src=c.url;
 
 }
 
-function render(data){
-
-    list.innerHTML = "";
-
-    if(data.length===0){
-
-        list.innerHTML =
-
-        "<h2 style='padding:30px'>No channels found</h2>";
-
-        return;
-
-    }
-
-    count.textContent=data.length;
-    adminCount.textContent=data.length;
-
-    ...
 }
 
-        const card=document.createElement("div");
+function render(){
 
-        card.className="card";
+let html="";
 
-        const star=favorites.includes(channel.name)
-        ? "★"
-        : "☆";
+channels.forEach(c=>{
 
-        card.innerHTML=`
+html+=`
 
-<h3>${channel.name}</h3>
+<div class="channel" onclick="playChannel(${c.id})">
 
-<p>${channel.group}</p>
+<b>${c.name}</b><br>
 
-<button style="margin-top:10px">
+${c.category}
 
-▶ Play
-
-</button>
-
-<button
-style="margin-left:8px"
-onclick="event.stopPropagation();toggleFavorite('${channel.name}')">
-
-${star}
-
-</button>
+</div>
 
 `;
-
-        card.onclick=()=>playChannel(channel);
-
-        list.appendChild(card);
-
-    });
-
-}
-
-function toggleFavorite(name){
-
-    if(favorites.includes(name)){
-
-        favorites=favorites.filter(x=>x!==name);
-
-    }else{
-
-        favorites.push(name);
-
-    }
-
-    localStorage.setItem(
-
-        "favorites",
-
-        JSON.stringify(favorites)
-
-    );
-
-    updateFavoriteCounter();
-
-    render(filteredChannels);
-
-}
-
-function showFavorites(){
-
-    categoryTitle.innerHTML="Favorites";
-
-    filteredChannels=channels.filter(c=>favorites.includes(c.name));
-
-    render(filteredChannels);
-
-}
-
-function filterCategory(cat){
-
-    categoryTitle.innerHTML=cat;
-
-    if(cat==="ALL"){
-
-        filteredChannels=channels;
-
-    }else{
-
-        filteredChannels=channels.filter(c=>
-
-            c.group.toUpperCase().includes(cat.toUpperCase())
-
-        );
-
-    }
-
-    render(filteredChannels);
-
-}
-
-search.addEventListener("input",()=>{
-
-    const value=search.value.toLowerCase();
-
-    filteredChannels=channels.filter(c=>
-
-        c.name.toLowerCase().includes(value)
-
-    );
-
-    render(filteredChannels);
 
 });
 
-/*****************************************************************
- M3U Parser
-*****************************************************************/
-function parseM3U(text){
+document.getElementById("channelList").innerHTML=html;
 
-    channels = [];
+let table="";
 
-    const lines = text.replace(/\r/g,'').split('\n');
+channels.forEach(c=>{
 
-    let current = null;
+table+=`
 
-    for(let i=0;i<lines.length;i++){
+<tr>
 
-        let line = lines[i].trim();
+<td>${c.id}</td>
 
-        if(!line) continue;
+<td>${c.name}</td>
 
-        if(line.startsWith("#EXTINF")){
+<td>${c.category}</td>
 
-            let group = "Other";
+<td>
 
-            let name = "Unknown Channel";
+<button onclick="playChannel(${c.id})">
 
-            const g = line.match(/group-title="([^"]+)"/);
+Play
 
-            if(g) group = g[1];
+</button>
 
-            const comma = line.lastIndexOf(",");
+</td>
 
-            if(comma !== -1){
+<td>
 
-                name = line.substring(comma+1).trim();
+<button onclick="removeChannel(${c.id})">
 
-            }
+Delete
 
-            current = {
+</button>
 
-                name,
+</td>
 
-                group,
+</tr>
 
-                url:""
-
-            };
-
-        }
-
-        else if(
-
-            current &&
-
-            /^https?:\/\//i.test(line)
-
-        ){
-
-            current.url = line;
-
-            channels.push(current);
-
-            current = null;
-
-        }
-
-    }
-
-    filteredChannels = [...channels];
-
-    render(filteredChannels);
-
-}
-/*****************************************************************
- Sample playlist
- Replace with your complete playlist in Part 3
-*****************************************************************/
-
-const playlist = `
-#EXTM3U
-
-############################################################
-# DSTV GENERAL
-############################################################
-
-#EXTINF:-1 tvg-id="cnn" group-title="DSTV GENERAL",CNN INTERNATIONAL HD
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/355042
-
-#EXTINF:-1 tvg-id="aljazeera" group-title="DSTV GENERAL",AL JAZEERA HD
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/355041
-
-#EXTINF:-1 group-title="DSTV GENERAL",CGTN NEWS FHD
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/354996
-
-#EXTINF:-1 group-title="DSTV GENERAL",TVC NEWS
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14473
-
-#EXTINF:-1 group-title="DSTV GENERAL",CHANNELS 24
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14466
-
-#EXTINF:-1 group-title="DSTV GENERAL",JOY NEWS
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14419
-
-#EXTINF:-1 group-title="DSTV GENERAL",CNBC AFRICA
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14403
-
-#EXTINF:-1 group-title="DSTV GENERAL",LAGOS TV
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/333516
-
-#EXTINF:-1 group-title="DSTV GENERAL",SABC NEWS
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/354998
-
-############################################################
-# SPORTS
-############################################################
-
-#EXTINF:-1 group-title="SPORTS",SUPERSPORT PREMIER LEAGUE
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/159892
-
-#EXTINF:-1 group-title="SPORTS",SUPERSPORT FOOTBALL
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186875
-
-#EXTINF:-1 group-title="SPORTS",SUPERSPORT LALIGA
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/159894
-
-#EXTINF:-1 group-title="SPORTS",SUPERSPORT RUGBY
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/159889
-
-#EXTINF:-1 group-title="SPORTS",SUPERSPORT CRICKET
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/117926
-
-#EXTINF:-1 group-title="SPORTS",SUPERSPORT TENNIS
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/159890
-
-#EXTINF:-1 group-title="SPORTS",ESPN
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186855
-
-#EXTINF:-1 group-title="SPORTS",ESPN 2
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/7229
-
-############################################################
-# MOVIES
-############################################################
-
-#EXTINF:-1 group-title="MOVIES",M-NET
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14582
-
-#EXTINF:-1 group-title="MOVIES",M-NET MOVIES 1
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14583
-
-#EXTINF:-1 group-title="MOVIES",M-NET MOVIES 2
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14580
-
-#EXTINF:-1 group-title="MOVIES",AFRICA MAGIC FAMILY
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186819
-
-#EXTINF:-1 group-title="MOVIES",AFRICA MAGIC EPIC
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186823
-
-#EXTINF:-1 group-title="MOVIES",ROK TV
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186792
-
-############################################################
-# KIDS
-############################################################
-
-#EXTINF:-1 group-title="KIDS",DISNEY CHANNEL
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/110610
-
-#EXTINF:-1 group-title="KIDS",DISNEY JUNIOR
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/110609
-
-#EXTINF:-1 group-title="KIDS",CARTOON NETWORK
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186864
-
-#EXTINF:-1 group-title="KIDS",BOOMERANG
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14567
-
-#EXTINF:-1 group-title="KIDS",CBEEBIES
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186821
-
-############################################################
-# MUSIC
-############################################################
-
-#EXTINF:-1 group-title="MUSIC",MTV
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186844
-
-#EXTINF:-1 group-title="MUSIC",MTV BASE
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186843
-
-#EXTINF:-1 group-title="MUSIC",TRACE AFRICA
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186826
-
-#EXTINF:-1 group-title="MUSIC",TRACE NAIJA
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14548
-
-############################################################
-# DOCUMENTARY
-############################################################
-
-#EXTINF:-1 group-title="DOCUMENTARY",NATIONAL GEOGRAPHIC
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/7261
-
-#EXTINF:-1 group-title="DOCUMENTARY",DISCOVERY CHANNEL
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186861
-
-#EXTINF:-1 group-title="DOCUMENTARY",DISCOVERY ID
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/186860
-
-############################################################
-# RELIGION
-############################################################
-
-#EXTINF:-1 group-title="RELIGION",TBN
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/159897
-
-#EXTINF:-1 group-title="RELIGION",DOVE TV
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14291
-
-#EXTINF:-1 group-title="RELIGION",FAITH TV
-http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/14298
-
-############################################################
-# Continue pasting the remaining channels here...
-############################################################
 `;
-/*****************************************************************
- Future features
-*****************************************************************/
 
-function refreshPlaylist(){
+});
 
-    parseM3U(playlist);
+document.getElementById("tableBody").innerHTML=table;
 
 }
 
-function exportFavorites(){
+function addChannel(){
 
-    const json=JSON.stringify(favorites);
+const name=document.getElementById("name").value;
 
-    const blob=new Blob([json]);
+const url=document.getElementById("url").value;
 
-    const a=document.createElement("a");
+const cat=document.getElementById("cat").value;
 
-    a.href=URL.createObjectURL(blob);
+if(!name||!url){
 
-    a.download="favorites.json";
+alert("Complete all fields");
 
-    a.click();
-
-}
-
-function importPlaylist(text){
-
-    parseM3U(text);
+return;
 
 }
 
-console.log("BTECH-TV Ultimate Ready");
- parseM3U(playlist);
- 
+channels.push({
+
+id:Date.now(),
+
+name,
+
+url,
+
+category:cat
+
+});
+
+render();
+
+document.getElementById("name").value="";
+document.getElementById("url").value="";
+
+}
+
+function removeChannel(id){
+
+channels=channels.filter(c=>c.id!=id);
+
+render();
+
+}
+
+document.getElementById("search").onkeyup=function(){
+
+const q=this.value.toLowerCase();
+
+const filtered=channels.filter(c=>
+
+c.name.toLowerCase().includes(q)
+
+);
+
+let html="";
+
+filtered.forEach(c=>{
+
+html+=`
+
+<div class="channel"
+
+onclick="playChannel(${c.id})">
+
+<b>${c.name}</b><br>
+
+${c.category}
+
+</div>
+
+`;
+
+});
+
+document.getElementById("channelList").innerHTML=html;
+
+};
+
+render();
+
 </script>
- console.log(channels);
-alert(channels.length + " channels loaded");
 
 </body>
 </html>
