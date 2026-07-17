@@ -584,11 +584,77 @@ background:#00b4d8;
 
 <script>
 
-let all=[],filtered=[],i=0;
-let video=document.getElementById("video");
+const channels = [
+{
+    name: "CNN International HD",
+    category: "DSTV General",
+    country: "Africa",
+    logo: "",
+    url: "http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/355042"
+},
+{
+    name: "SuperSport Premier League HD",
+    category: "DSTV Sport",
+    country: "Africa",
+    logo: "",
+    url: "http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/159892"
+},
+{
+    name: "Disney Channel HD",
+    category: "DSTV Kids",
+    country: "Africa",
+    logo: "",
+    url: "http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/110610"
+}
+];
+
+let all = [...channels];
+let filtered = [...channels];
+let i = 0;
+
+let video = document.getElementById("video");
+let hls;let video=document.getElementById("video");
 let hls;
 
 /* LOAD */
+    async function loadM3U(url){
+
+    const res = await fetch(url);
+    const text = await res.text();
+
+    // Keep the built-in channels
+    all = [...channels];
+
+    let lines = text.split("\n");
+
+    for(let x=0;x<lines.length;x++){
+
+        if(lines[x].startsWith("#EXTINF")){
+
+            let name = lines[x].split(",").pop().trim();
+            let stream = lines[x+1];
+
+            if(stream && stream.startsWith("http")){
+
+                all.push({
+                    name:name,
+                    category:"Imported",
+                    country:"Unknown",
+                    logo:"",
+                    url:stream
+                });
+
+            }
+        }
+
+    }
+
+    filtered=[...all];
+
+    render();
+    stats();
+
+}
 async function load(code){
 await loadM3U(`https://iptv-org.github.io/iptv/countries/${code}.m3u`);
 }
@@ -772,28 +838,5 @@ clearInterval(monitorCheck);
 }
 },1000);
 </script>
-  const channels = [
-{
-    name: "CNN International HD",
-    category: "DSTV General",
-    country: "Africa",
-    logo: "",
-    url: "http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/355042"
-},
-{
-    name: "SuperSport Premier League HD",
-    category: "DSTV Sport",
-    country: "Africa",
-    logo: "",
-    url: "http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/159892"
-},
-{
-    name: "Disney Channel HD",
-    category: "DSTV Kids",
-    country: "Africa",
-    logo: "",
-    url: "http://ypbmbfwd.mexamo.xyz:80/54RL5KJE/QVVXHK64/110610"
-}
-];
 </body>
 </html>
