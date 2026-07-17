@@ -652,13 +652,23 @@ function playChannel(channel){
 
 function render(data){
 
-    list.innerHTML="";
+    list.innerHTML = "";
 
-    count.innerHTML=data.length;
+    if(data.length===0){
 
-    adminCount.innerHTML=data.length;
+        list.innerHTML =
 
-    data.forEach(channel=>{
+        "<h2 style='padding:30px'>No channels found</h2>";
+
+        return;
+
+    }
+
+    count.textContent=data.length;
+    adminCount.textContent=data.length;
+
+    ...
+}
 
         const card=document.createElement("div");
 
@@ -773,28 +783,45 @@ search.addEventListener("input",()=>{
 /*****************************************************************
  M3U Parser
 *****************************************************************/
-
 function parseM3U(text){
 
-    const lines=text.split("\n");
+    channels = [];
 
-    channels=[];
+    const lines = text.replace(/\r/g,'').split('\n');
 
-    let current={};
+    let current = null;
 
-    lines.forEach(line=>{
+    for(let i=0;i<lines.length;i++){
+
+        let line = lines[i].trim();
+
+        if(!line) continue;
 
         if(line.startsWith("#EXTINF")){
 
-            const group=line.match(/group-title="([^"]+)"/);
+            let group = "Other";
 
-            const name=line.split(",").pop();
+            let name = "Unknown Channel";
 
-            current={
+            const g = line.match(/group-title="([^"]+)"/);
 
-                name:name.trim(),
+            if(g) group = g[1];
 
-                group:group?group[1]:"Other"
+            const comma = line.lastIndexOf(",");
+
+            if(comma !== -1){
+
+                name = line.substring(comma+1).trim();
+
+            }
+
+            current = {
+
+                name,
+
+                group,
+
+                url:""
 
             };
 
@@ -802,24 +829,27 @@ function parseM3U(text){
 
         else if(
 
-            line.startsWith("http")
+            current &&
+
+            /^https?:\/\//i.test(line)
 
         ){
 
-            current.url=line.trim();
+            current.url = line;
 
             channels.push(current);
 
+            current = null;
+
         }
 
-    });
+    }
 
-    filteredChannels=channels;
+    filteredChannels = [...channels];
 
-    render(channels);
+    render(filteredChannels);
 
 }
-
 /*****************************************************************
  Sample playlist
  Replace with your complete playlist in Part 3
@@ -1007,7 +1037,11 @@ function importPlaylist(text){
 }
 
 console.log("BTECH-TV Ultimate Ready");
+ parseM3U(playlist);
+ 
 </script>
+ console.log(channels);
+alert(channels.length + " channels loaded");
 
 </body>
 </html>
