@@ -1,345 +1,591 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ULTRA STREAM - Netflix + DSTV Clone</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>BTECH-TV ULTIMATE</title>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-body{
+
+*{
 margin:0;
-font-family:Arial;
-background:#0b0f1a;
-color:white;
-overflow:hidden;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI,Arial,sans-serif;
 }
 
-/* TOP BAR */
-.topbar{
+body{
+
+background:#060b12;
+color:white;
+height:100vh;
+overflow:hidden;
+
+}
+
+header{
+
+height:70px;
+
+background:#101927;
+
 display:flex;
-justify-content:space-between;
+
 align-items:center;
-padding:10px 15px;
-background:#111827;
+
+justify-content:space-between;
+
+padding:20px;
+
+border-bottom:1px solid #222;
+
 }
 
 .logo{
-font-size:20px;
+
+font-size:26px;
+
 font-weight:bold;
-color:#00d4ff;
+
+color:#00e6ff;
+
 }
 
-.menu button{
-margin-left:8px;
-padding:8px 12px;
+.logo span{
+
+color:#00ff7f;
+
+}
+
+.search{
+
+width:350px;
+
+max-width:45%;
+
+padding:12px;
+
 border:none;
-border-radius:8px;
-background:#1f2937;
+
+border-radius:30px;
+
+background:#1c2736;
+
 color:white;
+
+}
+
+button{
+
 cursor:pointer;
+
 }
 
-/* HERO */
-.hero{
-height:250px;
-background:linear-gradient(90deg,#111827,#1f2937);
-display:flex;
-align-items:center;
-padding:20px;
-}
+.headerButtons button{
 
-.hero h1{
-font-size:28px;
-}
+padding:10px 18px;
 
-/* LAYOUT */
-.container{
-display:flex;
-height:calc(100vh - 300px);
-}
+margin-left:8px;
 
-/* SIDEBAR */
-.sidebar{
-width:220px;
-background:#0f172a;
-padding:10px;
-overflow:auto;
-}
+border:none;
 
-.sidebar h3{
-color:#00d4ff;
-}
-
-.cat{
-padding:10px;
-margin-bottom:8px;
-background:#1f2937;
 border-radius:8px;
-cursor:pointer;
+
+background:#00b4ff;
+
+color:white;
+
 }
 
-.cat:hover{
-background:#334155;
-}
+.container{
 
-/* MAIN */
-.main{
-flex:1;
 display:flex;
-flex-direction:column;
-overflow:hidden;
+
+height:calc(100vh - 70px);
+
 }
 
-/* PLAYER */
-.player{
-height:300px;
-background:black;
-position:relative;
-}
+.sidebar{
 
-.player video{
-width:100%;
-height:100%;
-}
+width:270px;
 
-.live{
-position:absolute;
-top:10px;
-left:10px;
-background:red;
-padding:5px 10px;
-border-radius:20px;
-}
+background:#111b2a;
 
-/* ROWS */
-.rows{
-flex:1;
 overflow:auto;
-padding:10px;
+
+padding:15px;
+
 }
 
-.row-title{
-margin:10px 0;
-color:#00d4ff;
+.sidebar h2{
+
+font-size:18px;
+
+margin-bottom:15px;
+
+color:#00ffea;
+
 }
 
-.row{
+.category{
+
+padding:12px;
+
+margin-bottom:8px;
+
+background:#162336;
+
+border-radius:8px;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.category:hover{
+
+background:#00b4ff;
+
+}
+
+.main{
+
+flex:1;
+
 display:flex;
-overflow-x:auto;
-gap:10px;
+
+flex-direction:column;
+
+overflow:hidden;
+
+}
+
+.playerArea{
+
+height:45%;
+
+background:black;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+}
+
+video{
+
+width:100%;
+
+height:100%;
+
+background:black;
+
+}
+
+.channelHeader{
+
+display:flex;
+
+justify-content:space-between;
+
+padding:12px 20px;
+
+background:#121e2d;
+
+}
+
+.channelList{
+
+flex:1;
+
+overflow:auto;
+
+padding:15px;
+
+display:grid;
+
+grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+
+gap:12px;
+
 }
 
 .card{
-min-width:160px;
-height:90px;
-background:#1f2937;
-border-radius:10px;
-display:flex;
-align-items:center;
-justify-content:center;
+
+background:#152338;
+
+border-radius:12px;
+
+padding:15px;
+
 cursor:pointer;
+
+transition:.3s;
+
 }
 
-/* LOGIN */
-.login{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.8);
-display:none;
+.card:hover{
+
+transform:scale(1.03);
+
+background:#008cff;
+
+}
+
+.card h3{
+
+font-size:16px;
+
+margin-bottom:10px;
+
+}
+
+.card p{
+
+font-size:13px;
+
+opacity:.8;
+
+}
+
+footer{
+
+height:40px;
+
+display:flex;
+
 align-items:center;
+
 justify-content:center;
-}
 
-.login-box{
 background:#111827;
-padding:20px;
-border-radius:10px;
-width:300px;
+
 }
 
-.login-box input{
-width:100%;
-padding:10px;
-margin:5px 0;
-background:#0f172a;
-border:none;
-color:white;
-}
+.admin{
 
-/* NOTIFY */
-.notify{
 position:fixed;
-top:80px;
-right:10px;
+
+top:70px;
+
+right:0;
+
+width:320px;
+
+height:calc(100vh - 70px);
+
+background:#08111b;
+
+border-left:1px solid #222;
+
+padding:20px;
+
+overflow:auto;
+
+display:none;
+
 }
 
-.note{
-background:#1f2937;
-padding:10px;
-margin-bottom:5px;
-border-left:4px solid #00d4ff;
+.admin h2{
+
+margin-bottom:20px;
+
+color:#00ffd5;
+
 }
+
+.stat{
+
+background:#122236;
+
+padding:12px;
+
+margin-bottom:10px;
+
+border-radius:8px;
+
+}
+
+.lock{
+
+background:#ff4040!important;
+
+}
+
+.favorite{
+
+color:gold;
+
+}
+
+::-webkit-scrollbar{
+
+width:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:#00aaff;
+
+border-radius:20px;
+
+}
+
 </style>
+
 </head>
 
 <body>
 
-<div class="topbar">
-<div class="logo">📺 ULTRA STREAM</div>
-<div class="menu">
-<button onclick="showLogin()">Login</button>
-<button onclick="loadLive()">DSTV Live</button>
-<button onclick="loadMovies()">Netflix Movies</button>
-</div>
+<header>
+
+<div class="logo">
+
+BTECH<span>-TV</span>
+
 </div>
 
-<div class="hero">
-<h1>Unlimited Movies • Series • Live TV</h1>
+<input
+
+id="search"
+
+class="search"
+
+placeholder="Search channels..."
+
+>
+
+<div class="headerButtons">
+
+<button onclick="toggleAdmin()">
+
+ADMIN
+
+</button>
+
+<button onclick="toggleFullscreen()">
+
+FULL
+
+</button>
+
 </div>
+
+</header>
 
 <div class="container">
 
 <div class="sidebar">
-<h3>Categories</h3>
-<div class="cat" onclick="loadMovies()">🎬 Movies</div>
-<div class="cat" onclick="loadSeries()">📺 Series</div>
-<div class="cat" onclick="loadLive()">📡 Live TV</div>
-<div class="cat" onclick="notify('Premium Activated')">💎 Premium</div>
+
+<h2>Categories</h2>
+
+<div class="category" onclick="filterCategory('ALL')">
+
+All Channels
+
+</div>
+
+<div class="category" onclick="filterCategory('DSTV GENERAL')">
+
+DSTV General
+
+</div>
+
+<div class="category" onclick="filterCategory('SPORT')">
+
+Sports
+
+</div>
+
+<div class="category" onclick="filterCategory('MOVIES')">
+
+Movies
+
+</div>
+
+<div class="category" onclick="filterCategory('ENTERTAINMENT')">
+
+Entertainment
+
+</div>
+
+<div class="category" onclick="filterCategory('DOCUMENTARY')">
+
+Documentary
+
+</div>
+
+<div class="category" onclick="filterCategory('NEWS')">
+
+News
+
+</div>
+
+<div class="category" onclick="filterCategory('KIDS')">
+
+Kids
+
+</div>
+
+<div class="category" onclick="filterCategory('MUSIC')">
+
+Music
+
+</div>
+
+<div class="category" onclick="filterCategory('RELIGION')">
+
+Religion
+
+</div>
+
+<div class="category" onclick="filterCategory('CANAL+')">
+
+Canal+
+
+</div>
+
+<div class="category" onclick="showFavorites()">
+
+Favorites
+
+</div>
+
 </div>
 
 <div class="main">
 
-<div class="player">
-<div class="live">LIVE</div>
-<video id="video" controls autoplay></video>
+<div class="playerArea">
+
+<video
+
+id="player"
+
+controls
+
+autoplay
+
+></video>
+
 </div>
 
-<div class="rows" id="rows"></div>
+<div class="channelHeader">
+
+<div>
+
+<h2 id="currentCategory">
+
+All Channels
+
+</h2>
+
+</div>
+
+<div>
+
+<span id="count">
+
+0
+
+</span>
+
+Channels
 
 </div>
 
 </div>
 
-<!-- LOGIN -->
-<div class="login" id="login">
-<div class="login-box">
-<h3>Login</h3>
-<input placeholder="Email">
-<input type="password" placeholder="Password">
-<button onclick="closeLogin()">Enter</button>
-</div>
+<div
+
+class="channelList"
+
+id="channelList"
+
+>
+
 </div>
 
-<!-- NOTIFY -->
-<div class="notify" id="notify"></div>
+</div>
+
+</div>
+
+<div
+
+class="admin"
+
+id="admin"
+
+>
+
+<h2>
+
+SUPER ADMIN
+
+</h2>
+
+<div class="stat">
+
+Users
+
+<br>
+
+<b>1</b>
+
+</div>
+
+<div class="stat">
+
+Channels
+
+<br>
+
+<b id="adminCount">
+
+0
+
+</b>
+
+</div>
+
+<div class="stat">
+
+Favorites
+
+<br>
+
+<b id="favCount">
+
+0
+
+</b>
+
+</div>
+
+<button style="width:100%;padding:14px;margin-top:20px;background:#00b4ff;border:none;border-radius:8px">
+
+Refresh Playlist
+
+</button>
+
+</div>
+
+<footer>
+
+BTECH-TV ULTIMATE IPTV PLAYER
+
+</footer>
 
 <script>
 
-let hls;
-let video=document.getElementById("video");
-
-/* NOTIFY */
-function notify(msg){
-let n=document.createElement("div");
-n.className="note";
-n.innerText=msg;
-document.getElementById("notify").appendChild(n);
-setTimeout(()=>n.remove(),3000);
-}
-
-/* LOGIN */
-function showLogin(){
-document.getElementById("login").style.display="flex";
-}
-function closeLogin(){
-document.getElementById("login").style.display="none";
-notify("Welcome User");
-}
-
-/* SAMPLE CONTENT */
-function loadMovies(){
-
-render([
-{name:"Action Movie",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"Drama Movie",url:"https://test-streams.mux.dev/test_001/stream.m3u8"},
-{name:"Sci-Fi Movie",url:"https://test-streams.mux.dev/dai-discontinuity-dash.mpd"}
-],"Netflix Movies");
-
-notify("Movies Loaded");
-}
-
-function loadSeries(){
-
-render([
-{name:"Series 1 Episode 1",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"Series 2 Episode 3",url:"https://test-streams.mux.dev/test_001/stream.m3u8"}
-],"Series");
-
-notify("Series Loaded");
-}
-
-function loadLive(){
-
-render([
-{name:"DSTV Sports",url:"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"},
-{name:"News Live",url:"https://test-streams.mux.dev/test_001/stream.m3u8"}
-],"Live TV");
-
-notify("Live TV Loaded");
-}
-
-/* RENDER UI */
-function render(items,title){
-
-let box=document.getElementById("rows");
-box.innerHTML="";
-
-let h=document.createElement("div");
-h.className="row-title";
-h.innerText=title;
-box.appendChild(h);
-
-let row=document.createElement("div");
-row.className="row";
-
-items.forEach(v=>{
-
-let d=document.createElement("div");
-d.className="card";
-d.innerText=v.name;
-
-d.onclick=()=>play(v.url);
-
-row.appendChild(d);
-
-});
-
-box.appendChild(row);
-}
-
-/* PLAY VIDEO */
-function play(url){
-
-notify("Playing Stream");
-
-if(hls)hls.destroy();
-
-if(Hls.isSupported()){
-hls=new Hls();
-hls.loadSource(url);
-hls.attachMedia(video);
-hls.on(Hls.Events.MANIFEST_PARSED,()=>{
-video.play();
-});
-}else{
-video.src=url;
-video.play();
-}
-
-}
+/* JavaScript will be added in Part 2 */
 
 </script>
 
