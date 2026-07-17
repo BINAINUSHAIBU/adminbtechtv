@@ -202,8 +202,27 @@ BTECH-TV
 <th>Name</th>
 <th>Category</th>
 <th>Play</th>
-<th>Delete</th>
+<td>
 
+<button onclick="playChannel(${c.id})">
+
+▶
+
+</button>
+
+<button onclick="editChannel(${c.id})">
+
+Edit
+
+</button>
+
+<button onclick="removeChannel(${c.id})">
+
+Delete
+
+</button>
+
+</td>
 </tr>
 
 </thead>
@@ -411,6 +430,80 @@ document.getElementById("channelList").innerHTML=html;
 render();
 
 </script>
+  function saveChannels(){
+    localStorage.setItem("btechtv_channels",JSON.stringify(channels));
+}
+
+function loadChannels(){
+    const data=localStorage.getItem("btechtv_channels");
+
+    if(data){
+        channels=JSON.parse(data);
+    }
+}
+
+loadChannels();
+render();
+
+  channels.push({
+    id:Date.now(),
+    name,
+    url,
+    category:cat
+});
+
+saveChannels();
+render();
+  channels=channels.filter(c=>c.id!=id);
+
+saveChannels();
+
+render();
+  function editChannel(id){
+
+const c=channels.find(x=>x.id==id);
+
+const newName=prompt("Channel Name",c.name);
+
+const newUrl=prompt("Stream URL",c.url);
+
+const newCategory=prompt("Category",c.category);
+
+if(newName){
+
+c.name=newName;
+
+c.url=newUrl;
+
+c.category=newCategory;
+
+saveChannels();
+
+render();
+
+}
+
+}
+  favorite:false
+  function toggleFavorite(id){
+
+const c=channels.find(x=>x.id==id);
+
+c.favorite=!c.favorite;
+
+saveChannels();
+
+render();
+
+}
+  {
+id:1,
+name:"CNN",
+logo:"https://upload.wikimedia.org/wikipedia/commons/b/b1/CNN.svg",
+category:"News",
+url:"..."
+}
+  country:"USA"
 
 </body>
 </html>
