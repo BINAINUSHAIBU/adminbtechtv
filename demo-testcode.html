@@ -1,1183 +1,1187 @@
 
 
-<!DOCTYPE html>
+
+
+Claim offer
+
+
+
+
+<!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BTECH TV Admin Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BTECH-TV WORLD PRO MAX </title>
 
-<link rel="stylesheet" href="css/style.css">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, sans-serif;
-}
 
-body{
-background:#0f172a;
-color:#fff;
-}
-
-.dashboard-container{
-display:flex;
-min-height:100vh;
-}
+/* BASE */
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
 
 /* SIDEBAR */
 .sidebar{
-width:250px;
-background:#111827;
-padding:20px;
+width:280px;
+background:#0d1324;
+padding:15px;
+overflow-y:auto;
+border-right:1px solid #1d2b4f;
 }
 
-.sidebar h2{
-color:#00d4ff;
-margin-bottom:30px;
+.logo{font-size:22px;font-weight:900;color:#00d4ff;}
+.sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
+
+.menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
+
+.nav-btn{
+width:100%;
+padding:10px;
+margin:5px 0;
+background:#121c33;
+border:none;
+border-radius:8px;
+color:#fff;
+cursor:pointer;
+}
+.nav-btn:hover{background:#1e2f57}
+
+/* MAIN */
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+padding:10px;
+}
+
+/* TOP */
+.topbar{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+}
+
+.search-box input{
+padding:10px;
+border-radius:8px;
+border:none;
+background:#101a31;
+color:#fff;
+width:260px;
+}
+
+.live{background:red;padding:6px 12px;border-radius:20px}
+
+/* HERO */
+.hero{
+background:linear-gradient(135deg,#07132f,#0f1d45);
+padding:10px;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin-top:8px;
+}
+
+.stat{
+background:#101d39;
+padding:8px;
+border-radius:8px;
 text-align:center;
 }
 
-.sidebar ul{
-list-style:none;
-}
-
-.sidebar ul li{
-margin:15px 0;
-padding:12px;
+/* PLAYER */
+.player-container{
+background:#000;
 border-radius:10px;
-transition:0.3s;
+overflow:hidden;
+height:320px;
+flex-shrink:0;
 }
 
-.sidebar ul li:hover,
-.sidebar ul li.active{
-background:#1e293b;
-}
+video{width:100%;height:100%;}
 
-.sidebar ul li a{
-color:#fff;
-text-decoration:none;
-display:block;
-}
-
-/* MAIN */
-.dashboard-main{
-flex:1;
-padding:25px;
-} 
-
-.dashboard-header{
+/* CONTROLS */
+.controls{
 display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
+flex-wrap:wrap;
+gap:8px;
+margin:10px 0;
+flex-shrink:0;
 }
 
-.dashboard-header h1{
-font-size:28px;
-}
-
-/* STATS */
-.stats-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-margin-bottom:30px;
-}
-
-.stat-card{
-background:#1e293b;
-padding:25px;
-border-radius:15px;
-box-shadow:0 0 10px rgba(0,0,0,0.3);
-}
-
-.stat-card h3{
-font-size:18px;
-margin-bottom:10px;
-color:#cbd5e1;
-}
-
-.stat-card p{
-font-size:28px;
-font-weight:bold;
-color:#00d4ff;
-}
-
-/* TABLE */
-.channel-section{
-background:#1e293b;
-padding:20px;
-border-radius:15px;
-}
-
-.channel-section h2{
-margin-bottom:20px;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-}
-
-table th,
-table td{
-padding:15px;
-text-align:left;
-border-bottom:1px solid #334155;
-}
-
-table th{
-color:#00d4ff;
-}
-
-.status{
-padding:6px 12px;
-border-radius:20px;
-font-size:13px;
-font-weight:bold;
-display:inline-block;
-}
-
-.free{
-background:#16a34a;
-}
-
-.paid{
-background:#dc2626;
-}
-
-.locked{
-background:#f59e0b;
-}
-
-.unlocked{
-background:#2563eb;
-}
-
-button{
-padding:8px 14px;
+.controls button{
+padding:8px 10px;
 border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-}
-
-.lock-btn{
-background:#f59e0b;
+border-radius:6px;
+background:#152445;
 color:#fff;
+cursor:pointer;
+}
+.controls button:hover{background:#00d4ff;color:#000}
+
+/* CHANNELS */
+.channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+
+.channels{
+overflow-y:auto;
+flex:1;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+gap:10px;
+padding-right:5px;
 }
 
-.edit-btn{
-background:#00d4ff;
-color:#000;
+.card{
+background:#111a31;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+border:1px solid #1f355d;
+transition:.3s;
+}
+.card:hover{transform:scale(1.03);border-color:#00d4ff;}
+
+.badge{
+background:red;
+padding:3px 6px;
+border-radius:10px;
+font-size:10px;
+float:right;
 }
 
-@media(max-width:768px){
-.sidebar{
-display:none;
+@media(max-width:900px){
+body{flex-direction:column;}
+.sidebar{width:100%;}
 }
 
-.dashboard-main{
-padding:15px;
-}
-}
 </style>
 </head>
 
 <body>
 
-<div class="dashboard-container">
-
 <!-- SIDEBAR -->
-<aside class="sidebar">
-<h2>BTECH TV</h2>
+<div class="sidebar">
 
-<ul>
-<li class="active">
-<a href='https://btech-tv.netlify.app/index_dashboard'>Dashboard</a>
-</li>
+<div class="logo">📺 BTECH-TV PRO MAX</div>
+<div class="sub">Ultra BTECH-TV world Engine X</div>
 
-<li>
-<a href='https://btech-tv.netlify.app/all_channel'>All Channels</a>
-</li>
+<div class="menu-title">🌍 Countries</div>
 
-<li>
-<a href='https://btech-tv.netlify.app/free_channel'>Free Channels</a>
-</li>
+<!-- ALL COUNTRIES -->
+<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
+<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
+<button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
+<button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
+<button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
+<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
+<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
+<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
+<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
+<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
+<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
+<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
+<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
+<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
+<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
+<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
+<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
+<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
+<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
+<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
+<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
+<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
+<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
+<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
+<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
 
-<li>
-<a href='https://btech-tv.netlify.app/pay_to-view'>Pay To View</a>
-</li>
-  <li>
-<a href='https://btech-tv.netlify.app/chplayer'>BTECH Super Channels</a>
-</li>
+<div class="menu-title">🎬 Categories</div>
 
+<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
+<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
+<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
+<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
+<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
+<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
+<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
+<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
+<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
+<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
 
-<li>
-<a href="https://btech-tv.netlify.app/Locked_Channels.html">Locked Channels</a>
-</li>
+<div class="menu-title">🗣 Languages</div>
 
-<li>
-<a href='https://btech-tv.netlify.app/user'>Users</a>
-</li>
+<button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
+<button class="nav-btn" onclick="load('spa')">🇪🇸 Spanish</button>
+<button class="nav-btn" onclick="load('ara')">🇸🇦 Arabic</button>
+<button class="nav-btn" onclick="load('fra')">🇫🇷 French</button>
+<button class="nav-btn" onclick="load('hin')">🇮🇳 Hindi</button>
+<button class="nav-btn" onclick="load('zho')">🇨🇳 Chinese</button>
+<button class="nav-btn" onclick="load('por')">🇵🇹 Portuguese</button>
 
-<li>
-<a href='https://btech-tv.netlify.app/subscription'>Subscription Plans</a>
-</li>
+<div class="menu-title">🔥 Tools</div>
 
-<li>
-<a href="https://btech-tv.netlify.app/Settings.html">Settings</a>
-</li>
-</ul>
-</aside>
+<button class="nav-btn" onclick="scanStreams()">📡 Scan</button>
+<button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
+<button class="nav-btn" onclick="togglePiP()">📺 PiP</button>
+<button class="nav-btn" onclick="clearRecents()">🗑 Recents</button>
+<button class="nav-btn" onclick="recordMode()">⏺ Record</button>
+<button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
+<button class="nav-btn" onclick="repairStreams()">🛠 Repair</button>
+<button class="nav-btn" onclick="optimizeMemory()">🧠 Optimize</button>
+
+</div>
 
 <!-- MAIN -->
-<main class="dashboard-main">
+<div class="main">
 
-<header class="dashboard-header">
-<h1>BTECH TV Channel Dashboard</h1>
-</header>
+<div class="topbar">
+<div class="search-box">
+<input oninput="search(this.value)" placeholder="Search BTECH-TV World...">
+</div>
+<div class="live">🔴 BTECH-TV LIVE</div>
+</div>
 
-<!-- STATS -->
-<section class="stats-grid">
+<div class="hero">
+<h3>BTECH-TV World PRO MAX SYSTEM</h3>
+<div class="stats">
+<div class="stat">📺 <div id="total">0</div></div>
+<div class="stat">⭐ Fav <div id="fav">0</div></div>
+<div class="stat">⚫ Dead <div id="dead">0</div></div>
+<div class="stat">🌍 Live <div id="live">0</div></div>
+</div>
+</div>
 
-<a class='stat-link' href='https://btech-tv.netlify.app/index_dashboard'>
-  <div class="stat-card">
-    <h3>Total Channels</h3>
-    <p>20,000</p>
-  </div>
-</a>
+<div class="player-container">
+<video id="video" controls autoplay muted></video>
+</div>
 
-<a class='stat-link' href='https://btech-tv.netlify.app/free_channel'>
-  <div class="stat-card">
-    <h3>Free Channels</h3>
-    <p>12,500</p>
-  </div>
-</a>
+<div class="controls">
+<button onclick="next()">▶ Next</button>
+<button onclick="prev()">◀ Prev</button>
+<button onclick="toggleMute()">🔊 Mute</button>
+<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+<button onclick="loadUltra()">🚀 Global</button>
+</div>
 
-<a class='stat-link' href='https://btech-tv.netlify.app/pay_to-view'>
-  <div class="stat-card">
-    <h3>Pay To View</h3>
-    <p>6,800</p>
-  </div>
-</a>
+<div class="channel-wrapper">
+<div class="channels" id="grid"></div>
+</div>
 
-<a href="https://btech-tv.netlify.app/locked-channels.html" class="stat-link">
-  <div class="stat-card">
-    <h3>Locked Channels</h3>
-    <p>700</p>
-  </div>
-</a>
-
-</section>
-
-<!-- CHANNEL TABLE -->
-<section class="channel-section">
-
-<h2>Channel Management</h2>
-
-<table>
-
-<thead>
-<tr>
-<th>Channel Name</th>
-<th>Category</th>
-<th>Type</th>
-<th>Lock Status</th>
-<th>Actions</th>
-</tr>
-</thead>
-
-<tbody>
-
-<tr>
-<td>BTECH Sports HD</td>
-<td>Sports</td>
-<td>
-<span class="status paid">Pay To View</span>
-</td>
-<td>
-<span class="status locked">Locked</span>
-</td>
-<td>
-<button class="lock-btn">Unlock</button>
-<button class="edit-btn">Edit</button>
-</td>
-</tr>
-
-<tr>
-<td>BTECH Movies</td>
-<td>Entertainment</td>
-<td>
-<span class="status free">Free</span>
-</td>
-<td>
-<span class="status unlocked">Unlocked</span>
-</td>
-<td>
-<button class="lock-btn">Lock</button>
-<button class="edit-btn">Edit</button>
-</td>
-</tr>
-
-<tr>
-<td>BTECH Kids</td>
-<td>Kids</td>
-<td>
-<span class="status free">Free</span>
-</td>
-<td>
-<span class="status unlocked">Unlocked</span>
-</td>
-<td>
-<button class="lock-btn">Lock</button>
-<button class="edit-btn">Edit</button>
-</td>
-</tr>
-
-<tr>
-<td>BTECH Premium Cinema</td>
-<td>Movies</td>
-<td>
-<span class="status paid">Pay To View</span>
-</td>
-<td>
-<span class="status locked">Locked</span>
-</td>
-<td>
-<button class="lock-btn">Unlock</button>
-<button class="edit-btn">Edit</button>
-</td>
-</tr>
-
-<tr>
-<td>BTECH News Live</td>
-<td>News</td>
-<td>
-<span class="status free">Free</span>
-</td>
-<td>
-<span class="status unlocked">Unlocked</span>
-</td>
-<td>
-<button class="lock-btn">Lock</button>
-<button class="edit-btn">Edit</button>
-</td>
-</tr>
-nnn
-  
-<tr>
-<td>BTECH Sports HD</td>
-<td>Sports</td>
-<td>
-<span class="status paid">Pay To View</span>
-</td>
-<td>
-<span class="status locked">Locked</span>
-</td>
-<td>
-<button class="lock-btn">Unlock</button>
-<button class="edit-btn">Edit</button>
-</td>
-</tr>
-
-<tr>
-<td>BTECH Movies</td>
-<td>Entertainment</td>
-<td>
-<span class="status free">Free</span>
-</td>
-<td>
-<span class="status unlocked">Unlocked</span>
-</td>
-<td>
-<button class="lock-btn">Lock</button>
-<button class="edit-btn">Edit</button>
-</td>
-</tr>
-
-<tr>
-<td>BTECH Kids</td>
-<td>Kids</td>
-<td>
-<span class="status free">Free</span>
-</td>
-<td>
-<span class="status unlocked">Unlocked</span>
-</td>
-<td>
-<button class="lock-btn">Lock</button>
-<button class="edit-btn">Edit</button>
-</td>
-</tr>
-
-<tr>
-<td>BTECH Premium Cinema</td>
-<td>Movies</td>
-<td>
-<span class="status paid">Pay To View</span>
-</td>
-<td>
-<span class="status locked">Locked</span>
-</td>
-<td>
-<button class="lock-btn">Unlock</button>
-<button class="edit-btn">Edit</button>
-</td>
-</tr>
-
-<tr>
-<td>BTECH News Live</td>
-<td>News</td>
-<td>
-<span class="status free">Free</span>
-</td>
-<td>
-<span class="status unlocked">Unlocked</span>
-</td>
-<td>
-<button class="lock-btn">Lock</button>
-<button class="edit-btn">Edit</button>
-</td>
-</tr>
-</tbody>
-</table>
-
-</section>
-
-</main>
 </div>
 
 <script>
-// Example Lock/Unlock Function
-const lockButtons = document.querySelectorAll(".lock-btn");
 
-lockButtons.forEach(button => {
-button.addEventListener("click", () => {
+let all=[],filtered=[],i=0;
+let video=document.getElementById("video");
+let hls;
 
-if(button.innerText === "Lock"){
-button.innerText = "Unlock";
-} else {
-button.innerText = "Lock";
+/* LOAD */
+async function load(code){
+await loadM3U(https://iptv-org.github.io/iptv/countries/${code}.m3u);
 }
 
-});
-});
-</script>
-  <script>
-
-/* ==========================
-   BTECH IPTV ADMIN ENGINE
-========================== */
-
-let channels = [];
-
-const categories = [
-"Sports",
-"Movies",
-"News",
-"Kids",
-"Entertainment",
-"Music",
-"Documentary",
-"Education"
-];
-
-/* GENERATE 40,000 CHANNELS */
-
-for(let i=1;i<=40000;i++){
-
-channels.push({
-
-id:i,
-
-name:`BTECH Channel ${i}`,
-
-category:
-categories[
-Math.floor(
-Math.random()*categories.length
-)],
-
-type:
-Math.random()>0.65
-? "Pay To View"
-: "Free",
-
-status:
-Math.random()>0.85
-? "Locked"
-: "Unlocked",
-
-live:
-Math.random()>0.2
-
-});
-
+async function loadCat(c){
+await loadM3U(https://iptv-org.github.io/iptv/categories/${c}.m3u);
 }
 
-/* ==========================
-   UPDATE STAT CARDS
-========================== */
+async function loadUltra(){
+await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
+}
 
-function updateStats(){
+/* M3U */
+async function loadM3U(url){
+const res=await fetch(url);
+const text=await res.text();
 
-document.querySelectorAll(
-".stat-card p"
-)[0].innerText =
-channels.length.toLocaleString();
+all=[];filtered=[];i=0;
 
-document.querySelectorAll(
-".stat-card p"
-)[1].innerText =
-channels.filter(
-c=>c.type==="Free"
-).length.toLocaleString();
+let lines=text.split("\n");
 
-document.querySelectorAll(
-".stat-card p"
-)[2].innerText =
-channels.filter(
-c=>c.type==="Pay To View"
-).length.toLocaleString();
+for(let x=0;x<lines.length;x++){
+if(lines[x].startsWith("#EXTINF")){
+let name=lines[x].split(",").pop();
+let url=lines[x+1];
+if(url && url.startsWith("http")) all.push({name,url});
+}
+}
 
-document.querySelectorAll(
-".stat-card p"
-)[3].innerText =
-channels.filter(
-c=>c.status==="Locked"
-).length.toLocaleString();
+filtered=[...all];
+render();
+stats();
+}
+/* RENDER */
+function render(){
+
+    let grid = document.getElementById("grid");
+    grid.innerHTML = "";
+
+    filtered.forEach((c, idx)=>{
+
+        // Remove quality labels only
+        let cleanName = c.name
+            .replace(/\s*\(1080p\)/gi,"")
+            .replace(/\s*\(720p\)/gi,"")
+            .replace(/\s*\(540p\)/gi,"")
+            .replace(/\s*\(480p\)/gi,"")
+            .replace(/\s*\(360p\)/gi,"")
+            .replace(/\s*\(240p\)/gi,"")
+            .replace(/\s*\(144p\)/gi,"")
+            .trim();
+
+        // Channel number with leading zeros
+        let ch = String(idx + 1).padStart(3, "0");
+
+        let div = document.createElement("div");
+        div.className = "card";
+
+        div.innerHTML = 
+            <div class="badge">LIVE</div>
+            <div style="font-weight:bold;color:#00d4ff;margin-bottom:6px;">
+                CH ${ch}
+            </div>
+            <div>${cleanName}</div>
+        ;
+
+        div.onclick = ()=>play(idx);
+
+        grid.appendChild(div);
+
+    });
 
 }
 
-/* ==========================
-   TABLE RENDER
-========================== */
+/* PLAY */
+function play(idx){
 
-let page=0;
-const limit=50;
+    i = idx;
+    let c = filtered[i];
 
-function renderTable(){
+    let cleanName = c.name
+        .replace(/\s*\(1080p\)/gi,"")
+        .replace(/\s*\(720p\)/gi,"")
+        .replace(/\s*\(540p\)/gi,"")
+        .replace(/\s*\(480p\)/gi,"")
+        .replace(/\s*\(360p\)/gi,"")
+        .replace(/\s*\(240p\)/gi,"")
+        .replace(/\s*\(144p\)/gi,"")
+        .trim();
 
-const tbody =
-document.querySelector("tbody");
+    let ch = String(idx + 1).padStart(3, "0");
 
-tbody.innerHTML="";
+    document.title = CH ${ch} - ${cleanName} | BTECH-TV WORLD PRO MAX;
 
-let start=
-page*limit;
+    if(hls) hls.destroy();
 
-let end=
-start+limit;
-
-channels
-.slice(start,end)
-.forEach(channel=>{
-
-tbody.innerHTML += `
-
-<tr>
-
-<td>
-${channel.name}
-</td>
-
-<td>
-${channel.category}
-</td>
-
-<td>
-
-<span class="
-status
-${channel.type==="Free"
-?"free":"paid"}
-">
-
-${channel.type}
-
-</span>
-
-</td>
-
-<td>
-
-<span class="
-status
-${channel.status==="Locked"
-?"locked":"unlocked"}
-">
-
-${channel.status}
-
-</span>
-
-</td>
-
-<td>
-
-<button
-class="lock-btn"
-onclick="toggleLock(${channel.id})">
-
-${channel.status==="Locked"
-?"Unlock":"Lock"}
-
-</button>
-
-<button
-class="edit-btn"
-onclick="editChannel(${channel.id})">
-
-Edit
-
-</button>
-
-<button
-class="edit-btn"
-onclick="deleteChannel(${channel.id})">
-
-Delete
-
-</button>
-
-</td>
-
-</tr>
-
-`;
-
-});
-
-/* LOAD MORE */
-
-tbody.innerHTML += `
-
-<tr>
-
-<td colspan="5">
-
-<button
-style="
-width:100%;
-padding:15px"
-onclick="loadMore()">
-
-Load More Channels
-
-</button>
-
-</td>
-
-</tr>
-
-`;
+    if(Hls.isSupported()){
+        hls = new Hls();
+        hls.loadSource(c.url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+    }else{
+        video.src = c.url;
+        video.play();
+    }
 
 }
-
-/* ==========================
-   LOAD MORE
-========================== */
-
-function loadMore(){
-
-page++;
-
-renderTable();
-
+/* BASIC */
+function search(q){
+filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
+render();
 }
 
-/* ==========================
-   LOCK / UNLOCK
-========================== */
+function next(){i=(i+1)%filtered.length;play(i);}
+function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
 
-function toggleLock(id){
+function toggleMute(){video.muted=!video.muted;}
+function toggleFullscreen(){video.requestFullscreen();}
 
-let channel =
-channels.find(
-c=>c.id===id
-);
+/* EXTRA FEATURES (PLACEHOLDER SAFE) */
+function scanStreams(){alert("Scanning streams...");}
+function speedBoost(){video.playbackRate=1.15;}
+function repairStreams(){alert("Repair mode active");}
+function optimizeMemory(){alert("Optimizing memory");}
+function recordMode(){alert("Record mode enabled");}
+function clearRecents(){alert("Recents cleared");}
 
-channel.status =
-channel.status==="Locked"
-? "Unlocked"
-: "Locked";
-
-renderTable();
-updateStats();
-
+/* STATS */
+function stats(){
+document.getElementById("total").innerText=all.length;
+document.getElementById("live").innerText=all.length;
+document.getElementById("dead").innerText=0;
+document.getElementById("fav").innerText=0;
 }
 
-/* ==========================
-   EDIT CHANNEL
-========================== */
-
-function editChannel(id){
-
-let channel =
-channels.find(
-c=>c.id===id
-);
-
-let newName =
-prompt(
-"Rename Channel",
-channel.name
-);
-
-if(newName){
-
-channel.name =
-newName;
-
-renderTable();
-
-}
-
-}
-
-/* ==========================
-   DELETE CHANNEL
-========================== */
-
-function deleteChannel(id){
-
-channels =
-channels.filter(
-c=>c.id!==id
-);
-
-renderTable();
-updateStats();
-
-}
-
-/* ==========================
-   SEARCH BAR
-========================== */
-
-let search =
-document.createElement("input");
-
-search.placeholder =
-"Search channels";
-
-search.style =
-"width:100%;padding:12px;margin-bottom:20px";
-
-search.onkeyup =
-function(){
-
-let val =
-this.value
-.toLowerCase();
-
-channels =
-channels.filter(
-
-c=>
-
-c.name
-.toLowerCase()
-.includes(val)
-
-||
-
-c.category
-.toLowerCase()
-.includes(val)
-
-);
-
-page=0;
-
-renderTable();
-
-};
-
-document.querySelector(
-".dashboard-header"
-).appendChild(search);
-
-/* ==========================
-   INIT
-========================== */
-
-updateStats();
-renderTable();
-
-</script>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
-<script>
-
-/* ======================
-BTECH TV PRO SETTINGS
-====================== */
-
-const SETTINGS = {
-
-totalChannels:40000,
-showPerPage:100,
-
-autoRefresh:true,
-darkMode:true,
-
-allowFavorites:true,
-allowHistory:true,
-allowSubscriptions:true,
-
-currency:"₦",
-
-playerQuality:"Auto",
-
-categories:[
-"Sports",
-"Movies",
-"Kids",
-"News",
-"Music",
-"Entertainment",
-"Documentary",
-"Education",
-"VIP",
-"Religion",
-"Comedy",
-"Lifestyle",
-"Business",
-"Fashion"
-]
-
-};
-
-
-/* ======================
-CHANNEL DATABASE
-====================== */
-
-const channels=[];
-
-for(let i=1;i<=SETTINGS.totalChannels;i++){
-
-channels.push({
-
-id:i,
-
-name:`BTECH Channel ${i}`,
-
-category:
-SETTINGS.categories[
-Math.floor(
-Math.random()*SETTINGS.categories.length
-)
-],
-
-type:
-Math.random()>0.55
-?"Free"
-:"Premium",
-
-status:
-Math.random()>0.8
-?"Locked"
-:"Unlocked",
-
-price:
-Math.floor(Math.random()*5000)+500,
-
-viewers:
-Math.floor(Math.random()*50000),
-
-favorite:false,
-
-streamUrl:
-"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-
-});
-
-}
-
-
-/* ======================
-STATS
-====================== */
-
-function updateStats(){
-
-document.getElementById(
-"totalChannels"
-).innerText=
-channels.length.toLocaleString();
-
-document.getElementById(
-"freeChannels"
-).innerText=
-channels.filter(
-c=>c.type==="Free"
-).length.toLocaleString();
-
-document.getElementById(
-"premiumChannels"
-).innerText=
-channels.filter(
-c=>c.type==="Premium"
-).length.toLocaleString();
-
-document.getElementById(
-"lockedChannels"
-).innerText=
-channels.filter(
-c=>c.status==="Locked"
-).length.toLocaleString();
-
-}
-
-
-/* ======================
-RENDER CHANNELS
-====================== */
-
-function renderChannels(list,page=1){
-
-const grid=
-document.getElementById(
-"channelGrid"
-);
-
-grid.innerHTML="";
-
-const start=
-(page-1)*SETTINGS.showPerPage;
-
-const end=
-start+SETTINGS.showPerPage;
-
-list.slice(start,end)
-.forEach(channel=>{
-
-grid.innerHTML+=`
-
-<div class="channel-card">
-
-<div class="channel-banner">
-
-${channel.category}
-
-</div>
-
-<div class="channel-info">
-
-<h3>${channel.name}</h3>
-
-<p>
-👥 ${channel.viewers.toLocaleString()}
- Watching
-</p>
-
-<p>
-
-<span class="
-badge
-${channel.type==="Free"
-?"free":"paid"}
-">
-
-${channel.type}
-
-</span>
-
-<span class="
-badge
-${channel.status==="Locked"
-?"locked":"unlocked"}
-">
-
-${channel.status}
-
-</span>
-
-</p>
-
-<button
-class="watch-btn"
-onclick="watchChannel(${channel.id})"
->
-
-Watch
-
-</button>
-
-<button
-class="watch-btn"
-onclick="addFavorite(${channel.id})"
->
-
-⭐ Favorite
-
-</button>
-
-</div>
-
-</div>
-
-`;
-
-});
-
-}
-
-
-/* ======================
-SEARCH
-====================== */
-
-function searchChannels(){
-
-let value=
-document.getElementById(
-"searchInput"
-)
-.value
-.toLowerCase();
-
-let filtered=
-channels.filter(c=>
-
-c.name.toLowerCase()
-.includes(value)
-
-||
-
-c.category.toLowerCase()
-.includes(value)
-
-);
-
-renderChannels(filtered);
-
-}
-
-
-/* ======================
-WATCH CHANNEL
-====================== */
-
-function watchChannel(id){
-
-let channel=
-channels.find(
-c=>c.id===id
-);
-
-if(channel.status==="Locked"){
-
-alert(
-"Subscribe to unlock"
-);
-
-return;
-
-}
-
-document.getElementById(
-"playerModal"
-).style.display="flex";
-
-document.getElementById(
-"playerTitle"
-).innerText=
-channel.name;
-
-let video=
-document.getElementById(
-"videoPlayer"
-);
-
-if(Hls.isSupported()){
-
-let hls=new Hls();
-
-hls.loadSource(
-channel.streamUrl
-);
-
-hls.attachMedia(video);
-
-hls.on(
-Hls.Events.MANIFEST_PARSED,
-()=>video.play()
-);
-
-}
-else{
-
-video.src=
-channel.streamUrl;
-
-video.play();
-
-}
-
-}
-
-
-/* ======================
-FAVORITES
-====================== */
-
-function addFavorite(id){
-
-let channel=
-channels.find(c=>c.id===id);
-
-channel.favorite=true;
-
-alert(
-channel.name+
-" added to favorites"
-);
-
-}
-
-
-/* ======================
-AUTO REFRESH
-====================== */
-
-if(
-SETTINGS.autoRefresh
-){
-
-setInterval(()=>{
-
-channels.forEach(c=>{
-
-c.viewers=
-Math.floor(
-Math.random()*50000
-);
-
-});
-
-updateStats();
-
-},5000);
-
-}
-
-
-/* ======================
-INIT
-====================== */
-
-updateStats();
-
-renderChannels(channels);
+/* AUTO START */
+loadUltra();
 
 </script>
 
 </body>
 </html>
+remove all this -(576p) , (576p),(412p) , (576p), (576p) 
+only
+
+To remove all quality tags like:
+
+(1080p)
+
+(720p)
+
+(576p)
+
+(540p)
+
+(480p)
+
+(412p)
+
+(360p)
+
+(240p)
+
+(144p)
+
+replace your cleaning code with a single regular expression.
+
+In both render() and play(), replace:
+let cleanName = c.name
+    .replace(/\s*\(1080p\)/gi,"")
+    .replace(/\s*\(720p\)/gi,"")
+    .replace(/\s*\(540p\)/gi,"")
+    .replace(/\s*\(480p\)/gi,"")
+    .replace(/\s*\(360p\)/gi,"")
+    .replace(/\s*\(240p\)/gi,"")
+    .replace(/\s*\(144p\)/gi,"")
+    .trim();
+with this:
+let cleanName = c.name
+    .replace(/\s*\((1080|720|576|540|480|412|360|240|144)p\)/gi, "")
+    .trim();
+Or, if you want to remove any resolution in brackets automatically (including future ones like (2160p), (432p), (288p), etc.), use this instead:
+
+let cleanName = c.name
+    .replace(/\s*\(\d+p\)/gi, "")
+    .trim();
+This removes every bracketed resolution, for example:
+
+BBC One (1080p)     → BBC One
+CNN (720p)          → CNN
+Sky Sports (576p)   → Sky Sports
+Movie HD (412p)     → Movie HD
+FOX (540p)          → FOX
+ABC (480p)          → ABC
+Channel X (2160p)   → Channel X
+The second version is recommended because it will automatically remove all (numberp) quality labels without needing to update the code again.
+
+
+add custom BTECH-TV beside the channels
+
+You can add "BTECH-TV" beside every channel name by changing the HTML generated inside your render() function.
+
+Replace this:
+
+div.innerHTML = `
+    <div class="badge">LIVE</div>
+    <div style="font-weight:bold;color:#00d4ff;margin-bottom:6px;">
+        CH ${ch}
+    </div>
+    <div>${cleanName}</div>
+`;
+with:
+
+div.innerHTML = `
+    <div class="badge">LIVE</div>
+
+    <div style="font-weight:bold;color:#00d4ff;margin-bottom:6px;">
+        CH ${ch}
+    </div>
+
+    <div style="font-weight:bold;">
+        ${cleanName}
+        <span style="
+            display:inline-block;
+            margin-left:8px;
+            padding:2px 8px;
+            border-radius:20px;
+            background:#00d4ff;
+            color:#000;
+            font-size:11px;
+            font-weight:bold;
+        ">
+            BTECH-TV
+        </span>
+    </div>
+`;
+If you also want the browser title to include BTECH-TV, change this line in play():
+
+document.title = `CH ${ch} - ${cleanName} | BTECH-TV WORLD PRO MAX`;
+to:
+
+document.title = `CH ${ch} - ${cleanName} | BTECH-TV | WORLD PRO MAX`;
+This will display channels like:
+
+CH 001
+CNN International   BTECH-TV
+
+CH 002
+BBC News            BTECH-TV
+
+CH 003
+Al Jazeera          BTECH-TV
+
+CH 004
+ESPN                BTECH-TV
+with BTECH-TV shown as a blue pill badge next to every channel name for a custom branded appearance.
+
+
+like this-BTECH-TV  CH 011 
+Coza TV
+
+To display each channel exactly like this:
+
+BTECH-TV  CH 011
+Coza TV
+replace your div.innerHTML inside the render() function with:
+
+div.innerHTML = `
+    <div class="badge">LIVE</div>
+
+    <div style="
+        color:#00d4ff;
+        font-weight:bold;
+        font-size:14px;
+        margin-bottom:6px;
+    ">
+        BTECH-TV&nbsp;&nbsp;CH ${ch}
+    </div>
+
+    <div style="
+        color:#fff;
+        font-size:16px;
+        font-weight:600;
+    ">
+        ${cleanName}
+    </div>
+`;
+This will display channels like:
+
+BTECH-TV  CH 001
+BBC News
+
+BTECH-TV  CH 002
+CNN International
+
+BTECH-TV  CH 003
+Al Jazeera
+
+BTECH-TV  CH 004
+ESPN
+
+BTECH-TV  CH 011
+Coza TV
+
+BTECH-TV  CH 120
+Africa Magic
+It gives every channel a consistent BTECH-TV branded header followed by the channel number and the channel name underneath, matching the format you requested.
+
+
+add in beside this-Global , design by BINAINU SHAIBU BTECH WEBSITE DESIGN
+
+You can replace your current Global button:
+
+<button onclick="loadUltra()">🚀 Global</button>
+with a branded version like this:
+
+<button onclick="loadUltra()">
+    🚀 Global |
+    <span style="color:#00d4ff;font-weight:bold;">
+        Design by BINAINU SHAIBU
+    </span>
+    |
+    <span style="color:#ffd700;font-weight:bold;">
+        BTECH WEBSITE DESIGN
+    </span>
+</button>
+Or, if you want it to appear on a single line with cleaner spacing:
+
+<button onclick="loadUltra()">
+    🚀 Global • Design by <strong>BINAINU SHAIBU</strong> •
+    <span style="color:#00d4ff;">BTECH WEBSITE DESIGN</span>
+</button>
+The button will appear like:
+
+🚀 Global • Design by BINAINU SHAIBU • BTECH WEBSITE DESIGN
+while still calling loadUltra() when clicked.
+
+
+SHIFT TO RIGHT
+
+To shift the text to the right side of the button, use Flexbox.
+
+Replace your button with:
+
+<button onclick="loadUltra()" style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+width:100%;
+">
+    <span>🚀 Global</span>
+
+    <span style="
+        color:#00d4ff;
+        font-weight:bold;
+        font-size:12px;
+    ">
+        Design by BINAINU SHAIBU | BTECH WEBSITE DESIGN
+    </span>
+</button>
+It will display like this:
+
+🚀 Global                        Design by BINAINU SHAIBU | BTECH WEBSITE DESIGN
+If you want the design credit to appear at the extreme right edge of the control bar, this version is the best choice because justify-content: space-between pushes the two items to opposite sides.
+
+
+
+
+
+
+
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BTECH-TV WORLD PRO MAX </title>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<style>
+
+/* BASE */
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#050816;color:#fff;display:flex;height:100vh;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{
+width:280px;
+background:#0d1324;
+padding:15px;
+overflow-y:auto;
+border-right:1px solid #1d2b4f;
+}
+
+.logo{font-size:22px;font-weight:900;color:#00d4ff;}
+.sub{font-size:12px;color:#8ea2d9;margin-bottom:15px;}
+
+.menu-title{color:#00d4ff;margin:15px 0 10px;font-size:12px}
+
+.nav-btn{
+width:100%;
+padding:10px;
+margin:5px 0;
+background:#121c33;
+border:none;
+border-radius:8px;
+color:#fff;
+cursor:pointer;
+}
+.nav-btn:hover{background:#1e2f57}
+
+/* MAIN */
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+padding:10px;
+}
+
+/* TOP */
+.topbar{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+}
+
+.search-box input{
+padding:10px;
+border-radius:8px;
+border:none;
+background:#101a31;
+color:#fff;
+width:260px;
+}
+
+.live{background:red;padding:6px 12px;border-radius:20px}
+
+/* HERO */
+.hero{
+background:linear-gradient(135deg,#07132f,#0f1d45);
+padding:10px;
+border-radius:10px;
+margin-bottom:10px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin-top:8px;
+}
+
+.stat{
+background:#101d39;
+padding:8px;
+border-radius:8px;
+text-align:center;
+}
+
+/* PLAYER */
+.player-container{
+background:#000;
+border-radius:10px;
+overflow:hidden;
+height:320px;
+flex-shrink:0;
+}
+
+video{width:100%;height:100%;}
+
+/* CONTROLS */
+.controls{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin:10px 0;
+flex-shrink:0;
+}
+
+.controls button{
+padding:8px 10px;
+border:none;
+border-radius:6px;
+background:#152445;
+color:#fff;
+cursor:pointer;
+}
+.controls button:hover{background:#00d4ff;color:#000}
+
+/* CHANNELS */
+.channel-wrapper{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+
+.channels{
+overflow-y:auto;
+flex:1;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+gap:10px;
+padding-right:5px;
+}
+
+.card{
+background:#111a31;
+padding:10px;
+border-radius:10px;
+cursor:pointer;
+border:1px solid #1f355d;
+transition:.3s;
+}
+.card:hover{transform:scale(1.03);border-color:#00d4ff;}
+
+.badge{
+background:red;
+padding:3px 6px;
+border-radius:10px;
+font-size:10px;
+float:right;
+}
+
+@media(max-width:900px){
+body{flex-direction:column;}
+.sidebar{width:100%;}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+<div class="logo">📺 BTECH-TV PRO MAX</div>
+<div class="sub">Ultra BTECH-TV world Engine X</div>
+
+<div class="menu-title">🌍 Countries</div>
+
+<!-- ALL COUNTRIES -->
+<button class="nav-btn" onclick="load('ng')">🇳🇬 Nigeria</button>
+<button class="nav-btn" onclick="load('us')">🇺🇸 USA</button>
+<button class="nav-btn" onclick="load('uk')">🇬🇧 UK</button>
+<button class="nav-btn" onclick="load('in')">🇮🇳 India</button>
+<button class="nav-btn" onclick="load('fr')">🇫🇷 France</button>
+<button class="nav-btn" onclick="load('de')">🇩🇪 Germany</button>
+<button class="nav-btn" onclick="load('br')">🇧🇷 Brazil</button>
+<button class="nav-btn" onclick="load('za')">🇿🇦 South Africa</button>
+<button class="nav-btn" onclick="load('ca')">🇨🇦 Canada</button>
+<button class="nav-btn" onclick="load('au')">🇦🇺 Australia</button>
+<button class="nav-btn" onclick="load('jp')">🇯🇵 Japan</button>
+<button class="nav-btn" onclick="load('kr')">🇰🇷 South Korea</button>
+<button class="nav-btn" onclick="load('cn')">🇨🇳 China</button>
+<button class="nav-btn" onclick="load('es')">🇪🇸 Spain</button>
+<button class="nav-btn" onclick="load('it')">🇮🇹 Italy</button>
+<button class="nav-btn" onclick="load('tr')">🇹🇷 Turkey</button>
+<button class="nav-btn" onclick="load('mx')">🇲🇽 Mexico</button>
+<button class="nav-btn" onclick="load('ae')">🇦🇪 UAE</button>
+<button class="nav-btn" onclick="load('sa')">🇸🇦 Saudi Arabia</button>
+<button class="nav-btn" onclick="load('eg')">🇪🇬 Egypt</button>
+<button class="nav-btn" onclick="load('ar')">🇦🇷 Argentina</button>
+<button class="nav-btn" onclick="load('pk')">🇵🇰 Pakistan</button>
+<button class="nav-btn" onclick="load('id')">🇮🇩 Indonesia</button>
+<button class="nav-btn" onclick="load('ph')">🇵🇭 Philippines</button>
+<button class="nav-btn" onclick="load('al')">🇦🇱 Albania</button>
+
+<div class="menu-title">🎬 Categories</div>
+
+<button class="nav-btn" onclick="loadCat('news')">📰 News</button>
+<button class="nav-btn" onclick="loadCat('sports')">⚽ Sports</button>
+<button class="nav-btn" onclick="loadCat('movies')">🎬 Movies</button>
+<button class="nav-btn" onclick="loadCat('music')">🎵 Music</button>
+<button class="nav-btn" onclick="loadCat('kids')">👶 Kids</button>
+<button class="nav-btn" onclick="loadCat('comedy')">😂 Comedy</button>
+<button class="nav-btn" onclick="loadCat('documentary')">📚 Documentary</button>
+<button class="nav-btn" onclick="loadCat('business')">💼 Business</button>
+<button class="nav-btn" onclick="loadCat('science')">🔬 Science</button>
+<button class="nav-btn" onclick="loadCat('travel')">✈ Travel</button>
+
+<div class="menu-title">🗣 Languages</div>
+
+<button class="nav-btn" onclick="load('eng')">🇬🇧 English</button>
+<button class="nav-btn" onclick="load('spa')">🇪🇸 Spanish</button>
+<button class="nav-btn" onclick="load('ara')">🇸🇦 Arabic</button>
+<button class="nav-btn" onclick="load('fra')">🇫🇷 French</button>
+<button class="nav-btn" onclick="load('hin')">🇮🇳 Hindi</button>
+<button class="nav-btn" onclick="load('zho')">🇨🇳 Chinese</button>
+<button class="nav-btn" onclick="load('por')">🇵🇹 Portuguese</button>
+
+<div class="menu-title">🔥 Tools</div>
+
+<button class="nav-btn" onclick="scanStreams()">📡 Scan</button>
+<button class="nav-btn" onclick="speedBoost()">⚡ Boost</button>
+<button class="nav-btn" onclick="togglePiP()">📺 PiP</button>
+<button class="nav-btn" onclick="clearRecents()">🗑 Recents</button>
+<button class="nav-btn" onclick="recordMode()">⏺ Record</button>
+<button class="nav-btn" onclick="loadUltra()">🚀 Ultra Feeds</button>
+<button class="nav-btn" onclick="repairStreams()">🛠 Repair</button>
+<button class="nav-btn" onclick="optimizeMemory()">🧠 Optimize</button>
+
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="topbar">
+<div class="search-box">
+<input oninput="search(this.value)" placeholder="Search BTECH-TV World...">
+</div>
+<div class="live">🔴 BTECH-TV LIVE</div>
+</div>
+
+<div class="hero">
+<h3>BTECH-TV World PRO MAX SYSTEM</h3>
+<div class="stats">
+<div class="stat">📺 <div id="total">0</div></div>
+<div class="stat">⭐ Fav <div id="fav">0</div></div>
+<div class="stat">⚫ Dead <div id="dead">0</div></div>
+<div class="stat">🌍 Live <div id="live">0</div></div>
+</div>
+</div>
+
+<div class="player-container">
+<video id="video" controls autoplay muted></video>
+</div>
+
+<div class="controls">
+<button onclick="next()">▶ Next</button>
+<button onclick="prev()">◀ Prev</button>
+<button onclick="toggleMute()">🔊 Mute</button>
+<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+<button onclick="loadUltra()">🚀 Global</button>
+</div>
+
+<div class="channel-wrapper">
+<div class="channels" id="grid"></div>
+</div>
+
+</div>
+
+<script>
+
+let all=[],filtered=[],i=0;
+let video=document.getElementById("video");
+let hls;
+
+/* LOAD */
+async function load(code){
+await loadM3U(https://iptv-org.github.io/iptv/countries/${code}.m3u);
+}
+
+async function loadCat(c){
+await loadM3U(https://iptv-org.github.io/iptv/categories/${c}.m3u);
+}
+
+async function loadUltra(){
+await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
+}
+
+/* M3U */
+async function loadM3U(url){
+const res=await fetch(url);
+const text=await res.text();
+
+all=[];filtered=[];i=0;
+
+let lines=text.split("\n");
+
+for(let x=0;x<lines.length;x++){
+if(lines[x].startsWith("#EXTINF")){
+let name=lines[x].split(",").pop();
+let url=lines[x+1];
+if(url && url.startsWith("http")) all.push({name,url});
+}
+}
+
+filtered=[...all];
+render();
+stats();
+}
+/* RENDER */
+function render(){
+
+    let grid = document.getElementById("grid");
+    grid.innerHTML = "";
+
+    filtered.forEach((c, idx)=>{
+
+        // Remove quality labels only
+      let cleanName = c.name
+    .replace(/\s*\(\d+p\)/gi, "")
+    .trim();
+
+        // Channel number with leading zeros
+        let ch = String(idx + 1).padStart(3, "0");
+
+        let div = document.createElement("div");
+        div.className = "card";
+
+        div.innerHTML = 
+    <div class="badge">LIVE</div>
+
+    <div style="
+        color:#00d4ff;
+        font-weight:bold;
+        font-size:14px;
+        margin-bottom:6px;
+    ">
+        BTECH-TV&nbsp;&nbsp;CH ${ch}
+    </div>
+
+    <div style="
+        color:#fff;
+        font-size:16px;
+        font-weight:600;
+    ">
+        ${cleanName}
+    </div>
+;
+        div.onclick = ()=>play(idx);
+
+        grid.appendChild(div);
+
+    });
+
+}
+
+/* PLAY */
+function play(idx){
+
+    i = idx;
+    let c = filtered[i];
+
+    let cleanName = c.name
+        .replace(/\s*\(1080p\)/gi,"")
+        .replace(/\s*\(720p\)/gi,"")
+        .replace(/\s*\(540p\)/gi,"")
+        .replace(/\s*\(480p\)/gi,"")
+        .replace(/\s*\(360p\)/gi,"")
+        .replace(/\s*\(240p\)/gi,"")
+        .replace(/\s*\(144p\)/gi,"")
+        .trim();
+
+    let ch = String(idx + 1).padStart(3, "0");
+
+    document.title = CH ${ch} - ${cleanName} | BTECH-TV WORLD PRO MAX;
+
+    if(hls) hls.destroy();
+
+    if(Hls.isSupported()){
+        hls = new Hls();
+        hls.loadSource(c.url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED,()=>video.play());
+    }else{
+        video.src = c.url;
+        video.play();
+    }
+
+}
+/* BASIC */
+function search(q){
+filtered=all.filter(c=>c.name.toLowerCase().includes(q.toLowerCase()));
+render();
+}
+
+function next(){i=(i+1)%filtered.length;play(i);}
+function prev(){i=(i-1+filtered.length)%filtered.length;play(i);}
+
+function toggleMute(){video.muted=!video.muted;}
+function toggleFullscreen(){video.requestFullscreen();}
+
+/* EXTRA FEATURES (PLACEHOLDER SAFE) */
+function scanStreams(){alert("Scanning streams...");}
+function speedBoost(){video.playbackRate=1.15;}
+function repairStreams(){alert("Repair mode active");}
+function optimizeMemory(){alert("Optimizing memory");}
+function recordMode(){alert("Record mode enabled");}
+function clearRecents(){alert("Recents cleared");}
+
+/* STATS */
+function stats(){
+document.getElementById("total").innerText=all.length;
+document.getElementById("live").innerText=all.length;
+document.getElementById("dead").innerText=0;
+document.getElementById("fav").innerText=0;
+}
+
+/* AUTO START */
+loadUltra();
+
+</script>
+
+</body>
+</html> add  only design by BINAINU SHAIBU BTECH WEBSITE DESGN ON THE RIGHT  SIDE WITH THE SAME  LINE- 
+▶ Next
+◀ Prev
+🔊 Mute
+⛶ Fullscreen
+🚀 Global 
+🔊 Mute
+⛶ Fullscreen
+🚀 Global
+
+Replace your current controls section:
+
+<div class="controls">
+<button onclick="next()">▶ Next</button>
+<button onclick="prev()">◀ Prev</button>
+<button onclick="toggleMute()">🔊 Mute</button>
+<button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+<button onclick="loadUltra()">🚀 Global</button>
+</div>
+with this:
+
+<div class="controls" style="display:flex;align-items:center;width:100%;">
+
+    <button onclick="next()">▶ Next</button>
+    <button onclick="prev()">◀ Prev</button>
+    <button onclick="toggleMute()">🔊 Mute</button>
+    <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+    <button onclick="loadUltra()">🚀 Global</button>
+
+    <!-- Pushes the text to the far right -->
+    <div style="
+        margin-left:auto;
+        color:#00d4ff;
+        font-size:13px;
+        font-weight:bold;
+        white-space:nowrap;
+        padding-left:20px;
+    ">
+        Design by <span style="color:#ffffff;">BINAINU SHAIBU</span> | BTECH WEBSITE DESIGN
+    </div>
+
+</div>
+The result will appear on one line like this:
+
+▶ Next   ◀ Prev   🔊 Mute   ⛶ Fullscreen   🚀 Global                           Design by BINAINU SHAIBU | BTECH WEBSITE DESIGN
+The margin-left: auto; automatically pushes the design credit all the way to the far right while keeping it on the same line as the control buttons.
+
+
+add write advert display below iptv monitor moving from right to left
+
+You can add a scrolling advertisement ticker directly below the IPTV player that moves from right to left like a TV news ticker.
+
+1. Add this HTML immediately below:
+<div class="player-container">
+    <video id="video" controls autoplay muted></video>
+</div>
+Add:
+
+<!-- BTECH-TV Advertisement Ticker -->
+<div class="ad-ticker">
+    <div class="ad-text">
+        📢 WELCOME TO BTECH-TV WORLD PRO MAX • Design by BINAINU SHAIBU | BTECH WEBSITE DESIGN •
+        🌍 Watch Live TV from 200+ Countries • ⚽ Sports • 🎬 Movies • 📰 News • 🎵 Music •
+        📺 Enjoy Unlimited Entertainment Anytime, Anywhere •
+        📞 Contact BTECH WEBSITE DESIGN for IPTV & Website Development.
+    </div>
+</div>
+2. Add this CSS
+/* Advertisement Ticker */
+.ad-ticker{
+    width:100%;
+    height:36px;
+    margin-top:8px;
+    background:#000;
+    border:1px solid #00d4ff;
+    border-radius:6px;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+}
+
+.ad-text{
+    white-space:nowrap;
+    color:#00ff66;
+    font-weight:bold;
+    font-size:16px;
+    padding-left:100%;
+    animation:scrollAd 30s linear infinite;
+}
+
+@keyframes scrollAd{
+    from{
+        transform:translateX(0);
+    }
+    to{
+        transform:translateX(-100%);
+    }
+}
+Result
+It will appear like this under the video player:
+
+────────────────────────────────────────────────────────────────────────
+📺 IPTV PLAYER
+────────────────────────────────────────────────────────────────────────
+📢 WELCOME TO BTECH-TV WORLD PRO MAX • Design by BINAINU SHAIBU | BTECH WEBSITE DESIGN • 🌍 Watch Live TV from 200+ Countries • ⚽ Sports • 🎬 Movies • 📰 News • 🎵 Music • 📺 Enjoy Unlimited Entertainment Anytime, Anywhere •
+────────────────────────────────────────────────────────────────────────
+▶ Next   ◀ Prev   🔊 Mute   ⛶ Fullscreen   🚀 Global
+The text scrolls continuously from right to left, giving your IPTV application a professional television-style news/advertisement ticker.
