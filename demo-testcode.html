@@ -287,7 +287,7 @@ body{flex-direction:column;}
 </div>
 
 </div>
-
+<img src="${c.logo||'logo.png'}" class="logoImg">
 <script>
 
 let all=[],filtered=[],i=0;
@@ -448,6 +448,114 @@ function stats(){
 loadUltra();
 
 </script>
+    const CHANNELS_PER_PAGE = 200;
+let currentPage = 1;
 
+function render(){
+
+    const start = 0;
+    const end = currentPage * CHANNELS_PER_PAGE;
+
+    grid.innerHTML="";
+
+    filtered.slice(start,end).forEach((c,index)=>{
+        createCard(c,index);
+    });
+
+    if(end < filtered.length){
+
+        let btn=document.createElement("button");
+
+        btn.innerHTML="Load More";
+
+        btn.className="nav-btn";
+
+        btn.onclick=()=>{
+            currentPage++;
+            render();
+        };
+
+        grid.appendChild(btn);
+    }
+
+}
+
+        let logo="";
+
+const logoMatch=line.match(/tvg-logo="([^"]*)"/);
+
+if(logoMatch){
+
+logo=logoMatch[1];
+
+}
+
+all.push({
+
+name,
+
+logo,
+
+url
+
+});
+let favorites=[];
+
+function toggleFavorite(channel){
+
+let index=favorites.indexOf(channel.url);
+
+if(index==-1){
+
+favorites.push(channel.url);
+
+}else{
+
+favorites.splice(index,1);
+
+}
+
+localStorage.setItem("favorites",JSON.stringify(favorites));
+
+}
+        
 </body>
 </html>
+
+
+let recent=[];
+
+function addRecent(channel){
+
+recent.unshift(channel);
+
+recent=[...new Map(recent.map(c=>[c.url,c])).values()];
+
+recent=recent.slice(0,50);
+
+localStorage.setItem("recent",JSON.stringify(recent));
+
+}
+play(idx)
+localStorage.setItem("lastChannel",idx);
+
+let last=localStorage.getItem("lastChannel");
+
+if(last){
+
+play(Number(last));
+
+}
+async function togglePiP(){
+
+if(document.pictureInPictureElement){
+
+document.exitPictureInPicture();
+
+}else{
+
+await video.requestPictureInPicture();
+
+}
+
+}
