@@ -307,51 +307,10 @@ async function loadUltra(){
 await loadM3U("https://iptv-org.github.io/iptv/index.country.m3u");
 }
 
-/* M3U *//* M3U */
+/* M3U */
 async function loadM3U(url){
-
-    const res = await fetch(url);
-    const text = await res.text();
-
-    all = [];
-    filtered = [];
-    i = 0;
-
-    const lines = text.split("\n");
-
-    for(let x=0; x<lines.length; x++){
-
-        if(lines[x].startsWith("#EXTINF")){
-
-            const ext = lines[x];
-
-            const name = ext.split(",").pop().trim();
-
-            // Extract channel logo
-            let logo = "";
-            const logoMatch = ext.match(/tvg-logo="([^"]+)"/i);
-            if(logoMatch) logo = logoMatch[1];
-
-            const url = lines[x+1]?.trim();
-
-            if(url && url.startsWith("http")){
-                all.push({
-                    name,
-                    logo,
-                    url
-                });
-            }
-
-        }
-
-    }
-
-    filtered = [...all];
-
-    render();
-    stats();
-
-}
+const res=await fetch(url);
+const text=await res.text();
 
 all=[];filtered=[];i=0;
 
@@ -369,74 +328,11 @@ filtered=[...all];
 render();
 stats();
 }
-/* RENDER */function render(){
+/* RENDER */
+function render(){
 
-    const grid = document.getElementById("grid");
-    grid.innerHTML="";
-
-    const displayChannels = filtered.slice(0,13186);
-
-    displayChannels.forEach((c,idx)=>{
-
-        const cleanName = c.name.replace(/\s*\(\d+p\)/gi,"").trim();
-
-        const ch = String(idx+1).padStart(3,"0");
-
-        const logo = c.logo && c.logo.length
-            ? c.logo
-            : "https://via.placeholder.com/90x90?text=TV";
-
-        const div=document.createElement("div");
-        div.className="card";
-
-        div.innerHTML=`
-
-        <div class="badge">LIVE</div>
-
-        <div style="text-align:center;margin-bottom:8px;">
-
-            <img
-                src="${logo}"
-                loading="lazy"
-                style="
-                    width:90px;
-                    height:90px;
-                    object-fit:contain;
-                    background:#fff;
-                    border-radius:12px;
-                    padding:6px;
-                "
-                onerror="this.src='https://via.placeholder.com/90x90?text=TV'"
-            >
-
-        </div>
-
-        <div style="
-            color:#00d4ff;
-            text-align:center;
-            font-weight:bold;
-            margin-bottom:5px;
-        ">
-            CH ${ch}
-        </div>
-
-        <div style="
-            text-align:center;
-            font-size:15px;
-            font-weight:bold;
-        ">
-            ${cleanName}
-        </div>
-
-        `;
-
-        div.onclick=()=>play(idx);
-
-        grid.appendChild(div);
-
-    });
-
-}
+    let grid = document.getElementById("grid");
+    grid.innerHTML = "";
 
 // Super-Premium-PLUS: display every available channel
 const displayChannels = filtered.slice(0, 13186);
