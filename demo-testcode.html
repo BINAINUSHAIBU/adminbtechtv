@@ -1,14 +1,5 @@
 
 
-
-
-
-
-
-
-
-
-
 <!DOCTYPE html> 
 <html lang="en">
 <head>
@@ -755,6 +746,178 @@ clearInterval(monitorCheck);
 }
 },1000);
 </script>
-   
+   async function loadAllChannels() {
+  const files = [
+    "data/channels_part1.json",
+    "data/channels_part2.json",
+    "data/channels_part3.json",
+    "data/channels_part4.json",
+    "data/channels_part5.json",
+    "data/channels_part6.json",
+    "data/channels_part7.json"
+  ];
+
+  const data = await Promise.all(
+    files.map(file => fetch(file).then(r => r.json()))
+  );
+
+  const channels = data.flat();
+
+  console.log(`Loaded ${channels.length} channels`);
+
+  return channels;
+}
+     const fs = require("fs");
+
+const files = [
+  "channels_part1.json",
+  "channels_part2.json",
+  "channels_part3.json",
+  "channels_part4.json",
+  "channels_part5.json",
+  "channels_part6.json",
+  "channels_part7.json"
+];
+
+let channels = [];
+
+for (const file of files) {
+  channels.push(...JSON.parse(fs.readFileSync(file, "utf8")));
+}
+
+fs.writeFileSync(
+  "channels.json",
+  JSON.stringify(channels, null, 2)
+);
+
+console.log(`${channels.length} channels merged successfully.`);
+     fetch("data/categories.json")
+  .then(response => response.json())
+  .then(categories => {
+    categories.forEach(category => {
+      console.log(category.name);
+    });
+  });
+     async function loadCountries() {
+    const response = await fetch("data/countries.json");
+    const countries = await response.json();
+
+    const select = document.getElementById("countryFilter");
+
+    countries.forEach(country => {
+        const option = document.createElement("option");
+        option.value = country.code;
+        option.textContent = `${country.flag} ${country.name} (${country.channels})`;
+        select.appendChild(option);
+    });
+}
+
+loadCountries();
+     async function loadLanguages() {
+    const response = await fetch("data/languages.json");
+    const languages = await response.json();
+
+    const select = document.getElementById("languageFilter");
+
+    languages.forEach(language => {
+        const option = document.createElement("option");
+        option.value = language.code;
+        option.textContent =
+            `${language.flag} ${language.name} (${language.channels})`;
+
+        select.appendChild(option);
+    });
+}
+
+loadLanguages();
+     async function loadLogos() {
+    const response = await fetch("data/logos.json");
+    const logos = await response.json();
+
+    const logoMap = {};
+
+    logos.forEach(item => {
+        logoMap[item.channelId] = item.logo;
+    });
+
+    return logoMap;
+}
+
+loadLogos().then(logos => {
+    console.log(logos[1]); // logos/a2cnn.png
+});
+     async function loadEPG() {
+    const response = await fetch("data/epg.json");
+    const epg = await response.json();
+
+    const epgMap = {};
+
+    epg.forEach(channel => {
+        epgMap[channel.channelId] = channel;
+    });
+
+    return epgMap;
+}
+
+loadEPG().then(epg => {
+    console.log(epg[1]);
+});
+     function getCurrentProgram(channel) {
+    const now = new Date();
+
+    return channel.programs.find(program => {
+        const start = new Date(program.start);
+        const end = new Date(program.end);
+
+        return now >= start && now < end;
+    });
+}
+                                        async function loadEPG() {
+    const response = await fetch("data/epg.json");
+    const epg = await response.json();
+
+    const epgMap = {};
+
+    epg.forEach(item => {
+        epgMap[item.channelId] = item;
+    });
+
+    return epgMap;
+}
+             function getCurrentProgram(channelId, epgMap) {
+    const channel = epgMap[channelId];
+    if (!channel) return null;
+
+    const now = new Date();
+
+    return channel.schedule.find(program => {
+        return now >= new Date(program.start) &&
+               now < new Date(program.end);
+    });
+}
+                        const current = getCurrentProgram(1, epgMap);
+
+if (current) {
+    console.log(current.title);
+    console.log(current.start);
+    console.log(current.end);
+}
+                        Promise.all([
+    fetch("data/channels.json").then(r => r.json()),
+    fetch("data/categories.json").then(r => r.json()),
+    fetch("data/countries.json").then(r => r.json()),
+    fetch("data/languages.json").then(r => r.json()),
+    fetch("data/settings.json").then(r => r.json())
+]).then(([channels, categories, countries, languages, settings]) => {
+
+    window.channels = channels;
+
+    buildCountryMenu(countries);
+    buildCategoryMenu(categories);
+    buildLanguageMenu(languages);
+
+    renderChannels(channels);
+
+});
 </body>
 </html>
