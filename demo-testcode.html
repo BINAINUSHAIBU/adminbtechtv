@@ -322,6 +322,25 @@ let name=lines[x].split(",").pop();
 let url=lines[x+1];
 if(url && url.startsWith("http")) all.push({name,url});
 }
+}if(lines[x].startsWith("#EXTINF")){
+
+    let info = lines[x];
+
+    let name = info.split(",").pop().trim();
+
+    let logoMatch = info.match(/tvg-logo="([^"]+)"/i);
+
+    let logo = logoMatch ? logoMatch[1] : "https://via.placeholder.com/90x90?text=TV";
+
+    let url = lines[x+1];
+
+    if(url && url.startsWith("http")){
+        all.push({
+            name,
+            logo,
+            url
+        });
+    }
 }
 
 filtered=[...all];
@@ -350,8 +369,44 @@ displayChannels.forEach((c, idx)=>{
         let div = document.createElement("div");
         div.className = "card";
 
-        div.innerHTML = `
-    <div class="badge">LIVE</div>
+    div.innerHTML = `
+<div class="badge">LIVE</div>
+
+<div style="text-align:center">
+
+<img
+src="${c.logo}"
+alt="${cleanName}"
+style="
+width:90px;
+height:90px;
+object-fit:contain;
+background:#fff;
+border-radius:10px;
+padding:6px;
+margin-bottom:8px;
+"
+onerror="this.src='https://via.placeholder.com/90x90?text=TV';">
+
+<div style="
+font-size:13px;
+font-weight:bold;
+color:#00d4ff;
+">
+CH ${ch}
+</div>
+
+<div style="
+margin-top:5px;
+font-size:14px;
+font-weight:600;
+color:white;
+">
+${cleanName}
+</div>
+
+</div>
+`;
 
     <div style="
         color:#00d4ff;
