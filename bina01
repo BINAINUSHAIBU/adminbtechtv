@@ -1,0 +1,1094 @@
+Here is Part 1 of controllers/uploadController.js.
+
+/*==================================================
+  BTECH-TV WORLD ULTRA MAX
+  Upload Controller
+  File: controllers/uploadController.js
+==================================================*/
+
+import fs from "fs";
+import path from "path";
+import multer from "multer";
+
+/*==========================================
+  STORAGE CONFIGURATION
+==========================================*/
+
+const storage =
+    multer.diskStorage({
+
+        destination(req, file, cb){
+
+            const folder =
+                path.join(
+
+                    process.cwd(),
+
+                    "uploads"
+
+                );
+
+            if(
+
+                !fs.existsSync(
+
+                    folder
+
+                )
+
+            ){
+
+                fs.mkdirSync(
+
+                    folder,
+
+                    {
+
+                        recursive: true
+
+                    }
+
+                );
+
+            }
+
+            cb(
+
+                null,
+
+                folder
+
+            );
+
+        },
+
+        filename(req, file, cb){
+
+            const ext =
+                path.extname(
+
+                    file.originalname
+
+                );
+
+            const name =
+
+                Date.now()
+
+                +
+
+                "-"
+
+                +
+
+                Math.round(
+
+                    Math.random()
+
+                    *
+
+                    1e9
+
+                )
+
+                +
+
+                ext;
+
+            cb(
+
+                null,
+
+                name
+
+            );
+
+        }
+
+    });
+
+/*==========================================
+  FILE FILTER
+==========================================*/
+
+const fileFilter =
+(req, file, cb)=>{
+
+    const allowed = [
+
+        "image/jpeg",
+
+        "image/png",
+
+        "image/webp",
+
+        "image/gif",
+
+        "application/json",
+
+        "application/xml",
+
+        "application/vnd.apple.mpegurl",
+
+        "text/plain"
+
+    ];
+
+    if(
+
+        allowed.includes(
+
+            file.mimetype
+
+        )
+
+    ){
+
+        return cb(
+
+            null,
+
+            true
+
+        );
+
+    }
+
+    cb(
+
+        new Error(
+
+            "Unsupported file type."
+
+        ),
+
+        false
+
+    );
+
+};
+
+/*==========================================
+  MULTER EXPORT
+==========================================*/
+
+export const upload = multer({
+
+    storage,
+
+    fileFilter,
+
+    limits:{
+
+        fileSize:
+
+            50 *
+
+            1024 *
+
+            1024
+
+    }
+
+});
+
+/*==========================================
+  SINGLE FILE
+==========================================*/
+
+export const uploadSingle =
+async (req, res)=>{
+
+    try{
+
+        if(
+
+            !req.file
+
+        ){
+
+            return res.status(400).json({
+
+                success:false,
+
+                message:
+
+                    "No file uploaded."
+
+            });
+
+        }
+
+        return res.json({
+
+            success:true,
+
+            message:
+
+                "Upload successful.",
+
+            file:{
+
+                filename:
+
+                    req.file.filename,
+
+                original:
+
+                    req.file.originalname,
+
+                size:
+
+                    req.file.size,
+
+                type:
+
+                    req.file.mimetype,
+
+                path:
+
+                    req.file.path
+
+            }
+
+        });
+
+    }
+
+    catch(error){
+
+        return res.status(500).json({
+
+            success:false,
+
+            message:
+
+                error.message
+
+        });
+
+    }
+
+};
+
+Next part
+
+Part 2 of controllers/uploadController.js will include:
+
+    uploadMultiple()
+
+    deleteUpload()
+
+    listUploads()
+
+    getUploadInfo()
+
+    downloadUpload()
+
+The final part will include:
+
+    replaceUpload()
+
+    clearUploads()
+
+    storageStats()
+
+    exportUploads()
+
+This will complete the upload controller.
+
+next
+
+Here is Part 2 of controllers/uploadController.js, continuing directly from Part 1.
+
+/*==========================================
+  MULTIPLE FILE UPLOAD
+==========================================*/
+
+export const uploadMultiple =
+async (req, res) => {
+
+    try{
+
+        if(
+
+            !req.files ||
+
+            req.files.length === 0
+
+        ){
+
+            return res.status(400).json({
+
+                success: false,
+
+                message:
+                    "No files uploaded."
+
+            });
+
+        }
+
+        const files =
+            req.files.map(file => ({
+
+                filename:
+                    file.filename,
+
+                original:
+                    file.originalname,
+
+                size:
+                    file.size,
+
+                type:
+                    file.mimetype,
+
+                path:
+                    file.path
+
+            }));
+
+        return res.json({
+
+            success: true,
+
+            uploaded:
+                files.length,
+
+            files
+
+        });
+
+    }
+
+    catch(error){
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                error.message
+
+        });
+
+    }
+
+};
+
+/*==========================================
+  DELETE FILE
+==========================================*/
+
+export const deleteUpload =
+async (req, res) => {
+
+    try{
+
+        const filePath =
+            path.join(
+
+                process.cwd(),
+
+                "uploads",
+
+                req.params.filename
+
+            );
+
+        if(
+
+            !fs.existsSync(filePath)
+
+        ){
+
+            return res.status(404).json({
+
+                success: false,
+
+                message:
+                    "File not found."
+
+            });
+
+        }
+
+        fs.unlinkSync(filePath);
+
+        return res.json({
+
+            success: true,
+
+            message:
+                "File deleted successfully."
+
+        });
+
+    }
+
+    catch(error){
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                error.message
+
+        });
+
+    }
+
+};
+
+/*==========================================
+  LIST UPLOADS
+==========================================*/
+
+export const listUploads =
+async (req, res) => {
+
+    try{
+
+        const folder =
+            path.join(
+
+                process.cwd(),
+
+                "uploads"
+
+            );
+
+        if(
+
+            !fs.existsSync(folder)
+
+        ){
+
+            return res.json({
+
+                success: true,
+
+                uploads: []
+
+            });
+
+        }
+
+        const uploads =
+            fs.readdirSync(folder);
+
+        return res.json({
+
+            success: true,
+
+            total:
+                uploads.length,
+
+            uploads
+
+        });
+
+    }
+
+    catch(error){
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                error.message
+
+        });
+
+    }
+
+};
+
+/*==========================================
+  FILE INFORMATION
+==========================================*/
+
+export const getUploadInfo =
+async (req, res) => {
+
+    try{
+
+        const filePath =
+            path.join(
+
+                process.cwd(),
+
+                "uploads",
+
+                req.params.filename
+
+            );
+
+        if(
+
+            !fs.existsSync(filePath)
+
+        ){
+
+            return res.status(404).json({
+
+                success: false,
+
+                message:
+                    "File not found."
+
+            });
+
+        }
+
+        const stat =
+            fs.statSync(filePath);
+
+        return res.json({
+
+            success: true,
+
+            file: {
+
+                filename:
+                    req.params.filename,
+
+                size:
+                    stat.size,
+
+                created:
+                    stat.birthtime,
+
+                modified:
+                    stat.mtime
+
+            }
+
+        });
+
+    }
+
+    catch(error){
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                error.message
+
+        });
+
+    }
+
+};
+
+/*==========================================
+  DOWNLOAD FILE
+==========================================*/
+
+export const downloadUpload =
+async (req, res) => {
+
+    try{
+
+        const filePath =
+            path.join(
+
+                process.cwd(),
+
+                "uploads",
+
+                req.params.filename
+
+            );
+
+        if(
+
+            !fs.existsSync(filePath)
+
+        ){
+
+            return res.status(404).json({
+
+                success: false,
+
+                message:
+                    "File not found."
+
+            });
+
+        }
+
+        return res.download(
+
+            filePath
+
+        );
+
+    }
+
+    catch(error){
+
+        return res.status(500).json({
+
+            success: false,
+
+            message:
+                error.message
+
+        });
+
+    }
+
+};
+
+Next part
+
+The final section of controllers/uploadController.js will include:
+
+    replaceUpload()
+
+    clearUploads()
+
+    storageStats()
+
+    exportUploads()
+
+This will complete the Upload Controller for BTECH-TV WORLD ULTRA MAX.
+
+next
+
+Here is Part 3 (final) of controllers/uploadController.js, continuing directly from Part 2.
+
+/*==========================================
+  REPLACE FILE
+==========================================*/
+
+export const replaceUpload =
+async (req, res) => {
+
+    try{
+
+        if(!req.file){
+
+            return res.status(400).json({
+
+                success: false,
+
+                message:
+                    "No replacement file uploaded."
+
+            });
+
+        }
+
+        const oldFile =
+            path.join(
+
+                process.cwd(),
+
+                "uploads",
+
+                req.params.filename
+
+            );
+
+        if(
+
+            fs.existsSync(oldFile)
+
+        ){
+
+            fs.unlinkSync(
+
+                oldFile
+
+            );
+
+        }
+
+        return res.json({
+
+            success: true,
+
+            message:
+                "File replaced successfully.",
+
+            file:{
+
+                filename:
+                    req.file.filename,
+
+                original:
+                    req.file.originalname,
+
+                size:
+                    req.file.size,
+
+                type:
+                    req.file.mimetype,
+
+                path:
+                    req.file.path
+
+            }
+
+        });
+
+    }
+
+    catch(error){
+
+        return res.status(500).json({
+
+            success:false,
+
+            message:
+                error.message
+
+        });
+
+    }
+
+};
+
+/*==========================================
+  CLEAR ALL UPLOADS
+==========================================*/
+
+export const clearUploads =
+async (req, res) => {
+
+    try{
+
+        const folder =
+            path.join(
+
+                process.cwd(),
+
+                "uploads"
+
+            );
+
+        if(
+
+            !fs.existsSync(folder)
+
+        ){
+
+            return res.json({
+
+                success:true,
+
+                deleted:0
+
+            });
+
+        }
+
+        const files =
+            fs.readdirSync(folder);
+
+        files.forEach(file=>{
+
+            fs.unlinkSync(
+
+                path.join(
+
+                    folder,
+
+                    file
+
+                )
+
+            );
+
+        });
+
+        return res.json({
+
+            success:true,
+
+            deleted:
+                files.length,
+
+            message:
+                "Uploads folder cleared."
+
+        });
+
+    }
+
+    catch(error){
+
+        return res.status(500).json({
+
+            success:false,
+
+            message:
+                error.message
+
+        });
+
+    }
+
+};
+
+/*==========================================
+  STORAGE STATISTICS
+==========================================*/
+
+export const storageStats =
+async (req, res) => {
+
+    try{
+
+        const folder =
+            path.join(
+
+                process.cwd(),
+
+                "uploads"
+
+            );
+
+        if(
+
+            !fs.existsSync(folder)
+
+        ){
+
+            return res.json({
+
+                success:true,
+
+                stats:{
+
+                    files:0,
+
+                    size:0
+
+                }
+
+            });
+
+        }
+
+        const files =
+            fs.readdirSync(folder);
+
+        let totalSize = 0;
+
+        files.forEach(file=>{
+
+            const stat =
+                fs.statSync(
+
+                    path.join(
+
+                        folder,
+
+                        file
+
+                    )
+
+                );
+
+            totalSize += stat.size;
+
+        });
+
+        return res.json({
+
+            success:true,
+
+            stats:{
+
+                files:
+                    files.length,
+
+                size:
+                    totalSize,
+
+                sizeMB:
+                    (
+
+                        totalSize /
+
+                        1024 /
+
+                        1024
+
+                    ).toFixed(2)
+
+            }
+
+        });
+
+    }
+
+    catch(error){
+
+        return res.status(500).json({
+
+            success:false,
+
+            message:
+                error.message
+
+        });
+
+    }
+
+};
+
+/*==========================================
+  EXPORT UPLOAD REPORT
+==========================================*/
+
+export const exportUploads =
+async (req, res) => {
+
+    try{
+
+        const folder =
+            path.join(
+
+                process.cwd(),
+
+                "uploads"
+
+            );
+
+        if(
+
+            !fs.existsSync(folder)
+
+        ){
+
+            return res.json({
+
+                success:true,
+
+                exported:0,
+
+                uploads:[]
+
+            });
+
+        }
+
+        const uploads =
+            fs.readdirSync(folder)
+
+            .map(file=>{
+
+                const stat =
+                    fs.statSync(
+
+                        path.join(
+
+                            folder,
+
+                            file
+
+                        )
+
+                    );
+
+                return{
+
+                    filename:file,
+
+                    size:stat.size,
+
+                    created:stat.birthtime,
+
+                    modified:stat.mtime
+
+                };
+
+            });
+
+        return res.json({
+
+            success:true,
+
+            exported:
+                uploads.length,
+
+            uploads
+
+        });
+
+    }
+
+    catch(error){
+
+        return res.status(500).json({
+
+            success:false,
+
+            message:
+                error.message
+
+        });
+
+    }
+
+};
+
+✅ controllers/uploadController.js Complete
+
+Included features:
+
+    Configure Multer storage
+
+    Single file upload
+
+    Multiple file upload
+
+    Delete uploaded file
+
+    List uploaded files
+
+    Get file information
+
+    Download uploaded file
+
+    Replace uploaded file
+
+    Clear all uploads
+
+    Storage statistics
+
+    Export upload report
+
+📁 Project Progress
+
+controllers/
+├── authController.js            ✅
+├── userController.js            ✅
+├── channelController.js         ✅
+├── playlistController.js        ✅
+├── categoryController.js        ✅
+├── countryController.js         ✅
+├── subscriptionController.js    ✅
+├── paymentController.js         ✅
+├── notificationController.js    ✅
+├── analyticsController.js       ✅
+├── adminController.js           ✅
+├── uploadController.js          ✅
+├── streamController.js          ⏳ Next
+├── epgController.js
+├── settingsController.js
+└── reportController.js
+
+Next file: controllers/streamController.js (Part 1).
+You’re now chatting with Mini. Responses may have lower quality until tomorrow at 1:04 AM.
+
+
