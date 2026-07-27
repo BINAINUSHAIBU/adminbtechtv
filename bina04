@@ -1,0 +1,1904 @@
+/* ============================================================
+   Refresh EPG Data
+============================================================ */
+
+export const refreshEPG =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        /*
+          Production:
+          - Cron job runs every 6-12 hours
+          - Download XMLTV source
+          - Remove expired programs
+          - Import latest schedule
+        */
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            message:
+
+                "EPG refresh completed",
+
+            refreshedAt:
+
+                new Date(),
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            500
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   Search EPG Programs
+============================================================ */
+
+export const searchEPG =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const keyword =
+
+            req.query.q;
+
+
+
+        const programs =
+
+            await EPG.find({
+
+                title:
+
+                {
+
+                    $regex:
+
+                        keyword,
+
+
+
+                    $options:
+
+                        "i",
+
+                },
+
+            })
+
+            .sort({
+
+                startTime:
+
+                    1,
+
+            });
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            programs,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            500
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   TV Guide Timeline
+============================================================ */
+
+export const tvGuideTimeline =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const channels =
+
+            await Channel.find({
+
+                status:
+
+                    "active",
+
+            });
+
+
+
+        const timeline =
+
+            await Promise.all(
+
+                channels.map(
+
+                    async channel => {
+
+
+                        const programs =
+
+                            await EPG.find({
+
+                                channel:
+
+                                    channel._id,
+
+                            })
+
+                            .sort({
+
+                                startTime:
+
+                                    1,
+
+                            })
+
+                            .limit(
+
+                                10
+
+                            );
+
+
+
+                        return {
+
+                            channel,
+
+                            programs,
+
+                        };
+
+
+                    }
+
+                )
+
+            );
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            timeline,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            500
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   Delete EPG Data
+============================================================ */
+
+export const deleteEPG =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const result =
+
+            await EPG.deleteMany({
+
+                channel:
+
+                    req.params.channelId,
+
+            });
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            removed:
+
+                result.deletedCount,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            400
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   Clear Expired Programs
+============================================================ */
+
+export const clearExpiredEPG =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const result =
+
+            await EPG.deleteMany({
+
+                endTime:
+
+                {
+
+                    $lt:
+
+                        new Date(),
+
+                },
+
+            });
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            deleted:
+
+                result.deletedCount,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            500
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   EPG Statistics
+============================================================ */
+
+export const epgStats =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const totalPrograms =
+
+            await EPG.countDocuments();
+
+
+
+        const channels =
+
+            await EPG.distinct(
+
+                "channel"
+
+            );
+
+
+
+        const upcoming =
+
+            await EPG.countDocuments({
+
+                startTime:
+
+                {
+
+                    $gt:
+
+                        new Date(),
+
+                },
+
+            });
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            stats:
+
+            {
+
+                totalPrograms,
+
+                channels:
+
+                    channels.length,
+
+                upcoming,
+
+            },
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            500
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   Default Export
+============================================================ */
+
+export default {
+
+    createEPG,
+
+    getChannelEPG,
+
+    importXMLTV,
+
+    currentProgram,
+
+    upcomingPrograms,
+
+    mapEPGChannel,
+
+    refreshEPG,
+
+    searchEPG,
+
+    tvGuideTimeline,
+
+    deleteEPG,
+
+    clearExpiredEPG,
+
+    epgStats,
+
+};
+
+Next file: backend/controllers/settingsController.js (BTECH-TV system settings — app configuration, IPTV engine settings, payment settings, security settings, feature toggles, branding, and admin preferences).
+
+next
+
+/**
+ * ============================================================
+ * File: backend/controllers/settingsController.js
+ * Description: BTECH-TV System Settings Controller
+ * Features:
+ * - Application Configuration
+ * - IPTV Engine Settings
+ * - Branding Management
+ * - Payment Settings
+ * - Security Controls
+ * - Feature Toggles
+ * - Admin Preferences
+ * - System Configuration API
+ * ============================================================
+ */
+
+import Setting from "../models/Setting.js";
+
+
+
+
+/* ============================================================
+   Create Setting
+============================================================ */
+
+export const createSetting =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const setting =
+
+            await Setting.create({
+
+                key:
+
+                    req.body.key,
+
+
+
+                value:
+
+                    req.body.value,
+
+
+
+                category:
+
+                    req.body.category || "general",
+
+            });
+
+
+
+        res.status(
+
+            201
+
+        )
+
+        .json({
+
+            success:
+
+                true,
+
+            setting,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            400
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   Get All Settings
+============================================================ */
+
+export const getSettings =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const settings =
+
+            await Setting.find();
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            settings,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            500
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   Get Single Setting
+============================================================ */
+
+export const getSetting =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const setting =
+
+            await Setting.findOne({
+
+                key:
+
+                    req.params.key,
+
+            });
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            setting,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            404
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   Update Setting
+============================================================ */
+
+export const updateSetting =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const setting =
+
+            await Setting.findOneAndUpdate(
+
+            {
+
+                key:
+
+                    req.params.key,
+
+            },
+
+            {
+
+                value:
+
+                    req.body.value,
+
+
+
+                updatedAt:
+
+                    new Date(),
+
+            },
+
+            {
+
+                new:
+
+                    true,
+
+            }
+
+        );
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            setting,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            400
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   Delete Setting
+============================================================ */
+
+export const deleteSetting =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        await Setting.findOneAndDelete({
+
+            key:
+
+                req.params.key,
+
+        });
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            deleted:
+
+                true,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            400
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   IPTV Engine Configuration
+============================================================ */
+
+export const iptvConfig =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const config =
+
+        {
+
+            engine:
+
+                "BTECH-TV IPTV Ultra Engine",
+
+
+
+            maxChannels:
+
+                100000,
+
+
+
+            hls:
+
+                true,
+
+
+
+            adaptiveBitrate:
+
+                true,
+
+
+
+            autoRepair:
+
+                true,
+
+
+
+            epg:
+
+                true,
+
+        };
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            config,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            500
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   Branding Settings
+============================================================ */
+
+export const brandingSettings =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const branding =
+
+        {
+
+            appName:
+
+                req.body.appName || "BTECH-TV",
+
+
+
+            logo:
+
+                req.body.logo || "",
+
+
+
+            favicon:
+
+                req.body.favicon || "",
+
+
+
+            theme:
+
+                req.body.theme || "dark",
+
+        };
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            branding,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            400
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+Next file: backend/controllers/settingsController.js (Part 2 final: payment gateway settings, security configuration, trial settings, API keys management, feature flags, maintenance controls, and default export).
+
+next
+
+/* ============================================================
+   Payment Gateway Settings
+============================================================ */
+
+export const paymentSettings =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const payment =
+
+        {
+
+            paystack:
+
+            {
+
+                enabled:
+
+                    req.body.paystackEnabled ?? true,
+
+                publicKey:
+
+                    req.body.paystackPublicKey || "",
+
+            },
+
+
+
+            flutterwave:
+
+            {
+
+                enabled:
+
+                    req.body.flutterwaveEnabled ?? true,
+
+                publicKey:
+
+                    req.body.flutterwavePublicKey || "",
+
+            },
+
+
+
+            stripe:
+
+            {
+
+                enabled:
+
+                    req.body.stripeEnabled ?? false,
+
+                publicKey:
+
+                    req.body.stripePublicKey || "",
+
+            },
+
+        };
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            payment,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            400
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   Security Settings
+============================================================ */
+
+export const securitySettings =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const security =
+
+        {
+
+            jwtExpiry:
+
+                "7d",
+
+
+
+            maxLoginAttempts:
+
+                5,
+
+
+
+            twoFactorAuth:
+
+                false,
+
+
+
+            sessionTimeout:
+
+                3600,
+
+
+
+            passwordPolicy:
+
+            {
+
+                minimumLength:
+
+                    8,
+
+                requireNumbers:
+
+                    true,
+
+                requireSymbols:
+
+                    true,
+
+            },
+
+        };
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            security,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            500
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   Trial System Settings
+============================================================ */
+
+export const trialSettings =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const trial =
+
+        {
+
+            enabled:
+
+                req.body.enabled ?? true,
+
+
+
+            duration:
+
+                req.body.duration || 5,
+
+
+
+            unit:
+
+                "hours",
+
+
+
+            autoExpire:
+
+                true,
+
+
+
+            resetAllowed:
+
+                true,
+
+        };
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            trial,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            400
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   API Configuration
+============================================================ */
+
+export const apiSettings =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const api =
+
+        {
+
+            iptvOrg:
+
+            {
+
+                enabled:
+
+                    true,
+
+                endpoint:
+
+                    "https://iptv-org.github.io/api/",
+
+            },
+
+
+
+            epg:
+
+            {
+
+                enabled:
+
+                    true,
+
+                refresh:
+
+                    "12 hours",
+
+            },
+
+
+
+            analytics:
+
+            {
+
+                enabled:
+
+                    true,
+
+            },
+
+        };
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            api,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            500
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   Feature Flags
+============================================================ */
+
+export const featureFlags =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const features =
+
+        {
+
+            liveStreaming:
+
+                true,
+
+
+
+            catchUpTV:
+
+                true,
+
+
+
+            recording:
+
+                true,
+
+
+
+            favorites:
+
+                true,
+
+
+
+            parentalControl:
+
+                true,
+
+
+
+            multiDevice:
+
+                true,
+
+
+
+            smartTV:
+
+                true,
+
+        };
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            features,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            500
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   Save Global Configuration
+============================================================ */
+
+export const saveConfiguration =
+
+async (
+
+    req,
+
+    res
+
+) => {
+
+
+    try {
+
+
+        const config =
+
+            await Setting.findOneAndUpdate(
+
+            {
+
+                key:
+
+                    "global_config",
+
+            },
+
+            {
+
+                value:
+
+                    req.body,
+
+
+
+                updatedAt:
+
+                    new Date(),
+
+            },
+
+            {
+
+                upsert:
+
+                    true,
+
+                new:
+
+                    true,
+
+            }
+
+        );
+
+
+
+        res.json({
+
+            success:
+
+                true,
+
+            config,
+
+        });
+
+
+    }
+
+    catch (
+
+        error
+
+    ) {
+
+
+        res.status(
+
+            400
+
+        )
+
+        .json({
+
+            message:
+
+                error.message,
+
+        });
+
+
+    }
+
+
+};
+
+
+
+
+/* ============================================================
+   Default Export
+============================================================ */
+
+export default {
+
+    createSetting,
+
+    getSettings,
+
+    getSetting,
+
+    updateSetting,
+
+    deleteSetting,
+
+    iptvConfig,
+
+    brandingSettings,
+
+    paymentSettings,
+
+    securitySettings,
+
+    trialSettings,
+
+    apiSettings,
+
+    featureFlags,
+
+    saveConfiguration,
+
+};
+
+Next file: backend/controllers/reportController.js
+(BTECH-TV Reports — user reports, stream issues, abuse reports, payment disputes, analytics reports, export tools, and admin review workflow).
+You’re now chatting with Mini. Responses may have lower quality until tomorrow at 2:40 AM.
+
+next
