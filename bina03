@@ -1,0 +1,701 @@
+// frontend/admin-dashboard/src/services/notificationService.js
+
+import api from "./api";
+
+
+const notificationService = {
+
+
+    // Get all notifications
+    getNotifications: async (params = {}) => {
+
+        return await api.get(
+
+            "/notifications",
+
+            {
+
+                params
+
+            }
+
+        );
+
+    },
+
+
+    // Get single notification
+    getNotificationById: async (id) => {
+
+        return await api.get(
+
+            `/notifications/${id}`
+
+        );
+
+    },
+
+
+    // Create notification
+    createNotification: async (data) => {
+
+        return await api.post(
+
+            "/notifications",
+
+            data
+
+        );
+
+    },
+
+
+    // Send notification to user
+    sendUserNotification: async (
+
+        userId,
+
+        data
+
+    ) => {
+
+        return await api.post(
+
+            `/notifications/user/${userId}`,
+
+            data
+
+        );
+
+    },
+
+
+    // Broadcast notification
+    broadcastNotification: async (data) => {
+
+        return await api.post(
+
+            "/notifications/broadcast",
+
+            data
+
+        );
+
+    },
+
+
+    // Mark notification as read
+    markAsRead: async (id) => {
+
+        return await api.patch(
+
+            `/notifications/${id}/read`
+
+        );
+
+    },
+
+
+    // Mark all notifications as read
+    markAllAsRead: async () => {
+
+        return await api.patch(
+
+            "/notifications/read-all"
+
+        );
+
+    },
+
+
+    // Delete notification
+    deleteNotification: async (id) => {
+
+        return await api.delete(
+
+            `/notifications/${id}`
+
+        );
+
+    },
+
+
+    // Get notification statistics
+    getStatistics: async () => {
+
+        return await api.get(
+
+            "/notifications/statistics"
+
+        );
+
+    },
+
+
+    // Get unread count
+    getUnreadCount: async () => {
+
+        return await api.get(
+
+            "/notifications/unread-count"
+
+        );
+
+    },
+
+
+    // Send email notification
+    sendEmailNotification: async (data) => {
+
+        return await api.post(
+
+            "/notifications/email",
+
+            data
+
+        );
+
+    }
+
+
+};
+
+
+export default notificationService;
+
+✅ Services Folder Progress
+
+frontend/admin-dashboard/src/services/
+
+├── api.js                    ✅
+├── authService.js            ✅
+├── channelService.js         ✅
+├── userService.js            ✅
+├── categoryService.js        ✅
+├── countryService.js         ✅
+├── subscriptionService.js    ✅
+├── paymentService.js         ✅
+├── notificationService.js    ✅
+└── dashboardService.js       ⏳ Next
+
+Next: frontend/admin-dashboard/src/services/dashboardService.js ⏳
+
+next
+
+// frontend/admin-dashboard/src/services/dashboardService.js
+
+import api from "./api";
+
+
+const dashboardService = {
+
+
+    // Get dashboard overview
+    getDashboard: async () => {
+
+        return await api.get(
+
+            "/dashboard"
+
+        );
+
+    },
+
+
+    // Get dashboard statistics
+    getStatistics: async () => {
+
+        return await api.get(
+
+            "/dashboard/statistics"
+
+        );
+
+    },
+
+
+    // Get recent activity
+    getRecentActivity: async (params = {}) => {
+
+        return await api.get(
+
+            "/dashboard/activity",
+
+            {
+
+                params
+
+            }
+
+        );
+
+    },
+
+
+    // Get revenue analytics
+    getRevenueAnalytics: async (params = {}) => {
+
+        return await api.get(
+
+            "/dashboard/revenue",
+
+            {
+
+                params
+
+            }
+
+        );
+
+    },
+
+
+    // Get system health
+    getSystemHealth: async () => {
+
+        return await api.get(
+
+            "/dashboard/health"
+
+        );
+
+    },
+
+
+    // Get user growth statistics
+    getUserGrowth: async (params = {}) => {
+
+        return await api.get(
+
+            "/dashboard/users-growth",
+
+            {
+
+                params
+
+            }
+
+        );
+
+    },
+
+
+    // Get channel statistics
+    getChannelStats: async () => {
+
+        return await api.get(
+
+            "/dashboard/channels"
+
+        );
+
+    },
+
+
+    // Get subscription analytics
+    getSubscriptionAnalytics: async () => {
+
+        return await api.get(
+
+            "/dashboard/subscriptions"
+
+        );
+
+    },
+
+
+    // Export dashboard report
+    exportReport: async (
+
+        format = "pdf"
+
+    ) => {
+
+        return await api.get(
+
+            "/dashboard/export",
+
+            {
+
+                params: {
+
+                    format
+
+                }
+
+            }
+
+        );
+
+    }
+
+
+};
+
+
+export default dashboardService;
+
+✅ Services Folder Complete
+
+frontend/admin-dashboard/src/services/
+
+├── api.js                    ✅
+├── authService.js            ✅
+├── channelService.js         ✅
+├── userService.js            ✅
+├── categoryService.js        ✅
+├── countryService.js         ✅
+├── subscriptionService.js    ✅
+├── paymentService.js         ✅
+├── notificationService.js    ✅
+└── dashboardService.js       ✅
+
+🎉 Frontend Admin Dashboard Services Completed
+
+Next Folder:
+
+frontend/admin-dashboard/src/
+
+├── components/       ✅
+├── pages/            ✅
+├── services/         ✅ COMPLETE
+├── routes/           ⏳ NEXT
+├── context/
+├── hooks/
+└── App.jsx
+
+Next: frontend/admin-dashboard/src/routes/ ⏳
+
+next
+
+// frontend/admin-dashboard/src/routes/index.js
+
+import React from "react";
+
+import {
+
+    BrowserRouter,
+
+    Routes,
+
+    Route,
+
+    Navigate
+
+} from "react-router-dom";
+
+
+import Login from "../pages/Login";
+
+import Dashboard from "../pages/Dashboard";
+
+import Users from "../pages/Users";
+
+import Channels from "../pages/Channels";
+
+import Categories from "../pages/Categories";
+
+import Countries from "../pages/Countries";
+
+import Subscriptions from "../pages/Subscriptions";
+
+import Payments from "../pages/Payments";
+
+import Notifications from "../pages/Notifications";
+
+import Profile from "../pages/Profile";
+
+
+import AdminLayout from "../components/layout/AdminLayout";
+
+
+import authService from "../services/authService";
+
+
+
+/*==========================================
+=            Protected Route               =
+==========================================*/
+
+const ProtectedRoute = ({
+
+    children
+
+}) => {
+
+
+    const authenticated =
+
+        authService.isAuthenticated();
+
+
+
+    return authenticated
+
+        ?
+
+        children
+
+        :
+
+        <Navigate
+
+            to="/login"
+
+            replace
+
+        />;
+
+
+};
+
+
+
+/*==========================================
+=            Application Routes             =
+==========================================*/
+
+const AppRoutes = () => {
+
+
+    return (
+
+        <BrowserRouter>
+
+
+            <Routes>
+
+
+                {/* Public Route */}
+
+                <Route
+
+                    path="/login"
+
+                    element={
+
+                        <Login />
+
+                    }
+
+                />
+
+
+
+                {/* Admin Protected Routes */}
+
+                <Route
+
+                    path="/"
+
+                    element={
+
+                        <ProtectedRoute>
+
+
+                            <AdminLayout />
+
+
+                        </ProtectedRoute>
+
+                    }
+
+                >
+
+
+                    <Route
+
+                        index
+
+                        element={
+
+                            <Navigate
+
+                                to="/dashboard"
+
+                                replace
+
+                            />
+
+                        }
+
+                    />
+
+
+                    <Route
+
+                        path="dashboard"
+
+                        element={
+
+                            <Dashboard />
+
+                        }
+
+                    />
+
+
+                    <Route
+
+                        path="users"
+
+                        element={
+
+                            <Users />
+
+                        }
+
+                    />
+
+
+                    <Route
+
+                        path="channels"
+
+                        element={
+
+                            <Channels />
+
+                        }
+
+                    />
+
+
+                    <Route
+
+                        path="categories"
+
+                        element={
+
+                            <Categories />
+
+                        }
+
+                    />
+
+
+                    <Route
+
+                        path="countries"
+
+                        element={
+
+                            <Countries />
+
+                        }
+
+                    />
+
+
+                    <Route
+
+                        path="subscriptions"
+
+                        element={
+
+                            <Subscriptions />
+
+                        }
+
+                    />
+
+
+                    <Route
+
+                        path="payments"
+
+                        element={
+
+                            <Payments />
+
+                        }
+
+                    />
+
+
+                    <Route
+
+                        path="notifications"
+
+                        element={
+
+                            <Notifications />
+
+                        }
+
+                    />
+
+
+                    <Route
+
+                        path="profile"
+
+                        element={
+
+                            <Profile />
+
+                        }
+
+                    />
+
+
+                </Route>
+
+
+
+                {/* 404 Redirect */}
+
+                <Route
+
+                    path="*"
+
+                    element={
+
+                        <Navigate
+
+                            to="/dashboard"
+
+                            replace
+
+                        />
+
+                    }
+
+                />
+
+
+            </Routes>
+
+
+        </BrowserRouter>
+
+    );
+
+
+};
+
+
+export default AppRoutes;
+
+✅ Routes Folder Progress
+
+frontend/admin-dashboard/src/routes/
+
+└── index.js        ✅
+
+Frontend Progress
+
+frontend/admin-dashboard/src/
+
+├── components/       ✅
+├── pages/            ✅
+├── services/         ✅
+├── routes/           ✅
+├── context/          ⏳ NEXT
+├── hooks/
+└── App.jsx
+
+Next: frontend/admin-dashboard/src/context/ ⏳
+You’re now chatting with Mini. Responses may have lower quality until tomorrow at 2:40 AM.
+
+next
