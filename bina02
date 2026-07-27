@@ -1,0 +1,866 @@
+// frontend/admin-dashboard/src/pages/Notifications.jsx
+
+import React,{
+    useEffect,
+    useState
+} from "react";
+
+import {
+    Plus,
+    Search,
+    RefreshCcw,
+    Bell
+} from "lucide-react";
+
+import Button from "../components/Common/Button";
+
+import NotificationCard from "../components/Notifications/NotificationCard";
+
+import NotificationModal from "../components/Notifications/NotificationModal";
+
+import notificationService from "../services/notificationService";
+
+
+
+
+
+const Notifications=()=>{
+
+    const[notifications,setNotifications]=useState([]);
+
+    const[loading,setLoading]=useState(true);
+
+    const[modalOpen,setModalOpen]=useState(false);
+
+    const[selectedNotification,setSelectedNotification]=useState(null);
+
+    const[search,setSearch]=useState("");
+
+
+
+
+
+    useEffect(()=>{
+
+        loadNotifications();
+
+    },[]);
+
+
+
+
+
+    const loadNotifications=async()=>{
+
+        setLoading(true);
+
+
+
+
+
+        try{
+
+            const response=
+
+                await notificationService.getNotifications({
+
+                    search
+
+                });
+
+
+
+
+
+            setNotifications(
+
+                response.data ||
+
+                []
+
+            );
+
+        }
+
+        catch(error){
+
+            console.error(
+
+                "Notification loading error",
+
+                error
+
+            );
+
+        }
+
+        finally{
+
+            setLoading(false);
+
+        }
+
+    };
+
+
+
+
+
+    const handleCreate=()=>{
+
+        setSelectedNotification(null);
+
+        setModalOpen(true);
+
+    };
+
+
+
+
+
+    const handleEdit=(notification)=>{
+
+        setSelectedNotification(notification);
+
+        setModalOpen(true);
+
+    };
+
+
+
+
+
+    const handleView=(notification)=>{
+
+        console.log(
+
+            "View notification",
+
+            notification
+
+        );
+
+    };
+
+
+
+
+
+    const handleRead=async(notification)=>{
+
+        await notificationService.markRead(
+
+            notification._id
+
+        );
+
+
+
+
+
+        loadNotifications();
+
+    };
+
+
+
+
+
+    const handleDelete=async(notification)=>{
+
+        const confirm=
+
+            window.confirm(
+
+                "Delete this notification?"
+
+            );
+
+
+
+
+
+        if(!confirm){
+
+            return;
+
+        }
+
+
+
+
+
+        await notificationService.deleteNotification(
+
+            notification._id
+
+        );
+
+
+
+
+
+        loadNotifications();
+
+    };
+
+
+
+
+
+    return(
+
+        <div className="notifications-page">
+
+            <div className="page-header">
+
+                <div>
+
+                    <h1>
+
+                        Notification Center
+
+                    </h1>
+
+                    <p>
+
+                        Manage system alerts and user messages
+
+                    </p>
+
+                </div>
+
+
+
+
+
+                <Button
+
+                    variant="primary"
+
+                    icon={<Plus size={18}/>}
+
+                    onClick={handleCreate}
+
+                >
+
+                    New Notification
+
+                </Button>
+
+            </div>
+
+
+
+
+
+            <div className="page-toolbar">
+
+                <div className="search-box">
+
+                    <Search size={18}/>
+
+                    <input
+
+                        type="text"
+
+                        placeholder="Search notifications..."
+
+                        value={search}
+
+                        onChange={(e)=>
+
+                            setSearch(
+
+                                e.target.value
+
+                            )
+
+                        }
+
+                        onKeyDown={(e)=>{
+
+                            if(e.key==="Enter"){
+
+                                loadNotifications();
+
+                            }
+
+                        }}
+
+                    />
+
+                </div>
+
+
+
+
+
+                <Button
+
+                    variant="ghost"
+
+                    icon={<RefreshCcw size={17}/>}
+
+                    onClick={loadNotifications}
+
+                />
+
+            </div>
+
+
+
+
+
+            {
+
+            loading
+
+            ?
+
+            <div className="loading-grid">
+
+                Loading notifications...
+
+            </div>
+
+            :
+
+            <div className="notification-grid">
+
+                {
+
+                notifications.length
+
+                ?
+
+                notifications.map(notification=>(
+
+                    <NotificationCard
+
+                        key={notification._id}
+
+                        notification={notification}
+
+                        onView={handleView}
+
+                        onRead={handleRead}
+
+                        onDelete={handleDelete}
+
+                    />
+
+                ))
+
+                :
+
+                <div className="empty-box">
+
+                    <Bell size={40}/>
+
+                    <p>
+
+                        No notifications found
+
+                    </p>
+
+                </div>
+
+                )
+
+                }
+
+            </div>
+
+            }
+
+
+
+
+
+            <NotificationModal
+
+                open={modalOpen}
+
+                notification={selectedNotification}
+
+                onClose={()=>{
+
+                    setModalOpen(false);
+
+                }}
+
+                onSaved={loadNotifications}
+
+            />
+
+        </div>
+
+    );
+
+};
+
+
+
+
+
+export default Notifications;
+
+✅ Pages Folder Complete
+
+frontend/admin-dashboard/src/pages/
+
+├── Dashboard.jsx          ✅
+├── Channels.jsx           ✅
+├── Users.jsx              ✅
+├── Categories.jsx         ✅
+├── Countries.jsx          ✅
+├── Subscriptions.jsx      ✅
+├── Payments.jsx           ✅
+└── Notifications.jsx      ✅
+
+Next Folder
+
+frontend/admin-dashboard/src/
+
+├── components/       ✅
+├── pages/            ✅
+├── services/         ⏳ NEXT
+│
+│   ├── api.js
+│   ├── authService.js
+│   ├── channelService.js
+│   ├── userService.js
+│   ├── categoryService.js
+│   ├── countryService.js
+│   ├── subscriptionService.js
+│   ├── paymentService.js
+│   ├── notificationService.js
+│   └── dashboardService.js
+│
+├── routes/
+├── context/
+├── hooks/
+└── App.jsx
+
+Next: frontend/admin-dashboard/src/services/api.js ⏳
+
+next
+
+// frontend/admin-dashboard/src/services/api.js
+
+import axios from "axios";
+
+
+
+
+
+const API_URL =
+
+    import.meta.env.VITE_API_URL ||
+
+    "http://localhost:5000/api";
+
+
+
+
+
+const api = axios.create({
+
+    baseURL: API_URL,
+
+    timeout:10000,
+
+    headers:{
+
+        "Content-Type":
+
+        "application/json"
+
+    }
+
+});
+
+
+
+
+
+// Attach JWT token automatically
+
+api.interceptors.request.use(
+
+    (config)=>{
+
+        const token =
+
+            localStorage.getItem(
+
+                "btech_admin_token"
+
+            );
+
+
+
+
+
+        if(token){
+
+            config.headers.Authorization =
+
+                `Bearer ${token}`;
+
+        }
+
+
+
+
+
+        return config;
+
+    },
+
+    (error)=>{
+
+        return Promise.reject(error);
+
+    }
+
+);
+
+
+
+
+
+// Global response handler
+
+api.interceptors.response.use(
+
+    (response)=>{
+
+        return response.data;
+
+    },
+
+    (error)=>{
+
+
+        if(
+
+            error.response &&
+
+            error.response.status===401
+
+        ){
+
+            localStorage.removeItem(
+
+                "btech_admin_token"
+
+            );
+
+
+
+
+
+            window.location.href=
+
+                "/login";
+
+        }
+
+
+
+
+
+        return Promise.reject(
+
+            error.response?.data ||
+
+            error.message
+
+        );
+
+    }
+
+);
+
+
+
+
+
+export default api;
+
+✅ Services Folder Progress
+
+frontend/admin-dashboard/src/services/
+
+├── api.js                    ✅
+├── authService.js            ⏳ Next
+├── channelService.js
+├── userService.js
+├── categoryService.js
+├── countryService.js
+├── subscriptionService.js
+├── paymentService.js
+├── notificationService.js
+└── dashboardService.js
+
+Next: frontend/admin-dashboard/src/services/authService.js ⏳
+
+next
+
+// frontend/admin-dashboard/src/services/authService.js
+
+import api from "./api";
+
+
+
+
+
+const authService={
+
+
+
+
+
+    // Admin Login
+
+    login:async(credentials)=>{
+
+        const response=
+
+            await api.post(
+
+                "/auth/login",
+
+                credentials
+
+            );
+
+
+
+
+
+        if(response.token){
+
+            localStorage.setItem(
+
+                "btech_admin_token",
+
+                response.token
+
+            );
+
+        }
+
+
+
+
+
+        if(response.user){
+
+            localStorage.setItem(
+
+                "btech_admin_user",
+
+                JSON.stringify(
+
+                    response.user
+
+                )
+
+            );
+
+        }
+
+
+
+
+
+        return response;
+
+    },
+
+
+
+
+
+    // Register Admin
+
+    register:async(data)=>{
+
+        return await api.post(
+
+            "/auth/register",
+
+            data
+
+        );
+
+    },
+
+
+
+
+
+    // Current logged in admin
+
+    getProfile:async()=>{
+
+        return await api.get(
+
+            "/auth/profile"
+
+        );
+
+    },
+
+
+
+
+
+    // Update profile
+
+    updateProfile:async(data)=>{
+
+        return await api.put(
+
+            "/auth/profile",
+
+            data
+
+        );
+
+    },
+
+
+
+
+
+    // Change password
+
+    changePassword:async(data)=>{
+
+        return await api.put(
+
+            "/auth/change-password",
+
+            data
+
+        );
+
+    },
+
+
+
+
+
+    // Logout
+
+    logout:()=>{
+
+        localStorage.removeItem(
+
+            "btech_admin_token"
+
+        );
+
+
+
+
+
+        localStorage.removeItem(
+
+            "btech_admin_user"
+
+        );
+
+
+
+
+
+        window.location.href=
+
+            "/login";
+
+    },
+
+
+
+
+
+    // Check authentication
+
+    isAuthenticated:()=>{
+
+        return Boolean(
+
+            localStorage.getItem(
+
+                "btech_admin_token"
+
+            )
+
+        );
+
+    },
+
+
+
+
+
+    // Get saved admin user
+
+    getStoredUser:()=>{
+
+        const user=
+
+            localStorage.getItem(
+
+                "btech_admin_user"
+
+            );
+
+
+
+
+
+        return user
+
+            ?
+
+            JSON.parse(user)
+
+            :
+
+            null;
+
+    }
+
+};
+
+
+
+
+
+export default authService;
+
+✅ Services Folder Progress
+
+frontend/admin-dashboard/src/services/
+
+├── api.js                    ✅
+├── authService.js            ✅
+├── channelService.js         ⏳ Next
+├── userService.js
+├── categoryService.js
+├── countryService.js
+├── subscriptionService.js
+├── paymentService.js
+├── notificationService.js
+└── dashboardService.js
+
+Next: frontend/admin-dashboard/src/services/channelService.js ⏳
+You’re now chatting with Mini. Responses may have lower quality until tomorrow at 2:40 AM.
+
+nxt
