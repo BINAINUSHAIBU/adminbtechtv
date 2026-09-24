@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>BTECH-TV User Manager Settings</title>
+<style>
+:root{--bg:#07111f;--panel:#0d1b2a;--panel2:#102337;--line:#20364d;--text:#eef6ff;--muted:#9eb1c5;--accent:#22c55e;--danger:#ef4444;--input:#081522}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#050b13,#0a1726 55%,#06101c);color:var(--text);font:14px/1.5 Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;min-height:100vh}
+.top{position:sticky;top:0;z-index:5;background:rgba(7,17,31,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-weight:800;letter-spacing:.4px}.brand small{display:block;color:var(--muted);font-weight:500;font-size:11px}.actions{display:flex;gap:8px;flex-wrap:wrap}button,a.btn{border:1px solid var(--line);background:#102337;color:var(--text);padding:9px 13px;border-radius:9px;text-decoration:none;cursor:pointer;font-weight:700}button.primary{background:var(--accent);border-color:var(--accent);color:#03100a}button.danger{border-color:#6d2530;color:#fecaca;background:#2a1116}
+.wrap{max-width:1120px;margin:0 auto;padding:26px 18px 50px}.hero{margin-bottom:18px}.hero h1{margin:0 0 5px;font-size:28px}.hero p{margin:0;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:rgba(13,27,42,.92);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 14px 40px rgba(0,0,0,.18)}.card h2{margin:0 0 4px;font-size:17px}.card p.desc{margin:0 0 16px;color:var(--muted);font-size:12px}.field{margin:12px 0}.field label{display:block;font-weight:700;margin-bottom:6px}.field input,.field select{width:100%;background:var(--input);border:1px solid var(--line);color:var(--text);padding:11px 12px;border-radius:9px;outline:none}.field input:focus,.field select:focus{border-color:#4ade80;box-shadow:0 0 0 3px rgba(34,197,94,.12)}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid rgba(32,54,77,.65)}.toggle:last-child{border-bottom:0}.toggle span small{display:block;color:var(--muted);font-weight:400;margin-top:2px}.switch{position:relative;width:46px;height:25px;flex:0 0 auto}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;background:#33465a;border-radius:30px;cursor:pointer;transition:.2s}.slider:before{content:"";position:absolute;width:19px;height:19px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}.switch input:checked+.slider{background:var(--accent)}.switch input:checked+.slider:before{transform:translateX(21px)}.footer{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.status{position:fixed;right:18px;bottom:18px;background:#102337;border:1px solid var(--line);padding:10px 13px;border-radius:9px;display:none}.status.show{display:block}.note{background:#091827;border:1px dashed #31506b;color:#bcd0e2;padding:11px 12px;border-radius:9px;font-size:12px;margin-top:12px}@media(max-width:760px){.grid{grid-template-columns:1fr}.row{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header class="top"><div class="brand">BTECH-TV WORLD PRO MAX<small>User Manager Settings</small></div><div class="actions"><a class="btn" href="../super-admin/dashboard.html">Super Admin</a><a class="btn" href="../">Open BTECH-TV</a><button id="logoutBtn">Logout</button></div></header>
+<main class="wrap">
+<section class="hero"><h1>User Manager Settings</h1><p>Configure default user, subscription, access, notification, and interface behavior for the BTECH-TV user manager.</p></section>
+<div class="grid">
+<section class="card"><h2>Account Defaults</h2><p class="desc">Defaults applied when a new user is created.</p>
+<div class="row"><div class="field"><label for="defaultRole">Default role</label><select id="defaultRole"><option>User</option><option>Viewer</option><option>Moderator</option></select></div><div class="field"><label for="defaultStatus">Default status</label><select id="defaultStatus"><option>Active</option><option>Pending</option><option>Suspended</option></select></div></div>
+<div class="field"><label for="defaultPackage">Default package</label><select id="defaultPackage"><option>Starter — 500 Channels</option><option>Compact — 1,000 Channels</option><option>Standard — 1,500 Channels</option><option>Plus — 2,000 Channels</option><option>Advanced — 2,500 Channels</option><option>Premium — 3,000 Channels</option></select></div>
+<div class="field"><label for="validity">Default validity (days)</label><input id="validity" type="number" min="1" max="3650" value="30"></div>
+</section>
+<section class="card"><h2>Access & Security</h2><p class="desc">Control sign-in and account access behavior.</p>
+<div class="toggle"><span>Require email verification<small>New users must verify their email.</small></span><label class="switch"><input id="emailVerification" type="checkbox" checked><span class="slider"></span></label></div>
+<div class="toggle"><span>Allow multiple devices<small>Permit a user to sign in on more than one device.</small></span><label class="switch"><input id="multiDevice" type="checkbox" checked><span class="slider"></span></label></div>
+<div class="toggle"><span>Auto-lock expired accounts<small>Restrict access after subscription expiry.</small></span><label class="switch"><input id="autoLock" type="checkbox" checked><span class="slider"></span></label></div>
+<div class="field"><label for="sessionHours">Session timeout (hours)</label><input id="sessionHours" type="number" min="1" max="720" value="24"></div>
+</section>
+<section class="card"><h2>Notifications</h2><p class="desc">Choose which user-manager events are enabled.</p>
+<div class="toggle"><span>New-user notifications<small>Notify administrators when an account is created.</small></span><label class="switch"><input id="newUserNotify" type="checkbox" checked><span class="slider"></span></label></div>
+<div class="toggle"><span>Expiry reminders<small>Enable reminders before subscription expiry.</small></span><label class="switch"><input id="expiryNotify" type="checkbox" checked><span class="slider"></span></label></div>
+<div class="field"><label for="reminderDays">Reminder days before expiry</label><input id="reminderDays" type="number" min="1" max="90" value="3"></div>
+</section>
+<section class="card"><h2>Dashboard Preferences</h2><p class="desc">Customize how the user manager opens.</p>
+<div class="field"><label for="rows">Users per page</label><select id="rows"><option>10</option><option selected>25</option><option>50</option><option>100</option></select></div>
+<div class="toggle"><span>Show inactive users<small>Include suspended and expired users in the main list.</small></span><label class="switch"><input id="showInactive"><span class="slider"></span></label></div>
+<div class="toggle"><span>Compact user table<small>Use a denser layout for large user lists.</small></span><label class="switch"><input id="compactTable"><span class="slider"></span></label></div>
+<div class="note">Settings are stored locally in this static build. Connect these controls to your backend/API before using them for production account management.</div>
+</section>
+</div>
+<div class="footer"><button class="danger" id="resetBtn">Reset Defaults</button><button class="primary" id="saveBtn">Save Settings</button></div>
+</main><div id="status" class="status">Settings saved</div>
+<script>
+const KEY='btech_tv_user_manager_settings_v1';
+const ids=['defaultRole','defaultStatus','defaultPackage','validity','emailVerification','multiDevice','autoLock','sessionHours','newUserNotify','expiryNotify','reminderDays','rows','showInactive','compactTable'];
+const defaults={defaultRole:'User',defaultStatus:'Active',defaultPackage:'Starter — 500 Channels',validity:30,emailVerification:true,multiDevice:true,autoLock:true,sessionHours:24,newUserNotify:true,expiryNotify:true,reminderDays:3,rows:'25',showInactive:false,compactTable:false};
+function get(){try{return JSON.parse(localStorage.getItem(KEY))||defaults}catch{return defaults}}
+function setForm(data){ids.forEach(id=>{const el=document.getElementById(id);if(!el)return;if(el.type==='checkbox')el.checked=!!data[id];else el.value=data[id]??defaults[id]})}
+function read(){const d={};ids.forEach(id=>{const el=document.getElementById(id);d[id]=el.type==='checkbox'?el.checked:el.value});d.validity=Number(d.validity)||30;d.sessionHours=Number(d.sessionHours)||24;d.reminderDays=Number(d.reminderDays)||3;return d}
+function save(){localStorage.setItem(KEY,JSON.stringify(read()));const s=document.getElementById('status');s.textContent='Settings saved successfully';s.classList.add('show');setTimeout(()=>s.classList.remove('show'),1800)}
+document.getElementById('saveBtn').onclick=save;
+document.getElementById('resetBtn').onclick=()=>{if(confirm('Reset User Manager settings to defaults?')){localStorage.setItem(KEY,JSON.stringify(defaults));setForm(defaults);const s=document.getElementById('status');s.textContent='Defaults restored';s.classList.add('show');setTimeout(()=>s.classList.remove('show'),1800)}};
+document.getElementById('logoutBtn').onclick=()=>{localStorage.removeItem('btech_admin_logged_in');location.href='../super-admin/index.html'};
+setForm(get());
+</script>
+</body></html>
