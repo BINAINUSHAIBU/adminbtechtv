@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin Login - BTECH TV</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body class="login-page">
+<div class="login-card">
+  <div class="brand">
+    <h1>BTECH TV</h1>
+    <p>Admin Dashboard Login</p>
+  </div>
+  <div class="error" id="errorMessage">Invalid Admin Username or Password</div>
+  <form id="adminLoginForm" autocomplete="off">
+    <label for="username">Admin Username</label>
+    <input type="text" id="username" placeholder="Enter admin username" required autocomplete="username">
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Enter password" required autocomplete="current-password">
+    <button type="submit">Login to Dashboard</button>
+  </form>
+  <div class="login-note">© 2026 BTECH-TV Admin Panel</div>
+</div>
+<script>
+const adminLoginForm=document.getElementById("adminLoginForm");
+adminLoginForm.addEventListener("submit",function(e){
+  e.preventDefault();
+  const username=document.getElementById("username").value.trim();
+  const password=document.getElementById("password").value;
+  const error=document.getElementById("errorMessage");
+  if(username==="admin" && password==="123456"){
+    sessionStorage.setItem("btech_super_admin_auth","1");
+    sessionStorage.setItem("btech_super_admin_login",new Date().toISOString());
+    window.location.href="dashboard.html";
+  }else{
+    error.style.display="block";
+  }
+});
+</script>
+</body>
+</html>
