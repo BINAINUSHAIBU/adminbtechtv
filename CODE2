@@ -1,0 +1,23 @@
+// Fetch all channels and streaming URLs
+async function getLiveTV() {
+  const channelsResponse = await fetch('https://github.io');
+  const streamsResponse = await fetch('https://github.io');
+  
+  const channels = await channelsResponse.json();
+  const streams = await streamsResponse.json();
+
+  // Map streams to their corresponding channel using the unique channel ID
+  const linkedTvData = channels.map(channel => {
+    const match = streams.find(stream => stream.channel === channel.id);
+    return {
+      name: channel.name,
+      country: channel.country,
+      category: channel.category,
+      streamUrl: match ? match.url : null
+    };
+  }).filter(tv => tv.streamUrl); // Filter out channels without active links
+
+  console.log(linkedTvData);
+}
+
+getLiveTV();
